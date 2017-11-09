@@ -5,12 +5,12 @@
   <modelVersion>4.0.0</modelVersion>
 
   <groupId>no.nav.foreldrepenger.selvbetjening</groupId>
-  <artifactId>hello-apus</artifactId>
+  <artifactId>foreldrepenger-selvbetjening-engangsstonad</artifactId>
   <packaging>jar</packaging>
-  <version>7-SNAPSHOT</version>
+  <version>20-SNAPSHOT</version>
 
-  <name>hello-apus</name>
-  <description>Hello world</description>
+  <name>engangstonad</name>
+  <description>Backend for selvbetjent engangsstønad av foreldrepenger.</description>
 
   <parent>
     <groupId>org.springframework.boot</groupId>
@@ -66,8 +66,8 @@
   </build>
 
   <scm>
-    <connection>scm:git:ssh://git@stash.devillo.no:7999/sbtfp/hello-apus.git</connection>
-    <developerConnection>scm:git:ssh://git@stash.devillo.no:7999/sbtfp/hello-apus.git
+    <connection>scm:git:ssh://git@stash.devillo.no:7999/apus/engangstonad.git</connection>
+    <developerConnection>scm:git:ssh://git@stash.devillo.no:7999/apus/engangstonad.git
     </developerConnection>
     <tag>HEAD</tag>
   </scm>

@@ -1,4 +1,4 @@
-package no.nav.foreldrepenger.front;
+package no.nav.foreldrepenger.selvbetjening.engangstonad;
 
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;

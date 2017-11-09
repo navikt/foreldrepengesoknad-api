@@ -1,4 +1,4 @@
-package no.nav.foreldrepenger.front;
+package no.nav.foreldrepenger.selvbetjening.engangstonad;
 
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
