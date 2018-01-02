@@ -15,7 +15,7 @@ node {
     def branch = "master"
     def groupId = "nais"
     def environment = 't1'
-    def zone = 'fss'
+    def zone = 'sbs'
     def namespace = 'default'
 
     stage("Checkout") {
@@ -37,11 +37,12 @@ node {
     }
 
     stage("Initialize") {
-        pom = readMavenPom file: 'pom.xml'
-        releaseVersion = pom.version.tokenize("-")[0]
+        //pom = readMavenPom file: 'pom.xml'
+        //releaseVersion = pom.version.tokenize("-")[0]
+        releaseVersion = "${env.major_version}.${env.BUILD_NUMBER}-${commitHashShort}"
     }
 
-    stage("Valildate version and dependencies") {
+    stage("Validate version and dependencies") {
         sh "${mvn} -Pvalidation validate"
     }
 
@@ -50,26 +51,31 @@ node {
     }
 
     stage("Release") {
-        sh "${mvn} versions:set -B -DnewVersion=${releaseVersion} -DgenerateBackupPoms=false"
+        sh "${mvn} versions:set -B -DnewVersion=${releaseVersion}" // -DgenerateBackupPoms=false"
         sh "${mvn} clean install -Djava.io.tmpdir=/tmp/${repo} -B -e"
         sh "docker build --build-arg version=${releaseVersion} --build-arg app_name=${repo} -t ${dockerRepo}/${repo}:${releaseVersion} ."
-        sh "git commit -am \"set version to ${releaseVersion} (from Jenkins pipeline)\""
+        //sh "git commit -am \"set version to ${releaseVersion} (from Jenkins pipeline)\""
         withEnv(['HTTPS_PROXY=http://webproxy-utvikler.nav.no:8088']) {
             withCredentials([string(credentialsId: 'OAUTH_TOKEN', variable: 'token')]) {
-                sh ("git push https://${token}:x-oauth-basic@github.com/${project}/${repo}.git master")
-                sh ("git tag -a ${repo}-${releaseVersion} -m ${repo}-${releaseVersion}")
+                //sh ("git push https://${token}:x-oauth-basic@github.com/${project}/${repo}.git master")
+                //sh ("git tag -a ${repo}-${releaseVersion} -m ${repo}-${releaseVersion}")
+                sh ("git tag -a ${releaseVersion} -m ${releaseVersion}")
                 sh ("git push https://${token}:x-oauth-basic@github.com/${project}/${repo}.git --tags")
             }
         }
     }
     stage("Publish artifact") {
-        sh "${mvn} clean deploy -DskipTests -B -e"
+        //sh "${mvn} clean deploy -DskipTests -B -e"
         withCredentials([[$class: 'UsernamePasswordMultiBinding', credentialsId: 'nexusUser', usernameVariable: 'USERNAME', passwordVariable: 'PASSWORD']]) {
-            sh "curl -s -F r=m2internal -F hasPom=false -F e=yaml -F g=${groupId} -F a=${repo} -F " + "v=${releaseVersion} -F p=yaml -F file=@${appConfig} -u ${env.USERNAME}:${env.PASSWORD} http://maven.adeo.no/nexus/service/local/artifact/maven/content"
+            //sh "curl -s -F r=m2internal -F hasPom=false -F e=yaml -F g=${groupId} -F a=${repo} -F " + "v=${releaseVersion} -F p=yaml -F file=@${appConfig} -u ${env.USERNAME}:${env.PASSWORD} http://maven.adeo.no/nexus/service/local/artifact/maven/content"
+            sh "curl --user uploader:upl04d3r --upload-file ${appConfig} https://repo.adeo.no/repository/raw/${groupId}/${repo}/${releaseVersion}/nais.yaml"
         }
         sh "docker push ${dockerRepo}/${repo}:${releaseVersion}"
     }
 
+    stage("Cleanup") {
+        sh "${mvn} versions:revert"
+    }
 
     stage("Deploy to t") {
         callback = "${env.BUILD_URL}input/Deploy/"
@@ -84,7 +90,7 @@ node {
 
     }
 
-    stage("Update project version") {
+    /*stage("Update project version") {
         nextVersion = (releaseVersion.toInteger() + 1) + "-SNAPSHOT"
         sh "${mvn} versions:set -B -DnewVersion=${nextVersion} -DgenerateBackupPoms=false"
         withEnv(['HTTPS_PROXY=http://webproxy-utvikler.nav.no:8088']) {
@@ -95,7 +101,7 @@ node {
         }
         notifyGithub(project, repo, 'continuous-integration/jenkins', commitHash, 'success', "Build #${env.BUILD_NUMBER} has finished")
 
-    }
+    }*/
 }
 
 def notifyGithub(owner, repo, context, sha, state, description) {
