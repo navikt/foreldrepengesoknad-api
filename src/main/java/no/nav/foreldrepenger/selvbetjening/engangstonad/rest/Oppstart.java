@@ -17,7 +17,7 @@ public class Oppstart {
 
     @RequestMapping(method = {RequestMethod.GET}, value = "/rest/personinfo")
     public Person personinfo() {
-        return new Person("Test", "Testesen");
+        return new Person("Test", "Testesen", "Lyckliga gatan 1A, 0666 Oslo, Norge");
     }
 
     @RequestMapping(method = {RequestMethod.GET}, value = "/rest/oppstartsinfo")

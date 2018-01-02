@@ -2,23 +2,24 @@ package no.nav.foreldrepenger.selvbetjening.engangstonad.rest.json;
 
 public class Person {
 
-    public Person(String fornavn, String mellomnavn, String etternavn, String kjonn, Integer alder) {
+    public Person(String fornavn, String mellomnavn, String etternavn, String kjonn, String adresse) {
         this.fornavn = fornavn;
         this.mellomnavn = mellomnavn;
         this.etternavn = etternavn;
         this.kjonn = kjonn;
-        this.alder = alder;
+        this.adresse = adresse;
     }
 
-    public Person(String fornavn, String etternavn) {
+    public Person(String fornavn, String etternavn, String adresse) {
         this.fornavn = fornavn;
         this.etternavn = etternavn;
+        this.adresse = adresse;
     }
 
     public String fornavn;
     public String mellomnavn;
     public String etternavn;
     public String kjonn;
-    public Integer alder;
+    public String adresse;
 
 }
