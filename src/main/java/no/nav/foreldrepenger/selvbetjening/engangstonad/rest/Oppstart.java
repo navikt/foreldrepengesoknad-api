@@ -3,6 +3,7 @@ package no.nav.foreldrepenger.selvbetjening.engangstonad.rest;
 import no.nav.foreldrepenger.selvbetjening.engangstonad.rest.json.Oppstartsinfo;
 import no.nav.foreldrepenger.selvbetjening.engangstonad.rest.json.Person;
 import org.slf4j.Logger;
+import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RestController;
@@ -10,6 +11,7 @@ import org.springframework.web.client.RestTemplate;
 
 import static org.slf4j.LoggerFactory.getLogger;
 
+@CrossOrigin
 @RestController
 public class Oppstart {
 
