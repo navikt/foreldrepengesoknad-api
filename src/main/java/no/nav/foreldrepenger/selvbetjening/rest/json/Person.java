@@ -1,4 +1,4 @@
-package no.nav.foreldrepenger.selvbetjening.engangstonad.rest.json;
+package no.nav.foreldrepenger.selvbetjening.rest.json;
 
 public class Person {
 
