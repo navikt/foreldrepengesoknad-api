@@ -31,7 +31,7 @@ node {
         changelog = sh(script: 'git log `git describe --tags --abbrev=0`..HEAD --oneline', returnStdout: true)
         slackSend([
                 color: 'good',
-                message: "Build <${env.BUILD_URL}|#${env.BUILD_NUMBER}> (<${commitUrl}|${commitHashShort}>) of ${project}/${repo}@master by ${committer} passed  (${changelog})"
+                message: "Build <${env.BUILD_URL}|#${env.BUILD_NUMBER}> (<${commitUrl}|${commitHashShort}>) of ${project}/${repo}@master by ${committer} started  (${changelog})"
         ])
         notifyGithub(project, repo, 'continuous-integration/jenkins', commitHash, 'pending', "Build #${env.BUILD_NUMBER} has started")
 
@@ -65,8 +65,13 @@ node {
 
         def deploy = deployLib.deployNaisApp(app, releaseVersion, environment, zone, namespace, callback, committer).key
 
-        // Block and wait for the remote system to callback
-        input id: 'Deploy', message: 'Waiting for remote system'
+        try {
+            timeout(time: 15, unit: 'MINUTES') {
+                input id: 'deploy', message: "Check status here:  https://jira.adeo.no/browse/${deploy}"
+            }
+        } catch (Exception e) {
+            throw new Exception("Deploy feilet :( \n Se https://jira.adeo.no/browse/" + deploy + " for detaljer", e)
+        }
     }
 }
 

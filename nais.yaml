@@ -1,28 +1,31 @@
 name: foreldrepengesoeknad-api
 image: docker.adeo.no:5000/foreldrepengesoeknad-api
 replicas:
-    min: 1
-    max: 1 
-    cpuThresholdPercentage: 50
+  min: 1
+  max: 1
+  cpuThresholdPercentage: 50
 prometheus:
-    enabled: true
-    path: /application/prometheus
+  enabled: true
+  path: /application/prometheus
 port: 8080
 healthcheck:
-    liveness:
-      initialDelay: 60
-      path: rest/internal/isAlive
-    readiness:
-      initialDelay: 60
-      path: rest/internal/isAlive
+  liveness:
+    initialDelay: 60
+    path: rest/internal/isAlive
+  readiness:
+    initialDelay: 60
+    path: rest/internal/isAlive
 resources:
-    limits:
-      cpu: 1500m
-      memory: 3072Mi
-    requests:
-      cpu: 1000m
-      memory: 1536Mi
+  limits:
+    cpu: 1500m
+    memory: 3072Mi
+  requests:
+    cpu: 1000m
+    memory: 1536Mi
 fasitResources:
   used:
   exposed:
+  - alias: foreldrepengesoeknad-api
+    resourceType: restservice
+    path: /rest
     
