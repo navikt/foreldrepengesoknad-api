@@ -1,5 +1,5 @@
-name: foreldrepengesoeknad-api
-image: docker.adeo.no:5000/foreldrepengesoeknad-api
+name: foreldrepengesoknad-api
+image: docker.adeo.no:5000/foreldrepengesoknad-api
 replicas:
   min: 1
   max: 1
