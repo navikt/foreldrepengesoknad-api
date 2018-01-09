@@ -1,13 +1,15 @@
 package no.nav.foreldrepenger.selvbetjening.rest.json;
 
+import no.nav.foreldrepenger.selvbetjening.consumer.json.PersonDto;
+
 public class Person {
 
-    public Person(String fornavn, String mellomnavn, String etternavn, String kjonn, String adresse) {
-        this.fornavn = fornavn;
-        this.mellomnavn = mellomnavn;
-        this.etternavn = etternavn;
-        this.kjonn = kjonn;
-        this.adresse = adresse;
+    public Person(PersonDto personDto) {
+        this.fornavn = personDto.name.fornavn;
+        this.mellomnavn = personDto.name.mellomnavn;
+        this.etternavn = personDto.name.etternavn;
+
+        this.adresse = personDto.adresse.adresse();
     }
 
     public Person(String fornavn, String etternavn, String adresse) {

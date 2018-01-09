@@ -20,12 +20,16 @@ resources:
     cpu: 1500m
     memory: 3072Mi
   requests:
-    cpu: 1000m
+    cpu: 200m
     memory: 1536Mi
 fasitResources:
   used:
+  - alias: fpsoknad-oppslag-foreldrepengesoknad-api-key
+    resourceType: credential
+  - alias: fpsoknad-oppslag-apigw
+    resourceType: restservice
   exposed:
-  - alias: foreldrepengesoeknad-api
+  - alias: foreldrepengesoknad-api
     resourceType: restservice
     path: /rest
     

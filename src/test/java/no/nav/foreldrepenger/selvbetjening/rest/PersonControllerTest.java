@@ -16,7 +16,7 @@ public class PersonControllerTest {
 
     @Test
     public void stubPersonInfo() {
-        Person person = personController.personinfo();
+        Person person = personController.personinfo("fnr", true);
         assertThat(person).isNotNull();
     }
 
