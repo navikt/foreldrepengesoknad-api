@@ -8,13 +8,12 @@ import org.springframework.http.HttpEntity;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpMethod;
 import org.springframework.web.bind.annotation.CrossOrigin;
-import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.client.RestTemplate;
 
 import static org.slf4j.LoggerFactory.getLogger;
-import static org.springframework.web.bind.annotation.RequestMethod.GET;
 
 @CrossOrigin
 @RestController
@@ -25,7 +24,7 @@ public class PersonController {
     @Value("${FPSOKNAD_OPPSLAG_APIGW_URL}")
     private String oppslagServiceUrl;
 
-    @RequestMapping(method = {GET}, value = "/rest/personinfo")
+    @GetMapping("/personinfo")
     public Person personinfo(@RequestParam("fnr") String fnr, @RequestParam(name = "stub", defaultValue = "false", required = false) Boolean stub) {
         LOG.info("Henter personinfo {}", stub ? "(stub)" : "");
         if (stub) {
