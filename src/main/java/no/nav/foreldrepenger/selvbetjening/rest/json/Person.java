@@ -5,9 +5,8 @@ import no.nav.foreldrepenger.selvbetjening.consumer.json.PersonDto;
 public class Person {
 
     public Person(PersonDto personDto) {
-        this.fornavn = personDto.name.fornavn;
-        this.mellomnavn = personDto.name.mellomnavn;
-        this.etternavn = personDto.name.etternavn;
+        this.fornavn = personDto.fornavn;
+        this.etternavn = personDto.etternavn;
 
         this.adresse = personDto.adresse.adresse();
     }
