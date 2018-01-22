@@ -1,4 +1,4 @@
 # REST-API for foreldrepenger/engangsstønad
 
 ## Kjøre opp lokalt
-* Kjør klassen ```EngangsstonadApplication``` fra IntelliJ
+* Kjør klassen ```ApplicationLocal``` fra IntelliJ

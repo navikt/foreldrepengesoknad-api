@@ -41,13 +41,6 @@ node {
         sh "${mvn} versions:set -B -DnewVersion=${releaseVersion}"
         sh "${mvn} clean install -Djava.io.tmpdir=/tmp/${app} -B -e"
         sh "docker build --build-arg version=${releaseVersion} --build-arg app_name=${app} -t ${dockerRepo}/${app}:${releaseVersion} ."
-        withEnv(['HTTPS_PROXY=http://webproxy-utvikler.nav.no:8088']) {
-            withCredentials([string(credentialsId: 'OAUTH_TOKEN', variable: 'token')]) {
-                sh ("git tag -a ${releaseVersion} -m ${releaseVersion}")
-                sh ("git push https://${token}:x-oauth-basic@github.com/${project}/${app}.git --tags")
-                // Maybe just tag production releases?
-            }
-        }
 
         withCredentials([[$class: 'UsernamePasswordMultiBinding', credentialsId: 'nexusUser', usernameVariable: 'USERNAME', passwordVariable: 'PASSWORD']]) {
             sh "curl --user uploader:upl04d3r --upload-file ${appConfig} https://repo.adeo.no/repository/raw/${groupId}/${app}/${releaseVersion}/nais.yaml"
@@ -70,6 +63,16 @@ node {
             }
         } catch (Exception e) {
             throw new Exception("Deploy feilet :( \n Se https://jira.adeo.no/browse/" + deploy + " for detaljer", e)
+        }
+    }
+
+    stage("Tag") {
+        // Tag only releases that go to production
+        withEnv(['HTTPS_PROXY=http://webproxy-utvikler.nav.no:8088']) {
+            withCredentials([string(credentialsId: 'OAUTH_TOKEN', variable: 'token')]) {
+                sh ("git tag -a ${releaseVersion} -m ${releaseVersion}")
+                sh ("git push https://${token}:x-oauth-basic@github.com/${project}/${app}.git --tags")
+            }
         }
     }
 }
