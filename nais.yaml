@@ -6,15 +6,15 @@ replicas:
   cpuThresholdPercentage: 50
 prometheus:
   enabled: true
-  path: rest/actuator/prometheus
+  path: /rest/actuator/prometheus
 port: 8080
 healthcheck:
   liveness:
     initialDelay: 60
-    path: rest/actuator/health
+    path: /rest/actuator/health
   readiness:
     initialDelay: 60
-    path: rest/actuator/health
+    path: /rest/actuator/health
 resources:
   limits:
     cpu: 1500m

@@ -1,8 +1,11 @@
 package no.nav.foreldrepenger.selvbetjening.rest;
 
+import io.micrometer.core.instrument.Counter;
+import io.micrometer.core.instrument.MeterRegistry;
 import no.nav.foreldrepenger.selvbetjening.consumer.json.PersonDto;
 import no.nav.foreldrepenger.selvbetjening.rest.json.Person;
 import org.slf4j.Logger;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.HttpEntity;
 import org.springframework.http.HttpHeaders;
@@ -24,9 +27,16 @@ public class PersonController {
     @Value("${FPSOKNAD_OPPSLAG_APIGW_URL}")
     private String oppslagServiceUrl;
 
+    @Autowired
+    private MeterRegistry registry;
+
     @GetMapping("/personinfo")
     public Person personinfo(@RequestParam("fnr") String fnr, @RequestParam(name = "stub", defaultValue = "false", required = false) Boolean stub) {
         LOG.info("Henter personinfo {}", stub ? "(stub)" : "");
+
+        Counter counter = registry.counter("foreldrepengesoknad.hentet.personinfo");
+        counter.increment();
+
         if (stub) {
             return new Person("Test", "Testesen", "Lyckliga gatan 1A, 0666 Oslo, Norge");
         }
