@@ -16,6 +16,7 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.client.RestTemplate;
 
+import static java.time.LocalDate.now;
 import static org.slf4j.LoggerFactory.getLogger;
 
 @CrossOrigin
@@ -38,7 +39,7 @@ public class PersonController {
         counter.increment();
 
         if (stub) {
-            return new Person("Test", "Testesen", "Lyckliga gatan 1A, 0666 Oslo, Norge");
+            return new Person("Gro Harlem", "Stubberud", "K", now().minusYears(20), "Lyckliga gatan 1A, 0666 Oslo, Norge");
         }
 
         LOG.info("Oppslag URL: " + oppslagServiceUrl);
