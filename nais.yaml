@@ -24,9 +24,9 @@ resources:
     memory: 1536Mi
 fasitResources:
   used:
-  - alias: fpsoknad-oppslag-foreldrepengesoknad-api-key
+  - alias: foreldrepengesoknad-api-fpsoknad-oppslag-api-apiKey
     resourceType: credential
-  - alias: fpsoknad-oppslag-apigw
+  - alias: fpsoknad-oppslag-api
     resourceType: restservice
   exposed:
   - alias: foreldrepengesoknad-api

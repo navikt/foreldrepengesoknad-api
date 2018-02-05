@@ -13,7 +13,7 @@ node {
     def appConfig = "nais.yaml"
     def dockerRepo = "docker.adeo.no:5000"
     def groupId = "nais"
-    def environment = 'q1'
+    def environment = 't11'
     def zone = 'sbs'
     def namespace = 'default'
 

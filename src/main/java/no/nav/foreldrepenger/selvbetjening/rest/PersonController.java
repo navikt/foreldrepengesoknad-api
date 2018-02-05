@@ -25,7 +25,7 @@ public class PersonController {
 
     private static final Logger LOG = getLogger(PersonController.class);
 
-    @Value("${FPSOKNAD_OPPSLAG_APIGW_URL}")
+    @Value("${FPSOKNAD_OPPSLAG_API_URL}")
     private String oppslagServiceUrl;
 
     @Autowired

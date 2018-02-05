@@ -26,13 +26,13 @@ public class EngangsstonadController {
     }
 
     @PostMapping
-    public ResponseEntity<Engangsstonad> opprettEngangsstonad(@RequestBody Engangsstonad engangsstonad) {
-        String id = "69"; // Får denne fra fpsoknad-mottak?
+    public ResponseEntity<Engangsstonad> opprettEngangsstonad(@RequestBody Engangsstonad engangsstonad, @RequestParam(name = "stub", defaultValue = "false", required = false) Boolean stub) {
+        if (stub) {
+            engangsstonad.id = "69";
+            engangsstonad.opprettet = now();
+        }
 
-        engangsstonad.opprettet = now();
-        engangsstonad.id = id;
-
-        URI location = ServletUriComponentsBuilder.fromCurrentRequest().path("/{id}").buildAndExpand(id).toUri();
+        URI location = ServletUriComponentsBuilder.fromCurrentRequest().path("/{id}").buildAndExpand(engangsstonad.id).toUri();
         return ResponseEntity.created(location).body(engangsstonad);
     }
 
