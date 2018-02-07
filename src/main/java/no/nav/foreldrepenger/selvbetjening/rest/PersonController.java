@@ -28,6 +28,9 @@ public class PersonController {
     @Value("${FPSOKNAD_OPPSLAG_API_URL}")
     private String oppslagServiceUrl;
 
+    @Value("${FORELDREPENGESOKNAD_API_FPSOKNAD_OPPSLAG_API_APIKEY_PASSWORD}")
+    private String apiGatewayKey;
+
     @Autowired
     private MeterRegistry registry;
 
@@ -44,13 +47,15 @@ public class PersonController {
 
         LOG.info("Oppslag URL: " + oppslagServiceUrl);
 
-        HttpHeaders headers = new HttpHeaders();
-        headers.set("x-nav-apiKey", "foreldrepengesoknad-api+generertKey");
-        HttpEntity<?> entity = new HttpEntity<>(headers);
-
-        HttpEntity<PersonDto> response = new RestTemplate().exchange(oppslagServiceUrl + "/person/?fnr=" + fnr, HttpMethod.GET, entity, PersonDto.class);
+        HttpEntity<PersonDto> response = new RestTemplate().exchange(oppslagServiceUrl + "/person/?fnr=" + fnr, HttpMethod.GET, entityWithHeaders(), PersonDto.class);
 
         return new Person(response.getBody());
+    }
+
+    private HttpEntity<?> entityWithHeaders() {
+        HttpHeaders headers = new HttpHeaders();
+        headers.set("x-nav-apiKey", apiGatewayKey);
+        return new HttpEntity<>(headers);
     }
 
 }
