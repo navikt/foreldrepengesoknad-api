@@ -8,7 +8,7 @@ import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 
 import java.net.URI;
 
-import static java.time.LocalDate.now;
+import static java.time.LocalDateTime.now;
 import static org.slf4j.LoggerFactory.getLogger;
 
 @CrossOrigin
