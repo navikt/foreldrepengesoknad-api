@@ -1,5 +1,7 @@
 package no.nav.foreldrepenger.selvbetjening.rest.json;
 
+import no.nav.foreldrepenger.selvbetjening.consumer.json.EngangsstonadDto;
+
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 
@@ -13,6 +15,12 @@ public class Engangsstonad extends Soknad {
     public Boolean jobbetINorgeSisteTolvMnd;
     public Boolean skalBoINorgeNesteTolvMnd;
     public Boolean skalFodeINorge;
+
+    public Engangsstonad() {}
+
+    public Engangsstonad(EngangsstonadDto dto) {
+        this.opprettet = dto.motattdato.atStartOfDay();
+    }
 
     public static Engangsstonad stub() {
         Engangsstonad engangsstonad = new Engangsstonad();

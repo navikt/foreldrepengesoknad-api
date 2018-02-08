@@ -9,7 +9,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.HttpEntity;
 import org.springframework.http.HttpHeaders;
-import org.springframework.http.HttpMethod;
 import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestParam;
@@ -18,6 +17,7 @@ import org.springframework.web.client.RestTemplate;
 
 import static java.time.LocalDate.now;
 import static org.slf4j.LoggerFactory.getLogger;
+import static org.springframework.http.HttpMethod.GET;
 
 @CrossOrigin
 @RestController
@@ -46,13 +46,13 @@ public class PersonController {
         }
 
         LOG.info("Oppslag URL: " + oppslagServiceUrl);
-
-        HttpEntity<PersonDto> response = new RestTemplate().exchange(oppslagServiceUrl + "/person/?fnr=" + fnr, HttpMethod.GET, entityWithHeaders(), PersonDto.class);
+        String url = oppslagServiceUrl + "/person/?fnr=" + fnr;
+        HttpEntity<PersonDto> response = new RestTemplate().exchange(url, GET, headers(), PersonDto.class);
 
         return new Person(response.getBody());
     }
 
-    private HttpEntity<?> entityWithHeaders() {
+    private HttpEntity<?> headers() {
         HttpHeaders headers = new HttpHeaders();
         headers.set("x-nav-apiKey", apiGatewayKey);
         return new HttpEntity<>(headers);
