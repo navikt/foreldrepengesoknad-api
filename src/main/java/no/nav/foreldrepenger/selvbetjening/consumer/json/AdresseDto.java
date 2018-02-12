@@ -1,5 +1,7 @@
 package no.nav.foreldrepenger.selvbetjening.consumer.json;
 
+import static java.util.Optional.ofNullable;
+
 public class AdresseDto {
 
     public String gatenavn;
@@ -10,6 +12,10 @@ public class AdresseDto {
     public String landkode;
 
     public String adresse() {
-        return String.format("%s %s%s, %s %s", gatenavn, bolignummer, husbokstav, postnummer, poststed);
+        return String.format("%s %s%s, %s %s", gatenavn, bolignummer, emptyIfNull(husbokstav), postnummer, poststed);
+    }
+
+    private String emptyIfNull(String value) {
+        return ofNullable(value).orElse("");
     }
 }

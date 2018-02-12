@@ -21,7 +21,7 @@ resources:
     memory: 3072Mi
   requests:
     cpu: 200m
-    memory: 1536Mi
+    memory: 1000Mi
 fasitResources:
   used:
   - alias: foreldrepengesoknad-api-fpsoknad-oppslag-api-apiKey
