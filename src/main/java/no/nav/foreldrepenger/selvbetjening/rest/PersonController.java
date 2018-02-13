@@ -34,7 +34,7 @@ public class PersonController {
     @Autowired
     private MeterRegistry registry;
 
-    @GetMapping("/personinfo")
+    @GetMapping("/rest/personinfo")
     public Person personinfo(@RequestParam("fnr") String fnr, @RequestParam(name = "stub", defaultValue = "false", required = false) Boolean stub) {
         LOG.info("Henter personinfo {}", stub ? "(stub)" : "");
 
