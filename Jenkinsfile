@@ -51,7 +51,7 @@ node {
         notifyGithub(project, app, 'continuous-integration/jenkins', commitHash, 'success', "Build #${env.BUILD_NUMBER} has finished")
     }
 
-    stage("Deploy to preprod") {
+    stage("Deploy to pre-prod") {
         callback = "${env.BUILD_URL}input/Deploy/"
 
         def deploy = deployLib.deployNaisApp(app, releaseVersion, environment, zone, namespace, callback, committer).key
@@ -61,6 +61,10 @@ node {
                 input id: 'deploy', message: "Check status here:  https://jira.adeo.no/browse/${deploy}"
             }
         } catch (Exception e) {
+        slackSend([
+                color: 'warning',
+                message: "Build ${releaseVersion} of ${app} could not be deployed to pre-prod"
+        ])
             throw new Exception("Deploy feilet :( \n Se https://jira.adeo.no/browse/" + deploy + " for detaljer", e)
         }
     }
