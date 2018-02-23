@@ -25,10 +25,10 @@ public class EngangsstonadController {
     private static final Logger LOG = getLogger(EngangsstonadController.class);
 
 
-    //@Value("${FPSOKNAD_MOTTAK_API_URL}")
+    @Value("${FPSOKNAD_MOTTAK_API_URL}")
     private String mottakServiceUrl;
 
-    //@Value("${FORELDREPENGESOKNAD_API_FPSOKNAD_MOTTAK_API_APIKEY_PASSWORD}")
+    @Value("${FORELDREPENGESOKNAD_API_FPSOKNAD_MOTTAK_API_APIKEY_PASSWORD}")
     private String apiGatewayKey;
 
     @GetMapping("/{id}")

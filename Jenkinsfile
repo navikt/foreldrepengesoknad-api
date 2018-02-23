@@ -4,14 +4,14 @@ import deploy
 def deployLib = new deploy()
 
 node {
-    def commitHash, commitHashShort, commitUrl, currentVersion
+    def commitHash, commitHashShort, commitUrl
     def project = "navikt"
     def app = "foreldrepengesoknad-api"
-    def committer, committerEmail, changelog, pom, releaseVersion, nextVersion // metadata
+    def committer, committerEmail, changelog, releaseVersion
     def mvnHome = tool "maven-3.3.9"
     def mvn = "${mvnHome}/bin/mvn"
     def appConfig = "nais.yaml"
-    def dockerRepo = "docker.adeo.no:5000"
+    def dockerRepo = "repo.adeo.no:5443"
     def groupId = "nais"
     def environment = 't1'
     def zone = 'sbs'
@@ -43,11 +43,12 @@ node {
         sh "docker build --build-arg version=${releaseVersion} --build-arg app_name=${app} -t ${dockerRepo}/${app}:${releaseVersion} ."
 
         withCredentials([[$class: 'UsernamePasswordMultiBinding', credentialsId: 'nexusUser', usernameVariable: 'USERNAME', passwordVariable: 'PASSWORD']]) {
+            sh "docker login -u ${env.USERNAME} -p ${env.PASSWORD} ${dockerRepo} && docker push ${dockerRepo}/${app}:${releaseVersion}"
             sh "curl --fail -v -u ${env.USERNAME}:${env.PASSWORD} --upload-file ${appConfig} https://repo.adeo.no/repository/raw/${groupId}/${app}/${releaseVersion}/nais.yaml"
         }
-        sh "docker push ${dockerRepo}/${app}:${releaseVersion}"
 
         sh "${mvn} versions:revert"
+        notifyGithub(project, app, 'continuous-integration/jenkins', commitHash, 'success', "Build #${env.BUILD_NUMBER} has finished")
     }
 
     stage("Deploy to preprod") {
@@ -65,7 +66,7 @@ node {
     }
 
     stage("Tag") {
-        // Tag only releases that go to production
+        // TODO: Tag only releases that go to production
         withEnv(['HTTPS_PROXY=http://webproxy-utvikler.nav.no:8088']) {
             withCredentials([string(credentialsId: 'OAUTH_TOKEN', variable: 'token')]) {
                 sh ("git tag -a ${releaseVersion} -m ${releaseVersion}")
