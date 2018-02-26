@@ -1,7 +1,8 @@
 package no.nav.foreldrepenger.selvbetjening.config;
 
+import static java.util.Collections.singletonList;
+
 import java.net.URI;
-import java.util.Collections;
 
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;
@@ -29,10 +30,10 @@ public class ApiConfiguration {
     String oppslagApiKey;
 
     @Bean
-    public RestTemplate restTemplate(ClientHttpRequestInterceptor clientHttpRequestInterceptor) {
-        RestTemplate restTemplate = new RestTemplate();
-        restTemplate.setInterceptors(Collections.singletonList(clientHttpRequestInterceptor));
-        return restTemplate;
+    public RestTemplate restTemplate(ClientHttpRequestInterceptor interceptor) {
+        RestTemplate template = new RestTemplate();
+        template.setInterceptors(singletonList(interceptor));
+        return template;
     }
 
     @Bean
