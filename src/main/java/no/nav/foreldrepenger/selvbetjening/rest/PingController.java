@@ -1,7 +1,11 @@
 package no.nav.foreldrepenger.selvbetjening.rest;
 
+import static org.slf4j.LoggerFactory.getLogger;
+
+import org.slf4j.Logger;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.HttpStatus;
+import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -15,6 +19,8 @@ import org.springframework.web.client.RestTemplate;
 @RequestMapping(PingController.PING)
 public class PingController {
 
+    private static final Logger LOG = getLogger(PingController.class);
+
     public static final String PING = "/rest/ping";
 
     private final RestTemplate template;
@@ -26,8 +32,11 @@ public class PingController {
     }
 
     @GetMapping
+    @RequestMapping(produces = MediaType.APPLICATION_JSON_VALUE)
     public ResponseEntity<String> ping(@RequestParam("navn") String navn) {
-        String svar = template.getForObject(uri + "/mottak/dokmot/ping?navn=" + navn, String.class);
+        String url = uri + "/mottak/dokmot/ping?navn=" + navn;
+        LOG.info("Pinging {}", uri);
+        String svar = template.getForObject(url, String.class);
         return ResponseEntity.status(HttpStatus.OK).body(svar);
     }
 }

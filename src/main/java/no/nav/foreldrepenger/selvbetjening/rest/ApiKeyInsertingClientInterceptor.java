@@ -32,6 +32,7 @@ public class ApiKeyInsertingClientInterceptor implements ClientHttpRequestInterc
             throws IOException {
         String apiKey = apiKeyFor(request.getURI());
         if (apiKey != null) {
+            LOG.info("Injisert API-key for {} OK", request.getURI());
             request.getHeaders().add(KEY, apiKey);
         } else {
             LOG.warn("Ingen api key ble funnet for {}", request.getURI());
