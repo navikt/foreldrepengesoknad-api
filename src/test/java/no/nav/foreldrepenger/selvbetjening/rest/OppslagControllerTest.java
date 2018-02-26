@@ -1,29 +1,31 @@
 package no.nav.foreldrepenger.selvbetjening.rest;
 
-import io.micrometer.core.instrument.MeterRegistry;
-import io.micrometer.prometheus.PrometheusMeterRegistry;
-import no.nav.foreldrepenger.selvbetjening.rest.json.Person;
-import org.junit.Test;
-import org.junit.runner.RunWith;
-import org.mockito.InjectMocks;
-import org.mockito.Spy;
-import org.mockito.junit.MockitoJUnitRunner;
-
-import static io.micrometer.prometheus.PrometheusConfig.DEFAULT;
 import static org.assertj.core.api.Assertions.assertThat;
 
-@RunWith(MockitoJUnitRunner.class)
+import javax.inject.Inject;
+
+import org.junit.Test;
+import org.junit.runner.RunWith;
+import org.springframework.test.context.ContextConfiguration;
+import org.springframework.test.context.TestPropertySource;
+import org.springframework.test.context.junit4.SpringRunner;
+
+import no.nav.foreldrepenger.selvbetjening.config.ApiConfiguration;
+import no.nav.foreldrepenger.selvbetjening.rest.json.Person;
+
+@RunWith(SpringRunner.class)
+@ContextConfiguration(classes = { ApiConfiguration.class, OppslagController.class, ApiTestConfig.class })
+@TestPropertySource(properties = {
+        "FPSOKNAD_MOTTAK_API_URL=http://mottak.com",
+        "FPSOKNAD_OPPSLAG_API_URL=http://oppslag.com" })
 public class OppslagControllerTest {
 
-    @Spy
-    private MeterRegistry registry = new PrometheusMeterRegistry(DEFAULT);
-
-    @InjectMocks
-    private OppslagController personController;
+    @Inject
+    private OppslagController oppslagController;
 
     @Test
     public void stubPersonInfo() {
-        Person person = personController.personinfo("fnr", true);
+        Person person = oppslagController.personinfo("fnr", true);
         assertThat(person).isNotNull();
     }
 

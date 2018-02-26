@@ -3,8 +3,9 @@ package no.nav.foreldrepenger.selvbetjening.rest;
 import static java.time.LocalDate.now;
 import static org.slf4j.LoggerFactory.getLogger;
 
+import javax.inject.Inject;
+
 import org.slf4j.Logger;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -29,12 +30,14 @@ public class OppslagController {
 
     private final RestTemplate template;
 
-    @Autowired
-    private MeterRegistry registry;
+    private final MeterRegistry registry;
 
-    public OppslagController(RestTemplate template, @Value("${FPSOKNAD_OPPSLAG_API_URL}") String uri) {
+    @Inject
+    public OppslagController(RestTemplate template, @Value("${FPSOKNAD_OPPSLAG_API_URL}") String uri,
+            MeterRegistry registry) {
         this.template = template;
         this.oppslagServiceUrl = uri;
+        this.registry = registry;
     }
 
     public Person personinfo(@RequestParam("fnr") String fnr,
