@@ -13,13 +13,13 @@ import static io.micrometer.prometheus.PrometheusConfig.DEFAULT;
 import static org.assertj.core.api.Assertions.assertThat;
 
 @RunWith(MockitoJUnitRunner.class)
-public class PersonControllerTest {
+public class OppslagControllerTest {
 
     @Spy
     private MeterRegistry registry = new PrometheusMeterRegistry(DEFAULT);
 
     @InjectMocks
-    private PersonController personController;
+    private OppslagController personController;
 
     @Test
     public void stubPersonInfo() {

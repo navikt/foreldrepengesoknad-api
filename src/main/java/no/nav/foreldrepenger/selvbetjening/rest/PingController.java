@@ -5,7 +5,6 @@ import static org.slf4j.LoggerFactory.getLogger;
 import org.slf4j.Logger;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.HttpStatus;
-import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -17,6 +16,7 @@ import org.springframework.web.client.RestTemplate;
 @CrossOrigin
 @RestController
 @RequestMapping(PingController.PING)
+
 public class PingController {
 
     private static final Logger LOG = getLogger(PingController.class);
@@ -32,11 +32,9 @@ public class PingController {
     }
 
     @GetMapping
-    @RequestMapping(produces = MediaType.APPLICATION_JSON_VALUE)
     public ResponseEntity<String> ping(@RequestParam("navn") String navn) {
         String url = uri + "/mottak/dokmot/ping?navn=" + navn;
         LOG.info("Pinging {}", uri);
-        String svar = template.getForObject(url, String.class);
-        return ResponseEntity.status(HttpStatus.OK).body(svar);
+        return ResponseEntity.status(HttpStatus.OK).body(template.getForObject(url, String.class));
     }
 }
