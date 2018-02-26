@@ -5,6 +5,7 @@ import static org.slf4j.LoggerFactory.getLogger;
 import org.slf4j.Logger;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.HttpStatus;
+import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -31,7 +32,7 @@ public class PingController {
         this.uri = uri;
     }
 
-    @GetMapping
+    @GetMapping(produces = MediaType.APPLICATION_XML_VALUE)
     public ResponseEntity<String> ping(@RequestParam("navn") String navn) {
         String url = uri + "/mottak/dokmot/ping?navn=" + navn;
         LOG.info("Pinging {}", uri);
