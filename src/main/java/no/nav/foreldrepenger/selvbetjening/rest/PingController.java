@@ -39,7 +39,7 @@ public class PingController {
                 .fromUri(mottakUri)
                 .path("mottak/dokmot/ping")
                 .queryParam("navn", navn).build().toUri();
-        LOG.info("Pinging {}", uri);
+        LOG.info("Pinging mottak {}", uri);
 
         return ResponseEntity.status(OK)
                 .body(template.getForObject(uri, String.class));
