@@ -14,7 +14,7 @@
     </appender>
 
 	<root level="info">
-		<appender-ref ref="stdout" />
+		<appender-ref ref="stdout_json" />
 	</root>
 
 </configuration>

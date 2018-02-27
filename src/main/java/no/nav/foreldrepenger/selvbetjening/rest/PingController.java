@@ -2,6 +2,8 @@ package no.nav.foreldrepenger.selvbetjening.rest;
 
 import static org.springframework.http.HttpStatus.OK;
 
+import java.net.URI;
+
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
@@ -21,9 +23,9 @@ public class PingController {
     public static final String PING = "/rest/ping";
 
     private final RestTemplate template;
-    private final String mottakUri;
+    private final URI mottakUri;
 
-    public PingController(RestTemplate template, @Value("${FPSOKNAD_MOTTAK_API_URL}") String mottakUri) {
+    public PingController(RestTemplate template, @Value("${FPSOKNAD_MOTTAK_API_URL}") URI mottakUri) {
         this.template = template;
         this.mottakUri = mottakUri;
     }
@@ -32,7 +34,7 @@ public class PingController {
     public ResponseEntity<String> pingMottak(@RequestParam("navn") String navn) {
         return ResponseEntity.status(OK)
                 .body(template.getForObject(UriComponentsBuilder
-                        .fromUriString(mottakUri)
+                        .fromUri(mottakUri)
                         .queryParam("navn", navn).build().toUri(), String.class));
     }
 
