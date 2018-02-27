@@ -12,10 +12,13 @@ import org.springframework.web.client.RestTemplate;
 
 import com.google.common.collect.ImmutableMap;
 
-import no.nav.foreldrepenger.selvbetjening.rest.ApiKeyInsertingClientInterceptor;
+import no.nav.foreldrepenger.selvbetjening.rest.ApiKeyInjectingClientInterceptor;
 
 @Configuration
 public class ApiConfiguration {
+
+    @Value("${apikeys.key:x-nav-apiKey}")
+    private String key;
 
     @Value("${FPSOKNAD_MOTTAK_API_URL}")
     private URI mottakServiceUri;
@@ -37,8 +40,8 @@ public class ApiConfiguration {
     }
 
     @Bean
-    public ClientHttpRequestInterceptor apiKeyInsertingClientInterceptor() {
-        return new ApiKeyInsertingClientInterceptor(
+    public ClientHttpRequestInterceptor apiKeyInjectingClientInterceptor() {
+        return new ApiKeyInjectingClientInterceptor(key,
                 ImmutableMap.<URI, String>builder()
                         .put(mottakServiceUri, mottakApiKey)
                         .put(oppslagServiceUri, oppslagApiKey)

@@ -9,33 +9,35 @@ import java.util.Optional;
 import java.util.stream.Collectors;
 
 import org.slf4j.Logger;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.HttpRequest;
 import org.springframework.http.client.ClientHttpRequestExecution;
 import org.springframework.http.client.ClientHttpRequestInterceptor;
 import org.springframework.http.client.ClientHttpResponse;
-import org.springframework.stereotype.Component;
 
-@Component
-public class ApiKeyInsertingClientInterceptor implements ClientHttpRequestInterceptor {
+public class ApiKeyInjectingClientInterceptor implements ClientHttpRequestInterceptor {
 
-    private static final String KEY = "x-nav-apiKey";
+    private static final Logger LOG = getLogger(ApiKeyInjectingClientInterceptor.class);
 
     private final Map<URI, String> apiKeys;
-    private static final Logger LOG = getLogger(ApiKeyInsertingClientInterceptor.class);
+    private final String headerKey;
 
-    public ApiKeyInsertingClientInterceptor(Map<URI, String> apiKeys) {
+    public ApiKeyInjectingClientInterceptor(@Value("${apikeys.key:x-nav-apiKey}") String headerKey,
+            Map<URI, String> apiKeys) {
+        this.headerKey = headerKey;
         this.apiKeys = apiKeys;
     }
 
     @Override
     public ClientHttpResponse intercept(HttpRequest request, byte[] body, ClientHttpRequestExecution execution)
             throws IOException {
-        String apiKey = apiKeyFor(request.getURI());
+        URI destination = request.getURI();
+        String apiKey = apiKeyFor(destination);
         if (apiKey != null) {
-            LOG.info("Injisert API-key for {} OK", request.getURI());
-            request.getHeaders().add(KEY, apiKey);
+            LOG.info("Injisert API-key as header {} for {} OK", headerKey, destination);
+            request.getHeaders().add(headerKey, apiKey);
         } else {
-            LOG.warn("Ingen api key ble funnet for {}", request.getURI());
+            LOG.warn("Ingen API-key ble funnet for {}", destination);
         }
         return execution.execute(request, body);
     }
