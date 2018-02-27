@@ -1,9 +1,11 @@
 package no.nav.foreldrepenger.selvbetjening.rest;
 
+import static org.slf4j.LoggerFactory.getLogger;
 import static org.springframework.http.HttpStatus.OK;
 
 import java.net.URI;
 
+import org.slf4j.Logger;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
@@ -21,6 +23,7 @@ import org.springframework.web.util.UriComponentsBuilder;
 public class PingController {
 
     public static final String PING = "/rest/ping";
+    private static final Logger LOG = getLogger(PingController.class);
 
     private final RestTemplate template;
     private final URI mottakUri;
@@ -32,11 +35,14 @@ public class PingController {
 
     @GetMapping(produces = MediaType.APPLICATION_XML_VALUE)
     public ResponseEntity<String> pingMottak(@RequestParam("navn") String navn) {
+        URI uri = UriComponentsBuilder
+                .fromUri(mottakUri)
+                .path("mottak/dokmot")
+                .queryParam("navn", navn).build().toUri();
+        LOG.info("Pinging {}", uri);
+
         return ResponseEntity.status(OK)
-                .body(template.getForObject(UriComponentsBuilder
-                        .fromUri(mottakUri)
-                        .path("mottak/dokmot")
-                        .queryParam("navn", navn).build().toUri(), String.class));
+                .body(template.getForObject(uri, String.class));
     }
 
     @Override
