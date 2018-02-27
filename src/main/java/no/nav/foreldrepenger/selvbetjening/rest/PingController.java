@@ -37,7 +37,7 @@ public class PingController {
     public ResponseEntity<String> pingMottak(@RequestParam("navn") String navn) {
         URI uri = UriComponentsBuilder
                 .fromUri(mottakUri)
-                .path("mottak/dokmot/ping")
+                .path("/mottak/dokmot/ping")
                 .queryParam("navn", navn).build().toUri();
         LOG.info("Pinging mottak {}", uri);
 
