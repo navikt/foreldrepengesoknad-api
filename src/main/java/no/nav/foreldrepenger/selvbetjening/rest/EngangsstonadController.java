@@ -3,6 +3,7 @@ package no.nav.foreldrepenger.selvbetjening.rest;
 import static java.time.LocalDateTime.now;
 import static org.slf4j.LoggerFactory.getLogger;
 import static org.springframework.http.ResponseEntity.created;
+import static org.springframework.http.ResponseEntity.ok;
 import static org.springframework.web.servlet.support.ServletUriComponentsBuilder.fromCurrentRequest;
 
 import java.net.URI;
@@ -55,24 +56,21 @@ public class EngangsstonadController {
         if (stub) {
             engangsstonad.id = "69";
             engangsstonad.opprettet = now();
-            return created(location(engangsstonad.id)).body(engangsstonad);
+            return ok(engangsstonad);
         }
 
         LOG.info("Mottak URL: " + mottakServiceUrl);
-        String url = mottakServiceUrl + "/mottak";
-        EngangsstonadDto dto = new RestTemplate().postForObject(url, entity(engangsstonad), EngangsstonadDto.class);
+        String url = mottakServiceUrl + "/mottak/dokmot/søknad";
+        ResponseEntity<String> response = new RestTemplate().postForEntity(url, entity(engangsstonad), String.class);
+        LOG.info(response.toString());
 
-        return created(location(engangsstonad.id)).body(new Engangsstonad(dto));
+        return ok(engangsstonad);
     }
 
     private HttpEntity<EngangsstonadDto> entity(Engangsstonad engangsstonad) {
         HttpHeaders headers = new HttpHeaders();
         headers.set("x-nav-apiKey", apiGatewayKey);
         return new HttpEntity<>(new EngangsstonadDto(engangsstonad), headers);
-    }
-
-    private URI location(String id) {
-        return fromCurrentRequest().path("/{id}").buildAndExpand(id).toUri();
     }
 
 }

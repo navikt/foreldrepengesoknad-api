@@ -19,7 +19,7 @@ public class Engangsstonad extends Soknad {
     public Engangsstonad() {}
 
     public Engangsstonad(EngangsstonadDto dto) {
-        this.opprettet = dto.motattdato.atStartOfDay();
+        this.opprettet = dto.mottattdato;
     }
 
     public static Engangsstonad stub() {
