@@ -35,6 +35,7 @@ public class PingController {
         return ResponseEntity.status(OK)
                 .body(template.getForObject(UriComponentsBuilder
                         .fromUri(mottakUri)
+                        .path("mottak/dokmot")
                         .queryParam("navn", navn).build().toUri(), String.class));
     }
 
