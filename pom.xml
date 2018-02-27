@@ -24,7 +24,6 @@
 		<maven.compiler.target>1.8</maven.compiler.target>
 		<springfox.version>2.7.0</springfox.version>
 	</properties>
-
 	<dependencies>
 	 <dependency>
             <groupId>javax.inject</groupId>

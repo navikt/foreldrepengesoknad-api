@@ -11,6 +11,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.client.RestTemplate;
+import org.springframework.web.util.UriComponentsBuilder;
 
 @CrossOrigin
 @RestController
@@ -30,7 +31,9 @@ public class PingController {
     @GetMapping(produces = MediaType.APPLICATION_XML_VALUE)
     public ResponseEntity<String> pingMottak(@RequestParam("navn") String navn) {
         return ResponseEntity.status(OK)
-                .body(template.getForObject(mottakUri + "/mottak/dokmot/ping?navn={}", String.class, navn));
+                .body(template.getForObject(UriComponentsBuilder
+                        .fromUriString(mottakUri)
+                        .queryParam("navn", navn).build().toUri(), String.class));
     }
 
     @Override
