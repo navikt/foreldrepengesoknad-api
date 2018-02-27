@@ -10,7 +10,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
-import no.nav.foreldrepenger.selvbetjening.service.PingService;
+import no.nav.foreldrepenger.selvbetjening.service.MottakPingService;
 
 @CrossOrigin
 @RestController
@@ -19,9 +19,9 @@ public class PingController {
 
     public static final String PING = "/rest/ping";
 
-    private final PingService pingService;
+    private final MottakPingService pingService;
 
-    public PingController(PingService pingService) {
+    public PingController(MottakPingService pingService) {
         this.pingService = pingService;
     }
 

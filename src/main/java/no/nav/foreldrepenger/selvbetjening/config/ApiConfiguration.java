@@ -5,6 +5,8 @@ import static java.util.Collections.singletonList;
 import java.net.URI;
 
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.boot.actuate.health.HealthAggregator;
+import org.springframework.boot.actuate.health.OrderedHealthAggregator;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.http.client.ClientHttpRequestInterceptor;
@@ -47,5 +49,10 @@ public class ApiConfiguration {
                         .put(oppslagServiceUri, oppslagApiKey)
                         .build());
 
+    }
+
+    @Bean
+    public HealthAggregator healthAggregator() {
+        return new OrderedHealthAggregator();
     }
 }

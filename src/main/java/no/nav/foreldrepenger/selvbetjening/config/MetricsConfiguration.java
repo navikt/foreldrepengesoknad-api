@@ -1,4 +1,4 @@
-package no.nav.foreldrepenger.selvbetjening;
+package no.nav.foreldrepenger.selvbetjening.config;
 
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
