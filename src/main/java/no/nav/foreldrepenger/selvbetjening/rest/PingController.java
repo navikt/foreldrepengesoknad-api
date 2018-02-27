@@ -33,7 +33,7 @@ public class PingController {
         this.mottakUri = mottakUri;
     }
 
-    @GetMapping(produces = MediaType.APPLICATION_XML_VALUE)
+    @GetMapping(produces = MediaType.APPLICATION_JSON_VALUE)
     public ResponseEntity<String> pingMottak(@RequestParam("navn") String navn) {
         URI uri = UriComponentsBuilder
                 .fromUri(mottakUri)
