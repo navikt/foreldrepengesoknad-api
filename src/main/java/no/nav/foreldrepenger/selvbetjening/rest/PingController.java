@@ -1,6 +1,7 @@
 package no.nav.foreldrepenger.selvbetjening.rest;
 
 import static java.util.stream.Collectors.toMap;
+import static org.slf4j.LoggerFactory.getLogger;
 import static org.springframework.http.HttpStatus.OK;
 
 import java.net.URI;
@@ -8,6 +9,7 @@ import java.util.Arrays;
 import java.util.List;
 import java.util.Map;
 
+import org.slf4j.Logger;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.CrossOrigin;
@@ -24,6 +26,8 @@ import no.nav.foreldrepenger.selvbetjening.util.Pair;
 @RequestMapping(PingController.PING)
 public class PingController {
 
+    private static final Logger LOG = getLogger(PingController.class);
+
     public static final String PING = "/rest/ping";
 
     private final List<Pinger> pingServices;
@@ -34,6 +38,7 @@ public class PingController {
 
     @GetMapping(produces = MediaType.APPLICATION_JSON_VALUE)
     public ResponseEntity<Map<URI, Boolean>> ping(@RequestParam("navn") String navn) {
+        LOG.info("Pinging backend services {}", pingServices);
         return ResponseEntity.status(OK)
                 .body(pingServices.stream()
                         .map(s -> ping(s, navn))
