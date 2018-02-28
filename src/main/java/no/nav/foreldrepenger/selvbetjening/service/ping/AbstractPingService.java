@@ -1,7 +1,5 @@
 package no.nav.foreldrepenger.selvbetjening.service.ping;
 
-import static org.slf4j.LoggerFactory.getLogger;
-
 import java.net.URI;
 
 import org.slf4j.Logger;
@@ -9,12 +7,12 @@ import org.springframework.web.client.RestTemplate;
 
 public abstract class AbstractPingService implements Pinger {
 
-    private static final Logger LOG = getLogger(AbstractPingService.class);
-
     protected final RestTemplate template;
     private final URI baseUri;
 
     protected abstract URI pingURI(String message);
+
+    protected abstract Logger logger();
 
     public AbstractPingService(RestTemplate template, URI baseUri) {
         this.template = template;
@@ -24,7 +22,7 @@ public abstract class AbstractPingService implements Pinger {
     @Override
     public String ping(String message) {
         URI uri = pingURI(message);
-        LOG.info("Pinging remote {}", uri);
+        logger().info("Pinging remote {}", uri);
         return template.getForObject(uri, String.class);
     }
 

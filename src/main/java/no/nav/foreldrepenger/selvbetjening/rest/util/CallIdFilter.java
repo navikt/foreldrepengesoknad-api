@@ -1,5 +1,7 @@
 package no.nav.foreldrepenger.selvbetjening.rest.util;
 
+import static org.slf4j.LoggerFactory.getLogger;
+
 import java.io.IOException;
 
 import javax.inject.Inject;
@@ -9,6 +11,7 @@ import javax.servlet.ServletRequest;
 import javax.servlet.ServletResponse;
 import javax.servlet.http.HttpServletRequest;
 
+import org.slf4j.Logger;
 import org.slf4j.MDC;
 import org.springframework.core.annotation.Order;
 import org.springframework.stereotype.Component;
@@ -20,6 +23,8 @@ import no.nav.foreldrepenger.selvbetjening.util.CallIdGenerator;
 @Order(1)
 public class CallIdFilter extends GenericFilterBean {
 
+    private static final Logger LOG = getLogger(CallIdFilter.class);
+
     private final CallIdGenerator generator;
 
     @Inject
@@ -30,16 +35,18 @@ public class CallIdFilter extends GenericFilterBean {
     @Override
     public void doFilter(ServletRequest request, ServletResponse response, FilterChain chain)
             throws IOException, ServletException {
-        String key = getOrCreateCallId(request);
-        try {
-            chain.doFilter(request, response);
-        } finally {
-            MDC.remove(key);
-        }
+        getOrCreateCallId(request);
+        chain.doFilter(request, response);
     }
 
-    private String getOrCreateCallId(ServletRequest req) {
-        String callId = HttpServletRequest.class.cast(req).getHeader(generator.getDefaultKey());
-        return callId == null ? generator.generateCallId().getFirst() : generator.generateCallId(callId);
+    private void getOrCreateCallId(ServletRequest req) {
+        String callId = HttpServletRequest.class.cast(req).getHeader(generator.getKey());
+        if (callId != null) {
+            LOG.info("Callid is already set in request {}", callId);
+            MDC.put(generator.getKey(), callId);
+        } else {
+            MDC.put(generator.getKey(), generator.getOrCreate());
+            LOG.info("Callid was not set in request, now set in MDC to {}", MDC.get(generator.getKey()));
+        }
     }
 }

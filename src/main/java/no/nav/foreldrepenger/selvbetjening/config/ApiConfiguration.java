@@ -1,6 +1,6 @@
 package no.nav.foreldrepenger.selvbetjening.config;
 
-import static java.util.Collections.singletonList;
+import static java.util.Arrays.asList;
 
 import java.net.URI;
 
@@ -35,9 +35,9 @@ public class ApiConfiguration {
     String oppslagApiKey;
 
     @Bean
-    public RestTemplate restTemplate(ClientHttpRequestInterceptor interceptor) {
+    public RestTemplate restTemplate(ClientHttpRequestInterceptor... interceptors) {
         RestTemplate template = new RestTemplate();
-        template.setInterceptors(singletonList(interceptor));
+        template.setInterceptors(asList(interceptors));
         return template;
     }
 

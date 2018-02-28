@@ -2,10 +2,8 @@ package no.nav.foreldrepenger.selvbetjening.util;
 
 public interface CallIdGenerator {
 
-    Pair<String, String> generateCallId();
+    String getOrCreate();
 
-    String generateCallId(String key);
-
-    String getDefaultKey();
+    String getKey();
 
 }

@@ -12,37 +12,26 @@ import org.springframework.stereotype.Component;
 @Component
 public class UUIDCallIdGenerator implements CallIdGenerator {
 
-    private final String defaultCallIdkey;
+    private final String key;
 
     @Inject
-    public UUIDCallIdGenerator(@Value("${callid.key:X-Nav-CallId}") String defaultCallIdkey) {
-        this.defaultCallIdkey = defaultCallIdkey;
+    public UUIDCallIdGenerator(@Value("${callid.key:X-Nav-CallId}") String key) {
+        this.key = key;
     }
 
     @Override
-    public String generateCallId(String key) {
-        return getOrCreate(key);
+    public String getOrCreate() {
+        return Optional.ofNullable(MDC.get(key)).orElse(UUID.randomUUID().toString());
     }
 
     @Override
-    public Pair<String, String> generateCallId() {
-        return Pair.of(defaultCallIdkey, getOrCreate(defaultCallIdkey));
-    }
-
-    @Override
-    public String getDefaultKey() {
-        return defaultCallIdkey;
-    }
-
-    private static String getOrCreate(String key) {
-        String callId = Optional.ofNullable(MDC.get(key)).orElse(UUID.randomUUID().toString());
-        MDC.put(key, callId);
-        return callId;
+    public String getKey() {
+        return key;
     }
 
     @Override
     public String toString() {
-        return getClass().getSimpleName() + " [defaultCallIdkey=" + defaultCallIdkey + "]";
+        return getClass().getSimpleName() + " [key=" + key + "]";
     }
 
 }
