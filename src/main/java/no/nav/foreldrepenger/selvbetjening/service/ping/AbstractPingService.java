@@ -12,7 +12,7 @@ public abstract class AbstractPingService implements Pinger {
     private static final Logger LOG = getLogger(AbstractPingService.class);
 
     protected final RestTemplate template;
-    protected final URI baseUri;
+    private final URI baseUri;
 
     protected abstract URI pingURI(String message);
 

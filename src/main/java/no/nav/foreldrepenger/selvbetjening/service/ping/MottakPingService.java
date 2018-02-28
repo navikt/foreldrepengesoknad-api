@@ -10,14 +10,14 @@ import org.springframework.web.util.UriComponentsBuilder;
 @Service
 public class MottakPingService extends AbstractPingService {
 
-    public MottakPingService(RestTemplate template, @Value("${FPSOKNAD_MOTTAK_API_URL}") URI mottakUri) {
-        super(template, mottakUri);
+    public MottakPingService(RestTemplate template, @Value("${FPSOKNAD_MOTTAK_API_URL}") URI baseUri) {
+        super(template, baseUri);
     }
 
     @Override
     protected URI pingURI(String message) {
         return UriComponentsBuilder
-                .fromUri(baseUri)
+                .fromUri(baseUri())
                 .path("/mottak/dokmot/ping")
                 .queryParam("navn", message).build().toUri();
     }

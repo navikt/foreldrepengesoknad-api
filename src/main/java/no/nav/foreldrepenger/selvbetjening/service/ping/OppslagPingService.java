@@ -10,14 +10,14 @@ import org.springframework.web.util.UriComponentsBuilder;
 @Service
 public class OppslagPingService extends AbstractPingService {
 
-    public OppslagPingService(RestTemplate template, @Value("${FPSOKNAD_OPPSLAG_API_URL}") URI mottakUri) {
-        super(template, mottakUri);
+    public OppslagPingService(RestTemplate template, @Value("${FPSOKNAD_OPPSLAG_API_URL}") URI baseUri) {
+        super(template, baseUri);
     }
 
     @Override
     protected URI pingURI(String message) {
         return UriComponentsBuilder
-                .fromUri(baseUri)
+                .fromUri(baseUri())
                 .path("/oppslag/ping")
                 .queryParam("navn", message).build().toUri();
     }
