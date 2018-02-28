@@ -1,30 +1,18 @@
 package no.nav.foreldrepenger.selvbetjening.rest;
 
-import static java.time.LocalDateTime.now;
-import static org.slf4j.LoggerFactory.getLogger;
-import static org.springframework.http.ResponseEntity.created;
-import static org.springframework.http.ResponseEntity.ok;
-import static org.springframework.web.servlet.support.ServletUriComponentsBuilder.fromCurrentRequest;
-
-import java.net.URI;
-
+import no.nav.foreldrepenger.selvbetjening.consumer.json.EngangsstonadDto;
+import no.nav.foreldrepenger.selvbetjening.rest.json.Engangsstonad;
 import org.slf4j.Logger;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.HttpEntity;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.CrossOrigin;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 import org.springframework.web.client.RestTemplate;
 
-import no.nav.foreldrepenger.selvbetjening.consumer.json.EngangsstonadDto;
-import no.nav.foreldrepenger.selvbetjening.rest.json.Engangsstonad;
+import static java.time.LocalDateTime.now;
+import static org.slf4j.LoggerFactory.getLogger;
+import static org.springframework.http.ResponseEntity.ok;
 
 @CrossOrigin
 @RestController
@@ -53,17 +41,17 @@ public class EngangsstonadController {
             @RequestParam(name = "stub", defaultValue = "false", required = false) Boolean stub) {
         LOG.info("Poster engangsstønad {}", stub ? "(stub)" : "");
 
+        engangsstonad.opprettet = now();
+
         if (stub) {
             engangsstonad.id = "69";
-            engangsstonad.opprettet = now();
             return ok(engangsstonad);
         }
 
-        LOG.info("Mottak URL: " + mottakServiceUrl);
-        String url = mottakServiceUrl + "/mottak/dokmot/søknad";
-        ResponseEntity<String> response = new RestTemplate().postForEntity(url, entity(engangsstonad), String.class);
-        LOG.info(response.toString());
+        String url = mottakServiceUrl + "/mottak/dokmot/send";
+        LOG.info("Mottak URL: " + url);
 
+        new RestTemplate().postForEntity(url, entity(engangsstonad), String.class);
         return ok(engangsstonad);
     }
 
