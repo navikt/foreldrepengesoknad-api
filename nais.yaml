@@ -11,10 +11,10 @@ port: 8080
 healthcheck:
   liveness:
     initialDelay: 60
-    path: /foreldrepengesoknad-api/actuator/health
+    path: /foreldrepengesoknad-api/actuator/info
   readiness:
     initialDelay: 60
-    path: /foreldrepengesoknad-api/actuator/health
+    path: /foreldrepengesoknad-api/actuator/info
 resources:
   limits:
     cpu: 1500m

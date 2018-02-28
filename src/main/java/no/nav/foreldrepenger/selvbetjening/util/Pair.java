@@ -1,4 +1,4 @@
-package no.nav.foreldrepenger.selvbetjening.service;
+package no.nav.foreldrepenger.selvbetjening.util;
 
 import java.util.Objects;
 

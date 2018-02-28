@@ -10,7 +10,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
-import no.nav.foreldrepenger.selvbetjening.service.MottakPingService;
+import no.nav.foreldrepenger.selvbetjening.service.ping.MottakPingService;
 
 @CrossOrigin
 @RestController
