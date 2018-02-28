@@ -34,14 +34,14 @@ public class PingController {
 
     @GetMapping(produces = MediaType.APPLICATION_JSON_VALUE)
     public ResponseEntity<Map<URI, Boolean>> ping(@RequestParam("navn") String navn) {
-        Map<URI, Boolean> result = pingServices.stream()
-                .map(s -> ping(s, navn))
-                .collect(toMap(pair -> pair.getFirst(), pair -> pair.getSecond()));
-        return ResponseEntity.status(OK).body(result);
+        return ResponseEntity.status(OK)
+                .body(pingServices.stream()
+                        .map(s -> ping(s, navn))
+                        .collect(toMap(pair -> pair.getFirst(), pair -> pair.getSecond())));
 
     }
 
-    private Pair<URI, Boolean> ping(Pinger pinger, String message) {
+    private static Pair<URI, Boolean> ping(Pinger pinger, String message) {
         try {
             pinger.ping(message);
             return Pair.of(pinger.baseUri(), true);
