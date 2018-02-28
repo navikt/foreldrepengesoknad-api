@@ -14,7 +14,7 @@ import org.springframework.web.client.RestTemplate;
 
 import com.google.common.collect.ImmutableMap;
 
-import no.nav.foreldrepenger.selvbetjening.rest.ApiKeyInjectingClientInterceptor;
+import no.nav.foreldrepenger.selvbetjening.rest.util.ApiKeyInjectingClientInterceptor;
 
 @Configuration
 public class ApiConfiguration {

@@ -1,4 +1,4 @@
-package no.nav.foreldrepenger.selvbetjening.rest;
+package no.nav.foreldrepenger.selvbetjening.rest.util;
 
 import static java.util.Arrays.asList;
 import static java.util.stream.Collectors.toMap;

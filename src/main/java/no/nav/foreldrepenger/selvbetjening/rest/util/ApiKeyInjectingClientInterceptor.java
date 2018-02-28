@@ -1,4 +1,4 @@
-package no.nav.foreldrepenger.selvbetjening.rest;
+package no.nav.foreldrepenger.selvbetjening.rest.util;
 
 import static org.slf4j.LoggerFactory.getLogger;
 
@@ -34,10 +34,11 @@ public class ApiKeyInjectingClientInterceptor implements ClientHttpRequestInterc
         URI destination = request.getURI();
         String apiKey = apiKeyFor(destination);
         if (apiKey != null) {
-            LOG.info("Injisert API-key as header {} for {} OK", headerKey, destination);
+            LOG.info("Injisert API-key som header {} for {}", headerKey, destination);
             request.getHeaders().add(headerKey, apiKey);
         } else {
-            LOG.warn("Ingen API-key ble funnet for {} blant {} konfigurasjoner", destination, apiKeys.values().size());
+            LOG.warn("Ingen API-key ble funnet for {} (sjekket {} konfigurasjoner)", destination,
+                    apiKeys.values().size());
         }
         return execution.execute(request, body);
     }
@@ -49,4 +50,10 @@ public class ApiKeyInjectingClientInterceptor implements ClientHttpRequestInterc
                 .collect(Collectors.reducing((a, b) -> null)))
                 .map(s -> s.get()).orElse(null);
     }
+
+    @Override
+    public String toString() {
+        return getClass().getSimpleName() + " [apiKeys=" + apiKeys.keySet() + ", headerKey=" + headerKey + "]";
+    }
+
 }
