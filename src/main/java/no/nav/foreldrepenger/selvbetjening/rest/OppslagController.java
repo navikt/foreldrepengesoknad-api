@@ -1,6 +1,7 @@
 package no.nav.foreldrepenger.selvbetjening.rest;
 
 import static java.time.LocalDate.now;
+import static no.nav.foreldrepenger.selvbetjening.rest.OppslagController.REST_OPPSLAG;
 import static org.slf4j.LoggerFactory.getLogger;
 
 import javax.inject.Inject;
@@ -21,7 +22,7 @@ import no.nav.foreldrepenger.selvbetjening.rest.json.Person;
 
 @CrossOrigin
 @RestController
-@RequestMapping(OppslagController.REST_OPPSLAG)
+@RequestMapping(REST_OPPSLAG)
 public class OppslagController {
 
     public static final String REST_OPPSLAG = "/rest/personinfo";

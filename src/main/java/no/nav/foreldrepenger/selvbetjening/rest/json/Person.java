@@ -9,24 +9,24 @@ public class Person {
     public Person(PersonDto personDto) {
         this.fornavn = personDto.fornavn;
         this.etternavn = personDto.etternavn;
-        this.kjonn = personDto.kjonn;
-        this.fodselsdato = personDto.fodselsdato;
+        this.kjønn = personDto.kjønn;
+        this.fødselsdato = personDto.fødselsdato;
         this.adresse = personDto.adresse.adresse();
     }
 
-    public Person(String fornavn, String etternavn, String kjonn, LocalDate fodselsdato, String adresse) {
+    public Person(String fornavn, String etternavn, String kjønn, LocalDate fødselsdato, String adresse) {
         this.fornavn = fornavn;
         this.etternavn = etternavn;
-        this.kjonn = kjonn;
-        this.fodselsdato = fodselsdato;
+        this.kjønn = kjønn;
+        this.fødselsdato = fødselsdato;
         this.adresse = adresse;
     }
 
     public String fornavn;
     public String mellomnavn;
     public String etternavn;
-    public String kjonn;
-    public LocalDate fodselsdato;
+    public String kjønn;
+    public LocalDate fødselsdato;
     public String adresse;
 
 }

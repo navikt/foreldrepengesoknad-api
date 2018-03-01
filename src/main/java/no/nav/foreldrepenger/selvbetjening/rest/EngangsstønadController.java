@@ -1,6 +1,7 @@
 package no.nav.foreldrepenger.selvbetjening.rest;
 
 import static java.time.LocalDateTime.now;
+import static no.nav.foreldrepenger.selvbetjening.rest.EngangsstønadController.REST_ENGANGSSTONAD;
 import static org.slf4j.LoggerFactory.getLogger;
 import static org.springframework.http.ResponseEntity.ok;
 
@@ -22,17 +23,17 @@ import org.springframework.web.client.RestTemplate;
 import org.springframework.web.util.UriComponentsBuilder;
 
 import io.micrometer.core.instrument.MeterRegistry;
-import no.nav.foreldrepenger.selvbetjening.consumer.json.EngangsstonadDto;
-import no.nav.foreldrepenger.selvbetjening.rest.json.Engangsstonad;
+import no.nav.foreldrepenger.selvbetjening.consumer.json.EngangsstønadDto;
+import no.nav.foreldrepenger.selvbetjening.rest.json.Engangsstønad;
 
 @CrossOrigin
 @RestController
-@RequestMapping(EngangsstonadController.REST_ENGANGSSTONAD)
-public class EngangsstonadController {
+@RequestMapping(REST_ENGANGSSTONAD)
+public class EngangsstønadController {
 
     public static final String REST_ENGANGSSTONAD = "/rest/engangsstonad";
 
-    private static final Logger LOG = getLogger(EngangsstonadController.class);
+    private static final Logger LOG = getLogger(EngangsstønadController.class);
 
     private final RestTemplate template;
 
@@ -40,34 +41,32 @@ public class EngangsstonadController {
 
     private final MeterRegistry registry;
 
-    public EngangsstonadController(RestTemplate template,
-            @Value("${FPSOKNAD_MOTTAK_API_URL}") URI baseURI, MeterRegistry registry) {
+    public EngangsstønadController(RestTemplate template,
+                                   @Value("${FPSOKNAD_MOTTAK_API_URL}") URI baseURI, MeterRegistry registry) {
         this.template = template;
         this.mottakServiceUrl = mottakURIFra(baseURI);
         this.registry = registry;
     }
 
     @GetMapping("/{id}")
-    public Engangsstonad hentEngangsstonad(@PathVariable String id) {
-        Engangsstonad engangsstonad = Engangsstonad.stub();
-        engangsstonad.id = id;
-        return engangsstonad;
+    public Engangsstønad hentEngangsstonad(@PathVariable String id) {
+        return Engangsstønad.stub();
     }
 
     @PostMapping
-    public ResponseEntity<Engangsstonad> opprettEngangsstonad(@RequestBody Engangsstonad engangsstonad,
-            @RequestParam(name = "stub", defaultValue = "false", required = false) Boolean stub) {
+    public ResponseEntity<Engangsstønad> opprettEngangsstonad(@RequestBody Engangsstønad engangsstønad,
+                                                              @RequestParam(name = "stub", defaultValue = "false", required = false) Boolean stub) {
         LOG.info("Poster engangsstønad {}", stub ? "(stub)" : "");
 
-        engangsstonad.opprettet = now();
+        engangsstønad.opprettet = now();
 
         if (stub) {
-            engangsstonad.id = "42";
-            return ok(engangsstonad);
+            return ok(engangsstønad);
         }
+
         LOG.info("Mottak URL: " + mottakServiceUrl);
-        template.postForEntity(mottakServiceUrl, new HttpEntity<>(new EngangsstonadDto(engangsstonad)), String.class);
-        return ok(engangsstonad);
+        template.postForEntity(mottakServiceUrl, new HttpEntity<>(new EngangsstønadDto(engangsstønad)), String.class);
+        return ok(engangsstønad);
     }
 
     private static URI mottakURIFra(URI baseUri) {
