@@ -1,0 +1,25 @@
+info :
+    app:
+      version: @project.version@
+    build:
+       time:  @timestamp@  
+management:
+    endpoints: 
+         security:
+             enabled : false
+         web:
+            exposure:
+              include:  info, health, metrics
+server:
+     servlet :
+       context-path :  /foreldrepengesoknad-api
+    use-forward-headers: true                        
+spring :
+    main : 
+       banner-mode : 'off'
+    metrics :
+      web :
+        server :
+           auto-time-requests: true   
+               
+       
