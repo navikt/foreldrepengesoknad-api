@@ -11,7 +11,7 @@ node {
     def mvnHome = tool "maven-3.3.9"
     def mvn = "${mvnHome}/bin/mvn"
     def appConfig = "nais.yaml"
-    def dockerRepo = "repo.adeo.no:5443"
+    def repo = "repo.adeo.no:5443"
     def groupId = "nais"
     def environment = 't1'
     def zone = 'sbs'
@@ -42,10 +42,10 @@ node {
     stage("Build & publish") {
         sh "${mvn} versions:set -B -DnewVersion=${releaseVersion}"
         sh "${mvn} clean install -Djava.io.tmpdir=/tmp/${app} -B -e"
-        sh "docker build --build-arg version=${releaseVersion} --build-arg app_name=${app} -t ${dockerRepo}/${app}:${releaseVersion} ."
+        sh "docker build --build-arg version=${releaseVersion} --build-arg app_name=${app} -t ${repo}/${app}:${releaseVersion} ."
 
         withCredentials([[$class: 'UsernamePasswordMultiBinding', credentialsId: 'nexusUser', usernameVariable: 'USERNAME', passwordVariable: 'PASSWORD']]) {
-            sh "docker login -u ${env.USERNAME} -p ${env.PASSWORD} ${dockerRepo} && docker push ${dockerRepo}/${app}:${releaseVersion}"
+            sh "docker login -u ${env.USERNAME} -p ${env.PASSWORD} ${repo} && docker push ${repo}/${app}:${releaseVersion}"
             sh "curl --fail -v -u ${env.USERNAME}:${env.PASSWORD} --upload-file ${appConfig} https://repo.adeo.no/repository/raw/${groupId}/${app}/${releaseVersion}/nais.yaml"
         }
 
