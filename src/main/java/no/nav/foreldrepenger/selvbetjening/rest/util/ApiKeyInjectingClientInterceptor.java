@@ -6,7 +6,6 @@ import java.io.IOException;
 import java.net.URI;
 import java.util.Map;
 import java.util.Optional;
-import java.util.stream.Collectors;
 
 import org.slf4j.Logger;
 import org.springframework.beans.factory.annotation.Value;
@@ -34,7 +33,7 @@ public class ApiKeyInjectingClientInterceptor implements ClientHttpRequestInterc
         URI destination = request.getURI();
         String apiKey = apiKeyFor(destination);
         if (apiKey != null) {
-            LOG.info("Injisert API-key som header {} for {}", headerKey, destination);
+            LOG.trace("Injisert API-key som header {} for {}", headerKey, destination);
             request.getHeaders().add(headerKey, apiKey);
         } else {
             LOG.warn("Ingen API-key ble funnet for {} (sjekket {} konfigurasjoner)", destination,

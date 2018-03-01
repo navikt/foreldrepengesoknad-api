@@ -42,11 +42,11 @@ public class CallIdFilter extends GenericFilterBean {
     private void getOrCreateCallId(ServletRequest req) {
         String callId = HttpServletRequest.class.cast(req).getHeader(generator.getKey());
         if (callId != null) {
-            LOG.info("Callid is already set in request {}", callId);
+            LOG.trace("Callid is already set in request {}", callId);
             MDC.put(generator.getKey(), callId);
         } else {
-            MDC.put(generator.getKey(), generator.getOrCreate());
-            LOG.info("Callid was not set in request, now set in MDC to {}", MDC.get(generator.getKey()));
+            MDC.put(generator.getKey(), generator.create());
+            LOG.trace("Callid was not set in request, now set in MDC to {}", MDC.get(generator.getKey()));
         }
     }
 }
