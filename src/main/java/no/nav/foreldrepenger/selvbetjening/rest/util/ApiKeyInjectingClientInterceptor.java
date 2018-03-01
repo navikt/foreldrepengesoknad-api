@@ -46,9 +46,8 @@ public class ApiKeyInjectingClientInterceptor implements ClientHttpRequestInterc
     private String apiKeyFor(URI uri) {
         return Optional.ofNullable(apiKeys.entrySet().stream()
                 .filter(s -> uri.toString().startsWith(s.getKey().toString()))
-                .map(s -> s.getValue())
-                .collect(Collectors.reducing((a, b) -> null)))
-                .map(s -> s.get()).orElse(null);
+                .map(Map.Entry::getValue).reduce((a, b) -> null))
+                .map(Optional::get).orElse(null);
     }
 
     @Override

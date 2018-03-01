@@ -12,7 +12,7 @@ import org.springframework.boot.actuate.health.HealthAggregator;
 import org.springframework.boot.actuate.health.HealthIndicator;
 import org.springframework.stereotype.Component;
 
-import no.nav.foreldrepenger.selvbetjening.service.ping.Pinger;
+import no.nav.foreldrepenger.selvbetjening.consumer.ping.Pinger;
 import no.nav.foreldrepenger.selvbetjening.util.Pair;
 
 @Component
@@ -31,7 +31,7 @@ public class BackendAwareHealthIndicator implements HealthIndicator {
     public Health health() {
         return aggregator.aggregate(pingServices.stream()
                 .map(BackendAwareHealthIndicator::ping)
-                .collect(toMap(pair -> pair.getFirst(), pair -> pair.getSecond())));
+                .collect(toMap(Pair::getFirst, Pair::getSecond)));
     }
 
     private static Pair<String, Health> ping(Pinger pinger) {

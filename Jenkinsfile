@@ -61,10 +61,10 @@ node {
                 input id: 'deploy', message: "Check status here:  https://jira.adeo.no/browse/${deploy}"
             }
         } catch (Exception e) {
-        slackSend([
-                color: 'warning',
-                message: "Build ${releaseVersion} of ${app} could not be deployed to pre-prod"
-        ])
+            slackSend([
+                    color: 'warning',
+                    message: "Build ${releaseVersion} of ${app} could not be deployed to pre-prod"
+            ])
             throw new Exception("Deploy feilet :( \n Se https://jira.adeo.no/browse/" + deploy + " for detaljer", e)
         }
     }

@@ -36,27 +36,23 @@ public class OppslagController {
     private final MeterRegistry registry;
 
     @Inject
-    public OppslagController(RestTemplate template, @Value("${FPSOKNAD_OPPSLAG_API_URL}") String uri,
-            MeterRegistry registry) {
+    public OppslagController(RestTemplate template, @Value("${FPSOKNAD_OPPSLAG_API_URL}") String uri, MeterRegistry registry) {
         this.template = template;
         this.oppslagServiceUrl = uri;
         this.registry = registry;
     }
 
     @GetMapping(produces = MediaType.APPLICATION_JSON_VALUE)
-    public Person personinfo(@RequestParam("fnr") String fnr,
-            @RequestParam(name = "stub", defaultValue = "false", required = false) Boolean stub) {
+    public Person personinfo(@RequestParam("fnr") String fnr, @RequestParam(name = "stub", defaultValue = "false", required = false) Boolean stub) {
         LOG.info("Henter personinfo {}", stub ? "(stub)" : "");
 
         registry.counter("foreldrepengesoknad.hentet.personinfo").increment();
         if (stub) {
-            return new Person("Gro Harlem", "Stubberud", "K", now().minusYears(20),
-                    "Lyckliga gatan 1A, 0666 Oslo, Norge");
+            return new Person("Gro Harlem", "Stubberud", "K", now().minusYears(20), "Lyckliga gatan 1A, 0666 Oslo, Norge");
         }
 
-        LOG.info("Oppslag URL: " + oppslagServiceUrl);
         String url = oppslagServiceUrl + "/person/?fnr=" + fnr;
-        LOG.info("Slår opp i {}", url);
+        LOG.info("Oppslag URL: {}", url);
         return new Person(template.getForObject(url, PersonDto.class));
     }
 }

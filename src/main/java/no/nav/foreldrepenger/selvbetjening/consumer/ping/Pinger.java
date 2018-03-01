@@ -1,4 +1,4 @@
-package no.nav.foreldrepenger.selvbetjening.service.ping;
+package no.nav.foreldrepenger.selvbetjening.consumer.ping;
 
 import java.net.URI;
 

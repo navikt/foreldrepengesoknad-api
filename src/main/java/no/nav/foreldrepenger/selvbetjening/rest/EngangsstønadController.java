@@ -41,8 +41,7 @@ public class EngangsstønadController {
 
     private final MeterRegistry registry;
 
-    public EngangsstønadController(RestTemplate template,
-                                   @Value("${FPSOKNAD_MOTTAK_API_URL}") URI baseURI, MeterRegistry registry) {
+    public EngangsstønadController(RestTemplate template, @Value("${FPSOKNAD_MOTTAK_API_URL}") URI baseURI, MeterRegistry registry) {
         this.template = template;
         this.mottakServiceUrl = mottakURIFra(baseURI);
         this.registry = registry;
