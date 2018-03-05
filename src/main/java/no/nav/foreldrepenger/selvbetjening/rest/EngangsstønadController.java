@@ -7,6 +7,7 @@ import static org.springframework.http.ResponseEntity.ok;
 
 import java.net.URI;
 
+import com.fasterxml.jackson.databind.ObjectMapper;
 import org.slf4j.Logger;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.HttpEntity;
@@ -54,7 +55,7 @@ public class EngangsstønadController {
 
     @PostMapping
     public ResponseEntity<Engangsstønad> opprettEngangsstonad(@RequestBody Engangsstønad engangsstønad,
-                                                              @RequestParam(name = "stub", defaultValue = "false", required = false) Boolean stub) {
+                                                              @RequestParam(name = "stub", defaultValue = "false", required = false) Boolean stub) throws Exception {
         LOG.info("Poster engangsstønad {}", stub ? "(stub)" : "");
 
         engangsstønad.opprettet = now();
@@ -64,8 +65,15 @@ public class EngangsstønadController {
         }
 
         LOG.info("Mottak URL: " + mottakServiceUrl);
-        template.postForEntity(mottakServiceUrl, new HttpEntity<>(new EngangsstønadDto(engangsstønad)), String.class);
+        template.postForEntity(mottakServiceUrl, body(engangsstønad), String.class);
         return ok(engangsstønad);
+    }
+
+    private HttpEntity<EngangsstønadDto> body(@RequestBody Engangsstønad engangsstønad) throws Exception {
+        EngangsstønadDto dto = new EngangsstønadDto(engangsstønad);
+        String json = new ObjectMapper().writeValueAsString(dto);
+        LOG.info("Posting JSON: {}", json);
+        return new HttpEntity<>(dto);
     }
 
     private static URI mottakURIFra(URI baseUri) {

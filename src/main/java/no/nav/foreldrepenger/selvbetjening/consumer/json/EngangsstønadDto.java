@@ -29,7 +29,7 @@ public class EngangsstønadDto {
 
         this.ytelse.medlemsskap.norgeSiste12 = engangsstønad.utenlandsopphold.iNorgeSiste12Mnd;
         this.ytelse.medlemsskap.norgeNeste12 = engangsstønad.utenlandsopphold.iNorgeNeste12Mnd;
-        this.ytelse.medlemsskap.arbeidSiste12 = engangsstønad.utenlandsopphold.jobbetINorgeSiste12Mnd ? "ARBEIDET_I_NORGE" : "ARBEIDET_I_UTLANDET";
+        this.ytelse.medlemsskap.arbeidSiste12 = "IKKE_ARBEIDET";
         this.ytelse.medlemsskap.fødselNorge = engangsstønad.utenlandsopphold.fødselINorge;
 
         this.ytelse.relasjonTilBarn.type = engangsstønad.barn.erBarnetFødt ? "fødsel" : "termin";
