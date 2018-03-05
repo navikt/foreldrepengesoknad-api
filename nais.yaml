@@ -32,8 +32,4 @@ fasitResources:
     resourceType: credential
   - alias: fpsoknad-mottak-api
     resourceType: restservice
-  exposed:
-  - alias: foreldrepengesoknad-api
-    resourceType: restservice
-    path: /foreldrepengesoknad-api/rest
     
