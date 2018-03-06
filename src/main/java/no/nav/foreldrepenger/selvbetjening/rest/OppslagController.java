@@ -1,24 +1,16 @@
 package no.nav.foreldrepenger.selvbetjening.rest;
 
-import static java.time.LocalDate.now;
-import static no.nav.foreldrepenger.selvbetjening.rest.OppslagController.REST_OPPSLAG;
-import static org.slf4j.LoggerFactory.getLogger;
+import no.nav.foreldrepenger.selvbetjening.consumer.Oppslagstjeneste;
+import no.nav.foreldrepenger.selvbetjening.rest.json.Person;
+import org.slf4j.Logger;
+import org.springframework.http.MediaType;
+import org.springframework.web.bind.annotation.*;
 
 import javax.inject.Inject;
 
-import org.slf4j.Logger;
-import org.springframework.beans.factory.annotation.Value;
-import org.springframework.http.MediaType;
-import org.springframework.web.bind.annotation.CrossOrigin;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.bind.annotation.RestController;
-import org.springframework.web.client.RestTemplate;
-
-import io.micrometer.core.instrument.MeterRegistry;
-import no.nav.foreldrepenger.selvbetjening.consumer.json.PersonDto;
-import no.nav.foreldrepenger.selvbetjening.rest.json.Person;
+import static java.time.LocalDate.now;
+import static no.nav.foreldrepenger.selvbetjening.rest.OppslagController.REST_OPPSLAG;
+import static org.slf4j.LoggerFactory.getLogger;
 
 @CrossOrigin
 @RestController
@@ -29,30 +21,21 @@ public class OppslagController {
 
     private static final Logger LOG = getLogger(OppslagController.class);
 
-    private final String oppslagServiceUrl;
-
-    private final RestTemplate template;
-
-    private final MeterRegistry registry;
+    private Oppslagstjeneste oppslag;
 
     @Inject
-    public OppslagController(RestTemplate template, @Value("${FPSOKNAD_OPPSLAG_API_URL}") String uri, MeterRegistry registry) {
-        this.template = template;
-        this.oppslagServiceUrl = uri;
-        this.registry = registry;
+    public OppslagController(Oppslagstjeneste oppslag) {
+        this.oppslag = oppslag;
     }
 
     @GetMapping(produces = MediaType.APPLICATION_JSON_VALUE)
     public Person personinfo(@RequestParam("fnr") String fnr, @RequestParam(name = "stub", defaultValue = "false", required = false) Boolean stub) {
         LOG.info("Henter personinfo {}", stub ? "(stub)" : "");
 
-        registry.counter("foreldrepengesoknad.hentet.personinfo").increment();
         if (stub) {
             return new Person("Gro Harlem", "Stubberud", "K", now().minusYears(20), "Lyckliga gatan 1A, 0666 Oslo, Norge");
         }
 
-        String url = oppslagServiceUrl + "/person/?fnr=" + fnr;
-        LOG.info("Oppslag URL: {}", url);
-        return new Person(template.getForObject(url, PersonDto.class));
+        return new Person(oppslag.hentPerson(fnr));
     }
 }

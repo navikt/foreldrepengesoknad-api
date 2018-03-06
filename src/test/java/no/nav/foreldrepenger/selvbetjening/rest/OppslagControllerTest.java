@@ -1,26 +1,17 @@
 package no.nav.foreldrepenger.selvbetjening.rest;
 
-import static org.assertj.core.api.Assertions.assertThat;
-
-import javax.inject.Inject;
-
+import no.nav.foreldrepenger.selvbetjening.rest.json.Person;
 import org.junit.Test;
 import org.junit.runner.RunWith;
-import org.springframework.test.context.ContextConfiguration;
-import org.springframework.test.context.TestPropertySource;
-import org.springframework.test.context.junit4.SpringRunner;
+import org.mockito.InjectMocks;
+import org.mockito.junit.MockitoJUnitRunner;
 
-import no.nav.foreldrepenger.selvbetjening.config.ApiConfiguration;
-import no.nav.foreldrepenger.selvbetjening.rest.json.Person;
+import static org.assertj.core.api.Assertions.assertThat;
 
-@RunWith(SpringRunner.class)
-@ContextConfiguration(classes = { ApiConfiguration.class, OppslagController.class, ApiTestConfig.class })
-@TestPropertySource(properties = {
-        "FPSOKNAD_MOTTAK_API_URL=http://mottak.com",
-        "FPSOKNAD_OPPSLAG_API_URL=http://oppslag.com" })
+@RunWith(MockitoJUnitRunner.class)
 public class OppslagControllerTest {
 
-    @Inject
+    @InjectMocks
     private OppslagController oppslagController;
 
     @Test
