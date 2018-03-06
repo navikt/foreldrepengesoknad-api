@@ -17,10 +17,10 @@ public class EngangsstønadDto {
         this.søker = new SøkerDto();
         this.ytelse = new YtelseDto();
 
-        this.søker.fornavn = "Mor";
-        this.søker.etternavn = "Fugelli";
-        this.søker.fnr = "01010199999";
-        this.søker.aktør = "aktør-id";
+        this.søker.fornavn = "Lille-Mor";
+        this.søker.etternavn = "Brisnes";
+        this.søker.fnr = "30087802856";
+        this.søker.aktør = "1000104146834";
         this.søker.søknadsRolle = "MOR";
 
         this.ytelse.type = "engangsstønad";
