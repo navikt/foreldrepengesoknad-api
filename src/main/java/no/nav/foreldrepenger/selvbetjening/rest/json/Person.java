@@ -9,8 +9,8 @@ public class Person {
     public Person(PersonDto personDto) {
         this.fornavn = personDto.fornavn;
         this.etternavn = personDto.etternavn;
-        this.kjønn = personDto.kjønn;
-        this.fødselsdato = personDto.fødselsdato;
+        this.kjønn = personDto.kjonn;
+        this.fødselsdato = personDto.fodselsdato;
         this.adresse = personDto.adresse.adresse();
     }
 

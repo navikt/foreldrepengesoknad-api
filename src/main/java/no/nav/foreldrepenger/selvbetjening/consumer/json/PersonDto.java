@@ -5,11 +5,11 @@ import java.time.LocalDate;
 public class PersonDto {
 
     public String fnr;
-    public String aktørId;
+    public String aktorId;
     public String fornavn;
     public String etternavn;
-    public String kjønn;
-    public LocalDate fødselsdato;
+    public String kjonn;
+    public LocalDate fodselsdato;
 
     public AdresseDto adresse;
 
