@@ -1,20 +1,16 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <configuration>
 
-	<appender name="stdout_json" class="ch.qos.logback.core.ConsoleAppender">
-		<encoder class="net.logstash.logback.encoder.LogstashEncoder" />
-	</appender>
-	
 	<appender name="stdout" class="ch.qos.logback.core.ConsoleAppender">
-        <layout class="ch.qos.logback.classic.PatternLayout">
-            <Pattern>
-                %d{yyyy-MM-dd HH:mm:ss} %X{X-Nav-CallId} [%thread] %-5level %logger{70} - %msg%n
-            </Pattern>
-        </layout>
-    </appender>
+		<layout class="ch.qos.logback.classic.PatternLayout">
+			<Pattern>
+				%d{yyyy-MM-dd HH:mm:ss} %X{X-Nav-CallId} [%thread] %-5level %logger{70} - %msg%n
+			</Pattern>
+		</layout>
+	</appender>
 
 	<root level="info">
-		<appender-ref ref="stdout_json" />
+		<appender-ref ref="stdout" />
 	</root>
 
 </configuration>
