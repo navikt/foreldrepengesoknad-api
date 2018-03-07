@@ -9,7 +9,7 @@ management:
              enabled : false
          web:
             exposure:
-              include:  info, health, metrics
+              include:  info, health, metrics, prometheus
 server:
      servlet :
        context-path :  /foreldrepengesoknad-api
