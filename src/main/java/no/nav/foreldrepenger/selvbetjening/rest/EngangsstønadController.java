@@ -1,7 +1,9 @@
 package no.nav.foreldrepenger.selvbetjening.rest;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
+import no.nav.foreldrepenger.selvbetjening.consumer.Oppslagstjeneste;
 import no.nav.foreldrepenger.selvbetjening.consumer.json.EngangsstønadDto;
+import no.nav.foreldrepenger.selvbetjening.consumer.json.PersonDto;
 import no.nav.foreldrepenger.selvbetjening.rest.json.Engangsstønad;
 import org.slf4j.Logger;
 import org.springframework.beans.factory.annotation.Value;
@@ -28,12 +30,14 @@ public class EngangsstønadController {
     private static final Logger LOG = getLogger(EngangsstønadController.class);
 
     private final RestTemplate template;
-
     private final URI mottakServiceUrl;
+    private final Oppslagstjeneste oppslag;
 
-    public EngangsstønadController(RestTemplate template, @Value("${FPSOKNAD_MOTTAK_API_URL}") URI baseUri) {
-        this.template = template;
+
+    public EngangsstønadController(@Value("${FPSOKNAD_MOTTAK_API_URL}") URI baseUri, RestTemplate template, Oppslagstjeneste oppslag) {
         this.mottakServiceUrl = mottakUriFra(baseUri);
+        this.template = template;
+        this.oppslag = oppslag;
     }
 
     @GetMapping("/{id}")
@@ -52,13 +56,18 @@ public class EngangsstønadController {
             return ok(engangsstønad);
         }
 
+        String fnr = engangsstønad.fnr; // TODO: Skal hentes fra sikkerhetskonteksten
+        PersonDto personDto = oppslag.hentPerson(fnr);
+        String aktørId = personDto.aktorId;
+
         LOG.info("Mottak URL: " + mottakServiceUrl);
-        template.postForEntity(mottakServiceUrl, body(engangsstønad), String.class);
+        template.postForEntity(mottakServiceUrl, body(engangsstønad, fnr, aktørId), String.class);
         return ok(engangsstønad);
     }
 
-    private HttpEntity<EngangsstønadDto> body(@RequestBody Engangsstønad engangsstønad) throws Exception {
-        EngangsstønadDto dto = new EngangsstønadDto(engangsstønad);
+    private HttpEntity<EngangsstønadDto> body(Engangsstønad engangsstønad, String fnr, String aktørId) throws Exception {
+        EngangsstønadDto dto = new EngangsstønadDto(engangsstønad, fnr, aktørId);
+
         String json = new ObjectMapper().writeValueAsString(dto);
         LOG.info("Posting JSON: {}", json);
         return new HttpEntity<>(dto);

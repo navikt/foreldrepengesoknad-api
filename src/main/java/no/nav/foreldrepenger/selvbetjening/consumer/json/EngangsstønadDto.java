@@ -13,14 +13,14 @@ public class EngangsstønadDto {
 
     public EngangsstønadDto() {}
 
-    public EngangsstønadDto(Engangsstønad engangsstønad) {
+    public EngangsstønadDto(Engangsstønad engangsstønad, String fnr, String aktørId) {
         this.søker = new SøkerDto();
         this.ytelse = new YtelseDto();
 
         this.søker.fornavn = "Lille-Mor";
         this.søker.etternavn = "Brisnes";
-        this.søker.fnr = "30087802856";
-        this.søker.aktør = "1000104146834";
+        this.søker.fnr = fnr;
+        this.søker.aktør = aktørId;
         this.søker.søknadsRolle = "MOR";
 
         this.ytelse.type = "engangsstønad";
@@ -36,6 +36,5 @@ public class EngangsstønadDto {
         this.ytelse.relasjonTilBarn.antallBarn = engangsstønad.barn.antallBarn;
         this.ytelse.relasjonTilBarn.terminDato = engangsstønad.barn.termindato;
         this.ytelse.relasjonTilBarn.utstedtDato = engangsstønad.barn.terminbekreftelseDato;
-
     }
 }
