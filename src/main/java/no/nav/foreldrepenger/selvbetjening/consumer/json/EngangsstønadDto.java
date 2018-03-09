@@ -36,5 +36,6 @@ public class EngangsstønadDto {
         this.ytelse.relasjonTilBarn.antallBarn = engangsstønad.barn.antallBarn;
         this.ytelse.relasjonTilBarn.terminDato = engangsstønad.barn.termindato;
         this.ytelse.relasjonTilBarn.utstedtDato = engangsstønad.barn.terminbekreftelseDato;
+        this.ytelse.relasjonTilBarn.fødselsdato = engangsstønad.barn.fødselsdato();
     }
 }
