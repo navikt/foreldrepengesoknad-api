@@ -11,8 +11,10 @@ import org.springframework.http.HttpEntity;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.client.RestTemplate;
+import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.util.UriComponentsBuilder;
 
+import javax.inject.Inject;
 import java.net.URI;
 
 import static java.time.LocalDateTime.now;
@@ -32,6 +34,8 @@ public class EngangsstønadController {
     private final RestTemplate template;
     private final URI mottakServiceUrl;
     private final Oppslagstjeneste oppslag;
+    @Inject
+    private ObjectMapper mapper;
 
 
     public EngangsstønadController(@Value("${FPSOKNAD_MOTTAK_API_URL}") URI baseUri, RestTemplate template, Oppslagstjeneste oppslag) {
@@ -45,8 +49,9 @@ public class EngangsstønadController {
         return Engangsstønad.stub();
     }
 
-    @PostMapping
-    public ResponseEntity<Engangsstønad> opprettEngangsstonad(@RequestBody Engangsstønad engangsstønad,
+    @PostMapping(consumes = {"multipart/form-data"})
+    public ResponseEntity<Engangsstønad> opprettEngangsstonad(@RequestPart("soknad") Engangsstønad engangsstønad,
+                                                              @RequestPart("vedlegg") MultipartFile[] vedlegg,
                                                               @RequestParam(name = "stub", defaultValue = "false", required = false) Boolean stub) throws Exception {
         LOG.info("Poster engangsstønad {}", stub ? "(stub)" : "");
 
@@ -61,14 +66,14 @@ public class EngangsstønadController {
         String aktørId = personDto.aktorId;
 
         LOG.info("Mottak URL: " + mottakServiceUrl);
-        template.postForEntity(mottakServiceUrl, body(engangsstønad, fnr, aktørId), String.class);
+        template.postForEntity(mottakServiceUrl, body(engangsstønad, vedlegg[0], fnr, aktørId), String.class);
         return ok(engangsstønad);
     }
 
-    private HttpEntity<EngangsstønadDto> body(Engangsstønad engangsstønad, String fnr, String aktørId) throws Exception {
+    private HttpEntity<EngangsstønadDto> body(@RequestBody Engangsstønad engangsstønad, MultipartFile vedlegg, String aktørId, String fnr) throws Exception {
         EngangsstønadDto dto = new EngangsstønadDto(engangsstønad, fnr, aktørId);
-
-        String json = new ObjectMapper().writeValueAsString(dto);
+        dto.addVedlegg(vedlegg.getBytes());
+        String json = mapper.writeValueAsString(dto);
         LOG.info("Posting JSON: {}", json);
         return new HttpEntity<>(dto);
     }

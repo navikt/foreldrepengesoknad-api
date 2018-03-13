@@ -3,6 +3,8 @@ package no.nav.foreldrepenger.selvbetjening.consumer.json;
 import no.nav.foreldrepenger.selvbetjening.rest.json.Engangsstønad;
 
 import java.time.LocalDateTime;
+import java.util.ArrayList;
+import java.util.List;
 
 public class EngangsstønadDto {
 
@@ -10,12 +12,14 @@ public class EngangsstønadDto {
 
     public SøkerDto søker;
     public YtelseDto ytelse;
+    public List<VedleggDto> påkrevdeVedlegg;
 
     public EngangsstønadDto() {}
 
     public EngangsstønadDto(Engangsstønad engangsstønad, String fnr, String aktørId) {
         this.søker = new SøkerDto();
         this.ytelse = new YtelseDto();
+        this.påkrevdeVedlegg = new ArrayList<>();
 
         this.søker.fornavn = "Lille-Mor";
         this.søker.etternavn = "Brisnes";
@@ -37,5 +41,15 @@ public class EngangsstønadDto {
         this.ytelse.relasjonTilBarn.terminDato = engangsstønad.barn.termindato;
         this.ytelse.relasjonTilBarn.utstedtDato = engangsstønad.barn.terminbekreftelseDato;
         this.ytelse.relasjonTilBarn.fødselsdato = engangsstønad.barn.fødselsdato();
+    }
+
+    public void addVedlegg(byte[] vedlegg) {
+        VedleggDto vedleggDto = new VedleggDto();
+        vedleggDto.type = "påkrevd";
+        vedleggDto.metadata.beskrivelse = "Terminbekreftelse";
+        vedleggDto.metadata.type = "PDF";
+        vedleggDto.metadata.skjemanummer = "TERMINBEKREFTELSE";
+        vedleggDto.vedlegg = vedlegg;
+        this.påkrevdeVedlegg.add(vedleggDto);
     }
 }
