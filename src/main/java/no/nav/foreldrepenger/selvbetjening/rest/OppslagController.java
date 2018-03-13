@@ -8,7 +8,6 @@ import org.springframework.web.bind.annotation.*;
 
 import javax.inject.Inject;
 
-import static java.time.LocalDate.now;
 import static no.nav.foreldrepenger.selvbetjening.rest.OppslagController.REST_OPPSLAG;
 import static org.slf4j.LoggerFactory.getLogger;
 
@@ -29,13 +28,8 @@ public class OppslagController {
     }
 
     @GetMapping(produces = MediaType.APPLICATION_JSON_VALUE)
-    public Person personinfo(@RequestParam("fnr") String fnr, @RequestParam(name = "stub", defaultValue = "false", required = false) Boolean stub) {
-        LOG.info("Henter personinfo {}", stub ? "(stub)" : "");
-
-        if (stub) {
-            return new Person("Gro Harlem", "Stubberud", "K", now().minusYears(20), "Lyckliga gatan 1A, 0666 Oslo, Norge");
-        }
-
+    public Person personinfo(@RequestParam("fnr") String fnr) {
+        LOG.info("Henter personinfo...");
         return new Person(oppslag.hentPerson(fnr));
     }
 }

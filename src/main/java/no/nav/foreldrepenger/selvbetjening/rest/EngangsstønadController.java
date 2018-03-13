@@ -37,6 +37,9 @@ public class EngangsstønadController {
     @Inject
     private ObjectMapper mapper;
 
+    @Value("${stub.mottak:false}")
+    private boolean stub;
+
 
     public EngangsstønadController(@Value("${FPSOKNAD_MOTTAK_API_URL}") URI baseUri, RestTemplate template, Oppslagstjeneste oppslag) {
         this.mottakServiceUrl = mottakUriFra(baseUri);
@@ -50,14 +53,13 @@ public class EngangsstønadController {
     }
 
     @PostMapping(consumes = {"multipart/form-data"})
-    public ResponseEntity<Engangsstønad> opprettEngangsstonad(@RequestPart("soknad") Engangsstønad engangsstønad,
-                                                              @RequestPart("vedlegg") MultipartFile[] vedlegg,
-                                                              @RequestParam(name = "stub", defaultValue = "false", required = false) Boolean stub) throws Exception {
-        LOG.info("Poster engangsstønad {}", stub ? "(stub)" : "");
+    public ResponseEntity<Engangsstønad> sendInn(@RequestPart("soknad") Engangsstønad engangsstønad, @RequestPart("vedlegg") MultipartFile[] vedlegg) throws Exception {
+        LOG.info("Poster engangsstønad");
 
         engangsstønad.opprettet = now();
 
         if (stub) {
+            LOG.info("Stubber mottak...");
             return ok(engangsstønad);
         }
 
