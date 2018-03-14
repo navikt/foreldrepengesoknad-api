@@ -1,25 +1,31 @@
-info :
-    app:
-      version: @project.version@
-    build:
-       time:  @timestamp@  
+info:
+  app:
+    version: @project.version@
+  build:
+    time:  @timestamp@
 management:
-    endpoints: 
-         security:
-             enabled : false
-         web:
-            exposure:
-              include:  info, health, metrics, prometheus
+  endpoints:
+    security:
+      enabled: false
+    web:
+      exposure:
+        include: info, health, metrics, prometheus
 server:
-     servlet :
-       context-path :  /foreldrepengesoknad-api
-     use-forward-headers: true                        
-spring :
-    main : 
-       banner-mode : 'off'
-    metrics :
-      web :
-        server :
-           auto-time-requests: true   
+  servlet:
+    context-path: /foreldrepengesoknad-api
+  use-forward-headers: true
+spring:
+  main:
+    banner-mode: 'off'
+  metrics:
+    web:
+      server:
+        auto-time-requests: true
                
-       
+no.nav.security.oidc:
+  issuers: selvbetjening
+  issuer.selvbetjening:
+    uri: https://login.microsoftonline.com/NAVQb2c.onmicrosoft.com/v2.0/.well-known/openid-configuration?p=B2C_1A_signup_signin_wth_idportentest
+    accepted_audience: 35120d2d-a15d-4f40-a846-45a05b8f6a41
+
+http.proxy: http://webproxy-utvikler.nav.no:8088

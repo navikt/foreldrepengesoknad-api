@@ -11,4 +11,6 @@
 		<appender-ref ref="stdout" />
 	</root>
 
+    <logger name="no.nav.security" level="DEBUG" />
+
 </configuration>

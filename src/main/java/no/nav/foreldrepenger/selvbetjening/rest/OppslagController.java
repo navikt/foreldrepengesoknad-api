@@ -2,8 +2,8 @@ package no.nav.foreldrepenger.selvbetjening.rest;
 
 import no.nav.foreldrepenger.selvbetjening.consumer.Oppslagstjeneste;
 import no.nav.foreldrepenger.selvbetjening.rest.json.Person;
+import no.nav.security.spring.oidc.validation.api.Protected;
 import org.slf4j.Logger;
-import org.springframework.http.MediaType;
 import org.springframework.web.bind.annotation.*;
 
 import javax.inject.Inject;
@@ -27,7 +27,8 @@ public class OppslagController {
         this.oppslag = oppslag;
     }
 
-    @GetMapping(produces = MediaType.APPLICATION_JSON_VALUE)
+    @Protected
+    @GetMapping
     public Person personinfo(@RequestParam("fnr") String fnr) {
         LOG.info("Henter personinfo...");
         return new Person(oppslag.hentPerson(fnr));

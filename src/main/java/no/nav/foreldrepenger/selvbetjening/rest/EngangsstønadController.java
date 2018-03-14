@@ -5,6 +5,7 @@ import no.nav.foreldrepenger.selvbetjening.consumer.Oppslagstjeneste;
 import no.nav.foreldrepenger.selvbetjening.consumer.json.EngangsstønadDto;
 import no.nav.foreldrepenger.selvbetjening.consumer.json.PersonDto;
 import no.nav.foreldrepenger.selvbetjening.rest.json.Engangsstønad;
+import no.nav.security.spring.oidc.validation.api.Protected;
 import org.slf4j.Logger;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.HttpEntity;
@@ -20,6 +21,7 @@ import java.net.URI;
 import static java.time.LocalDateTime.now;
 import static no.nav.foreldrepenger.selvbetjening.rest.EngangsstønadController.REST_ENGANGSSTONAD;
 import static org.slf4j.LoggerFactory.getLogger;
+import static org.springframework.http.MediaType.MULTIPART_FORM_DATA_VALUE;
 import static org.springframework.http.ResponseEntity.ok;
 
 @CrossOrigin
@@ -34,6 +36,7 @@ public class EngangsstønadController {
     private final RestTemplate template;
     private final URI mottakServiceUrl;
     private final Oppslagstjeneste oppslag;
+
     @Inject
     private ObjectMapper mapper;
 
@@ -47,12 +50,14 @@ public class EngangsstønadController {
         this.oppslag = oppslag;
     }
 
+    @Protected
     @GetMapping("/{id}")
     public Engangsstønad hentEngangsstonad(@PathVariable String id) {
         return Engangsstønad.stub();
     }
 
-    @PostMapping(consumes = {"multipart/form-data"})
+    @Protected
+    @PostMapping(consumes = MULTIPART_FORM_DATA_VALUE)
     public ResponseEntity<Engangsstønad> sendInn(@RequestPart("soknad") Engangsstønad engangsstønad, @RequestPart("vedlegg") MultipartFile[] vedlegg) throws Exception {
         LOG.info("Poster engangsstønad");
 
