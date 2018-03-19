@@ -11,9 +11,9 @@ import javax.inject.Inject;
 import static no.nav.foreldrepenger.selvbetjening.rest.OppslagController.REST_OPPSLAG;
 import static org.slf4j.LoggerFactory.getLogger;
 
-@CrossOrigin
 @RestController
 @RequestMapping(REST_OPPSLAG)
+@CrossOrigin(allowCredentials = "true")
 public class OppslagController {
 
     public static final String REST_OPPSLAG = "/rest/personinfo";
@@ -34,3 +34,4 @@ public class OppslagController {
         return new Person(oppslag.hentPerson(fnr));
     }
 }
+

@@ -24,7 +24,6 @@ import static org.slf4j.LoggerFactory.getLogger;
 import static org.springframework.http.MediaType.MULTIPART_FORM_DATA_VALUE;
 import static org.springframework.http.ResponseEntity.ok;
 
-@CrossOrigin
 @RestController
 @RequestMapping(REST_ENGANGSSTONAD)
 public class EngangsstønadController {
