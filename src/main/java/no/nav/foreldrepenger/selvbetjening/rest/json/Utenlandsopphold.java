@@ -1,6 +1,5 @@
 package no.nav.foreldrepenger.selvbetjening.rest.json;
 
-import java.time.LocalDate;
 import java.util.List;
 
 public class Utenlandsopphold {
@@ -10,11 +9,7 @@ public class Utenlandsopphold {
     public Boolean iNorgeSiste12Mnd;
     public Boolean jobbetINorgeSiste12Mnd;
     
-    public List<Periode> perioder;
-
-    public class Periode {
-        public LocalDate fom;
-        public LocalDate tom;
-    }
+    public List<Periode> tidligerePerioder;
+    public List<Periode> senerePerioder;
 
 }
