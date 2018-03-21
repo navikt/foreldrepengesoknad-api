@@ -12,14 +12,14 @@ public class EngangsstønadDto {
 
     public SøkerDto søker;
     public YtelseDto ytelse;
-    public List<VedleggDto> påkrevdeVedlegg;
+    public List<VedleggDto> vedlegg;
 
     public EngangsstønadDto() {}
 
     public EngangsstønadDto(Engangsstønad engangsstønad, String fnr, String aktørId) {
         this.søker = new SøkerDto();
         this.ytelse = new YtelseDto();
-        this.påkrevdeVedlegg = new ArrayList<>();
+        this.vedlegg = new ArrayList<>();
 
         this.søker.fornavn = "Lille-Mor";
         this.søker.etternavn = "Brisnes";
@@ -50,6 +50,6 @@ public class EngangsstønadDto {
         vedleggDto.metadata.type = "PDF";
         vedleggDto.metadata.skjemanummer = "TERMINBEKREFTELSE";
         vedleggDto.vedlegg = vedlegg;
-        this.påkrevdeVedlegg.add(vedleggDto);
+        this.vedlegg.add(vedleggDto);
     }
 }
