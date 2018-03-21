@@ -1,9 +1,7 @@
 package no.nav.foreldrepenger.selvbetjening.config;
 
-import static java.util.Arrays.asList;
-
-import java.net.URI;
-
+import com.google.common.collect.ImmutableMap;
+import no.nav.foreldrepenger.selvbetjening.rest.util.ApiKeyInjectingClientInterceptor;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.boot.actuate.health.HealthAggregator;
 import org.springframework.boot.actuate.health.OrderedHealthAggregator;
@@ -11,13 +9,16 @@ import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.http.client.ClientHttpRequestInterceptor;
 import org.springframework.web.client.RestTemplate;
+import org.springframework.web.servlet.config.annotation.InterceptorRegistry;
+import org.springframework.web.servlet.config.annotation.WebMvcConfigurer;
 
-import com.google.common.collect.ImmutableMap;
+import javax.inject.Inject;
+import java.net.URI;
 
-import no.nav.foreldrepenger.selvbetjening.rest.util.ApiKeyInjectingClientInterceptor;
+import static java.util.Arrays.asList;
 
 @Configuration
-public class ApiConfiguration {
+public class ApiConfiguration implements WebMvcConfigurer {
 
     @Value("${apikeys.key:x-nav-apiKey}")
     private String key;
@@ -33,6 +34,9 @@ public class ApiConfiguration {
 
     @Value("${FORELDREPENGESOKNAD_API_FPSOKNAD_OPPSLAG_API_APIKEY_PASSWORD}")
     String oppslagApiKey;
+
+    @Inject
+    CorsInterceptor corsInterceptor;
 
     @Bean
     public RestTemplate restTemplate(ClientHttpRequestInterceptor... interceptors) {
@@ -54,5 +58,10 @@ public class ApiConfiguration {
     @Bean
     public HealthAggregator healthAggregator() {
         return new OrderedHealthAggregator();
+    }
+
+    @Override
+    public void addInterceptors(InterceptorRegistry registry) {
+        registry.addInterceptor(corsInterceptor);
     }
 }
