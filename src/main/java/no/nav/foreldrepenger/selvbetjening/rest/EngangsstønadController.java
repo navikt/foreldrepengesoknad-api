@@ -58,6 +58,11 @@ public class EngangsstønadController {
 
         if (stub) {
             LOG.info("Stubber mottak...");
+
+            EngangsstønadDto dto = new EngangsstønadDto(engangsstønad, "STUB_FNR", "STUB_AKTØRID");
+            String json = mapper.writeValueAsString(dto);
+            LOG.info("Posting JSON (stub): {}", json);
+
             return ok(engangsstønad);
         }
 
