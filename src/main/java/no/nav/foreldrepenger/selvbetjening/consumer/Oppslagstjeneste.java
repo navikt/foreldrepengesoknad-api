@@ -31,20 +31,20 @@ public class Oppslagstjeneste {
         this.template = template;
     }
 
-    public PersonDto hentPerson(String fnr) {
+    public PersonDto hentPerson() {
         if (stub) {
             LOG.info("Stubber oppslag...");
-            return person(fnr);
+            return person();
         }
-        URI url = fromUri(oppslagServiceUrl).path("/person").queryParam("fnr", fnr).build().toUri();
+        URI url = fromUri(oppslagServiceUrl).path("/person").build().toUri();
         LOG.info("Oppslag URL: {}", url);
 
         return template.getForObject(url, PersonDto.class);
     }
 
-    private PersonDto person(String fnr) {
+    private PersonDto person() {
         PersonDto dto = new PersonDto();
-        dto.fnr = fnr;
+        dto.fnr = "25987148243";
         dto.aktorId = "0123456789999";
         dto.fornavn = "Siv";
         dto.etternavn = "Stubsveen";

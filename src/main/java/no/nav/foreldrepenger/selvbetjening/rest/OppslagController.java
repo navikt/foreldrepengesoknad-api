@@ -6,7 +6,6 @@ import no.nav.security.spring.oidc.validation.api.Protected;
 import org.slf4j.Logger;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import javax.inject.Inject;
@@ -31,8 +30,8 @@ public class OppslagController {
 
     @Protected
     @GetMapping
-    public Person personinfo(@RequestParam("fnr") String fnr) {
+    public Person personinfo() {
         LOG.info("Henter personinfo...");
-        return new Person(oppslag.hentPerson(fnr));
+        return new Person(oppslag.hentPerson());
     }
 }

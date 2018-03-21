@@ -50,12 +50,6 @@ public class EngangsstønadController {
     }
 
     @Protected
-    @GetMapping("/{id}")
-    public Engangsstønad hentEngangsstonad(@PathVariable String id) {
-        return Engangsstønad.stub();
-    }
-
-    @Protected
     @PostMapping(consumes = MULTIPART_FORM_DATA_VALUE)
     public ResponseEntity<Engangsstønad> sendInn(@RequestPart("soknad") Engangsstønad engangsstønad, @RequestPart("vedlegg") MultipartFile[] vedlegg) throws Exception {
         LOG.info("Poster engangsstønad");
@@ -67,8 +61,8 @@ public class EngangsstønadController {
             return ok(engangsstønad);
         }
 
-        String fnr = engangsstønad.fnr; // TODO: Skal hentes fra sikkerhetskonteksten
-        PersonDto personDto = oppslag.hentPerson(fnr);
+        String fnr = engangsstønad.fnr; // TODO: mottak bør hente fnr og aktørId fra oidc token selv.
+        PersonDto personDto = oppslag.hentPerson();
         String aktørId = personDto.aktorId;
 
         LOG.info("Mottak URL: " + mottakServiceUrl);

@@ -10,7 +10,6 @@ import org.mockito.Mock;
 import org.mockito.junit.MockitoJUnitRunner;
 
 import static org.assertj.core.api.Assertions.assertThat;
-import static org.mockito.ArgumentMatchers.anyString;
 import static org.mockito.Mockito.when;
 
 @RunWith(MockitoJUnitRunner.class)
@@ -24,8 +23,8 @@ public class OppslagControllerTest {
 
     @Test
     public void stubPersonInfo() {
-        when(oppslagstjeneste.hentPerson(anyString())).thenReturn(new PersonDto());
-        Person person = oppslagController.personinfo("fnr");
+        when(oppslagstjeneste.hentPerson()).thenReturn(new PersonDto());
+        Person person = oppslagController.personinfo();
         assertThat(person).isNotNull();
     }
 
