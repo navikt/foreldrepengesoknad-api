@@ -13,7 +13,11 @@ public class CorsInterceptor extends HandlerInterceptorAdapter {
 
     @Override
     public boolean preHandle(HttpServletRequest request, HttpServletResponse response, Object handler) throws Exception {
-        List<String> allowedOrigins = Arrays.asList("http://localhost:8080", "https://engangsstonad.nais.oera-q.local");
+        List<String> allowedOrigins = Arrays.asList(
+                "http://localhost:8080",
+                "https://engangsstonad.nais.oera-q.local",
+                "https://engangsstonad.nav.no"
+        );
         String origin = request.getHeader("Origin");
 
         if (allowedOrigins.contains(origin)) {
