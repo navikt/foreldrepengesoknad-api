@@ -22,7 +22,7 @@ import no.nav.security.spring.oidc.validation.api.ProtectedWithClaims;
 
 @CrossOrigin
 @RestController
-@ProtectedWithClaims(issuer = "selvbetjening", claimMap = { "acr=Level4" })
+@ProtectedWithClaims(issuer = "selvbetjening", claimMap = { "" })
 @RequestMapping(PingController.PING)
 public class PingController {
 
