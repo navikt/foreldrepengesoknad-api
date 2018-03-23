@@ -29,6 +29,7 @@ import no.nav.foreldrepenger.selvbetjening.consumer.Oppslagstjeneste;
 import no.nav.foreldrepenger.selvbetjening.consumer.json.EngangsstønadDto;
 import no.nav.foreldrepenger.selvbetjening.consumer.json.PersonDto;
 import no.nav.foreldrepenger.selvbetjening.rest.json.Engangsstønad;
+import no.nav.security.spring.oidc.validation.api.ProtectedWithClaims;
 
 @RestController
 @ProtectedWithClaims(issuer = "selvbetjening", claimMap = { "acr=Level4" })
