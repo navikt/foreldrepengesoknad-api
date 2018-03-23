@@ -16,9 +16,9 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
-import no.nav.foreldrepenger.mottak.http.ProtectedWithClaims;
 import no.nav.foreldrepenger.selvbetjening.consumer.ping.Pinger;
 import no.nav.foreldrepenger.selvbetjening.util.Pair;
+import no.nav.security.spring.oidc.validation.api.ProtectedWithClaims;
 
 @CrossOrigin
 @RestController

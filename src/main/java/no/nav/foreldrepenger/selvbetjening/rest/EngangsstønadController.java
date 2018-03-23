@@ -25,7 +25,6 @@ import org.springframework.web.util.UriComponentsBuilder;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 
-import no.nav.foreldrepenger.mottak.http.ProtectedWithClaims;
 import no.nav.foreldrepenger.selvbetjening.consumer.Oppslagstjeneste;
 import no.nav.foreldrepenger.selvbetjening.consumer.json.EngangsstønadDto;
 import no.nav.foreldrepenger.selvbetjening.consumer.json.PersonDto;
