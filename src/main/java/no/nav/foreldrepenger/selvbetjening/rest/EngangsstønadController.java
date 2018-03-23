@@ -1,30 +1,38 @@
 package no.nav.foreldrepenger.selvbetjening.rest;
 
-import com.fasterxml.jackson.databind.ObjectMapper;
-import no.nav.foreldrepenger.selvbetjening.consumer.Oppslagstjeneste;
-import no.nav.foreldrepenger.selvbetjening.consumer.json.EngangsstønadDto;
-import no.nav.foreldrepenger.selvbetjening.consumer.json.PersonDto;
-import no.nav.foreldrepenger.selvbetjening.rest.json.Engangsstønad;
-import no.nav.security.spring.oidc.validation.api.Protected;
-import org.slf4j.Logger;
-import org.springframework.beans.factory.annotation.Value;
-import org.springframework.http.HttpEntity;
-import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.*;
-import org.springframework.web.client.RestTemplate;
-import org.springframework.web.multipart.MultipartFile;
-import org.springframework.web.util.UriComponentsBuilder;
-
-import javax.inject.Inject;
-import java.net.URI;
-
 import static java.time.LocalDateTime.now;
 import static no.nav.foreldrepenger.selvbetjening.rest.EngangsstønadController.REST_ENGANGSSTONAD;
 import static org.slf4j.LoggerFactory.getLogger;
 import static org.springframework.http.MediaType.MULTIPART_FORM_DATA_VALUE;
 import static org.springframework.http.ResponseEntity.ok;
 
+import java.net.URI;
+
+import javax.inject.Inject;
+
+import org.slf4j.Logger;
+import org.springframework.beans.factory.annotation.Value;
+import org.springframework.http.HttpEntity;
+import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestPart;
+import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.client.RestTemplate;
+import org.springframework.web.multipart.MultipartFile;
+import org.springframework.web.util.UriComponentsBuilder;
+
+import com.fasterxml.jackson.databind.ObjectMapper;
+
+import no.nav.foreldrepenger.mottak.http.ProtectedWithClaims;
+import no.nav.foreldrepenger.selvbetjening.consumer.Oppslagstjeneste;
+import no.nav.foreldrepenger.selvbetjening.consumer.json.EngangsstønadDto;
+import no.nav.foreldrepenger.selvbetjening.consumer.json.PersonDto;
+import no.nav.foreldrepenger.selvbetjening.rest.json.Engangsstønad;
+
 @RestController
+@ProtectedWithClaims(issuer = "selvbetjening", claimMap = { "acr=Level4" })
 @RequestMapping(REST_ENGANGSSTONAD)
 public class EngangsstønadController {
 
@@ -42,16 +50,16 @@ public class EngangsstønadController {
     @Value("${stub.mottak:false}")
     private boolean stub;
 
-
-    public EngangsstønadController(@Value("${FPSOKNAD_MOTTAK_API_URL}") URI baseUri, RestTemplate template, Oppslagstjeneste oppslag) {
+    public EngangsstønadController(@Value("${FPSOKNAD_MOTTAK_API_URL}") URI baseUri, RestTemplate template,
+            Oppslagstjeneste oppslag) {
         this.mottakServiceUrl = mottakUriFra(baseUri);
         this.template = template;
         this.oppslag = oppslag;
     }
 
-    @Protected
     @PostMapping(consumes = MULTIPART_FORM_DATA_VALUE)
-    public ResponseEntity<Engangsstønad> sendInn(@RequestPart("soknad") Engangsstønad engangsstønad, @RequestPart("vedlegg") MultipartFile[] vedlegg) throws Exception {
+    public ResponseEntity<Engangsstønad> sendInn(@RequestPart("soknad") Engangsstønad engangsstønad,
+            @RequestPart("vedlegg") MultipartFile[] vedlegg) throws Exception {
         LOG.info("Poster engangsstønad");
 
         engangsstønad.opprettet = now();
@@ -75,7 +83,8 @@ public class EngangsstønadController {
         return ok(engangsstønad);
     }
 
-    private HttpEntity<EngangsstønadDto> body(@RequestBody Engangsstønad engangsstønad, MultipartFile vedlegg, String aktørId, String fnr) throws Exception {
+    private HttpEntity<EngangsstønadDto> body(@RequestBody Engangsstønad engangsstønad, MultipartFile vedlegg,
+            String aktørId, String fnr) throws Exception {
         EngangsstønadDto dto = new EngangsstønadDto(engangsstønad, fnr, aktørId);
         dto.addVedlegg(vedlegg.getBytes());
         String json = mapper.writeValueAsString(dto);

@@ -1,0 +1,12 @@
+management :
+   endpoints.web.exposure.include:  '*'
+   endpoint: 
+     health.show-details : always
+     security.enabled : false
+                   
+no.nav.security.oidc:
+  issuers: selvbetjening
+  issuer:
+    selvbetjening.uri: http://metadata
+    selvbetjening.accepted_audience: aud-localhost
+    selvbetjening.cookie_name: localhost-idtoken

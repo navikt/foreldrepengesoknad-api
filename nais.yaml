@@ -24,6 +24,14 @@ resources:
     memory: 1000Mi
 fasitResources:
   used:
+  - alias: aad_b2c_clientid
+    resourceType: credential
+    propertyMap:
+      username: NO_NAV_SECURITY_OIDC_ISSUER_SELVBETJENING_ACCEPTEDAUDIENCE
+  - alias: aad_b2c_discovery
+    resourceType: baseurl
+    propertyMap:
+       url: NO_NAV_SECURITY_OIDC_ISSUER_SELVBETJENING_URI
   - alias: foreldrepengesoknad-api-fpsoknad-oppslag-api-apiKey
     resourceType: credential
   - alias: fpsoknad-oppslag-api

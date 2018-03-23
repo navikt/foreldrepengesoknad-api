@@ -1,21 +1,28 @@
 package no.nav.foreldrepenger.selvbetjening.rest;
 
-import no.nav.foreldrepenger.selvbetjening.consumer.ping.Pinger;
-import no.nav.foreldrepenger.selvbetjening.util.Pair;
-import org.springframework.http.MediaType;
-import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.*;
+import static java.util.stream.Collectors.toMap;
+import static org.springframework.http.HttpStatus.OK;
 
 import java.net.URI;
 import java.util.Arrays;
 import java.util.List;
 import java.util.Map;
 
-import static java.util.stream.Collectors.toMap;
-import static org.springframework.http.HttpStatus.OK;
+import org.springframework.http.MediaType;
+import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.CrossOrigin;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.RestController;
+
+import no.nav.foreldrepenger.mottak.http.ProtectedWithClaims;
+import no.nav.foreldrepenger.selvbetjening.consumer.ping.Pinger;
+import no.nav.foreldrepenger.selvbetjening.util.Pair;
 
 @CrossOrigin
 @RestController
+@ProtectedWithClaims(issuer = "selvbetjening", claimMap = { "acr=Level4" })
 @RequestMapping(PingController.PING)
 public class PingController {
 

@@ -1,19 +1,21 @@
 package no.nav.foreldrepenger.selvbetjening.rest;
 
-import no.nav.foreldrepenger.selvbetjening.consumer.Oppslagstjeneste;
-import no.nav.foreldrepenger.selvbetjening.rest.json.Person;
-import no.nav.security.spring.oidc.validation.api.Protected;
+import static no.nav.foreldrepenger.selvbetjening.rest.OppslagController.REST_OPPSLAG;
+import static org.slf4j.LoggerFactory.getLogger;
+
+import javax.inject.Inject;
+
 import org.slf4j.Logger;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
-import javax.inject.Inject;
-
-import static no.nav.foreldrepenger.selvbetjening.rest.OppslagController.REST_OPPSLAG;
-import static org.slf4j.LoggerFactory.getLogger;
+import no.nav.foreldrepenger.mottak.http.ProtectedWithClaims;
+import no.nav.foreldrepenger.selvbetjening.consumer.Oppslagstjeneste;
+import no.nav.foreldrepenger.selvbetjening.rest.json.Person;
 
 @RestController
+@ProtectedWithClaims(issuer = "selvbetjening", claimMap = { "acr=Level4" })
 @RequestMapping(REST_OPPSLAG)
 public class OppslagController {
 
@@ -28,7 +30,6 @@ public class OppslagController {
         this.oppslag = oppslag;
     }
 
-    @Protected
     @GetMapping
     public Person personinfo() {
         LOG.info("Henter personinfo...");
