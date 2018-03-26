@@ -1,21 +1,29 @@
 package no.nav.foreldrepenger.selvbetjening.config;
 
-import com.google.common.collect.ImmutableMap;
-import no.nav.foreldrepenger.selvbetjening.rest.util.ApiKeyInjectingClientInterceptor;
+import static java.util.Arrays.asList;
+
+import java.net.URI;
+
+import javax.inject.Inject;
+
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.boot.actuate.health.HealthAggregator;
+import org.springframework.boot.actuate.health.HealthIndicator;
 import org.springframework.boot.actuate.health.OrderedHealthAggregator;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.core.env.Environment;
 import org.springframework.http.client.ClientHttpRequestInterceptor;
 import org.springframework.web.client.RestTemplate;
 import org.springframework.web.servlet.config.annotation.InterceptorRegistry;
 import org.springframework.web.servlet.config.annotation.WebMvcConfigurer;
 
-import javax.inject.Inject;
-import java.net.URI;
+import com.google.common.collect.ImmutableMap;
 
-import static java.util.Arrays.asList;
+import no.nav.foreldrepenger.selvbetjening.health.EnvironmentAwareServiceHealthIndicator;
+import no.nav.foreldrepenger.selvbetjening.health.MottakPingService;
+import no.nav.foreldrepenger.selvbetjening.health.OppslagPingService;
+import no.nav.foreldrepenger.selvbetjening.rest.util.ApiKeyInjectingClientInterceptor;
 
 @Configuration
 public class ApiConfiguration implements WebMvcConfigurer {
@@ -53,6 +61,16 @@ public class ApiConfiguration implements WebMvcConfigurer {
                         .put(oppslagServiceUri, oppslagApiKey)
                         .build());
 
+    }
+
+    @Bean
+    HealthIndicator oppslagIndicator(Environment env, OppslagPingService service) {
+        return new EnvironmentAwareServiceHealthIndicator(env, service);
+    }
+
+    @Bean
+    HealthIndicator mottakIndicator(Environment env, MottakPingService service) {
+        return new EnvironmentAwareServiceHealthIndicator(env, service);
     }
 
     @Bean

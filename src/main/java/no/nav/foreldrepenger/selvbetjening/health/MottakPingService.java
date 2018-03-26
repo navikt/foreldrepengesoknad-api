@@ -1,4 +1,4 @@
-package no.nav.foreldrepenger.selvbetjening.consumer.ping;
+package no.nav.foreldrepenger.selvbetjening.health;
 
 import static org.slf4j.LoggerFactory.getLogger;
 
