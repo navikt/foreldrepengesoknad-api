@@ -22,6 +22,8 @@ spring:
       server:
         auto-time-requests: true
                
+management.health.diskspace.enabled: false
+
 no.nav.security.oidc:
   issuers: selvbetjening
   issuer.selvbetjening:
