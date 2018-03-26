@@ -1,14 +1,18 @@
 package no.nav.foreldrepenger.selvbetjening;
 
-import io.prometheus.client.hotspot.DefaultExports;
-import no.nav.security.spring.oidc.validation.api.EnableOIDCTokenValidation;
+import static org.springframework.boot.SpringApplication.run;
+
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.context.annotation.ComponentScan;
+import org.springframework.context.annotation.Import;
 
-import static org.springframework.boot.SpringApplication.run;
+import io.prometheus.client.hotspot.DefaultExports;
+import no.nav.security.spring.oidc.test.TokenGeneratorConfiguration;
+import no.nav.security.spring.oidc.validation.api.EnableOIDCTokenValidation;
 
 @SpringBootApplication
 @ComponentScan
+@Import(value = TokenGeneratorConfiguration.class)
 @EnableOIDCTokenValidation(ignore = "org.springframework")
 public class ApplicationLocal {
 

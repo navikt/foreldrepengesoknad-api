@@ -25,7 +25,7 @@ spring:
 no.nav.security.oidc:
   issuers: selvbetjening
   issuer.selvbetjening:
-    uri: https://login.microsoftonline.com/NAVQb2c.onmicrosoft.com/v2.0/.well-known/openid-configuration?p=B2C_1A_signup_signin_wth_idportentest
-    accepted_audience: 35120d2d-a15d-4f40-a846-45a05b8f6a41
+    uri: Set from Fasit
+    accepted_audience: Set from Fasit
 
 http.proxy: http://webproxy-utvikler.nav.no:8088

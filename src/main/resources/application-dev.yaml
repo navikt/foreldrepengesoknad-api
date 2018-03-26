@@ -6,7 +6,7 @@ management :
                    
 no.nav.security.oidc:
   issuers: selvbetjening
-  issuer:
-    selvbetjening.uri: http://metadata
-    selvbetjening.accepted_audience: aud-localhost
-    selvbetjening.cookie_name: localhost-idtoken
+  issuer.selvbetjening : 
+     uri: http://metadata
+     accepted_audience: aud-localhost
+     cookie_name: localhost-idtoken

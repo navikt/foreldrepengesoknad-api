@@ -1,7 +1,7 @@
 management:
-    endpoints: 
-         web:
-            exposure:
-              include:  '*'
+   endpoints.web.exposure.include:  '*'
+   endpoint :
+      security.enabled : false
+      health.show-details : always
                
        
