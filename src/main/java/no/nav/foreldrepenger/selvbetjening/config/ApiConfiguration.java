@@ -64,12 +64,12 @@ public class ApiConfiguration implements WebMvcConfigurer {
     }
 
     @Bean
-    HealthIndicator oppslagIndicator(Environment env, OppslagPingService service) {
+    HealthIndicator oppslag(Environment env, OppslagPingService service) {
         return new EnvironmentAwareServiceHealthIndicator(env, service);
     }
 
     @Bean
-    HealthIndicator mottakIndicator(Environment env, MottakPingService service) {
+    HealthIndicator mottak(Environment env, MottakPingService service) {
         return new EnvironmentAwareServiceHealthIndicator(env, service);
     }
 
