@@ -16,6 +16,7 @@ public class CorsInterceptor extends HandlerInterceptorAdapter {
         List<String> allowedOrigins = Arrays.asList(
                 "http://localhost:8080",
                 "https://engangsstonad.nais.oera-q.local",
+                "https://engangsstonad-q.nav.no",
                 "https://engangsstonad.nav.no"
         );
         String origin = request.getHeader("Origin");
