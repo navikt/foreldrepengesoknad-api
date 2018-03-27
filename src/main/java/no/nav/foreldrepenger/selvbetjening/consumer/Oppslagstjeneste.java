@@ -16,7 +16,7 @@ import org.springframework.web.client.RestTemplate;
 import no.nav.foreldrepenger.selvbetjening.consumer.json.PersonDto;
 
 @Service
-@ConditionalOnProperty(name = "stub.oppslag", havingValue = "false")
+@ConditionalOnProperty(name = "stub.oppslag", havingValue = "false", matchIfMissing = true)
 public class Oppslagstjeneste implements Oppslag {
 
     private static final Logger LOG = getLogger(Oppslagstjeneste.class);
