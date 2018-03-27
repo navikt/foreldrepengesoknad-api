@@ -1,7 +1,5 @@
 package no.nav.foreldrepenger.selvbetjening.health;
 
-import java.util.Arrays;
-
 import org.springframework.boot.actuate.health.Health;
 import org.springframework.boot.actuate.health.HealthIndicator;
 import org.springframework.core.env.Environment;
@@ -9,20 +7,24 @@ import org.springframework.core.env.Environment;
 public class EnvironmentAwareServiceHealthIndicator implements HealthIndicator {
 
     private final Pinger pinger;
-    private final Environment env;
+    private final boolean isDevOrPreProd;
 
     public EnvironmentAwareServiceHealthIndicator(Environment env, Pinger pinger) {
-        this.env = env;
+        this.isDevOrPreProd = idDevOrPreprod(env);
         this.pinger = pinger;
+    }
+
+    private static boolean idDevOrPreprod(Environment env) {
+        return env.acceptsProfiles("dev", "preprod");
     }
 
     @Override
     public Health health() {
         try {
             pinger.ping("Pinger");
-            return isPreprodOrDev() ? upWithDetails() : up();
+            return isDevOrPreProd ? upWithDetails() : up();
         } catch (Exception e) {
-            return isPreprodOrDev() ? downWithDetails(e) : down();
+            return isDevOrPreProd ? downWithDetails(e) : down();
         }
     }
 
@@ -32,10 +34,6 @@ public class EnvironmentAwareServiceHealthIndicator implements HealthIndicator {
 
     private Health downWithDetails(Exception e) {
         return Health.down().withDetail("uri", pinger.baseUri()).withException(e).build();
-    }
-
-    private boolean isPreprodOrDev() {
-        return env.acceptsProfiles("dev", "preprod");
     }
 
     private static Health up() {
@@ -48,7 +46,7 @@ public class EnvironmentAwareServiceHealthIndicator implements HealthIndicator {
 
     @Override
     public String toString() {
-        return getClass().getSimpleName() + " [url=" + pinger + "activeProfiles "
-                + Arrays.toString(env.getActiveProfiles()) + "]";
+        return getClass().getSimpleName() + " [url=" + pinger + "isDevOrPreProd "
+                + isDevOrPreProd + "]";
     }
 }

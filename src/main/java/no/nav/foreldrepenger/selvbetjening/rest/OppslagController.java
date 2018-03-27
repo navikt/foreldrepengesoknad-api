@@ -10,7 +10,7 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
-import no.nav.foreldrepenger.selvbetjening.consumer.Oppslagstjeneste;
+import no.nav.foreldrepenger.selvbetjening.consumer.Oppslag;
 import no.nav.foreldrepenger.selvbetjening.rest.json.Person;
 import no.nav.security.spring.oidc.validation.api.ProtectedWithClaims;
 
@@ -23,10 +23,10 @@ public class OppslagController {
 
     private static final Logger LOG = getLogger(OppslagController.class);
 
-    private Oppslagstjeneste oppslag;
+    private final Oppslag oppslag;
 
     @Inject
-    public OppslagController(Oppslagstjeneste oppslag) {
+    public OppslagController(Oppslag oppslag) {
         this.oppslag = oppslag;
     }
 
@@ -34,5 +34,10 @@ public class OppslagController {
     public Person personinfo() {
         LOG.info("Henter personinfo...");
         return new Person(oppslag.hentPerson());
+    }
+
+    @Override
+    public String toString() {
+        return getClass().getSimpleName() + " [oppslag=" + oppslag + "]";
     }
 }

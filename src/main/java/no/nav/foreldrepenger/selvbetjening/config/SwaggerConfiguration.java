@@ -4,9 +4,8 @@ import static com.google.common.base.Predicates.or;
 import static io.swagger.models.Scheme.HTTP;
 import static io.swagger.models.Scheme.HTTPS;
 import static java.util.stream.Collectors.toSet;
-import static no.nav.foreldrepenger.selvbetjening.rest.EngangsstønadController.REST_ENGANGSSTONAD;
+import static no.nav.foreldrepenger.selvbetjening.rest.MottakController.REST_ENGANGSSTONAD;
 import static no.nav.foreldrepenger.selvbetjening.rest.OppslagController.REST_OPPSLAG;
-import static no.nav.foreldrepenger.selvbetjening.rest.PingController.PING;
 import static springfox.documentation.builders.PathSelectors.regex;
 import static springfox.documentation.spi.DocumentationType.SWAGGER_2;
 
@@ -33,7 +32,6 @@ public class SwaggerConfiguration {
                 .select()
                 .apis(RequestHandlerSelectors.any())
                 .paths(or(
-                        regex(PING + ".*"),
                         regex(REST_OPPSLAG + ".*"),
                         regex(REST_ENGANGSSTONAD + ".*")))
                 .build();

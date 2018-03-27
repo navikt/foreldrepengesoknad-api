@@ -1,7 +1,7 @@
 package no.nav.foreldrepenger.selvbetjening.rest;
 
 import static java.time.LocalDateTime.now;
-import static no.nav.foreldrepenger.selvbetjening.rest.EngangsstønadController.REST_ENGANGSSTONAD;
+import static no.nav.foreldrepenger.selvbetjening.rest.MottakController.REST_ENGANGSSTONAD;
 import static org.slf4j.LoggerFactory.getLogger;
 import static org.springframework.http.MediaType.MULTIPART_FORM_DATA_VALUE;
 import static org.springframework.http.ResponseEntity.ok;
@@ -25,7 +25,7 @@ import org.springframework.web.util.UriComponentsBuilder;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 
-import no.nav.foreldrepenger.selvbetjening.consumer.Oppslagstjeneste;
+import no.nav.foreldrepenger.selvbetjening.consumer.Oppslag;
 import no.nav.foreldrepenger.selvbetjening.consumer.json.EngangsstønadDto;
 import no.nav.foreldrepenger.selvbetjening.consumer.json.PersonDto;
 import no.nav.foreldrepenger.selvbetjening.rest.json.Engangsstønad;
@@ -34,15 +34,15 @@ import no.nav.security.spring.oidc.validation.api.ProtectedWithClaims;
 @RestController
 @ProtectedWithClaims(issuer = "selvbetjening", claimMap = { "acr=Level4" })
 @RequestMapping(REST_ENGANGSSTONAD)
-public class EngangsstønadController {
+public class MottakController {
 
     public static final String REST_ENGANGSSTONAD = "/rest/engangsstonad";
 
-    private static final Logger LOG = getLogger(EngangsstønadController.class);
+    private static final Logger LOG = getLogger(MottakController.class);
 
     private final RestTemplate template;
     private final URI mottakServiceUrl;
-    private final Oppslagstjeneste oppslag;
+    private final Oppslag oppslag;
 
     @Inject
     private ObjectMapper mapper;
@@ -50,8 +50,8 @@ public class EngangsstønadController {
     @Value("${stub.mottak:false}")
     private boolean stub;
 
-    public EngangsstønadController(@Value("${FPSOKNAD_MOTTAK_API_URL}") URI baseUri, RestTemplate template,
-            Oppslagstjeneste oppslag) {
+    public MottakController(@Value("${FPSOKNAD_MOTTAK_API_URL}") URI baseUri, RestTemplate template,
+            Oppslag oppslag) {
         this.mottakServiceUrl = mottakUriFra(baseUri);
         this.template = template;
         this.oppslag = oppslag;
@@ -61,7 +61,6 @@ public class EngangsstønadController {
     public ResponseEntity<Engangsstønad> sendInn(@RequestPart("soknad") Engangsstønad engangsstønad,
             @RequestPart("vedlegg") MultipartFile[] vedlegg) throws Exception {
         LOG.info("Poster engangsstønad");
-
         engangsstønad.opprettet = now();
 
         if (stub) {
@@ -70,7 +69,6 @@ public class EngangsstønadController {
             EngangsstønadDto dto = new EngangsstønadDto(engangsstønad, "STUB_FNR", "STUB_AKTØRID");
             String json = mapper.writeValueAsString(dto);
             LOG.info("Posting JSON (stub): {}", json);
-
             return ok(engangsstønad);
         }
 
