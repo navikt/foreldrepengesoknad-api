@@ -7,9 +7,7 @@ import java.net.URI;
 import javax.inject.Inject;
 
 import org.springframework.beans.factory.annotation.Value;
-import org.springframework.boot.actuate.health.HealthAggregator;
 import org.springframework.boot.actuate.health.HealthIndicator;
-import org.springframework.boot.actuate.health.OrderedHealthAggregator;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.core.env.Environment;
@@ -71,11 +69,6 @@ public class ApiConfiguration implements WebMvcConfigurer {
     @Bean
     HealthIndicator mottak(Environment env, MottakPingService service) {
         return new EnvironmentAwareServiceHealthIndicator(env, service);
-    }
-
-    @Bean
-    public HealthAggregator healthAggregator() {
-        return new OrderedHealthAggregator();
     }
 
     @Override
