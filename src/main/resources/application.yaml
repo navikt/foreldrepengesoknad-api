@@ -14,4 +14,5 @@ no.nav.security.oidc:
   issuer.selvbetjening:
     uri: <Set from Fasit>
     accepted_audience: <Set from Fasit>
+    cookie_name: selvbetjening-idtoken
 http.proxy: http://webproxy-utvikler.nav.no:8088
