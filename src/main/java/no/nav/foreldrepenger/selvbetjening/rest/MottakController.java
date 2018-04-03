@@ -66,24 +66,21 @@ public class MottakController {
         if (stub) {
             LOG.info("Stubber mottak...");
 
-            EngangsstønadDto dto = new EngangsstønadDto(engangsstønad, "STUB_FNR", "STUB_AKTØRID");
+            EngangsstønadDto dto = new EngangsstønadDto(engangsstønad, new PersonDto("STUB", "STUBNES", "STUB_FNR", "STUB_AKTOR"));
             String json = mapper.writeValueAsString(dto);
             LOG.info("Posting JSON (stub): {}", json);
             return ok(engangsstønad);
         }
 
-        String fnr = engangsstønad.fnr; // TODO: mottak bør hente fnr og aktørId fra oidc token selv.
-        PersonDto personDto = oppslag.hentPerson();
-        String aktørId = personDto.aktorId;
+        PersonDto person = oppslag.hentPerson();
 
         LOG.info("Mottak URL: " + mottakServiceUrl);
-        template.postForEntity(mottakServiceUrl, body(engangsstønad, vedlegg[0], fnr, aktørId), String.class);
+        template.postForEntity(mottakServiceUrl, body(engangsstønad, vedlegg[0], person), String.class);
         return ok(engangsstønad);
     }
 
-    private HttpEntity<EngangsstønadDto> body(@RequestBody Engangsstønad engangsstønad, MultipartFile vedlegg,
-            String aktørId, String fnr) throws Exception {
-        EngangsstønadDto dto = new EngangsstønadDto(engangsstønad, fnr, aktørId);
+    private HttpEntity<EngangsstønadDto> body(@RequestBody Engangsstønad engangsstønad, MultipartFile vedlegg, PersonDto person) throws Exception {
+        EngangsstønadDto dto = new EngangsstønadDto(engangsstønad, person);
         dto.addVedlegg(vedlegg.getBytes());
         String json = mapper.writeValueAsString(dto);
         LOG.info("Posting JSON: {}", json);

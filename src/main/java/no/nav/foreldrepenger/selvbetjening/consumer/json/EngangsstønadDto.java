@@ -16,17 +16,18 @@ public class EngangsstønadDto {
 
     public EngangsstønadDto() {}
 
-    public EngangsstønadDto(Engangsstønad engangsstønad, String fnr, String aktørId) {
+    public EngangsstønadDto(Engangsstønad engangsstønad, PersonDto person) {
         this.søker = new SøkerDto();
         this.ytelse = new YtelseDto();
         this.vedlegg = new ArrayList<>();
 
-        this.søker.fornavn = "Lille-Mor";
-        this.søker.etternavn = "Brisnes";
-        this.søker.fnr = fnr;
-        this.søker.aktør = aktørId;
-        this.søker.søknadsRolle = "MOR";
+        // TODO: Mottak bør hente personinfo via fnr fra oidc token selv.
+        this.søker.fornavn = person.fornavn;
+        this.søker.etternavn = person.etternavn;
+        this.søker.fnr = person.fnr;
+        this.søker.aktør = person.aktorId;
 
+        this.søker.søknadsRolle = "MOR";
         this.ytelse.type = "engangsstønad";
 
         this.mottattdato = LocalDateTime.now();
