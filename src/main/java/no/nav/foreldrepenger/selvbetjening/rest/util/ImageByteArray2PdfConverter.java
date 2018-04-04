@@ -27,7 +27,7 @@ public class ImageByteArray2PdfConverter {
 
     private static final Logger LOG = LoggerFactory.getLogger(ImageByteArray2PdfConverter.class);
 
-    private final List<MediaType> mediaTypes;
+    private final List<MediaType> supportedMediaTypes;
 
     public ImageByteArray2PdfConverter() {
         this(IMAGE_JPEG, IMAGE_PNG);
@@ -38,7 +38,7 @@ public class ImageByteArray2PdfConverter {
     }
 
     public ImageByteArray2PdfConverter(List<MediaType> mediaTypes) {
-        this.mediaTypes = mediaTypes;
+        this.supportedMediaTypes = mediaTypes;
     }
 
     public byte[] convert(String classPathResource) {
@@ -85,7 +85,7 @@ public class ImageByteArray2PdfConverter {
     }
 
     private boolean shouldConvert(MediaType mediaType) {
-        boolean shouldConvert = mediaTypes.contains(mediaType);
+        boolean shouldConvert = supportedMediaTypes.contains(mediaType);
         LOG.info("{} convert byte stream of type {} to PDF", shouldConvert ? "Will" : "Will not", mediaType);
         return shouldConvert;
     }
@@ -96,6 +96,6 @@ public class ImageByteArray2PdfConverter {
 
     @Override
     public String toString() {
-        return getClass().getSimpleName() + " [mediaTypes=" + mediaTypes + "]";
+        return getClass().getSimpleName() + " [supportedMediaTypes=" + supportedMediaTypes + "]";
     }
 }
