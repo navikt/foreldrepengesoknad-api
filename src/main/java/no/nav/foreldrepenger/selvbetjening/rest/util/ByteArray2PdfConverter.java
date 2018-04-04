@@ -1,5 +1,6 @@
 package no.nav.foreldrepenger.selvbetjening.rest.util;
 
+import static org.springframework.http.MediaType.APPLICATION_PDF;
 import static org.springframework.http.MediaType.IMAGE_JPEG;
 import static org.springframework.http.MediaType.IMAGE_PNG;
 import static org.springframework.util.StreamUtils.copyToByteArray;
@@ -23,6 +24,8 @@ import com.itextpdf.text.pdf.PdfWriter;
 @Component
 public class ByteArray2PdfConverter {
 
+    private static final Logger LOG = LoggerFactory.getLogger(ByteArray2PdfConverter.class);
+
     private final List<MediaType> mediaTypes;
 
     public ByteArray2PdfConverter() {
@@ -37,8 +40,6 @@ public class ByteArray2PdfConverter {
         this.mediaTypes = mediaTypes;
     }
 
-    private static final Logger LOG = LoggerFactory.getLogger(ByteArray2PdfConverter.class);
-
     public byte[] convert(String classPathResource) {
         try {
             return convert(copyToByteArray(new ClassPathResource(classPathResource).getInputStream()));
@@ -48,7 +49,15 @@ public class ByteArray2PdfConverter {
     }
 
     public byte[] convert(byte[] bytes) {
-        return shouldConvert(bytes) ? doConvert(bytes) : bytes;
+        MediaType mediaType = mediaType(bytes);
+        if (APPLICATION_PDF.equals(mediaType)) {
+            LOG.info("Innhold er allerede PDF, konverteres ikke");
+            return bytes;
+        }
+        if (shouldConvert(mediaType)) {
+            return doConvert(bytes);
+        }
+        throw new UnsupportedAttachmentTypeException(mediaType);
     }
 
     private byte[] doConvert(byte[] bytes) {
@@ -70,11 +79,14 @@ public class ByteArray2PdfConverter {
         }
     }
 
-    private boolean shouldConvert(byte[] bytes) {
-        MediaType mediaType = MediaType.valueOf(new Tika().detect(bytes));
+    private boolean shouldConvert(MediaType mediaType) {
         boolean shouldConvert = mediaTypes.contains(mediaType);
         LOG.info("{} convert byte stream of type {} to PDF", shouldConvert ? "Will" : "Will not", mediaType);
         return shouldConvert;
+    }
+
+    private MediaType mediaType(byte[] bytes) {
+        return MediaType.valueOf(new Tika().detect(bytes));
     }
 
     @Override
