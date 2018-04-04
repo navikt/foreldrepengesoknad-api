@@ -14,6 +14,7 @@ import org.apache.tika.Tika;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.core.io.ClassPathResource;
+import org.springframework.core.io.Resource;
 import org.springframework.http.MediaType;
 import org.springframework.stereotype.Component;
 
@@ -22,30 +23,34 @@ import com.itextpdf.text.Image;
 import com.itextpdf.text.pdf.PdfWriter;
 
 @Component
-public class ByteArray2PdfConverter {
+public class ImageByteArray2PdfConverter {
 
-    private static final Logger LOG = LoggerFactory.getLogger(ByteArray2PdfConverter.class);
+    private static final Logger LOG = LoggerFactory.getLogger(ImageByteArray2PdfConverter.class);
 
     private final List<MediaType> mediaTypes;
 
-    public ByteArray2PdfConverter() {
+    public ImageByteArray2PdfConverter() {
         this(IMAGE_JPEG, IMAGE_PNG);
     }
 
-    public ByteArray2PdfConverter(MediaType... mediaTypes) {
+    public ImageByteArray2PdfConverter(MediaType... mediaTypes) {
         this(Arrays.asList(mediaTypes));
     }
 
-    public ByteArray2PdfConverter(List<MediaType> mediaTypes) {
+    public ImageByteArray2PdfConverter(List<MediaType> mediaTypes) {
         this.mediaTypes = mediaTypes;
     }
 
     public byte[] convert(String classPathResource) {
         try {
-            return convert(copyToByteArray(new ClassPathResource(classPathResource).getInputStream()));
+            return convert(new ClassPathResource(classPathResource));
         } catch (IOException e) {
             throw new IllegalArgumentException(e);
         }
+    }
+
+    public byte[] convert(Resource resource) throws IOException {
+        return convert(copyToByteArray(resource.getInputStream()));
     }
 
     public byte[] convert(byte[] bytes) {
