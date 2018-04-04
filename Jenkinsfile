@@ -68,8 +68,23 @@ node {
         }
     }
 
-    stage("Tag") {
-        // TODO: Tag only releases that go to production
+    stage("Deploy to prod") {
+            timeout(time: 5, unit: 'MINUTES') {
+                input id: 'prod', message: "Deploy to prod?"
+            }
+
+            callback = "${env.BUILD_URL}input/Deploy/"
+            def deploy = deployLib.deployNaisApp(app, releaseVersion, 'p', zone, namespace, callback, committer, false).key
+            try {
+                timeout(time: 15, unit: 'MINUTES') {
+                    input id: 'deploy', message: "Check status here:  https://jira.adeo.no/browse/${deploy}"
+                }
+            } catch (Exception e) {
+                throw new Exception("Deploy feilet :( \n Se https://jira.adeo.no/browse/" + deploy + " for detaljer", e)
+            }
+
+
+        //Tag only releases that go to production
         withEnv(['HTTPS_PROXY=http://webproxy-utvikler.nav.no:8088']) {
             withCredentials([string(credentialsId: 'OAUTH_TOKEN', variable: 'token')]) {
                 sh ("git tag -a ${releaseVersion} -m ${releaseVersion}")
