@@ -28,6 +28,7 @@
 		<oidc-spring-support.version>0.1.4</oidc-spring-support.version>
 	</properties>
 	<dependencies>
+	
 		<dependency>
 			<groupId>com.itextpdf</groupId>
 			<artifactId>itextpdf</artifactId>
@@ -100,6 +101,11 @@
 			<groupId>no.nav.security</groupId>
 			<artifactId>oidc-spring-support</artifactId>
 			<version>${oidc-spring-support.version}</version>
+		</dependency>
+		<dependency>
+			<groupId>org.apache.tika</groupId>
+			<artifactId>tika-core</artifactId>
+			<version>1.17</version>
 		</dependency>
 	</dependencies>
 	<build>
