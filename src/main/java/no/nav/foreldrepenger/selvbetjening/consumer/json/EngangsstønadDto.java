@@ -18,7 +18,7 @@ public class EngangsstønadDto {
 
     public EngangsstønadDto(Engangsstønad engangsstønad, PersonDto person) {
         this.søker = new SøkerDto();
-        this.ytelse = new YtelseDto();
+        this.ytelse = new YtelseDto(engangsstønad.utenlandsopphold, engangsstønad.barn, engangsstønad.annenForelder);
         this.vedlegg = new ArrayList<>();
 
         // TODO: Mottak bør hente personinfo via fnr fra oidc token selv.
@@ -28,20 +28,8 @@ public class EngangsstønadDto {
         this.søker.aktør = person.aktorId;
 
         this.søker.søknadsRolle = "MOR";
-        this.ytelse.type = "engangsstønad";
 
         this.mottattdato = LocalDateTime.now();
-
-        this.ytelse.medlemsskap.norgeSiste12 = engangsstønad.utenlandsopphold.iNorgeSiste12Mnd;
-        this.ytelse.medlemsskap.norgeNeste12 = engangsstønad.utenlandsopphold.iNorgeNeste12Mnd;
-        this.ytelse.medlemsskap.arbeidSiste12 = "IKKE_ARBEIDET";
-        this.ytelse.medlemsskap.fødselNorge = engangsstønad.utenlandsopphold.fødselINorge;
-
-        this.ytelse.relasjonTilBarn.type = engangsstønad.barn.erBarnetFødt ? "fødsel" : "termin";
-        this.ytelse.relasjonTilBarn.antallBarn = engangsstønad.barn.antallBarn;
-        this.ytelse.relasjonTilBarn.terminDato = engangsstønad.barn.termindato;
-        this.ytelse.relasjonTilBarn.utstedtDato = engangsstønad.barn.terminbekreftelseDato;
-        this.ytelse.relasjonTilBarn.fødselsdato = engangsstønad.barn.fødselsdato();
     }
 
     public void addVedlegg(byte[] vedlegg) {

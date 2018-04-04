@@ -10,13 +10,4 @@ public class Barn {
     public Integer antallBarn;
     public LocalDate termindato;
     public LocalDate terminbekreftelseDato;
-
-    public LocalDate fødselsdato() {
-        if (fødselsdatoer != null && fødselsdatoer.size() > 0) {
-            return fødselsdatoer.get(0);
-        } else {
-            return null;
-        }
-    }
-
 }

@@ -28,7 +28,6 @@
 		<oidc-spring-support.version>0.1.4</oidc-spring-support.version>
 	</properties>
 	<dependencies>
-	
 		<dependency>
 			<groupId>com.itextpdf</groupId>
 			<artifactId>itextpdf</artifactId>
@@ -41,7 +40,7 @@
 		<dependency>
 			<groupId>no.nav.security</groupId>
 			<artifactId>oidc-spring-test</artifactId>
-			<version>${oidc-spring-support.version}</version>
+			<version>0.1.4</version>
 			<scope>test</scope>
 		</dependency>
 		<dependency>

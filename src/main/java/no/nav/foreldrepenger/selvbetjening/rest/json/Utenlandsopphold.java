@@ -11,5 +11,4 @@ public class Utenlandsopphold {
     
     public List<Periode> tidligerePerioder;
     public List<Periode> senerePerioder;
-
 }
