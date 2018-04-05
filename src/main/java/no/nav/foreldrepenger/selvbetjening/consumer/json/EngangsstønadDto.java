@@ -1,10 +1,13 @@
 package no.nav.foreldrepenger.selvbetjening.consumer.json;
 
+import com.fasterxml.jackson.annotation.JsonInclude;
 import no.nav.foreldrepenger.selvbetjening.rest.json.Engangsstønad;
 
 import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
+
+import static com.fasterxml.jackson.annotation.JsonInclude.Include.NON_EMPTY;
 
 public class EngangsstønadDto {
 
@@ -12,6 +15,7 @@ public class EngangsstønadDto {
 
     public SøkerDto søker;
     public YtelseDto ytelse;
+    @JsonInclude(NON_EMPTY)
     public List<VedleggDto> vedlegg;
 
     public EngangsstønadDto() {}

@@ -9,6 +9,7 @@ import no.nav.foreldrepenger.selvbetjening.rest.json.Utenlandsopphold;
 import java.time.LocalDate;
 import java.util.List;
 
+import static com.fasterxml.jackson.annotation.JsonInclude.Include.NON_EMPTY;
 import static com.fasterxml.jackson.annotation.JsonInclude.Include.NON_NULL;
 
 public class YtelseDto {
@@ -72,7 +73,9 @@ public class YtelseDto {
         public Boolean norgeNeste12;
         public Boolean fødselNorge;
         public String arbeidSiste12;
+        @JsonInclude(NON_EMPTY)
         public List<Periode> utenlandsopphold;
+        @JsonInclude(NON_EMPTY)
         public List<Periode> framtidigUtenlandsopphold;
     }
 
