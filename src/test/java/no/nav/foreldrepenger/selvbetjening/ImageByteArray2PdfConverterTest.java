@@ -1,43 +1,49 @@
 package no.nav.foreldrepenger.selvbetjening;
 
-import static org.junit.Assert.*;
-
-import no.nav.foreldrepenger.selvbetjening.rest.util.UnsupportedAttachmentTypeException;
-import org.junit.Test;
-
-import no.nav.foreldrepenger.selvbetjening.rest.util.ImageByteArray2PdfConverter;
+import static org.junit.Assert.assertTrue;
+import static org.springframework.http.MediaType.IMAGE_GIF;
 
 import java.util.Arrays;
 
+import org.junit.Test;
+
+import no.nav.foreldrepenger.selvbetjening.rest.util.ImageByteArray2PdfConverter;
+import no.nav.foreldrepenger.selvbetjening.rest.util.UnsupportedAttachmentTypeException;
+
 public class ImageByteArray2PdfConverterTest {
-    private static final byte[] pdfSignature = {0x25, 0x50, 0x44, 0x46};
+    private static final byte[] PDFSIGNATURE = { 0x25, 0x50, 0x44, 0x46 };
 
     @Test
     public void jpgConvertsToPdf() {
-        byte[] converted = new ImageByteArray2PdfConverter().convert("pdf/jks.jpg");
-        assertTrue(isPdf(converted));
+        assertTrue(isPdf(new ImageByteArray2PdfConverter().convert("pdf/jks.jpg")));
     }
 
     @Test
     public void pngConvertsToPdf() {
-        byte[] converted = new ImageByteArray2PdfConverter().convert("pdf/nav-logo.png");
-        assertTrue(isPdf(converted));
+        assertTrue(isPdf(new ImageByteArray2PdfConverter().convert("pdf/nav-logo.png")));
+    }
+
+    @Test(expected = UnsupportedAttachmentTypeException.class)
+    public void gifConvertsToPdfWhenConfigured() {
+        new ImageByteArray2PdfConverter().convert("pdf/loading.gif");
+    }
+
+    @Test
+    public void gifFailsfWhenNotConfigured() {
+        assertTrue(isPdf(new ImageByteArray2PdfConverter(IMAGE_GIF).convert("pdf/loading.gif")));
     }
 
     @Test
     public void pdfRemainsUnchanged() {
-        byte[] converted = new ImageByteArray2PdfConverter().convert("pdf/test.pdf");
-        assertTrue(isPdf(converted));
+        assertTrue(isPdf(new ImageByteArray2PdfConverter().convert("pdf/test.pdf")));
     }
 
     @Test(expected = UnsupportedAttachmentTypeException.class)
     public void whateverElseIsNotAllowed() {
-        byte[] bytes = {1, 2, 3 ,4};
-        new ImageByteArray2PdfConverter().convert(bytes);
+        new ImageByteArray2PdfConverter().convert(new byte[] { 1, 2, 3, 4 });
     }
 
-    private boolean isPdf(byte[] fileContents) {
-        byte[] firstFourBytes = Arrays.copyOfRange(fileContents, 0, 4);
-        return Arrays.equals(firstFourBytes, pdfSignature);
+    private static boolean isPdf(byte[] fileContents) {
+        return Arrays.equals(Arrays.copyOfRange(fileContents, 0, PDFSIGNATURE.length), PDFSIGNATURE);
     }
 }
