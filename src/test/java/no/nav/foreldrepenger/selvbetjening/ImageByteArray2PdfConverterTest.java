@@ -43,14 +43,6 @@ public class ImageByteArray2PdfConverterTest {
         new ImageByteArray2PdfConverter().convert(new byte[] { 1, 2, 3, 4 });
     }
 
-    // @Test
-    public void testCompressionWorks() {
-        ImageByteArray2PdfConverter converter = new ImageByteArray2PdfConverter();
-        int uncompressed = converter.convert("pdf/nav-logo.png").length;
-        int compressed = converter.convert("pdf/nav-logo.png", true).length;
-        System.out.println(uncompressed + "," + compressed);
-    }
-
     private static boolean isPdf(byte[] fileContents) {
         return Arrays.equals(Arrays.copyOfRange(fileContents, 0, PDFSIGNATURE.length), PDFSIGNATURE);
     }
