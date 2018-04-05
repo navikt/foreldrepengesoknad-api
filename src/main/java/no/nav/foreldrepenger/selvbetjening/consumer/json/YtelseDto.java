@@ -63,8 +63,8 @@ public class YtelseDto {
             this.norgeSiste12 = utenlandsopphold.iNorgeSiste12Mnd;
             this.norgeNeste12 = utenlandsopphold.iNorgeNeste12Mnd;
             this.fødselNorge = utenlandsopphold.fødselINorge;
-            this.utlandsopphold = utenlandsopphold.tidligerePerioder;
-            this.fremtidigeUtlandsopphold = utenlandsopphold.senerePerioder;
+            this.utenlandsopphold = utenlandsopphold.tidligerePerioder;
+            this.framtidigUtenlandsopphold = utenlandsopphold.senerePerioder;
             this.arbeidSiste12 = "IKKE_ARBEIDET";
         }
 
@@ -72,8 +72,8 @@ public class YtelseDto {
         public Boolean norgeNeste12;
         public Boolean fødselNorge;
         public String arbeidSiste12;
-        public List<Periode> utlandsopphold;
-        public List<Periode> fremtidigeUtlandsopphold;
+        public List<Periode> utenlandsopphold;
+        public List<Periode> framtidigUtenlandsopphold;
     }
 
     @JsonInclude(NON_NULL)

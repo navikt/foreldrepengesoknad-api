@@ -4,6 +4,10 @@ import java.time.LocalDate;
 
 public class Periode {
     public String land;
-    public LocalDate fom;
-    public LocalDate tom;
+    public Varighet varighet;
+
+    public class Varighet {
+        public LocalDate fom;
+        public LocalDate tom;
+    }
 }
