@@ -48,6 +48,11 @@ node {
 
         sh "${mvn} versions:revert"
         notifyGithub(repo, app, 'continuous-integration/jenkins', commitHash, 'success', "Build #${env.BUILD_NUMBER} has finished")
+
+        slackSend([
+            color: 'good',
+            message: "Build <${env.BUILD_URL}|#${env.BUILD_NUMBER}> (<${commitUrl}|${commitHashShort}>) of ${repo}/${app}@master by ${committer} passed  (${changelog})"
+        ])
     }
 
     stage("Deploy to pre-prod") {
@@ -59,6 +64,10 @@ node {
             timeout(time: 15, unit: 'MINUTES') {
                 input id: 'deploy', message: "Check status here:  https://jira.adeo.no/browse/${deploy}"
             }
+            slackSend([
+                    color: 'good',
+                    message: "${app} version ${releaseVersion} has been deployed to pre-prod."
+            ])
         } catch (Exception e) {
             slackSend([
                     color: 'warning',
