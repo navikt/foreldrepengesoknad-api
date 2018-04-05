@@ -42,34 +42,49 @@ public class ImageByteArray2PdfConverter {
     }
 
     public byte[] convert(String classPathResource) {
+        return convert(classPathResource, false);
+    }
+
+    public byte[] convert(String classPathResource, boolean compress) {
         try {
-            return convert(new ClassPathResource(classPathResource));
+            return convert(new ClassPathResource(classPathResource), compress);
         } catch (IOException e) {
             throw new IllegalArgumentException(e);
         }
     }
 
     public byte[] convert(Resource resource) throws IOException {
-        return convert(copyToByteArray(resource.getInputStream()));
+        return convert(resource, false);
+    }
+
+    public byte[] convert(Resource resource, boolean compress) throws IOException {
+        return convert(copyToByteArray(resource.getInputStream()), compress);
     }
 
     public byte[] convert(byte[] bytes) {
+        return convert(bytes, false);
+    }
+
+    public byte[] convert(byte[] bytes, boolean compress) {
         MediaType mediaType = mediaType(bytes);
         if (APPLICATION_PDF.equals(mediaType)) {
             LOG.info("Innhold er allerede PDF, konverteres ikke");
             return bytes;
         }
         if (shouldConvert(mediaType)) {
-            return doConvert(bytes);
+            return doConvert(bytes, compress);
         }
         throw new UnsupportedAttachmentTypeException(mediaType);
     }
 
-    private byte[] doConvert(byte[] bytes) {
+    private byte[] doConvert(byte[] bytes, boolean compress) {
         try {
             Document document = new Document();
             ByteArrayOutputStream baos = new ByteArrayOutputStream();
-            PdfWriter.getInstance(document, baos);
+            PdfWriter writer = PdfWriter.getInstance(document, baos);
+            if (compress) {
+                writer.setFullCompression();
+            }
             document.open();
             Image image = Image.getInstance(bytes);
             image.setAlignment(Image.ALIGN_CENTER);
