@@ -89,14 +89,14 @@ public class YtelseDto {
             this.antallBarn = barn.antallBarn;
             this.terminDato = barn.termindato;
             this.utstedtDato = barn.terminbekreftelseDato;
-            this.fødselsdatoer = barn.fødselsdatoer;
+            this.fødselsdato = barn.fødselsdatoer;
         }
 
         public String type;
         public Integer antallBarn;
         public LocalDate terminDato;
         public LocalDate utstedtDato;
-        public List<LocalDate> fødselsdatoer;
+        public List<LocalDate> fødselsdato;
     }
 
 }
