@@ -59,7 +59,7 @@ public class MottakController {
 
     @PostMapping(consumes = MULTIPART_FORM_DATA_VALUE)
     public ResponseEntity<Engangsstønad> sendInn(@RequestPart("soknad") Engangsstønad engangsstønad,
-            @RequestPart("vedlegg") MultipartFile[] vedlegg) throws Exception {
+            @RequestPart("vedlegg") MultipartFile... vedlegg) throws Exception {
         LOG.info("Poster engangsstønad");
         engangsstønad.opprettet = now();
 
@@ -75,13 +75,15 @@ public class MottakController {
         PersonDto person = oppslag.hentPerson();
 
         LOG.info("Mottak URL: " + mottakServiceUrl);
-        template.postForEntity(mottakServiceUrl, body(engangsstønad, vedlegg[0], person), String.class);
+        template.postForEntity(mottakServiceUrl, body(engangsstønad, person, vedlegg), String.class);
         return ok(engangsstønad);
     }
 
-    private HttpEntity<EngangsstønadDto> body(@RequestBody Engangsstønad engangsstønad, MultipartFile vedlegg, PersonDto person) throws Exception {
+    private HttpEntity<EngangsstønadDto> body(@RequestBody Engangsstønad engangsstønad, PersonDto person, MultipartFile... vedlegg) throws Exception {
         EngangsstønadDto dto = new EngangsstønadDto(engangsstønad, person);
-        dto.addVedlegg(vedlegg.getBytes());
+        for (MultipartFile multipartFile : vedlegg) {
+            dto.addVedlegg(multipartFile.getBytes());
+        }
         String json = mapper.writeValueAsString(dto);
         LOG.info("Posting JSON: {}", json);
         return new HttpEntity<>(dto);
