@@ -10,6 +10,7 @@ import java.net.URI;
 
 import javax.inject.Inject;
 
+import no.nav.foreldrepenger.selvbetjening.rest.util.ImageByteArray2PdfConverter;
 import org.slf4j.Logger;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.HttpEntity;
@@ -47,6 +48,9 @@ public class MottakController {
     @Inject
     private ObjectMapper mapper;
 
+    @Inject
+    private ImageByteArray2PdfConverter converter;
+
     @Value("${stub.mottak:false}")
     private boolean stub;
 
@@ -82,7 +86,8 @@ public class MottakController {
     private HttpEntity<EngangsstønadDto> body(@RequestBody Engangsstønad engangsstønad, PersonDto person, MultipartFile... vedlegg) throws Exception {
         EngangsstønadDto dto = new EngangsstønadDto(engangsstønad, person);
         for (MultipartFile multipartFile : vedlegg) {
-            dto.addVedlegg(multipartFile.getBytes());
+            byte[] vedleggBytes = multipartFile.getBytes();
+            dto.addVedlegg(converter.convert(vedleggBytes));
         }
         String json = mapper.writeValueAsString(dto);
         LOG.info("Posting JSON: {}", json);
