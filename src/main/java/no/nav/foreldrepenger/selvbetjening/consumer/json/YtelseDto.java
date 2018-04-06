@@ -96,6 +96,7 @@ public class YtelseDto {
         public Integer antallBarn;
         public LocalDate terminDato;
         public LocalDate utstedtDato;
+        @JsonInclude(NON_EMPTY)
         public List<LocalDate> fødselsdato;
     }
 
