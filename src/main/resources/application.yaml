@@ -8,7 +8,8 @@ server:
   use-forward-headers: true
 spring :
   main.banner-mode: 'off'
-  metrics.web.server.auto-time-requests: true   
+  metrics.web.server.auto-time-requests: true
+  servlet.multipart.max-file-size: 5MB
 no.nav.security.oidc:
   issuers: selvbetjening
   issuer.selvbetjening:

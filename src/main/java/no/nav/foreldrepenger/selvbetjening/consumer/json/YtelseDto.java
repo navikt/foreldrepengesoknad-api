@@ -55,7 +55,7 @@ public class YtelseDto {
         public String fornavn;
     }
 
-    @JsonInclude(NON_NULL)
+    @JsonInclude(NON_EMPTY)
     public class MedlemsskapDto {
         public MedlemsskapDto() {
         }
@@ -73,13 +73,11 @@ public class YtelseDto {
         public Boolean norgeNeste12;
         public Boolean fødselNorge;
         public String arbeidSiste12;
-        @JsonInclude(NON_EMPTY)
         public List<Periode> utenlandsopphold;
-        @JsonInclude(NON_EMPTY)
         public List<Periode> framtidigUtenlandsopphold;
     }
 
-    @JsonInclude(NON_NULL)
+    @JsonInclude(NON_EMPTY)
     public class RelasjonTilBarn {
         public RelasjonTilBarn() {
         }
@@ -96,7 +94,6 @@ public class YtelseDto {
         public Integer antallBarn;
         public LocalDate terminDato;
         public LocalDate utstedtDato;
-        @JsonInclude(NON_EMPTY)
         public List<LocalDate> fødselsdato;
     }
 
