@@ -27,6 +27,7 @@ public class EngangsstønadDto {
 
         // TODO: Mottak bør hente personinfo via fnr fra oidc token selv.
         this.søker.fornavn = person.fornavn;
+        this.søker.mellomnavn = person.mellomnavn;
         this.søker.etternavn = person.etternavn;
         this.søker.fnr = person.fnr;
         this.søker.aktør = person.aktorId;
