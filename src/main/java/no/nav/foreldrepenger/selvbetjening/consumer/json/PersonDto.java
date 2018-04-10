@@ -6,10 +6,11 @@ public class PersonDto {
 
     public PersonDto() {}
 
-    public PersonDto(String fnr, String aktorId, String fornavn, String etternavn, String målform) {
+    public PersonDto(String fnr, String aktorId, String fornavn, String mellomnavn, String etternavn, String målform) {
         this.fnr = fnr;
         this.aktorId = aktorId;
         this.fornavn = fornavn;
+        this.mellomnavn = mellomnavn;
         this.etternavn = etternavn;
         this.målform = målform;
     }
@@ -17,6 +18,7 @@ public class PersonDto {
     public String fnr;
     public String aktorId;
     public String fornavn;
+    public String mellomnavn;
     public String etternavn;
     public String kjonn;
     public LocalDate fodselsdato;

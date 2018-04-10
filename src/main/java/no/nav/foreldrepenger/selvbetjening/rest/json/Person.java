@@ -11,22 +11,16 @@ import static com.fasterxml.jackson.annotation.JsonInclude.Include.NON_NULL;
 public class Person {
 
     public Person(PersonDto personDto) {
+        this.fnr = personDto.fnr;
         this.fornavn = personDto.fornavn;
         this.etternavn = personDto.etternavn;
+        this.mellomnavn = personDto.mellomnavn;
         this.kjønn = personDto.kjonn;
         this.fødselsdato = personDto.fodselsdato;
         this.målform = personDto.målform;
     }
 
-    public Person(String fornavn, String mellomnavn, String etternavn, String kjønn, LocalDate fødselsdato, String målform) {
-        this.fornavn = fornavn;
-        this.mellomnavn = mellomnavn;
-        this.etternavn = etternavn;
-        this.kjønn = kjønn;
-        this.fødselsdato = fødselsdato;
-        this.målform = målform;
-    }
-
+    public String fnr;
     public String fornavn;
     public String mellomnavn;
     public String etternavn;
