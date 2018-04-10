@@ -1,15 +1,8 @@
 package no.nav.foreldrepenger.selvbetjening.rest.util;
 
-import static org.springframework.http.MediaType.APPLICATION_PDF;
-import static org.springframework.http.MediaType.IMAGE_JPEG;
-import static org.springframework.http.MediaType.IMAGE_PNG;
-import static org.springframework.util.StreamUtils.copyToByteArray;
-
-import java.io.ByteArrayOutputStream;
-import java.io.IOException;
-import java.util.Arrays;
-import java.util.List;
-
+import com.itextpdf.text.Document;
+import com.itextpdf.text.Image;
+import com.itextpdf.text.pdf.PdfWriter;
 import org.apache.tika.Tika;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -18,9 +11,14 @@ import org.springframework.core.io.Resource;
 import org.springframework.http.MediaType;
 import org.springframework.stereotype.Component;
 
-import com.itextpdf.text.Document;
-import com.itextpdf.text.Image;
-import com.itextpdf.text.pdf.PdfWriter;
+import java.io.ByteArrayOutputStream;
+import java.io.IOException;
+import java.util.Arrays;
+import java.util.List;
+
+import static com.itextpdf.text.PageSize.A4;
+import static org.springframework.http.MediaType.*;
+import static org.springframework.util.StreamUtils.copyToByteArray;
 
 @Component
 public class ImageByteArray2PdfConverter {
@@ -86,8 +84,12 @@ public class ImageByteArray2PdfConverter {
                 writer.setFullCompression();
             }
             document.open();
+
             Image image = Image.getInstance(bytes);
             image.setAlignment(Image.ALIGN_CENTER);
+            image.scaleToFit(A4.getWidth(), A4.getHeight());
+            // TODO: Rotation
+
             document.add(image);
             document.close();
             byte[] converted = baos.toByteArray();

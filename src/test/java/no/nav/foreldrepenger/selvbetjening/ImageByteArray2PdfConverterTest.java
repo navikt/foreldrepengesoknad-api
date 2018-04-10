@@ -3,8 +3,11 @@ package no.nav.foreldrepenger.selvbetjening;
 import static org.junit.Assert.assertTrue;
 import static org.springframework.http.MediaType.IMAGE_GIF;
 
+import java.io.FileOutputStream;
+import java.io.OutputStream;
 import java.util.Arrays;
 
+import org.junit.Ignore;
 import org.junit.Test;
 
 import no.nav.foreldrepenger.selvbetjening.rest.util.ImageByteArray2PdfConverter;
@@ -45,5 +48,12 @@ public class ImageByteArray2PdfConverterTest {
 
     private static boolean isPdf(byte[] fileContents) {
         return Arrays.equals(Arrays.copyOfRange(fileContents, 0, PDFSIGNATURE.length), PDFSIGNATURE);
+    }
+
+    @Ignore
+    public void jpgToPdf() throws Exception {
+        OutputStream stream = new FileOutputStream("pdf/OUTPUT.pdf");
+        stream.write(new ImageByteArray2PdfConverter().convert("pdf/INPUT.jpg"));
+        stream.close();
     }
 }

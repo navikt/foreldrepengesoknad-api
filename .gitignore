@@ -16,7 +16,4 @@ target
 *.iml
 *.log
 reports/
-node_modules/
-repo_test_dir
-**/webapp/static/bundle.js
-war/src/main/client/build
+.DS_Store

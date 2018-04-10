@@ -9,7 +9,7 @@ server:
 spring :
   main.banner-mode: 'off'
   metrics.web.server.auto-time-requests: true
-  servlet.multipart.max-file-size: 5MB
+  servlet.multipart.max-file-size: 9MB
 no.nav.security.oidc:
   issuers: selvbetjening
   issuer.selvbetjening:
