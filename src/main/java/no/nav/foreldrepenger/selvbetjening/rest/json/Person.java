@@ -15,14 +15,16 @@ public class Person {
         this.etternavn = personDto.etternavn;
         this.kjønn = personDto.kjonn;
         this.fødselsdato = personDto.fodselsdato;
+        this.målform = personDto.målform;
     }
 
-    public Person(String fornavn, String mellomnavn, String etternavn, String kjønn, LocalDate fødselsdato) {
+    public Person(String fornavn, String mellomnavn, String etternavn, String kjønn, LocalDate fødselsdato, String målform) {
         this.fornavn = fornavn;
         this.mellomnavn = mellomnavn;
         this.etternavn = etternavn;
         this.kjønn = kjønn;
         this.fødselsdato = fødselsdato;
+        this.målform = målform;
     }
 
     public String fornavn;
@@ -30,5 +32,6 @@ public class Person {
     public String etternavn;
     public String kjønn;
     public LocalDate fødselsdato;
+    public String målform;
 
 }

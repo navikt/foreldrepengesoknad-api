@@ -70,7 +70,7 @@ public class MottakController {
         if (stub) {
             LOG.info("Stubber mottak...");
 
-            EngangsstønadDto dto = new EngangsstønadDto(engangsstønad, new PersonDto("STUB", "STUBNES", "STUB_FNR", "STUB_AKTOR"));
+            EngangsstønadDto dto = new EngangsstønadDto(engangsstønad, new PersonDto("STUB", "STUBNES", "STUB_FNR", "STUB_AKTOR", "STUB_MÅLFORM"));
             String json = mapper.writeValueAsString(dto);
             LOG.info("Posting JSON (stub): {}", json);
             return ok(engangsstønad);
