@@ -27,12 +27,12 @@ public class ImageByteArray2PdfConverterTest {
     }
 
     @Test(expected = UnsupportedAttachmentTypeException.class)
-    public void gifConvertsToPdfWhenConfigured() {
+    public void gifFailsfWhenNotConfigured() {
         new ImageByteArray2PdfConverter().convert("pdf/loading.gif");
     }
 
     @Test
-    public void gifFailsfWhenNotConfigured() {
+    public void gifConvertsToPdfWhenConfigured() {
         assertTrue(isPdf(new ImageByteArray2PdfConverter(IMAGE_GIF).convert("pdf/loading.gif")));
     }
 

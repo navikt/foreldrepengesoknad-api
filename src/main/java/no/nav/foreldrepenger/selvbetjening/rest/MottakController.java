@@ -5,7 +5,9 @@ import static no.nav.foreldrepenger.selvbetjening.rest.MottakController.REST_ENG
 import static org.slf4j.LoggerFactory.getLogger;
 import static org.springframework.http.MediaType.MULTIPART_FORM_DATA_VALUE;
 
+import java.io.IOException;
 import java.net.URI;
+import java.util.Arrays;
 
 import javax.inject.Inject;
 
@@ -23,7 +25,9 @@ import org.springframework.web.client.RestTemplate;
 import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.util.UriComponentsBuilder;
 
+import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import com.neovisionaries.i18n.CountryCode;
 
 import no.nav.foreldrepenger.selvbetjening.consumer.Oppslag;
 import no.nav.foreldrepenger.selvbetjening.consumer.json.EngangsstønadDto;
@@ -67,18 +71,20 @@ public class MottakController {
             @RequestPart("vedlegg") MultipartFile... vedlegg) throws Exception {
         LOG.info("Poster engangsstønad til {}", mottakServiceUrl);
         engangsstønad.opprettet = now();
+        return stub ? postStub(engangsstønad) : post(engangsstønad, vedlegg);
+    }
 
-        if (stub) {
-            LOG.info("Stubber mottak...");
-
-            EngangsstønadDto dto = new EngangsstønadDto(engangsstønad,
-                    new PersonDto("STUB_FNR", "STUB_AKTOR", "STUB", "STUBBE", "STUBNES", "STUB_MÅLFORM"));
-            String json = mapper.writeValueAsString(dto);
-            LOG.info("Posting JSON (stub): {}", json);
-            return new ResponseEntity<>(Kvittering.STUB, HttpStatus.OK);
-        }
+    private ResponseEntity<Kvittering> post(Engangsstønad engangsstønad, MultipartFile... vedlegg) throws Exception {
         return template.postForEntity(mottakServiceUrl, body(engangsstønad, oppslag.hentPerson(), vedlegg),
                 Kvittering.class);
+    }
+
+    private ResponseEntity<Kvittering> postStub(Engangsstønad engangsstønad) throws JsonProcessingException {
+        LOG.info("Stubber mottak...");
+        EngangsstønadDto dto = new EngangsstønadDto(engangsstønad,
+                new PersonDto("STUB_FNR", "STUB_AKTOR", "STUB", "STUBBE", "STUBNES", "STUB_MÅLFORM", CountryCode.NO));
+        LOG.info("Posting JSON (stub): {}", mapper.writeValueAsString(dto));
+        return new ResponseEntity<>(Kvittering.STUB, HttpStatus.OK);
     }
 
     private HttpEntity<EngangsstønadDto> body(@RequestBody Engangsstønad engangsstønad, PersonDto person,
@@ -86,12 +92,19 @@ public class MottakController {
         EngangsstønadDto dto = new EngangsstønadDto(engangsstønad, person);
         String json = mapper.writeValueAsString(dto);
         LOG.info("Posting JSON (without attachment): {})", json);
-
-        for (MultipartFile multipartFile : vedlegg) {
-            byte[] vedleggBytes = multipartFile.getBytes();
-            dto.addVedlegg(converter.convert(vedleggBytes));
-        }
+        Arrays.stream(vedlegg)
+                .map(this::vedleggBytes)
+                .map(s -> converter.convert(s))
+                .forEach(s -> dto.addVedlegg(s));
         return new HttpEntity<>(dto);
+    }
+
+    private byte[] vedleggBytes(MultipartFile vedlegg) {
+        try {
+            return vedlegg.getBytes();
+        } catch (IOException e) {
+            throw new IllegalStateException("Kunne ikke hente bytes fra vedlegg " + vedlegg.getName(), e);
+        }
     }
 
     private static URI mottakUriFra(URI baseUri) {
