@@ -11,7 +11,6 @@ public class VedleggDto {
 
     public class VedleggMetadataDto {
         public String beskrivelse;
-        public String type;
         public String skjemanummer;
     }
 }

@@ -8,14 +8,14 @@ import java.util.ArrayList;
 import java.util.List;
 
 import static com.fasterxml.jackson.annotation.JsonInclude.Include.NON_EMPTY;
+import static java.time.LocalDateTime.now;
 
+@JsonInclude(NON_EMPTY)
 public class EngangsstønadDto {
 
     public LocalDateTime mottattdato;
-
     public SøkerDto søker;
     public YtelseDto ytelse;
-    @JsonInclude(NON_EMPTY)
     public List<VedleggDto> vedlegg;
 
     public EngangsstønadDto() {}
@@ -34,14 +34,13 @@ public class EngangsstønadDto {
 
         this.søker.søknadsRolle = "MOR";
 
-        this.mottattdato = LocalDateTime.now();
+        this.mottattdato = now();
     }
 
     public void addVedlegg(byte[] vedlegg) {
         VedleggDto vedleggDto = new VedleggDto();
         vedleggDto.type = "påkrevd";
         vedleggDto.metadata.beskrivelse = "Terminbekreftelse";
-        vedleggDto.metadata.type = "PDF";
         vedleggDto.metadata.skjemanummer = "TERMINBEKREFTELSE";
         vedleggDto.vedlegg = vedlegg;
         this.vedlegg.add(vedleggDto);
