@@ -8,7 +8,7 @@ import com.fasterxml.jackson.annotation.JsonInclude;
 import com.neovisionaries.i18n.CountryCode;
 
 import no.nav.foreldrepenger.selvbetjening.consumer.json.PersonDto;
-import no.nav.foreldrepenger.selvbetjening.util.EØSLandVelger;
+import no.nav.foreldrepenger.selvbetjening.util.IkkeNordiskEØSLandVelger;
 
 @JsonInclude(NON_NULL)
 public class Person {
@@ -21,7 +21,7 @@ public class Person {
     public LocalDate fødselsdato;
     public String målform;
     public CountryCode land;
-    public boolean isEøsLand;
+    public boolean isIkkeNordiskEøsLand;
 
     public Person(PersonDto personDto) {
         this.fnr = personDto.fnr;
@@ -32,6 +32,6 @@ public class Person {
         this.fødselsdato = personDto.fodselsdato;
         this.målform = personDto.målform;
         this.land = personDto.land;
-        this.isEøsLand = EØSLandVelger.erAnnetEØSLand(personDto.land);
+        this.isIkkeNordiskEøsLand = IkkeNordiskEØSLandVelger.erIkkeNordiskEØSLand(personDto.land);
     }
 }
