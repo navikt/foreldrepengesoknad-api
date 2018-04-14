@@ -14,7 +14,7 @@ import org.junit.Ignore;
 import org.junit.Test;
 import org.springframework.http.MediaType;
 
-import no.nav.foreldrepenger.selvbetjening.rest.util.CatInjectingPdf2ImageConverter;
+import no.nav.foreldrepenger.selvbetjening.rest.util.DefaultPdf2ImageConverter;
 import no.nav.foreldrepenger.selvbetjening.rest.util.ImageByteArray2PdfConverter;
 import no.nav.foreldrepenger.selvbetjening.rest.util.PDFPageSplitter;
 import no.nav.foreldrepenger.selvbetjening.rest.util.UnsupportedAttachmentTypeException;
@@ -28,7 +28,7 @@ public class ImageByteArray2PdfConverterTest {
     public static void before() throws IOException {
 
         converter = new ImageByteArray2PdfConverter(new PDFPageSplitter(),
-                new CatInjectingPdf2ImageConverter());
+                new DefaultPdf2ImageConverter());
     }
 
     @Test
@@ -50,7 +50,7 @@ public class ImageByteArray2PdfConverterTest {
     public void gifConvertsToPdfWhenConfigured() throws IOException {
         assertTrue(isPdf(
                 new ImageByteArray2PdfConverter(new PDFPageSplitter(),
-                        new CatInjectingPdf2ImageConverter(), IMAGE_GIF)
+                        new DefaultPdf2ImageConverter(), IMAGE_GIF)
                                 .convert("pdf/loading.gif")));
     }
 
