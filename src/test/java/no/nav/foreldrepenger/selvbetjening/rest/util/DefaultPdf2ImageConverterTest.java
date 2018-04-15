@@ -2,6 +2,7 @@ package no.nav.foreldrepenger.selvbetjening.rest.util;
 
 import org.junit.Test;
 
+import javax.imageio.ImageIO;
 import java.util.List;
 
 import static org.junit.Assert.*;
@@ -10,6 +11,7 @@ public class DefaultPdf2ImageConverterTest {
 
     @Test
     public void verfiyConversion() {
+        ImageIO.setUseCache(false);
         PDFPageSplitter splitter = new PDFPageSplitter();
         Pdf2ImageConverter converter = new DefaultPdf2ImageConverter();
         List<byte[]> pages = splitter.split("/pdf/test123.pdf");
