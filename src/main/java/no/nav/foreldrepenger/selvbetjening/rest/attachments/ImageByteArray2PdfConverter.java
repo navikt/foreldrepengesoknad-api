@@ -1,4 +1,4 @@
-package no.nav.foreldrepenger.selvbetjening.rest.util;
+package no.nav.foreldrepenger.selvbetjening.rest.attachments;
 
 import static com.itextpdf.text.PageSize.A4;
 import static org.springframework.http.MediaType.APPLICATION_PDF;
@@ -8,7 +8,6 @@ import static org.springframework.util.StreamUtils.copyToByteArray;
 
 import java.io.ByteArrayOutputStream;
 import java.io.IOException;
-import java.net.MalformedURLException;
 import java.util.Arrays;
 import java.util.List;
 
@@ -22,7 +21,6 @@ import org.springframework.core.io.Resource;
 import org.springframework.http.MediaType;
 import org.springframework.stereotype.Component;
 
-import com.itextpdf.text.BadElementException;
 import com.itextpdf.text.Document;
 import com.itextpdf.text.DocumentException;
 import com.itextpdf.text.Element;
@@ -64,7 +62,7 @@ public class ImageByteArray2PdfConverter {
         try {
             return convert(new ClassPathResource(classPathResource), compress);
         } catch (IOException e) {
-            throw new IllegalArgumentException(e);
+            throw new AttachmentConversionException("Kunne ikke konvertere vedlegg " + classPathResource, e);
         }
     }
 
@@ -83,7 +81,7 @@ public class ImageByteArray2PdfConverter {
     public byte[] convert(byte[] bytes, boolean compress) {
         MediaType mediaType = mediaType(bytes);
         if (APPLICATION_PDF.equals(mediaType)) {
-            LOG.info("Innhold er allerede PDF, deles opp i bildedeler");
+            LOG.info("Innhold er allerede PDF, deles opp i deler");
             List<byte[]> pdfPages = pdfPageSplitter.split(bytes);
             LOG.info("PDF ble delt opp i {} deler", pdfPages.size());
             return embedImagesInPdf(compress, pdf2ImageConverter.convertToImages(pdfPages));
@@ -107,16 +105,12 @@ public class ImageByteArray2PdfConverter {
                 writer.setFullCompression();
             }
             document.open();
-            for (byte[] image : images) {
-                addImage(document, image);
-
-            }
+            images.stream().forEach(s -> addImage(document, s));
             document.close();
-            byte[] converted = baos.toByteArray();
-            return converted;
-        } catch (Exception e) {
-            LOG.warn("Konvertering feilet", e);
-            throw new IllegalArgumentException(e);
+            return baos.toByteArray();
+        } catch (DocumentException e) {
+            LOG.warn("Konvertering av vedlegg feilet", e);
+            throw new AttachmentConversionException("Konvertering av vedlegg feilet", e);
         }
     }
 
@@ -124,21 +118,25 @@ public class ImageByteArray2PdfConverter {
         return supportedMediaTypes;
     }
 
-    private void addImage(Document document, byte[] bytes)
-            throws BadElementException, MalformedURLException, IOException, DocumentException {
-        Image image = Image.getInstance(bytes);
-        image.setAlignment(Element.ALIGN_CENTER);
-        image.scaleToFit(A4.getWidth(), A4.getHeight());
-        document.add(image);
+    private void addImage(Document document, byte[] bytes) {
+        try {
+            LOG.info("Legger til image");
+            Image image = Image.getInstance(bytes);
+            image.setAlignment(Element.ALIGN_CENTER);
+            image.scaleToFit(A4.getWidth(), A4.getHeight());
+            document.add(image);
+        } catch (IOException | DocumentException e) {
+            throw new AttachmentConversionException("Kunne ikke legge image til dokument", e);
+        }
     }
 
     private boolean shouldConvertImage(MediaType mediaType) {
         boolean shouldConvert = supportedMediaTypes.contains(mediaType);
-        LOG.info("{} convert byte stream of type {} to PDF", shouldConvert ? "Will" : "Will not", mediaType);
+        LOG.info("{} konvertere bytes av type {} til PDF", shouldConvert ? "Vil" : "Vil ikke", mediaType);
         return shouldConvert;
     }
 
-    private MediaType mediaType(byte[] bytes) {
+    private static MediaType mediaType(byte[] bytes) {
         return MediaType.valueOf(new Tika().detect(bytes));
     }
 

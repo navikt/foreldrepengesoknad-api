@@ -1,4 +1,4 @@
-package no.nav.foreldrepenger.selvbetjening.rest.util;
+package no.nav.foreldrepenger.selvbetjening.rest.attachments;
 
 import java.io.ByteArrayInputStream;
 import java.io.ByteArrayOutputStream;
@@ -24,7 +24,7 @@ public class PDFPageSplitter {
         try {
             return split(resource.getInputStream());
         } catch (IOException e) {
-            throw new IllegalStateException(e);
+            throw new AttachmentConversionException("Kunne ikke splitte " + resource, e);
         }
     }
 
@@ -38,15 +38,23 @@ public class PDFPageSplitter {
                     .map(PDFPageSplitter::toByteArray)
                     .collect(Collectors.toList());
         } catch (IOException ex) {
-            throw new RuntimeException("Error while splitting PDF into pages", ex);
+            throw new AttachmentConversionException("Error while splitting PDF into pages", ex);
         }
     }
 
     private static List<PDDocument> split(PDDocument document) {
         try {
             return new Splitter().split(document);
-        } catch (Exception e) {
-            throw new IllegalStateException(e);
+        } catch (IOException e) {
+            throw new AttachmentConversionException("Kunne ikke splitte PDF", e);
+        }
+    }
+
+    private static PDDocument load(InputStream stream) {
+        try {
+            return PDDocument.load(stream);
+        } catch (IOException e) {
+            throw new AttachmentConversionException("Kunne ikke laste PDF", e);
         }
     }
 
@@ -57,7 +65,7 @@ public class PDFPageSplitter {
             page.close();
             return baos.toByteArray();
         } catch (IOException e) {
-            throw new IllegalStateException(e);
+            throw new AttachmentConversionException("Kunne ikke ekstrahere bytes fra PDF", e);
         }
     }
 }

@@ -1,6 +1,10 @@
-package no.nav.foreldrepenger.selvbetjening.rest.util;
+package no.nav.foreldrepenger.selvbetjening.rest.attachments;
 
 import org.junit.Test;
+
+import no.nav.foreldrepenger.selvbetjening.rest.attachments.DefaultPdf2ImageConverter;
+import no.nav.foreldrepenger.selvbetjening.rest.attachments.PDFPageSplitter;
+import no.nav.foreldrepenger.selvbetjening.rest.attachments.Pdf2ImageConverter;
 
 import javax.imageio.ImageIO;
 import java.util.List;

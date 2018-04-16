@@ -1,22 +1,16 @@
-package no.nav.foreldrepenger.selvbetjening.rest.json.util;
+package no.nav.foreldrepenger.selvbetjening.rest.attachments;
 
-import no.nav.foreldrepenger.selvbetjening.rest.util.DefaultPdf2ImageConverter;
-import no.nav.foreldrepenger.selvbetjening.rest.util.ImageByteArray2PdfConverter;
-import no.nav.foreldrepenger.selvbetjening.rest.util.PDFPageSplitter;
-import no.nav.foreldrepenger.selvbetjening.rest.util.UnsupportedAttachmentTypeException;
+import static org.junit.Assert.assertTrue;
+import static org.springframework.http.MediaType.IMAGE_GIF;
+
+import java.io.IOException;
+import java.util.Arrays;
+
 import org.apache.tika.Tika;
 import org.junit.BeforeClass;
 import org.junit.Ignore;
 import org.junit.Test;
 import org.springframework.http.MediaType;
-
-import java.io.IOException;
-import java.nio.file.Files;
-import java.nio.file.Paths;
-import java.util.Arrays;
-
-import static org.junit.Assert.assertTrue;
-import static org.springframework.http.MediaType.IMAGE_GIF;
 
 public class ImageByteArray2PdfConverterTest {
     private static final byte[] PDFSIGNATURE = { 0x25, 0x50, 0x44, 0x46 };
@@ -65,9 +59,9 @@ public class ImageByteArray2PdfConverterTest {
         return Arrays.equals(Arrays.copyOfRange(fileContents, 0, PDFSIGNATURE.length), PDFSIGNATURE);
     }
 
+    @Ignore
+    public void writeToFileForFunAndProfit() throws Exception {
+        byte[] bytes = converter.convert("pdf/spring-framework-reference.pdf");
 
-    @Ignore // Used for manual inspection of PDF, delete OUTPUT.pdf afterwards
-    public void jpgToPdf() throws Exception {
-        Files.write(Paths.get("OUTPUT.pdf"), converter.convert("pdf/test123.pdf", true));
     }
 }

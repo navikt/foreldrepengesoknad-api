@@ -32,9 +32,9 @@ import com.neovisionaries.i18n.CountryCode;
 import no.nav.foreldrepenger.selvbetjening.consumer.Oppslag;
 import no.nav.foreldrepenger.selvbetjening.consumer.json.EngangsstønadDto;
 import no.nav.foreldrepenger.selvbetjening.consumer.json.PersonDto;
+import no.nav.foreldrepenger.selvbetjening.rest.attachments.ImageByteArray2PdfConverter;
 import no.nav.foreldrepenger.selvbetjening.rest.json.Engangsstønad;
 import no.nav.foreldrepenger.selvbetjening.rest.json.Kvittering;
-import no.nav.foreldrepenger.selvbetjening.rest.util.ImageByteArray2PdfConverter;
 import no.nav.security.spring.oidc.validation.api.ProtectedWithClaims;
 
 @RestController
