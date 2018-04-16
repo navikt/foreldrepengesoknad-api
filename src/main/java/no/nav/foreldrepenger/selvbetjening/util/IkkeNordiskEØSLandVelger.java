@@ -42,13 +42,10 @@ public final class IkkeNordiskEØSLandVelger {
     private static final List<CountryCode> IKKENORDISKEØSLAND = Arrays.asList(
             BE, /* Belgia */
             BG, /* Bulgaria */
-            DK, /* Danmark */
             EE, /* Estland */
-            FI, /* Finland */
             FR, /* Frankrike */
             GR, /* Hellas */
             IE, /* Irland */
-            IS, /* Island */
             IT, /* Italia */
             HR, /* Kroatia */
             CY, /* Kypros */
@@ -66,7 +63,6 @@ public final class IkkeNordiskEØSLandVelger {
             ES, /* Spania */
             UK, /* Storbritannia og Nord Irland */
             CH, /* Sveits */
-            SE, /* Sverige */
             CZ, /* Tsjekkia */
             DE, /* Tyskland */
             HU, /* Ungarn */
@@ -78,7 +74,7 @@ public final class IkkeNordiskEØSLandVelger {
     }
 
     public static boolean erIkkeNordiskEØSLand(CountryCode cc) {
-        return cc != null ? !IKKENORDISKEØSLAND.contains(cc) : false;
+        return IKKENORDISKEØSLAND.contains(cc);
     }
 
 }
