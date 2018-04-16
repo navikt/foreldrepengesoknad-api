@@ -3,6 +3,7 @@
     <appender name="stdout" class="ch.qos.logback.core.ConsoleAppender">
         <encoder class="net.logstash.logback.encoder.LogstashEncoder" />
     </appender>
+
     <springProfile name="dev">
         <appender name="stdout" class="ch.qos.logback.core.ConsoleAppender">
             <layout class="ch.qos.logback.classic.PatternLayout">
@@ -12,6 +13,9 @@
             </layout>
         </appender>
     </springProfile>
+
+    <logger name="org.apache.pdfbox.pdfmodel.font" level="error" />
+
     <root level="info">
         <appender-ref ref="stdout" />
     </root>

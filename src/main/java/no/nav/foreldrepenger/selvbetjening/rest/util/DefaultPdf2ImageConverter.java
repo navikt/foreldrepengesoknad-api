@@ -42,7 +42,7 @@ public class DefaultPdf2ImageConverter implements Pdf2ImageConverter {
 
     private byte[] toBytes(BufferedImage img) {
         try (ByteArrayOutputStream baos = new ByteArrayOutputStream()) {
-            ImageIO.write(img, "png", baos);
+            ImageIO.write(img, "jpg", baos);
             baos.flush();
             return baos.toByteArray();
         } catch (IOException ex) {
