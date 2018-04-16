@@ -1,6 +1,7 @@
 package no.nav.foreldrepenger.selvbetjening.rest.attachments;
 
 import static java.util.stream.Collectors.toList;
+import static org.apache.pdfbox.rendering.ImageType.RGB;
 
 import java.awt.image.BufferedImage;
 import java.io.ByteArrayOutputStream;
@@ -10,7 +11,6 @@ import java.util.List;
 import javax.imageio.ImageIO;
 
 import org.apache.pdfbox.pdmodel.PDDocument;
-import org.apache.pdfbox.rendering.ImageType;
 import org.apache.pdfbox.rendering.PDFRenderer;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -23,33 +23,33 @@ public class DefaultPdf2ImageConverter implements Pdf2ImageConverter {
 
     @Override
     public List<byte[]> convertToImages(List<byte[]> pdfPages) {
-        LOG.info("Konverterer {} PDF-sider til image", pdfPages.size());
+        LOG.info("Konverterer {} PDF-side(r) til image", pdfPages.size());
         return pdfPages.stream()
-                .map(this::toBufferedImage)
-                .map(this::toBytes)
+                .map(DefaultPdf2ImageConverter::toBufferedImage)
+                .map(DefaultPdf2ImageConverter::toBytes)
                 .collect(toList());
     }
 
-    private BufferedImage toBufferedImage(byte[] page) {
+    private static BufferedImage toBufferedImage(byte[] page) {
         LOG.info("Konverterer {} bytes til image", page.length);
         try (PDDocument document = PDDocument.load(page)) {
-            return new PDFRenderer(document).renderImageWithDPI(0, 300, ImageType.RGB);
+            return new PDFRenderer(document).renderImageWithDPI(0, 300, RGB);
         } catch (IOException e) {
-            LOG.warn("Kunne ikke konvertere PDF til BufferedImage", e);
-            throw new AttachmentConversionException("Kunne ikke konvertere PDF til BufferedImage", e);
+            LOG.warn("Kunne ikke konvertere PDF til image", e);
+            throw new AttachmentConversionException("Kunne ikke konvertere PDF til image", e);
         }
     }
 
-    private byte[] toBytes(BufferedImage img) {
+    private static byte[] toBytes(BufferedImage img) {
         try (ByteArrayOutputStream baos = new ByteArrayOutputStream()) {
             ImageIO.setUseCache(false);
             ImageIO.write(img, "jpg", baos);
-            LOG.info("Konverterer image {} bytes", img);
+            LOG.info("Konverterte image til {}", img);
             baos.flush();
             return baos.toByteArray();
         } catch (IOException e) {
-            LOG.warn("Kunne ikke konvertere BufferedImage til bytes", e);
-            throw new AttachmentConversionException("Kunne ikke konvertere BufferedImage til bytes", e);
+            LOG.warn("Kunne ikke konvertere image til bytes", e);
+            throw new AttachmentConversionException("Kunne ikke konvertere image til bytes", e);
         }
     }
 }

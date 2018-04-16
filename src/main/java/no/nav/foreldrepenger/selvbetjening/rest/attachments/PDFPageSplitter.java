@@ -38,7 +38,7 @@ public class PDFPageSplitter {
                     .map(PDFPageSplitter::toByteArray)
                     .collect(Collectors.toList());
         } catch (IOException ex) {
-            throw new AttachmentConversionException("Error while splitting PDF into pages", ex);
+            throw new AttachmentConversionException("Kunne ikke splitte PDF", ex);
         }
     }
 
@@ -47,14 +47,6 @@ public class PDFPageSplitter {
             return new Splitter().split(document);
         } catch (IOException e) {
             throw new AttachmentConversionException("Kunne ikke splitte PDF", e);
-        }
-    }
-
-    private static PDDocument load(InputStream stream) {
-        try {
-            return PDDocument.load(stream);
-        } catch (IOException e) {
-            throw new AttachmentConversionException("Kunne ikke laste PDF", e);
         }
     }
 

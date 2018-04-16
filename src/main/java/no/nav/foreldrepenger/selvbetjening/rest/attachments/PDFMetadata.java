@@ -1,11 +1,11 @@
 
 package no.nav.foreldrepenger.selvbetjening.rest.attachments;
 
-public class Metadata {
+public class PDFMetadata {
 
     private org.apache.tika.metadata.Metadata metadata;
 
-    public Metadata(org.apache.tika.metadata.Metadata metadata) {
+    public PDFMetadata(org.apache.tika.metadata.Metadata metadata) {
         this.metadata = metadata;
     }
 

@@ -8,7 +8,7 @@ public class MetadataExtractorTest {
 
     @Test
     public void testPages() throws Exception {
-        Metadata metadata = new PDFMetadataExtractor().metadata("pdf/spring-framework-reference.pdf");
+        PDFMetadata metadata = new PDFMetadataExtractor().metadata("pdf/spring-framework-reference.pdf");
         assertEquals(metadata.pages(), 798);
     }
 }
