@@ -33,6 +33,7 @@ import no.nav.foreldrepenger.selvbetjening.consumer.Oppslag;
 import no.nav.foreldrepenger.selvbetjening.consumer.json.EngangsstønadDto;
 import no.nav.foreldrepenger.selvbetjening.consumer.json.PersonDto;
 import no.nav.foreldrepenger.selvbetjening.rest.attachments.ImageByteArray2PdfConverter;
+import no.nav.foreldrepenger.selvbetjening.rest.attachments.TooLargeAttachmentsException;
 import no.nav.foreldrepenger.selvbetjening.rest.json.Engangsstønad;
 import no.nav.foreldrepenger.selvbetjening.rest.json.Kvittering;
 import no.nav.security.spring.oidc.validation.api.ProtectedWithClaims;
@@ -72,7 +73,7 @@ public class MottakController {
     public ResponseEntity<Kvittering> sendInn(@RequestPart("soknad") Engangsstønad engangsstønad,
             @RequestPart("vedlegg") MultipartFile... vedlegg) throws Exception {
         if (vedleggTooLarge(vedlegg)) {
-            return ResponseEntity.status(HttpStatus.PAYLOAD_TOO_LARGE).build();
+            throw new TooLargeAttachmentsException();
         }
 
         LOG.info("Poster engangsstønad til {}", mottakServiceUrl);
@@ -121,10 +122,9 @@ public class MottakController {
     }
 
     private boolean vedleggTooLarge(MultipartFile... vedlegg) {
-        long totalSize = Arrays.stream(vedlegg)
+        return Arrays.stream(vedlegg)
                 .mapToLong(MultipartFile::getSize)
-                .sum();
-        return totalSize > MAX_VEDLEGG_SIZE;
+                .sum() > MAX_VEDLEGG_SIZE;
     }
 
     @Override

@@ -1,3 +1,4 @@
+
 package no.nav.foreldrepenger.selvbetjening.rest.attachments;
 
 public class Metadata {
