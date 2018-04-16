@@ -46,6 +46,8 @@ public class MottakController {
 
     private static final Logger LOG = getLogger(MottakController.class);
 
+    private static final double MAX_VEDLEGG_SIZE = 9.5 * 1024 * 1024;
+
     private final RestTemplate template;
     private final URI mottakServiceUrl;
     private final Oppslag oppslag;
@@ -69,6 +71,10 @@ public class MottakController {
     @PostMapping(consumes = MULTIPART_FORM_DATA_VALUE)
     public ResponseEntity<Kvittering> sendInn(@RequestPart("soknad") Engangsstønad engangsstønad,
             @RequestPart("vedlegg") MultipartFile... vedlegg) throws Exception {
+        if (vedleggToBig(vedlegg)) {
+            return ResponseEntity.status(HttpStatus.PAYLOAD_TOO_LARGE).build();
+        }
+
         LOG.info("Poster engangsstønad til {}", mottakServiceUrl);
         engangsstønad.opprettet = now();
         return stub ? postStub(engangsstønad) : post(engangsstønad, vedlegg);
@@ -112,6 +118,13 @@ public class MottakController {
                 .fromUri(baseUri)
                 .path("/mottak/dokmot/send")
                 .build().toUri();
+    }
+
+    private boolean vedleggToBig(MultipartFile... vedlegg) {
+        long totalSize = Arrays.stream(vedlegg)
+                .mapToLong(MultipartFile::getSize)
+                .sum();
+        return totalSize > MAX_VEDLEGG_SIZE;
     }
 
     @Override
