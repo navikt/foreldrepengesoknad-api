@@ -33,23 +33,18 @@ public class PDFPageSplitter {
     }
 
     public List<byte[]> split(InputStream stream) {
-        PDDocument document = load(stream);
-        return split(document).stream()
-                .map(PDFPageSplitter::toByteArray)
-                .collect(Collectors.toList());
+        try (PDDocument document = PDDocument.load(stream)) {
+            return split(document).stream()
+                    .map(PDFPageSplitter::toByteArray)
+                    .collect(Collectors.toList());
+        } catch (IOException ex) {
+            throw new RuntimeException("Error while splitting PDF into pages", ex);
+        }
     }
 
     private static List<PDDocument> split(PDDocument document) {
         try {
             return new Splitter().split(document);
-        } catch (Exception e) {
-            throw new IllegalStateException(e);
-        }
-    }
-
-    private static PDDocument load(InputStream stream) {
-        try {
-            return PDDocument.load(stream);
         } catch (Exception e) {
             throw new IllegalStateException(e);
         }
