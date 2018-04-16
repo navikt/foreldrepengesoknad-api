@@ -71,7 +71,7 @@ public class MottakController {
     @PostMapping(consumes = MULTIPART_FORM_DATA_VALUE)
     public ResponseEntity<Kvittering> sendInn(@RequestPart("soknad") Engangsstønad engangsstønad,
             @RequestPart("vedlegg") MultipartFile... vedlegg) throws Exception {
-        if (vedleggToBig(vedlegg)) {
+        if (vedleggTooLarge(vedlegg)) {
             return ResponseEntity.status(HttpStatus.PAYLOAD_TOO_LARGE).build();
         }
 
@@ -101,7 +101,7 @@ public class MottakController {
         Arrays.stream(vedlegg)
                 .map(this::vedleggBytes)
                 .map(s -> converter.convert(s))
-                .forEach(s -> dto.addVedlegg(s));
+                .forEach(dto::addVedlegg);
         return new HttpEntity<>(dto);
     }
 
@@ -120,7 +120,7 @@ public class MottakController {
                 .build().toUri();
     }
 
-    private boolean vedleggToBig(MultipartFile... vedlegg) {
+    private boolean vedleggTooLarge(MultipartFile... vedlegg) {
         long totalSize = Arrays.stream(vedlegg)
                 .mapToLong(MultipartFile::getSize)
                 .sum();
