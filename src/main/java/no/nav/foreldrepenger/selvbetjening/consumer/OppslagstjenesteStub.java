@@ -1,5 +1,6 @@
 package no.nav.foreldrepenger.selvbetjening.consumer;
 
+import static com.neovisionaries.i18n.CountryCode.NO;
 import static java.time.LocalDate.now;
 import static org.slf4j.LoggerFactory.getLogger;
 
@@ -32,6 +33,7 @@ public class OppslagstjenesteStub implements Oppslag {
         dto.fodselsdato = now().minusYears(21);
         dto.kjonn = "K";
         dto.adresse = new AdresseDto();
+        dto.land = NO;
         return dto;
     }
 }

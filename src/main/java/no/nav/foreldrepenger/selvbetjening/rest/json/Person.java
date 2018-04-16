@@ -21,7 +21,7 @@ public class Person {
     public LocalDate fødselsdato;
     public String målform;
     public CountryCode land;
-    public boolean isIkkeNordiskEøsLand;
+    public Boolean ikkeNordiskEøsLand;
 
     public Person(PersonDto personDto) {
         this.fnr = personDto.fnr;
@@ -32,6 +32,6 @@ public class Person {
         this.fødselsdato = personDto.fodselsdato;
         this.målform = personDto.målform;
         this.land = personDto.land;
-        this.isIkkeNordiskEøsLand = IkkeNordiskEØSLandVelger.erIkkeNordiskEØSLand(personDto.land);
+        this.ikkeNordiskEøsLand = IkkeNordiskEØSLandVelger.erIkkeNordiskEØSLand(personDto.land);
     }
 }
