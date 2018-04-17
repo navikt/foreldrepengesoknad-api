@@ -104,7 +104,8 @@ public class APIControllerAdvice extends ResponseEntityExceptionHandler {
     @Override
     protected ResponseEntity<Object> handleMethodArgumentNotValid(MethodArgumentNotValidException e,
             HttpHeaders headers, HttpStatus status, WebRequest request) {
-        return handleExceptionInternal(e, validationResponseBody(e), new HttpHeaders(), UNPROCESSABLE_ENTITY, request);
+        return handleExceptionInternal(e, new ApiError(UNPROCESSABLE_ENTITY, validationResponseBody(e), e),
+                new HttpHeaders(), UNPROCESSABLE_ENTITY, request);
     }
 
     private String validationResponseBody(MethodArgumentNotValidException e) {
