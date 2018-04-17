@@ -32,9 +32,11 @@ import com.neovisionaries.i18n.CountryCode;
 import no.nav.foreldrepenger.selvbetjening.consumer.Oppslag;
 import no.nav.foreldrepenger.selvbetjening.consumer.json.EngangsstønadDto;
 import no.nav.foreldrepenger.selvbetjening.consumer.json.PersonDto;
+import no.nav.foreldrepenger.selvbetjening.rest.attachments.Image2PDFConverter;
+import no.nav.foreldrepenger.selvbetjening.rest.attachments.exceptions.AttachmentConversionException;
+import no.nav.foreldrepenger.selvbetjening.rest.attachments.exceptions.AttachmentsTooLargeException;
 import no.nav.foreldrepenger.selvbetjening.rest.json.Engangsstønad;
 import no.nav.foreldrepenger.selvbetjening.rest.json.Kvittering;
-import no.nav.foreldrepenger.selvbetjening.rest.util.ImageByteArray2PdfConverter;
 import no.nav.security.spring.oidc.validation.api.ProtectedWithClaims;
 
 @RestController
@@ -56,7 +58,7 @@ public class MottakController {
     private ObjectMapper mapper;
 
     @Inject
-    private ImageByteArray2PdfConverter converter;
+    private Image2PDFConverter converter;
 
     @Value("${stub.mottak:false}")
     private boolean stub;
@@ -71,10 +73,7 @@ public class MottakController {
     @PostMapping(consumes = MULTIPART_FORM_DATA_VALUE)
     public ResponseEntity<Kvittering> sendInn(@RequestPart("soknad") Engangsstønad engangsstønad,
             @RequestPart("vedlegg") MultipartFile... vedlegg) throws Exception {
-        if (vedleggTooLarge(vedlegg)) {
-            return ResponseEntity.status(HttpStatus.PAYLOAD_TOO_LARGE).build();
-        }
-
+        checkVedleggTooLarge(vedlegg);
         LOG.info("Poster engangsstønad til {}", mottakServiceUrl);
         engangsstønad.opprettet = now();
         return stub ? postStub(engangsstønad) : post(engangsstønad, vedlegg);
@@ -96,8 +95,7 @@ public class MottakController {
     private HttpEntity<EngangsstønadDto> body(@RequestBody Engangsstønad engangsstønad, PersonDto person,
             MultipartFile... vedlegg) throws Exception {
         EngangsstønadDto dto = new EngangsstønadDto(engangsstønad, person);
-        String json = mapper.writeValueAsString(dto);
-        LOG.info("Posting JSON (without attachment): {})", json);
+        LOG.info("Posting JSON (without attachment): {})", mapper.writeValueAsString(dto));
         Arrays.stream(vedlegg)
                 .map(this::vedleggBytes)
                 .map(s -> converter.convert(s))
@@ -109,7 +107,7 @@ public class MottakController {
         try {
             return vedlegg.getBytes();
         } catch (IOException e) {
-            throw new IllegalStateException("Kunne ikke hente bytes fra vedlegg " + vedlegg.getName(), e);
+            throw new AttachmentConversionException("Kunne ikke hente bytes fra vedlegg " + vedlegg.getName(), e);
         }
     }
 
@@ -120,11 +118,13 @@ public class MottakController {
                 .build().toUri();
     }
 
-    private boolean vedleggTooLarge(MultipartFile... vedlegg) {
-        long totalSize = Arrays.stream(vedlegg)
+    private void checkVedleggTooLarge(MultipartFile... vedlegg) {
+        long total = Arrays.stream(vedlegg)
                 .mapToLong(MultipartFile::getSize)
                 .sum();
-        return totalSize > MAX_VEDLEGG_SIZE;
+        if (total > MAX_VEDLEGG_SIZE) {
+            throw new AttachmentsTooLargeException(total);
+        }
     }
 
     @Override

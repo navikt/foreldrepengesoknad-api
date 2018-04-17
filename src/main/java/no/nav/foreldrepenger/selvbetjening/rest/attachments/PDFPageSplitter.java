@@ -1,4 +1,4 @@
-package no.nav.foreldrepenger.selvbetjening.rest.util;
+package no.nav.foreldrepenger.selvbetjening.rest.attachments;
 
 import java.io.ByteArrayInputStream;
 import java.io.ByteArrayOutputStream;
@@ -13,18 +13,20 @@ import org.springframework.core.io.ClassPathResource;
 import org.springframework.core.io.Resource;
 import org.springframework.stereotype.Component;
 
+import no.nav.foreldrepenger.selvbetjening.rest.attachments.exceptions.AttachmentConversionException;
+
 @Component
 public class PDFPageSplitter {
 
-    public List<byte[]> split(String resource) {
+    List<byte[]> split(String resource) {
         return split(new ClassPathResource(resource));
     }
 
-    public List<byte[]> split(Resource resource) {
+    List<byte[]> split(Resource resource) {
         try {
             return split(resource.getInputStream());
         } catch (IOException e) {
-            throw new IllegalStateException(e);
+            throw new AttachmentConversionException("Kunne ikke splitte " + resource, e);
         }
     }
 
@@ -32,21 +34,21 @@ public class PDFPageSplitter {
         return split(new ByteArrayInputStream(bytes));
     }
 
-    public List<byte[]> split(InputStream stream) {
+    List<byte[]> split(InputStream stream) {
         try (PDDocument document = PDDocument.load(stream)) {
             return split(document).stream()
                     .map(PDFPageSplitter::toByteArray)
                     .collect(Collectors.toList());
         } catch (IOException ex) {
-            throw new RuntimeException("Error while splitting PDF into pages", ex);
+            throw new AttachmentConversionException("Kunne ikke splitte PDF", ex);
         }
     }
 
     private static List<PDDocument> split(PDDocument document) {
         try {
             return new Splitter().split(document);
-        } catch (Exception e) {
-            throw new IllegalStateException(e);
+        } catch (IOException e) {
+            throw new AttachmentConversionException("Kunne ikke splitte PDF", e);
         }
     }
 
@@ -57,7 +59,7 @@ public class PDFPageSplitter {
             page.close();
             return baos.toByteArray();
         } catch (IOException e) {
-            throw new IllegalStateException(e);
+            throw new AttachmentConversionException("Kunne ikke ekstrahere bytes fra PDF", e);
         }
     }
 }

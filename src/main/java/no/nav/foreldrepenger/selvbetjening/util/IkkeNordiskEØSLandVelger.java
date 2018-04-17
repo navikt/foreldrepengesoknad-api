@@ -7,16 +7,13 @@ import static com.neovisionaries.i18n.CountryCode.CH;
 import static com.neovisionaries.i18n.CountryCode.CY;
 import static com.neovisionaries.i18n.CountryCode.CZ;
 import static com.neovisionaries.i18n.CountryCode.DE;
-import static com.neovisionaries.i18n.CountryCode.DK;
 import static com.neovisionaries.i18n.CountryCode.EE;
 import static com.neovisionaries.i18n.CountryCode.ES;
-import static com.neovisionaries.i18n.CountryCode.FI;
 import static com.neovisionaries.i18n.CountryCode.FR;
 import static com.neovisionaries.i18n.CountryCode.GR;
 import static com.neovisionaries.i18n.CountryCode.HR;
 import static com.neovisionaries.i18n.CountryCode.HU;
 import static com.neovisionaries.i18n.CountryCode.IE;
-import static com.neovisionaries.i18n.CountryCode.IS;
 import static com.neovisionaries.i18n.CountryCode.IT;
 import static com.neovisionaries.i18n.CountryCode.LI;
 import static com.neovisionaries.i18n.CountryCode.LT;
@@ -27,7 +24,6 @@ import static com.neovisionaries.i18n.CountryCode.NL;
 import static com.neovisionaries.i18n.CountryCode.PL;
 import static com.neovisionaries.i18n.CountryCode.PT;
 import static com.neovisionaries.i18n.CountryCode.RO;
-import static com.neovisionaries.i18n.CountryCode.SE;
 import static com.neovisionaries.i18n.CountryCode.SI;
 import static com.neovisionaries.i18n.CountryCode.SK;
 import static com.neovisionaries.i18n.CountryCode.UK;
@@ -42,13 +38,10 @@ public final class IkkeNordiskEØSLandVelger {
     private static final List<CountryCode> IKKENORDISKEØSLAND = Arrays.asList(
             BE, /* Belgia */
             BG, /* Bulgaria */
-            DK, /* Danmark */
             EE, /* Estland */
-            FI, /* Finland */
             FR, /* Frankrike */
             GR, /* Hellas */
             IE, /* Irland */
-            IS, /* Island */
             IT, /* Italia */
             HR, /* Kroatia */
             CY, /* Kypros */
@@ -66,7 +59,6 @@ public final class IkkeNordiskEØSLandVelger {
             ES, /* Spania */
             UK, /* Storbritannia og Nord Irland */
             CH, /* Sveits */
-            SE, /* Sverige */
             CZ, /* Tsjekkia */
             DE, /* Tyskland */
             HU, /* Ungarn */
@@ -78,7 +70,7 @@ public final class IkkeNordiskEØSLandVelger {
     }
 
     public static boolean erIkkeNordiskEØSLand(CountryCode cc) {
-        return cc != null ? IKKENORDISKEØSLAND.contains(cc) : false;
+        return IKKENORDISKEØSLAND.contains(cc);
     }
 
 }
