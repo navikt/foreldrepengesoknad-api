@@ -2,12 +2,12 @@ package no.nav.foreldrepenger.selvbetjening.rest;
 
 import static java.util.stream.Collectors.joining;
 import static org.springframework.http.HttpStatus.INTERNAL_SERVER_ERROR;
+import static org.springframework.http.HttpStatus.NOT_FOUND;
 import static org.springframework.http.HttpStatus.PAYLOAD_TOO_LARGE;
 import static org.springframework.http.HttpStatus.UNPROCESSABLE_ENTITY;
 
-import java.time.LocalDateTime;
-
-import org.slf4j.MDC;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -16,12 +16,12 @@ import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.bind.annotation.ControllerAdvice;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.ResponseBody;
+import org.springframework.web.client.HttpClientErrorException;
 import org.springframework.web.context.request.WebRequest;
 import org.springframework.web.servlet.mvc.method.annotation.ResponseEntityExceptionHandler;
 
-import com.fasterxml.jackson.annotation.JsonFormat;
-import com.fasterxml.jackson.annotation.JsonInclude;
-
+import io.micrometer.core.instrument.Counter;
+import io.micrometer.core.instrument.Metrics;
 import no.nav.foreldrepenger.selvbetjening.rest.attachments.exceptions.AttachmentConversionException;
 import no.nav.foreldrepenger.selvbetjening.rest.attachments.exceptions.AttachmentTypeUnsupportedException;
 import no.nav.foreldrepenger.selvbetjening.rest.attachments.exceptions.AttachmentsTooLargeException;
@@ -29,46 +29,20 @@ import no.nav.foreldrepenger.selvbetjening.rest.attachments.exceptions.Attachmen
 @ControllerAdvice
 public class APIControllerAdvice extends ResponseEntityExceptionHandler {
 
-    @JsonInclude(JsonInclude.Include.NON_NULL)
-    static class ApiError {
+    private final Counter notFoundCounter = Metrics.counter("fpsoknad.api.person.notfound");
+    private static final Logger LOG = LoggerFactory.getLogger(APIControllerAdvice.class);
 
-        private final HttpStatus status;
-        @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "dd-MM-yyyy hh:mm:ss")
-        private final LocalDateTime timestamp;
-        private final String message;
-        private final String uuid;
-
-        ApiError(HttpStatus status) {
-            this(status, null);
+    @ExceptionHandler(HttpClientErrorException.class)
+    public ResponseEntity<Object> handleHttpClientException(HttpClientErrorException e, WebRequest request) {
+        if (e.getStatusCode() == HttpStatus.NOT_FOUND) {
+            notFoundCounter.increment();
+            LOG.warn("Got 404, is the gateway down?");
+            return handleExceptionInternal(e, new ApiError(NOT_FOUND, e.getMessage(), e),
+                    new HttpHeaders(),
+                    NOT_FOUND,
+                    request);
         }
-
-        ApiError(HttpStatus status, Throwable ex) {
-            this(status, "Unexpected error", ex);
-        }
-
-        ApiError(HttpStatus status, String message, Throwable ex) {
-            this.timestamp = LocalDateTime.now();
-            this.status = status;
-            this.message = message;
-            this.uuid = MDC.get("X-Nav-CallId");
-        }
-
-        public String getUuid() {
-            return uuid;
-        }
-
-        public HttpStatus getStatus() {
-            return status;
-        }
-
-        public LocalDateTime getTimestamp() {
-            return timestamp;
-        }
-
-        public String getMessage() {
-            return message;
-        }
-
+        throw e;
     }
 
     @ExceptionHandler(AttachmentsTooLargeException.class)
