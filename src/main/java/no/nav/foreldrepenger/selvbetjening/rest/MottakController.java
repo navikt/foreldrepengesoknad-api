@@ -95,8 +95,7 @@ public class MottakController {
     private HttpEntity<EngangsstønadDto> body(@RequestBody Engangsstønad engangsstønad, PersonDto person,
             MultipartFile... vedlegg) throws Exception {
         EngangsstønadDto dto = new EngangsstønadDto(engangsstønad, person);
-        String json = mapper.writeValueAsString(dto);
-        LOG.info("Posting JSON (without attachment): {})", json);
+        LOG.info("Posting JSON (without attachment): {})", mapper.writeValueAsString(dto));
         Arrays.stream(vedlegg)
                 .map(this::vedleggBytes)
                 .map(s -> converter.convert(s))

@@ -25,7 +25,7 @@ public class DefaultPDF2ImageConverter implements PDF2ImageConverter {
 
     @Override
     public List<byte[]> convertToImages(List<byte[]> pdfPages) {
-        LOG.info("Konverterer {} PDF-side(r) til image", pdfPages.size());
+        LOG.info("Konverterer {} PDF-side(r) til bilde(r)", pdfPages.size());
         return pdfPages.stream()
                 .map(DefaultPDF2ImageConverter::toBufferedImage)
                 .map(DefaultPDF2ImageConverter::toBytes)
@@ -38,7 +38,7 @@ public class DefaultPDF2ImageConverter implements PDF2ImageConverter {
             return new PDFRenderer(document).renderImageWithDPI(0, 300, RGB);
         } catch (IOException e) {
             LOG.warn("Kunne ikke konvertere PDF til image", e);
-            throw new AttachmentConversionException("Kunne ikke konvertere PDF til image", e);
+            throw new AttachmentConversionException("Kunne ikke konvertere PDF til bilde", e);
         }
     }
 
@@ -46,12 +46,12 @@ public class DefaultPDF2ImageConverter implements PDF2ImageConverter {
         try (ByteArrayOutputStream baos = new ByteArrayOutputStream()) {
             ImageIO.setUseCache(false);
             ImageIO.write(img, "jpg", baos);
-            LOG.info("Konverterte image til {}", img);
+            LOG.info("Konverterte bilde til {}", img);
             baos.flush();
             return baos.toByteArray();
         } catch (IOException e) {
             LOG.warn("Kunne ikke konvertere image til bytes", e);
-            throw new AttachmentConversionException("Kunne ikke konvertere image til bytes", e);
+            throw new AttachmentConversionException("Kunne ikke konvertere bilde til bytes", e);
         }
     }
 }
