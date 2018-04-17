@@ -14,7 +14,6 @@
         </appender>
     </springProfile>
 
-    <logger name="org.apache.pdfbox.pdfmodel.font" level="error" />
 
     <root level="info">
         <appender-ref ref="stdout" />

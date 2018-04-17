@@ -56,7 +56,7 @@ public class Image2PDFConverter {
         this.supportedMediaTypes = mediaTypes;
     }
 
-    public byte[] convert(String classPathResource) {
+    byte[] convert(String classPathResource) {
         try {
             return convert(new ClassPathResource(classPathResource));
         } catch (IOException e) {
@@ -64,7 +64,7 @@ public class Image2PDFConverter {
         }
     }
 
-    public byte[] convert(Resource resource) throws IOException {
+    byte[] convert(Resource resource) throws IOException {
         return convert(copyToByteArray(resource.getInputStream()));
     }
 

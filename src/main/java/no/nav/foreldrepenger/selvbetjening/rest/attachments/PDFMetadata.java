@@ -17,4 +17,10 @@ public class PDFMetadata {
         String value = metadata.get(key);
         return value != null ? Integer.valueOf(value) : defaultValue;
     }
+
+    @Override
+    public String toString() {
+        return getClass().getSimpleName() + " [metadata=" + metadata + "]";
+    }
+
 }

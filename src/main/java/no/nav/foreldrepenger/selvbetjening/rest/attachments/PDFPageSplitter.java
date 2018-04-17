@@ -18,11 +18,11 @@ import no.nav.foreldrepenger.selvbetjening.rest.attachments.exceptions.Attachmen
 @Component
 public class PDFPageSplitter {
 
-    public List<byte[]> split(String resource) {
+    List<byte[]> split(String resource) {
         return split(new ClassPathResource(resource));
     }
 
-    public List<byte[]> split(Resource resource) {
+    List<byte[]> split(Resource resource) {
         try {
             return split(resource.getInputStream());
         } catch (IOException e) {
@@ -34,7 +34,7 @@ public class PDFPageSplitter {
         return split(new ByteArrayInputStream(bytes));
     }
 
-    public List<byte[]> split(InputStream stream) {
+    List<byte[]> split(InputStream stream) {
         try (PDDocument document = PDDocument.load(stream)) {
             return split(document).stream()
                     .map(PDFPageSplitter::toByteArray)

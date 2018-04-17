@@ -33,7 +33,7 @@ public class PDFMetadataExtractor {
         }
     }
 
-    private PDFMetadata metadata(InputStream inputStream) {
+    public PDFMetadata metadata(InputStream inputStream) {
         checkIsPdf(inputStream);
         Parser parser = new AutoDetectParser();
         org.apache.tika.metadata.Metadata metadata = new org.apache.tika.metadata.Metadata();
