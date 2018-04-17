@@ -5,15 +5,15 @@ import org.springframework.http.MediaType;
 public class AttachmentTypeUnsupportedException extends AttachmentException {
 
     public AttachmentTypeUnsupportedException(MediaType mediaType) {
-        this(mediaType, null);
+        this("Media type " + mediaType + " er ikke støttet", mediaType, null);
     }
 
     public AttachmentTypeUnsupportedException(Throwable e) {
-        this(null, null);
+        this(null, null, null);
     }
 
-    public AttachmentTypeUnsupportedException(MediaType mediaType, Throwable e) {
-        super(mediaType, e);
+    public AttachmentTypeUnsupportedException(String msg, MediaType mediaType, Throwable e) {
+        super(msg, mediaType, e);
     }
 
 }
