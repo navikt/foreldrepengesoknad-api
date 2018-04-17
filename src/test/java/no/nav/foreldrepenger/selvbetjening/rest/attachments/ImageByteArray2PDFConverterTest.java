@@ -12,14 +12,16 @@ import org.junit.Ignore;
 import org.junit.Test;
 import org.springframework.http.MediaType;
 
-public class ImageByteArray2PdfConverterTest {
+import no.nav.foreldrepenger.selvbetjening.rest.attachments.exceptions.AttachmentTypeUnsupportedException;
+
+public class ImageByteArray2PDFConverterTest {
     private static final byte[] PDFSIGNATURE = { 0x25, 0x50, 0x44, 0x46 };
 
-    private static ImageByteArray2PdfConverter converter;
+    private static Image2PDFConverter converter;
 
     @BeforeClass
     public static void before() throws IOException {
-        converter = new ImageByteArray2PdfConverter(new PDFPageSplitter(), new DefaultPdf2ImageConverter());
+        converter = new Image2PDFConverter(new PDFPageSplitter(), new DefaultPDF2ImageConverter());
     }
 
     @Test
@@ -32,7 +34,7 @@ public class ImageByteArray2PdfConverterTest {
         assertTrue(isPdf(converter.convert("pdf/nav-logo.png")));
     }
 
-    @Test(expected = UnsupportedAttachmentTypeException.class)
+    @Test(expected = AttachmentTypeUnsupportedException.class)
     public void gifFailsfWhenNotConfigured() {
         converter.convert("pdf/loading.gif");
     }
@@ -40,8 +42,8 @@ public class ImageByteArray2PdfConverterTest {
     @Test
     public void gifConvertsToPdfWhenConfigured() throws IOException {
         assertTrue(isPdf(
-                new ImageByteArray2PdfConverter(new PDFPageSplitter(),
-                        new DefaultPdf2ImageConverter(), IMAGE_GIF)
+                new Image2PDFConverter(new PDFPageSplitter(),
+                        new DefaultPDF2ImageConverter(), IMAGE_GIF)
                                 .convert("pdf/loading.gif")));
     }
 
@@ -50,7 +52,7 @@ public class ImageByteArray2PdfConverterTest {
         System.out.println(MediaType.valueOf(new Tika().detect(converter.convert("pdf/test.pdf"))));
     }
 
-    @Test(expected = UnsupportedAttachmentTypeException.class)
+    @Test(expected = AttachmentTypeUnsupportedException.class)
     public void whateverElseIsNotAllowed() {
         converter.convert(new byte[] { 1, 2, 3, 4 });
     }

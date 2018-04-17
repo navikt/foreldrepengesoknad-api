@@ -13,6 +13,8 @@ import org.springframework.core.io.ClassPathResource;
 import org.springframework.core.io.Resource;
 import org.springframework.stereotype.Component;
 
+import no.nav.foreldrepenger.selvbetjening.rest.attachments.exceptions.AttachmentConversionException;
+
 @Component
 public class PDFPageSplitter {
 

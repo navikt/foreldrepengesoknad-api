@@ -13,13 +13,15 @@ import org.springframework.core.io.ClassPathResource;
 import org.springframework.core.io.Resource;
 import org.springframework.http.MediaType;
 import org.springframework.stereotype.Component;
-import org.xml.sax.ContentHandler;
 import org.xml.sax.SAXException;
+
+import no.nav.foreldrepenger.selvbetjening.rest.attachments.exceptions.AttachmentConversionException;
+import no.nav.foreldrepenger.selvbetjening.rest.attachments.exceptions.AttachmentTypeUnsupportedException;
 
 @Component
 public class PDFMetadataExtractor {
 
-    public PDFMetadata metadata(String classPathResource) {
+    PDFMetadata metadata(String classPathResource) {
         return metadata(new ClassPathResource(classPathResource));
     }
 
@@ -32,27 +34,25 @@ public class PDFMetadataExtractor {
     }
 
     private PDFMetadata metadata(InputStream inputStream) {
-        checkPdf(inputStream);
+        checkIsPdf(inputStream);
         Parser parser = new AutoDetectParser();
-        ContentHandler handler = new BodyContentHandler(-1);
         org.apache.tika.metadata.Metadata metadata = new org.apache.tika.metadata.Metadata();
-        ParseContext context = new ParseContext();
         try {
-            parser.parse(inputStream, handler, metadata, context);
+            parser.parse(inputStream, new BodyContentHandler(-1), metadata, new ParseContext());
             return new PDFMetadata(metadata);
         } catch (IOException | SAXException | TikaException e) {
             throw new AttachmentConversionException("Kunne ikke hente metadata", e);
         }
     }
 
-    private static void checkPdf(InputStream inputStream) {
+    private static void checkIsPdf(InputStream inputStream) {
         try {
             MediaType mediaType = MediaType.valueOf(new Tika().detect(inputStream));
             if (!MediaType.APPLICATION_PDF.equals(mediaType)) {
-                throw new UnsupportedAttachmentTypeException(mediaType);
+                throw new AttachmentTypeUnsupportedException(mediaType);
             }
         } catch (IOException e) {
-            throw new AttachmentConversionException("Kunne ikke sjekke attachment type", e);
+            throw new AttachmentTypeUnsupportedException(e);
         }
     }
 }

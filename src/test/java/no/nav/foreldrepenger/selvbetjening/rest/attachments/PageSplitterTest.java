@@ -16,7 +16,7 @@ public class PageSplitterTest {
         List<byte[]> pages = new PDFPageSplitter().split("pdf/spring-framework-reference.pdf");
         assertEquals(798, pages.size());
         for (byte[] page : pages) {
-            assertTrue(ImageByteArray2PdfConverterTest.isPdf(page));
+            assertTrue(ImageByteArray2PDFConverterTest.isPdf(page));
         }
     }
 }

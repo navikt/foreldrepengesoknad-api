@@ -32,8 +32,9 @@ import com.neovisionaries.i18n.CountryCode;
 import no.nav.foreldrepenger.selvbetjening.consumer.Oppslag;
 import no.nav.foreldrepenger.selvbetjening.consumer.json.EngangsstønadDto;
 import no.nav.foreldrepenger.selvbetjening.consumer.json.PersonDto;
-import no.nav.foreldrepenger.selvbetjening.rest.attachments.ImageByteArray2PdfConverter;
-import no.nav.foreldrepenger.selvbetjening.rest.attachments.TooLargeAttachmentsException;
+import no.nav.foreldrepenger.selvbetjening.rest.attachments.Image2PDFConverter;
+import no.nav.foreldrepenger.selvbetjening.rest.attachments.exceptions.AttachmentConversionException;
+import no.nav.foreldrepenger.selvbetjening.rest.attachments.exceptions.AttachmentsTooLargeException;
 import no.nav.foreldrepenger.selvbetjening.rest.json.Engangsstønad;
 import no.nav.foreldrepenger.selvbetjening.rest.json.Kvittering;
 import no.nav.security.spring.oidc.validation.api.ProtectedWithClaims;
@@ -57,7 +58,7 @@ public class MottakController {
     private ObjectMapper mapper;
 
     @Inject
-    private ImageByteArray2PdfConverter converter;
+    private Image2PDFConverter converter;
 
     @Value("${stub.mottak:false}")
     private boolean stub;
@@ -72,10 +73,7 @@ public class MottakController {
     @PostMapping(consumes = MULTIPART_FORM_DATA_VALUE)
     public ResponseEntity<Kvittering> sendInn(@RequestPart("soknad") Engangsstønad engangsstønad,
             @RequestPart("vedlegg") MultipartFile... vedlegg) throws Exception {
-        if (vedleggTooLarge(vedlegg)) {
-            throw new TooLargeAttachmentsException();
-        }
-
+        checkVedleggTooLarge(vedlegg);
         LOG.info("Poster engangsstønad til {}", mottakServiceUrl);
         engangsstønad.opprettet = now();
         return stub ? postStub(engangsstønad) : post(engangsstønad, vedlegg);
@@ -110,7 +108,7 @@ public class MottakController {
         try {
             return vedlegg.getBytes();
         } catch (IOException e) {
-            throw new IllegalStateException("Kunne ikke hente bytes fra vedlegg " + vedlegg.getName(), e);
+            throw new AttachmentConversionException("Kunne ikke hente bytes fra vedlegg " + vedlegg.getName(), e);
         }
     }
 
@@ -121,10 +119,13 @@ public class MottakController {
                 .build().toUri();
     }
 
-    private boolean vedleggTooLarge(MultipartFile... vedlegg) {
-        return Arrays.stream(vedlegg)
+    private void checkVedleggTooLarge(MultipartFile... vedlegg) {
+        long total = Arrays.stream(vedlegg)
                 .mapToLong(MultipartFile::getSize)
-                .sum() > MAX_VEDLEGG_SIZE;
+                .sum();
+        if (total > MAX_VEDLEGG_SIZE) {
+            throw new AttachmentsTooLargeException(total);
+        }
     }
 
     @Override

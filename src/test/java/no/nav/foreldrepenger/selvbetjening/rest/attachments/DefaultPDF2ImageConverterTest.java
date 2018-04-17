@@ -2,22 +2,22 @@ package no.nav.foreldrepenger.selvbetjening.rest.attachments;
 
 import org.junit.Test;
 
-import no.nav.foreldrepenger.selvbetjening.rest.attachments.DefaultPdf2ImageConverter;
+import no.nav.foreldrepenger.selvbetjening.rest.attachments.DefaultPDF2ImageConverter;
 import no.nav.foreldrepenger.selvbetjening.rest.attachments.PDFPageSplitter;
-import no.nav.foreldrepenger.selvbetjening.rest.attachments.Pdf2ImageConverter;
+import no.nav.foreldrepenger.selvbetjening.rest.attachments.PDF2ImageConverter;
 
 import javax.imageio.ImageIO;
 import java.util.List;
 
 import static org.junit.Assert.*;
 
-public class DefaultPdf2ImageConverterTest {
+public class DefaultPDF2ImageConverterTest {
 
     @Test
     public void verifyConversion() {
         ImageIO.setUseCache(false);
         PDFPageSplitter splitter = new PDFPageSplitter();
-        Pdf2ImageConverter converter = new DefaultPdf2ImageConverter();
+        PDF2ImageConverter converter = new DefaultPDF2ImageConverter();
         List<byte[]> pages = splitter.split("/pdf/test123.pdf");
         List<byte[]> jpgs = converter.convertToImages(pages);
         jpgs.forEach(jpg-> assertTrue(hasJpgSignature(jpg)));

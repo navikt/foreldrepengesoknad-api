@@ -10,14 +10,14 @@ import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.context.request.WebRequest;
 import org.springframework.web.servlet.mvc.method.annotation.ResponseEntityExceptionHandler;
 
-import no.nav.foreldrepenger.selvbetjening.rest.attachments.TooLargeAttachmentsException;
+import no.nav.foreldrepenger.selvbetjening.rest.attachments.exceptions.AttachmentsTooLargeException;
 
 @ControllerAdvice
 public class APIControllerAdvice extends ResponseEntityExceptionHandler {
 
-    @ExceptionHandler(TooLargeAttachmentsException.class)
+    @ExceptionHandler(AttachmentsTooLargeException.class)
     @ResponseBody
-    protected ResponseEntity<Object> handleTooLargeAttachments(TooLargeAttachmentsException e, WebRequest request) {
+    protected ResponseEntity<Object> handleTooLargeAttachments(AttachmentsTooLargeException e, WebRequest request) {
         return handleExceptionInternal(e, null, new HttpHeaders(), PAYLOAD_TOO_LARGE, request);
     }
 

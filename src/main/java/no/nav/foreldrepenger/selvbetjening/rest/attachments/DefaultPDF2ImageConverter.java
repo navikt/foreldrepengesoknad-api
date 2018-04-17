@@ -16,17 +16,19 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Component;
 
-@Component
-public class DefaultPdf2ImageConverter implements Pdf2ImageConverter {
+import no.nav.foreldrepenger.selvbetjening.rest.attachments.exceptions.AttachmentConversionException;
 
-    private static final Logger LOG = LoggerFactory.getLogger(DefaultPdf2ImageConverter.class);
+@Component
+public class DefaultPDF2ImageConverter implements PDF2ImageConverter {
+
+    private static final Logger LOG = LoggerFactory.getLogger(DefaultPDF2ImageConverter.class);
 
     @Override
     public List<byte[]> convertToImages(List<byte[]> pdfPages) {
         LOG.info("Konverterer {} PDF-side(r) til image", pdfPages.size());
         return pdfPages.stream()
-                .map(DefaultPdf2ImageConverter::toBufferedImage)
-                .map(DefaultPdf2ImageConverter::toBytes)
+                .map(DefaultPDF2ImageConverter::toBufferedImage)
+                .map(DefaultPDF2ImageConverter::toBytes)
                 .collect(toList());
     }
 

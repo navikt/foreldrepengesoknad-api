@@ -27,26 +27,29 @@ import com.itextpdf.text.Element;
 import com.itextpdf.text.Image;
 import com.itextpdf.text.pdf.PdfWriter;
 
+import no.nav.foreldrepenger.selvbetjening.rest.attachments.exceptions.AttachmentConversionException;
+import no.nav.foreldrepenger.selvbetjening.rest.attachments.exceptions.AttachmentTypeUnsupportedException;
+
 @Component
-public class ImageByteArray2PdfConverter {
+public class Image2PDFConverter {
 
     private final PDFPageSplitter pdfPageSplitter;
-    private final Pdf2ImageConverter pdf2ImageConverter;
+    private final PDF2ImageConverter pdf2ImageConverter;
     private final List<MediaType> supportedMediaTypes;
 
-    private static final Logger LOG = LoggerFactory.getLogger(ImageByteArray2PdfConverter.class);
+    private static final Logger LOG = LoggerFactory.getLogger(Image2PDFConverter.class);
 
     @Inject
-    public ImageByteArray2PdfConverter(PDFPageSplitter splitter, Pdf2ImageConverter converter) {
+    public Image2PDFConverter(PDFPageSplitter splitter, PDF2ImageConverter converter) {
         this(splitter, converter, IMAGE_JPEG, IMAGE_PNG);
     }
 
-    public ImageByteArray2PdfConverter(PDFPageSplitter splitter, Pdf2ImageConverter converter,
+    public Image2PDFConverter(PDFPageSplitter splitter, PDF2ImageConverter converter,
             MediaType... mediaTypes) {
         this(splitter, converter, asList(mediaTypes));
     }
 
-    public ImageByteArray2PdfConverter(PDFPageSplitter splitter, Pdf2ImageConverter converter,
+    public Image2PDFConverter(PDFPageSplitter splitter, PDF2ImageConverter converter,
             List<MediaType> mediaTypes) {
         this.pdfPageSplitter = splitter;
         this.pdf2ImageConverter = converter;
@@ -76,7 +79,7 @@ public class ImageByteArray2PdfConverter {
         if (shouldConvertImage(mediaType)) {
             return embedImagesInPdf(bytes);
         }
-        throw new UnsupportedAttachmentTypeException(mediaType);
+        throw new AttachmentTypeUnsupportedException(mediaType);
     }
 
     private static byte[] embedImagesInPdf(byte[]... images) {
