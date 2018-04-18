@@ -90,11 +90,12 @@
         <dependency>
             <groupId>io.micrometer</groupId>
             <artifactId>micrometer-registry-prometheus</artifactId>
+            <version>1.0.3</version>
         </dependency>
         <dependency>
             <groupId>io.prometheus</groupId>
             <artifactId>simpleclient_hotspot</artifactId>
-            <version>0.1.0</version>
+            <version>0.3.0</version>
         </dependency>
         <dependency>
             <groupId>net.logstash.logback</groupId>
