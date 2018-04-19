@@ -8,7 +8,6 @@ import org.slf4j.Logger;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnProperty;
 import org.springframework.stereotype.Service;
 
-import no.nav.foreldrepenger.selvbetjening.consumer.json.AdresseDto;
 import no.nav.foreldrepenger.selvbetjening.consumer.json.PersonDto;
 
 @Service
@@ -32,7 +31,6 @@ public class OppslagstjenesteStub implements Oppslag {
         dto.etternavn = "Stubsveen";
         dto.fodselsdato = now().minusYears(21);
         dto.kjonn = "K";
-        dto.adresse = new AdresseDto();
         dto.land = NO;
         return dto;
     }

@@ -16,8 +16,6 @@ public class PersonDto {
     public String målform;
     public CountryCode land;
 
-    public AdresseDto adresse;
-
     public PersonDto() {
     }
 
