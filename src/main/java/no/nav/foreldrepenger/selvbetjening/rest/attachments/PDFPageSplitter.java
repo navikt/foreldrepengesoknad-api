@@ -64,6 +64,8 @@ public class PDFPageSplitter {
             return baos.toByteArray();
         } catch (IOException e) {
             throw new AttachmentConversionException("Kunne ikke ekstrahere bytes fra PDF", e);
+        } finally {
+            PDFUtils.closeQuietly(page);
         }
     }
 }
