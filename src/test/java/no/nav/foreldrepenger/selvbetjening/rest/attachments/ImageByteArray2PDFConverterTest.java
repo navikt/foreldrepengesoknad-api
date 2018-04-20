@@ -8,11 +8,11 @@ import java.util.Arrays;
 
 import org.apache.tika.Tika;
 import org.junit.BeforeClass;
-import org.junit.Ignore;
 import org.junit.Test;
 import org.springframework.http.MediaType;
 
 import no.nav.foreldrepenger.selvbetjening.rest.attachments.exceptions.AttachmentTypeUnsupportedException;
+import no.nav.foreldrepenger.selvbetjening.rest.attachments.exceptions.AttachmentsTooLargeException;
 
 public class ImageByteArray2PDFConverterTest {
     private static final byte[] PDFSIGNATURE = { 0x25, 0x50, 0x44, 0x46 };
@@ -49,7 +49,7 @@ public class ImageByteArray2PDFConverterTest {
 
     @Test
     public void pdfRemainsUnchanged() {
-        System.out.println(MediaType.valueOf(new Tika().detect(converter.convert("pdf/test.pdf"))));
+        System.out.println(MediaType.valueOf(new Tika().detect(converter.convert("pdf/test123.pdf"))));
     }
 
     @Test(expected = AttachmentTypeUnsupportedException.class)
@@ -61,9 +61,9 @@ public class ImageByteArray2PDFConverterTest {
         return Arrays.equals(Arrays.copyOfRange(fileContents, 0, PDFSIGNATURE.length), PDFSIGNATURE);
     }
 
-    @Ignore
-    public void writeToFileForFunAndProfit() throws Exception {
-        byte[] bytes = converter.convert("pdf/spring-framework-reference.pdf");
+    @Test(expected = AttachmentsTooLargeException.class)
+    public void testTooLargePdfFile() throws Exception {
+        converter.convert("pdf/spring-framework-reference.pdf");
 
     }
 }

@@ -29,6 +29,7 @@ import com.itextpdf.text.pdf.PdfWriter;
 
 import no.nav.foreldrepenger.selvbetjening.rest.attachments.exceptions.AttachmentConversionException;
 import no.nav.foreldrepenger.selvbetjening.rest.attachments.exceptions.AttachmentTypeUnsupportedException;
+import no.nav.foreldrepenger.selvbetjening.rest.attachments.exceptions.AttachmentsTooLargeException;
 
 @Component
 public class Image2PDFConverter {
@@ -36,6 +37,8 @@ public class Image2PDFConverter {
     private final PDFPageSplitter pdfPageSplitter;
     private final PDF2ImageConverter pdf2ImageConverter;
     private final List<MediaType> supportedMediaTypes;
+
+    private static final int MAX_PDF_PAGES_PR_DOCUMENT = 5;
 
     private static final Logger LOG = LoggerFactory.getLogger(Image2PDFConverter.class);
 
@@ -73,7 +76,14 @@ public class Image2PDFConverter {
         if (APPLICATION_PDF.equals(mediaType)) {
             LOG.info("Innhold er allerede PDF, deles opp i deler");
             List<byte[]> pdfPages = pdfPageSplitter.split(bytes);
-            LOG.info("PDF ble delt opp i {} deler", pdfPages.size());
+            if (pdfPages.size() > MAX_PDF_PAGES_PR_DOCUMENT) {
+                LOG.warn("PDF inneholder {} sider, kan ikke overstige {}", pdfPages.size(), MAX_PDF_PAGES_PR_DOCUMENT);
+                throw new AttachmentsTooLargeException(
+                        "Antall sider pdf PDF-dokument kan ikke overstige " + MAX_PDF_PAGES_PR_DOCUMENT + ", fikk "
+                                + pdfPages.size());
+            }
+            LOG.info("PDF inneholder {} sider, konverterer disse til bildeformat (fattigmanns virussscanner...)",
+                    pdfPages.size());
             return embedImagesInPdf(pdf2ImageConverter.convertToImages(pdfPages));
         }
         if (shouldConvertImage(mediaType)) {

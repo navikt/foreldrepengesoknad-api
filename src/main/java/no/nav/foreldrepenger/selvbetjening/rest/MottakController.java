@@ -123,7 +123,8 @@ public class MottakController {
                 .mapToLong(MultipartFile::getSize)
                 .sum();
         if (total > MAX_VEDLEGG_SIZE) {
-            throw new AttachmentsTooLargeException(total);
+            throw new AttachmentsTooLargeException("Samlet filstørrelse for alle vedlegg er " + total
+                    + ", men kan ikke overstige  " + MAX_VEDLEGG_SIZE + " bytes");
         }
     }
 
