@@ -41,7 +41,6 @@ public class APIControllerAdvice extends ResponseEntityExceptionHandler {
     public ResponseEntity<Object> handleHttpClientException(HttpClientErrorException e, WebRequest request) {
         if (e.getStatusCode() == NOT_FOUND) {
             notFoundCounter.increment();
-            LOG.warn("Got {}, is the gateway down?", e.getStatusCode(), e);
             return logAndhandle(NOT_FOUND, e, request);
         }
         throw e;
