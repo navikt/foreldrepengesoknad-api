@@ -1,5 +1,6 @@
 package no.nav.foreldrepenger.selvbetjening.rest.attachments;
 
+import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertTrue;
 import static org.springframework.http.MediaType.IMAGE_GIF;
 
@@ -49,7 +50,8 @@ public class ImageByteArray2PDFConverterTest {
 
     @Test
     public void pdfRemainsUnchanged() {
-        System.out.println(MediaType.valueOf(new Tika().detect(converter.convert("pdf/test123.pdf"))));
+        assertEquals(MediaType.APPLICATION_PDF,
+                MediaType.valueOf(new Tika().detect(converter.convert("pdf/test123.pdf"))));
     }
 
     @Test(expected = AttachmentTypeUnsupportedException.class)

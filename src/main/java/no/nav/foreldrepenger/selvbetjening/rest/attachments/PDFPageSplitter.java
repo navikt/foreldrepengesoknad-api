@@ -35,12 +35,16 @@ public class PDFPageSplitter {
     }
 
     List<byte[]> split(InputStream stream) {
-        try (PDDocument document = PDDocument.load(stream)) {
+        PDDocument document = null;
+        try {
+            document = PDDocument.load(stream);
             return split(document).stream()
                     .map(PDFPageSplitter::toByteArray)
                     .collect(Collectors.toList());
         } catch (IOException ex) {
             throw new AttachmentConversionException("Kunne ikke splitte PDF", ex);
+        } finally {
+            PDFUtils.closeQuietly(document);
         }
     }
 

@@ -34,11 +34,15 @@ public class DefaultPDF2ImageConverter implements PDF2ImageConverter {
 
     private static BufferedImage toBufferedImage(byte[] page) {
         LOG.info("Konverterer {} bytes til image", page.length);
-        try (PDDocument document = PDDocument.load(page)) {
+        PDDocument document = null;
+        try {
+            document = PDDocument.load(page);
             return new PDFRenderer(document).renderImageWithDPI(0, 300, RGB);
         } catch (IOException e) {
             LOG.warn("Kunne ikke konvertere PDF til image", e);
             throw new AttachmentConversionException("Kunne ikke konvertere PDF til bilde", e);
+        } finally {
+            PDFUtils.closeQuietly(document);
         }
     }
 
