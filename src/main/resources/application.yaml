@@ -1,6 +1,6 @@
 info.app:
-    version: @project.version@
-    build.time:  @timestamp@
+    version: '@project.version@'
+    build.time:  '@timestamp@'
 management:
    endpoints.web.exposure.include:  info, health, metrics, prometheus
 server:

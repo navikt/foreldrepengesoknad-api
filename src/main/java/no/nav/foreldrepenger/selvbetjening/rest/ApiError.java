@@ -1,34 +1,34 @@
 package no.nav.foreldrepenger.selvbetjening.rest;
 
+import static com.fasterxml.jackson.annotation.JsonFormat.Feature.WRITE_SINGLE_ELEM_ARRAYS_UNWRAPPED;
+import static com.fasterxml.jackson.annotation.JsonFormat.Shape.STRING;
+import static com.fasterxml.jackson.annotation.JsonInclude.Include.NON_NULL;
+
 import java.time.LocalDateTime;
+import java.util.List;
 
 import org.slf4j.MDC;
 import org.springframework.http.HttpStatus;
 
 import com.fasterxml.jackson.annotation.JsonFormat;
-import com.fasterxml.jackson.annotation.JsonInclude;
+import com.fasterxml.jackson.annotation.JsonInclude;;
 
-@JsonInclude(JsonInclude.Include.NON_NULL) class ApiError {
+@JsonInclude(NON_NULL)
+class ApiError {
 
+    private static final String UUID = "X-Nav-CallId";
     private final HttpStatus status;
-    @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "dd-MM-yyyy hh:mm:ss")
+    @JsonFormat(shape = STRING, pattern = "dd-MM-yyyy hh:mm:ss")
     private final LocalDateTime timestamp;
-    private final String message;
+    @JsonFormat(with = WRITE_SINGLE_ELEM_ARRAYS_UNWRAPPED)
+    private final List<String> messages;
     private final String uuid;
 
-    ApiError(HttpStatus status) {
-        this(status, null);
-    }
-
-    ApiError(HttpStatus status, Throwable ex) {
-        this(status, "Unexpected error", ex);
-    }
-
-    ApiError(HttpStatus status, String message, Throwable ex) {
+    ApiError(HttpStatus status, Throwable t, List<String> messages) {
         this.timestamp = LocalDateTime.now();
         this.status = status;
-        this.message = message;
-        this.uuid = MDC.get("X-Nav-CallId");
+        this.messages = messages;
+        this.uuid = MDC.get(UUID);
     }
 
     public String getUuid() {
@@ -43,8 +43,13 @@ import com.fasterxml.jackson.annotation.JsonInclude;
         return timestamp;
     }
 
-    public String getMessage() {
-        return message;
+    public List<String> getMessages() {
+        return messages;
     }
 
+    @Override
+    public String toString() {
+        return getClass().getSimpleName() + "[status=" + status + ", timestamp=" + timestamp + ", messages=" + messages
+                + ", uuid=" + uuid + "]";
+    }
 }
