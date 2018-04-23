@@ -1,34 +1,8 @@
 package no.nav.foreldrepenger.selvbetjening.rest;
 
-import static java.time.LocalDateTime.now;
-import static no.nav.foreldrepenger.selvbetjening.rest.MottakController.REST_ENGANGSSTONAD;
-import static org.slf4j.LoggerFactory.getLogger;
-import static org.springframework.http.MediaType.MULTIPART_FORM_DATA_VALUE;
-
-import java.io.IOException;
-import java.net.URI;
-import java.util.Arrays;
-
-import javax.inject.Inject;
-
-import org.slf4j.Logger;
-import org.springframework.beans.factory.annotation.Value;
-import org.springframework.http.HttpEntity;
-import org.springframework.http.HttpStatus;
-import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestPart;
-import org.springframework.web.bind.annotation.RestController;
-import org.springframework.web.client.RestTemplate;
-import org.springframework.web.multipart.MultipartFile;
-import org.springframework.web.util.UriComponentsBuilder;
-
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.neovisionaries.i18n.CountryCode;
-
 import no.nav.foreldrepenger.selvbetjening.consumer.Oppslag;
 import no.nav.foreldrepenger.selvbetjening.consumer.json.EngangsstønadDto;
 import no.nav.foreldrepenger.selvbetjening.consumer.json.PersonDto;
@@ -38,9 +12,28 @@ import no.nav.foreldrepenger.selvbetjening.rest.attachments.exceptions.Attachmen
 import no.nav.foreldrepenger.selvbetjening.rest.json.Engangsstønad;
 import no.nav.foreldrepenger.selvbetjening.rest.json.Kvittering;
 import no.nav.security.spring.oidc.validation.api.ProtectedWithClaims;
+import org.slf4j.Logger;
+import org.springframework.beans.factory.annotation.Value;
+import org.springframework.http.HttpEntity;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.*;
+import org.springframework.web.client.RestTemplate;
+import org.springframework.web.multipart.MultipartFile;
+import org.springframework.web.util.UriComponentsBuilder;
+
+import javax.inject.Inject;
+import java.io.IOException;
+import java.net.URI;
+
+import static java.time.LocalDateTime.now;
+import static java.util.Arrays.stream;
+import static no.nav.foreldrepenger.selvbetjening.rest.MottakController.REST_ENGANGSSTONAD;
+import static org.slf4j.LoggerFactory.getLogger;
+import static org.springframework.http.MediaType.MULTIPART_FORM_DATA_VALUE;
 
 @RestController
-@ProtectedWithClaims(issuer = "selvbetjening", claimMap = { "acr=Level4" })
+@ProtectedWithClaims(issuer = "selvbetjening", claimMap = {"acr=Level4"})
 @RequestMapping(REST_ENGANGSSTONAD)
 public class MottakController {
 
@@ -48,7 +41,7 @@ public class MottakController {
 
     private static final Logger LOG = getLogger(MottakController.class);
 
-    private static final double MAX_VEDLEGG_SIZE = 9.5 * 1024 * 1024;
+    private static final double MAX_VEDLEGG_SIZE = 7.5 * 1024 * 1024;
 
     private final RestTemplate template;
     private final URI mottakServiceUrl;
@@ -63,8 +56,7 @@ public class MottakController {
     @Value("${stub.mottak:false}")
     private boolean stub;
 
-    public MottakController(@Value("${FPSOKNAD_MOTTAK_API_URL}") URI baseUri, RestTemplate template,
-            Oppslag oppslag) {
+    public MottakController(@Value("${FPSOKNAD_MOTTAK_API_URL}") URI baseUri, RestTemplate template, Oppslag oppslag) {
         this.mottakServiceUrl = mottakUriFra(baseUri);
         this.template = template;
         this.oppslag = oppslag;
@@ -72,7 +64,7 @@ public class MottakController {
 
     @PostMapping(consumes = MULTIPART_FORM_DATA_VALUE)
     public ResponseEntity<Kvittering> sendInn(@RequestPart("soknad") Engangsstønad engangsstønad,
-            @RequestPart("vedlegg") MultipartFile... vedlegg) throws Exception {
+                                              @RequestPart("vedlegg") MultipartFile... vedlegg) throws Exception {
         checkVedleggTooLarge(vedlegg);
         LOG.info("Poster engangsstønad til {}", mottakServiceUrl);
         engangsstønad.opprettet = now();
@@ -92,14 +84,14 @@ public class MottakController {
         return new ResponseEntity<>(Kvittering.STUB, HttpStatus.OK);
     }
 
-    private HttpEntity<EngangsstønadDto> body(@RequestBody Engangsstønad engangsstønad, PersonDto person,
-            MultipartFile... vedlegg) throws Exception {
+    private HttpEntity<EngangsstønadDto> body(@RequestBody Engangsstønad engangsstønad, PersonDto person, MultipartFile... vedlegg) {
         EngangsstønadDto dto = new EngangsstønadDto(engangsstønad, person);
-        LOG.info("Posting JSON (without attachment): {})", mapper.writeValueAsString(dto));
-        Arrays.stream(vedlegg)
+
+        stream(vedlegg)
                 .map(this::vedleggBytes)
                 .map(s -> converter.convert(s))
                 .forEach(dto::addVedlegg);
+
         return new HttpEntity<>(dto);
     }
 
@@ -119,7 +111,7 @@ public class MottakController {
     }
 
     private void checkVedleggTooLarge(MultipartFile... vedlegg) {
-        long total = Arrays.stream(vedlegg)
+        long total = stream(vedlegg)
                 .mapToLong(MultipartFile::getSize)
                 .sum();
         if (total > MAX_VEDLEGG_SIZE) {
