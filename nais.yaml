@@ -1,8 +1,8 @@
 name: foreldrepengesoknad-api
 image: repo.adeo.no:5443/foreldrepengesoknad-api
 replicas:
-  min: 1
-  max: 1
+  min: 2
+  max: 2
   cpuThresholdPercentage: 50
 prometheus:
   enabled: true
