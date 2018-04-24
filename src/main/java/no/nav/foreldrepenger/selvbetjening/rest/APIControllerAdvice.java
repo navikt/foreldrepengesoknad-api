@@ -24,8 +24,6 @@ import org.springframework.web.client.HttpClientErrorException;
 import org.springframework.web.context.request.WebRequest;
 import org.springframework.web.servlet.mvc.method.annotation.ResponseEntityExceptionHandler;
 
-import io.micrometer.core.instrument.Counter;
-import io.micrometer.core.instrument.Metrics;
 import no.nav.foreldrepenger.selvbetjening.rest.attachments.exceptions.AttachmentConversionException;
 import no.nav.foreldrepenger.selvbetjening.rest.attachments.exceptions.AttachmentTypeUnsupportedException;
 import no.nav.foreldrepenger.selvbetjening.rest.attachments.exceptions.AttachmentsTooLargeException;
@@ -34,13 +32,11 @@ import no.nav.security.spring.oidc.validation.interceptor.OIDCUnauthorizedExcept
 @ControllerAdvice
 public class APIControllerAdvice extends ResponseEntityExceptionHandler {
 
-    private final Counter notFoundCounter = Metrics.counter("fpsoknad.api.person.notfound");
     private static final Logger LOG = LoggerFactory.getLogger(APIControllerAdvice.class);
 
     @ExceptionHandler(HttpClientErrorException.class)
     public ResponseEntity<Object> handleHttpClientException(HttpClientErrorException e, WebRequest request) {
         if (e.getStatusCode() == NOT_FOUND) {
-            notFoundCounter.increment();
             return logAndHandle(NOT_FOUND, e, request);
         }
         throw e;
@@ -78,7 +74,6 @@ public class APIControllerAdvice extends ResponseEntityExceptionHandler {
 
     @ExceptionHandler({ Exception.class })
     public ResponseEntity<Object> handleAll(Exception e, WebRequest req) {
-        LOG.warn(e.getMessage(), e);
         return logAndHandle(INTERNAL_SERVER_ERROR, e, req);
     }
 
