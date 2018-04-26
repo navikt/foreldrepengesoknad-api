@@ -1,14 +1,13 @@
 package no.nav.foreldrepenger.selvbetjening.rest.json;
 
-import static com.fasterxml.jackson.annotation.JsonInclude.Include.NON_NULL;
+import com.fasterxml.jackson.annotation.JsonInclude;
+import com.neovisionaries.i18n.CountryCode;
+import no.nav.foreldrepenger.selvbetjening.consumer.json.PersonDto;
 
 import java.time.LocalDate;
 
-import com.fasterxml.jackson.annotation.JsonInclude;
-import com.neovisionaries.i18n.CountryCode;
-
-import no.nav.foreldrepenger.selvbetjening.consumer.json.PersonDto;
-import no.nav.foreldrepenger.selvbetjening.util.IkkeNordiskEØSLandVelger;
+import static com.fasterxml.jackson.annotation.JsonInclude.Include.NON_NULL;
+import static no.nav.foreldrepenger.selvbetjening.util.IkkeNordiskEØSLandVelger.erIkkenordiskEØSLand;
 
 @JsonInclude(NON_NULL)
 public class Person {
@@ -31,7 +30,7 @@ public class Person {
         this.kjønn = personDto.kjonn;
         this.fødselsdato = personDto.fodselsdato;
         this.målform = personDto.målform;
-        this.land = personDto.land;
-        this.ikkeNordiskEøsLand = IkkeNordiskEØSLandVelger.erIkkeNordiskEØSLand(personDto.land);
+        this.land = personDto.landKode;
+        this.ikkeNordiskEøsLand = erIkkenordiskEØSLand(personDto.landKode);
     }
 }

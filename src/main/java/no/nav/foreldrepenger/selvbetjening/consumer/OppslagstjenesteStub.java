@@ -22,7 +22,7 @@ public class OppslagstjenesteStub implements Oppslag {
         return person();
     }
 
-    private PersonDto person() {
+    public static PersonDto person() {
         PersonDto dto = new PersonDto();
         dto.fnr = "25987148243";
         dto.aktorId = "0123456789999";
@@ -31,7 +31,7 @@ public class OppslagstjenesteStub implements Oppslag {
         dto.etternavn = "Stubsveen";
         dto.fodselsdato = now().minusYears(21);
         dto.kjonn = "K";
-        dto.land = NO;
+        dto.landKode = NO;
         return dto;
     }
 }

@@ -27,5 +27,4 @@ public class OppslagControllerTest {
         Person person = oppslagController.personinfo();
         assertThat(person).isNotNull();
     }
-
 }

@@ -69,7 +69,7 @@ public final class IkkeNordiskEØSLandVelger {
 
     }
 
-    public static boolean erIkkeNordiskEØSLand(CountryCode cc) {
+    public static boolean erIkkenordiskEØSLand(CountryCode cc) {
         return IKKENORDISKEØSLAND.contains(cc);
     }
 
