@@ -25,7 +25,7 @@
         <maven.compiler.source>1.8</maven.compiler.source>
         <maven.compiler.target>1.8</maven.compiler.target>
         <springfox.version>2.7.0</springfox.version>
-        <oidc-spring-support.version>0.1.5</oidc-spring-support.version>
+        <oidc-spring-support.version>0.2.0</oidc-spring-support.version>
     </properties>
     <dependencies>
         <dependency>
@@ -41,12 +41,6 @@
         <dependency>
             <groupId>org.springframework.boot</groupId>
             <artifactId>spring-boot-starter-jetty</artifactId>
-        </dependency>
-        <dependency>
-            <groupId>no.nav.security</groupId>
-            <artifactId>oidc-spring-test</artifactId>
-            <version>0.1.4</version>
-            <scope>test</scope>
         </dependency>
         <dependency>
             <groupId>javax.inject</groupId>
@@ -105,6 +99,12 @@
             <groupId>no.nav.security</groupId>
             <artifactId>oidc-spring-support</artifactId>
             <version>${oidc-spring-support.version}</version>
+        </dependency>
+        <dependency>
+            <groupId>no.nav.security</groupId>
+            <artifactId>oidc-spring-test</artifactId>
+            <version>${oidc-spring-support.version}</version>
+            <scope>test</scope>
         </dependency>
         <dependency>
             <groupId>org.apache.tika</groupId>
