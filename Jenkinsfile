@@ -38,7 +38,7 @@ node {
 
     stage("Build & publish") {
         sh "${mvn} versions:set -B -DnewVersion=${releaseVersion}"
-        sh "${mvn} clean install -Djava.io.tmpdir=/tmp/${app} -B -e"
+        sh "${mvn} -Pall-tests clean install -Djava.io.tmpdir=/tmp/${app} -B -e"
         sh "docker build --build-arg version=${releaseVersion} --build-arg app_name=${app} -t ${dockerRepo}/${app}:${releaseVersion} ."
 
         withCredentials([[$class: 'UsernamePasswordMultiBinding', credentialsId: 'nexusUser', usernameVariable: 'USERNAME', passwordVariable: 'PASSWORD']]) {
