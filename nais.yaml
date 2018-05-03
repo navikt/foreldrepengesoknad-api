@@ -22,6 +22,7 @@ resources:
   requests:
     cpu: 200m
     memory: 1000Mi
+redis: true
 fasitResources:
   used:
   - alias : FPSOKNADAPI_PROPERTIES
