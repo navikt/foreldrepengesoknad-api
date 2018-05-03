@@ -2,7 +2,9 @@ package no.nav.foreldrepenger.selvbetjening.rest;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import no.nav.foreldrepenger.selvbetjening.FastTests;
 import org.junit.Test;
+import org.junit.experimental.categories.Category;
 import org.junit.runner.RunWith;
 import org.springframework.boot.test.autoconfigure.json.AutoConfigureJsonTesters;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
@@ -14,6 +16,7 @@ import static no.nav.foreldrepenger.selvbetjening.consumer.OppslagstjenesteStub.
 import static org.assertj.core.api.Assertions.assertThat;
 
 @RunWith(SpringJUnit4ClassRunner.class)
+@Category(FastTests.class)
 @AutoConfigureJsonTesters
 public class SerializationTest {
 

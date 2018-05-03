@@ -2,8 +2,11 @@ package no.nav.foreldrepenger.selvbetjening.rest.attachments;
 
 import static org.junit.Assert.assertEquals;
 
+import no.nav.foreldrepenger.selvbetjening.SlowTests;
 import org.junit.Test;
+import org.junit.experimental.categories.Category;
 
+@Category(SlowTests.class)
 public class MetadataExtractorTest {
 
     @Test

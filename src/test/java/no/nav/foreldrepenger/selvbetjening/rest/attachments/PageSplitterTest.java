@@ -5,10 +5,13 @@ import static org.junit.Assert.assertTrue;
 
 import java.util.List;
 
+import no.nav.foreldrepenger.selvbetjening.SlowTests;
 import org.junit.Test;
 
 import no.nav.foreldrepenger.selvbetjening.rest.attachments.PDFPageSplitter;
+import org.junit.experimental.categories.Category;
 
+@Category(SlowTests.class)
 public class PageSplitterTest {
 
     @Test

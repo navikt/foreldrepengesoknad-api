@@ -1,12 +1,15 @@
 package no.nav.foreldrepenger.selvbetjening.storage;
 
+import no.nav.foreldrepenger.selvbetjening.SlowTests;
 import org.junit.Rule;
 import org.junit.Test;
+import org.junit.experimental.categories.Category;
 import org.testcontainers.containers.GenericContainer;
 
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertNull;
 
+@Category(SlowTests.class)
 public class StorageTest {
 
     @Rule

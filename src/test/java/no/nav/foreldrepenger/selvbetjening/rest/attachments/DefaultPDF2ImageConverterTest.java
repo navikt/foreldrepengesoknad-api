@@ -1,16 +1,19 @@
 package no.nav.foreldrepenger.selvbetjening.rest.attachments;
 
+import no.nav.foreldrepenger.selvbetjening.SlowTests;
 import org.junit.Test;
 
 import no.nav.foreldrepenger.selvbetjening.rest.attachments.DefaultPDF2ImageConverter;
 import no.nav.foreldrepenger.selvbetjening.rest.attachments.PDFPageSplitter;
 import no.nav.foreldrepenger.selvbetjening.rest.attachments.PDF2ImageConverter;
+import org.junit.experimental.categories.Category;
 
 import javax.imageio.ImageIO;
 import java.util.List;
 
 import static org.junit.Assert.*;
 
+@Category(SlowTests.class)
 public class DefaultPDF2ImageConverterTest {
 
     @Test

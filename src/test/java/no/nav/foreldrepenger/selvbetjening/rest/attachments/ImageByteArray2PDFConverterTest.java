@@ -7,14 +7,17 @@ import static org.springframework.http.MediaType.IMAGE_GIF;
 import java.io.IOException;
 import java.util.Arrays;
 
+import no.nav.foreldrepenger.selvbetjening.SlowTests;
 import org.apache.tika.Tika;
 import org.junit.BeforeClass;
 import org.junit.Test;
+import org.junit.experimental.categories.Category;
 import org.springframework.http.MediaType;
 
 import no.nav.foreldrepenger.selvbetjening.rest.attachments.exceptions.AttachmentTypeUnsupportedException;
 import no.nav.foreldrepenger.selvbetjening.rest.attachments.exceptions.AttachmentsTooLargeException;
 
+@Category(SlowTests.class)
 public class ImageByteArray2PDFConverterTest {
     private static final byte[] PDFSIGNATURE = { 0x25, 0x50, 0x44, 0x46 };
 

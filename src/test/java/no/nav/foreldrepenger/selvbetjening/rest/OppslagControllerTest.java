@@ -1,9 +1,11 @@
 package no.nav.foreldrepenger.selvbetjening.rest;
 
+import no.nav.foreldrepenger.selvbetjening.FastTests;
 import no.nav.foreldrepenger.selvbetjening.consumer.Oppslagstjeneste;
 import no.nav.foreldrepenger.selvbetjening.consumer.json.PersonDto;
 import no.nav.foreldrepenger.selvbetjening.rest.json.Person;
 import org.junit.Test;
+import org.junit.experimental.categories.Category;
 import org.junit.runner.RunWith;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
@@ -12,6 +14,7 @@ import org.mockito.junit.MockitoJUnitRunner;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.mockito.Mockito.when;
 
+@Category(FastTests.class)
 @RunWith(MockitoJUnitRunner.class)
 public class OppslagControllerTest {
 

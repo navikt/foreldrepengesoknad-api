@@ -1,12 +1,15 @@
 package no.nav.foreldrepenger.selvbetjening.crypto;
 
+import no.nav.foreldrepenger.selvbetjening.FastTests;
 import org.junit.Test;
+import org.junit.experimental.categories.Category;
 
 import java.util.Base64;
 
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertNotEquals;
 
+@Category(FastTests.class)
 public class CryptoTest {
 
     @Test
