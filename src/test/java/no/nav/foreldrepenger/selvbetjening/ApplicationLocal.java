@@ -11,7 +11,6 @@ import no.nav.security.spring.oidc.test.TokenGeneratorConfiguration;
 import no.nav.security.spring.oidc.validation.api.EnableOIDCTokenValidation;
 
 @SpringBootApplication
-@ComponentScan
 @Import(value = TokenGeneratorConfiguration.class)
 @EnableOIDCTokenValidation(ignore = "org.springframework")
 public class ApplicationLocal {

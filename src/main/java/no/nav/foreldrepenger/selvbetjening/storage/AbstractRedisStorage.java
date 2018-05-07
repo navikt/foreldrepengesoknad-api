@@ -2,7 +2,7 @@ package no.nav.foreldrepenger.selvbetjening.storage;
 
 import redis.clients.jedis.Jedis;
 
-public abstract class AbstractStorage implements Storage {
+public abstract class AbstractRedisStorage implements Storage {
 
     private static final int twoDays = 3600 * 24 * 2;
 

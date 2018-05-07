@@ -2,7 +2,7 @@ package no.nav.foreldrepenger.selvbetjening.storage;
 
 import redis.clients.jedis.Jedis;
 
-public class RedisStandalonelStorage extends AbstractStorage {
+public class RedisStandalonelStorage extends AbstractRedisStorage {
 
     private String host;
     private int port;
