@@ -24,7 +24,8 @@ public class StorageController {
     private static final Logger log = getLogger(StorageController.class);
     private static final String KEY_PREFIX = "fpsoknad-";
 
-    private String encryptionPassphrase = "bogus";
+    @Value("${FORELDREPENGESOKNAD_API_STORAGE_PASSWORD}")
+    private String encryptionPassphrase;
 
     @Inject
     private OIDCRequestContextHolder contextHolder;
