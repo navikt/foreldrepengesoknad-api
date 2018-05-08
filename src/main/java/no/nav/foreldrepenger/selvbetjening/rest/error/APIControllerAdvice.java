@@ -1,4 +1,4 @@
-package no.nav.foreldrepenger.selvbetjening.rest;
+package no.nav.foreldrepenger.selvbetjening.rest.error;
 
 import static java.util.stream.Collectors.toList;
 import static org.springframework.http.HttpStatus.INTERNAL_SERVER_ERROR;

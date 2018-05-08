@@ -6,6 +6,7 @@ import java.net.URI;
 
 import javax.inject.Inject;
 
+import no.nav.foreldrepenger.selvbetjening.rest.filters.CorsInterceptor;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.boot.actuate.health.HealthIndicator;
 import org.springframework.context.annotation.Bean;
@@ -21,7 +22,7 @@ import com.google.common.collect.ImmutableMap;
 import no.nav.foreldrepenger.selvbetjening.health.EnvironmentAwareServiceHealthIndicator;
 import no.nav.foreldrepenger.selvbetjening.health.MottakPingService;
 import no.nav.foreldrepenger.selvbetjening.health.OppslagPingService;
-import no.nav.foreldrepenger.selvbetjening.rest.util.ApiKeyInjectingClientInterceptor;
+import no.nav.foreldrepenger.selvbetjening.rest.filters.ApiKeyInjectingClientInterceptor;
 
 @Configuration
 public class ApiConfiguration implements WebMvcConfigurer {

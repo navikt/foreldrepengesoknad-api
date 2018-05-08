@@ -1,4 +1,4 @@
-package no.nav.foreldrepenger.selvbetjening.rest.util;
+package no.nav.foreldrepenger.selvbetjening.rest.filters;
 
 import static org.slf4j.LoggerFactory.getLogger;
 

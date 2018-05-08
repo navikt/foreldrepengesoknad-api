@@ -1,4 +1,4 @@
-package no.nav.foreldrepenger.selvbetjening.rest.util;
+package no.nav.foreldrepenger.selvbetjening.rest.filters;
 
 import java.io.IOException;
 

@@ -1,4 +1,4 @@
-package no.nav.foreldrepenger.selvbetjening.config;
+package no.nav.foreldrepenger.selvbetjening.rest.filters;
 
 import static com.google.common.net.HttpHeaders.ACCESS_CONTROL_ALLOW_CREDENTIALS;
 import static com.google.common.net.HttpHeaders.ACCESS_CONTROL_ALLOW_ORIGIN;
@@ -31,9 +31,7 @@ public class CorsInterceptor extends HandlerInterceptorAdapter {
     }
 
     @Override
-    public boolean preHandle(HttpServletRequest request, HttpServletResponse response, Object handler)
-            throws Exception {
-
+    public boolean preHandle(HttpServletRequest request, HttpServletResponse response, Object handler) {
         String origin = request.getHeader(ORIGIN);
         if (allowedOrigins.contains(origin)) {
             response.setHeader(ACCESS_CONTROL_ALLOW_ORIGIN, origin);

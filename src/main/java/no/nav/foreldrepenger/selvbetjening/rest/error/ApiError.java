@@ -1,4 +1,4 @@
-package no.nav.foreldrepenger.selvbetjening.rest;
+package no.nav.foreldrepenger.selvbetjening.rest.error;
 
 import static com.fasterxml.jackson.annotation.JsonFormat.Feature.WRITE_SINGLE_ELEM_ARRAYS_UNWRAPPED;
 import static com.fasterxml.jackson.annotation.JsonFormat.Shape.STRING;

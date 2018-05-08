@@ -116,7 +116,7 @@ public class MottakController {
                 .sum();
         if (total > MAX_VEDLEGG_SIZE) {
             throw new AttachmentsTooLargeException("Samlet filstørrelse for alle vedlegg er " + total
-                    + ", men kan ikke overstige  " + MAX_VEDLEGG_SIZE + " bytes");
+                    + ", men kan ikke overstige " + MAX_VEDLEGG_SIZE + " bytes");
         }
     }
 
