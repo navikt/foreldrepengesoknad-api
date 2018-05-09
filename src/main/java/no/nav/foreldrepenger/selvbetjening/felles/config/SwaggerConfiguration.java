@@ -4,7 +4,7 @@ import static com.google.common.base.Predicates.or;
 import static io.swagger.models.Scheme.HTTP;
 import static io.swagger.models.Scheme.HTTPS;
 import static java.util.stream.Collectors.toSet;
-import static no.nav.foreldrepenger.selvbetjening.innsending.MottakController.REST_ENGANGSSTONAD;
+import static no.nav.foreldrepenger.selvbetjening.innsending.InnsendingController.REST_ENGANGSSTONAD;
 import static no.nav.foreldrepenger.selvbetjening.oppslag.OppslagController.REST_OPPSLAG;
 import static springfox.documentation.builders.PathSelectors.regex;
 import static springfox.documentation.spi.DocumentationType.SWAGGER_2;

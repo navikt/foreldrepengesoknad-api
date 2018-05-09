@@ -12,12 +12,9 @@ import static com.fasterxml.jackson.annotation.JsonInclude.Include.NON_EMPTY;
 import static java.time.LocalDateTime.now;
 
 @JsonInclude(NON_EMPTY)
-public class EngangsstønadDto {
+public class EngangsstønadDto extends SøknadDto {
 
-    public LocalDateTime mottattdato;
-    public SøkerDto søker;
     public YtelseDto ytelse;
-    public List<VedleggDto> vedlegg;
 
     public EngangsstønadDto() {}
 
@@ -25,6 +22,8 @@ public class EngangsstønadDto {
         this.søker = new SøkerDto();
         this.ytelse = new YtelseDto(engangsstønad.utenlandsopphold, engangsstønad.barn, engangsstønad.annenForelder);
         this.vedlegg = new ArrayList<>();
+        this.mottattdato = now();
+        this.søker.søknadsRolle = "MOR";
 
         // TODO: Mottak bør hente personinfo via fnr fra oidc token selv.
         this.søker.fornavn = person.fornavn;
@@ -33,17 +32,6 @@ public class EngangsstønadDto {
         this.søker.fnr = person.fnr;
         this.søker.aktør = person.aktorId;
 
-        this.søker.søknadsRolle = "MOR";
 
-        this.mottattdato = now();
-    }
-
-    public void addVedlegg(byte[] vedlegg) {
-        VedleggDto vedleggDto = new VedleggDto();
-        vedleggDto.type = "påkrevd";
-        vedleggDto.metadata.beskrivelse = "Terminbekreftelse";
-        vedleggDto.metadata.skjemanummer = "TERMINBEKREFTELSE";
-        vedleggDto.vedlegg = vedlegg;
-        this.vedlegg.add(vedleggDto);
     }
 }
