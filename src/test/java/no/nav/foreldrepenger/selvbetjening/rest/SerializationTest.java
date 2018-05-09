@@ -12,7 +12,7 @@ import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 import javax.inject.Inject;
 import java.io.IOException;
 
-import static no.nav.foreldrepenger.selvbetjening.consumer.OppslagstjenesteStub.person;
+import static no.nav.foreldrepenger.selvbetjening.oppslag.tjeneste.OppslagstjenesteStub.person;
 import static org.assertj.core.api.Assertions.assertThat;
 
 @RunWith(SpringJUnit4ClassRunner.class)

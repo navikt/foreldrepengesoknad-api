@@ -1,6 +1,6 @@
 package no.nav.foreldrepenger.selvbetjening.stub;
 
-import no.nav.foreldrepenger.selvbetjening.storage.Storage;
+import no.nav.foreldrepenger.selvbetjening.felles.storage.Storage;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.Primary;

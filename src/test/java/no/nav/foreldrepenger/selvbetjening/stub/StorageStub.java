@@ -1,6 +1,6 @@
 package no.nav.foreldrepenger.selvbetjening.stub;
 
-import no.nav.foreldrepenger.selvbetjening.storage.Storage;
+import no.nav.foreldrepenger.selvbetjening.felles.storage.Storage;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
