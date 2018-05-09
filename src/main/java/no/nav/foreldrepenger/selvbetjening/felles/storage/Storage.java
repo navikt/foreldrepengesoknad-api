@@ -1,10 +1,12 @@
 package no.nav.foreldrepenger.selvbetjening.felles.storage;
 
+import java.util.Optional;
+
 public interface Storage {
 
-    void put(String key, String value);
+    void put(String directory, String key, String value);
 
-    String get(String key);
+    Optional<String> get(String directory, String key);
 
-    void delete(String key);
+    void delete(String directory, String key);
 }

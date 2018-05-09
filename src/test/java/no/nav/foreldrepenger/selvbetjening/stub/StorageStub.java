@@ -4,22 +4,24 @@ import no.nav.foreldrepenger.selvbetjening.felles.storage.Storage;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import java.util.Optional;
+
 public class StorageStub implements Storage {
 
     private static final Logger log = LoggerFactory.getLogger(StorageStub.class);
 
     @Override
-    public void put(String key, String value) {
-        log.debug("Would have stored: " + key + " -> " + value);
+    public void put(String directory, String key, String value) {
+        log.debug("Would have stored: " + key + " -> " + value + " in directory " + directory);
     }
 
     @Override
-    public String get(String key) {
-        return "r6pbUjCtjD8XvzxtQnkN9w==";
+    public Optional<String> get(String directory, String key) {
+        return Optional.of("r6pbUjCtjD8XvzxtQnkN9w==");
     }
 
     @Override
-    public void delete(String key) {
-        log.debug("Would have deleted: " + key);
+    public void delete(String directory, String key) {
+        log.debug("Would have deleted: " + key + " from directory " + directory);
     }
 }
