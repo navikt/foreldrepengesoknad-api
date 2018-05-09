@@ -45,5 +45,9 @@ fasitResources:
     resourceType: restservice
   - alias: foreldrepengesoknad-api-storage
     resourceType: credential
+  - alias: foreldrepengesoknad-api-s3_endpoint
+    resourceType: baseurl
+  - alias: foreldrepengesoknad-api-s3-creds
+    resourceType: credential
 
     
