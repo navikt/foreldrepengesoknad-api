@@ -24,6 +24,7 @@ public class StorageConfiguration {
 
     @Value("${FORELDREPENGESOKNAD_API_S3_ENDPOINT}")
     private String s3Endpoint;
+
     private final static String REGION_TO_USE_FOR_S3_TO_WORK_ONPREM = "us-east-1";
 
     @Bean
