@@ -16,10 +16,10 @@ import org.springframework.context.annotation.Lazy;
 @Configuration
 public class StorageConfiguration {
 
-    @Value("${FORELDREPENGESOKNAD_API_ACCESSKEY_PASSWORD}")
+    @Value("${FORELDREPENGESOKNAD_API_S3_CREDS_USERNAME}")
     private String accessKey;
 
-    @Value("${FORELDREPENGESOKNAD_API_SECRETKEY_PASSWORD}")
+    @Value("${FORELDREPENGESOKNAD_API_S3_CREDS_PASSWORD}")
     private String secretKey;
 
     @Value("${FORELDREPENGESOKNAD_API_S3_ENDPOINT}")
