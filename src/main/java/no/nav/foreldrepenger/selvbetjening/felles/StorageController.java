@@ -13,6 +13,8 @@ import org.springframework.web.bind.annotation.*;
 
 import javax.inject.Inject;
 
+import java.util.Optional;
+
 import static org.slf4j.LoggerFactory.getLogger;
 import static org.springframework.http.MediaType.APPLICATION_JSON_VALUE;
 
@@ -22,7 +24,7 @@ import static org.springframework.http.MediaType.APPLICATION_JSON_VALUE;
 public class StorageController {
 
     private static final Logger log = getLogger(StorageController.class);
-    private static final String KEY_PREFIX = "fpsoknad-";
+    private static final String KEY = "soknad";
 
     @Value("${FORELDREPENGESOKNAD_API_STORAGE_PASSWORD}")
     private String encryptionPassphrase;
@@ -36,20 +38,21 @@ public class StorageController {
     @GetMapping
     public ResponseEntity<String> retrieveSøknad() {
         String fnr = fnrFromOIDCToken();
-        String encryptedKey = encrypt(KEY_PREFIX + fnr, fnr);
-        log.info("Retrieving søknad with key " + encryptedKey + " from storage");
-        String encryptedValue = storage.get(encryptedKey);
-        return encryptedValue != null ?
-                ResponseEntity.ok().body(decrypt(encryptedValue, fnr)) : ResponseEntity.notFound().build();
+        String directory = encrypt(fnr, fnr);
+        log.info("Retrieving søknad from directory " + directory);
+        Optional<String> encryptedValue = storage.get(directory, KEY);
+        return encryptedValue
+                .map(ev -> ResponseEntity.ok().body(decrypt(ev, fnr)))
+                .orElse(ResponseEntity.notFound().build());
     }
 
     @PostMapping(consumes = APPLICATION_JSON_VALUE)
     public ResponseEntity<String> storeSøknad(@RequestBody String søknadJson) {
         String fnr = fnrFromOIDCToken();
-        String encryptedKey = encrypt(KEY_PREFIX + fnr, fnr);
-        log.info("Writing søknad with key " + encryptedKey + " to storage");
+        String directory = encrypt(fnr, fnr);
+        log.info("Writing søknad to directory " + directory);
         String encryptedValue = encrypt(søknadJson, fnr);
-        storage.put(encryptedKey, encryptedValue);
+        storage.put(directory, KEY, encryptedValue);
         return ResponseEntity.created(null).build();
     }
 
@@ -59,13 +62,13 @@ public class StorageController {
         return context.getClaims("selvbetjening").getClaimSet().getSubject();
     }
 
-    private String encrypt(String plaintext, String fnr) {
-        Crypto crypto = new Crypto(encryptionPassphrase, fnr);
+    private String encrypt(String plaintext, String salt) {
+        Crypto crypto = new Crypto(encryptionPassphrase, salt);
         return crypto.encrypt(plaintext);
     }
 
-    private String decrypt(String encrypted, String fnr) {
-        Crypto crypto = new Crypto(encryptionPassphrase, fnr);
+    private String decrypt(String encrypted, String salt) {
+        Crypto crypto = new Crypto(encryptionPassphrase, salt);
         return crypto.decrypt(encrypted);
     }
 
