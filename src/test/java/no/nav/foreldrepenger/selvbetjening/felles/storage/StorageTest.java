@@ -35,11 +35,18 @@ public class StorageTest {
         assertEquals(Optional.empty(), storage.get("mydir", "mykey"));
     }
 
+    @Test
+    public void createBucketIsIdempotent() {
+        new S3Storage(s3());
+        new S3Storage(s3());
+    }
+
     private AmazonS3 s3() {
         return AmazonS3ClientBuilder
                 .standard()
                 .withEndpointConfiguration(localstack.getEndpointConfiguration(S3))
                 .withCredentials(localstack.getDefaultCredentialsProvider())
+                .enablePathStyleAccess()
                 .build();
     }
 

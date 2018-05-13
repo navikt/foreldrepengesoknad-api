@@ -22,7 +22,7 @@ public class S3Storage implements Storage {
     @Inject
     public S3Storage(AmazonS3 s3) {
         this.s3 = s3;
-        createBucketIfNotExists();
+        ensureBucketExists();
     }
 
     @Override
@@ -40,15 +40,16 @@ public class S3Storage implements Storage {
         deleteString(directory, key);
     }
 
-    private Bucket createBucketIfNotExists() {
-        return s3.listBuckets().stream()
-                .filter(b -> b.getName() == BUCKET_NAME)
-                .findFirst()
-                .orElse(createBucket());
+    private void ensureBucketExists() {
+        boolean bucketExists = s3.listBuckets().stream()
+                .anyMatch(b -> b.getName().equals(BUCKET_NAME));
+        if (!bucketExists) {
+            createBucket();
+        }
     }
 
-    private Bucket createBucket() {
-        return s3.createBucket(new CreateBucketRequest(BUCKET_NAME)
+    private void createBucket() {
+        s3.createBucket(new CreateBucketRequest(BUCKET_NAME)
                  .withCannedAcl(CannedAccessControlList.Private));
     }
 
