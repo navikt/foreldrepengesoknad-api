@@ -12,7 +12,7 @@ public class StorageStub implements Storage {
 
     @Override
     public void put(String directory, String key, String value) {
-        log.debug("Would have stored: " + key + " -> " + value + " in directory " + directory);
+        log.info("Would have stored: " + key + " -> " + value + " in directory " + directory);
     }
 
     @Override
@@ -22,6 +22,6 @@ public class StorageStub implements Storage {
 
     @Override
     public void delete(String directory, String key) {
-        log.debug("Would have deleted: " + key + " from directory " + directory);
+        log.info("Would have deleted: " + key + " from directory " + directory);
     }
 }
