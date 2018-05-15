@@ -15,7 +15,7 @@ import org.springframework.context.annotation.Lazy;
 import org.springframework.context.annotation.Profile;
 
 @Configuration
-@Profile("default")
+@Profile("!dev")
 public class StorageConfiguration {
 
     @Value("${FORELDREPENGESOKNAD_API_S3_CREDS_USERNAME}")

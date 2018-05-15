@@ -36,18 +36,14 @@ public class StorageControllerTest implements ApplicationContextAware {
     private int port;
 
     @Autowired
-    private StubbedLocalStackContainer localStackContainer;
-
-
-
-    @Autowired
     private TestRestTemplate http;
+
     private String endpoint;
     private HttpEntity<String> entity;
 
+    private static  ApplicationContext applicationContext;
     private static final String FNR = "12345678901";
     private static final String PAYLOAD = "en skikkelig, skikkelig, skikkelig (s3) nais søknad";
-    private static  ApplicationContext applicationContext;
 
     @Before
     public void setup() {
