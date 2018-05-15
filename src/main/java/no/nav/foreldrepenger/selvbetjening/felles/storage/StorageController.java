@@ -11,6 +11,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import javax.inject.Inject;
+import javax.xml.bind.DatatypeConverter;
 import java.util.Optional;
 
 import static org.slf4j.LoggerFactory.getLogger;
@@ -36,9 +37,9 @@ public class StorageController {
     @GetMapping
     public ResponseEntity<String> retrieveSøknad() {
         String fnr = fnrFromOIDCToken();
-
-        log.info("Retrieving søknad from directory " + fnr);
-        Optional<String> encryptedValue = storage.get(fnr, KEY);
+        String directory = encrypt(fnr,fnr);
+        log.info("Retrieving søknad from directory " + directory);
+        Optional<String> encryptedValue = storage.get(directory, KEY);
         return encryptedValue
                 .map(ev -> ResponseEntity.ok().body(decrypt(ev, fnr)))
                 .orElse(ResponseEntity.notFound().build());
@@ -47,9 +48,10 @@ public class StorageController {
     @PostMapping(consumes = APPLICATION_JSON_VALUE)
     public ResponseEntity<String> storeSøknad(@RequestBody String søknadJson) {
         String fnr = fnrFromOIDCToken();
-        log.info("Writing søknad to directory " + fnr);
+        String directory = encrypt(fnr,fnr);
+        log.info("Writing søknad to directory " + directory);
         String encryptedValue = encrypt(søknadJson, fnr);
-        storage.put(fnr, KEY, encryptedValue);
+        storage.put(directory, KEY, encryptedValue);
         return ResponseEntity.created(null).build();
     }
 
@@ -61,12 +63,12 @@ public class StorageController {
 
     private String encrypt(String plaintext, String fnr) {
         Crypto crypto = new Crypto(encryptionPassphrase, fnr);
-        return crypto.encrypt(plaintext);
+        return DatatypeConverter.printHexBinary(crypto.encrypt(plaintext).getBytes());
     }
 
     private String decrypt(String encrypted, String fnr) {
         Crypto crypto = new Crypto(encryptionPassphrase, fnr);
-        return crypto.decrypt(encrypted);
+        return crypto.decrypt(new String(DatatypeConverter.parseHexBinary(encrypted)));
     }
 
 }
