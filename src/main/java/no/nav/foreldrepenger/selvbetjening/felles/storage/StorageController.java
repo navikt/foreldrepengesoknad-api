@@ -14,6 +14,7 @@ import javax.inject.Inject;
 import javax.xml.bind.DatatypeConverter;
 import java.util.Optional;
 
+import static javax.xml.bind.DatatypeConverter.printHexBinary;
 import static org.slf4j.LoggerFactory.getLogger;
 import static org.springframework.http.MediaType.APPLICATION_JSON_VALUE;
 
@@ -37,7 +38,7 @@ public class StorageController {
     @GetMapping
     public ResponseEntity<String> retrieveSøknad() {
         String fnr = fnrFromOIDCToken();
-        String directory = encrypt(fnr,fnr);
+        String directory = getDirectory(fnr);
         log.info("Retrieving søknad from directory " + directory);
         Optional<String> encryptedValue = storage.get(directory, KEY);
         return encryptedValue
@@ -48,13 +49,16 @@ public class StorageController {
     @PostMapping(consumes = APPLICATION_JSON_VALUE)
     public ResponseEntity<String> storeSøknad(@RequestBody String søknadJson) {
         String fnr = fnrFromOIDCToken();
-        String directory = encrypt(fnr,fnr);
+        String directory = getDirectory(fnr);
         log.info("Writing søknad to directory " + directory);
         String encryptedValue = encrypt(søknadJson, fnr);
         storage.put(directory, KEY, encryptedValue);
         return ResponseEntity.created(null).build();
     }
 
+    private String getDirectory(String plaintext){
+        return printHexBinary(encrypt(plaintext,plaintext).getBytes());
+    }
     private String fnrFromOIDCToken() {
         OIDCValidationContext context = (OIDCValidationContext) contextHolder
                 .getRequestAttribute(OIDCConstants.OIDC_VALIDATION_CONTEXT);
@@ -63,12 +67,12 @@ public class StorageController {
 
     private String encrypt(String plaintext, String fnr) {
         Crypto crypto = new Crypto(encryptionPassphrase, fnr);
-        return DatatypeConverter.printHexBinary(crypto.encrypt(plaintext).getBytes());
+        return crypto.encrypt(plaintext);
     }
 
     private String decrypt(String encrypted, String fnr) {
         Crypto crypto = new Crypto(encryptionPassphrase, fnr);
-        return crypto.decrypt(new String(DatatypeConverter.parseHexBinary(encrypted)));
+        return crypto.decrypt(encrypted);
     }
 
 }
