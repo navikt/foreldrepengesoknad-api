@@ -54,11 +54,11 @@ public class S3Storage implements Storage {
     }
 
     private void writeString(String directory, String key, String value) {
-        s3.putObject(BUCKET_NAME, fakePath(directory, key), value);
+        s3.putObject(BUCKET_NAME, fileName(directory, key), value);
     }
 
     private String readString(String directory, String key) {
-        String path = fakePath(directory, key);
+        String path = fileName(directory, key);
         try {
             S3Object object = s3.getObject(BUCKET_NAME, path);
             return new BufferedReader(new InputStreamReader(object.getObjectContent()))
@@ -72,11 +72,11 @@ public class S3Storage implements Storage {
     }
 
     private void deleteString(String directory, String key) {
-        s3.deleteObject(BUCKET_NAME, fakePath(directory, key));
+        s3.deleteObject(BUCKET_NAME, fileName(directory, key));
     }
 
-    private String fakePath(String directory, String key) {
-        return "/" + directory + "/" + key;
+    private String fileName(String directory, String key) {
+        return directory + "_" + key;
     }
 
 }
