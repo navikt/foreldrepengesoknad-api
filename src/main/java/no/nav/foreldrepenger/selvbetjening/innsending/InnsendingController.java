@@ -1,12 +1,10 @@
 package no.nav.foreldrepenger.selvbetjening.innsending;
 
 import no.nav.foreldrepenger.selvbetjening.felles.attachments.exceptions.AttachmentsTooLargeException;
-import no.nav.foreldrepenger.selvbetjening.innsending.json.Engangsstønad;
 import no.nav.foreldrepenger.selvbetjening.innsending.json.Kvittering;
+import no.nav.foreldrepenger.selvbetjening.innsending.json.Søknad;
 import no.nav.foreldrepenger.selvbetjening.innsending.tjeneste.Innsending;
-import no.nav.foreldrepenger.selvbetjening.innsending.tjeneste.Innsendingstjeneste;
 import no.nav.security.spring.oidc.validation.api.ProtectedWithClaims;
-import org.slf4j.Logger;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -18,17 +16,16 @@ import javax.inject.Inject;
 
 import static java.util.Arrays.stream;
 import static no.nav.foreldrepenger.selvbetjening.innsending.InnsendingController.REST_ENGANGSSTONAD;
-import static org.slf4j.LoggerFactory.getLogger;
+import static no.nav.foreldrepenger.selvbetjening.innsending.InnsendingController.REST_SOKNAD;
 import static org.springframework.http.MediaType.MULTIPART_FORM_DATA_VALUE;
 
 @RestController
 @ProtectedWithClaims(issuer = "selvbetjening", claimMap = {"acr=Level4"})
-@RequestMapping(REST_ENGANGSSTONAD)
+@RequestMapping({REST_SOKNAD, REST_ENGANGSSTONAD})
 public class InnsendingController {
 
-    public static final String REST_ENGANGSSTONAD = "/rest/engangsstonad";
-
-    private static final Logger LOG = getLogger(InnsendingController.class);
+    public static final String REST_ENGANGSSTONAD = "/rest/engangsstonad"; // TODO: Fjern denne når frontend er oppdatert
+    public static final String REST_SOKNAD = "/rest/soknad";
 
     private static final double MB = 1024 * 1024;
     private static final double MAX_VEDLEGG_SIZE = 7.5 * MB;
@@ -41,7 +38,7 @@ public class InnsendingController {
     }
 
     @PostMapping(consumes = MULTIPART_FORM_DATA_VALUE)
-    public ResponseEntity<Kvittering> sendInn(@RequestPart("soknad") Engangsstønad søknad, @RequestPart("vedlegg") MultipartFile... vedlegg) throws Exception {
+    public ResponseEntity<Kvittering> sendInn(@RequestPart("soknad") Søknad søknad, @RequestPart("vedlegg") MultipartFile... vedlegg) throws Exception {
         checkVedleggTooLarge(vedlegg);
 
         return innsending.sendInn(søknad, vedlegg);

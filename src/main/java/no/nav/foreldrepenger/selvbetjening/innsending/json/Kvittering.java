@@ -5,8 +5,11 @@ import java.time.LocalDateTime;
 import com.fasterxml.jackson.annotation.JsonCreator;
 import com.fasterxml.jackson.annotation.JsonProperty;
 
+import static java.time.LocalDateTime.now;
+
 public class Kvittering {
-    public static final Kvittering STUB = new Kvittering("0", LocalDateTime.now());
+    public static final Kvittering STUB = new Kvittering("69", now());
+
     public final LocalDateTime mottattDato;
     public final String referanseId;
 

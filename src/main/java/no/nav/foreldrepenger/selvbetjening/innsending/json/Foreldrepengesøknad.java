@@ -1,14 +1,17 @@
 package no.nav.foreldrepenger.selvbetjening.innsending.json;
 
-public class Engangsstønad extends Søknad {
+public class Foreldrepengesøknad extends Søknad {
 
     public Barn barn;
     public AnnenForelder annenForelder;
     public Utenlandsopphold utenlandsopphold;
 
-    public Engangsstønad() {
+    public String situasjon;
+
+    public Foreldrepengesøknad() {
         this.barn = new Barn();
-        this.utenlandsopphold = new Utenlandsopphold();
         this.annenForelder = new AnnenForelder();
+        this.utenlandsopphold = new Utenlandsopphold();
     }
+
 }

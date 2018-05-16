@@ -1,10 +1,7 @@
 package no.nav.foreldrepenger.selvbetjening.innsending.tjeneste;
 
 import no.nav.foreldrepenger.selvbetjening.felles.attachments.Image2PDFConverter;
-import no.nav.foreldrepenger.selvbetjening.innsending.json.Barn;
-import no.nav.foreldrepenger.selvbetjening.innsending.json.Engangsstønad;
-import no.nav.foreldrepenger.selvbetjening.innsending.json.Kvittering;
-import no.nav.foreldrepenger.selvbetjening.innsending.json.Søknad;
+import no.nav.foreldrepenger.selvbetjening.innsending.json.*;
 import no.nav.foreldrepenger.selvbetjening.oppslag.tjeneste.Oppslag;
 import no.nav.foreldrepenger.selvbetjening.oppslag.tjeneste.json.PersonDto;
 import org.junit.Before;
@@ -55,6 +52,12 @@ public class InnsendingstjenesteTest {
         ResponseEntity<Kvittering> response = innsending.sendInn(engangsstønad(), new MultipartFile[] {});
         assertThat(response.getStatusCode()).isEqualByComparingTo(OK);
     }
+    
+    @Test
+    public void testInnsendingAvEnkelForeldrepengesøknad() {
+        ResponseEntity<Kvittering> response = innsending.sendInn(foreldrepengesøknad(), new MultipartFile[] {});
+        assertThat(response.getStatusCode()).isEqualByComparingTo(OK);
+    }
 
     @Test
     public void testAtExceptionKastesVedUkjentTypeSøknad() {
@@ -75,6 +78,19 @@ public class InnsendingstjenesteTest {
         engangsstønad.barn = barn;
 
         return engangsstønad;
+    }
+
+    private Foreldrepengesøknad foreldrepengesøknad() {
+        Foreldrepengesøknad foreldrepengesøknad = new Foreldrepengesøknad();
+        foreldrepengesøknad.opprettet = now();
+
+        Barn barn = new Barn();
+        barn.erBarnetFødt = true;
+        foreldrepengesøknad.barn = barn;
+
+        foreldrepengesøknad.situasjon = "adopsjon";
+
+        return foreldrepengesøknad;
     }
 
 }

@@ -2,10 +2,13 @@ package no.nav.foreldrepenger.selvbetjening.innsending.tjeneste;
 
 import no.nav.foreldrepenger.selvbetjening.felles.attachments.Image2PDFConverter;
 import no.nav.foreldrepenger.selvbetjening.felles.attachments.exceptions.AttachmentConversionException;
+import no.nav.foreldrepenger.selvbetjening.felles.util.Enabled;
 import no.nav.foreldrepenger.selvbetjening.innsending.json.Engangsstønad;
+import no.nav.foreldrepenger.selvbetjening.innsending.json.Foreldrepengesøknad;
 import no.nav.foreldrepenger.selvbetjening.innsending.json.Kvittering;
 import no.nav.foreldrepenger.selvbetjening.innsending.json.Søknad;
 import no.nav.foreldrepenger.selvbetjening.innsending.tjeneste.json.EngangsstønadDto;
+import no.nav.foreldrepenger.selvbetjening.innsending.tjeneste.json.ForeldrepengesøknadDto;
 import no.nav.foreldrepenger.selvbetjening.innsending.tjeneste.json.SøknadDto;
 import no.nav.foreldrepenger.selvbetjening.oppslag.tjeneste.Oppslag;
 import no.nav.foreldrepenger.selvbetjening.oppslag.tjeneste.json.PersonDto;
@@ -54,6 +57,10 @@ public class Innsendingstjeneste implements Innsending {
     }
 
     private ResponseEntity<Kvittering> post(Søknad søknad, MultipartFile... vedlegg) {
+        if (!Enabled.foreldrepengesøknad && søknad.type("foreldrepengesøknad")) {
+            throw new BadRequestException("Application with type foreldrepengesøknad is not supported yet");
+        }
+
         return template.postForEntity(mottakServiceUrl, body(søknad, oppslag.hentPerson(), vedlegg), Kvittering.class);
     }
 
@@ -61,6 +68,8 @@ public class Innsendingstjeneste implements Innsending {
         SøknadDto dto;
         if (søknad instanceof Engangsstønad) {
             dto = new EngangsstønadDto((Engangsstønad) søknad, person);
+        } else if (søknad instanceof Foreldrepengesøknad) {
+            dto = new ForeldrepengesøknadDto((Foreldrepengesøknad) søknad);
         } else {
             throw new BadRequestException("Unknown application type");
         }
