@@ -3,6 +3,7 @@ package no.nav.foreldrepenger.selvbetjening.innsending;
 import no.nav.foreldrepenger.selvbetjening.felles.attachments.exceptions.AttachmentsTooLargeException;
 import no.nav.foreldrepenger.selvbetjening.innsending.json.Engangsstønad;
 import no.nav.foreldrepenger.selvbetjening.innsending.json.Kvittering;
+import no.nav.foreldrepenger.selvbetjening.innsending.tjeneste.Innsending;
 import no.nav.foreldrepenger.selvbetjening.innsending.tjeneste.Innsendingstjeneste;
 import no.nav.security.spring.oidc.validation.api.ProtectedWithClaims;
 import org.slf4j.Logger;
@@ -32,8 +33,12 @@ public class InnsendingController {
     private static final double MB = 1024 * 1024;
     private static final double MAX_VEDLEGG_SIZE = 7.5 * MB;
 
+    private final Innsending innsending;
+
     @Inject
-    private Innsendingstjeneste innsending;
+    public InnsendingController(Innsending innsending) {
+        this.innsending = innsending;
+    }
 
     @PostMapping(consumes = MULTIPART_FORM_DATA_VALUE)
     public ResponseEntity<Kvittering> sendInn(@RequestPart("soknad") Engangsstønad søknad, @RequestPart("vedlegg") MultipartFile... vedlegg) throws Exception {
