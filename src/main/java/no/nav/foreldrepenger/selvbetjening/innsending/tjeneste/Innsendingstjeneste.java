@@ -1,7 +1,5 @@
 package no.nav.foreldrepenger.selvbetjening.innsending.tjeneste;
 
-import com.fasterxml.jackson.core.JsonProcessingException;
-import com.fasterxml.jackson.databind.ObjectMapper;
 import no.nav.foreldrepenger.selvbetjening.felles.attachments.Image2PDFConverter;
 import no.nav.foreldrepenger.selvbetjening.felles.attachments.exceptions.AttachmentConversionException;
 import no.nav.foreldrepenger.selvbetjening.innsending.json.Engangsstønad;
@@ -13,8 +11,8 @@ import no.nav.foreldrepenger.selvbetjening.oppslag.tjeneste.Oppslag;
 import no.nav.foreldrepenger.selvbetjening.oppslag.tjeneste.json.PersonDto;
 import org.slf4j.Logger;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.boot.autoconfigure.condition.ConditionalOnProperty;
 import org.springframework.http.HttpEntity;
-import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -22,43 +20,37 @@ import org.springframework.web.client.RestTemplate;
 import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.util.UriComponentsBuilder;
 
-import javax.inject.Inject;
+import javax.ws.rs.BadRequestException;
 import java.io.IOException;
 import java.net.URI;
 
 import static java.time.LocalDateTime.now;
 import static java.util.Arrays.stream;
-import static no.nav.foreldrepenger.selvbetjening.oppslag.tjeneste.OppslagstjenesteStub.person;
 import static org.slf4j.LoggerFactory.getLogger;
 
 @Service
-public class Innsendingstjeneste {
+@ConditionalOnProperty(name = "stub.mottak", havingValue = "false", matchIfMissing = true)
+public class Innsendingstjeneste implements Innsending {
 
     private static final Logger LOG = getLogger(Innsendingstjeneste.class);
 
-    @Inject
-    private ObjectMapper mapper;
-
-    @Inject
-    private Image2PDFConverter converter;
-
-    @Value("${stub.mottak:false}")
-    private boolean stub;
-
+    private final Image2PDFConverter converter;
     private final URI mottakServiceUrl;
     private final RestTemplate template;
     private final Oppslag oppslag;
 
-    public Innsendingstjeneste(@Value("${FPSOKNAD_MOTTAK_API_URL}") URI baseUri, RestTemplate template, Oppslag oppslag) {
+    public Innsendingstjeneste(@Value("${FPSOKNAD_MOTTAK_API_URL}") URI baseUri, RestTemplate template, Oppslag oppslag, Image2PDFConverter converter) {
         this.mottakServiceUrl = mottakUriFra(baseUri);
         this.template = template;
         this.oppslag = oppslag;
+        this.converter = converter;
     }
 
-    public ResponseEntity<Kvittering> sendInn(Søknad søknad, MultipartFile[] vedlegg) throws Exception {
+    @Override
+    public ResponseEntity<Kvittering> sendInn(Søknad søknad, MultipartFile[] vedlegg) {
         LOG.info("Poster søknad til {}", mottakServiceUrl);
         søknad.opprettet = now();
-        return stub ? postStub(søknad) : post(søknad, vedlegg);
+        return post(søknad, vedlegg);
     }
 
     private ResponseEntity<Kvittering> post(Søknad søknad, MultipartFile... vedlegg) {
@@ -66,20 +58,19 @@ public class Innsendingstjeneste {
     }
 
     private HttpEntity<SøknadDto> body(@RequestBody Søknad søknad, PersonDto person, MultipartFile... vedlegg) {
-        SøknadDto dto = new EngangsstønadDto((Engangsstønad) søknad, person);
+        SøknadDto dto;
+        if (søknad instanceof Engangsstønad) {
+            dto = new EngangsstønadDto((Engangsstønad) søknad, person);
+        } else {
+            throw new BadRequestException("Unknown application type");
+        }
 
         stream(vedlegg)
                 .map(this::vedleggBytes)
-                .map(s -> converter.convert(s))
+                .map(converter::convert)
                 .forEach(dto::addVedlegg);
 
         return new HttpEntity<>(dto);
-    }
-
-    private ResponseEntity<Kvittering> postStub(Søknad søknad) throws JsonProcessingException {
-        EngangsstønadDto dto = new EngangsstønadDto((Engangsstønad) søknad, person());
-        LOG.info("Posting JSON (stub): {}", mapper.writeValueAsString(dto));
-        return new ResponseEntity<>(Kvittering.STUB, HttpStatus.OK);
     }
 
     private static URI mottakUriFra(URI baseUri) {

@@ -1,4 +1,4 @@
-package no.nav.foreldrepenger.selvbetjening.rest;
+package no.nav.foreldrepenger.selvbetjening.oppslag;
 
 import no.nav.foreldrepenger.selvbetjening.FastTests;
 import no.nav.foreldrepenger.selvbetjening.oppslag.OppslagController;

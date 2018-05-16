@@ -4,6 +4,7 @@ import java.time.LocalDateTime;
 
 public class Søknad {
 
+    public String type;
     public LocalDateTime opprettet;
     public LocalDateTime sistEndret;
 
