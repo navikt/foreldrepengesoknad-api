@@ -21,6 +21,7 @@ public class Person {
     public String målform;
     public CountryCode land;
     public Boolean ikkeNordiskEøsLand;
+    public Bankkonto bankkonto;
 
     public Person(PersonDto personDto) {
         this.fnr = personDto.fnr;
@@ -32,5 +33,6 @@ public class Person {
         this.målform = personDto.målform;
         this.land = personDto.landKode;
         this.ikkeNordiskEøsLand = erIkkenordiskEØSLand(personDto.landKode);
+        this.bankkonto = personDto.bankkonto;
     }
 }
