@@ -32,6 +32,8 @@ public class OppslagstjenesteStub implements Oppslag {
         dto.fodselsdato = now().minusYears(21);
         dto.kjonn = "K";
         dto.landKode = NO;
+        dto.bankkonto.kontonummer = "1234567890";
+        dto.bankkonto.banknavn = "Stub NOR";
         return dto;
     }
 }
