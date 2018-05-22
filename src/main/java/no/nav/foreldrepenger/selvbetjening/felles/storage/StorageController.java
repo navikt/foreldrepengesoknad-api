@@ -1,5 +1,7 @@
 package no.nav.foreldrepenger.selvbetjening.felles.storage;
 
+import com.google.common.collect.ImmutableList;
+import com.google.gson.Gson;
 import no.nav.foreldrepenger.selvbetjening.felles.crypto.Crypto;
 import no.nav.security.oidc.OIDCConstants;
 import no.nav.security.oidc.context.OIDCRequestContextHolder;
@@ -9,17 +11,18 @@ import org.slf4j.Logger;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.multipart.MultipartFile;
 
 import javax.inject.Inject;
-import javax.xml.bind.DatatypeConverter;
 import java.util.Optional;
 
 import static javax.xml.bind.DatatypeConverter.printHexBinary;
 import static org.slf4j.LoggerFactory.getLogger;
 import static org.springframework.http.MediaType.APPLICATION_JSON_VALUE;
+import static org.springframework.http.MediaType.MULTIPART_FORM_DATA_VALUE;
 
 @RestController
-@ProtectedWithClaims(issuer = "selvbetjening", claimMap = { "acr=Level4" })
+@ProtectedWithClaims(issuer = "selvbetjening", claimMap = {"acr=Level4"})
 @RequestMapping("/rest/storage")
 public class StorageController {
 
@@ -47,7 +50,7 @@ public class StorageController {
     }
 
     @PostMapping(consumes = APPLICATION_JSON_VALUE)
-    public ResponseEntity<String> storeSøknad(@RequestBody String søknadJson) {
+    public ResponseEntity<String> storeJSON(@RequestBody String søknadJson) {
         String fnr = fnrFromOIDCToken();
         String directory = getDirectory(fnr);
         log.info("Writing søknad to directory " + directory);
@@ -56,9 +59,16 @@ public class StorageController {
         return ResponseEntity.created(null).build();
     }
 
-    private String getDirectory(String plaintext){
-        return printHexBinary(encrypt(plaintext,plaintext).getBytes());
+    @PostMapping(consumes = MULTIPART_FORM_DATA_VALUE)
+    public ResponseEntity<String> storeSøknad(@RequestPart("soknad") String søknad, @RequestPart("vedlegg") MultipartFile... vedlegg) {
+        return storeJSON(ImmutableList.of(søknad, new Gson().toJson(vedlegg)).toString());
+
     }
+
+    private String getDirectory(String plaintext) {
+        return printHexBinary(encrypt(plaintext, plaintext).getBytes());
+    }
+
     private String fnrFromOIDCToken() {
         OIDCValidationContext context = (OIDCValidationContext) contextHolder
                 .getRequestAttribute(OIDCConstants.OIDC_VALIDATION_CONTEXT);
