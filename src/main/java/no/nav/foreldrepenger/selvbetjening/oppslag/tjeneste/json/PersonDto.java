@@ -5,6 +5,8 @@ import java.util.Objects;
 
 import com.neovisionaries.i18n.CountryCode;
 
+import no.nav.foreldrepenger.selvbetjening.oppslag.json.Bankkonto;
+
 public class PersonDto {
 
     public String fnr;
@@ -16,12 +18,15 @@ public class PersonDto {
     public LocalDate fodselsdato;
     public String målform;
     public CountryCode landKode;
+    public Bankkonto bankkonto;
+
 
     public PersonDto() {
+        this.bankkonto = new Bankkonto();
     }
 
     public PersonDto(String fnr, String aktorId, String fornavn, String mellomnavn, String etternavn, String målform,
-            CountryCode landKode) {
+            CountryCode landKode, Bankkonto bankkonto) {
         this.fnr = fnr;
         this.aktorId = aktorId;
         this.fornavn = fornavn;
@@ -29,6 +34,7 @@ public class PersonDto {
         this.etternavn = etternavn;
         this.målform = målform;
         this.landKode = landKode;
+        this.bankkonto = bankkonto;
     }
 
     @Override
