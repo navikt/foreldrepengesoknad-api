@@ -6,9 +6,7 @@ import no.nav.foreldrepenger.selvbetjening.felles.storage.S3Storage;
 import no.nav.foreldrepenger.selvbetjening.felles.storage.Storage;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
-import org.springframework.context.annotation.Primary;
 import org.springframework.context.annotation.Profile;
-import org.testcontainers.containers.localstack.LocalStackContainer;
 
 import static org.testcontainers.containers.localstack.LocalStackContainer.Service.S3;
 
@@ -34,9 +32,9 @@ public class StubConfiguration {
         return new S3Storage(s3);
     }
 
-    @Bean(name="stubbedLocalStackContainer")
+    @Bean(name = "stubbedLocalStackContainer")
     @Profile("localstack")
-    public StubbedLocalStackContainer stubbedLocalStackContainer(){
-      return new StubbedLocalStackContainer().withServices(S3);
+    public StubbedLocalStackContainer stubbedLocalStackContainer() {
+        return new StubbedLocalStackContainer().withServices(S3);
     }
 }

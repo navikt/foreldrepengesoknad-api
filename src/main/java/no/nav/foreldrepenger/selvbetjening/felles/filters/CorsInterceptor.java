@@ -1,9 +1,5 @@
 package no.nav.foreldrepenger.selvbetjening.felles.filters;
 
-import static com.google.common.net.HttpHeaders.ACCESS_CONTROL_ALLOW_CREDENTIALS;
-import static com.google.common.net.HttpHeaders.ACCESS_CONTROL_ALLOW_ORIGIN;
-import static com.google.common.net.HttpHeaders.ORIGIN;
-
 import java.util.Arrays;
 import java.util.List;
 
@@ -14,6 +10,8 @@ import javax.servlet.http.HttpServletResponse;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Component;
 import org.springframework.web.servlet.handler.HandlerInterceptorAdapter;
+
+import static com.google.common.net.HttpHeaders.*;
 
 @Component
 public class CorsInterceptor extends HandlerInterceptorAdapter {
@@ -41,6 +39,7 @@ public class CorsInterceptor extends HandlerInterceptorAdapter {
         if (allowedOrigins.contains(origin)) {
             response.setHeader(ACCESS_CONTROL_ALLOW_ORIGIN, origin);
             response.setHeader(ACCESS_CONTROL_ALLOW_CREDENTIALS, "true");
+            response.setHeader(ACCESS_CONTROL_EXPOSE_HEADERS, "location");
         }
         return true;
     }

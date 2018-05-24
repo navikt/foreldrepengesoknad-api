@@ -49,5 +49,4 @@ public class StorageTest {
                 .enablePathStyleAccess()
                 .build();
     }
-
 }

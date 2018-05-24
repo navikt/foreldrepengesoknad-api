@@ -1,7 +1,5 @@
 package no.nav.foreldrepenger.selvbetjening.felles.storage;
 
-import com.google.common.collect.ImmutableList;
-import com.google.gson.Gson;
 import no.nav.foreldrepenger.selvbetjening.felles.crypto.Crypto;
 import no.nav.security.oidc.OIDCConstants;
 import no.nav.security.oidc.context.OIDCRequestContextHolder;
@@ -39,8 +37,8 @@ public class StorageController {
     private Storage storage;
 
     @GetMapping
-    public ResponseEntity<String> retrieveSøknad() {
-        String fnr = fnrFromOIDCToken();
+    public ResponseEntity<String> getSoknad() {
+        String fnr = subjectFromOIDC();
         String directory = getDirectory(fnr);
         log.info("Retrieving søknad from directory " + directory);
         Optional<String> encryptedValue = storage.get(directory, KEY);
@@ -50,39 +48,61 @@ public class StorageController {
     }
 
     @PostMapping(consumes = APPLICATION_JSON_VALUE)
-    public ResponseEntity<String> storeJSON(@RequestBody String søknadJson) {
-        String fnr = fnrFromOIDCToken();
+    public ResponseEntity<String> storeSoknad(@RequestBody String soknad) {
+        String fnr = subjectFromOIDC();
         String directory = getDirectory(fnr);
         log.info("Writing søknad to directory " + directory);
-        String encryptedValue = encrypt(søknadJson, fnr);
+        String encryptedValue = encrypt(soknad, fnr);
         storage.put(directory, KEY, encryptedValue);
-        return ResponseEntity.created(null).build();
+        return ResponseEntity.noContent().build();
     }
 
-    @PostMapping(consumes = MULTIPART_FORM_DATA_VALUE)
-    public ResponseEntity<String> storeSøknad(@RequestPart("soknad") String søknad, @RequestPart("vedlegg") MultipartFile... vedlegg) {
-        return storeJSON(ImmutableList.of(søknad, new Gson().toJson(vedlegg)).toString());
+    @GetMapping(path = "vedlegg/{key}")
+    public ResponseEntity<byte[]> getAttachment(@PathVariable("key") String key) {
+        String fnr = subjectFromOIDC();
+        String directory = getDirectory(fnr);
+        log.info("Retrieving attachment from directory " + directory);
+        return storage.get(directory, key)
+                .map(ev -> Attachment.fromJson(decrypt(ev, fnr)).asOKHTTPEntity())
+                .orElse(ResponseEntity.notFound().build());
+    }
 
+    @PostMapping(path = "/vedlegg", consumes = MULTIPART_FORM_DATA_VALUE)
+    public ResponseEntity<String> storeAttachment(@RequestPart("vedlegg") MultipartFile attachmentMultipartFile) {
+        Attachment attachment = Attachment.of(attachmentMultipartFile);
+        String fnr = subjectFromOIDC();
+        String directory = getDirectory(fnr);
+        log.info("Writing attachment to directory " + directory);
+        String encryptedValue = encrypt(attachment.toJson(), fnr);
+        storage.put(directory, attachment.uuid, encryptedValue);
+        return ResponseEntity.created(attachment.uri()).build();
+    }
+
+
+    @DeleteMapping(path = "vedlegg/{key}")
+    public ResponseEntity<String> deleteAttachment(@PathVariable("key") String key) {
+        String directory = getDirectory(subjectFromOIDC());
+        log.info("Deleting attachment from directory " + directory);
+        storage.delete(directory, key);
+        return ResponseEntity.noContent().build();
     }
 
     private String getDirectory(String plaintext) {
         return printHexBinary(encrypt(plaintext, plaintext).getBytes());
     }
 
-    private String fnrFromOIDCToken() {
+    private String subjectFromOIDC() {
         OIDCValidationContext context = (OIDCValidationContext) contextHolder
                 .getRequestAttribute(OIDCConstants.OIDC_VALIDATION_CONTEXT);
         return context.getClaims("selvbetjening").getClaimSet().getSubject();
     }
 
     private String encrypt(String plaintext, String fnr) {
-        Crypto crypto = new Crypto(encryptionPassphrase, fnr);
-        return crypto.encrypt(plaintext);
+        return new Crypto(encryptionPassphrase, fnr).encrypt(plaintext);
     }
 
     private String decrypt(String encrypted, String fnr) {
-        Crypto crypto = new Crypto(encryptionPassphrase, fnr);
-        return crypto.decrypt(encrypted);
+        return new Crypto(encryptionPassphrase, fnr).decrypt(encrypted);
     }
 
 }

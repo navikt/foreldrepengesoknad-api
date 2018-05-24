@@ -1,6 +1,8 @@
 package no.nav.foreldrepenger.selvbetjening.felles.storage;
 
 
+import com.fasterxml.jackson.databind.ObjectMapper;
+import com.fasterxml.jackson.databind.SerializationFeature;
 import no.nav.foreldrepenger.selvbetjening.ApplicationLocal;
 import no.nav.foreldrepenger.selvbetjening.SlowTests;
 import no.nav.foreldrepenger.selvbetjening.stub.StubbedLocalStackContainer;
@@ -30,46 +32,48 @@ import static org.assertj.core.api.AssertionsForClassTypes.assertThat;
 @ActiveProfiles("dev, localstack")
 @FixMethodOrder(MethodSorters.NAME_ASCENDING)
 @Category(SlowTests.class)
-public class StorageControllerTest implements ApplicationContextAware {
+public class SoknadStorageHttpTest implements ApplicationContextAware {
 
+    private static final String FNR = "12345678901";
+    private static ApplicationContext applicationContext;
     @LocalServerPort
     private int port;
-
     @Autowired
     private TestRestTemplate http;
-
+    @Autowired
+    private ObjectMapper mapper;
     private String endpoint;
-    private HttpEntity<String> entity;
 
-    private static  ApplicationContext applicationContext;
-    private static final String FNR = "12345678901";
-    private static final String PAYLOAD = "en skikkelig, skikkelig, skikkelig (s3) nais søknad";
+
+    @AfterClass
+    public static void destroy() {
+        applicationContext.getBean("stubbedLocalStackContainer", StubbedLocalStackContainer.class).stopContainer();
+    }
 
     @Before
     public void setup() {
-        HttpHeaders headers = new HttpHeaders();
-        headers.add("Content-Type", MediaType.APPLICATION_JSON_VALUE);
-        headers.add("Authorization", "bearer " + JwtTokenGenerator.createSignedJWT(FNR).serialize());
-        entity = new HttpEntity<>(PAYLOAD, headers);
+        mapper.disable(SerializationFeature.FAIL_ON_EMPTY_BEANS);
         endpoint = "http://localhost:" + port + "/foreldrepengesoknad-api/rest/storage";
     }
 
-    @Test
-    public void first_store_payload_over_HTTP() {
-        ResponseEntity<String> responseEntity = http.exchange(endpoint, HttpMethod.POST, entity, String.class);
-        assertThat(responseEntity.getStatusCode()).isEqualTo(HttpStatus.CREATED);
+    private HttpHeaders createHeaders(MediaType mediaType) {
+        HttpHeaders headers = new HttpHeaders();
+        headers.add("Content-Type", mediaType.toString());
+        headers.add("Authorization", "bearer " + JwtTokenGenerator.createSignedJWT(FNR).serialize());
+        return headers;
     }
 
     @Test
-    public void then_retrieve_payload_over_HTTP() {
-        ResponseEntity<String> getResponse = http.exchange(endpoint, HttpMethod.GET, entity, String.class);
+    public void store_and_retrieve_json_over_HTTP() {
+        String payload = "en skikkelig, skikkelig, skikkelig (s3) nais søknad";
+
+        ResponseEntity<String> responseEntity = http.exchange(endpoint, HttpMethod.POST, new HttpEntity<>(payload, createHeaders(MediaType.APPLICATION_JSON)), String.class);
+        assertThat(responseEntity.getStatusCode()).isEqualTo(HttpStatus.NO_CONTENT);
+
+        ResponseEntity<String> getResponse = http.exchange(endpoint, HttpMethod.GET, new HttpEntity<>(createHeaders(MediaType.APPLICATION_JSON)), String.class);
         assertThat(getResponse.getStatusCode()).isEqualTo(HttpStatus.OK);
-        assertThat(getResponse.getBody()).isEqualTo(PAYLOAD);
-    }
+        assertThat(getResponse.getBody()).isEqualTo(payload);
 
-    @AfterClass
-    public static void destroy(){
-        applicationContext.getBean("stubbedLocalStackContainer", StubbedLocalStackContainer.class).stopContainer();
     }
 
     @Override

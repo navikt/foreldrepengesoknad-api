@@ -1,10 +1,9 @@
 package no.nav.foreldrepenger.selvbetjening.oppslag;
 
 import no.nav.foreldrepenger.selvbetjening.FastTests;
-import no.nav.foreldrepenger.selvbetjening.oppslag.OppslagController;
+import no.nav.foreldrepenger.selvbetjening.oppslag.json.Person;
 import no.nav.foreldrepenger.selvbetjening.oppslag.tjeneste.Oppslagstjeneste;
 import no.nav.foreldrepenger.selvbetjening.oppslag.tjeneste.json.PersonDto;
-import no.nav.foreldrepenger.selvbetjening.oppslag.json.Person;
 import org.junit.Test;
 import org.junit.experimental.categories.Category;
 import org.junit.runner.RunWith;
