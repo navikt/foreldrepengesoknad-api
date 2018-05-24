@@ -22,6 +22,8 @@ public class Søknad {
     public LocalDateTime sistEndret;
 
     public String søkerRolle;
+    public Boolean erSelvstendigNæringsdrivende;
+    public Boolean erFrilanser;
 
     public boolean type(String type) {
         if (this.type == null || type == null) {
