@@ -20,9 +20,7 @@ public class PersonDto {
     public CountryCode landKode;
     public Bankkonto bankkonto;
 
-    public PersonDto() {
-        this.bankkonto = new Bankkonto();
-    }
+    public PersonDto() {}
 
     @Override
     public boolean equals(Object o) {
