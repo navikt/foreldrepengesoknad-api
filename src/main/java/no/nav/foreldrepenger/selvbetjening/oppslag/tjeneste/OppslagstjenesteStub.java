@@ -8,6 +8,7 @@ import org.slf4j.Logger;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnProperty;
 import org.springframework.stereotype.Service;
 
+import no.nav.foreldrepenger.selvbetjening.oppslag.json.Bankkonto;
 import no.nav.foreldrepenger.selvbetjening.oppslag.tjeneste.json.PersonDto;
 
 @Service
@@ -32,6 +33,7 @@ public class OppslagstjenesteStub implements Oppslag {
         dto.fodselsdato = now().minusYears(21);
         dto.kjonn = "K";
         dto.landKode = NO;
+        dto.bankkonto = new Bankkonto();
         dto.bankkonto.kontonummer = "1234567890";
         dto.bankkonto.banknavn = "Stub NOR";
         return dto;
