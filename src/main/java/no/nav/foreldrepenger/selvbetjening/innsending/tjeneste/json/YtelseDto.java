@@ -3,7 +3,7 @@ package no.nav.foreldrepenger.selvbetjening.innsending.tjeneste.json;
 import com.fasterxml.jackson.annotation.JsonInclude;
 import no.nav.foreldrepenger.selvbetjening.innsending.json.AnnenForelder;
 import no.nav.foreldrepenger.selvbetjening.innsending.json.Barn;
-import no.nav.foreldrepenger.selvbetjening.innsending.json.Periode;
+import no.nav.foreldrepenger.selvbetjening.innsending.json.UtenlandsoppholdPeriode;
 import no.nav.foreldrepenger.selvbetjening.innsending.json.Utenlandsopphold;
 
 import java.time.LocalDate;
@@ -73,8 +73,8 @@ public class YtelseDto {
         public Boolean norgeNeste12;
         public Boolean fødselNorge;
         public String arbeidSiste12;
-        public List<Periode> utenlandsopphold;
-        public List<Periode> framtidigUtenlandsopphold;
+        public List<UtenlandsoppholdPeriode> utenlandsopphold;
+        public List<UtenlandsoppholdPeriode> framtidigUtenlandsopphold;
     }
 
     @JsonInclude(NON_EMPTY)

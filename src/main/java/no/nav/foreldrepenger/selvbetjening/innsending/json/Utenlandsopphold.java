@@ -8,7 +8,8 @@ public class Utenlandsopphold {
     public Boolean iNorgeNeste12Mnd;
     public Boolean iNorgeSiste12Mnd;
     public Boolean jobbetINorgeSiste12Mnd;
-    
-    public List<Periode> tidligerePerioder;
-    public List<Periode> senerePerioder;
+
+    public List<UtenlandsoppholdPeriode> tidligerePerioder;
+    public List<UtenlandsoppholdPeriode> senerePerioder;
+
 }
