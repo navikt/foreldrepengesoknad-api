@@ -55,11 +55,7 @@ public class AttachmentStorageHttpTest implements ApplicationContextAware {
     @Autowired
     private TestRestTemplate http;
 
-    @Autowired
-    private ObjectMapper mapper;
-
     private String endpoint;
-
 
     @AfterClass
     public static void destroy() {
@@ -68,7 +64,6 @@ public class AttachmentStorageHttpTest implements ApplicationContextAware {
 
     @Before
     public void setup() {
-        mapper.disable(SerializationFeature.FAIL_ON_EMPTY_BEANS);
         endpoint = "http://localhost:" + port + "/foreldrepengesoknad-api/rest/storage/vedlegg";
     }
 
