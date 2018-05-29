@@ -38,7 +38,7 @@ node {
                     'http_proxy=http://webproxy-internett.nav.no:8088',
                     'NO_PROXY=localhost,127.0.0.1,.local,.adeo.no,.nav.no,.aetat.no,.devillo.no,.oera.no',
                     'no_proxy=localhost,127.0.0.1,.local,.adeo.no,.nav.no,.aetat.no,.devillo.no,.oera.no']) {
-                    def deployOk = deployToNais("foreldrepengesoknad-api", "LATEST", "t1", "sbs", "${USERNAME}", "${PASSWORD}", "bris", "https://${token}:x-oauth-basic@raw.githubusercontent.com/navikt/engangsstonad/master/nais.yaml")
+                    def deployOk = deployToNais("foreldrepengesoknad-api", "LATEST", "t1", "sbs", "${USERNAME}", "${PASSWORD}", "bris", "https://${token}:x-oauth-basic@raw.githubusercontent.com/navikt/foreldrepengesoknad-api/master/nais.yaml")
                     if (!deployOk) {
                         currentBuild.result = "FAILURE"
                         return
