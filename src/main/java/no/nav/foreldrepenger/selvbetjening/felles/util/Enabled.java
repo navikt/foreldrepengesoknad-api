@@ -8,7 +8,7 @@ public class Enabled {
 
     public static boolean foreldrepengesøknad;
 
-    public Enabled(@Value("${toggles.enable.foreldrepengesoknad:false}") boolean foreldrepengesøknad) {
+    public Enabled(@Value("${TOGGLES_ENABLE_FORELDREPENGESOKNAD:false}") boolean foreldrepengesøknad) {
         Enabled.foreldrepengesøknad = foreldrepengesøknad;
     }
 

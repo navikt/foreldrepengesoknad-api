@@ -24,7 +24,7 @@ resources:
     memory: 1000Mi
 fasitResources:
   used:
-  - alias : FPSOKNADAPI_PROPERTIES
+  - alias: FPSOKNADAPI_PROPERTIES
     resourceType: applicationProperties 
   - alias: aad_b2c_clientid
     resourceType: credential
@@ -48,5 +48,7 @@ fasitResources:
     resourceType: baseurl
   - alias: foreldrepengesoknad-api-s3-creds
     resourceType: credential
+  - alias: foreldrepengesoknad-api-toggles
+    resourceType: applicationProperties
 
     
