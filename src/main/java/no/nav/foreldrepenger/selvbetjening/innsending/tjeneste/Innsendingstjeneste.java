@@ -57,7 +57,8 @@ public class Innsendingstjeneste implements Innsending {
     }
 
     private ResponseEntity<Kvittering> post(Søknad søknad, MultipartFile... vedlegg) {
-        if (!Enabled.foreldrepengesøknad && søknad.type("foreldrepengesøknad")) {
+        if (!Enabled.foreldrepengesøknad && søknad instanceof Foreldrepengesøknad) {
+            LOG.info("Mottok foreldrepengesøknad, men innsending av foreldrepengesøknad er togglet av!");
             throw new BadRequestException("Application with type foreldrepengesøknad is not supported yet");
         }
 
@@ -71,6 +72,7 @@ public class Innsendingstjeneste implements Innsending {
         } else if (søknad instanceof Foreldrepengesøknad) {
             dto = new ForeldrepengesøknadDto((Foreldrepengesøknad) søknad);
         } else {
+            LOG.warn("Mottok en søknad av ukjent type..");
             throw new BadRequestException("Unknown application type");
         }
 

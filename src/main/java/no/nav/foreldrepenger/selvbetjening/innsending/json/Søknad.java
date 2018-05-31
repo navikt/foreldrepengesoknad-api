@@ -10,7 +10,7 @@ import static com.fasterxml.jackson.annotation.JsonTypeInfo.Id.NAME;
 
 
 // TODO remove defaultImpl when both frontend apps send json payload with type field.
-@JsonTypeInfo(use = NAME, property = "type", defaultImpl = Engangsstønad.class)
+@JsonTypeInfo(use = NAME, property = "type", defaultImpl = Engangsstønad.class, visible = true)
 @JsonSubTypes({
         @Type(value = Engangsstønad.class, name = "engangsstønad"),
         @Type(value = Foreldrepengesøknad.class, name = "foreldrepengesøknad")
@@ -20,13 +20,5 @@ public class Søknad {
     public String type;
     public LocalDateTime opprettet;
     public LocalDateTime sistEndret;
-
-    public boolean type(String type) {
-        if (this.type == null || type == null) {
-            return false;
-        }
-
-        return this.type.equals(type);
-    }
 
 }

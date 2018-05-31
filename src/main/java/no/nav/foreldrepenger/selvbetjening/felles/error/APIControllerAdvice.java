@@ -1,11 +1,7 @@
 package no.nav.foreldrepenger.selvbetjening.felles.error;
 
 import static java.util.stream.Collectors.toList;
-import static org.springframework.http.HttpStatus.INTERNAL_SERVER_ERROR;
-import static org.springframework.http.HttpStatus.NOT_FOUND;
-import static org.springframework.http.HttpStatus.PAYLOAD_TOO_LARGE;
-import static org.springframework.http.HttpStatus.UNAUTHORIZED;
-import static org.springframework.http.HttpStatus.UNPROCESSABLE_ENTITY;
+import static org.springframework.http.HttpStatus.*;
 
 import java.util.Collections;
 import java.util.List;
@@ -29,6 +25,8 @@ import no.nav.foreldrepenger.selvbetjening.felles.attachments.exceptions.Attachm
 import no.nav.foreldrepenger.selvbetjening.felles.attachments.exceptions.AttachmentsTooLargeException;
 import no.nav.security.spring.oidc.validation.interceptor.OIDCUnauthorizedException;
 
+import javax.ws.rs.BadRequestException;
+
 @ControllerAdvice
 public class APIControllerAdvice extends ResponseEntityExceptionHandler {
 
@@ -50,8 +48,7 @@ public class APIControllerAdvice extends ResponseEntityExceptionHandler {
 
     @ExceptionHandler(AttachmentTypeUnsupportedException.class)
     @ResponseBody
-    protected ResponseEntity<Object> handleUnsupportedAttachmentError(AttachmentTypeUnsupportedException e,
-            WebRequest req) {
+    protected ResponseEntity<Object> handleUnsupportedAttachmentError(AttachmentTypeUnsupportedException e, WebRequest req) {
         return logAndHandle(UNPROCESSABLE_ENTITY, e, req);
     }
 
@@ -62,8 +59,7 @@ public class APIControllerAdvice extends ResponseEntityExceptionHandler {
     }
 
     @Override
-    protected ResponseEntity<Object> handleMethodArgumentNotValid(MethodArgumentNotValidException e,
-            HttpHeaders headers, HttpStatus status, WebRequest req) {
+    protected ResponseEntity<Object> handleMethodArgumentNotValid(MethodArgumentNotValidException e, HttpHeaders headers, HttpStatus status, WebRequest req) {
         return logAndHandle(UNPROCESSABLE_ENTITY, e, req, validationErrors(e));
     }
 
@@ -72,10 +68,16 @@ public class APIControllerAdvice extends ResponseEntityExceptionHandler {
         return logAndHandle(UNAUTHORIZED, e, req);
     }
 
+    @ExceptionHandler(BadRequestException.class)
+    public ResponseEntity<Object> handleBadRequest(BadRequestException e, WebRequest req) {
+        return logAndHandle(BAD_REQUEST, e, req);
+    }
+
     @ExceptionHandler({ Exception.class })
     public ResponseEntity<Object> handleAll(Exception e, WebRequest req) {
         return logAndHandle(INTERNAL_SERVER_ERROR, e, req);
     }
+
 
     private ResponseEntity<Object> logAndHandle(HttpStatus status, Exception e, WebRequest req) {
         return logAndHandle(status, e, req, Collections.singletonList(e.getMessage()));
