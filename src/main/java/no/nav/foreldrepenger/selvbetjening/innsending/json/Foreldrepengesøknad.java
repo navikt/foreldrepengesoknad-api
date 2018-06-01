@@ -21,7 +21,7 @@ public class Foreldrepengesøknad extends Søknad {
         this.barn = new Barn();
         this.annenForelder = new AnnenForelder();
         this.utenlandsopphold = new Utenlandsopphold();
-        this.uttaksplan = new ArrayList<UttaksplanPeriode>();
+        this.uttaksplan = new ArrayList<>();
     }
 
 }

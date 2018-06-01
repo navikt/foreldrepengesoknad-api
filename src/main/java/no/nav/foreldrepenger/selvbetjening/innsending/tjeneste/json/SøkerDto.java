@@ -14,4 +14,8 @@ public class SøkerDto {
     public String aktør;
     public String søknadsRolle;
 
+    public SøkerDto(String søknadsRolle) {
+        this.søknadsRolle = søknadsRolle;
+    }
+
 }

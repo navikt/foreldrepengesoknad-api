@@ -14,18 +14,15 @@ import static com.fasterxml.jackson.annotation.JsonInclude.Include.NON_NULL;
 
 public class YtelseDto {
 
-    public String type = "engangsstønad";
+    public String type;
     public MedlemsskapDto medlemsskap;
     public RelasjonTilBarn relasjonTilBarn;
     public AnnenForelderDto annenForelder;
 
-    public YtelseDto() {
-        this.medlemsskap = new MedlemsskapDto();
-        this.relasjonTilBarn = new RelasjonTilBarn();
-        this.annenForelder = new AnnenForelderDto();
-    }
+    public String dekningsgrad = "GRAD100"; // TODO FIX
 
-    public YtelseDto(Utenlandsopphold utenlandsopphold, Barn barn, AnnenForelder annenForelder) {
+    public YtelseDto(String type, Utenlandsopphold utenlandsopphold, Barn barn, AnnenForelder annenForelder) {
+        this.type = type;
         this.medlemsskap = new MedlemsskapDto(utenlandsopphold);
         this.relasjonTilBarn = new RelasjonTilBarn(barn);
         this.annenForelder = new AnnenForelderDto(annenForelder);
@@ -33,9 +30,6 @@ public class YtelseDto {
 
     @JsonInclude(NON_NULL)
     public class AnnenForelderDto {
-        public AnnenForelderDto() {
-        }
-
         public AnnenForelderDto(AnnenForelder annenForelder) {
             this.type = annenForelder.type();
             this.fornavn = annenForelder.navn;
@@ -57,9 +51,6 @@ public class YtelseDto {
 
     @JsonInclude(NON_EMPTY)
     public class MedlemsskapDto {
-        public MedlemsskapDto() {
-        }
-
         public MedlemsskapDto(Utenlandsopphold utenlandsopphold) {
             this.norgeSiste12 = utenlandsopphold.iNorgeSiste12Mnd;
             this.norgeNeste12 = utenlandsopphold.iNorgeNeste12Mnd;
@@ -79,9 +70,6 @@ public class YtelseDto {
 
     @JsonInclude(NON_EMPTY)
     public class RelasjonTilBarn {
-        public RelasjonTilBarn() {
-        }
-
         public RelasjonTilBarn(Barn barn) {
             this.type = barn.erBarnetFødt ? "fødsel" : "termin";
             this.antallBarn = barn.antallBarn;

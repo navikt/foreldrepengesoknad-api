@@ -16,12 +16,11 @@ public class EngangsstønadDto extends SøknadDto {
 
     public EngangsstønadDto() {}
 
-    public EngangsstønadDto(Engangsstønad engangsstønad, PersonDto person) {
-        this.søker = new SøkerDto();
-        this.ytelse = new YtelseDto(engangsstønad.utenlandsopphold, engangsstønad.barn, engangsstønad.annenForelder);
+    public EngangsstønadDto(Engangsstønad søknad, PersonDto person) {
+        this.søker = new SøkerDto("MOR");
+        this.ytelse = new YtelseDto(søknad.type, søknad.utenlandsopphold, søknad.barn, søknad.annenForelder);
         this.vedlegg = new ArrayList<>();
         this.mottattdato = now();
-        this.søker.søknadsRolle = "MOR";
 
         // TODO: Mottak bør hente personinfo via fnr fra oidc token selv.
         this.søker.fornavn = person.fornavn;
