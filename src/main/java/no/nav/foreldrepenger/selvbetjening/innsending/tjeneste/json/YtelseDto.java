@@ -12,20 +12,22 @@ import java.util.List;
 import static com.fasterxml.jackson.annotation.JsonInclude.Include.NON_EMPTY;
 import static com.fasterxml.jackson.annotation.JsonInclude.Include.NON_NULL;
 
+@JsonInclude(NON_NULL)
 public class YtelseDto {
 
     public String type;
     public MedlemsskapDto medlemsskap;
     public RelasjonTilBarn relasjonTilBarn;
     public AnnenForelderDto annenForelder;
-
-    public String dekningsgrad = "GRAD100"; // TODO FIX
+    public String dekningsgrad;
 
     public YtelseDto(String type, Utenlandsopphold utenlandsopphold, Barn barn, AnnenForelder annenForelder) {
         this.type = type;
         this.medlemsskap = new MedlemsskapDto(utenlandsopphold);
         this.relasjonTilBarn = new RelasjonTilBarn(barn);
         this.annenForelder = new AnnenForelderDto(annenForelder);
+
+        this.dekningsgrad = type.equals("foreldrepenger") ? "GRAD100" : null; // TODO FIX
     }
 
     @JsonInclude(NON_NULL)
