@@ -87,7 +87,7 @@ public class Innsendingstjeneste implements Innsending {
     private static URI mottakUriFra(URI baseUri) {
         return UriComponentsBuilder
                 .fromUri(baseUri)
-                .path("/mottak/dokmot/send")
+                .path("/mottak/send")
                 .build().toUri();
     }
 
