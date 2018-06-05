@@ -16,7 +16,7 @@ import com.fasterxml.jackson.annotation.JsonInclude;;
 @JsonInclude(NON_NULL)
 class ApiError {
 
-    private static final String UUID = "X-Nav-CallId";
+    private static final String UUID = "Nav-CallId";
     private final HttpStatus status;
     @JsonFormat(shape = STRING, pattern = "dd-MM-yyyy hh:mm:ss")
     private final LocalDateTime timestamp;
@@ -28,7 +28,12 @@ class ApiError {
         this.timestamp = LocalDateTime.now();
         this.status = status;
         this.messages = messages;
-        this.uuid = MDC.get(UUID);
+        this.uuid = uuid();
+    }
+
+    private static String uuid() {
+        String uuid = MDC.get(UUID);
+        return uuid != null ? uuid : MDC.get("X-" + UUID);
     }
 
     public String getUuid() {

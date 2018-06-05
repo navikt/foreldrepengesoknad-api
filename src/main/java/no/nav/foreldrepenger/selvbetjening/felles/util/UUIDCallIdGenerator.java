@@ -15,7 +15,7 @@ public class UUIDCallIdGenerator implements CallIdGenerator {
     private final String key;
 
     @Inject
-    public UUIDCallIdGenerator(@Value("${callid.key:X-Nav-CallId}") String key) {
+    public UUIDCallIdGenerator(@Value("${callid.key:Nav-CallId}") String key) {
         this.key = key;
     }
 
