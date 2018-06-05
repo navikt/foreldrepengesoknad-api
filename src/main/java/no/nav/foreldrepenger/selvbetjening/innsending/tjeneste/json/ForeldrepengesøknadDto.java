@@ -1,7 +1,6 @@
 package no.nav.foreldrepenger.selvbetjening.innsending.tjeneste.json;
 
 import no.nav.foreldrepenger.selvbetjening.innsending.json.Foreldrepengesøknad;
-import no.nav.foreldrepenger.selvbetjening.oppslag.tjeneste.json.PersonDto;
 
 import java.util.ArrayList;
 
@@ -18,7 +17,7 @@ public class ForeldrepengesøknadDto extends SøknadDto {
         this.ytelse = new YtelseDto(søknad.type, søknad.utenlandsopphold, søknad.barn, søknad.annenForelder);
         this.vedlegg = new ArrayList<>();
         this.opptjening = new OpptjeningDto();
-        this.fordeling = new FordelingDto();
+        this.fordeling = new FordelingDto(søknad.uttaksplan);
 
         this.mottattdato = now();
     }
