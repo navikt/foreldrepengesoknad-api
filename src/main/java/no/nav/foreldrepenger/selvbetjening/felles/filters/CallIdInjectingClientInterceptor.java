@@ -13,20 +13,20 @@ import org.springframework.http.client.ClientHttpRequestInterceptor;
 import org.springframework.http.client.ClientHttpResponse;
 import org.springframework.stereotype.Component;
 
-import no.nav.foreldrepenger.selvbetjening.felles.util.CallIdGenerator;
+import no.nav.foreldrepenger.selvbetjening.felles.util.UUIDCallIdGenerator;
 
 @Component
 @Order(1)
 public class CallIdInjectingClientInterceptor implements ClientHttpRequestInterceptor {
 
     @Inject
-    private CallIdGenerator generator;
+    private UUIDCallIdGenerator generator;
 
     @Override
     public ClientHttpResponse intercept(HttpRequest request, byte[] body, ClientHttpRequestExecution execution)
             throws IOException {
         HttpHeaders headers = request.getHeaders();
-        headers.add(generator.getKey(), MDC.get(generator.getKey()));
+        headers.add(generator.getCallIdKey(), MDC.get(generator.getCallIdKey()));
         return execution.execute(request, body);
     }
 }

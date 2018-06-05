@@ -17,7 +17,7 @@ import org.springframework.core.annotation.Order;
 import org.springframework.stereotype.Component;
 import org.springframework.web.filter.GenericFilterBean;
 
-import no.nav.foreldrepenger.selvbetjening.felles.util.CallIdGenerator;
+import no.nav.foreldrepenger.selvbetjening.felles.util.UUIDCallIdGenerator;
 
 @Component
 @Order(1)
@@ -25,10 +25,10 @@ public class CallIdFilter extends GenericFilterBean {
 
     private static final Logger LOG = getLogger(CallIdFilter.class);
 
-    private final CallIdGenerator generator;
+    private final UUIDCallIdGenerator generator;
 
     @Inject
-    public CallIdFilter(CallIdGenerator generator) {
+    public CallIdFilter(UUIDCallIdGenerator generator) {
         this.generator = generator;
     }
 
@@ -40,13 +40,14 @@ public class CallIdFilter extends GenericFilterBean {
     }
 
     private void getOrCreateCallId(ServletRequest req) {
-        String callId = HttpServletRequest.class.cast(req).getHeader(generator.getKey());
+        String callId = HttpServletRequest.class.cast(req).getHeader(generator.getCallIdKey());
         if (callId != null) {
             LOG.trace("Callid is already set in request {}", callId);
-            MDC.put(generator.getKey(), callId);
-        } else {
-            MDC.put(generator.getKey(), generator.create());
-            LOG.trace("Callid was not set in request, now set in MDC to {}", MDC.get(generator.getKey()));
+            MDC.put(generator.getCallIdKey(), callId);
+        }
+        else {
+            MDC.put(generator.getCallIdKey(), generator.create());
+            LOG.trace("Callid was not set in request, now set in MDC to {}", MDC.get(generator.getCallIdKey()));
         }
     }
 }

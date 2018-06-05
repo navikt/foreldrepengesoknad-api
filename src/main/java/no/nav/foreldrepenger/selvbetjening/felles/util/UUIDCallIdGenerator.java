@@ -10,21 +10,19 @@ import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Component;
 
 @Component
-public class UUIDCallIdGenerator implements CallIdGenerator {
+public class UUIDCallIdGenerator {
 
-    private final String key;
+    private final String callIdKey;
 
     @Inject
-    public UUIDCallIdGenerator(@Value("${callid.key:Nav-CallId}") String key) {
-        this.key = key;
+    public UUIDCallIdGenerator(@Value("${callid.key:Nav-CallId}") String callIdKey) {
+        this.callIdKey = callIdKey;
     }
 
-    @Override
     public String getOrCreate() {
-        return Optional.ofNullable(MDC.get(key)).orElse(doCreate());
+        return Optional.ofNullable(MDC.get(callIdKey)).orElse(doCreate());
     }
 
-    @Override
     public String create() {
         return doCreate();
     }
@@ -33,14 +31,13 @@ public class UUIDCallIdGenerator implements CallIdGenerator {
         return UUID.randomUUID().toString();
     }
 
-    @Override
-    public String getKey() {
-        return key;
+    public String getCallIdKey() {
+        return callIdKey;
     }
 
     @Override
     public String toString() {
-        return getClass().getSimpleName() + " [key=" + key + "]";
+        return getClass().getSimpleName() + " [callIdKey=" + callIdKey + "]";
     }
 
 }
