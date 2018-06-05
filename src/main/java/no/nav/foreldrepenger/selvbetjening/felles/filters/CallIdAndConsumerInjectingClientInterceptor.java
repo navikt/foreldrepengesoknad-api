@@ -17,7 +17,7 @@ import no.nav.foreldrepenger.selvbetjening.felles.util.UUIDCallIdGenerator;
 
 @Component
 @Order(1)
-public class CallIdInjectingClientInterceptor implements ClientHttpRequestInterceptor {
+public class CallIdAndConsumerInjectingClientInterceptor implements ClientHttpRequestInterceptor {
 
     @Inject
     private UUIDCallIdGenerator generator;
@@ -27,6 +27,7 @@ public class CallIdInjectingClientInterceptor implements ClientHttpRequestInterc
             throws IOException {
         HttpHeaders headers = request.getHeaders();
         headers.add(generator.getCallIdKey(), MDC.get(generator.getCallIdKey()));
+        headers.add("Nav-Consumer-Id", "foreldrepenger-selvbetjening");
         return execution.execute(request, body);
     }
 }
