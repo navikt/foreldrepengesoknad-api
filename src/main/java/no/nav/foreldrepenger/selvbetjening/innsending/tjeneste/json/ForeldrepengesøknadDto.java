@@ -9,15 +9,11 @@ import static java.time.LocalDateTime.now;
 public class ForeldrepengesøknadDto extends SøknadDto {
 
     public YtelseDto ytelse;
-    public OpptjeningDto opptjening;
-    public FordelingDto fordeling;
 
     public ForeldrepengesøknadDto(Foreldrepengesøknad søknad) {
         this.søker = new SøkerDto(søknad.søkerRolle);
-        this.ytelse = new YtelseDto(søknad.type, søknad.utenlandsopphold, søknad.barn, søknad.annenForelder);
+        this.ytelse = new YtelseDto(søknad.type, søknad.utenlandsopphold, søknad.barn, søknad.annenForelder, søknad.uttaksplan);
         this.vedlegg = new ArrayList<>();
-        this.opptjening = new OpptjeningDto();
-        this.fordeling = new FordelingDto(søknad.uttaksplan);
 
         this.mottattdato = now();
     }
