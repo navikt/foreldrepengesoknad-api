@@ -19,7 +19,6 @@ import javax.inject.Inject;
 import javax.ws.rs.BadRequestException;
 
 import static java.time.LocalDateTime.now;
-import static no.nav.foreldrepenger.selvbetjening.oppslag.tjeneste.OppslagstjenesteStub.person;
 import static org.slf4j.LoggerFactory.getLogger;
 import static org.springframework.http.HttpStatus.OK;
 
@@ -41,7 +40,7 @@ public class InnsendingstjenesteStub implements Innsending {
     private ResponseEntity<Kvittering> postStub(Søknad søknad) throws JsonProcessingException {
         SøknadDto dto;
         if (søknad instanceof Engangsstønad) {
-            dto = new EngangsstønadDto((Engangsstønad) søknad, person());
+            dto = new EngangsstønadDto((Engangsstønad) søknad);
         } else if (søknad instanceof Foreldrepengesøknad) {
             dto = new ForeldrepengesøknadDto((Foreldrepengesøknad) søknad);
         } else {

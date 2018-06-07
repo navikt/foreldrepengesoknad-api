@@ -2,8 +2,6 @@ package no.nav.foreldrepenger.selvbetjening.innsending.tjeneste;
 
 import no.nav.foreldrepenger.selvbetjening.felles.attachments.Image2PDFConverter;
 import no.nav.foreldrepenger.selvbetjening.innsending.json.*;
-import no.nav.foreldrepenger.selvbetjening.oppslag.tjeneste.Oppslag;
-import no.nav.foreldrepenger.selvbetjening.oppslag.tjeneste.json.PersonDto;
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -34,16 +32,12 @@ public class InnsendingstjenesteTest {
     RestTemplate template;
 
     @Mock
-    Oppslag oppslag;
-
-    @Mock
     Image2PDFConverter converter;
 
     @Before
     public void setUp() throws Exception {
-        innsending = new Innsendingstjeneste(new URI("uri"), template, oppslag, converter);
+        innsending = new Innsendingstjeneste(new URI("uri"), template, converter);
 
-        when(oppslag.hentPerson()).thenReturn(new PersonDto());
         when(template.postForEntity(any(URI.class), any(HttpEntity.class), eq(Kvittering.class))).thenReturn(kvittering());
     }
 

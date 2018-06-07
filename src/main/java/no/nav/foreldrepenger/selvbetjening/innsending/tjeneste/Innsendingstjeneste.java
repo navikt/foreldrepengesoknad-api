@@ -10,8 +10,6 @@ import no.nav.foreldrepenger.selvbetjening.innsending.json.Søknad;
 import no.nav.foreldrepenger.selvbetjening.innsending.tjeneste.json.EngangsstønadDto;
 import no.nav.foreldrepenger.selvbetjening.innsending.tjeneste.json.ForeldrepengesøknadDto;
 import no.nav.foreldrepenger.selvbetjening.innsending.tjeneste.json.SøknadDto;
-import no.nav.foreldrepenger.selvbetjening.oppslag.tjeneste.Oppslag;
-import no.nav.foreldrepenger.selvbetjening.oppslag.tjeneste.json.PersonDto;
 import org.slf4j.Logger;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnProperty;
@@ -40,12 +38,10 @@ public class Innsendingstjeneste implements Innsending {
     private final Image2PDFConverter converter;
     private final URI mottakServiceUrl;
     private final RestTemplate template;
-    private final Oppslag oppslag;
 
-    public Innsendingstjeneste(@Value("${FPSOKNAD_MOTTAK_API_URL}") URI baseUri, RestTemplate template, Oppslag oppslag, Image2PDFConverter converter) {
+    public Innsendingstjeneste(@Value("${FPSOKNAD_MOTTAK_API_URL}") URI baseUri, RestTemplate template, Image2PDFConverter converter) {
         this.mottakServiceUrl = mottakUriFra(baseUri);
         this.template = template;
-        this.oppslag = oppslag;
         this.converter = converter;
     }
 
@@ -62,13 +58,13 @@ public class Innsendingstjeneste implements Innsending {
             throw new BadRequestException("Application with type foreldrepengesøknad is not supported yet");
         }
 
-        return template.postForEntity(mottakServiceUrl, body(søknad, oppslag.hentPerson(), vedlegg), Kvittering.class);
+        return template.postForEntity(mottakServiceUrl, body(søknad, vedlegg), Kvittering.class);
     }
 
-    private HttpEntity<SøknadDto> body(@RequestBody Søknad søknad, PersonDto person, MultipartFile... vedlegg) {
+    private HttpEntity<SøknadDto> body(@RequestBody Søknad søknad, MultipartFile... vedlegg) {
         SøknadDto dto;
         if (søknad instanceof Engangsstønad) {
-            dto = new EngangsstønadDto((Engangsstønad) søknad, person);
+            dto = new EngangsstønadDto((Engangsstønad) søknad);
         } else if (søknad instanceof Foreldrepengesøknad) {
             dto = new ForeldrepengesøknadDto((Foreldrepengesøknad) søknad);
         } else {
