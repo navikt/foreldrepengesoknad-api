@@ -7,6 +7,7 @@ import java.net.URI;
 
 import javax.inject.Inject;
 
+import no.nav.foreldrepenger.selvbetjening.oppslag.tjeneste.json.SøkerinfoDto;
 import org.slf4j.Logger;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnProperty;
@@ -33,9 +34,17 @@ public class Oppslagstjeneste implements Oppslag {
     @Override
     public PersonDto hentPerson() {
         URI url = fromUri(oppslagServiceUrl).path("/person").build().toUri();
-        LOG.info("Oppslag URL: {}", url);
+        LOG.info("Person URL: {}", url);
         return template.getForObject(url, PersonDto.class);
     }
+
+    @Override
+    public SøkerinfoDto hentSøkerinfo() {
+        URI url = fromUri(oppslagServiceUrl).path("/oppslag").build().toUri();
+        LOG.info("Oppslag URL: {}", url);
+        return template.getForObject(url, SøkerinfoDto.class);
+    }
+
 
     @Override
     public String toString() {

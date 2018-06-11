@@ -4,6 +4,7 @@ import static com.neovisionaries.i18n.CountryCode.NO;
 import static java.time.LocalDate.now;
 import static org.slf4j.LoggerFactory.getLogger;
 
+import no.nav.foreldrepenger.selvbetjening.oppslag.tjeneste.json.SøkerinfoDto;
 import org.slf4j.Logger;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnProperty;
 import org.springframework.stereotype.Service;
@@ -21,6 +22,11 @@ public class OppslagstjenesteStub implements Oppslag {
     public PersonDto hentPerson() {
         LOG.info("Stubber oppslag...");
         return person();
+    }
+
+    @Override
+    public SøkerinfoDto hentSøkerinfo() {
+        return null; //TODO FIX
     }
 
     public static PersonDto person() {
