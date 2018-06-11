@@ -11,10 +11,6 @@ public class Foreldrepengesøknad extends Søknad {
 
     public String situasjon;
 
-    public String søkerRolle;
-    public Boolean erSelvstendigNæringsdrivende;
-    public Boolean erFrilanser;
-
     public List<UttaksplanPeriode> uttaksplan;
 
     public Foreldrepengesøknad() {

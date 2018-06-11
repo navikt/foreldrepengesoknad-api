@@ -18,7 +18,8 @@ import static com.fasterxml.jackson.annotation.JsonTypeInfo.Id.NAME;
 public class Søknad {
 
     public String type;
+    public Søker søker;
+
     public LocalDateTime opprettet;
-    public LocalDateTime sistEndret;
 
 }
