@@ -6,10 +6,7 @@ import no.nav.foreldrepenger.selvbetjening.innsending.json.Søknad;
 import no.nav.foreldrepenger.selvbetjening.innsending.tjeneste.Innsending;
 import no.nav.security.spring.oidc.validation.api.ProtectedWithClaims;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestPart;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
 import javax.inject.Inject;
@@ -17,6 +14,7 @@ import javax.inject.Inject;
 import static java.util.Arrays.stream;
 import static no.nav.foreldrepenger.selvbetjening.innsending.InnsendingController.REST_ENGANGSSTONAD;
 import static no.nav.foreldrepenger.selvbetjening.innsending.InnsendingController.REST_SOKNAD;
+import static org.springframework.http.MediaType.APPLICATION_JSON_VALUE;
 import static org.springframework.http.MediaType.MULTIPART_FORM_DATA_VALUE;
 
 @RestController
@@ -35,6 +33,13 @@ public class InnsendingController {
     @Inject
     public InnsendingController(Innsending innsending) {
         this.innsending = innsending;
+    }
+
+
+    @PostMapping(consumes = APPLICATION_JSON_VALUE)
+    public ResponseEntity<Kvittering> sendInn(@RequestBody Søknad søknad) throws Exception {
+        System.out.println(søknad);
+        return null;
     }
 
     @PostMapping(consumes = MULTIPART_FORM_DATA_VALUE)

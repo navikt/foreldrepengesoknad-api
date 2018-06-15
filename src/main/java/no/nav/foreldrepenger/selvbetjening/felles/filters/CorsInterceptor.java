@@ -6,8 +6,10 @@ import java.util.List;
 import javax.inject.Inject;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import javax.ws.rs.HttpMethod;
 
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.http.MediaType;
 import org.springframework.stereotype.Component;
 import org.springframework.web.servlet.handler.HandlerInterceptorAdapter;
 
@@ -39,8 +41,15 @@ public class CorsInterceptor extends HandlerInterceptorAdapter {
         if (allowedOrigins.contains(origin)) {
             response.setHeader(ACCESS_CONTROL_ALLOW_ORIGIN, origin);
             response.setHeader(ACCESS_CONTROL_ALLOW_CREDENTIALS, "true");
+        }
+        if (request.getMethod().equals(HttpMethod.POST)){
             response.setHeader(ACCESS_CONTROL_EXPOSE_HEADERS, "location");
         }
+        if (request.getMethod().equals(HttpMethod.OPTIONS)){
+            response.setHeader(ACCESS_CONTROL_ALLOW_METHODS, "POST, GET, OPTIONS, DELETE");
+            response.setHeader(ACCESS_CONTROL_ALLOW_HEADERS, "content-type");
+        }
+
         return true;
     }
 
