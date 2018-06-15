@@ -1,7 +1,7 @@
 package no.nav.foreldrepenger.selvbetjening.oppslag;
 
 import no.nav.foreldrepenger.selvbetjening.oppslag.json.Person;
-import no.nav.foreldrepenger.selvbetjening.oppslag.tjeneste.json.SøkerinfoDto;
+import no.nav.foreldrepenger.selvbetjening.oppslag.json.Søkerinfo;
 import no.nav.foreldrepenger.selvbetjening.oppslag.tjeneste.Oppslag;
 import no.nav.security.spring.oidc.validation.api.ProtectedWithClaims;
 import org.slf4j.Logger;
@@ -35,9 +35,9 @@ public class OppslagController {
     }
 
     @GetMapping(REST_SØKERINFO)
-    public SøkerinfoDto søkerinfo() {
+    public Søkerinfo søkerinfo() {
         LOG.info("Henter søkerinfo...");
-        return oppslag.hentSøkerinfo();
+        return new Søkerinfo(oppslag.hentSøkerinfo());
     }
 
 
