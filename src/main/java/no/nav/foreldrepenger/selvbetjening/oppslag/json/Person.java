@@ -31,8 +31,8 @@ public class Person {
         this.fornavn = dto.fornavn;
         this.etternavn = dto.etternavn;
         this.mellomnavn = dto.mellomnavn;
-        this.kjønn = dto.kjonn;
-        this.fødselsdato = dto.fodselsdato;
+        this.kjønn = dto.kjønn;
+        this.fødselsdato = dto.fødselsdato;
         this.målform = dto.målform;
         this.land = dto.landKode;
         this.ikkeNordiskEøsLand = erIkkenordiskEØSLand(dto.landKode);

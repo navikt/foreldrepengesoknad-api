@@ -38,8 +38,8 @@ public class OppslagstjenesteStub implements Oppslag {
         dto.fornavn = "Siv";
         dto.mellomnavn = "Bjarne";
         dto.etternavn = "Stubsveen";
-        dto.fodselsdato = now().minusYears(21);
-        dto.kjonn = "K";
+        dto.fødselsdato = now().minusYears(21);
+        dto.kjønn = "K";
         dto.landKode = NO;
         dto.bankkonto = new Bankkonto();
         dto.bankkonto.kontonummer = "1234567890";

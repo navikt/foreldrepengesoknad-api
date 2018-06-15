@@ -16,6 +16,7 @@ public class Barn {
     public String kjønn;
     public LocalDate fødselsdato;
 
+    @SuppressWarnings("unused")
     public Barn() {
 
     }
