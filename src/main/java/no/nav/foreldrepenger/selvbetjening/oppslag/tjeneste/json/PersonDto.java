@@ -1,11 +1,12 @@
 package no.nav.foreldrepenger.selvbetjening.oppslag.tjeneste.json;
 
-import java.time.LocalDate;
-import java.util.Objects;
-
 import com.neovisionaries.i18n.CountryCode;
-
 import no.nav.foreldrepenger.selvbetjening.oppslag.json.Bankkonto;
+import no.nav.foreldrepenger.selvbetjening.oppslag.json.Barn;
+
+import java.time.LocalDate;
+import java.util.List;
+import java.util.Objects;
 
 public class PersonDto {
 
@@ -14,11 +15,12 @@ public class PersonDto {
     public String fornavn;
     public String mellomnavn;
     public String etternavn;
-    public String kjonn;
-    public LocalDate fodselsdato;
+    public String kjønn;
+    public LocalDate fødselsdato;
     public String målform;
     public CountryCode landKode;
     public Bankkonto bankkonto;
+    public List<Barn> barn;
 
     public PersonDto() {}
 

@@ -2,7 +2,6 @@ package no.nav.foreldrepenger.selvbetjening.innsending.tjeneste.json;
 
 import com.fasterxml.jackson.annotation.JsonInclude;
 import no.nav.foreldrepenger.selvbetjening.innsending.json.Engangsstønad;
-import no.nav.foreldrepenger.selvbetjening.oppslag.tjeneste.json.PersonDto;
 
 import java.util.ArrayList;
 
@@ -14,21 +13,11 @@ public class EngangsstønadDto extends SøknadDto {
 
     public YtelseDto ytelse;
 
-    public EngangsstønadDto() {}
-
-    public EngangsstønadDto(Engangsstønad søknad, PersonDto person) {
+    public EngangsstønadDto(Engangsstønad søknad) {
         this.søker = new SøkerDto("MOR");
         this.ytelse = new YtelseDto(søknad.type, søknad.utenlandsopphold, søknad.barn, søknad.annenForelder);
         this.vedlegg = new ArrayList<>();
         this.mottattdato = now();
-
-        // TODO: Mottak bør hente personinfo via fnr fra oidc token selv.
-        this.søker.fornavn = person.fornavn;
-        this.søker.mellomnavn = person.mellomnavn;
-        this.søker.etternavn = person.etternavn;
-        this.søker.fnr = person.fnr;
-        this.søker.aktør = person.aktorId;
-
 
     }
 }

@@ -1,10 +1,7 @@
 package no.nav.foreldrepenger.selvbetjening.innsending.tjeneste.json;
 
 import com.fasterxml.jackson.annotation.JsonInclude;
-import no.nav.foreldrepenger.selvbetjening.innsending.json.AnnenForelder;
-import no.nav.foreldrepenger.selvbetjening.innsending.json.Barn;
-import no.nav.foreldrepenger.selvbetjening.innsending.json.UtenlandsoppholdPeriode;
-import no.nav.foreldrepenger.selvbetjening.innsending.json.Utenlandsopphold;
+import no.nav.foreldrepenger.selvbetjening.innsending.json.*;
 
 import java.time.LocalDate;
 import java.util.List;
@@ -17,17 +14,25 @@ public class YtelseDto {
 
     public String type;
     public MedlemsskapDto medlemsskap;
-    public RelasjonTilBarn relasjonTilBarn;
+    public RelasjonTilBarnDto relasjonTilBarn;
     public AnnenForelderDto annenForelder;
     public String dekningsgrad;
+    public OpptjeningDto opptjening;
+    public FordelingDto fordeling;
 
     public YtelseDto(String type, Utenlandsopphold utenlandsopphold, Barn barn, AnnenForelder annenForelder) {
         this.type = type;
         this.medlemsskap = new MedlemsskapDto(utenlandsopphold);
-        this.relasjonTilBarn = new RelasjonTilBarn(barn);
+        this.relasjonTilBarn = new RelasjonTilBarnDto(barn);
         this.annenForelder = new AnnenForelderDto(annenForelder);
+    }
+
+    public YtelseDto(String type, Utenlandsopphold utenlandsopphold, Barn barn, AnnenForelder annenForelder, List<UttaksplanPeriode> uttaksplan) {
+        this(type, utenlandsopphold, barn, annenForelder);
 
         this.dekningsgrad = type.equals("foreldrepenger") ? "GRAD100" : null; // TODO FIX
+        this.opptjening = new OpptjeningDto();
+        this.fordeling = new FordelingDto(uttaksplan);
     }
 
     @JsonInclude(NON_NULL)
@@ -71,8 +76,8 @@ public class YtelseDto {
     }
 
     @JsonInclude(NON_EMPTY)
-    public class RelasjonTilBarn {
-        public RelasjonTilBarn(Barn barn) {
+    public class RelasjonTilBarnDto {
+        public RelasjonTilBarnDto(Barn barn) {
             this.type = barn.erBarnetFødt ? "fødsel" : "termin";
             this.antallBarn = barn.antallBarn;
             this.terminDato = barn.termindato;

@@ -11,6 +11,8 @@ import java.util.List;
 import javax.imageio.ImageIO;
 
 import org.apache.pdfbox.pdmodel.PDDocument;
+import org.apache.pdfbox.pdmodel.PDPage;
+import org.apache.pdfbox.pdmodel.common.PDRectangle;
 import org.apache.pdfbox.rendering.PDFRenderer;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -22,6 +24,9 @@ import no.nav.foreldrepenger.selvbetjening.felles.attachments.exceptions.Attachm
 public class DefaultPDF2ImageConverter implements PDF2ImageConverter {
 
     private static final Logger LOG = LoggerFactory.getLogger(DefaultPDF2ImageConverter.class);
+
+    private static final int DPI = 300;
+    private static final int FIRST_PAGE = 0;
 
     @Override
     public List<byte[]> convertToImages(List<byte[]> pdfPages) {
@@ -37,13 +42,27 @@ public class DefaultPDF2ImageConverter implements PDF2ImageConverter {
         PDDocument document = null;
         try {
             document = PDDocument.load(page);
-            return new PDFRenderer(document).renderImageWithDPI(0, 300, RGB);
+
+            checkPageDimensions(document);
+
+            return new PDFRenderer(document).renderImageWithDPI(FIRST_PAGE, DPI, RGB);
         } catch (IOException e) {
             LOG.warn("Kunne ikke konvertere PDF til image", e);
             throw new AttachmentConversionException("Kunne ikke konvertere PDF til bilde", e);
         } finally {
             PDFUtils.closeQuietly(document);
         }
+    }
+
+    private static void checkPageDimensions(PDDocument document) {
+        PDPage pdfPage = document.getPage(FIRST_PAGE);
+        PDRectangle cropbBox = pdfPage.getCropBox();
+        float widthPt = cropbBox.getWidth();
+        float heightPt = cropbBox.getHeight();
+        int widthPx = Math.round(widthPt * (DPI/72f));
+        int heightPx = Math.round(heightPt * (DPI/72f));
+
+        LOG.info("PDF page dimensions: {} x {}", widthPx, heightPx);
     }
 
     private static byte[] toBytes(BufferedImage img) {

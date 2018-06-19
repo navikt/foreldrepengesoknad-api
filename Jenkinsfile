@@ -60,6 +60,9 @@ node {
                  'NO_PROXY=localhost,127.0.0.1,.local,.adeo.no,.nav.no,.aetat.no,.devillo.no,.oera.no',
                  'no_proxy=localhost,127.0.0.1,.local,.adeo.no,.nav.no,.aetat.no,.devillo.no,.oera.no'
                 ]) {
+
+            System.setProperty("java.net.useSystemProxies", "true")
+            System.setProperty("http.nonProxyHosts", "*.adeo.no")
         
             callback = "${env.BUILD_URL}input/Deploy/"
 
