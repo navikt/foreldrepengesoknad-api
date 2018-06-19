@@ -4,7 +4,6 @@ package no.nav.foreldrepenger.selvbetjening.felles.storage;
 import no.nav.foreldrepenger.selvbetjening.ApplicationLocal;
 import no.nav.foreldrepenger.selvbetjening.SlowTests;
 import no.nav.foreldrepenger.selvbetjening.stub.StubbedLocalStackContainer;
-import no.nav.security.spring.oidc.test.JwtTokenGenerator;
 import org.junit.AfterClass;
 import org.junit.Before;
 import org.junit.Test;
@@ -22,8 +21,6 @@ import org.springframework.core.io.ClassPathResource;
 import org.springframework.http.*;
 import org.springframework.test.context.ActiveProfiles;
 import org.springframework.test.context.junit4.SpringRunner;
-import org.springframework.util.LinkedMultiValueMap;
-import org.springframework.util.MultiValueMap;
 
 import java.io.IOException;
 import java.net.URI;
@@ -39,7 +36,7 @@ import static org.assertj.core.api.AssertionsForClassTypes.assertThat;
 @Category(SlowTests.class)
 public class AttachmentStorageHttpTest implements ApplicationContextAware {
 
-    private static final String FNR = "12345678901";
+    private static final String FNR = "12345678910";
     private static final byte[] PDFSIGNATURE = {0x25, 0x50, 0x44, 0x46};
     private static ApplicationContext applicationContext;
 
@@ -47,9 +44,9 @@ public class AttachmentStorageHttpTest implements ApplicationContextAware {
     private int port;
 
     @Autowired
-    private TestRestTemplate http;
+    private TestRestTemplate testRestTemplate;
 
-    private String endpoint;
+    public AttachmentTestHttpHandler http;
 
     @AfterClass
     public static void destroy() {
@@ -58,19 +55,19 @@ public class AttachmentStorageHttpTest implements ApplicationContextAware {
 
     @Before
     public void setup() {
-        endpoint = "http://localhost:" + port + "/foreldrepengesoknad-api/rest/storage/vedlegg";
+        http = new AttachmentTestHttpHandler(testRestTemplate,port, FNR);
     }
 
     @Test
     public void store_and_retrieve_pdf_over_http() {
         ByteArrayResource byteArrayResource = getByteArrayResource("pdf", "test.pdf");
 
-        ResponseEntity<String> postResponse = postAttachmentAsMultipart("vedlegg", MediaType.APPLICATION_PDF, byteArrayResource);
+        ResponseEntity<String> postResponse = http.postMultipart("vedlegg", MediaType.APPLICATION_PDF, byteArrayResource);
         URI location = postResponse.getHeaders().getLocation();
         assertThat(location).isNotNull();
         assertThat(postResponse.getStatusCode()).isEqualTo(HttpStatus.CREATED);
 
-        ResponseEntity<byte[]> getResponse = getAttachment(location);
+        ResponseEntity<byte[]> getResponse = http.getAttachment(location);
         assertThat(getResponse.getStatusCode()).isEqualTo(HttpStatus.OK);
         assertThat(getResponse.getBody()).isEqualTo(byteArrayResource.getByteArray());
         assertThat(getResponse.getHeaders().getContentType()).isEqualTo(MediaType.APPLICATION_PDF);
@@ -81,12 +78,12 @@ public class AttachmentStorageHttpTest implements ApplicationContextAware {
     public void store_and_retrieve_image_over_http() {
         ByteArrayResource byteArrayResource = getByteArrayResource("pdf", "nav-logo.png");
 
-        ResponseEntity<String> postResponse = postAttachmentAsMultipart("vedlegg", MediaType.IMAGE_PNG, byteArrayResource);
+        ResponseEntity<String> postResponse = http.postMultipart("vedlegg", MediaType.IMAGE_PNG, byteArrayResource);
         URI location = postResponse.getHeaders().getLocation();
         assertThat(location).isNotNull();
         assertThat(postResponse.getStatusCode()).isEqualTo(HttpStatus.CREATED);
 
-        ResponseEntity<byte[]> getResponse = getAttachment(location);
+        ResponseEntity<byte[]> getResponse = http.getAttachment(location);
         assertThat(getResponse.getStatusCode()).isEqualTo(HttpStatus.OK);
         assertThat(getResponse.getBody()).isEqualTo(byteArrayResource.getByteArray());
         assertThat(getResponse.getHeaders().getContentType()).isEqualTo(MediaType.IMAGE_PNG);
@@ -94,48 +91,27 @@ public class AttachmentStorageHttpTest implements ApplicationContextAware {
 
     @Test
     public void delete_pdf_over_http() {
-        URI location = postAttachmentAsMultipart("vedlegg", MediaType.APPLICATION_PDF, getByteArrayResource("pdf", "test.pdf")).getHeaders().getLocation();
-        assertThat(getAttachment(location).getStatusCode()).isEqualTo(HttpStatus.OK);
+        URI location = http.postMultipart("vedlegg", MediaType.APPLICATION_PDF, getByteArrayResource("pdf", "test.pdf")).getHeaders().getLocation();
+        assertThat(http.getAttachment(location).getStatusCode()).isEqualTo(HttpStatus.OK);
 
-        ResponseEntity<String> deleteResponse = deleteAttachment(location);
+        ResponseEntity<String> deleteResponse = http.delete(location);
         assertThat(deleteResponse.getStatusCode()).isEqualTo(HttpStatus.NO_CONTENT);
 
-        assertThat(getAttachment(location).getStatusCode()).isEqualTo(HttpStatus.NOT_FOUND);
+        assertThat(http.getAttachment(location).getStatusCode()).isEqualTo(HttpStatus.NOT_FOUND);
     }
 
     @Test
     public void unauthorized_calls_returns_401() {
-        URI location = postAttachmentAsMultipart("vedlegg", MediaType.APPLICATION_PDF, getByteArrayResource("pdf", "test.pdf")).getHeaders().getLocation();
-        ResponseEntity<byte[]> getResponse = http.exchange(location, HttpMethod.GET, new HttpEntity<>(null, null), byte[].class);
+        URI location = http.postMultipart("vedlegg", MediaType.APPLICATION_PDF, getByteArrayResource("pdf", "test.pdf")).getHeaders().getLocation();
+        ResponseEntity<byte[]> getResponse = testRestTemplate.exchange(location, HttpMethod.GET, new HttpEntity<>(null, null), byte[].class);
         assertThat(getResponse.getStatusCode()).isEqualTo(HttpStatus.UNAUTHORIZED);
 
-        ResponseEntity<String> deleteResponse = http.exchange(location, HttpMethod.DELETE, new HttpEntity<>(null, null), String.class);
+        ResponseEntity<String> deleteResponse = testRestTemplate.exchange(location, HttpMethod.DELETE, new HttpEntity<>(null, null), String.class);
         assertThat(deleteResponse.getStatusCode()).isEqualTo(HttpStatus.UNAUTHORIZED);
     }
 
-    private ResponseEntity<byte[]> getAttachment(URI location) {
-        return http.exchange(location, HttpMethod.GET, new HttpEntity<>(null, createHeaders(MediaType.ALL)), byte[].class);
-    }
 
-    private ResponseEntity<String> postAttachmentAsMultipart(String name, MediaType mediaType, ByteArrayResource byteArrayResource) {
-        MultiValueMap<String, Object> multipartRequest = new LinkedMultiValueMap<>();
-        multipartRequest.add(name, new HttpEntity<>(byteArrayResource, createHeaders(mediaType)));
-        return http.exchange(endpoint, HttpMethod.POST, new HttpEntity<>(multipartRequest, createHeaders(MediaType.MULTIPART_FORM_DATA)), String.class);
-    }
-
-    private ResponseEntity<String> deleteAttachment(URI location) {
-        return http.exchange(location, HttpMethod.DELETE, new HttpEntity<>(null, createHeaders(MediaType.ALL)), String.class);
-    }
-
-    private HttpHeaders createHeaders(MediaType mediaType) {
-        HttpHeaders headers = new HttpHeaders();
-        headers.add("Content-Type", mediaType.toString());
-        headers.add("Authorization", "bearer " + JwtTokenGenerator.createSignedJWT(FNR).serialize());
-        return headers;
-    }
-
-
-    private ByteArrayResource getByteArrayResource(final String path, final String filename) {
+    public static ByteArrayResource getByteArrayResource(final String path, final String filename) {
         try {
             return new ByteArrayResource(Files.readAllBytes(new ClassPathResource(Paths.get(path, filename).toString()).getFile().toPath())) {
                 @Override

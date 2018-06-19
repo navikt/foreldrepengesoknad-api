@@ -2,7 +2,8 @@ package no.nav.foreldrepenger.selvbetjening;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
-import no.nav.foreldrepenger.selvbetjening.FastTests;
+import no.nav.foreldrepenger.selvbetjening.innsending.json.Barn;
+import no.nav.foreldrepenger.selvbetjening.innsending.json.Engangsstønad;
 import org.junit.Test;
 import org.junit.experimental.categories.Category;
 import org.junit.runner.RunWith;
@@ -12,6 +13,7 @@ import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 import javax.inject.Inject;
 import java.io.IOException;
 
+import static java.time.LocalDateTime.now;
 import static no.nav.foreldrepenger.selvbetjening.oppslag.tjeneste.OppslagstjenesteStub.person;
 import static org.assertj.core.api.Assertions.assertThat;
 
@@ -24,14 +26,26 @@ public class SerializationTest {
     ObjectMapper mapper;
 
     @Test
-    public void testPersonSerialiaztion() throws IOException {
+    public void person_serialiaztion() throws IOException {
         test(person());
+    }
+
+    @Test
+    public void engangstonad_deserialisation() throws IOException {
+        Engangsstønad engangsstønad = new Engangsstønad();
+        engangsstønad.opprettet = now();
+
+        Barn barn = new Barn();
+        barn.erBarnetFødt = false;
+        engangsstønad.barn = barn;
+
+        test(engangsstønad);
     }
 
     private void test(Object object) throws IOException {
         String serialized = write(object);
         Object deserialized = mapper.readValue(serialized, object.getClass());
-        assertThat(object).isEqualTo(deserialized);
+        assertThat(object).isEqualToComparingFieldByFieldRecursively(deserialized);
     }
 
     private String write(Object obj) throws JsonProcessingException {

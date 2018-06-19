@@ -46,23 +46,24 @@ public class Innsendingstjeneste implements Innsending {
     }
 
     @Override
-    public ResponseEntity<Kvittering> sendInn(Søknad søknad, MultipartFile[] vedlegg) {
+    public ResponseEntity<Kvittering> sendInn(Søknad søknad) {
         LOG.info("Poster søknad til {}", mottakServiceUrl);
         søknad.opprettet = now();
-        return post(søknad, vedlegg);
+        return post(søknad);
     }
 
-    private ResponseEntity<Kvittering> post(Søknad søknad, MultipartFile... vedlegg) {
+    private ResponseEntity<Kvittering> post(Søknad søknad) {
         if (!Enabled.foreldrepengesøknad && søknad instanceof Foreldrepengesøknad) {
             LOG.info("Mottok foreldrepengesøknad, men innsending av foreldrepengesøknad er togglet av!");
             throw new BadRequestException("Application with type foreldrepengesøknad is not supported yet");
         }
 
-        return template.postForEntity(mottakServiceUrl, body(søknad, vedlegg), Kvittering.class);
+        return template.postForEntity(mottakServiceUrl, body(søknad), Kvittering.class);
     }
 
-    private HttpEntity<SøknadDto> body(@RequestBody Søknad søknad, MultipartFile... vedlegg) {
+    private HttpEntity<SøknadDto> body(@RequestBody Søknad søknad) {
         SøknadDto dto;
+
         if (søknad instanceof Engangsstønad) {
             dto = new EngangsstønadDto((Engangsstønad) søknad);
         } else if (søknad instanceof Foreldrepengesøknad) {
@@ -72,8 +73,8 @@ public class Innsendingstjeneste implements Innsending {
             throw new BadRequestException("Unknown application type");
         }
 
-        stream(vedlegg)
-                .map(this::vedleggBytes)
+        søknad.vedlegg.stream()
+                .map(v -> v.content)
                 .map(converter::convert)
                 .forEach(dto::addVedlegg);
 
@@ -85,13 +86,5 @@ public class Innsendingstjeneste implements Innsending {
                 .fromUri(baseUri)
                 .path("/mottak/send")
                 .build().toUri();
-    }
-
-    private byte[] vedleggBytes(MultipartFile vedlegg) {
-        try {
-            return vedlegg.getBytes();
-        } catch (IOException e) {
-            throw new AttachmentConversionException("Kunne ikke hente bytes fra vedlegg " + vedlegg.getName(), e);
-        }
     }
 }

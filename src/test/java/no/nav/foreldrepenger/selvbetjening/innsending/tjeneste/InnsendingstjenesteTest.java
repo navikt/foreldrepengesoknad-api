@@ -10,7 +10,6 @@ import org.mockito.junit.MockitoJUnitRunner;
 import org.springframework.http.HttpEntity;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.client.RestTemplate;
-import org.springframework.web.multipart.MultipartFile;
 
 import javax.ws.rs.BadRequestException;
 import java.net.URI;
@@ -43,19 +42,19 @@ public class InnsendingstjenesteTest {
 
     @Test
     public void testInnsendingAvEnkelEngangsstønad() {
-        ResponseEntity<Kvittering> response = innsending.sendInn(engangsstønad(), new MultipartFile[] {});
+        ResponseEntity<Kvittering> response = innsending.sendInn(engangsstønad());
         assertThat(response.getStatusCode()).isEqualByComparingTo(OK);
     }
-    
+
     @Test
     public void testInnsendingAvEnkelForeldrepengesøknad() {
-        ResponseEntity<Kvittering> response = innsending.sendInn(foreldrepengesøknad(), new MultipartFile[] {});
+        ResponseEntity<Kvittering> response = innsending.sendInn(foreldrepengesøknad());
         assertThat(response.getStatusCode()).isEqualByComparingTo(OK);
     }
 
     @Test
     public void testAtExceptionKastesVedUkjentTypeSøknad() {
-        BadRequestException e = assertThrows(BadRequestException.class, () -> innsending.sendInn(new Søknad(), new MultipartFile[] {}));
+        BadRequestException e = assertThrows(BadRequestException.class, () -> innsending.sendInn(new Søknad()));
         assertThat(e.getMessage()).isEqualToIgnoringCase("Unknown application type");
     }
 
@@ -63,7 +62,7 @@ public class InnsendingstjenesteTest {
         return new ResponseEntity<>(new Kvittering("ref", now()), OK);
     }
 
-    private Engangsstønad engangsstønad() {
+    public Engangsstønad engangsstønad() {
         Engangsstønad engangsstønad = new Engangsstønad();
         engangsstønad.opprettet = now();
 
