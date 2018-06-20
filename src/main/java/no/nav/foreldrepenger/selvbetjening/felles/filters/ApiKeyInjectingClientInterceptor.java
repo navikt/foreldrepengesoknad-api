@@ -1,18 +1,18 @@
 package no.nav.foreldrepenger.selvbetjening.felles.filters;
 
-import static org.slf4j.LoggerFactory.getLogger;
-
-import java.io.IOException;
-import java.net.URI;
-import java.util.Map;
-import java.util.Optional;
-
 import org.slf4j.Logger;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.HttpRequest;
 import org.springframework.http.client.ClientHttpRequestExecution;
 import org.springframework.http.client.ClientHttpRequestInterceptor;
 import org.springframework.http.client.ClientHttpResponse;
+
+import java.io.IOException;
+import java.net.URI;
+import java.util.Map;
+import java.util.Optional;
+
+import static org.slf4j.LoggerFactory.getLogger;
 
 public class ApiKeyInjectingClientInterceptor implements ClientHttpRequestInterceptor {
 
@@ -22,7 +22,7 @@ public class ApiKeyInjectingClientInterceptor implements ClientHttpRequestInterc
     private final String headerKey;
 
     public ApiKeyInjectingClientInterceptor(@Value("${apikeys.key:x-nav-apiKey}") String headerKey,
-            Map<URI, String> apiKeys) {
+                                            Map<URI, String> apiKeys) {
         this.headerKey = headerKey;
         this.apiKeys = apiKeys;
     }
@@ -31,10 +31,10 @@ public class ApiKeyInjectingClientInterceptor implements ClientHttpRequestInterc
     public ClientHttpResponse intercept(HttpRequest request, byte[] body, ClientHttpRequestExecution execution)
             throws IOException {
         URI destination = request.getURI();
-        String apiKey = apiKeyFor(destination);
-        if (apiKey != null) {
+        Optional<String> apiKey = apiKeyFor(destination);
+        if (apiKey.isPresent()) {
             LOG.trace("Injisert API-key som header {} for {}", headerKey, destination);
-            request.getHeaders().add(headerKey, apiKey);
+            request.getHeaders().add(headerKey, apiKey.get());
         } else {
             LOG.warn("Ingen API-key ble funnet for {} (sjekket {} konfigurasjoner)", destination,
                     apiKeys.values().size());
@@ -42,11 +42,11 @@ public class ApiKeyInjectingClientInterceptor implements ClientHttpRequestInterc
         return execution.execute(request, body);
     }
 
-    private String apiKeyFor(URI uri) {
-        return Optional.ofNullable(apiKeys.entrySet().stream()
+    private Optional<String> apiKeyFor(URI uri) {
+        return apiKeys.entrySet().stream()
                 .filter(s -> uri.toString().startsWith(s.getKey().toString()))
-                .map(Map.Entry::getValue).reduce((a, b) -> null))
-                .map(Optional::get).orElse(null);
+                .map(Map.Entry::getValue)
+                .findFirst();
     }
 
     @Override
