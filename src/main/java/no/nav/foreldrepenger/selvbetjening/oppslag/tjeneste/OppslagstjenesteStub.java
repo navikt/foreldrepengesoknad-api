@@ -37,9 +37,8 @@ public class OppslagstjenesteStub implements Oppslag {
         arbeidsforhold.arbeidsgiverId = "123456789";
         arbeidsforhold.arbeidsgiverIdType = "orgnr";
         arbeidsforhold.fom = now().minusYears(2);
-        arbeidsforhold.tom = now();
         arbeidsforhold.arbeidsgiverNavn = "navn";
-        arbeidsforhold.stillingsprosent = new Double(100);
+        arbeidsforhold.stillingsprosent = 100d;
         dto.arbeidsforhold.add(arbeidsforhold);
         return dto;
     }
