@@ -1,5 +1,6 @@
 package no.nav.foreldrepenger.selvbetjening.oppslag.tjeneste;
 
+import no.nav.foreldrepenger.selvbetjening.oppslag.json.Arbeidsforhold;
 import no.nav.foreldrepenger.selvbetjening.oppslag.json.Bankkonto;
 import no.nav.foreldrepenger.selvbetjening.oppslag.json.Barn;
 import no.nav.foreldrepenger.selvbetjening.oppslag.tjeneste.json.PersonDto;
@@ -8,6 +9,7 @@ import org.slf4j.Logger;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnProperty;
 import org.springframework.stereotype.Service;
 
+import java.util.ArrayList;
 import java.util.Collections;
 
 import static com.neovisionaries.i18n.CountryCode.NO;
@@ -28,7 +30,18 @@ public class OppslagstjenesteStub implements Oppslag {
 
     @Override
     public SøkerinfoDto hentSøkerinfo() {
-        return null; //TODO FIX
+        SøkerinfoDto dto = new SøkerinfoDto();
+        dto.person = person();
+        dto.arbeidsforhold = new ArrayList<>();
+        Arbeidsforhold arbeidsforhold = new Arbeidsforhold();
+        arbeidsforhold.arbeidsgiverId = "123456789";
+        arbeidsforhold.arbeidsgiverIdType = "orgnr";
+        arbeidsforhold.fom = now().minusYears(2);
+        arbeidsforhold.tom = now();
+        arbeidsforhold.arbeidsgiverNavn = "navn";
+        arbeidsforhold.stillingsprosent = new Double(100);
+        dto.arbeidsforhold.add(arbeidsforhold);
+        return dto;
     }
 
     public static PersonDto person() {
