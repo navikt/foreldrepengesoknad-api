@@ -27,7 +27,8 @@ public class StorageConfiguration {
     @Value("${FORELDREPENGESOKNAD_API_S3_ENDPOINT_URL}")
     private String s3Endpoint;
 
-    private final static String REGION_TO_USE_FOR_S3_TO_WORK_ONPREM = "us-east-1";
+    @Value("${FORELDREPENGESOKNAD_API_S3_REGION:us-east-1}")
+    private String s3Region;
 
     @Bean
     @Lazy
@@ -38,7 +39,7 @@ public class StorageConfiguration {
     private AmazonS3 s3() {
         AWSCredentials credentials = new BasicAWSCredentials(accessKey, secretKey);
         return AmazonS3ClientBuilder.standard()
-                .withEndpointConfiguration(new AwsClientBuilder.EndpointConfiguration(s3Endpoint, REGION_TO_USE_FOR_S3_TO_WORK_ONPREM))
+                .withEndpointConfiguration(new AwsClientBuilder.EndpointConfiguration(s3Endpoint, s3Region))
                 .enablePathStyleAccess()
                 .withCredentials(new AWSStaticCredentialsProvider(credentials)).build();
     }
