@@ -45,25 +45,32 @@ public class Innsendingstjeneste implements Innsending {
         this.converter = converter;
     }
 
-    @Override
-    public ResponseEntity<Kvittering> sendInn(Søknad søknad) {
-        LOG.info("Poster søknad til {}", mottakServiceUrl);
-        søknad.opprettet = now();
-        return post(søknad);
+    private static URI mottakUriFra(URI baseUri) {
+        return UriComponentsBuilder
+                .fromUri(baseUri)
+                .path("/mottak/send")
+                .build().toUri();
     }
 
-    private ResponseEntity<Kvittering> post(Søknad søknad) {
+
+    @Override
+    public ResponseEntity<Kvittering> sendInn(Søknad søknad, MultipartFile... vedlegg)  {
+        LOG.info("Poster søknad til {}", mottakServiceUrl);
+        søknad.opprettet = now();
+        return post(søknad, vedlegg);
+    }
+
+    private ResponseEntity<Kvittering> post(Søknad søknad, MultipartFile... vedlegg) {
         if (!Enabled.foreldrepengesøknad && søknad instanceof Foreldrepengesøknad) {
             LOG.info("Mottok foreldrepengesøknad, men innsending av foreldrepengesøknad er togglet av!");
             throw new BadRequestException("Application with type foreldrepengesøknad is not supported yet");
         }
 
-        return template.postForEntity(mottakServiceUrl, body(søknad), Kvittering.class);
+        return template.postForEntity(mottakServiceUrl, body(søknad, vedlegg), Kvittering.class);
     }
 
-    private HttpEntity<SøknadDto> body(@RequestBody Søknad søknad) {
+    private HttpEntity<SøknadDto> body(@RequestBody Søknad søknad, MultipartFile... vedlegg) {
         SøknadDto dto;
-
         if (søknad instanceof Engangsstønad) {
             dto = new EngangsstønadDto((Engangsstønad) søknad);
         } else if (søknad instanceof Foreldrepengesøknad) {
@@ -73,18 +80,29 @@ public class Innsendingstjeneste implements Innsending {
             throw new BadRequestException("Unknown application type");
         }
 
-        søknad.vedlegg.stream()
-                .map(v -> v.content)
-                .map(converter::convert)
-                .forEach(dto::addVedlegg);
+        //TODO: Remove vedlegg when frontend is updated
+        if (vedlegg.length > 0) {
+            stream(vedlegg)
+                    .map(this::vedleggBytes)
+                    .map(converter::convert)
+                    .forEach(dto::addVedlegg);
+        } else {
+            //TODO: ..and keep only this after we remove multipart handling from frontend
+            søknad.vedlegg.stream()
+                    .map(v -> v.content)
+                    .map(converter::convert)
+                    .forEach(dto::addVedlegg);
+        }
+
 
         return new HttpEntity<>(dto);
     }
 
-    private static URI mottakUriFra(URI baseUri) {
-        return UriComponentsBuilder
-                .fromUri(baseUri)
-                .path("/mottak/send")
-                .build().toUri();
+    private byte[] vedleggBytes(MultipartFile vedlegg) {
+        try {
+            return vedlegg.getBytes();
+        } catch (IOException e) {
+            throw new AttachmentConversionException("Kunne ikke hente bytes fra vedlegg " + vedlegg.getName(), e);
+        }
     }
 }
