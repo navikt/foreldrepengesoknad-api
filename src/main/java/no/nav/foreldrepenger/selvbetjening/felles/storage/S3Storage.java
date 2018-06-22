@@ -22,7 +22,11 @@ public class S3Storage implements Storage {
     @Inject
     public S3Storage(AmazonS3 s3) {
         this.s3 = s3;
-        ensureBucketExists();
+        try {
+            ensureBucketExists();
+        } catch (Exception ex) {
+            LOG.warn("Could not create S3 bucket", ex);
+        }
     }
 
     @Override

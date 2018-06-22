@@ -26,9 +26,11 @@ public class FordelingDto {
         public LocalDate fom;
         public LocalDate tom;
         public String årsak;
+        public String uttaksperiodeType;
 
         public FordelingPeriodeDto(UttaksplanPeriode u) {
             this.type = u.type;
+            this.uttaksperiodeType = u.konto;
             this.fom = u.tidsperiode.startdato;
             this.tom = u.tidsperiode.sluttdato;
             this.årsak = u.årsak;
