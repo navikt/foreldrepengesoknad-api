@@ -32,12 +32,12 @@ public class InnsendingstjenesteStub implements Innsending {
     private ObjectMapper mapper;
 
     @Override
-    public ResponseEntity<Kvittering> sendInn(Søknad søknad, MultipartFile[] vedlegg) throws Exception {
+    public ResponseEntity<Kvittering> sendInn(Søknad søknad, MultipartFile ...vedlegg)  {
         søknad.opprettet = now();
         return postStub(søknad);
     }
 
-    private ResponseEntity<Kvittering> postStub(Søknad søknad) throws JsonProcessingException {
+    private ResponseEntity<Kvittering> postStub(Søknad søknad)  {
         SøknadDto dto;
         if (søknad instanceof Engangsstønad) {
             dto = new EngangsstønadDto((Engangsstønad) søknad);
@@ -46,7 +46,12 @@ public class InnsendingstjenesteStub implements Innsending {
         } else {
             throw new BadRequestException("Unknown application type");
         }
-        LOG.info("Posting JSON (stub): {}", mapper.writeValueAsString(dto));
+
+        try {
+            LOG.info("Posting JSON (stub): {}", mapper.writeValueAsString(dto));
+        } catch (JsonProcessingException e) {
+            throw new RuntimeException(e);
+        }
         return new ResponseEntity<>(Kvittering.STUB, OK);
     }
 }

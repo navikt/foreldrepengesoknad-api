@@ -7,6 +7,6 @@ import org.springframework.web.multipart.MultipartFile;
 
 public interface Innsending {
 
-    ResponseEntity<Kvittering> sendInn(Søknad søknad, MultipartFile[] vedlegg) throws Exception;
+    ResponseEntity<Kvittering> sendInn(Søknad søknad, MultipartFile... vedlegg);
 
 }

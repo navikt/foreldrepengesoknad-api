@@ -5,6 +5,8 @@ import com.fasterxml.jackson.annotation.JsonSubTypes.Type;
 import com.fasterxml.jackson.annotation.JsonTypeInfo;
 
 import java.time.LocalDateTime;
+import java.util.ArrayList;
+import java.util.List;
 
 import static com.fasterxml.jackson.annotation.JsonTypeInfo.Id.NAME;
 
@@ -18,7 +20,12 @@ public class Søknad {
 
     public String type;
     public Søker søker;
+    public List<Vedlegg> vedlegg;
 
     public LocalDateTime opprettet;
+
+    public Søknad(){
+        vedlegg = new ArrayList<>();
+    }
 
 }

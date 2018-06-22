@@ -45,8 +45,16 @@ public class Innsendingstjeneste implements Innsending {
         this.converter = converter;
     }
 
+    private static URI mottakUriFra(URI baseUri) {
+        return UriComponentsBuilder
+                .fromUri(baseUri)
+                .path("/mottak/send")
+                .build().toUri();
+    }
+
+
     @Override
-    public ResponseEntity<Kvittering> sendInn(Søknad søknad, MultipartFile[] vedlegg) {
+    public ResponseEntity<Kvittering> sendInn(Søknad søknad, MultipartFile... vedlegg)  {
         LOG.info("Poster søknad til {}", mottakServiceUrl);
         søknad.opprettet = now();
         return post(søknad, vedlegg);
@@ -72,19 +80,22 @@ public class Innsendingstjeneste implements Innsending {
             throw new BadRequestException("Unknown application type");
         }
 
-        stream(vedlegg)
-                .map(this::vedleggBytes)
-                .map(converter::convert)
-                .forEach(dto::addVedlegg);
+        //TODO: Remove vedlegg when frontend is updated
+        if (vedlegg.length > 0) {
+            stream(vedlegg)
+                    .map(this::vedleggBytes)
+                    .map(converter::convert)
+                    .forEach(dto::addVedlegg);
+        } else {
+            //TODO: ..and keep only this after we remove multipart handling from frontend
+            søknad.vedlegg.stream()
+                    .map(v -> v.content)
+                    .map(converter::convert)
+                    .forEach(dto::addVedlegg);
+        }
+
 
         return new HttpEntity<>(dto);
-    }
-
-    private static URI mottakUriFra(URI baseUri) {
-        return UriComponentsBuilder
-                .fromUri(baseUri)
-                .path("/mottak/send")
-                .build().toUri();
     }
 
     private byte[] vedleggBytes(MultipartFile vedlegg) {
