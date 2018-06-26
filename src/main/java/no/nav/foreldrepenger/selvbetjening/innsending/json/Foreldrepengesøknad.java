@@ -7,7 +7,7 @@ public class Foreldrepengesøknad extends Søknad {
 
     public Barn barn;
     public AnnenForelder annenForelder;
-    public Utenlandsopphold utenlandsopphold;
+    public Utenlandsopphold informasjonOmUtenlandsopphold;
 
     public String situasjon;
 
@@ -16,7 +16,7 @@ public class Foreldrepengesøknad extends Søknad {
     public Foreldrepengesøknad() {
         this.barn = new Barn();
         this.annenForelder = new AnnenForelder();
-        this.utenlandsopphold = new Utenlandsopphold();
+        this.informasjonOmUtenlandsopphold = new Utenlandsopphold();
         this.uttaksplan = new ArrayList<>();
     }
 
@@ -24,7 +24,7 @@ public class Foreldrepengesøknad extends Søknad {
     public String toString() {
         return getClass().getSimpleName() + " [barn=" + barn + ", annenForelder=" + annenForelder
                 + ", utenlandsopphold="
-                + utenlandsopphold + ", situasjon=" + situasjon + ", uttaksplan=" + uttaksplan + "]";
+                + informasjonOmUtenlandsopphold + ", situasjon=" + situasjon + ", uttaksplan=" + uttaksplan + "]";
     }
 
 }

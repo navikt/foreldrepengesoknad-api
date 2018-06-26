@@ -25,9 +25,10 @@ public class YtelseDto {
     public OpptjeningDto opptjening;
     public FordelingDto fordeling;
 
-    public YtelseDto(String type, Utenlandsopphold utenlandsopphold, Barn barn, AnnenForelder annenForelder) {
+    public YtelseDto(String type, Utenlandsopphold informasjonOmUtenlandsopphold, Barn barn,
+            AnnenForelder annenForelder) {
         this.type = type;
-        this.medlemsskap = new MedlemsskapDto(utenlandsopphold);
+        this.medlemsskap = new MedlemsskapDto(informasjonOmUtenlandsopphold);
         this.relasjonTilBarn = new RelasjonTilBarnDto(barn);
         this.annenForelder = new AnnenForelderDto(annenForelder);
     }
