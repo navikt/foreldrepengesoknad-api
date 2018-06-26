@@ -4,6 +4,6 @@ management:
       security.enabled : false
       health.show-details : always
       
-spring.jackson.deserialization.fail-on-unknown-properties: true
+spring.jackson.deserialization.fail-on-unknown-properties: false
                
        
