@@ -10,4 +10,11 @@ public class Barn {
     public Integer antallBarn;
     public LocalDate termindato;
     public LocalDate terminbekreftelseDato;
+
+    @Override
+    public String toString() {
+        return getClass().getSimpleName() + " [erBarnetFødt=" + erBarnetFødt + ", fødselsdatoer=" + fødselsdatoer
+                + ", antallBarn=" + antallBarn
+                + ", termindato=" + termindato + ", terminbekreftelseDato=" + terminbekreftelseDato + "]";
+    }
 }

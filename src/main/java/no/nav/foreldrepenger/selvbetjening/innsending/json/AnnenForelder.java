@@ -12,10 +12,19 @@ public class AnnenForelder {
     public String type() {
         if (isTrue(kanIkkeOppgis)) {
             return "ukjent";
-        } else if (isTrue(utenlandskFnr)) {
+        }
+        else if (isTrue(utenlandskFnr)) {
             return "utenlandsk";
-        } else {
+        }
+        else {
             return "norsk";
         }
+    }
+
+    @Override
+    public String toString() {
+        return getClass().getSimpleName() + " [kanIkkeOppgis=" + kanIkkeOppgis + ", navn=" + navn + ", fnr=" + fnr
+                + ", utenlandskFnr="
+                + utenlandskFnr + ", bostedsland=" + bostedsland + "]";
     }
 }

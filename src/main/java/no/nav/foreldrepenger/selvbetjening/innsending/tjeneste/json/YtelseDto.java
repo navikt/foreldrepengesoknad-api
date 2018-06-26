@@ -77,8 +77,8 @@ public class YtelseDto {
             this.norgeSiste12 = utenlandsopphold.iNorgeSiste12Mnd;
             this.norgeNeste12 = utenlandsopphold.iNorgeNeste12Mnd;
             this.fødselNorge = utenlandsopphold.fødselINorge;
-            this.utenlandsopphold = utenlandsopphold.tidligerePerioder;
-            this.framtidigUtenlandsopphold = utenlandsopphold.senerePerioder;
+            this.utenlandsopphold = utenlandsopphold.tidligereOpphold;
+            this.framtidigUtenlandsopphold = utenlandsopphold.senereOpphold;
             this.arbeidSiste12 = "IKKE_ARBEIDET";
         }
 
