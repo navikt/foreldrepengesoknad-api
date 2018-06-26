@@ -20,4 +20,11 @@ public class Foreldrepengesøknad extends Søknad {
         this.uttaksplan = new ArrayList<>();
     }
 
+    @Override
+    public String toString() {
+        return getClass().getSimpleName() + " [barn=" + barn + ", annenForelder=" + annenForelder
+                + ", utenlandsopphold="
+                + utenlandsopphold + ", situasjon=" + situasjon + ", uttaksplan=" + uttaksplan + "]";
+    }
+
 }
