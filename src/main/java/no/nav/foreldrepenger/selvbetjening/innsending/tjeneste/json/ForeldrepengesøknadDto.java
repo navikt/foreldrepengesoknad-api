@@ -1,10 +1,10 @@
 package no.nav.foreldrepenger.selvbetjening.innsending.tjeneste.json;
 
-import no.nav.foreldrepenger.selvbetjening.innsending.json.Foreldrepengesøknad;
+import static java.time.LocalDateTime.now;
 
 import java.util.ArrayList;
 
-import static java.time.LocalDateTime.now;
+import no.nav.foreldrepenger.selvbetjening.innsending.json.Foreldrepengesøknad;
 
 public class ForeldrepengesøknadDto extends SøknadDto {
 
@@ -12,9 +12,14 @@ public class ForeldrepengesøknadDto extends SøknadDto {
 
     public ForeldrepengesøknadDto(Foreldrepengesøknad søknad) {
         this.søker = new SøkerDto(søknad.søker);
-        this.ytelse = new YtelseDto(søknad.type, søknad.utenlandsopphold, søknad.barn, søknad.annenForelder, søknad.uttaksplan);
+        this.ytelse = new YtelseDto(søknad.type, søknad.utenlandsopphold, søknad.barn, søknad.annenForelder,
+                søknad.uttaksplan);
         this.vedlegg = new ArrayList<>();
-
         this.mottattdato = now();
+    }
+
+    @Override
+    public String toString() {
+        return getClass().getSimpleName() + " [ytelse=" + ytelse + "]";
     }
 }

@@ -1,13 +1,18 @@
 package no.nav.foreldrepenger.selvbetjening.innsending.tjeneste.json;
 
-import com.fasterxml.jackson.annotation.JsonInclude;
-import no.nav.foreldrepenger.selvbetjening.innsending.json.*;
+import static com.fasterxml.jackson.annotation.JsonInclude.Include.NON_EMPTY;
+import static com.fasterxml.jackson.annotation.JsonInclude.Include.NON_NULL;
 
 import java.time.LocalDate;
 import java.util.List;
 
-import static com.fasterxml.jackson.annotation.JsonInclude.Include.NON_EMPTY;
-import static com.fasterxml.jackson.annotation.JsonInclude.Include.NON_NULL;
+import com.fasterxml.jackson.annotation.JsonInclude;
+
+import no.nav.foreldrepenger.selvbetjening.innsending.json.AnnenForelder;
+import no.nav.foreldrepenger.selvbetjening.innsending.json.Barn;
+import no.nav.foreldrepenger.selvbetjening.innsending.json.Utenlandsopphold;
+import no.nav.foreldrepenger.selvbetjening.innsending.json.UtenlandsoppholdPeriode;
+import no.nav.foreldrepenger.selvbetjening.innsending.json.UttaksplanPeriode;
 
 @JsonInclude(NON_NULL)
 public class YtelseDto {
@@ -27,7 +32,8 @@ public class YtelseDto {
         this.annenForelder = new AnnenForelderDto(annenForelder);
     }
 
-    public YtelseDto(String type, Utenlandsopphold utenlandsopphold, Barn barn, AnnenForelder annenForelder, List<UttaksplanPeriode> uttaksplan) {
+    public YtelseDto(String type, Utenlandsopphold utenlandsopphold, Barn barn, AnnenForelder annenForelder,
+            List<UttaksplanPeriode> uttaksplan) {
         this(type, utenlandsopphold, barn, annenForelder);
 
         this.dekningsgrad = type.equals("foreldrepenger") ? "GRAD100" : null; // TODO FIX
@@ -44,9 +50,17 @@ public class YtelseDto {
 
             if (annenForelder.type().equals("norsk")) {
                 this.fnr = annenForelder.fnr;
-            } else if (annenForelder.type().equals("utenlandsk")) {
+            }
+            else if (annenForelder.type().equals("utenlandsk")) {
                 this.id = annenForelder.fnr;
             }
+        }
+
+        @Override
+        public String toString() {
+            return getClass().getSimpleName() + " [type=" + type + ", id=" + id + ", fnr=" + fnr + ", land=" + land
+                    + ", fornavn="
+                    + fornavn + "]";
         }
 
         public String type;
@@ -67,6 +81,14 @@ public class YtelseDto {
             this.arbeidSiste12 = "IKKE_ARBEIDET";
         }
 
+        @Override
+        public String toString() {
+            return getClass().getSimpleName() + " [norgeSiste12=" + norgeSiste12 + ", norgeNeste12=" + norgeNeste12
+                    + ", fødselNorge="
+                    + fødselNorge + ", arbeidSiste12=" + arbeidSiste12 + ", utenlandsopphold=" + utenlandsopphold
+                    + ", framtidigUtenlandsopphold=" + framtidigUtenlandsopphold + "]";
+        }
+
         public Boolean norgeSiste12;
         public Boolean norgeNeste12;
         public Boolean fødselNorge;
@@ -85,11 +107,26 @@ public class YtelseDto {
             this.fødselsdato = barn.fødselsdatoer;
         }
 
+        @Override
+        public String toString() {
+            return getClass().getSimpleName() + " [type=" + type + ", antallBarn=" + antallBarn + ", terminDato="
+                    + terminDato
+                    + ", utstedtDato=" + utstedtDato + ", fødselsdato=" + fødselsdato + "]";
+        }
+
         public String type;
         public Integer antallBarn;
         public LocalDate terminDato;
         public LocalDate utstedtDato;
         public List<LocalDate> fødselsdato;
+    }
+
+    @Override
+    public String toString() {
+        return getClass().getSimpleName() + " [type=" + type + ", medlemsskap=" + medlemsskap + ", relasjonTilBarn="
+                + relasjonTilBarn
+                + ", annenForelder=" + annenForelder + ", dekningsgrad=" + dekningsgrad + ", opptjening=" + opptjening
+                + ", fordeling=" + fordeling + "]";
     }
 
 }
