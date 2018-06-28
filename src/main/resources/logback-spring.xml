@@ -15,7 +15,8 @@
     </springProfile>
 
     <springProfile name="dev,preprod">
-        <logger name="no.nav.foreldrepenger.selvbetjening" level="trace" />
+        <logger name="no.nav.foreldrepenger.selvbetjening" level="info" />
+        <logger name="org.springframework.web" level="info" />
     </springProfile>
 
     <root level="info">
