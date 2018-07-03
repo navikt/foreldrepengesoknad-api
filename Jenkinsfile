@@ -63,7 +63,7 @@ node {
 
             System.setProperty("java.net.useSystemProxies", "true")
             System.setProperty("http.nonProxyHosts", "*.adeo.no")
-        
+
             callback = "${env.BUILD_URL}input/Deploy/"
 
             def deploy = deployLib.deployNaisApp(app, releaseVersion, environment, zone, namespace, callback, committer).key
@@ -86,6 +86,38 @@ node {
         }
     }
 
+
+    stage("Deploy to t10") {
+        withEnv(['HTTPS_PROXY=http://webproxy-internett.nav.no:8088',
+                 'NO_PROXY=localhost,127.0.0.1,.local,.adeo.no,.nav.no,.aetat.no,.devillo.no,.oera.no',
+                 'no_proxy=localhost,127.0.0.1,.local,.adeo.no,.nav.no,.aetat.no,.devillo.no,.oera.no'
+        ]) {
+
+            System.setProperty("java.net.useSystemProxies", "true")
+            System.setProperty("http.nonProxyHosts", "*.adeo.no")
+
+            callback = "${env.BUILD_URL}input/Deploy/"
+
+            def deploy = deployLib.deployNaisApp(app, releaseVersion, 't10', zone, 't10', callback, committer).key
+
+            try {
+                timeout(time: 15, unit: 'MINUTES') {
+                    input id: 'deploy', message: "Check status here:  https://jira.adeo.no/browse/${deploy}"
+                }
+                slackSend([
+                        color: 'good',
+                        message: "${app} version ${releaseVersion} has been deployed to t10."
+                ])
+            } catch (Exception e) {
+                slackSend([
+                        color: 'warning',
+                        message: "Build ${releaseVersion} of ${app} could not be deployed to t10"
+                ])
+                throw new Exception("Deploy feilet :( \n Se https://jira.adeo.no/browse/" + deploy + " for detaljer", e)
+            }
+        }
+    }
+
     stage("Tag") {
         withEnv(['HTTPS_PROXY=http://webproxy-internett.nav.no:8088']) {
             withCredentials([string(credentialsId: 'OAUTH_TOKEN', variable: 'token')]) {
@@ -100,7 +132,7 @@ node {
                  'NO_PROXY=localhost,127.0.0.1,.local,.adeo.no,.nav.no,.aetat.no,.devillo.no,.oera.no',
                  'no_proxy=localhost,127.0.0.1,.local,.adeo.no,.nav.no,.aetat.no,.devillo.no,.oera.no'
                 ]) {
-                    
+
             try {
                 timeout(time: 5, unit: 'MINUTES') {
                     input id: 'prod', message: "Deploy to prod?"
