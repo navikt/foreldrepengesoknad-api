@@ -15,6 +15,7 @@ public class Barn {
     public String fnr;
     public String kjønn;
     public LocalDate fødselsdato;
+    public AnnenForelder annenForelder;
 
     @SuppressWarnings("unused")
     public Barn() {
