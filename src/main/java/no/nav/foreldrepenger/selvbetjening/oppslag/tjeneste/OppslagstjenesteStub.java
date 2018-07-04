@@ -1,5 +1,6 @@
 package no.nav.foreldrepenger.selvbetjening.oppslag.tjeneste;
 
+import no.nav.foreldrepenger.selvbetjening.oppslag.json.AnnenForelder;
 import no.nav.foreldrepenger.selvbetjening.oppslag.json.Arbeidsforhold;
 import no.nav.foreldrepenger.selvbetjening.oppslag.json.Bankkonto;
 import no.nav.foreldrepenger.selvbetjening.oppslag.json.Barn;
@@ -14,6 +15,7 @@ import java.util.Collections;
 
 import static com.neovisionaries.i18n.CountryCode.NO;
 import static java.time.LocalDate.now;
+import static java.util.Collections.singletonList;
 import static org.slf4j.LoggerFactory.getLogger;
 
 @Service
@@ -57,7 +59,10 @@ public class OppslagstjenesteStub implements Oppslag {
         dto.bankkonto.kontonummer = "1234567890";
         dto.bankkonto.banknavn = "Stub NOR";
 
-        dto.barn = Collections.singletonList(new Barn("01011812345", "Mo", null, "Stubsveen", "M", now().minusYears(1)));
+        AnnenForelder annenForelder = new AnnenForelder("01017098765", "Steve", "Stubsveen", "Nichols", now().minusYears(45));
+
+        Barn barn = new Barn("01011812345", "Mo", null, "Stubsveen", "M", now().minusYears(1), annenForelder);
+        dto.barn = singletonList(barn);
 
         return dto;
     }
