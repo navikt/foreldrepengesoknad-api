@@ -11,10 +11,4 @@ public class Barn {
     public LocalDate termindato;
     public LocalDate terminbekreftelseDato;
 
-    @Override
-    public String toString() {
-        return getClass().getSimpleName() + " [erBarnetFødt=" + erBarnetFødt + ", fødselsdatoer=" + fødselsdatoer
-                + ", antallBarn=" + antallBarn
-                + ", termindato=" + termindato + ", terminbekreftelseDato=" + terminbekreftelseDato + "]";
-    }
 }

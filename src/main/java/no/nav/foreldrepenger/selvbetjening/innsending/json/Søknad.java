@@ -20,9 +20,9 @@ public class Søknad {
 
     public String type;
     public Søker søker;
-    public List<Vedlegg> vedlegg;
-
     public LocalDateTime opprettet;
+
+    public List<Vedlegg> vedlegg;
 
     public Søknad(){
         vedlegg = new ArrayList<>();

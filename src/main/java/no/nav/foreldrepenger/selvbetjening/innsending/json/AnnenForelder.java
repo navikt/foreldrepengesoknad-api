@@ -21,10 +21,4 @@ public class AnnenForelder {
         }
     }
 
-    @Override
-    public String toString() {
-        return getClass().getSimpleName() + " [kanIkkeOppgis=" + kanIkkeOppgis + ", navn=" + navn + ", fnr=" + fnr
-                + ", utenlandskFnr="
-                + utenlandskFnr + ", bostedsland=" + bostedsland + "]";
-    }
 }
