@@ -1,18 +1,13 @@
 package no.nav.foreldrepenger.selvbetjening.felles.attachments;
 
-import static com.itextpdf.text.PageSize.A4;
-import static java.util.Arrays.asList;
-import static org.springframework.http.MediaType.APPLICATION_PDF;
-import static org.springframework.http.MediaType.IMAGE_JPEG;
-import static org.springframework.http.MediaType.IMAGE_PNG;
-import static org.springframework.util.StreamUtils.copyToByteArray;
-
-import java.io.ByteArrayOutputStream;
-import java.io.IOException;
-import java.util.List;
-
-import javax.inject.Inject;
-
+import no.nav.foreldrepenger.selvbetjening.felles.attachments.exceptions.AttachmentConversionException;
+import no.nav.foreldrepenger.selvbetjening.felles.attachments.exceptions.AttachmentTypeUnsupportedException;
+import no.nav.foreldrepenger.selvbetjening.felles.attachments.exceptions.AttachmentsTooLargeException;
+import org.apache.pdfbox.pdmodel.PDDocument;
+import org.apache.pdfbox.pdmodel.PDPage;
+import org.apache.pdfbox.pdmodel.PDPageContentStream;
+import org.apache.pdfbox.pdmodel.common.PDRectangle;
+import org.apache.pdfbox.pdmodel.graphics.image.PDImageXObject;
 import org.apache.tika.Tika;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -21,15 +16,14 @@ import org.springframework.core.io.Resource;
 import org.springframework.http.MediaType;
 import org.springframework.stereotype.Component;
 
-import com.itextpdf.text.Document;
-import com.itextpdf.text.DocumentException;
-import com.itextpdf.text.Element;
-import com.itextpdf.text.Image;
-import com.itextpdf.text.pdf.PdfWriter;
+import javax.inject.Inject;
+import java.io.ByteArrayOutputStream;
+import java.io.IOException;
+import java.util.List;
 
-import no.nav.foreldrepenger.selvbetjening.felles.attachments.exceptions.AttachmentConversionException;
-import no.nav.foreldrepenger.selvbetjening.felles.attachments.exceptions.AttachmentTypeUnsupportedException;
-import no.nav.foreldrepenger.selvbetjening.felles.attachments.exceptions.AttachmentsTooLargeException;
+import static java.util.Arrays.asList;
+import static org.springframework.http.MediaType.*;
+import static org.springframework.util.StreamUtils.copyToByteArray;
 
 @Component
 public class Image2PDFConverter {
@@ -37,6 +31,8 @@ public class Image2PDFConverter {
     private final PDFPageSplitter pdfPageSplitter;
     private final PDF2ImageConverter pdf2ImageConverter;
     private final List<MediaType> supportedMediaTypes;
+
+    private static final PDRectangle A4 = PDRectangle.A4;
 
     private static final int MAX_PDF_PAGES_PR_DOCUMENT = 5;
 
@@ -84,43 +80,25 @@ public class Image2PDFConverter {
             }
             LOG.info("PDF inneholder {} sider, konverterer disse til bildeformat (fattigmanns virussscanner...)",
                     pdfPages.size());
-            return embedImagesInPdf(pdf2ImageConverter.convertToImages(pdfPages));
+            return embedImagesInPdf(pdf2ImageConverter.convertToImages(pdfPages), "jpg");
         }
         if (shouldConvertImage(mediaType)) {
-            return embedImagesInPdf(bytes);
+            return embedImagesInPdf(mediaType.getSubtype(), bytes);
         }
         throw new AttachmentTypeUnsupportedException(mediaType);
     }
 
-    private static byte[] embedImagesInPdf(byte[]... images) {
-        return embedImagesInPdf(asList(images));
+    private static byte[] embedImagesInPdf(String imgType, byte[]... images) {
+        return embedImagesInPdf(asList(images), imgType);
     }
 
-    private static byte[] embedImagesInPdf(List<byte[]> images) {
-        try {
-            Document document = new Document();
-            ByteArrayOutputStream baos = new ByteArrayOutputStream();
-            PdfWriter writer = PdfWriter.getInstance(document, baos);
-            writer.setFullCompression();
-            document.open();
-            images.stream().forEach(s -> addImage(document, s));
-            document.close();
-            return baos.toByteArray();
-        } catch (DocumentException e) {
-            LOG.warn("Konvertering av vedlegg feilet", e);
-            throw new AttachmentConversionException("Konvertering av vedlegg feilet", e);
-        }
-    }
-
-    private static void addImage(Document document, byte[] bytes) {
-        try {
-            LOG.info("Legger image til i dokumentet");
-            Image image = Image.getInstance(bytes);
-            image.setAlignment(Element.ALIGN_CENTER);
-            image.scaleToFit(A4.getWidth(), A4.getHeight());
-            document.add(image);
-        } catch (IOException | DocumentException e) {
-            throw new AttachmentConversionException("Kunne ikke legge image til i dokument", e);
+    private static byte[] embedImagesInPdf(List<byte[]> images, String imgType) {
+        try (PDDocument doc = new PDDocument(); ByteArrayOutputStream outputStream = new ByteArrayOutputStream()) {
+            images.forEach(i -> addPDFPageFromImage(doc, i, imgType));
+            doc.save(outputStream);
+            return outputStream.toByteArray();
+        } catch (IOException ex) {
+            throw new AttachmentConversionException("Konvertering av vedlegg feilet", ex);
         }
     }
 
@@ -139,6 +117,19 @@ public class Image2PDFConverter {
         return getClass().getSimpleName() + " [splitter=" + pdfPageSplitter + ", supportedMediaTypes="
                 + supportedMediaTypes
                 + "]";
+    }
+
+    private static void addPDFPageFromImage(PDDocument doc, byte[] origImg, String imgFormat) {
+        PDPage page = new PDPage(A4);
+        doc.addPage(page);
+        byte[] scaledImg = ImageScaler.toA4(origImg, imgFormat);
+        try (PDPageContentStream contentStream = new PDPageContentStream(doc, page)) {
+            PDImageXObject ximage = PDImageXObject.createFromByteArray(doc, scaledImg, "img");
+            contentStream.drawImage(ximage, (int) A4.getLowerLeftX(), (int) A4.getLowerLeftY());
+        } catch (IOException ex) {
+            throw new AttachmentConversionException("Konvertering av vedlegg feilet", ex);
+        }
+
     }
 
 }
