@@ -4,6 +4,7 @@ import com.fasterxml.jackson.annotation.JsonInclude;
 import no.nav.foreldrepenger.selvbetjening.innsending.json.*;
 
 import java.time.LocalDate;
+import java.util.ArrayList;
 import java.util.List;
 
 import static com.fasterxml.jackson.annotation.JsonInclude.Include.NON_EMPTY;
@@ -39,6 +40,12 @@ public class YtelseDto {
 
     @JsonInclude(NON_NULL)
     public class AnnenForelderDto {
+        public String type;
+        public String id;
+        public String fnr;
+        public String land;
+        public String fornavn;
+
         public AnnenForelderDto(AnnenForelder annenForelder) {
             this.type = annenForelder.type();
             this.fornavn = annenForelder.navn;
@@ -51,35 +58,52 @@ public class YtelseDto {
                 this.id = annenForelder.fnr;
             }
         }
-
-        public String type;
-        public String id;
-        public String fnr;
-        public String land;
-        public String fornavn;
     }
 
     @JsonInclude(NON_EMPTY)
     public class MedlemsskapDto {
-        public MedlemsskapDto(Utenlandsopphold utenlandsopphold) {
-            this.norgeSiste12 = utenlandsopphold.iNorgeSiste12Mnd;
-            this.norgeNeste12 = utenlandsopphold.iNorgeNeste12Mnd;
-            this.fødselNorge = utenlandsopphold.fødselINorge;
-            this.utenlandsopphold = utenlandsopphold.tidligereOpphold;
-            this.framtidigUtenlandsopphold = utenlandsopphold.senereOpphold;
-            this.arbeidSiste12 = "IKKE_ARBEIDET";
-        }
-
         public Boolean norgeSiste12;
         public Boolean norgeNeste12;
         public Boolean fødselNorge;
         public String arbeidSiste12;
-        public List<UtenlandsoppholdPeriode> utenlandsopphold;
-        public List<UtenlandsoppholdPeriode> framtidigUtenlandsopphold;
+        public List<UtenlandsoppholdPeriodeDto> utenlandsopphold = new ArrayList<>();
+        public List<UtenlandsoppholdPeriodeDto> framtidigUtenlandsopphold = new ArrayList<>();
+
+        public MedlemsskapDto(Utenlandsopphold opphold) {
+            this.norgeSiste12 = opphold.iNorgeSiste12Mnd;
+            this.norgeNeste12 = opphold.iNorgeNeste12Mnd;
+            this.fødselNorge = opphold.fødselINorge;
+            this.arbeidSiste12 = "IKKE_ARBEIDET";
+
+            for (UtenlandsoppholdPeriode tidligere : opphold.tidligereOpphold) {
+                utenlandsopphold.add(new UtenlandsoppholdPeriodeDto(tidligere));
+            }
+            for (UtenlandsoppholdPeriode senere : opphold.senereOpphold) {
+                framtidigUtenlandsopphold.add(new UtenlandsoppholdPeriodeDto(senere));
+            }
+        }
+
+    }
+
+    public class UtenlandsoppholdPeriodeDto {
+        public String land;
+        public PeriodeDto varighet = new PeriodeDto();
+
+        public UtenlandsoppholdPeriodeDto(UtenlandsoppholdPeriode periode) {
+            this.land = periode.land;
+            this.varighet.fom = periode.tidsperiode.startdato;
+            this.varighet.tom = periode.tidsperiode.sluttdato;
+        }
     }
 
     @JsonInclude(NON_EMPTY)
     public class RelasjonTilBarnDto {
+        public String type;
+        public Integer antallBarn;
+        public LocalDate terminDato;
+        public LocalDate utstedtDato;
+        public List<LocalDate> fødselsdato;
+
         public RelasjonTilBarnDto(Barn barn) {
             this.type = barn.erBarnetFødt ? "fødsel" : "termin";
             this.antallBarn = barn.antallBarn;
@@ -87,12 +111,6 @@ public class YtelseDto {
             this.utstedtDato = barn.terminbekreftelseDato;
             this.fødselsdato = barn.fødselsdatoer;
         }
-
-        public String type;
-        public Integer antallBarn;
-        public LocalDate terminDato;
-        public LocalDate utstedtDato;
-        public List<LocalDate> fødselsdato;
     }
 
     @JsonInclude(NON_NULL)

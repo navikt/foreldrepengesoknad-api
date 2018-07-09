@@ -49,10 +49,4 @@ public class OpptjeningDto {
             this.periode.tom = tom;
         }
     }
-
-    @JsonInclude(NON_NULL)
-    public class PeriodeDto {
-        public LocalDate fom;
-        public LocalDate tom;
-    }
 }
