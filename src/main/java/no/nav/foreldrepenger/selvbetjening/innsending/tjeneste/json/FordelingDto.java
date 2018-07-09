@@ -12,13 +12,13 @@ import static com.fasterxml.jackson.annotation.JsonInclude.Include.NON_NULL;
 public class FordelingDto {
 
     public List<FordelingPeriodeDto> perioder = new ArrayList<>();
-    public Boolean annenForelderErInformert;
+    public Boolean erAnnenForelderInformert;
 
     public FordelingDto(List<UttaksplanPeriode> uttaksplanperioder, Boolean annenForelderErInformert) {
         for (UttaksplanPeriode u : uttaksplanperioder) {
             perioder.add(new FordelingPeriodeDto(u));
         }
-        this.annenForelderErInformert = annenForelderErInformert;
+        this.erAnnenForelderInformert = annenForelderErInformert;
     }
 
     @JsonInclude(NON_NULL)
