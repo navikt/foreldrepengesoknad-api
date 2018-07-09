@@ -8,6 +8,8 @@ public class AnnenForelder {
     public String fnr;
     public Boolean utenlandskFnr;
     public String bostedsland;
+    public Boolean harRettPåForeldrepenger;
+    public Boolean erInformertOmSøknaden;
 
     public String type() {
         if (isTrue(kanIkkeOppgis)) {

@@ -33,7 +33,8 @@ public class YtelseDto {
 
         this.dekningsgrad = "GRAD100";
         this.opptjening = new OpptjeningDto(søknad.søker);
-        this.fordeling = new FordelingDto(søknad.uttaksplan);
+        this.fordeling = new FordelingDto(søknad.uttaksplan, søknad.annenForelder.erInformertOmSøknaden);
+        this.rettigheter = new RettigheterDto(søknad.søker, søknad.annenForelder);
     }
 
     @JsonInclude(NON_NULL)
@@ -97,7 +98,11 @@ public class YtelseDto {
     @JsonInclude(NON_NULL)
     public class RettigheterDto {
         public Boolean harAnnenForelderRett;
-        public Boolean harOmsorgForBarnetIPeriodene;
         public Boolean harAleneOmsorgForBarnet;
+
+        public RettigheterDto(Søker søker, AnnenForelder annenForelder) {
+            this.harAleneOmsorgForBarnet = søker.erAleneOmOmsorg;
+            this.harAnnenForelderRett = annenForelder.harRettPåForeldrepenger;
+        }
     }
 }
