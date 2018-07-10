@@ -1,6 +1,7 @@
 package no.nav.foreldrepenger.selvbetjening.innsending.tjeneste.json;
 
 import com.fasterxml.jackson.annotation.JsonInclude;
+import no.nav.foreldrepenger.selvbetjening.innsending.json.arbeid.AnnenInntekt;
 import no.nav.foreldrepenger.selvbetjening.innsending.json.arbeid.FrilansInformasjon;
 import no.nav.foreldrepenger.selvbetjening.innsending.json.arbeid.Frilansoppdrag;
 import no.nav.foreldrepenger.selvbetjening.innsending.json.arbeid.SelvstendigNæringsdrivendeInformasjon;
@@ -17,6 +18,7 @@ public class OpptjeningDto {
 
     public FrilansDto frilans;
     public List<EgenNæringDto> egenNæring = new ArrayList<>();
+    public List<AnnenOpptjeningDto> annenOpptjening = new ArrayList<>();
 
     public OpptjeningDto(Søker søker) {
         if (søker.frilansInformasjon != null) {
@@ -24,6 +26,9 @@ public class OpptjeningDto {
         }
         for (SelvstendigNæringsdrivendeInformasjon selvstendig : søker.selvstendigNæringsdrivendeInformasjon) {
             this.egenNæring.add(new EgenNæringDto(selvstendig));
+        }
+        for (AnnenInntekt annenInntekt : søker.andreInntekterSiste10Mnd) {
+            this.annenOpptjening.add(new AnnenOpptjeningDto(annenInntekt));
         }
     }
 
@@ -72,6 +77,17 @@ public class OpptjeningDto {
             this.arbeidsland = selvstendig.registrertILand;
 
             this.virksomhetsTyper.addAll(selvstendig.næringstyper);
+        }
+    }
+
+    public class AnnenOpptjeningDto {
+        public String type;
+        public PeriodeDto periode = new PeriodeDto();
+
+        public AnnenOpptjeningDto(AnnenInntekt annenInntekt) {
+            this.type = annenInntekt.type;
+            this.periode.fom = annenInntekt.tidsperiode.startdato;
+            this.periode.tom = annenInntekt.tidsperiode.sluttdato;
         }
     }
 }

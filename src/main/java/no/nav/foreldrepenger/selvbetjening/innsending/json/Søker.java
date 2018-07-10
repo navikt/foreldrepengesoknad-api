@@ -1,8 +1,10 @@
 package no.nav.foreldrepenger.selvbetjening.innsending.json;
 
+import no.nav.foreldrepenger.selvbetjening.innsending.json.arbeid.AnnenInntekt;
 import no.nav.foreldrepenger.selvbetjening.innsending.json.arbeid.FrilansInformasjon;
 import no.nav.foreldrepenger.selvbetjening.innsending.json.arbeid.SelvstendigNæringsdrivendeInformasjon;
 
+import java.util.ArrayList;
 import java.util.List;
 
 public class Søker {
@@ -11,11 +13,8 @@ public class Søker {
 
     public Boolean erAleneOmOmsorg;
 
-    public Boolean harJobbetSomFrilansSiste10Mnd;
-    public Boolean harJobbetSomSelvstendigNæringsdrivendeSiste10Mnd;
-    public Boolean harHattAnnenInntektSiste10Mnd;
-
     public FrilansInformasjon frilansInformasjon;
-    public List<SelvstendigNæringsdrivendeInformasjon> selvstendigNæringsdrivendeInformasjon;
+    public List<SelvstendigNæringsdrivendeInformasjon> selvstendigNæringsdrivendeInformasjon = new ArrayList<>();
+    public List<AnnenInntekt> andreInntekterSiste10Mnd = new ArrayList<>();
 
 }
