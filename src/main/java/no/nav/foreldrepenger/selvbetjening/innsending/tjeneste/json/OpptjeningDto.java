@@ -62,16 +62,14 @@ public class OpptjeningDto {
         public String orgNummer;
         public List<String> virksomhetsTyper = new ArrayList<>();
         public String arbeidsland;
-        public Double stillingsprosent;
 
         public EgenNæringDto(SelvstendigNæringsdrivendeInformasjon selvstendig) {
             this.type = selvstendig.registrertINorge ? "norsk" : "utenlandsk";
+            this.orgNummer = selvstendig.registrertINorge ? selvstendig.organisasjonsnummer : null;
+            this.orgName = selvstendig.navnPåNæringen;
             this.periode.fom = selvstendig.tidsperiode.startdato;
             this.periode.tom = selvstendig.tidsperiode.sluttdato;
-            this.orgName = selvstendig.navnPåNæringen;
-            this.orgNummer = selvstendig.organisasjonsnummer;
             this.arbeidsland = selvstendig.registrertILand;
-            this.stillingsprosent = selvstendig.stillingsprosent;
 
             this.virksomhetsTyper.addAll(selvstendig.næringstyper);
         }
