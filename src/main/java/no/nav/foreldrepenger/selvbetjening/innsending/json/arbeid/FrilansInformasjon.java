@@ -1,4 +1,4 @@
-package no.nav.foreldrepenger.selvbetjening.innsending.json;
+package no.nav.foreldrepenger.selvbetjening.innsending.json.arbeid;
 
 import java.time.LocalDate;
 import java.util.ArrayList;

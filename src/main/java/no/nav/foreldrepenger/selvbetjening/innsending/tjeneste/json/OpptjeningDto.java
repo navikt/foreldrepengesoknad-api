@@ -1,8 +1,9 @@
 package no.nav.foreldrepenger.selvbetjening.innsending.tjeneste.json;
 
 import com.fasterxml.jackson.annotation.JsonInclude;
-import no.nav.foreldrepenger.selvbetjening.innsending.json.FrilansInformasjon;
-import no.nav.foreldrepenger.selvbetjening.innsending.json.Frilansoppdrag;
+import no.nav.foreldrepenger.selvbetjening.innsending.json.arbeid.FrilansInformasjon;
+import no.nav.foreldrepenger.selvbetjening.innsending.json.arbeid.Frilansoppdrag;
+import no.nav.foreldrepenger.selvbetjening.innsending.json.arbeid.SelvstendigNæringsdrivendeInformasjon;
 import no.nav.foreldrepenger.selvbetjening.innsending.json.Søker;
 
 import java.time.LocalDate;
@@ -10,16 +11,19 @@ import java.util.ArrayList;
 import java.util.List;
 
 import static com.fasterxml.jackson.annotation.JsonInclude.Include.NON_EMPTY;
-import static com.fasterxml.jackson.annotation.JsonInclude.Include.NON_NULL;
 
-@JsonInclude(NON_NULL)
+@JsonInclude(NON_EMPTY)
 public class OpptjeningDto {
 
     public FrilansDto frilans;
+    public List<EgenNæringDto> egenNæring = new ArrayList<>();
 
     public OpptjeningDto(Søker søker) {
         if (søker.frilansInformasjon != null) {
             this.frilans = new FrilansDto(søker.frilansInformasjon);
+        }
+        for (SelvstendigNæringsdrivendeInformasjon selvstendig : søker.selvstendigNæringsdrivendeInformasjon) {
+            this.egenNæring.add(new EgenNæringDto(selvstendig));
         }
     }
 
@@ -47,6 +51,29 @@ public class OpptjeningDto {
             this.oppdragsgiver = oppdragsgiver;
             this.periode.fom = fom;
             this.periode.tom = tom;
+        }
+    }
+
+    @JsonInclude(NON_EMPTY)
+    public class EgenNæringDto {
+        public String type;
+        public PeriodeDto periode = new PeriodeDto();
+        public String orgName;
+        public String orgNummer;
+        public List<String> virksomhetsTyper = new ArrayList<>();
+        public String arbeidsland;
+        public Double stillingsprosent;
+
+        public EgenNæringDto(SelvstendigNæringsdrivendeInformasjon selvstendig) {
+            this.type = selvstendig.registrertINorge ? "norsk" : "utenlandsk";
+            this.periode.fom = selvstendig.tidsperiode.startdato;
+            this.periode.tom = selvstendig.tidsperiode.sluttdato;
+            this.orgName = selvstendig.navnPåNæringen;
+            this.orgNummer = selvstendig.organisasjonsnummer;
+            this.arbeidsland = selvstendig.registrertILand;
+            this.stillingsprosent = selvstendig.stillingsprosent;
+
+            this.virksomhetsTyper.addAll(selvstendig.næringstyper);
         }
     }
 }
