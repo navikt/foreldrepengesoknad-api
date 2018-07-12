@@ -16,4 +16,9 @@ public class Barn {
     public LocalDate termindato;
     public LocalDate terminbekreftelseDato;
 
+    public LocalDate adopsjonsdato;
+    public Boolean adoptertIUtlandet;
+
+    public LocalDate foreldreansvarsdato;
+
 }
