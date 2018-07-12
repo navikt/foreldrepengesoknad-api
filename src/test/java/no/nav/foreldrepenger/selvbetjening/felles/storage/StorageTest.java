@@ -41,6 +41,14 @@ public class StorageTest {
         new S3Storage(s3());
     }
 
+    @Test
+    public void deleteIsIdempotent() {
+        Storage storage = new S3Storage(s3());
+        storage.put("mydir", "mykey", "myvalue");
+        storage.delete("mydir", "mykey");
+        storage.delete("mydir", "mykey");
+    }
+
     private AmazonS3 s3() {
         return AmazonS3ClientBuilder
                 .standard()

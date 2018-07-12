@@ -4,6 +4,7 @@ import com.amazonaws.services.s3.AmazonS3;
 import com.amazonaws.services.s3.AmazonS3ClientBuilder;
 import no.nav.foreldrepenger.selvbetjening.felles.storage.S3Storage;
 import no.nav.foreldrepenger.selvbetjening.felles.storage.Storage;
+import no.nav.foreldrepenger.selvbetjening.felles.storage.StorageCrypto;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.Profile;
@@ -36,5 +37,10 @@ public class StubConfiguration {
     @Profile("localstack")
     public StubbedLocalStackContainer stubbedLocalStackContainer() {
         return new StubbedLocalStackContainer().withServices(S3);
+    }
+
+    @Bean
+    public StorageCrypto storageCrypto() {
+        return new StorageCrypto("whatever");
     }
 }

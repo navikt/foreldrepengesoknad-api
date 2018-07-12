@@ -8,6 +8,7 @@ import com.amazonaws.services.s3.AmazonS3;
 import com.amazonaws.services.s3.AmazonS3ClientBuilder;
 import no.nav.foreldrepenger.selvbetjening.felles.storage.S3Storage;
 import no.nav.foreldrepenger.selvbetjening.felles.storage.Storage;
+import no.nav.foreldrepenger.selvbetjening.felles.storage.StorageCrypto;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -30,10 +31,18 @@ public class StorageConfiguration {
     @Value("${FORELDREPENGESOKNAD_API_S3_REGION:us-east-1}")
     private String s3Region;
 
+    @Value("${FORELDREPENGESOKNAD_API_STORAGE_PASSWORD}")
+    private String encryptionPassphrase;
+
     @Bean
     @Lazy
     public Storage storage() {
         return new S3Storage(s3());
+    }
+
+    @Bean
+    public StorageCrypto storageCrypto() {
+        return new StorageCrypto(encryptionPassphrase);
     }
 
     private AmazonS3 s3() {

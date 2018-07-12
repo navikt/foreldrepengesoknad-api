@@ -1,12 +1,9 @@
 package no.nav.foreldrepenger.selvbetjening.felles.storage;
 
-import no.nav.foreldrepenger.selvbetjening.felles.crypto.Crypto;
-import no.nav.security.oidc.OIDCConstants;
+import no.nav.foreldrepenger.selvbetjening.felles.util.FnrExtractor;
 import no.nav.security.oidc.context.OIDCRequestContextHolder;
-import no.nav.security.oidc.context.OIDCValidationContext;
 import no.nav.security.spring.oidc.validation.api.ProtectedWithClaims;
 import org.slf4j.Logger;
-import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
@@ -14,7 +11,6 @@ import org.springframework.web.multipart.MultipartFile;
 import javax.inject.Inject;
 import java.util.Optional;
 
-import static javax.xml.bind.DatatypeConverter.printHexBinary;
 import static org.slf4j.LoggerFactory.getLogger;
 import static org.springframework.http.MediaType.APPLICATION_JSON_VALUE;
 import static org.springframework.http.MediaType.MULTIPART_FORM_DATA_VALUE;
@@ -27,53 +23,53 @@ public class StorageController {
     private static final Logger log = getLogger(StorageController.class);
     private static final String KEY = "soknad";
 
-    @Value("${FORELDREPENGESOKNAD_API_STORAGE_PASSWORD}")
-    private String encryptionPassphrase;
-
     @Inject
     private OIDCRequestContextHolder contextHolder;
 
     @Inject
     private Storage storage;
 
+    @Inject
+    private StorageCrypto crypto;
+
     @GetMapping
     public ResponseEntity<String> getSoknad() {
-        String fnr = subjectFromOIDC();
-        String directory = getDirectory(fnr);
+        String fnr = FnrExtractor.extract(contextHolder);
+        String directory = crypto.encryptDirectoryName(fnr);
         log.info("Retrieving søknad from directory " + directory);
         Optional<String> encryptedValue = storage.get(directory, KEY);
         return encryptedValue
-                .map(ev -> ResponseEntity.ok().body(decrypt(ev, fnr)))
+                .map(ev -> ResponseEntity.ok().body(crypto.decrypt(ev, fnr)))
                 .orElse(ResponseEntity.notFound().build());
     }
 
     @PostMapping(consumes = APPLICATION_JSON_VALUE)
     public ResponseEntity<String> storeSoknad(@RequestBody String soknad) {
-        String fnr = subjectFromOIDC();
-        String directory = getDirectory(fnr);
+        String fnr = FnrExtractor.extract(contextHolder);
+        String directory = crypto.encryptDirectoryName(fnr);
         log.info("Writing søknad to directory " + directory);
-        String encryptedValue = encrypt(soknad, fnr);
+        String encryptedValue = crypto.encrypt(soknad, fnr);
         storage.put(directory, KEY, encryptedValue);
         return ResponseEntity.noContent().build();
     }
 
     @GetMapping(path = "vedlegg/{key}")
     public ResponseEntity<byte[]> getAttachment(@PathVariable("key") String key) {
-        String fnr = subjectFromOIDC();
-        String directory = getDirectory(fnr);
+        String fnr = FnrExtractor.extract(contextHolder);
+        String directory = crypto.encryptDirectoryName(fnr);
         log.info("Retrieving attachment from directory " + directory);
         return storage.get(directory, key)
-                .map(ev -> Attachment.fromJson(decrypt(ev, fnr)).asOKHTTPEntity())
+                .map(ev -> Attachment.fromJson(crypto.decrypt(ev, fnr)).asOKHTTPEntity())
                 .orElse(ResponseEntity.notFound().build());
     }
 
     @PostMapping(path = "/vedlegg", consumes = MULTIPART_FORM_DATA_VALUE)
     public ResponseEntity<String> storeAttachment(@RequestPart("vedlegg") MultipartFile attachmentMultipartFile) {
         Attachment attachment = Attachment.of(attachmentMultipartFile);
-        String fnr = subjectFromOIDC();
-        String directory = getDirectory(fnr);
+        String fnr = FnrExtractor.extract(contextHolder);
+        String directory = crypto.encryptDirectoryName(fnr);
         log.info("Writing attachment to directory " + directory);
-        String encryptedValue = encrypt(attachment.toJson(), fnr);
+        String encryptedValue = crypto.encrypt(attachment.toJson(), fnr);
         storage.put(directory, attachment.uuid, encryptedValue);
         return ResponseEntity.created(attachment.uri()).build();
     }
@@ -81,28 +77,11 @@ public class StorageController {
 
     @DeleteMapping(path = "vedlegg/{key}")
     public ResponseEntity<String> deleteAttachment(@PathVariable("key") String key) {
-        String directory = getDirectory(subjectFromOIDC());
+        String fnr = FnrExtractor.extract(contextHolder);
+        String directory = crypto.encryptDirectoryName(fnr);
         log.info("Deleting attachment from directory " + directory);
         storage.delete(directory, key);
         return ResponseEntity.noContent().build();
-    }
-
-    private String getDirectory(String plaintext) {
-        return printHexBinary(encrypt(plaintext, plaintext).getBytes());
-    }
-
-    private String subjectFromOIDC() {
-        OIDCValidationContext context = (OIDCValidationContext) contextHolder
-                .getRequestAttribute(OIDCConstants.OIDC_VALIDATION_CONTEXT);
-        return context.getClaims("selvbetjening").getClaimSet().getSubject();
-    }
-
-    private String encrypt(String plaintext, String fnr) {
-        return new Crypto(encryptionPassphrase, fnr).encrypt(plaintext);
-    }
-
-    private String decrypt(String encrypted, String fnr) {
-        return new Crypto(encryptionPassphrase, fnr).decrypt(encrypted);
     }
 
 }

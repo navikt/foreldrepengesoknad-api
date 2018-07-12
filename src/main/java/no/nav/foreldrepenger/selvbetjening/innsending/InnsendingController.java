@@ -10,6 +10,10 @@ import java.util.List;
 
 import javax.inject.Inject;
 
+import no.nav.foreldrepenger.selvbetjening.felles.storage.Storage;
+import no.nav.foreldrepenger.selvbetjening.felles.storage.StorageCrypto;
+import no.nav.foreldrepenger.selvbetjening.felles.util.FnrExtractor;
+import no.nav.security.oidc.context.OIDCRequestContextHolder;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.http.ResponseEntity;
@@ -48,6 +52,15 @@ public class InnsendingController {
     public RestTemplate http;
 
     @Inject
+    private OIDCRequestContextHolder contextHolder;
+
+    @Inject
+    private Storage storage;
+
+    @Inject
+    private StorageCrypto crypto;
+
+    @Inject
     public InnsendingController(Innsending innsending) {
         this.innsending = innsending;
     }
@@ -55,9 +68,13 @@ public class InnsendingController {
     @PostMapping(consumes = APPLICATION_JSON_VALUE)
     public ResponseEntity<Kvittering> sendInn(@RequestBody Søknad søknad) {
         LOG.info("Mottok søknad  {}", søknad);
-        søknad.vedlegg.stream().forEach(this::fetchAndDeleteAttachment);
+
         checkVedleggTooLarge(søknad.vedlegg);
-        return innsending.sendInn(søknad);
+        ResponseEntity<Kvittering> respons = innsending.sendInn(søknad);
+
+        deleteFromTempStorage(FnrExtractor.extract(contextHolder), søknad);
+
+        return respons;
     }
 
     // TODO: Fjern denne når frontend er oppdatert
@@ -93,5 +110,10 @@ public class InnsendingController {
     private void fetchAndDeleteAttachment(Vedlegg vedlegg) {
         vedlegg.content = http.getForObject(vedlegg.url, byte[].class);
         http.delete(vedlegg.url);
+    }
+
+    private void deleteFromTempStorage(String fnr, Søknad søknad) {
+        søknad.vedlegg.stream().forEach(this::fetchAndDeleteAttachment);
+        storage.delete(crypto.encryptDirectoryName(fnr), "soknad");
     }
 }
