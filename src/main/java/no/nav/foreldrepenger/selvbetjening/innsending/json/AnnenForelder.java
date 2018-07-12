@@ -10,6 +10,7 @@ public class AnnenForelder {
     public String bostedsland;
     public Boolean harRettPåForeldrepenger;
     public Boolean erInformertOmSøknaden;
+    public Boolean erForSyk;
 
     public String type() {
         if (isTrue(kanIkkeOppgis)) {

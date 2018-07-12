@@ -22,6 +22,12 @@ public class Søknad {
     public Søker søker;
     public LocalDateTime opprettet;
 
+    public Barn barn;
+    public AnnenForelder annenForelder;
+    public Utenlandsopphold informasjonOmUtenlandsopphold;
+
+    public String situasjon;
+
     public List<Vedlegg> vedlegg;
 
     public Søknad(){
