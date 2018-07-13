@@ -103,6 +103,7 @@ public class YtelseDto {
         public LocalDate terminDato;
         public LocalDate utstedtDato;
         public List<LocalDate> fødselsdato;
+        public LocalDate omsorgsovertakelsesdato;
 
         public RelasjonTilBarnDto(Barn barn, String situasjon) {
             this.type = type(barn.erBarnetFødt, situasjon);
@@ -110,6 +111,7 @@ public class YtelseDto {
             this.terminDato = barn.termindato;
             this.utstedtDato = barn.terminbekreftelseDato;
             this.fødselsdato = barn.fødselsdatoer;
+            this.omsorgsovertakelsesdato = omsorgsovertakelsesdato(barn);
         }
 
         private String type(Boolean erBarnetFødt, String situasjon) {
@@ -117,6 +119,16 @@ public class YtelseDto {
                 return erBarnetFødt ? "fødsel" : "termin";
             } else {
                 return situasjon;
+            }
+        }
+
+        private LocalDate omsorgsovertakelsesdato(Barn barn) {
+            if (barn.adopsjonsdato != null) {
+                return barn.adopsjonsdato;
+            } else if (barn.foreldreansvarsdato != null) {
+                return barn.foreldreansvarsdato;
+            } else {
+                return null;
             }
         }
     }
