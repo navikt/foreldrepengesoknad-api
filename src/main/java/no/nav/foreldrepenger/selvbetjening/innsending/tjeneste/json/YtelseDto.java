@@ -9,6 +9,7 @@ import java.util.List;
 
 import static com.fasterxml.jackson.annotation.JsonInclude.Include.NON_EMPTY;
 import static com.fasterxml.jackson.annotation.JsonInclude.Include.NON_NULL;
+import static org.apache.commons.lang3.StringUtils.isEmpty;
 
 @JsonInclude(NON_NULL)
 public class YtelseDto {
@@ -22,20 +23,19 @@ public class YtelseDto {
     public FordelingDto fordeling;
     public RettigheterDto rettigheter;
 
-    public YtelseDto(String type, Utenlandsopphold utenlandsopphold, Barn barn, AnnenForelder annenForelder) {
-        this.type = type;
-        this.medlemsskap = new MedlemsskapDto(utenlandsopphold);
-        this.relasjonTilBarn = new RelasjonTilBarnDto(barn);
-        this.annenForelder = new AnnenForelderDto(annenForelder);
-    }
+    public YtelseDto(Søknad søknad) {
+        this.type = søknad.type;
+        this.medlemsskap = new MedlemsskapDto(søknad.informasjonOmUtenlandsopphold);
+        this.relasjonTilBarn = new RelasjonTilBarnDto(søknad.barn, søknad.situasjon);
+        this.annenForelder = new AnnenForelderDto(søknad.annenForelder);
 
-    public YtelseDto(Foreldrepengesøknad søknad) {
-        this(søknad.type, søknad.informasjonOmUtenlandsopphold, søknad.barn, søknad.annenForelder);
-
-        this.dekningsgrad = "GRAD100";
-        this.opptjening = new OpptjeningDto(søknad.søker);
-        this.fordeling = new FordelingDto(søknad.uttaksplan, søknad.annenForelder.erInformertOmSøknaden);
-        this.rettigheter = new RettigheterDto(søknad.søker, søknad.annenForelder);
+        if (søknad instanceof Foreldrepengesøknad) {
+            Foreldrepengesøknad foreldrepengesøknad = (Foreldrepengesøknad) søknad;
+            this.dekningsgrad = "GRAD100";
+            this.opptjening = new OpptjeningDto(foreldrepengesøknad.søker);
+            this.fordeling = new FordelingDto(foreldrepengesøknad.uttaksplan, foreldrepengesøknad.annenForelder.erInformertOmSøknaden);
+            this.rettigheter = new RettigheterDto(foreldrepengesøknad.søker, foreldrepengesøknad.annenForelder);
+        }
     }
 
     @JsonInclude(NON_NULL)
@@ -103,13 +103,33 @@ public class YtelseDto {
         public LocalDate terminDato;
         public LocalDate utstedtDato;
         public List<LocalDate> fødselsdato;
+        public LocalDate omsorgsovertakelsesdato;
 
-        public RelasjonTilBarnDto(Barn barn) {
-            this.type = barn.erBarnetFødt ? "fødsel" : "termin";
+        public RelasjonTilBarnDto(Barn barn, String situasjon) {
+            this.type = type(barn.erBarnetFødt, situasjon);
             this.antallBarn = barn.antallBarn;
             this.terminDato = barn.termindato;
             this.utstedtDato = barn.terminbekreftelseDato;
             this.fødselsdato = barn.fødselsdatoer;
+            this.omsorgsovertakelsesdato = omsorgsovertakelsesdato(barn);
+        }
+
+        private String type(Boolean erBarnetFødt, String situasjon) {
+            if (isEmpty(situasjon) || situasjon.equals("fødsel")) {
+                return erBarnetFødt ? "fødsel" : "termin";
+            } else {
+                return situasjon;
+            }
+        }
+
+        private LocalDate omsorgsovertakelsesdato(Barn barn) {
+            if (barn.adopsjonsdato != null) {
+                return barn.adopsjonsdato;
+            } else if (barn.foreldreansvarsdato != null) {
+                return barn.foreldreansvarsdato;
+            } else {
+                return null;
+            }
         }
     }
 
