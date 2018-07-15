@@ -1,10 +1,7 @@
 package no.nav.foreldrepenger.selvbetjening.innsending.tjeneste.json;
 
 import com.fasterxml.jackson.annotation.JsonInclude;
-import no.nav.foreldrepenger.selvbetjening.innsending.json.arbeid.AnnenInntekt;
-import no.nav.foreldrepenger.selvbetjening.innsending.json.arbeid.FrilansInformasjon;
-import no.nav.foreldrepenger.selvbetjening.innsending.json.arbeid.Frilansoppdrag;
-import no.nav.foreldrepenger.selvbetjening.innsending.json.arbeid.SelvstendigNæringsdrivendeInformasjon;
+import no.nav.foreldrepenger.selvbetjening.innsending.json.arbeid.*;
 import no.nav.foreldrepenger.selvbetjening.innsending.json.Søker;
 
 import java.time.LocalDate;
@@ -67,6 +64,7 @@ public class OpptjeningDto {
         public String orgNummer;
         public List<String> virksomhetsTyper = new ArrayList<>();
         public String arbeidsland;
+        public List<RegnskapsførerDto> regnskapsførere = new ArrayList<>();
 
         public EgenNæringDto(SelvstendigNæringsdrivendeInformasjon selvstendig) {
             this.type = selvstendig.registrertINorge ? "norsk" : "utenlandsk";
@@ -77,6 +75,23 @@ public class OpptjeningDto {
             this.arbeidsland = selvstendig.registrertILand;
 
             this.virksomhetsTyper.addAll(selvstendig.næringstyper);
+
+            if (selvstendig.regnskapsfører != null) {
+                regnskapsførere.add(new RegnskapsførerDto(selvstendig.regnskapsfører));
+            }
+            if (selvstendig.revisor != null) {
+                regnskapsførere.add(new RegnskapsførerDto(selvstendig.revisor));
+            }
+        }
+    }
+
+    public class RegnskapsførerDto {
+        public String fornavn;
+        public String telefon;
+
+        public RegnskapsførerDto(TilknyttetPerson person) {
+            this.fornavn = person.navn;
+            this.telefon = person.telefonnummer;
         }
     }
 
