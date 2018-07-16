@@ -85,11 +85,11 @@ public class OpptjeningDto {
     }
 
     public class RegnskapsførerDto {
-        public String fornavn;
+        public String navn;
         public String telefon;
 
         public RegnskapsførerDto(TilknyttetPerson person) {
-            this.fornavn = person.navn;
+            this.navn = person.navn;
             this.telefon = person.telefonnummer;
         }
     }
