@@ -16,6 +16,7 @@ public class OpptjeningDto {
     public FrilansDto frilans;
     public List<EgenNæringDto> egenNæring = new ArrayList<>();
     public List<AnnenOpptjeningDto> annenOpptjening = new ArrayList<>();
+    public List<ArbeidsforholdDto> arbeidsforhold = new ArrayList<>();
 
     public OpptjeningDto(Søker søker) {
         if (søker.frilansInformasjon != null) {
@@ -25,7 +26,11 @@ public class OpptjeningDto {
             this.egenNæring.add(new EgenNæringDto(selvstendig));
         }
         for (AnnenInntekt annenInntekt : søker.andreInntekterSiste10Mnd) {
-            this.annenOpptjening.add(new AnnenOpptjeningDto(annenInntekt));
+            if (annenInntekt.type.equals("jobbiutlandet")) {
+                this.arbeidsforhold.add(new ArbeidsforholdDto(annenInntekt));
+            } else {
+                this.annenOpptjening.add(new AnnenOpptjeningDto(annenInntekt));
+            }
         }
     }
 
@@ -100,6 +105,19 @@ public class OpptjeningDto {
 
         public AnnenOpptjeningDto(AnnenInntekt annenInntekt) {
             this.type = annenInntekt.type;
+            this.periode.fom = annenInntekt.tidsperiode.startdato;
+            this.periode.tom = annenInntekt.tidsperiode.sluttdato;
+        }
+    }
+
+    public class ArbeidsforholdDto {
+        public String arbeidsgiverNavn;
+        public PeriodeDto periode = new PeriodeDto();
+        public String land;
+
+        public ArbeidsforholdDto(AnnenInntekt annenInntekt) {
+            this.arbeidsgiverNavn = "Utenlandsk arbeidsgiver"; // TODO FIX
+            this.land = annenInntekt.land;
             this.periode.fom = annenInntekt.tidsperiode.startdato;
             this.periode.tom = annenInntekt.tidsperiode.sluttdato;
         }
