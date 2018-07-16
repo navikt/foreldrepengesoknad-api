@@ -53,6 +53,15 @@ public class StorageController {
         return ResponseEntity.noContent().build();
     }
 
+    @DeleteMapping
+    public ResponseEntity<String> deleteSoknad() {
+        String fnr = FnrExtractor.extract(contextHolder);
+        String directory = crypto.encryptDirectoryName(fnr);
+        log.info("Deleting søknad from directory " + directory);
+        storage.delete(directory, KEY);
+        return ResponseEntity.noContent().build();
+    }
+
     @GetMapping(path = "vedlegg/{key}")
     public ResponseEntity<byte[]> getAttachment(@PathVariable("key") String key) {
         String fnr = FnrExtractor.extract(contextHolder);
