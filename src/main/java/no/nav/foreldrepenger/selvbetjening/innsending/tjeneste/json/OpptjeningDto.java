@@ -78,8 +78,7 @@ public class OpptjeningDto {
 
             if (selvstendig.regnskapsfører != null) {
                 regnskapsførere.add(new RegnskapsførerDto(selvstendig.regnskapsfører));
-            }
-            if (selvstendig.revisor != null) {
+            } else if (selvstendig.revisor != null) {
                 regnskapsførere.add(new RegnskapsførerDto(selvstendig.revisor));
             }
         }
