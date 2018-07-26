@@ -69,6 +69,7 @@ public class InnsendingController {
     public ResponseEntity<Kvittering> sendInn(@RequestBody Søknad søknad) {
         LOG.info("Mottok søknad  {}", søknad);
 
+        søknad.vedlegg.stream().forEach(this::fetchAttachment);
         checkVedleggTooLarge(søknad.vedlegg);
         ResponseEntity<Kvittering> respons = innsending.sendInn(søknad);
 
@@ -105,6 +106,10 @@ public class InnsendingController {
             throw new AttachmentsTooLargeException("Samlet filstørrelse for alle vedlegg er " + total
                     + ", men kan ikke overstige " + MAX_VEDLEGG_SIZE + " bytes");
         }
+    }
+
+    private void fetchAttachment(Vedlegg vedlegg) {
+        vedlegg.content = http.getForObject(vedlegg.url, byte[].class);
     }
 
     private void fetchAndDeleteAttachment(Vedlegg vedlegg) {
