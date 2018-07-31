@@ -1,6 +1,7 @@
 package no.nav.foreldrepenger.selvbetjening.innsending.tjeneste.json;
 
 import com.fasterxml.jackson.annotation.JsonInclude;
+import no.nav.foreldrepenger.selvbetjening.innsending.json.Vedlegg;
 
 import java.time.LocalDateTime;
 import java.util.ArrayList;
@@ -15,12 +16,13 @@ public class SøknadDto {
     public SøkerDto søker;
     public List<VedleggDto> vedlegg = new ArrayList<>();
 
-    public void addVedlegg(byte[] vedlegg) {
+    public void addVedlegg(Vedlegg vedlegg) {
         VedleggDto vedleggDto = new VedleggDto();
         vedleggDto.type = "påkrevd";
+        vedleggDto.metadata.id = vedlegg.id;
         vedleggDto.metadata.beskrivelse = "Terminbekreftelse";
         vedleggDto.metadata.skjemanummer = "TERMINBEKREFTELSE";
-        vedleggDto.vedlegg = vedlegg;
+        vedleggDto.vedlegg = vedlegg.content;
         this.vedlegg.add(vedleggDto);
     }
 }

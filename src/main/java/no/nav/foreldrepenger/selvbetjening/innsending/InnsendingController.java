@@ -1,10 +1,8 @@
 package no.nav.foreldrepenger.selvbetjening.innsending;
 
-import static java.util.Arrays.stream;
 import static no.nav.foreldrepenger.selvbetjening.innsending.InnsendingController.REST_ENGANGSSTONAD;
 import static no.nav.foreldrepenger.selvbetjening.innsending.InnsendingController.REST_SOKNAD;
 import static org.springframework.http.MediaType.APPLICATION_JSON_VALUE;
-import static org.springframework.http.MediaType.MULTIPART_FORM_DATA_VALUE;
 
 import java.util.List;
 
@@ -20,10 +18,8 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestPart;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.client.RestTemplate;
-import org.springframework.web.multipart.MultipartFile;
 
 import no.nav.foreldrepenger.selvbetjening.felles.attachments.exceptions.AttachmentsTooLargeException;
 import no.nav.foreldrepenger.selvbetjening.innsending.json.Kvittering;
@@ -76,26 +72,6 @@ public class InnsendingController {
         deleteFromTempStorage(FnrExtractor.extract(contextHolder), søknad);
 
         return respons;
-    }
-
-    // TODO: Fjern denne når frontend er oppdatert
-    @PostMapping(consumes = MULTIPART_FORM_DATA_VALUE)
-    public ResponseEntity<Kvittering> sendInnWithMultipart(@RequestPart("soknad") Søknad søknad,
-            @RequestPart("vedlegg") MultipartFile... vedlegg) throws Exception {
-        LOG.info("Mottok søknad (multipart) {}", søknad);
-        checkVedleggTooLargeMultipart(vedlegg);
-        return innsending.sendInn(søknad, vedlegg);
-    }
-
-    // TODO: Fjern denne når frontend er oppdatert
-    private void checkVedleggTooLargeMultipart(MultipartFile... vedlegg) {
-        long total = stream(vedlegg)
-                .mapToLong(MultipartFile::getSize)
-                .sum();
-        if (total > MAX_VEDLEGG_SIZE) {
-            throw new AttachmentsTooLargeException("Samlet filstørrelse for alle vedlegg er " + total
-                    + ", men kan ikke overstige " + MAX_VEDLEGG_SIZE + " bytes");
-        }
     }
 
     private void checkVedleggTooLarge(List<Vedlegg> vedlegg) {

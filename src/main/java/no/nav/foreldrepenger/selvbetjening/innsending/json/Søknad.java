@@ -33,5 +33,4 @@ public class Søknad {
     public Søknad(){
         vedlegg = new ArrayList<>();
     }
-
 }

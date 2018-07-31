@@ -13,6 +13,7 @@ public class Barn {
     public Boolean erBarnetFødt;
     public List<LocalDate> fødselsdatoer;
     public Integer antallBarn;
+    public List<String> terminbekreftelse;
     public LocalDate termindato;
     public LocalDate terminbekreftelseDato;
 
