@@ -13,6 +13,7 @@ import org.slf4j.Logger;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnProperty;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
+import org.springframework.web.multipart.MultipartFile;
 
 import javax.inject.Inject;
 import javax.ws.rs.BadRequestException;
@@ -31,7 +32,7 @@ public class InnsendingstjenesteStub implements Innsending {
     private ObjectMapper mapper;
 
     @Override
-    public ResponseEntity<Kvittering> sendInn(Søknad søknad)  {
+    public ResponseEntity<Kvittering> sendInn(Søknad søknad, MultipartFile ...vedlegg)  {
         søknad.opprettet = now();
         return postStub(søknad);
     }
