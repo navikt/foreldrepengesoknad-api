@@ -101,7 +101,7 @@ public class YtelseDto {
         public String type;
         public Integer antallBarn;
         public LocalDate terminDato;
-        public List<String> terminbekreftelse;
+        public List<String> vedlegg;
         public LocalDate utstedtDato;
         public List<LocalDate> fødselsdato;
         public LocalDate omsorgsovertakelsesdato;
@@ -109,7 +109,7 @@ public class YtelseDto {
         public RelasjonTilBarnDto(Barn barn, String situasjon) {
             this.type = type(barn.erBarnetFødt, situasjon);
             this.antallBarn = barn.antallBarn;
-            this.terminbekreftelse = barn.terminbekreftelse;
+            this.vedlegg = barn.terminbekreftelse;
             this.terminDato = barn.termindato;
             this.utstedtDato = barn.terminbekreftelseDato;
             this.fødselsdato = barn.fødselsdatoer;
