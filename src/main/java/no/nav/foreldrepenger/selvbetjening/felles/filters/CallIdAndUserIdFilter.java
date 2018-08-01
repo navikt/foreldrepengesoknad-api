@@ -40,7 +40,7 @@ public class CallIdAndUserIdFilter extends GenericFilterBean {
     @Override
     public void doFilter(ServletRequest request, ServletResponse response, FilterChain chain)
             throws IOException, ServletException {
-        MDC.put("Nav-User-Id", FnrExtractor.extract(contextHolder));
+        MDC.put("Nav-UserId", FnrExtractor.extract(contextHolder));
         getOrCreateCallId(request);
         chain.doFilter(request, response);
     }
