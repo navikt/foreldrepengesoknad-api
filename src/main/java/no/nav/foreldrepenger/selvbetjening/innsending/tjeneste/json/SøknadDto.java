@@ -29,7 +29,6 @@ public class SøknadDto {
         VedleggDto vedleggDto = new VedleggDto();
         vedleggDto.type = "påkrevd";
         vedleggDto.metadata.beskrivelse = "Terminbekreftelse";
-        vedleggDto.metadata.skjemanummer = "TERMINBEKREFTELSE";
         vedleggDto.vedlegg = vedlegg;
         this.vedlegg.add(vedleggDto);
     }
