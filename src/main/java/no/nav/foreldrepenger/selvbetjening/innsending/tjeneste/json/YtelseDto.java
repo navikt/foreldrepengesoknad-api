@@ -5,6 +5,7 @@ import no.nav.foreldrepenger.selvbetjening.innsending.json.*;
 
 import java.time.LocalDate;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 
 import static com.fasterxml.jackson.annotation.JsonInclude.Include.NON_EMPTY;
@@ -109,7 +110,7 @@ public class YtelseDto {
         public RelasjonTilBarnDto(Barn barn, String situasjon) {
             this.type = type(barn.erBarnetFødt, situasjon);
             this.antallBarn = barn.antallBarn;
-            this.vedlegg = barn.terminbekreftelse;
+            this.vedlegg = Arrays.asList("I000062");
             this.terminDato = barn.termindato;
             this.utstedtDato = barn.terminbekreftelseDato;
             this.fødselsdato = barn.fødselsdatoer;

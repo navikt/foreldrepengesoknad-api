@@ -19,7 +19,7 @@ public class SøknadDto {
     public void addVedlegg(Vedlegg vedlegg) {
         VedleggDto vedleggDto = new VedleggDto();
         vedleggDto.type = "påkrevd";
-        vedleggDto.metadata.id = vedlegg.id;
+        vedleggDto.metadata.id = "I000062";
         vedleggDto.metadata.beskrivelse = "Terminbekreftelse";
         vedleggDto.metadata.skjemanummer = "TERMINBEKREFTELSE";
         vedleggDto.vedlegg = vedlegg.content;
