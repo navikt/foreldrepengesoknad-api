@@ -17,24 +17,30 @@ import org.springframework.core.annotation.Order;
 import org.springframework.stereotype.Component;
 import org.springframework.web.filter.GenericFilterBean;
 
+import no.nav.foreldrepenger.selvbetjening.felles.util.FnrExtractor;
 import no.nav.foreldrepenger.selvbetjening.felles.util.UUIDCallIdGenerator;
+import no.nav.security.oidc.context.OIDCRequestContextHolder;
 
 @Component
 @Order(1)
-public class CallIdFilter extends GenericFilterBean {
+public class CallIdAndUserIdFilter extends GenericFilterBean {
 
-    private static final Logger LOG = getLogger(CallIdFilter.class);
+    private static final Logger LOG = getLogger(CallIdAndUserIdFilter.class);
+
+    @Inject
+    private OIDCRequestContextHolder contextHolder;
 
     private final UUIDCallIdGenerator generator;
 
     @Inject
-    public CallIdFilter(UUIDCallIdGenerator generator) {
+    public CallIdAndUserIdFilter(UUIDCallIdGenerator generator) {
         this.generator = generator;
     }
 
     @Override
     public void doFilter(ServletRequest request, ServletResponse response, FilterChain chain)
             throws IOException, ServletException {
+        MDC.put("Nav-userId", FnrExtractor.extract(contextHolder));
         getOrCreateCallId(request);
         chain.doFilter(request, response);
     }
