@@ -19,8 +19,8 @@ public class SøknadDto {
     public void addVedlegg(Vedlegg vedlegg) {
         VedleggDto vedleggDto = new VedleggDto();
         vedleggDto.type = "påkrevd";
-        vedleggDto.metadata.id = "I000062";
-        vedleggDto.metadata.beskrivelse = "Terminbekreftelse";
+        vedleggDto.metadata.id = vedlegg.id;
+        vedleggDto.metadata.beskrivelse = vedlegg.type;
         vedleggDto.vedlegg = vedlegg.content;
         this.vedlegg.add(vedleggDto);
     }
