@@ -55,14 +55,17 @@ public class DefaultPDF2ImageConverter implements PDF2ImageConverter {
     }
 
     private static void checkPageDimensions(PDDocument document) {
+        LOG.info("Checking PDF-page dimensions..");
         PDPage pdfPage = document.getPage(FIRST_PAGE);
         PDRectangle cropbBox = pdfPage.getCropBox();
+
         float widthPt = cropbBox.getWidth();
         float heightPt = cropbBox.getHeight();
+        LOG.info("PDF page dimensions (points): {} x {}", widthPt, heightPt);
+
         int widthPx = Math.round(widthPt * (DPI/72f));
         int heightPx = Math.round(heightPt * (DPI/72f));
-
-        LOG.info("PDF page dimensions: {} x {}", widthPx, heightPx);
+        LOG.info("PDF page dimensions (pixels): {} x {}", widthPx, heightPx);
     }
 
     private static byte[] toBytes(BufferedImage img) {
