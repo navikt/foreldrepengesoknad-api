@@ -11,7 +11,6 @@ import org.springframework.boot.autoconfigure.condition.ConditionalOnProperty;
 import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
-import java.util.Collections;
 
 import static com.neovisionaries.i18n.CountryCode.NO;
 import static java.time.LocalDate.now;

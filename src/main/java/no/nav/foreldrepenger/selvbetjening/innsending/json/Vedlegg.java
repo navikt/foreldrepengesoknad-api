@@ -7,7 +7,7 @@ public class Vedlegg {
 
     public String filename;
     public Long filesize;
-    public String group;
+    public String type;
     public String id;
     public String pending;
     public String uploaded;
