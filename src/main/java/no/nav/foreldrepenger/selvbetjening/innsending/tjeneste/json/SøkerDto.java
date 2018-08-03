@@ -1,7 +1,6 @@
 package no.nav.foreldrepenger.selvbetjening.innsending.tjeneste.json;
 
 import com.fasterxml.jackson.annotation.JsonInclude;
-import no.nav.foreldrepenger.selvbetjening.innsending.json.Søker;
 
 import static com.fasterxml.jackson.annotation.JsonInclude.Include.NON_NULL;
 
@@ -10,12 +9,16 @@ public class SøkerDto {
 
     public String søknadsRolle;
 
-    public SøkerDto(Søker søker) {
-        this.søknadsRolle = søker.rolle;
+    public SøkerDto(String rolle) {
+        if (morFarEllerMedmor(rolle)) {
+            this.søknadsRolle = rolle;
+        } else {
+            this.søknadsRolle = "ANDRE";
+        }
     }
 
-    public SøkerDto(String søknadsRolle) {
-        this.søknadsRolle = søknadsRolle;
+    private boolean morFarEllerMedmor(String rolle) {
+        return rolle != null && (rolle.equals("MOR") || rolle.equals("FAR") || rolle.equals("MEDMOR"));
     }
 
 }
