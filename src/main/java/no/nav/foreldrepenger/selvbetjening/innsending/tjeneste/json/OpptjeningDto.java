@@ -116,7 +116,7 @@ public class OpptjeningDto {
         public String land;
 
         public ArbeidsforholdDto(AnnenInntekt annenInntekt) {
-            this.arbeidsgiverNavn = "Utenlandsk arbeidsgiver"; // TODO FIX
+            this.arbeidsgiverNavn = annenInntekt.arbeidsgiverNavn; 
             this.land = annenInntekt.land;
             this.periode.fom = annenInntekt.tidsperiode.fom;
             this.periode.tom = annenInntekt.tidsperiode.tom;

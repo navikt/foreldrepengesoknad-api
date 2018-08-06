@@ -10,6 +10,7 @@ public class AnnenInntekt {
 
     public String type;
     public String land;
+    public String arbeidsgiverNavn;
     public Tidsperiode tidsperiode;
     public Boolean erNærVennEllerFamilieMedArbeisdgiver;
 
