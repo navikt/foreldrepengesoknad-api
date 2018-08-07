@@ -3,7 +3,6 @@ package no.nav.foreldrepenger.selvbetjening.felles.storage;
 import com.amazonaws.services.s3.AmazonS3;
 import com.amazonaws.services.s3.AmazonS3ClientBuilder;
 import no.nav.foreldrepenger.selvbetjening.SlowTests;
-import org.junit.Ignore;
 import org.junit.Rule;
 import org.junit.Test;
 import org.junit.experimental.categories.Category;
@@ -15,7 +14,6 @@ import static org.junit.Assert.assertEquals;
 import static org.testcontainers.containers.localstack.LocalStackContainer.Service.S3;
 
 @Category(SlowTests.class)
-@Ignore // TODO reinstate when Docker works on build server
 public class StorageTest {
 
     @Rule

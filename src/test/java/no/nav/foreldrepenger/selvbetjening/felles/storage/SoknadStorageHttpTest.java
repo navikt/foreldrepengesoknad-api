@@ -29,7 +29,6 @@ import static org.assertj.core.api.AssertionsForClassTypes.assertThat;
 @ActiveProfiles("dev, localstack")
 @FixMethodOrder(MethodSorters.NAME_ASCENDING)
 @Category(SlowTests.class)
-@Ignore // TODO reinstate when Docker works on build server
 public class SoknadStorageHttpTest implements ApplicationContextAware {
 
     private static final String FNR = "12345678901";
