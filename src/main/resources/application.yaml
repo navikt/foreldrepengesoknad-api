@@ -6,10 +6,12 @@ management:
 server:
   servlet.context-path: /foreldrepengesoknad-api
   use-forward-headers: true
-spring :
+spring:
   main.banner-mode: 'off'
   metrics.web.server.auto-time-requests: true
   servlet.multipart.max-file-size: 9MB
+  jackson:
+    default-property-inclusion: non_empty
 no.nav.security.oidc:
   issuers: selvbetjening
   issuer.selvbetjening:

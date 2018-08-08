@@ -68,7 +68,6 @@ public class Innsendingstjeneste implements Innsending {
             throw new BadRequestException("Application with type foreldrepengesøknad is not supported yet");
         }
 
-        LOG.trace("Søknaden er {}", søknad);
         return template.postForEntity(mottakServiceUrl, body(søknad, vedlegg), Kvittering.class);
     }
 
@@ -84,7 +83,6 @@ public class Innsendingstjeneste implements Innsending {
             LOG.warn("Mottok en søknad av ukjent type..");
             throw new BadRequestException("Unknown application type");
         }
-        LOG.trace("DTO (uten vedlegg) er {}", dto);
 
         // TODO: Remove vedlegg when frontend is updated
         if (vedlegg.length > 0) {

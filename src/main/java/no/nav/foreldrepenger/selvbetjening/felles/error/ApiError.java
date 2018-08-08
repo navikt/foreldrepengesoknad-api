@@ -1,19 +1,15 @@
 package no.nav.foreldrepenger.selvbetjening.felles.error;
 
-import static com.fasterxml.jackson.annotation.JsonFormat.Feature.WRITE_SINGLE_ELEM_ARRAYS_UNWRAPPED;
-import static com.fasterxml.jackson.annotation.JsonFormat.Shape.STRING;
-import static com.fasterxml.jackson.annotation.JsonInclude.Include.NON_NULL;
+import com.fasterxml.jackson.annotation.JsonFormat;
+import org.slf4j.MDC;
+import org.springframework.http.HttpStatus;
 
 import java.time.LocalDateTime;
 import java.util.List;
 
-import org.slf4j.MDC;
-import org.springframework.http.HttpStatus;
+import static com.fasterxml.jackson.annotation.JsonFormat.Feature.WRITE_SINGLE_ELEM_ARRAYS_UNWRAPPED;
+import static com.fasterxml.jackson.annotation.JsonFormat.Shape.STRING;
 
-import com.fasterxml.jackson.annotation.JsonFormat;
-import com.fasterxml.jackson.annotation.JsonInclude;;
-
-@JsonInclude(NON_NULL)
 class ApiError {
 
     private static final String UUID = "Nav-CallId";
