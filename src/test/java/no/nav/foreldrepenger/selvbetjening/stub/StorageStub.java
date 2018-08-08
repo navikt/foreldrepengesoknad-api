@@ -17,7 +17,9 @@ public class StorageStub implements Storage {
 
     @Override
     public Optional<String> get(String directory, String key) {
-        return Optional.of("r6pbUjCtjD8XvzxtQnkN9w==");
+        // Attachment JSON encrypted with key/fnr: 12345678910
+        return Optional.of("cbA7LYNQFEbOkXmsv9ORXXXgNcx/Tf8iBsiPVeVofuaYRxesQz8tg/" +
+                "lZRDtVWVGQHiRrFY/9LryCtkhdAWigaMuTPPw8ljzlmsV+pDOfaxsgbM/d0jPEqoo2y3bCQzLKBxOxTZZuhVlDCIb91Bx7BbiTd58hjkXytkoH0Jdt7m4=");
     }
 
     @Override
