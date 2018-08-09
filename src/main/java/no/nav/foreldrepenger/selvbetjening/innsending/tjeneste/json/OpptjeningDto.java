@@ -1,5 +1,6 @@
 package no.nav.foreldrepenger.selvbetjening.innsending.tjeneste.json;
 
+import com.fasterxml.jackson.annotation.JsonInclude;
 import no.nav.foreldrepenger.selvbetjening.innsending.json.arbeid.*;
 import no.nav.foreldrepenger.selvbetjening.innsending.json.Søker;
 
@@ -7,6 +8,9 @@ import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
 
+import static com.fasterxml.jackson.annotation.JsonInclude.Include.NON_EMPTY;
+
+@JsonInclude(NON_EMPTY)
 public class OpptjeningDto {
 
     public FrilansDto frilans;
@@ -30,6 +34,7 @@ public class OpptjeningDto {
         }
     }
 
+    @JsonInclude(NON_EMPTY)
     public class FrilansDto {
         public PeriodeDto periode = new PeriodeDto();
         public Boolean harInntektFraFosterhjem;
@@ -56,6 +61,7 @@ public class OpptjeningDto {
         }
     }
 
+    @JsonInclude(NON_EMPTY)
     public class EgenNæringDto {
         public String type;
         public PeriodeDto periode = new PeriodeDto();

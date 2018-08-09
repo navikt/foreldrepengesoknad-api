@@ -1,10 +1,13 @@
 package no.nav.foreldrepenger.selvbetjening.innsending.tjeneste.json;
 
+import com.fasterxml.jackson.annotation.JsonInclude;
 import no.nav.foreldrepenger.selvbetjening.innsending.json.UttaksplanPeriode;
 
 import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
+
+import static com.fasterxml.jackson.annotation.JsonInclude.Include.NON_NULL;
 
 public class FordelingDto {
 
@@ -18,6 +21,7 @@ public class FordelingDto {
         this.erAnnenForelderInformert = annenForelderErInformert;
     }
 
+    @JsonInclude(NON_NULL)
     public class FordelingPeriodeDto {
 
         public String type;

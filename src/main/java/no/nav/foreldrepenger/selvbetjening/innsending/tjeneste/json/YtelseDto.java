@@ -1,13 +1,17 @@
 package no.nav.foreldrepenger.selvbetjening.innsending.tjeneste.json;
 
+import com.fasterxml.jackson.annotation.JsonInclude;
 import no.nav.foreldrepenger.selvbetjening.innsending.json.*;
 
 import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
 
+import static com.fasterxml.jackson.annotation.JsonInclude.Include.NON_EMPTY;
+import static com.fasterxml.jackson.annotation.JsonInclude.Include.NON_NULL;
 import static org.apache.commons.lang3.StringUtils.isEmpty;
 
+@JsonInclude(NON_NULL)
 public class YtelseDto {
 
     public String type;
@@ -34,6 +38,7 @@ public class YtelseDto {
         }
     }
 
+    @JsonInclude(NON_NULL)
     public class AnnenForelderDto {
         public String type;
         public String id;
@@ -55,6 +60,7 @@ public class YtelseDto {
         }
     }
 
+    @JsonInclude(NON_EMPTY)
     public class MedlemsskapDto {
         public Boolean norgeSiste12;
         public Boolean norgeNeste12;
@@ -90,6 +96,7 @@ public class YtelseDto {
         }
     }
 
+    @JsonInclude(NON_EMPTY)
     public class RelasjonTilBarnDto {
         public String type;
         public Integer antallBarn;
@@ -128,6 +135,7 @@ public class YtelseDto {
         }
     }
 
+    @JsonInclude(NON_NULL)
     public class RettigheterDto {
         public Boolean harAnnenForelderRett;
         public Boolean harAleneOmsorgForBarnet;
