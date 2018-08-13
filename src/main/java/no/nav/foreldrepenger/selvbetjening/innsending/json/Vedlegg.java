@@ -6,6 +6,7 @@ public class Vedlegg {
 
     public String type;
     public String id;
+    public String skjemanummer;
     public URI url;
     public byte[] content;
 }
