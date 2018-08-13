@@ -9,6 +9,7 @@ import java.net.URI;
 
 import javax.ws.rs.BadRequestException;
 
+import no.nav.foreldrepenger.selvbetjening.innsending.json.*;
 import org.slf4j.Logger;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnProperty;
@@ -23,10 +24,6 @@ import org.springframework.web.util.UriComponentsBuilder;
 import no.nav.foreldrepenger.selvbetjening.felles.attachments.Image2PDFConverter;
 import no.nav.foreldrepenger.selvbetjening.felles.attachments.exceptions.AttachmentConversionException;
 import no.nav.foreldrepenger.selvbetjening.felles.util.Enabled;
-import no.nav.foreldrepenger.selvbetjening.innsending.json.Engangsstønad;
-import no.nav.foreldrepenger.selvbetjening.innsending.json.Foreldrepengesøknad;
-import no.nav.foreldrepenger.selvbetjening.innsending.json.Kvittering;
-import no.nav.foreldrepenger.selvbetjening.innsending.json.Søknad;
 import no.nav.foreldrepenger.selvbetjening.innsending.tjeneste.json.EngangsstønadDto;
 import no.nav.foreldrepenger.selvbetjening.innsending.tjeneste.json.ForeldrepengesøknadDto;
 import no.nav.foreldrepenger.selvbetjening.innsending.tjeneste.json.SøknadDto;
@@ -90,11 +87,10 @@ public class Innsendingstjeneste implements Innsending {
                     .map(this::vedleggBytes)
                     .map(converter::convert)
                     .forEach(dto::addVedlegg);
-        }
-        else {
+        } else {
             // TODO: ..and keep only this after we remove multipart handling from frontend
-            søknad.vedlegg.stream().forEach(v -> {
-                converter.convert(v.content);
+            søknad.vedlegg.forEach(v -> {
+                v.content = converter.convert(v.content);
                 dto.addVedlegg(v);
             });
         }
