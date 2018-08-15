@@ -21,7 +21,8 @@ public class Barn {
 
     public LocalDate adopsjonsdato;
     public List<String> adopsjonsvedtak = new ArrayList<>();
-    public Boolean adoptertIUtlandet;
+    public LocalDate ankomstdato;
+    public Boolean adopsjonAvEktefellesBarn;
 
     public LocalDate foreldreansvarsdato;
     public List<String> omsorgsovertakelse = new ArrayList<>();

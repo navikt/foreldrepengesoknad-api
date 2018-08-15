@@ -49,7 +49,6 @@ public class OppslagstjenesteStub implements Oppslag {
         dto.fnr = "25987148243";
         dto.aktorId = "0123456789999";
         dto.fornavn = "SIV";
-        dto.mellomnavn = "BJARNE";
         dto.etternavn = "STUBSVEEN";
         dto.fødselsdato = now().minusYears(21);
         dto.kjønn = "K";
