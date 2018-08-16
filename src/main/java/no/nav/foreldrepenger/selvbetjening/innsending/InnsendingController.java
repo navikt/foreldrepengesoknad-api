@@ -39,8 +39,7 @@ public class InnsendingController {
 
     private static final Logger LOG = LoggerFactory.getLogger(InnsendingController.class);
 
-    public static final String REST_ENGANGSSTONAD = "/rest/engangsstonad"; // TODO: Fjern denne når frontend er
-                                                                           // oppdatert
+    public static final String REST_ENGANGSSTONAD = "/rest/engangsstonad"; // TODO: Fjern denne når frontend er oppdatert
     public static final String REST_SOKNAD = "/rest/soknad";
 
     private static final double MB = 1024 * 1024;
@@ -69,7 +68,7 @@ public class InnsendingController {
     public ResponseEntity<Kvittering> sendInn(@RequestBody Søknad søknad) {
         LOG.info("Mottok søknad  {}", søknad);
 
-        søknad.vedlegg.stream().forEach(this::fetchAttachment);
+        søknad.vedlegg.forEach(this::fetchAttachment);
         checkVedleggTooLarge(søknad.vedlegg);
         ResponseEntity<Kvittering> respons = innsending.sendInn(søknad);
 
@@ -81,7 +80,7 @@ public class InnsendingController {
     // TODO: Fjern denne når frontend er oppdatert
     @PostMapping(consumes = MULTIPART_FORM_DATA_VALUE)
     public ResponseEntity<Kvittering> sendInnWithMultipart(@RequestPart("soknad") Søknad søknad,
-                                                           @RequestPart("vedlegg") MultipartFile... vedlegg) throws Exception {
+                                                           @RequestPart("vedlegg") MultipartFile... vedlegg) {
 
         LOG.info("Mottok søknad (multipart) {}", søknad);
         checkVedleggTooLargeMultipart(vedlegg);
@@ -119,7 +118,7 @@ public class InnsendingController {
     }
 
     private void deleteFromTempStorage(String fnr, Søknad søknad) {
-        søknad.vedlegg.stream().forEach(this::fetchAndDeleteAttachment);
+        søknad.vedlegg.forEach(this::fetchAndDeleteAttachment);
         storage.delete(crypto.encryptDirectoryName(fnr), "soknad");
     }
 }
