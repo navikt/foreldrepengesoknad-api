@@ -26,7 +26,7 @@ public class OpptjeningDto {
             this.egenNæring.add(new EgenNæringDto(selvstendig));
         }
         for (AnnenInntekt annenInntekt : søker.andreInntekterSiste10Mnd) {
-            if (annenInntekt.type.equals("jobbiutlandet")) {
+            if (annenInntekt.type.equals("JOBB_I_UTLANDET")) {
                 this.arbeidsforhold.add(new ArbeidsforholdDto(annenInntekt));
             } else {
                 this.annenOpptjening.add(new AnnenOpptjeningDto(annenInntekt));
@@ -116,7 +116,7 @@ public class OpptjeningDto {
         public String land;
 
         public ArbeidsforholdDto(AnnenInntekt annenInntekt) {
-            this.arbeidsgiverNavn = annenInntekt.arbeidsgiverNavn; 
+            this.arbeidsgiverNavn = annenInntekt.arbeidsgiverNavn;
             this.land = annenInntekt.land;
             this.periode.fom = annenInntekt.tidsperiode.fom;
             this.periode.tom = annenInntekt.tidsperiode.tom;
