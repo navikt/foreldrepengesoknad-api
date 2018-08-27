@@ -57,7 +57,7 @@ public class ImageScaler {
         int newWidth = (int) newDim.getWidth();
         int newHeight = (int) newDim.getHeight();
         Image tempImg = origImage.getScaledInstance(newWidth, newHeight, Image.SCALE_SMOOTH);
-        BufferedImage scaledImg = new BufferedImage(newWidth, newHeight, BufferedImage.TYPE_INT_ARGB);
+        BufferedImage scaledImg = new BufferedImage(newWidth, newHeight, BufferedImage.TYPE_3BYTE_BGR);
         Graphics2D g = (Graphics2D) scaledImg.getGraphics();
         g.drawImage(tempImg, 0, 0, null);
         g.dispose();
