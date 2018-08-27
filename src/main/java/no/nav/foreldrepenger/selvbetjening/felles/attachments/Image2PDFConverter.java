@@ -122,7 +122,7 @@ public class Image2PDFConverter {
     private static void addPDFPageFromImage(PDDocument doc, byte[] origImg, String imgFormat) {
         PDPage page = new PDPage(A4);
         doc.addPage(page);
-        byte[] scaledImg = ImageScaler.toA4(origImg, imgFormat);
+        byte[] scaledImg = ImageScaler.downToA4(origImg, imgFormat);
         try (PDPageContentStream contentStream = new PDPageContentStream(doc, page)) {
             PDImageXObject ximage = PDImageXObject.createFromByteArray(doc, scaledImg, "img");
             contentStream.drawImage(ximage, (int) A4.getLowerLeftX(), (int) A4.getLowerLeftY());
