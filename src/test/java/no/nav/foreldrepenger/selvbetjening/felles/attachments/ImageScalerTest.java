@@ -27,7 +27,7 @@ public class ImageScalerTest {
 
     @Test
     public void imgBiggerThanA4IsScaledDown() throws Exception {
-        URL url = getClass().getResource("/pdf/rdd.jpg");
+        URL url = getClass().getResource("/pdf/rdd.png");
         byte[] orig = Files.readAllBytes(Paths.get(url.toURI()));
         byte[] scaled = ImageScaler.downToA4(orig, "jpg");
         BufferedImage origImg = fromBytes(orig);
@@ -38,7 +38,7 @@ public class ImageScalerTest {
 
     @Test
     public void scaledImgHasRetainedFormat() throws Exception {
-        URL url = getClass().getResource("/pdf/rdd.jpg");
+        URL url = getClass().getResource("/pdf/rdd.png");
         final byte[] orig = Files.readAllBytes(Paths.get(url.toURI()));
         final byte[] scaled = ImageScaler.downToA4(orig, "jpg");
         assertTrue(hasJpgSignature(scaled));
