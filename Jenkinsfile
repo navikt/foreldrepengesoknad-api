@@ -37,22 +37,32 @@ node {
     }
 
     stage("Build & publish") {
-        sh "${mvn} versions:set -B -DnewVersion=${releaseVersion}"
-        sh "${mvn} -Pall-tests clean install -Djava.io.tmpdir=/tmp/${app} -B -e"
-        sh "docker build --build-arg version=${releaseVersion} --build-arg app_name=${app} -t ${dockerRepo}/${app}:${releaseVersion} ."
+        try {
+            sh "${mvn} versions:set -B -DnewVersion=${releaseVersion}"
+            sh "${mvn} -Pall-tests clean install -Djava.io.tmpdir=/tmp/${app} -B -e"
+            sh "docker build --build-arg version=${releaseVersion} --build-arg app_name=${app} -t ${dockerRepo}/${app}:${releaseVersion} ."
 
-        withCredentials([[$class: 'UsernamePasswordMultiBinding', credentialsId: 'nexusUser', usernameVariable: 'USERNAME', passwordVariable: 'PASSWORD']]) {
-            sh "docker login -u ${env.USERNAME} -p ${env.PASSWORD} ${dockerRepo} && docker push ${dockerRepo}/${app}:${releaseVersion}"
-            sh "curl --fail -v -u ${env.USERNAME}:${env.PASSWORD} --upload-file ${appConfig} https://repo.adeo.no/repository/raw/${groupId}/${app}/${releaseVersion}/nais.yaml"
+            withCredentials([[$class: 'UsernamePasswordMultiBinding', credentialsId: 'nexusUser', usernameVariable: 'USERNAME', passwordVariable: 'PASSWORD']]) {
+                sh "docker login -u ${env.USERNAME} -p ${env.PASSWORD} ${dockerRepo} && docker push ${dockerRepo}/${app}:${releaseVersion}"
+                sh "curl --fail -v -u ${env.USERNAME}:${env.PASSWORD} --upload-file ${appConfig} https://repo.adeo.no/repository/raw/${groupId}/${app}/${releaseVersion}/nais.yaml"
+            }
+
+            sh "${mvn} versions:revert"
+            notifyGithub(repo, app, 'continuous-integration/jenkins', commitHash, 'success', "Build #${env.BUILD_NUMBER} has finished")
+
+            slackSend([
+                    color: 'good',
+                    message: "Build <${env.BUILD_URL}|#${env.BUILD_NUMBER}> (<${commitUrl}|${commitHashShort}>) of ${repo}/${app}@master by ${committer} passed  (${changelog})"
+            ])
+        } catch (Exception ex) {
+            slackSend([
+                    color: 'danger',
+                    message: "Build <${env.BUILD_URL}|#${env.BUILD_NUMBER}> (<${commitUrl}|${commitHashShort}>) of ${repo}/${app}@master by ${committer} failed (${changelog})"
+            ])
+            echo '[FAILURE] Failed to build: ${ex}'
+            currentBuild.result = 'FAILURE'
+            return
         }
-
-        sh "${mvn} versions:revert"
-        notifyGithub(repo, app, 'continuous-integration/jenkins', commitHash, 'success', "Build #${env.BUILD_NUMBER} has finished")
-
-        slackSend([
-            color: 'good',
-            message: "Build <${env.BUILD_URL}|#${env.BUILD_NUMBER}> (<${commitUrl}|${commitHashShort}>) of ${repo}/${app}@master by ${committer} passed  (${changelog})"
-        ])
     }
 
     stage("Deploy to pre-prod") {
