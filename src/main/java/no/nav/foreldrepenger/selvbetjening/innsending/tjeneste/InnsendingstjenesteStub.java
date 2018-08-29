@@ -46,6 +46,11 @@ public class InnsendingstjenesteStub implements Innsending {
             throw new BadRequestException("Unknown application type");
         }
 
+        søknad.vedlegg.forEach(v -> {
+            v.content = new byte[]{};
+            dto.addVedlegg(v);
+        });
+
         try {
             LOG.info("Posting JSON (stub): {}", mapper.writeValueAsString(dto));
         } catch (JsonProcessingException e) {
