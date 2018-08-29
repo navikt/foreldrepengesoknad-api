@@ -29,7 +29,7 @@ import no.nav.security.spring.oidc.validation.api.ProtectedWithClaims;
 
 @RestController
 @ProtectedWithClaims(issuer = "selvbetjening", claimMap = { "acr=Level4" })
-@RequestMapping({ REST_SOKNAD })
+@RequestMapping(REST_SOKNAD)
 public class InnsendingController {
 
     private static final Logger LOG = LoggerFactory.getLogger(InnsendingController.class);
