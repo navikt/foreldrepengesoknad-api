@@ -1,10 +1,8 @@
 package no.nav.foreldrepenger.selvbetjening.innsending.tjeneste;
 
 import static java.time.LocalDateTime.now;
-import static java.util.Arrays.stream;
 import static org.slf4j.LoggerFactory.getLogger;
 
-import java.io.IOException;
 import java.net.URI;
 
 import javax.ws.rs.BadRequestException;
@@ -18,11 +16,9 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.client.RestTemplate;
-import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.util.UriComponentsBuilder;
 
 import no.nav.foreldrepenger.selvbetjening.felles.attachments.Image2PDFConverter;
-import no.nav.foreldrepenger.selvbetjening.felles.attachments.exceptions.AttachmentConversionException;
 import no.nav.foreldrepenger.selvbetjening.felles.util.Enabled;
 import no.nav.foreldrepenger.selvbetjening.innsending.tjeneste.json.EngangsstønadDto;
 import no.nav.foreldrepenger.selvbetjening.innsending.tjeneste.json.ForeldrepengesøknadDto;
@@ -53,22 +49,22 @@ public class Innsendingstjeneste implements Innsending {
     }
 
     @Override
-    public ResponseEntity<Kvittering> sendInn(Søknad søknad, MultipartFile... vedlegg) {
+    public ResponseEntity<Kvittering> sendInn(Søknad søknad) {
         LOG.info("Poster søknad til {}", mottakServiceUrl);
         søknad.opprettet = now();
-        return post(søknad, vedlegg);
+        return post(søknad);
     }
 
-    private ResponseEntity<Kvittering> post(Søknad søknad, MultipartFile... vedlegg) {
+    private ResponseEntity<Kvittering> post(Søknad søknad) {
         if (!Enabled.foreldrepengesøknad && søknad instanceof Foreldrepengesøknad) {
             LOG.info("Mottok foreldrepengesøknad, men innsending av foreldrepengesøknad er togglet av!");
             throw new BadRequestException("Application with type foreldrepengesøknad is not supported yet");
         }
 
-        return template.postForEntity(mottakServiceUrl, body(søknad, vedlegg), Kvittering.class);
+        return template.postForEntity(mottakServiceUrl, body(søknad), Kvittering.class);
     }
 
-    private HttpEntity<SøknadDto> body(@RequestBody Søknad søknad, MultipartFile... vedlegg) {
+    private HttpEntity<SøknadDto> body(@RequestBody Søknad søknad) {
         SøknadDto dto;
         if (søknad instanceof Engangsstønad) {
             dto = new EngangsstønadDto((Engangsstønad) søknad);
@@ -81,28 +77,11 @@ public class Innsendingstjeneste implements Innsending {
             throw new BadRequestException("Unknown application type");
         }
 
-        // TODO: Remove vedlegg when frontend is updated
-        if (vedlegg.length > 0) {
-            stream(vedlegg)
-                    .map(this::vedleggBytes)
-                    .map(converter::convert)
-                    .forEach(dto::addVedlegg);
-        } else {
-            // TODO: ..and keep only this after we remove multipart handling from frontend
-            søknad.vedlegg.forEach(v -> {
-                v.content = converter.convert(v.content);
-                dto.addVedlegg(v);
-            });
-        }
+        søknad.vedlegg.forEach(v -> {
+            v.content = converter.convert(v.content);
+            dto.addVedlegg(v);
+        });
 
         return new HttpEntity<>(dto);
-    }
-
-    private byte[] vedleggBytes(MultipartFile vedlegg) {
-        try {
-            return vedlegg.getBytes();
-        } catch (IOException e) {
-            throw new AttachmentConversionException("Kunne ikke hente bytes fra vedlegg " + vedlegg.getName(), e);
-        }
     }
 }
