@@ -59,9 +59,7 @@ node {
                     color: 'danger',
                     message: "Build <${env.BUILD_URL}|#${env.BUILD_NUMBER}> (<${commitUrl}|${commitHashShort}>) of ${repo}/${app}@master by ${committer} failed (${changelog})"
             ])
-            echo '[FAILURE] Failed to build: ${ex}'
-            currentBuild.result = 'FAILURE'
-            return
+            throw new Exception("Bygget har feilet", e)
         }
     }
 
