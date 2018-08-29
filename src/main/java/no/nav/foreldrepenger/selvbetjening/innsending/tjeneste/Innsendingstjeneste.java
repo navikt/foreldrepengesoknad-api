@@ -77,7 +77,6 @@ public class Innsendingstjeneste implements Innsending {
             throw new BadRequestException("Unknown application type");
         }
 
-        // TODO: ..and keep only this after we remove multipart handling from frontend
         søknad.vedlegg.forEach(v -> {
             v.content = converter.convert(v.content);
             dto.addVedlegg(v);

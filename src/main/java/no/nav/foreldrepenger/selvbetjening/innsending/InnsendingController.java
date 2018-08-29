@@ -1,10 +1,7 @@
 package no.nav.foreldrepenger.selvbetjening.innsending;
 
-import static java.util.Arrays.stream;
-import static no.nav.foreldrepenger.selvbetjening.innsending.InnsendingController.REST_ENGANGSSTONAD;
 import static no.nav.foreldrepenger.selvbetjening.innsending.InnsendingController.REST_SOKNAD;
 import static org.springframework.http.MediaType.APPLICATION_JSON_VALUE;
-import static org.springframework.http.MediaType.MULTIPART_FORM_DATA_VALUE;
 
 import java.util.List;
 
@@ -32,12 +29,11 @@ import no.nav.security.spring.oidc.validation.api.ProtectedWithClaims;
 
 @RestController
 @ProtectedWithClaims(issuer = "selvbetjening", claimMap = { "acr=Level4" })
-@RequestMapping({ REST_SOKNAD, REST_ENGANGSSTONAD })
+@RequestMapping({ REST_SOKNAD })
 public class InnsendingController {
 
     private static final Logger LOG = LoggerFactory.getLogger(InnsendingController.class);
 
-    public static final String REST_ENGANGSSTONAD = "/rest/engangsstonad"; // TODO: Fjern denne når frontend er oppdatert
     public static final String REST_SOKNAD = "/rest/soknad";
 
     private static final double MB = 1024 * 1024;
