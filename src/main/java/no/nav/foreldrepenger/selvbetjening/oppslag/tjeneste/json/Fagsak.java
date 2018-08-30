@@ -56,4 +56,11 @@ public class Fagsak {
         return aktørIdBarn;
     }
 
+    @Override
+    public String toString() {
+        return getClass().getSimpleName() + " [saksnummer=" + saksnummer + ", fagsakStatus=" + fagsakStatus
+                + ", behandlingTema="
+                + behandlingTema + ", aktørId=" + aktørId + ", aktørIdAnnenPart=" + aktørIdAnnenPart + ", aktørIdBarn="
+                + aktørIdBarn + "]";
+    }
 }
