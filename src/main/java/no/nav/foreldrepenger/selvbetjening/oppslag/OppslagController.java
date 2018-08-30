@@ -1,16 +1,22 @@
 package no.nav.foreldrepenger.selvbetjening.oppslag;
 
-import no.nav.foreldrepenger.selvbetjening.oppslag.json.Person;
-import no.nav.foreldrepenger.selvbetjening.oppslag.json.Søkerinfo;
-import no.nav.foreldrepenger.selvbetjening.oppslag.tjeneste.Oppslag;
-import no.nav.security.spring.oidc.validation.api.ProtectedWithClaims;
-import org.slf4j.Logger;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.RestController;
+import static org.slf4j.LoggerFactory.getLogger;
+
+import java.util.List;
 
 import javax.inject.Inject;
 
-import static org.slf4j.LoggerFactory.getLogger;
+import org.slf4j.Logger;
+import org.springframework.core.env.Environment;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.RestController;
+
+import no.nav.foreldrepenger.selvbetjening.felles.util.EnvUtil;
+import no.nav.foreldrepenger.selvbetjening.oppslag.json.Person;
+import no.nav.foreldrepenger.selvbetjening.oppslag.json.Søkerinfo;
+import no.nav.foreldrepenger.selvbetjening.oppslag.tjeneste.Oppslag;
+import no.nav.foreldrepenger.selvbetjening.oppslag.tjeneste.json.Fagsak;
+import no.nav.security.spring.oidc.validation.api.ProtectedWithClaims;
 
 @RestController
 @ProtectedWithClaims(issuer = "selvbetjening", claimMap = { "acr=Level4" })
@@ -18,9 +24,12 @@ public class OppslagController {
 
     public static final String REST_PERSONINFO = "/rest/personinfo";
     private static final String REST_SØKERINFO = "/rest/sokerinfo";
+    private static final String REST_FAGSAKER = "/rest/faksaker";
 
     private static final Logger LOG = getLogger(OppslagController.class);
 
+    @Inject
+    private Environment env;
     private final Oppslag oppslag;
 
     @Inject
@@ -37,9 +46,17 @@ public class OppslagController {
     @GetMapping(REST_SØKERINFO)
     public Søkerinfo søkerinfo() {
         LOG.info("Henter søkerinfo...");
+        if (EnvUtil.isDevOrPreprod(env)) {
+            LOG.info("{}", fagsaker());
+        }
         return new Søkerinfo(oppslag.hentSøkerinfo());
     }
 
+    @GetMapping(REST_FAGSAKER)
+    public List<Fagsak> fagsaker() {
+        LOG.info("Henter fagsaker...");
+        return oppslag.hentFagsaker();
+    }
 
     @Override
     public String toString() {
