@@ -26,7 +26,7 @@ public class OpptjeningDto {
             this.egenNæring.add(new EgenNæringDto(selvstendig));
         }
         for (AnnenInntekt annenInntekt : søker.andreInntekterSiste10Mnd) {
-            if (annenInntekt.type.equals("jobbiutlandet")) {
+            if (annenInntekt.type.equals("JOBB_I_UTLANDET")) {
                 this.arbeidsforhold.add(new ArbeidsforholdDto(annenInntekt));
             } else {
                 this.annenOpptjening.add(new AnnenOpptjeningDto(annenInntekt));
@@ -45,7 +45,7 @@ public class OpptjeningDto {
             this.harInntektFraFosterhjem = frilansInformasjon.driverFosterhjem;
 
             for (Frilansoppdrag o : frilansInformasjon.oppdragForNæreVennerEllerFamilieSiste10Mnd) {
-                frilansOppdrag.add(new FrilansoppdragDto(o.navnPåArbeidsgiver, o.tidsperiode.startdato, o.tidsperiode.sluttdato));
+                frilansOppdrag.add(new FrilansoppdragDto(o.navnPåArbeidsgiver, o.tidsperiode.fom, o.tidsperiode.tom));
             }
         }
     }
@@ -75,8 +75,8 @@ public class OpptjeningDto {
             this.type = selvstendig.registrertINorge ? "norsk" : "utenlandsk";
             this.orgNummer = selvstendig.registrertINorge ? selvstendig.organisasjonsnummer : null;
             this.orgName = selvstendig.navnPåNæringen;
-            this.periode.fom = selvstendig.tidsperiode.startdato;
-            this.periode.tom = selvstendig.tidsperiode.sluttdato;
+            this.periode.fom = selvstendig.tidsperiode.fom;
+            this.periode.tom = selvstendig.tidsperiode.tom;
             this.arbeidsland = selvstendig.registrertILand;
 
             this.virksomhetsTyper.addAll(selvstendig.næringstyper);
@@ -105,8 +105,8 @@ public class OpptjeningDto {
 
         public AnnenOpptjeningDto(AnnenInntekt annenInntekt) {
             this.type = annenInntekt.type;
-            this.periode.fom = annenInntekt.tidsperiode.startdato;
-            this.periode.tom = annenInntekt.tidsperiode.sluttdato;
+            this.periode.fom = annenInntekt.tidsperiode.fom;
+            this.periode.tom = annenInntekt.tidsperiode.tom;
         }
     }
 
@@ -116,10 +116,10 @@ public class OpptjeningDto {
         public String land;
 
         public ArbeidsforholdDto(AnnenInntekt annenInntekt) {
-            this.arbeidsgiverNavn = "Utenlandsk arbeidsgiver"; // TODO FIX
+            this.arbeidsgiverNavn = annenInntekt.arbeidsgiverNavn;
             this.land = annenInntekt.land;
-            this.periode.fom = annenInntekt.tidsperiode.startdato;
-            this.periode.tom = annenInntekt.tidsperiode.sluttdato;
+            this.periode.fom = annenInntekt.tidsperiode.fom;
+            this.periode.tom = annenInntekt.tidsperiode.tom;
         }
     }
 }

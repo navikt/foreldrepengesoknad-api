@@ -7,6 +7,7 @@ import static org.slf4j.LoggerFactory.getLogger;
 
 import java.util.ArrayList;
 import java.util.Collections;
+import java.util.List;
 
 import org.slf4j.Logger;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnProperty;
@@ -53,7 +54,6 @@ public class OppslagstjenesteStub implements Oppslag {
         dto.fnr = "25987148243";
         dto.aktorId = "0123456789999";
         dto.fornavn = "SIV";
-        dto.mellomnavn = "BJARNE";
         dto.etternavn = "STUBSVEEN";
         dto.fødselsdato = now().minusYears(21);
         dto.kjønn = "K";

@@ -7,10 +7,7 @@ import no.nav.foreldrepenger.selvbetjening.ApplicationLocal;
 import no.nav.foreldrepenger.selvbetjening.SlowTests;
 import no.nav.foreldrepenger.selvbetjening.stub.StubbedLocalStackContainer;
 import no.nav.security.spring.oidc.test.JwtTokenGenerator;
-import org.junit.AfterClass;
-import org.junit.Before;
-import org.junit.FixMethodOrder;
-import org.junit.Test;
+import org.junit.*;
 import org.junit.experimental.categories.Category;
 import org.junit.runner.RunWith;
 import org.junit.runners.MethodSorters;
@@ -27,6 +24,7 @@ import org.springframework.test.context.junit4.SpringRunner;
 
 import static org.assertj.core.api.AssertionsForClassTypes.assertThat;
 
+@Ignore
 @RunWith(SpringRunner.class)
 @SpringBootTest(classes = ApplicationLocal.class, webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT)
 @ActiveProfiles("dev, localstack")

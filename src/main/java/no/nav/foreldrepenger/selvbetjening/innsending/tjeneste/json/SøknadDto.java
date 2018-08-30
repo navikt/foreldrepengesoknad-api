@@ -19,17 +19,10 @@ public class SøknadDto {
     public void addVedlegg(Vedlegg vedlegg) {
         VedleggDto vedleggDto = new VedleggDto();
         vedleggDto.type = "påkrevd";
-        vedleggDto.metadata.id = "I000062";
-        vedleggDto.metadata.beskrivelse = "Terminbekreftelse";
+        vedleggDto.metadata.id = vedlegg.id;
+        vedleggDto.metadata.beskrivelse = vedlegg.type;
+        vedleggDto.metadata.dokumentType = vedlegg.skjemanummer;
         vedleggDto.vedlegg = vedlegg.content;
-        this.vedlegg.add(vedleggDto);
-    }
-
-    public void addVedlegg(byte[] vedlegg) {
-        VedleggDto vedleggDto = new VedleggDto();
-        vedleggDto.type = "påkrevd";
-        vedleggDto.metadata.beskrivelse = "Terminbekreftelse";
-        vedleggDto.vedlegg = vedlegg;
         this.vedlegg.add(vedleggDto);
     }
 }

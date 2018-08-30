@@ -33,8 +33,8 @@ public class FordelingDto {
         public FordelingPeriodeDto(UttaksplanPeriode u) {
             this.type = u.type;
             this.uttaksperiodeType = u.konto;
-            this.fom = u.tidsperiode.startdato;
-            this.tom = u.tidsperiode.sluttdato;
+            this.fom = u.tidsperiode.fom;
+            this.tom = u.tidsperiode.tom;
             this.årsak = u.årsak;
         }
     }

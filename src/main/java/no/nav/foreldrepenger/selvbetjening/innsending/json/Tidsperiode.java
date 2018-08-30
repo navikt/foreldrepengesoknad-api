@@ -8,6 +8,6 @@ import static com.fasterxml.jackson.annotation.JsonInclude.Include.NON_NULL;
 
 @JsonInclude(NON_NULL)
 public class Tidsperiode {
-    public LocalDate startdato;
-    public LocalDate sluttdato;
+    public LocalDate fom;
+    public LocalDate tom;
 }
