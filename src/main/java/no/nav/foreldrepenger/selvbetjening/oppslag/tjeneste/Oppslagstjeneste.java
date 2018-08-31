@@ -27,10 +27,13 @@ public class Oppslagstjeneste implements Oppslag {
 
     private final RestTemplate template;
     private final URI oppslagServiceUrl;
+    private final URI søknadURI;
 
     @Inject
-    public Oppslagstjeneste(@Value("${FPSOKNAD_OPPSLAG_API_URL}") URI uri, RestTemplate template) {
-        this.oppslagServiceUrl = uri;
+    public Oppslagstjeneste(@Value("${FPSOKNAD_OPPSLAG_API_URL}") URI oppslagURI,
+            @Value("${FPSOKNAD_MOTTAK_API_URL}") URI søknadURI, RestTemplate template) {
+        this.oppslagServiceUrl = oppslagURI;
+        this.søknadURI = søknadURI;
         this.template = template;
     }
 
@@ -53,6 +56,13 @@ public class Oppslagstjeneste implements Oppslag {
         URI uri = fromUri(oppslagServiceUrl).path("/oppslag/saker").build().toUri();
         LOG.info("Fagsak URI: {}", uri);
         return asList(template.getForObject(uri, Fagsak[].class));
+    }
+
+    @Override
+    public String hentSøknad(String behandlingId) {
+        URI uri = fromUri(søknadURI).path("/mottak/soknad").build().toUri();
+        LOG.info("Søknad URI: {}", uri);
+        return template.getForObject(uri, String.class);
     }
 
     @Override

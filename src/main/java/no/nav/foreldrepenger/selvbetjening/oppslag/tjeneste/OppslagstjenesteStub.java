@@ -77,4 +77,9 @@ public class OppslagstjenesteStub implements Oppslag {
                 .singletonList(
                         new Fagsak("42", FagsakStatus.LOP, "FORP_FODS", "1", "2", Collections.singletonList("3")));
     }
+
+    @Override
+    public String hentSøknad(String behandlingId) {
+        return "Hello world";
+    }
 }

@@ -14,4 +14,6 @@ public interface Oppslag {
 
     List<Fagsak> hentFagsaker();
 
+    String hentSøknad(String behandlingId);
+
 }
