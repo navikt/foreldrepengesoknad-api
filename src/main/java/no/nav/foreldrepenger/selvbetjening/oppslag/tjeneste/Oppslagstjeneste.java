@@ -67,7 +67,8 @@ public class Oppslagstjeneste implements Oppslag {
 
     @Override
     public String toString() {
-        return getClass().getSimpleName() + " [template=" + template + ", oppslagServiceUrl=" + oppslagServiceUrl + "]";
+        return getClass().getSimpleName() + " [template=" + template + ", oppslagServiceUrl=" + oppslagServiceUrl
+                + ", søknadURI=" + søknadURI + "]";
     }
 
 }
