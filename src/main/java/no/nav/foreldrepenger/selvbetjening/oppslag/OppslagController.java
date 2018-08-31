@@ -47,11 +47,14 @@ public class OppslagController {
     @GetMapping(REST_SØKERINFO)
     public Søkerinfo søkerinfo() {
         LOG.info("Henter søkerinfo...");
-
-        if (EnvUtil.isDevOrPreprod(env)) {
-            LOG.info("{}", søknad());
+        try {
+            LOG.info("Henter søknad...");
+            if (EnvUtil.isDevOrPreprod(env)) {
+                LOG.info("{}", oppslag.hentSøknad("1000525"));
+            }
+        } catch (Exception e) {
+            LOG.warn("Oops", e);
         }
-
         return new Søkerinfo(oppslag.hentSøkerinfo());
     }
 
@@ -67,7 +70,7 @@ public class OppslagController {
             LOG.info("Henter søknad...");
             return oppslag.hentSøknad("1000525");
         } catch (Exception e) {
-            LOG.warn("OOps", e);
+            LOG.warn("Oops", e);
             return null;
         }
     }
