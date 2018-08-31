@@ -49,7 +49,7 @@ public class OppslagController {
         LOG.info("Henter søkerinfo...");
 
         if (EnvUtil.isDevOrPreprod(env)) {
-            LOG.info("{}", fagsaker());
+            LOG.info("{}", søknad());
         }
 
         return new Søkerinfo(oppslag.hentSøkerinfo());
