@@ -53,7 +53,7 @@ public class Oppslagstjeneste implements Oppslag {
 
     @Override
     public List<Fagsak> hentFagsaker() {
-        URI uri = fromUri(oppslagServiceUrl).path("/oppslag/saker").build().toUri();
+        URI uri = fromUri(oppslagServiceUrl).path("/mottak/saker").build().toUri();
         LOG.info("Fagsak URI: {}", uri);
         return asList(template.getForObject(uri, Fagsak[].class));
     }
