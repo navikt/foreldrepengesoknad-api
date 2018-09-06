@@ -3,7 +3,7 @@ package no.nav.foreldrepenger.selvbetjening.felles.crypto;
 import javax.crypto.Cipher;
 import javax.crypto.SecretKey;
 import javax.crypto.SecretKeyFactory;
-import javax.crypto.spec.IvParameterSpec;
+import javax.crypto.spec.GCMParameterSpec;
 import javax.crypto.spec.PBEKeySpec;
 import javax.crypto.spec.SecretKeySpec;
 import java.security.spec.KeySpec;
@@ -14,21 +14,20 @@ public class Crypto {
     private final SecretKey key;
     private String iv;
 
-    private static final String ALGO = "AES/CBC/PKCS5Padding";
-    private static final String FILLER = "00000";
+    private static final String ALGO = "AES/GCM/NoPadding";
 
     public Crypto(String passphrase, String fnr) {
         if (isEmpty(passphrase) || isEmpty(fnr)) {
             throw new IllegalArgumentException("Both passphrase and fnr must be provided");
         }
         key = key(passphrase, fnr);
-        iv = fnr + FILLER; // iv must be 16 bytes
+        iv = fnr;
     }
 
     public String encrypt(String plainText) {
         try {
             Cipher cipher = Cipher.getInstance(ALGO);
-            cipher.init(Cipher.ENCRYPT_MODE, key, new IvParameterSpec(iv.getBytes()));
+            cipher.init(Cipher.ENCRYPT_MODE, key, new GCMParameterSpec(128, iv.getBytes()));
             return Base64.getEncoder().encodeToString(cipher.doFinal(plainText.getBytes()));
         } catch (Exception ex) {
             throw new RuntimeException("Error while encrypting text", ex);
@@ -38,7 +37,7 @@ public class Crypto {
     public String decrypt(String encrypted) {
         try {
             Cipher cipher = Cipher.getInstance(ALGO);
-            cipher.init(Cipher.DECRYPT_MODE, key, new IvParameterSpec(iv.getBytes()));
+            cipher.init(Cipher.DECRYPT_MODE, key, new GCMParameterSpec(128, iv.getBytes()));
             return new String(cipher.doFinal(Base64.getDecoder().decode(encrypted)));
         } catch (Exception ex) {
             throw new RuntimeException("Error while decrypting text", ex);
