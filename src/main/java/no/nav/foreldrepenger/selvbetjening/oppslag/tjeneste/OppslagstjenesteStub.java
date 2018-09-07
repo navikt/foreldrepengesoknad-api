@@ -18,7 +18,6 @@ import no.nav.foreldrepenger.selvbetjening.oppslag.json.Arbeidsforhold;
 import no.nav.foreldrepenger.selvbetjening.oppslag.json.Bankkonto;
 import no.nav.foreldrepenger.selvbetjening.oppslag.json.Barn;
 import no.nav.foreldrepenger.selvbetjening.oppslag.tjeneste.json.Fagsak;
-import no.nav.foreldrepenger.selvbetjening.oppslag.tjeneste.json.FagsakStatus;
 import no.nav.foreldrepenger.selvbetjening.oppslag.tjeneste.json.PersonDto;
 import no.nav.foreldrepenger.selvbetjening.oppslag.tjeneste.json.SøkerinfoDto;
 
@@ -75,7 +74,7 @@ public class OppslagstjenesteStub implements Oppslag {
     public List<Fagsak> hentFagsaker() {
         return Collections
                 .singletonList(
-                        new Fagsak("42", FagsakStatus.LOP, "FORP_FODS", "1", "2", Collections.singletonList("3"),
+                        new Fagsak("42", "LOP", "FORP_FODS", "1", "2", Collections.singletonList("3"),
                                 Collections.emptyList()));
     }
 
