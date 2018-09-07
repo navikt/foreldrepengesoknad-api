@@ -11,7 +11,7 @@ import com.fasterxml.jackson.annotation.JsonProperty;
 public class Fagsak {
 
     private final String saksnummer;
-    private final FagsakStatus fagsakStatus;
+    private final String fagsakStatus;
     private final String behandlingTema;
     private final String aktørId;
     private final String aktørIdAnnenPart;
@@ -20,7 +20,7 @@ public class Fagsak {
 
     @JsonCreator
     public Fagsak(@JsonProperty("saksnummer") String saksnummer,
-            @JsonProperty("fagsakStatus") FagsakStatus fagsakStatus,
+            @JsonProperty("fagsakStatus") String fagsakStatus,
             @JsonProperty("behandlingTema") String behandlingsTema,
             @JsonProperty("aktørId") String aktørId,
             @JsonProperty("aktørIdAnnenPart") String aktørIdAnnenPart,
@@ -44,7 +44,7 @@ public class Fagsak {
         return saksnummer;
     }
 
-    public FagsakStatus getFagsakStatus() {
+    public String getFagsakStatus() {
         return fagsakStatus;
     }
 
