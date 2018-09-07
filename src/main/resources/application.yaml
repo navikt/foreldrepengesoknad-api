@@ -7,7 +7,6 @@ server:
   servlet.context-path: /foreldrepengesoknad-api
   use-forward-headers: true
 spring :
-  jackson.mapper.deserialization.accept_single_value_as_array: true
   main.banner-mode: 'off'
   metrics.web.server.auto-time-requests: true
   servlet.multipart.max-file-size: 9MB
