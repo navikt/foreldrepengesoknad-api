@@ -1,23 +1,22 @@
 package no.nav.foreldrepenger.selvbetjening.oppslag.tjeneste;
 
-import static java.util.Arrays.asList;
-import static org.slf4j.LoggerFactory.getLogger;
-import static org.springframework.web.util.UriComponentsBuilder.fromUri;
-
-import java.net.URI;
-import java.util.List;
-
-import javax.inject.Inject;
-
+import no.nav.foreldrepenger.selvbetjening.oppslag.tjeneste.json.Fagsak;
+import no.nav.foreldrepenger.selvbetjening.oppslag.tjeneste.json.PersonDto;
+import no.nav.foreldrepenger.selvbetjening.oppslag.tjeneste.json.SøkerinfoDto;
 import org.slf4j.Logger;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnProperty;
 import org.springframework.stereotype.Service;
 import org.springframework.web.client.RestTemplate;
 
-import no.nav.foreldrepenger.selvbetjening.oppslag.tjeneste.json.Fagsak;
-import no.nav.foreldrepenger.selvbetjening.oppslag.tjeneste.json.PersonDto;
-import no.nav.foreldrepenger.selvbetjening.oppslag.tjeneste.json.SøkerinfoDto;
+import javax.inject.Inject;
+import java.net.URI;
+import java.util.List;
+
+import static java.util.Arrays.asList;
+import static java.util.Collections.emptyList;
+import static org.slf4j.LoggerFactory.getLogger;
+import static org.springframework.web.util.UriComponentsBuilder.fromUri;
 
 @Service
 @ConditionalOnProperty(name = "stub.oppslag", havingValue = "false", matchIfMissing = true)
@@ -27,13 +26,14 @@ public class Oppslagstjeneste implements Oppslag {
 
     private final RestTemplate template;
     private final URI oppslagServiceUrl;
-    private final URI søknadURI;
+    private final URI mottakServiceUrl;
 
     @Inject
-    public Oppslagstjeneste(@Value("${FPSOKNAD_OPPSLAG_API_URL}") URI oppslagURI,
-            @Value("${FPSOKNAD_MOTTAK_API_URL}") URI søknadURI, RestTemplate template) {
-        this.oppslagServiceUrl = oppslagURI;
-        this.søknadURI = søknadURI;
+    public Oppslagstjeneste(@Value("${FPSOKNAD_OPPSLAG_API_URL}") URI oppslagUrl,
+                            @Value("${FPSOKNAD_MOTTAK_API_URL}") URI mottakUrl,
+                            RestTemplate template) {
+        this.oppslagServiceUrl = oppslagUrl;
+        this.mottakServiceUrl = mottakUrl;
         this.template = template;
     }
 
@@ -53,22 +53,17 @@ public class Oppslagstjeneste implements Oppslag {
 
     @Override
     public List<Fagsak> hentFagsaker() {
-        URI uri = fromUri(oppslagServiceUrl).path("/mottak/saker").build().toUri();
+        URI uri = fromUri(mottakServiceUrl).path("/mottak/saker").build().toUri();
         LOG.info("Fagsak URI: {}", uri);
-        return asList(template.getForObject(uri, Fagsak[].class));
+        Fagsak[] saker = template.getForObject(uri, Fagsak[].class);
+        return saker != null ? asList(saker) : emptyList();
     }
 
     @Override
     public String hentSøknad(String behandlingId) {
-        URI uri = fromUri(søknadURI).path("/mottak/soknad").queryParam("behandlingId", behandlingId).build().toUri();
+        URI uri = fromUri(mottakServiceUrl).path("/mottak/soknad").queryParam("behandlingId", behandlingId).build().toUri();
         LOG.info("Søknad URI: {}", uri);
         return template.getForObject(uri, String.class);
-    }
-
-    @Override
-    public String toString() {
-        return getClass().getSimpleName() + " [template=" + template + ", oppslagServiceUrl=" + oppslagServiceUrl
-                + ", søknadURI=" + søknadURI + "]";
     }
 
 }
