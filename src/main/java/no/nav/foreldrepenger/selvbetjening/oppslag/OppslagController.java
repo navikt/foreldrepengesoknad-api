@@ -50,11 +50,12 @@ public class OppslagController {
         try {
 
             if (EnvUtil.isDevOrPreprod(env)) {
+                LOG.info("Henter søknad...");
+                oppslag.hentSøknad("1026787");
                 LOG.info("Henter fagsaker...");
                 List<Fagsak> fagsaker = oppslag.hentFagsaker();
                 LOG.info("Fagsaker {}", fagsaker);
-                LOG.info("Henter søknad...");
-                oppslag.hentSøknad("1026787");
+
                 /*
                  * for (Fagsak fagsak : fagsaker) { for (Behandling behandling :
                  * fagsak.getBehandlinger()) { LOG.info("Henter søknad for {} {}",
