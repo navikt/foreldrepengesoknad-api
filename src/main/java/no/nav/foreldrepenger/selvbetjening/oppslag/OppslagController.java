@@ -48,9 +48,13 @@ public class OppslagController {
     public Søkerinfo søkerinfo() {
         LOG.info("Henter søkerinfo...");
         try {
-            LOG.info("Henter søknad...");
+
             if (EnvUtil.isDevOrPreprod(env)) {
-                LOG.info("{}", oppslag.hentSøknad("1000525"));
+                LOG.info("Henter fagsaker...");
+                List<Fagsak> fagsaker = oppslag.hentFagsaker();
+                LOG.info("{}", fagsaker);
+                // LOG.info("Henter søknad...");
+                // LOG.info("{}", oppslag.hentSøknad("1000525"));
             }
         } catch (Exception e) {
             LOG.warn("Oops", e);

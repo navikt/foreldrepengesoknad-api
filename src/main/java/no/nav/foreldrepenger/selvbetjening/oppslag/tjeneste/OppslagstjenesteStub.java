@@ -75,7 +75,8 @@ public class OppslagstjenesteStub implements Oppslag {
     public List<Fagsak> hentFagsaker() {
         return Collections
                 .singletonList(
-                        new Fagsak("42", FagsakStatus.LOP, "FORP_FODS", "1", "2", Collections.singletonList("3")));
+                        new Fagsak("42", FagsakStatus.LOP, "FORP_FODS", "1", "2", Collections.singletonList("3"),
+                                Collections.emptyList()));
     }
 
     @Override
