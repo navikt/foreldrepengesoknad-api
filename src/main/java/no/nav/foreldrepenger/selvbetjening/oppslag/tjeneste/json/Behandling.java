@@ -1,7 +1,11 @@
 package no.nav.foreldrepenger.selvbetjening.oppslag.tjeneste.json;
 
+import com.fasterxml.jackson.annotation.JsonCreator;
+import com.fasterxml.jackson.annotation.JsonProperty;
+
 public class Behandling {
 
+    private final String id;
     private final String status;
     private final String type;
     private final String tema;
@@ -9,8 +13,14 @@ public class Behandling {
     private final String behandlendeEnhet;
     private final String behandlendeEnhetNavn;
 
-    public Behandling(String status, String type, String tema, String årsak, String behandlendeEnhet,
-            String behandlendeEnhetNavn) {
+    @JsonCreator
+    public Behandling(@JsonProperty("id") String id, @JsonProperty("status") String status,
+            @JsonProperty("type") String type,
+            @JsonProperty("tema") String tema,
+            @JsonProperty("årsak") String årsak,
+            @JsonProperty("behandlendeEnhet") String behandlendeEnhet,
+            @JsonProperty("behandlendeEnhetNavn") String behandlendeEnhetNavn) {
+        this.id = id;
         this.status = status;
         this.type = type;
         this.tema = tema;
@@ -21,6 +31,10 @@ public class Behandling {
 
     public String getStatus() {
         return status;
+    }
+
+    public String getId() {
+        return id;
     }
 
     public String getType() {
@@ -45,8 +59,8 @@ public class Behandling {
 
     @Override
     public String toString() {
-        return getClass().getSimpleName() + " [status=" + status + ", type=" + type + ", tema=" + tema + ", årsak="
-                + årsak
+        return getClass().getSimpleName() + " [id=" + id + ", status=" + status + ", type=" + type + ", tema=" + tema
+                + ", årsak=" + årsak
                 + ", behandlendeEnhet=" + behandlendeEnhet + ", behandlendeEnhetNavn=" + behandlendeEnhetNavn + "]";
     }
 
