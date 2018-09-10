@@ -15,6 +15,7 @@ import no.nav.foreldrepenger.selvbetjening.felles.util.EnvUtil;
 import no.nav.foreldrepenger.selvbetjening.oppslag.json.Person;
 import no.nav.foreldrepenger.selvbetjening.oppslag.json.Søkerinfo;
 import no.nav.foreldrepenger.selvbetjening.oppslag.tjeneste.Oppslag;
+import no.nav.foreldrepenger.selvbetjening.oppslag.tjeneste.json.Behandling;
 import no.nav.foreldrepenger.selvbetjening.oppslag.tjeneste.json.Sak;
 import no.nav.security.spring.oidc.validation.api.ProtectedWithClaims;
 
@@ -50,18 +51,19 @@ public class OppslagController {
         try {
 
             if (EnvUtil.isDevOrPreprod(env)) {
-                LOG.info("Henter søknad...");
-                oppslag.hentSøknad("1026787");
                 LOG.info("Henter saker...");
-                List<Sak> fagsaker = oppslag.hentSaker();
-                LOG.info("Fagsaker {}", fagsaker);
+                List<Sak> saker = oppslag.hentSaker();
+                LOG.info("{} saker {}", saker.size(), saker);
 
-                /*
-                 * for (Fagsak fagsak : fagsaker) { for (Behandling behandling :
-                 * fagsak.getBehandlinger()) { LOG.info("Henter søknad for {} {}",
-                 * fagsak.getSaksnummer(), behandling.getId()); // LOG.info("{}",
-                 * oppslag.hentSøknad(behandling.getId())); } }
-                 */
+                for (Sak sak : saker) {
+                    LOG.info("sak {} har {} behandlinger", sak, sak.getBehandlinger().size());
+                    for (Behandling behandling : sak.getBehandlinger()) {
+                        LOG.info("Henter søknad for sak {} med behandlingsid {}", sak.getSaksnummer(),
+                                behandling.getId());
+                        LOG.info("{}", oppslag.hentSøknad(behandling.getId()));
+                    }
+                }
+
             }
         } catch (Exception e) {
             LOG.warn("Oops", e);
