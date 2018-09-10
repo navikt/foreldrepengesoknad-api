@@ -1,6 +1,6 @@
 package no.nav.foreldrepenger.selvbetjening.oppslag.tjeneste;
 
-import no.nav.foreldrepenger.selvbetjening.oppslag.tjeneste.json.Fagsak;
+import no.nav.foreldrepenger.selvbetjening.oppslag.tjeneste.json.Sak;
 import no.nav.foreldrepenger.selvbetjening.oppslag.tjeneste.json.PersonDto;
 import no.nav.foreldrepenger.selvbetjening.oppslag.tjeneste.json.SøkerinfoDto;
 import org.slf4j.Logger;
@@ -52,10 +52,10 @@ public class Oppslagstjeneste implements Oppslag {
     }
 
     @Override
-    public List<Fagsak> hentFagsaker() {
+    public List<Sak> hentSaker() {
         URI uri = fromUri(mottakServiceUrl).path("/mottak/saker").build().toUri();
         LOG.info("Fagsak URI: {}", uri);
-        Fagsak[] saker = template.getForObject(uri, Fagsak[].class);
+        Sak[] saker = template.getForObject(uri, Sak[].class);
         return saker != null ? asList(saker) : emptyList();
     }
 

@@ -15,7 +15,7 @@ import no.nav.foreldrepenger.selvbetjening.felles.util.EnvUtil;
 import no.nav.foreldrepenger.selvbetjening.oppslag.json.Person;
 import no.nav.foreldrepenger.selvbetjening.oppslag.json.Søkerinfo;
 import no.nav.foreldrepenger.selvbetjening.oppslag.tjeneste.Oppslag;
-import no.nav.foreldrepenger.selvbetjening.oppslag.tjeneste.json.Fagsak;
+import no.nav.foreldrepenger.selvbetjening.oppslag.tjeneste.json.Sak;
 import no.nav.security.spring.oidc.validation.api.ProtectedWithClaims;
 
 @RestController
@@ -24,7 +24,7 @@ public class OppslagController {
 
     public static final String REST_PERSONINFO = "/rest/personinfo";
     private static final String REST_SØKERINFO = "/rest/sokerinfo";
-    private static final String REST_FAGSAKER = "/rest/fagsaker";
+    private static final String REST_SAKER = "/rest/saker";
     private static final String REST_SØKNADER = "/rest/soknader";
 
     private static final Logger LOG = getLogger(OppslagController.class);
@@ -52,8 +52,8 @@ public class OppslagController {
             if (EnvUtil.isDevOrPreprod(env)) {
                 LOG.info("Henter søknad...");
                 oppslag.hentSøknad("1026787");
-                LOG.info("Henter fagsaker...");
-                List<Fagsak> fagsaker = oppslag.hentFagsaker();
+                LOG.info("Henter saker...");
+                List<Sak> fagsaker = oppslag.hentSaker();
                 LOG.info("Fagsaker {}", fagsaker);
 
                 /*
@@ -69,10 +69,10 @@ public class OppslagController {
         return new Søkerinfo(oppslag.hentSøkerinfo());
     }
 
-    @GetMapping(REST_FAGSAKER)
-    public List<Fagsak> fagsaker() {
-        LOG.info("Henter fagsaker...");
-        return oppslag.hentFagsaker();
+    @GetMapping(REST_SAKER)
+    public List<Sak> saker() {
+        LOG.info("Henter saker...");
+        return oppslag.hentSaker();
     }
 
     @GetMapping(REST_SØKNADER)

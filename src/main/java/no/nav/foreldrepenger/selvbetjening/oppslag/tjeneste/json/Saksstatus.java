@@ -1,5 +1,5 @@
 package no.nav.foreldrepenger.selvbetjening.oppslag.tjeneste.json;
 
-public enum FagsakStatus {
+public enum Saksstatus {
     OPPR, UBEH, LOP, AVSLU
 }
