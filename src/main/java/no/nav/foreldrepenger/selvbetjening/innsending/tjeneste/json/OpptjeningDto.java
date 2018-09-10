@@ -114,12 +114,14 @@ public class OpptjeningDto {
         public String arbeidsgiverNavn;
         public PeriodeDto periode = new PeriodeDto();
         public String land;
+        public List<String> vedlegg;
 
         public ArbeidsforholdDto(AnnenInntekt annenInntekt) {
             this.arbeidsgiverNavn = annenInntekt.arbeidsgiverNavn;
             this.land = annenInntekt.land;
             this.periode.fom = annenInntekt.tidsperiode.fom;
             this.periode.tom = annenInntekt.tidsperiode.tom;
+            this.vedlegg = annenInntekt.vedlegg;
         }
     }
 }
