@@ -4,6 +4,7 @@ import no.nav.foreldrepenger.selvbetjening.oppslag.json.AnnenForelder;
 import no.nav.foreldrepenger.selvbetjening.oppslag.json.Arbeidsforhold;
 import no.nav.foreldrepenger.selvbetjening.oppslag.json.Bankkonto;
 import no.nav.foreldrepenger.selvbetjening.oppslag.json.Barn;
+import no.nav.foreldrepenger.selvbetjening.oppslag.tjeneste.json.Behandling;
 import no.nav.foreldrepenger.selvbetjening.oppslag.tjeneste.json.PersonDto;
 import no.nav.foreldrepenger.selvbetjening.oppslag.tjeneste.json.Sak;
 import no.nav.foreldrepenger.selvbetjening.oppslag.tjeneste.json.SøkerinfoDto;
@@ -16,7 +17,6 @@ import java.util.List;
 
 import static com.neovisionaries.i18n.CountryCode.NO;
 import static java.time.LocalDate.now;
-import static java.util.Collections.emptyList;
 import static java.util.Collections.singletonList;
 import static org.slf4j.LoggerFactory.getLogger;
 
@@ -71,7 +71,9 @@ public class OppslagstjenesteStub implements Oppslag {
 
     @Override
     public List<Sak> hentSaker() {
-        return singletonList(new Sak("42", "LOP", "FORP_FODS", "1", "2", singletonList("3"), emptyList()));
+        Behandling behandling = new Behandling("abc", "UTRED", "FP", "FORP_FODS", null, "4833", "NAV Torrevieja");
+        Sak sak = new Sak("42", "LOP", "FORP_FODS", "1", "2", singletonList("3"), singletonList(behandling));
+        return singletonList(sak);
     }
 
     @Override
