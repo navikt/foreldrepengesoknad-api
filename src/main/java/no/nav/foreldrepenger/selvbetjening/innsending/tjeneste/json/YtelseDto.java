@@ -31,7 +31,7 @@ public class YtelseDto {
 
         if (søknad instanceof Foreldrepengesøknad) {
             Foreldrepengesøknad foreldrepengesøknad = (Foreldrepengesøknad) søknad;
-            this.dekningsgrad = "GRAD100";
+            this.dekningsgrad = "GRAD" + foreldrepengesøknad.dekningsgrad;
             this.opptjening = new OpptjeningDto(foreldrepengesøknad.søker);
             this.fordeling = new FordelingDto(foreldrepengesøknad.uttaksplan, foreldrepengesøknad.annenForelder.erInformertOmSøknaden);
             this.rettigheter = new RettigheterDto(foreldrepengesøknad.søker, foreldrepengesøknad.annenForelder);
