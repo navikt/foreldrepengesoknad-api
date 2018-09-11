@@ -1,25 +1,24 @@
 package no.nav.foreldrepenger.selvbetjening.oppslag.tjeneste;
 
-import static com.neovisionaries.i18n.CountryCode.NO;
-import static java.time.LocalDate.now;
-import static java.util.Collections.singletonList;
-import static org.slf4j.LoggerFactory.getLogger;
-
-import java.util.ArrayList;
-import java.util.Collections;
-import java.util.List;
-
-import org.slf4j.Logger;
-import org.springframework.boot.autoconfigure.condition.ConditionalOnProperty;
-import org.springframework.stereotype.Service;
-
 import no.nav.foreldrepenger.selvbetjening.oppslag.json.AnnenForelder;
 import no.nav.foreldrepenger.selvbetjening.oppslag.json.Arbeidsforhold;
 import no.nav.foreldrepenger.selvbetjening.oppslag.json.Bankkonto;
 import no.nav.foreldrepenger.selvbetjening.oppslag.json.Barn;
-import no.nav.foreldrepenger.selvbetjening.oppslag.tjeneste.json.Fagsak;
+import no.nav.foreldrepenger.selvbetjening.oppslag.tjeneste.json.Behandling;
 import no.nav.foreldrepenger.selvbetjening.oppslag.tjeneste.json.PersonDto;
+import no.nav.foreldrepenger.selvbetjening.oppslag.tjeneste.json.Sak;
 import no.nav.foreldrepenger.selvbetjening.oppslag.tjeneste.json.SøkerinfoDto;
+import org.slf4j.Logger;
+import org.springframework.boot.autoconfigure.condition.ConditionalOnProperty;
+import org.springframework.stereotype.Service;
+
+import java.util.ArrayList;
+import java.util.List;
+
+import static com.neovisionaries.i18n.CountryCode.NO;
+import static java.time.LocalDate.now;
+import static java.util.Collections.singletonList;
+import static org.slf4j.LoggerFactory.getLogger;
 
 @Service
 @ConditionalOnProperty(name = "stub.oppslag", havingValue = "true")
@@ -71,11 +70,10 @@ public class OppslagstjenesteStub implements Oppslag {
     }
 
     @Override
-    public List<Fagsak> hentFagsaker() {
-        return Collections
-                .singletonList(
-                        new Fagsak("42", "LOP", "FORP_FODS", "1", "2", Collections.singletonList("3"),
-                                Collections.emptyList()));
+    public List<Sak> hentSaker() {
+        Behandling behandling = new Behandling("abc", "UTRED", "FP", "FORP_FODS", null, "4833", "NAV Torrevieja");
+        Sak sak = new Sak("42", "LOP", "FORP_FODS", "1", "2", singletonList("3"), singletonList(behandling));
+        return singletonList(sak);
     }
 
     @Override

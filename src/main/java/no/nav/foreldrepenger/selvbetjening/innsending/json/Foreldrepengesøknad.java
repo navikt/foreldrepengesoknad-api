@@ -4,6 +4,7 @@ import java.util.List;
 
 public class Foreldrepengesøknad extends Søknad {
 
+    public String dekningsgrad;
     public List<UttaksplanPeriode> uttaksplan;
 
 }
