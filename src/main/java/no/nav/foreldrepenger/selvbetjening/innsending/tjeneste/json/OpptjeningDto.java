@@ -70,14 +70,14 @@ public class OpptjeningDto {
         public List<String> virksomhetsTyper = new ArrayList<>();
         public String arbeidsland;
         public List<RegnskapsførerDto> regnskapsførere = new ArrayList<>();
-        public int naeringsinntektBrutto;
-        public Boolean erNyoppstartet;
+        public int næringsinntektBrutto;
+        public Boolean erNyOpprettet;
         public Boolean erNyIArbeidslivet;
-        public Boolean naerRelasjon;
+        public Boolean nærRelasjon;
         public Boolean erVarigEndring;
         public LocalDate oppstartsDato;
         public LocalDate endringsDato;
-        public String beskrivelseAvEndring;
+        public String beskrivelseEndring;
 
         public EgenNæringDto(SelvstendigNæringsdrivendeInformasjon selvstendig) {
             NæringsinntektInformasjon næringsInfo = selvstendig.endringAvNæringsinntektInformasjon;
@@ -97,16 +97,16 @@ public class OpptjeningDto {
 
             if (næringsInfo != null) {
                 this.endringsDato = næringsInfo.dato;
-                this.naeringsinntektBrutto = Integer.parseInt(næringsInfo.næringsinntektEtterEndring);
-                this.beskrivelseAvEndring = næringsInfo.forklaring;
+                this.næringsinntektBrutto = Integer.parseInt(næringsInfo.næringsinntektEtterEndring);
+                this.beskrivelseEndring = næringsInfo.forklaring;
             }
 
             if (regnskapsfører != null) {
                 regnskapsførere.add(new RegnskapsførerDto(regnskapsfører));
-                this.naerRelasjon = regnskapsfører.erNærVennEllerFamilie;
+                this.nærRelasjon = regnskapsfører.erNærVennEllerFamilie;
             } else if (revisor != null) {
                 regnskapsførere.add(new RegnskapsførerDto(revisor));
-                this.naerRelasjon = revisor.erNærVennEllerFamilie;
+                this.nærRelasjon = revisor.erNærVennEllerFamilie;
             }
         }
     }
