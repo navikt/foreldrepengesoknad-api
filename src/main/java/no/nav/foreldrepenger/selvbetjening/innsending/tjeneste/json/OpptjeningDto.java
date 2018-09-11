@@ -70,21 +70,43 @@ public class OpptjeningDto {
         public List<String> virksomhetsTyper = new ArrayList<>();
         public String arbeidsland;
         public List<RegnskapsførerDto> regnskapsførere = new ArrayList<>();
+        public int naeringsinntektBrutto;
+        public Boolean erNyoppstartet;
+        public Boolean erNyIArbeidslivet;
+        public Boolean naerRelasjon;
+        public Boolean erVarigEndring;
+        public LocalDate oppstartsDato;
+        public LocalDate endringsDato;
+        public String beskrivelseAvEndring;
 
         public EgenNæringDto(SelvstendigNæringsdrivendeInformasjon selvstendig) {
+            NæringsinntektInformasjon næringsInfo = selvstendig.endringAvNæringsinntektInformasjon;
+            TilknyttetPerson regnskapsfører = selvstendig.regnskapsfører;
+            TilknyttetPerson revisor = selvstendig.revisor;
+
             this.type = selvstendig.registrertINorge ? "norsk" : "utenlandsk";
             this.orgNummer = selvstendig.registrertINorge ? selvstendig.organisasjonsnummer : null;
             this.orgName = selvstendig.navnPåNæringen;
             this.periode.fom = selvstendig.tidsperiode.fom;
             this.periode.tom = selvstendig.tidsperiode.tom;
             this.arbeidsland = selvstendig.registrertILand;
+            this.erNyIArbeidslivet = selvstendig.nyIArbeidslivet;
+            this.erVarigEndring = selvstendig.hattVarigEndringAvNæringsinntektSiste4Kalenderår;
 
             this.virksomhetsTyper.addAll(selvstendig.næringstyper);
 
-            if (selvstendig.regnskapsfører != null) {
-                regnskapsførere.add(new RegnskapsførerDto(selvstendig.regnskapsfører));
-            } else if (selvstendig.revisor != null) {
-                regnskapsførere.add(new RegnskapsførerDto(selvstendig.revisor));
+            if (næringsInfo != null) {
+                this.endringsDato = næringsInfo.dato;
+                this.naeringsinntektBrutto = Integer.parseInt(næringsInfo.næringsinntektEtterEndring);
+                this.beskrivelseAvEndring = næringsInfo.forklaring;
+            }
+
+            if (regnskapsfører != null) {
+                regnskapsførere.add(new RegnskapsførerDto(regnskapsfører));
+                this.naerRelasjon = regnskapsfører.erNærVennEllerFamilie;
+            } else if (revisor != null) {
+                regnskapsførere.add(new RegnskapsførerDto(revisor));
+                this.naerRelasjon = revisor.erNærVennEllerFamilie;
             }
         }
     }

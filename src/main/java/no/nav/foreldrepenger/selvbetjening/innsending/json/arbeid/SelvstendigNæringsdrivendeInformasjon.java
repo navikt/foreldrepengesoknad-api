@@ -16,5 +16,7 @@ public class SelvstendigNæringsdrivendeInformasjon {
     public Boolean nyIArbeidslivet;
     public TilknyttetPerson regnskapsfører;
     public TilknyttetPerson revisor;
+    public Boolean hattVarigEndringAvNæringsinntektSiste4Kalenderår;
+    public NæringsinntektInformasjon endringAvNæringsinntektInformasjon;
 
 }
