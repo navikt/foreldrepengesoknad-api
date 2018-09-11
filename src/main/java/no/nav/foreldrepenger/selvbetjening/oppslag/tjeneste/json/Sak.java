@@ -20,8 +20,8 @@ public class Sak {
 
     @JsonCreator
     public Sak(@JsonProperty("saksnummer") String saksnummer,
-               @JsonProperty("fagsakStatus") String status,
-               @JsonProperty("behandlingTema") String behandlingstema,
+               @JsonProperty("status") String status,
+               @JsonProperty("behandlingstema") String behandlingstema,
                @JsonProperty("aktørId") String aktørId,
                @JsonProperty("aktørIdAnnenPart") String aktørIdAnnenPart,
                @JsonProperty("aktørIdBarn") List<String> aktørIdBarn,
