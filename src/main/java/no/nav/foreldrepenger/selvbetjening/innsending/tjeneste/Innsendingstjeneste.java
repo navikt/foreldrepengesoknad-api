@@ -5,6 +5,7 @@ import static org.slf4j.LoggerFactory.getLogger;
 
 import java.net.URI;
 
+import javax.inject.Inject;
 import javax.ws.rs.BadRequestException;
 
 import org.slf4j.Logger;
@@ -16,6 +17,9 @@ import org.springframework.stereotype.Service;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.client.RestTemplate;
 import org.springframework.web.util.UriComponentsBuilder;
+
+import com.fasterxml.jackson.core.JsonProcessingException;
+import com.fasterxml.jackson.databind.ObjectMapper;
 
 import no.nav.foreldrepenger.selvbetjening.felles.attachments.Image2PDFConverter;
 import no.nav.foreldrepenger.selvbetjening.felles.util.Enabled;
@@ -36,6 +40,8 @@ public class Innsendingstjeneste implements Innsending {
     private final Image2PDFConverter converter;
     private final URI mottakServiceUrl;
     private final RestTemplate template;
+    @Inject
+    private ObjectMapper mapper;
 
     public Innsendingstjeneste(@Value("${FPSOKNAD_MOTTAK_API_URL}") URI baseUri, RestTemplate template,
             Image2PDFConverter converter) {
@@ -76,6 +82,7 @@ public class Innsendingstjeneste implements Innsending {
             LOG.trace("Mottatt søknad er {}", søknad);
             dto = new ForeldrepengesøknadDto((Foreldrepengesøknad) søknad);
             LOG.trace("DTO til mottak er {}", dto);
+            logJSON(dto);
         }
         else {
             LOG.warn("Mottok en søknad av ukjent type..");
@@ -88,5 +95,13 @@ public class Innsendingstjeneste implements Innsending {
         });
 
         return new HttpEntity<>(dto);
+    }
+
+    private void logJSON(SøknadDto dto) {
+        try {
+            LOG.trace("JSON er {}", mapper.writerWithDefaultPrettyPrinter().writeValueAsString(dto));
+        } catch (JsonProcessingException e) {
+            e.printStackTrace();
+        }
     }
 }
