@@ -53,7 +53,7 @@ public class Innsendingstjeneste implements Innsending {
 
     @Override
     public ResponseEntity<Kvittering> sendInn(Søknad søknad) {
-        LOG.info("Poster søknad til {}", mottakServiceUrl);
+        LOG.trace("Poster søknad {} til {}", søknad, mottakServiceUrl);
         søknad.opprettet = now();
         return post(søknad);
     }
@@ -73,8 +73,9 @@ public class Innsendingstjeneste implements Innsending {
             dto = new EngangsstønadDto((Engangsstønad) søknad);
         }
         else if (søknad instanceof Foreldrepengesøknad) {
+            LOG.trace("Mottatt søknad er {}", søknad);
             dto = new ForeldrepengesøknadDto((Foreldrepengesøknad) søknad);
-            LOG.trace("DTO til mottak er { }", dto);
+            LOG.trace("DTO til mottak er {}", dto);
         }
         else {
             LOG.warn("Mottok en søknad av ukjent type..");
