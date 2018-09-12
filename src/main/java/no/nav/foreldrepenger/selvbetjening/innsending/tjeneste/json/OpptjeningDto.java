@@ -1,14 +1,20 @@
 package no.nav.foreldrepenger.selvbetjening.innsending.tjeneste.json;
 
-import com.fasterxml.jackson.annotation.JsonInclude;
-import no.nav.foreldrepenger.selvbetjening.innsending.json.arbeid.*;
-import no.nav.foreldrepenger.selvbetjening.innsending.json.Søker;
+import static com.fasterxml.jackson.annotation.JsonInclude.Include.NON_EMPTY;
 
 import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
 
-import static com.fasterxml.jackson.annotation.JsonInclude.Include.NON_EMPTY;
+import com.fasterxml.jackson.annotation.JsonInclude;
+
+import no.nav.foreldrepenger.selvbetjening.innsending.json.Søker;
+import no.nav.foreldrepenger.selvbetjening.innsending.json.arbeid.AnnenInntekt;
+import no.nav.foreldrepenger.selvbetjening.innsending.json.arbeid.FrilansInformasjon;
+import no.nav.foreldrepenger.selvbetjening.innsending.json.arbeid.Frilansoppdrag;
+import no.nav.foreldrepenger.selvbetjening.innsending.json.arbeid.NæringsinntektInformasjon;
+import no.nav.foreldrepenger.selvbetjening.innsending.json.arbeid.SelvstendigNæringsdrivendeInformasjon;
+import no.nav.foreldrepenger.selvbetjening.innsending.json.arbeid.TilknyttetPerson;
 
 @JsonInclude(NON_EMPTY)
 public class OpptjeningDto {
@@ -28,14 +34,27 @@ public class OpptjeningDto {
         for (AnnenInntekt annenInntekt : søker.andreInntekterSiste10Mnd) {
             if (annenInntekt.type.equals("JOBB_I_UTLANDET")) {
                 this.arbeidsforhold.add(new ArbeidsforholdDto(annenInntekt));
-            } else {
+            }
+            else {
                 this.annenOpptjening.add(new AnnenOpptjeningDto(annenInntekt));
             }
         }
     }
 
+    @Override
+    public String toString() {
+        return "OpptjeningDto [frilans=" + frilans + ", egenNæring=" + egenNæring + ", annenOpptjening="
+                + annenOpptjening + ", arbeidsforhold=" + arbeidsforhold + "]";
+    }
+
     @JsonInclude(NON_EMPTY)
     public class FrilansDto {
+        @Override
+        public String toString() {
+            return "FrilansDto [periode=" + periode + ", harInntektFraFosterhjem=" + harInntektFraFosterhjem
+                    + ", frilansOppdrag=" + frilansOppdrag + "]";
+        }
+
         public PeriodeDto periode = new PeriodeDto();
         public Boolean harInntektFraFosterhjem;
         public List<FrilansoppdragDto> frilansOppdrag = new ArrayList<>();
@@ -51,6 +70,11 @@ public class OpptjeningDto {
     }
 
     public class FrilansoppdragDto {
+        @Override
+        public String toString() {
+            return "FrilansoppdragDto [oppdragsgiver=" + oppdragsgiver + ", periode=" + periode + "]";
+        }
+
         public String oppdragsgiver;
         public PeriodeDto periode = new PeriodeDto();
 
@@ -63,6 +87,16 @@ public class OpptjeningDto {
 
     @JsonInclude(NON_EMPTY)
     public class EgenNæringDto {
+        @Override
+        public String toString() {
+            return "EgenNæringDto [type=" + type + ", periode=" + periode + ", orgName=" + orgName + ", orgNummer="
+                    + orgNummer + ", virksomhetsTyper=" + virksomhetsTyper + ", arbeidsland=" + arbeidsland
+                    + ", regnskapsførere=" + regnskapsførere + ", næringsinntektBrutto=" + næringsinntektBrutto
+                    + ", erNyOpprettet=" + erNyOpprettet + ", erNyIArbeidslivet=" + erNyIArbeidslivet + ", nærRelasjon="
+                    + nærRelasjon + ", erVarigEndring=" + erVarigEndring + ", oppstartsDato=" + oppstartsDato
+                    + ", endringsDato=" + endringsDato + ", beskrivelseEndring=" + beskrivelseEndring + "]";
+        }
+
         public String type;
         public PeriodeDto periode = new PeriodeDto();
         public String orgName;
@@ -104,7 +138,8 @@ public class OpptjeningDto {
             if (regnskapsfører != null) {
                 regnskapsførere.add(new RegnskapsførerDto(regnskapsfører));
                 this.nærRelasjon = regnskapsfører.erNærVennEllerFamilie;
-            } else if (revisor != null) {
+            }
+            else if (revisor != null) {
                 regnskapsførere.add(new RegnskapsførerDto(revisor));
                 this.nærRelasjon = revisor.erNærVennEllerFamilie;
             }
@@ -112,6 +147,11 @@ public class OpptjeningDto {
     }
 
     public class RegnskapsførerDto {
+        @Override
+        public String toString() {
+            return "RegnskapsførerDto [navn=" + navn + ", telefon=" + telefon + "]";
+        }
+
         public String navn;
         public String telefon;
 
@@ -122,6 +162,11 @@ public class OpptjeningDto {
     }
 
     public class AnnenOpptjeningDto {
+        @Override
+        public String toString() {
+            return "AnnenOpptjeningDto [type=" + type + ", periode=" + periode + "]";
+        }
+
         public String type;
         public PeriodeDto periode = new PeriodeDto();
 
@@ -133,6 +178,12 @@ public class OpptjeningDto {
     }
 
     public class ArbeidsforholdDto {
+        @Override
+        public String toString() {
+            return "ArbeidsforholdDto [arbeidsgiverNavn=" + arbeidsgiverNavn + ", periode=" + periode + ", land=" + land
+                    + ", vedlegg=" + vedlegg + "]";
+        }
+
         public String arbeidsgiverNavn;
         public PeriodeDto periode = new PeriodeDto();
         public String land;

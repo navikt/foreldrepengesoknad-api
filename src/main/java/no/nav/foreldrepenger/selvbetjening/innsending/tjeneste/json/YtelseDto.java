@@ -1,15 +1,22 @@
 package no.nav.foreldrepenger.selvbetjening.innsending.tjeneste.json;
 
-import com.fasterxml.jackson.annotation.JsonInclude;
-import no.nav.foreldrepenger.selvbetjening.innsending.json.*;
+import static com.fasterxml.jackson.annotation.JsonInclude.Include.NON_EMPTY;
+import static com.fasterxml.jackson.annotation.JsonInclude.Include.NON_NULL;
+import static org.apache.commons.lang3.StringUtils.isEmpty;
 
 import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
 
-import static com.fasterxml.jackson.annotation.JsonInclude.Include.NON_EMPTY;
-import static com.fasterxml.jackson.annotation.JsonInclude.Include.NON_NULL;
-import static org.apache.commons.lang3.StringUtils.isEmpty;
+import com.fasterxml.jackson.annotation.JsonInclude;
+
+import no.nav.foreldrepenger.selvbetjening.innsending.json.AnnenForelder;
+import no.nav.foreldrepenger.selvbetjening.innsending.json.Barn;
+import no.nav.foreldrepenger.selvbetjening.innsending.json.Foreldrepengesøknad;
+import no.nav.foreldrepenger.selvbetjening.innsending.json.Søker;
+import no.nav.foreldrepenger.selvbetjening.innsending.json.Søknad;
+import no.nav.foreldrepenger.selvbetjening.innsending.json.Utenlandsopphold;
+import no.nav.foreldrepenger.selvbetjening.innsending.json.UtenlandsoppholdPeriode;
 
 @JsonInclude(NON_NULL)
 public class YtelseDto {
@@ -17,6 +24,14 @@ public class YtelseDto {
     public String type;
     public MedlemsskapDto medlemsskap;
     public RelasjonTilBarnDto relasjonTilBarn;
+
+    @Override
+    public String toString() {
+        return "YtelseDto [type=" + type + ", medlemsskap=" + medlemsskap + ", relasjonTilBarn=" + relasjonTilBarn
+                + ", annenForelder=" + annenForelder + ", dekningsgrad=" + dekningsgrad + ", opptjening=" + opptjening
+                + ", fordeling=" + fordeling + ", rettigheter=" + rettigheter + "]";
+    }
+
     public AnnenForelderDto annenForelder;
     public String dekningsgrad;
     public OpptjeningDto opptjening;
@@ -33,13 +48,20 @@ public class YtelseDto {
             Foreldrepengesøknad foreldrepengesøknad = (Foreldrepengesøknad) søknad;
             this.dekningsgrad = "GRAD" + foreldrepengesøknad.dekningsgrad;
             this.opptjening = new OpptjeningDto(foreldrepengesøknad.søker);
-            this.fordeling = new FordelingDto(foreldrepengesøknad.uttaksplan, foreldrepengesøknad.annenForelder.erInformertOmSøknaden);
+            this.fordeling = new FordelingDto(foreldrepengesøknad.uttaksplan,
+                    foreldrepengesøknad.annenForelder.erInformertOmSøknaden);
             this.rettigheter = new RettigheterDto(foreldrepengesøknad.søker, foreldrepengesøknad.annenForelder);
         }
     }
 
     @JsonInclude(NON_NULL)
     public class AnnenForelderDto {
+        @Override
+        public String toString() {
+            return "AnnenForelderDto [type=" + type + ", id=" + id + ", fnr=" + fnr + ", land=" + land + ", fornavn="
+                    + fornavn + "]";
+        }
+
         public String type;
         public String id;
         public String fnr;
@@ -62,6 +84,13 @@ public class YtelseDto {
 
     @JsonInclude(NON_EMPTY)
     public class MedlemsskapDto {
+        @Override
+        public String toString() {
+            return "MedlemsskapDto [norgeSiste12=" + norgeSiste12 + ", norgeNeste12=" + norgeNeste12 + ", fødselNorge="
+                    + fødselNorge + ", arbeidSiste12=" + arbeidSiste12 + ", utenlandsopphold=" + utenlandsopphold
+                    + ", framtidigUtenlandsopphold=" + framtidigUtenlandsopphold + "]";
+        }
+
         public Boolean norgeSiste12;
         public Boolean norgeNeste12;
         public Boolean fødselNorge;
@@ -86,6 +115,11 @@ public class YtelseDto {
     }
 
     public class UtenlandsoppholdPeriodeDto {
+        @Override
+        public String toString() {
+            return "UtenlandsoppholdPeriodeDto [land=" + land + ", varighet=" + varighet + "]";
+        }
+
         public String land;
         public PeriodeDto varighet = new PeriodeDto();
 
@@ -106,6 +140,15 @@ public class YtelseDto {
         public List<LocalDate> fødselsdato;
         public LocalDate omsorgsovertakelsesdato;
         public LocalDate ankomstDato;
+
+        @Override
+        public String toString() {
+            return "RelasjonTilBarnDto [type=" + type + ", antallBarn=" + antallBarn + ", terminDato=" + terminDato
+                    + ", vedlegg=" + vedlegg + ", utstedtDato=" + utstedtDato + ", fødselsdato=" + fødselsdato
+                    + ", omsorgsovertakelsesdato=" + omsorgsovertakelsesdato + ", ankomstDato=" + ankomstDato
+                    + ", ektefellesBarn=" + ektefellesBarn + "]";
+        }
+
         public Boolean ektefellesBarn;
 
         public RelasjonTilBarnDto(Barn barn, String situasjon) {
@@ -123,7 +166,8 @@ public class YtelseDto {
         private String type(Boolean erBarnetFødt, String situasjon) {
             if (isEmpty(situasjon) || situasjon.equals("fødsel")) {
                 return erBarnetFødt ? "fødsel" : "termin";
-            } else {
+            }
+            else {
                 return situasjon;
             }
         }
@@ -131,9 +175,11 @@ public class YtelseDto {
         private LocalDate omsorgsovertakelsesdato(Barn barn) {
             if (barn.adopsjonsdato != null) {
                 return barn.adopsjonsdato;
-            } else if (barn.foreldreansvarsdato != null) {
+            }
+            else if (barn.foreldreansvarsdato != null) {
                 return barn.foreldreansvarsdato;
-            } else {
+            }
+            else {
                 return null;
             }
         }
@@ -141,6 +187,12 @@ public class YtelseDto {
 
     @JsonInclude(NON_NULL)
     public class RettigheterDto {
+        @Override
+        public String toString() {
+            return "RettigheterDto [harAnnenForelderRett=" + harAnnenForelderRett + ", harAleneOmsorgForBarnet="
+                    + harAleneOmsorgForBarnet + "]";
+        }
+
         public Boolean harAnnenForelderRett;
         public Boolean harAleneOmsorgForBarnet;
 
