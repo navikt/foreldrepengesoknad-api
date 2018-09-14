@@ -3,6 +3,7 @@ package no.nav.foreldrepenger.selvbetjening.innsending.tjeneste.json;
 import static com.fasterxml.jackson.annotation.JsonInclude.Include.NON_EMPTY;
 
 import java.time.LocalDate;
+import java.time.Period;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -57,11 +58,15 @@ public class OpptjeningDto {
 
         public PeriodeDto periode = new PeriodeDto();
         public Boolean harInntektFraFosterhjem;
+        public Boolean nyOppstartet;
         public List<FrilansoppdragDto> frilansOppdrag = new ArrayList<>();
 
         public FrilansDto(FrilansInformasjon frilansInformasjon) {
             this.periode.fom = frilansInformasjon.oppstart;
             this.harInntektFraFosterhjem = frilansInformasjon.driverFosterhjem;
+
+            LocalDate treMånederFørFom = LocalDate.now().minus(Period.ofDays(90));
+            this.nyOppstartet = this.periode.fom.isAfter(treMånederFørFom);
 
             for (Frilansoppdrag o : frilansInformasjon.oppdragForNæreVennerEllerFamilieSiste10Mnd) {
                 frilansOppdrag.add(new FrilansoppdragDto(o.navnPåArbeidsgiver, o.tidsperiode.fom, o.tidsperiode.tom));
