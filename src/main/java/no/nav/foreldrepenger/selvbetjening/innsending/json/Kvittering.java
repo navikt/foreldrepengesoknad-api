@@ -17,6 +17,9 @@ public class Kvittering {
     public String journalId;
     public String saksNr;
 
+    @SuppressWarnings("unused")
+    public Kvittering() {}
+
     public Kvittering(LocalDateTime mottattDato, String referanseId, String leveranseStatus, String journalId, String saksNr) {
         this.mottattDato = mottattDato;
         this.referanseId = referanseId;
