@@ -59,7 +59,7 @@ public class InnsendingstjenesteTest {
     }
 
     private ResponseEntity<Kvittering> kvittering() {
-        return new ResponseEntity<>(new Kvittering("ref", now()), OK);
+        return new ResponseEntity<>(new Kvittering(now(), "1", "OK", "2", "3"), OK);
     }
 
     public Engangsstønad engangsstønad() {
