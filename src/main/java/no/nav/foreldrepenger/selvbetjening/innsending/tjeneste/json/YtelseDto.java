@@ -58,19 +58,18 @@ public class YtelseDto {
     public class AnnenForelderDto {
         @Override
         public String toString() {
-            return "AnnenForelderDto [type=" + type + ", id=" + id + ", fnr=" + fnr + ", land=" + land + ", fornavn="
-                    + fornavn + "]";
+            return "AnnenForelderDto [type=" + type + ", id=" + id + ", fnr=" + fnr + ", land=" + land + ", navn=" + navn + "]";
         }
 
         public String type;
         public String id;
         public String fnr;
         public String land;
-        public String fornavn;
+        public String navn;
 
         public AnnenForelderDto(AnnenForelder annenForelder) {
             this.type = annenForelder.type();
-            this.fornavn = annenForelder.navn;
+            this.navn = annenForelder.navn;
             this.land = annenForelder.bostedsland;
 
             if (annenForelder.type().equals("norsk")) {
