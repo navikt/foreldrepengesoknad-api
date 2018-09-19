@@ -4,7 +4,8 @@ import static org.apache.commons.lang3.BooleanUtils.isTrue;
 
 public class AnnenForelder {
     public Boolean kanIkkeOppgis;
-    public String navn;
+    public String fornavn;
+    public String etternavn;
     public String fnr;
     public Boolean utenlandskFnr;
     public String bostedsland;
