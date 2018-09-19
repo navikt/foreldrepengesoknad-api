@@ -9,7 +9,7 @@ import static java.time.LocalDateTime.now;
 
 @JsonInclude(NON_EMPTY)
 public class Kvittering {
-    public static final Kvittering STUB = new Kvittering(now(),"beefcake-69-cafebabe-42", "PÅGÅR", "12345", "67890");
+    public static final Kvittering STUB = new Kvittering(now(),"deadbeef-69-cafebabe-42", "PÅGÅR", "12345", "67890");
 
     public LocalDateTime mottattDato;
     public String referanseId;
