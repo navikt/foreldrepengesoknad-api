@@ -51,5 +51,6 @@ fasitResources:
     resourceType: credential
   - alias: foreldrepengesoknad-api-toggles
     resourceType: applicationProperties
-
+  - alias: loadbalancer:foreldrepengesoknad-api
+    resourceType: loadbalancerconfig
     
