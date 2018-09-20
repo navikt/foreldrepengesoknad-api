@@ -79,8 +79,9 @@ public class OppslagController {
     @GetMapping(REST_SØKNADER)
     public String søknad() {
         try {
-            LOG.info("Henter søknad...");
-            return oppslag.hentSøknad("1000525");
+            LOG.info("Henter ikke søknad...");
+            return "42";
+            // return oppslag.hentSøknad("1000525");
         } catch (Exception e) {
             LOG.warn("Oops", e);
             return null;
