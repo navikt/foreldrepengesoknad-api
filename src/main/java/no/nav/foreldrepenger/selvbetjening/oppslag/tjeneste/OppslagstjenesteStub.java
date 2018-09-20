@@ -1,9 +1,6 @@
 package no.nav.foreldrepenger.selvbetjening.oppslag.tjeneste;
 
-import no.nav.foreldrepenger.selvbetjening.oppslag.json.AnnenForelder;
-import no.nav.foreldrepenger.selvbetjening.oppslag.json.Arbeidsforhold;
-import no.nav.foreldrepenger.selvbetjening.oppslag.json.Bankkonto;
-import no.nav.foreldrepenger.selvbetjening.oppslag.json.Barn;
+import no.nav.foreldrepenger.selvbetjening.oppslag.json.*;
 import no.nav.foreldrepenger.selvbetjening.oppslag.tjeneste.json.Behandling;
 import no.nav.foreldrepenger.selvbetjening.oppslag.tjeneste.json.PersonDto;
 import no.nav.foreldrepenger.selvbetjening.oppslag.tjeneste.json.Sak;
@@ -13,11 +10,12 @@ import org.springframework.boot.autoconfigure.condition.ConditionalOnProperty;
 import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 
 import static com.neovisionaries.i18n.CountryCode.NO;
 import static java.time.LocalDate.now;
-import static java.util.Collections.singletonList;
+import static java.util.Collections.*;
 import static org.slf4j.LoggerFactory.getLogger;
 
 @Service
@@ -72,8 +70,10 @@ public class OppslagstjenesteStub implements Oppslag {
     @Override
     public List<Sak> hentSaker() {
         Behandling behandling = new Behandling("abc", "UTRED", "FP", "FORP_FODS", null, "4833", "NAV Torrevieja");
-        Sak sak = new Sak("42", "LOP", "FORP_FODS", "1", "2", singletonList("3"), singletonList(behandling));
-        return singletonList(sak);
+        return Arrays.asList(
+                new Sak("sak123", "status1", "behtema1", "aktør1", "annenAktør1", emptyList(), emptyList()),
+                new Sak("42", "LOP", "FORP_FODS", "1", "2", singletonList("3"), singletonList(behandling))
+        );
     }
 
     @Override

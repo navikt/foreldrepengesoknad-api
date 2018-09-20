@@ -1,7 +1,8 @@
 package no.nav.foreldrepenger.selvbetjening.oppslag.tjeneste;
 
-import no.nav.foreldrepenger.selvbetjening.oppslag.tjeneste.json.Sak;
+import no.nav.foreldrepenger.selvbetjening.oppslag.tjeneste.json.GSakDeserializer;
 import no.nav.foreldrepenger.selvbetjening.oppslag.tjeneste.json.PersonDto;
+import no.nav.foreldrepenger.selvbetjening.oppslag.tjeneste.json.Sak;
 import no.nav.foreldrepenger.selvbetjening.oppslag.tjeneste.json.SøkerinfoDto;
 import org.slf4j.Logger;
 import org.springframework.beans.factory.annotation.Value;
@@ -14,7 +15,6 @@ import java.net.URI;
 import java.util.List;
 
 import static java.util.Arrays.asList;
-import static java.util.Collections.emptyList;
 import static org.slf4j.LoggerFactory.getLogger;
 import static org.springframework.web.util.UriComponentsBuilder.fromUri;
 
@@ -27,14 +27,17 @@ public class Oppslagstjeneste implements Oppslag {
     private final RestTemplate template;
     private final URI oppslagServiceUrl;
     private final URI mottakServiceUrl;
+    private GSakDeserializer gSakDeserializer;
 
     @Inject
     public Oppslagstjeneste(@Value("${FPSOKNAD_OPPSLAG_API_URL}") URI oppslagUrl,
                             @Value("${FPSOKNAD_MOTTAK_API_URL}") URI mottakUrl,
-                            RestTemplate template) {
+                            RestTemplate template,
+                            GSakDeserializer gSakDeserializer) {
         this.oppslagServiceUrl = oppslagUrl;
         this.mottakServiceUrl = mottakUrl;
         this.template = template;
+        this.gSakDeserializer = gSakDeserializer;
     }
 
     @Override
@@ -53,10 +56,14 @@ public class Oppslagstjeneste implements Oppslag {
 
     @Override
     public List<Sak> hentSaker() {
-        URI uri = fromUri(mottakServiceUrl).path("/mottak/saker").build().toUri();
-        LOG.info("Fagsak URI: {}", uri);
-        Sak[] saker = template.getForObject(uri, Sak[].class);
-        return saker != null ? asList(saker) : emptyList();
+        URI fpsakUri = fromUri(mottakServiceUrl).path("/mottak/saker").build().toUri();
+        LOG.info("Fpsak URI: {}", fpsakUri);
+        List<Sak> saker = asList(template.getForObject(fpsakUri, Sak[].class));
+        URI gsakUri = fromUri(oppslagServiceUrl).path("/oppslag/gsak").build().toUri();
+        LOG.info("Gsak URI: {}", gsakUri);
+        String gsakerJson = template.getForObject(gsakUri, String.class);
+        saker.addAll(gSakDeserializer.from(gsakerJson));
+        return saker;
     }
 
     @Override
