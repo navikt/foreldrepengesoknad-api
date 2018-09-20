@@ -15,7 +15,6 @@ import no.nav.foreldrepenger.selvbetjening.felles.util.EnvUtil;
 import no.nav.foreldrepenger.selvbetjening.oppslag.json.Person;
 import no.nav.foreldrepenger.selvbetjening.oppslag.json.Søkerinfo;
 import no.nav.foreldrepenger.selvbetjening.oppslag.tjeneste.Oppslag;
-import no.nav.foreldrepenger.selvbetjening.oppslag.tjeneste.json.Behandling;
 import no.nav.foreldrepenger.selvbetjening.oppslag.tjeneste.json.Sak;
 import no.nav.security.spring.oidc.validation.api.ProtectedWithClaims;
 
@@ -57,13 +56,13 @@ public class OppslagController {
 
                 for (Sak sak : saker) {
                     LOG.info("sak {} har {} behandlinger", sak, sak.getBehandlinger().size());
-                    for (Behandling behandling : sak.getBehandlinger()) {
-                        LOG.info("Henter søknad for sak {} med behandlingsid {}", sak.getSaksnummer(),
-                                behandling.getId());
-                        LOG.info("{}", oppslag.hentSøknad(behandling.getId()));
-                    }
+                    // for (Behandling behandling : sak.getBehandlinger()) {
+                    // LOG.info("Henter søknad for sak {} med behandlingsid {}",
+                    // sak.getSaksnummer(),
+                    // behandling.getId());
+                    // LOG.info("{}", oppslag.hentSøknad(behandling.getId()));
+                    // }
                 }
-
             }
         } catch (Exception e) {
             LOG.warn("Oops", e);
