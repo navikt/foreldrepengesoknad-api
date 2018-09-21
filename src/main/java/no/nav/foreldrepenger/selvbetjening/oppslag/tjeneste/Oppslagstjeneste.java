@@ -61,15 +61,15 @@ public class Oppslagstjeneste implements Oppslag {
         List<Sak> saker = new ArrayList<>();
 
         URI fpsakUri = fromUri(mottakServiceUrl).path("/mottak/saker").build().toUri();
-        Sak[] fpsakSaker = Optional.ofNullable(template.getForObject(fpsakUri, Sak[].class)).orElse(new Sak[]{});
-        saker.addAll(asList(fpsakSaker));
+        List<Sak> fpsakSaker = asList(Optional.ofNullable(template.getForObject(fpsakUri, Sak[].class)).orElse(new Sak[]{}));
+        saker.addAll(fpsakSaker);
 
         URI gsakUri = fromUri(oppslagServiceUrl).path("/gsak").build().toUri();
         String gsakerJson = template.getForObject(gsakUri, String.class);
         List<Sak> gsakSaker = gSakDeserializer.from(gsakerJson);
         saker.addAll(gsakSaker);
 
-        LOG.info("Henter {} saker fra fpsak og {} saker fra gsak", fpsakSaker.length, gsakSaker.size());
+        LOG.info("Henter {} saker fra fpsak og {} saker fra gsak", fpsakSaker.size(), gsakSaker.size());
         return saker;
     }
 
