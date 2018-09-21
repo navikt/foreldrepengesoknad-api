@@ -6,12 +6,11 @@ import java.util.List;
 
 import javax.inject.Inject;
 
+import org.apache.commons.lang3.NotImplementedException;
 import org.slf4j.Logger;
-import org.springframework.core.env.Environment;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RestController;
 
-import no.nav.foreldrepenger.selvbetjening.felles.util.EnvUtil;
 import no.nav.foreldrepenger.selvbetjening.oppslag.json.Person;
 import no.nav.foreldrepenger.selvbetjening.oppslag.json.Søkerinfo;
 import no.nav.foreldrepenger.selvbetjening.oppslag.tjeneste.Oppslag;
@@ -29,8 +28,6 @@ public class OppslagController {
 
     private static final Logger LOG = getLogger(OppslagController.class);
 
-    @Inject
-    private Environment env;
     private final Oppslag oppslag;
 
     @Inject
@@ -47,26 +44,6 @@ public class OppslagController {
     @GetMapping(REST_SØKERINFO)
     public Søkerinfo søkerinfo() {
         LOG.info("Henter søkerinfo...");
-        try {
-
-            if (EnvUtil.isDevOrPreprod(env)) {
-                LOG.info("Henter saker...");
-                List<Sak> saker = oppslag.hentSaker();
-                LOG.info("{} saker {}", saker.size(), saker);
-
-                for (Sak sak : saker) {
-                    LOG.info("sak {} har {} behandlinger", sak, sak.getBehandlinger().size());
-                    // for (Behandling behandling : sak.getBehandlinger()) {
-                    // LOG.info("Henter søknad for sak {} med behandlingsid {}",
-                    // sak.getSaksnummer(),
-                    // behandling.getId());
-                    // LOG.info("{}", oppslag.hentSøknad(behandling.getId()));
-                    // }
-                }
-            }
-        } catch (Exception e) {
-            LOG.warn("Oops", e);
-        }
         return new Søkerinfo(oppslag.hentSøkerinfo());
     }
 
@@ -78,14 +55,7 @@ public class OppslagController {
 
     @GetMapping(REST_SØKNADER)
     public String søknad() {
-        try {
-            LOG.info("Henter ikke søknad...");
-            return "42";
-            // return oppslag.hentSøknad("1000525");
-        } catch (Exception e) {
-            LOG.warn("Oops", e);
-            return null;
-        }
+        throw new NotImplementedException("Uthenting av søknad ikke implementert");
     }
 
     @Override
