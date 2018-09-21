@@ -12,7 +12,9 @@ import org.springframework.web.client.RestTemplate;
 
 import javax.inject.Inject;
 import java.net.URI;
+import java.util.ArrayList;
 import java.util.List;
+import java.util.Optional;
 
 import static java.util.Arrays.asList;
 import static org.slf4j.LoggerFactory.getLogger;
@@ -56,9 +58,18 @@ public class Oppslagstjeneste implements Oppslag {
 
     @Override
     public List<Sak> hentSaker() {
+        List<Sak> saker = new ArrayList<>();
+
         URI fpsakUri = fromUri(mottakServiceUrl).path("/mottak/saker").build().toUri();
-        LOG.info("Fpsak URI: {}", fpsakUri);
-        List<Sak> saker = asList(template.getForObject(fpsakUri, Sak[].class));
+        Sak[] fpsakSaker = Optional.ofNullable(template.getForObject(fpsakUri, Sak[].class)).orElse(new Sak[]{});
+        saker.addAll(asList(fpsakSaker));
+
+        URI gsakUri = fromUri(oppslagServiceUrl).path("/gsak").build().toUri();
+        String gsakerJson = template.getForObject(gsakUri, String.class);
+        List<Sak> gsakSaker = gSakDeserializer.from(gsakerJson);
+        saker.addAll(gsakSaker);
+
+        LOG.info("Henter {} saker fra fpsak og {} saker fra gsak", fpsakSaker.length, gsakSaker.size());
         return saker;
     }
 
