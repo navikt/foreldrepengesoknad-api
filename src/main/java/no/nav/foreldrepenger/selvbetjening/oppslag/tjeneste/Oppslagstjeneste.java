@@ -59,10 +59,6 @@ public class Oppslagstjeneste implements Oppslag {
         URI fpsakUri = fromUri(mottakServiceUrl).path("/mottak/saker").build().toUri();
         LOG.info("Fpsak URI: {}", fpsakUri);
         List<Sak> saker = asList(template.getForObject(fpsakUri, Sak[].class));
-        URI gsakUri = fromUri(oppslagServiceUrl).path("/oppslag/gsak").build().toUri();
-        LOG.info("Gsak URI: {}", gsakUri);
-        String gsakerJson = template.getForObject(gsakUri, String.class);
-        saker.addAll(gSakDeserializer.from(gsakerJson));
         return saker;
     }
 
