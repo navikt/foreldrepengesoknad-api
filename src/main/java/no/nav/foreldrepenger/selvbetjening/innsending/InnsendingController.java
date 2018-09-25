@@ -10,6 +10,7 @@ import javax.inject.Inject;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -59,13 +60,13 @@ public class InnsendingController {
     }
 
     @PostMapping(consumes = APPLICATION_JSON_VALUE)
-    public Kvittering sendInn(@RequestBody Søknad søknad) {
+    public ResponseEntity<Kvittering> sendInn(@RequestBody Søknad søknad) {
         LOG.info(CONFIDENTIAL, "Mottok søknad  {}", søknad);
         søknad.vedlegg.forEach(this::fetchAttachment);
         checkVedleggTooLarge(søknad.vedlegg);
-        Kvittering kvittering = innsending.sendInn(søknad);
+        ResponseEntity<Kvittering> respons = innsending.sendInn(søknad);
         deleteFromTempStorage(FnrExtractor.extract(contextHolder), søknad);
-        return kvittering;
+        return respons;
     }
 
     private void checkVedleggTooLarge(List<Vedlegg> vedlegg) {
