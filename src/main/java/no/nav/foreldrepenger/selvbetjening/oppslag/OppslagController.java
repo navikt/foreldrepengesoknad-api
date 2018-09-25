@@ -1,5 +1,6 @@
 package no.nav.foreldrepenger.selvbetjening.oppslag;
 
+import static no.nav.foreldrepenger.selvbetjening.felles.util.EnvUtil.CONFIDENTIAL;
 import static org.slf4j.LoggerFactory.getLogger;
 
 import java.util.List;
@@ -14,7 +15,9 @@ import org.springframework.web.bind.annotation.RestController;
 import no.nav.foreldrepenger.selvbetjening.oppslag.json.Person;
 import no.nav.foreldrepenger.selvbetjening.oppslag.json.Søkerinfo;
 import no.nav.foreldrepenger.selvbetjening.oppslag.tjeneste.Oppslag;
+import no.nav.foreldrepenger.selvbetjening.oppslag.tjeneste.json.PersonDto;
 import no.nav.foreldrepenger.selvbetjening.oppslag.tjeneste.json.Sak;
+import no.nav.foreldrepenger.selvbetjening.oppslag.tjeneste.json.SøkerinfoDto;
 import no.nav.security.spring.oidc.validation.api.ProtectedWithClaims;
 
 @RestController
@@ -38,19 +41,25 @@ public class OppslagController {
     @GetMapping(REST_PERSONINFO)
     public Person personinfo() {
         LOG.info("Henter personinfo...");
-        return new Person(oppslag.hentPerson());
+        PersonDto person = oppslag.hentPerson();
+        LOG.info(CONFIDENTIAL, "Fikk søkerinfo {}", person);
+        return new Person(person);
     }
 
     @GetMapping(REST_SØKERINFO)
     public Søkerinfo søkerinfo() {
         LOG.info("Henter søkerinfo...");
-        return new Søkerinfo(oppslag.hentSøkerinfo());
+        SøkerinfoDto info = oppslag.hentSøkerinfo();
+        LOG.info(CONFIDENTIAL, "Fikk søkerinfo {}", info);
+        return new Søkerinfo(info);
     }
 
     @GetMapping(REST_SAKER)
     public List<Sak> saker() {
         LOG.info("Henter saker...");
-        return oppslag.hentSaker();
+        List<Sak> saker = oppslag.hentSaker();
+        LOG.info(CONFIDENTIAL, "Fikk saker {}", saker);
+        return saker;
     }
 
     @GetMapping(REST_SØKNADER)
