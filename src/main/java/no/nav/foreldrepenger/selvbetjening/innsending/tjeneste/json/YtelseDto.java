@@ -69,7 +69,7 @@ public class YtelseDto {
 
         public AnnenForelderDto(AnnenForelder annenForelder) {
             this.type = annenForelder.type();
-            this.navn = annenForelder.fornavn + " " + annenForelder.etternavn;
+            this.navn = type.equals("ukjent") ? null : annenForelder.fornavn + " " + annenForelder.etternavn;
             this.land = annenForelder.bostedsland;
 
             if (annenForelder.type().equals("norsk")) {
