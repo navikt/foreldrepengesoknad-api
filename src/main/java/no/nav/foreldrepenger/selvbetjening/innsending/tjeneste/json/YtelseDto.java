@@ -13,7 +13,6 @@ import com.fasterxml.jackson.annotation.JsonInclude;
 import no.nav.foreldrepenger.selvbetjening.innsending.json.AnnenForelder;
 import no.nav.foreldrepenger.selvbetjening.innsending.json.Barn;
 import no.nav.foreldrepenger.selvbetjening.innsending.json.Foreldrepengesøknad;
-import no.nav.foreldrepenger.selvbetjening.innsending.json.Søker;
 import no.nav.foreldrepenger.selvbetjening.innsending.json.Søknad;
 import no.nav.foreldrepenger.selvbetjening.innsending.json.Utenlandsopphold;
 import no.nav.foreldrepenger.selvbetjening.innsending.json.UtenlandsoppholdPeriode;
@@ -50,7 +49,7 @@ public class YtelseDto {
             this.opptjening = new OpptjeningDto(foreldrepengesøknad.søker);
             this.fordeling = new FordelingDto(foreldrepengesøknad.uttaksplan,
                     foreldrepengesøknad.annenForelder.erInformertOmSøknaden);
-            this.rettigheter = new RettigheterDto(foreldrepengesøknad.søker, foreldrepengesøknad.annenForelder);
+            this.rettigheter = new RettigheterDto(foreldrepengesøknad);
         }
     }
 
@@ -189,15 +188,17 @@ public class YtelseDto {
         @Override
         public String toString() {
             return "RettigheterDto [harAnnenForelderRett=" + harAnnenForelderRett + ", harAleneOmsorgForBarnet="
-                    + harAleneOmsorgForBarnet + "]";
+                    + harAleneOmsorgForBarnet + ", datoForAleneomsorg=" + datoForAleneomsorg + "]";
         }
 
         public Boolean harAnnenForelderRett;
         public Boolean harAleneOmsorgForBarnet;
+        public LocalDate datoForAleneomsorg;
 
-        public RettigheterDto(Søker søker, AnnenForelder annenForelder) {
-            this.harAleneOmsorgForBarnet = søker.erAleneOmOmsorg;
-            this.harAnnenForelderRett = annenForelder.harRettPåForeldrepenger;
+        public RettigheterDto(Foreldrepengesøknad foreldrepengesøknad) {
+            this.harAleneOmsorgForBarnet = foreldrepengesøknad.søker.erAleneOmOmsorg;
+            this.harAnnenForelderRett = foreldrepengesøknad.annenForelder.harRettPåForeldrepenger;
+            this.datoForAleneomsorg = foreldrepengesøknad.annenForelder.datoForAleneomsorg;
         }
     }
 }
