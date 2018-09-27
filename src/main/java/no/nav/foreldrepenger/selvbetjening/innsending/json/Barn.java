@@ -27,14 +27,14 @@ public class Barn {
     public LocalDate foreldreansvarsdato;
     public List<String> omsorgsovertakelse = new ArrayList<>();
 
-    public List<String> omsorgsovertakelseDato = new ArrayList<>();
+    public List<String> dokumentasjonAvAleneomsorg = new ArrayList<>();
 
     public List<String> getAlleVedlegg() {
         List<String> alleVedlegg = new ArrayList<>();
         alleVedlegg.addAll(terminbekreftelse);
         alleVedlegg.addAll(omsorgsovertakelse);
         alleVedlegg.addAll(adopsjonsvedtak);
-        alleVedlegg.addAll(omsorgsovertakelseDato);
+        alleVedlegg.addAll(dokumentasjonAvAleneomsorg);
         return alleVedlegg;
     }
 
