@@ -13,10 +13,10 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import no.nav.foreldrepenger.selvbetjening.oppslag.json.Person;
+import no.nav.foreldrepenger.selvbetjening.oppslag.json.Sak;
 import no.nav.foreldrepenger.selvbetjening.oppslag.json.Søkerinfo;
 import no.nav.foreldrepenger.selvbetjening.oppslag.tjeneste.Oppslag;
 import no.nav.foreldrepenger.selvbetjening.oppslag.tjeneste.json.PersonDto;
-import no.nav.foreldrepenger.selvbetjening.oppslag.json.Sak;
 import no.nav.foreldrepenger.selvbetjening.oppslag.tjeneste.json.SøkerinfoDto;
 import no.nav.security.spring.oidc.validation.api.ProtectedWithClaims;
 
@@ -42,7 +42,7 @@ public class OppslagController {
     public Person personinfo() {
         LOG.info("Henter personinfo...");
         PersonDto person = oppslag.hentPerson();
-        LOG.info(CONFIDENTIAL, "Fikk søkerinfo {}", person);
+        LOG.info(CONFIDENTIAL, "Fikk personInfo {}", person);
         return new Person(person);
     }
 
