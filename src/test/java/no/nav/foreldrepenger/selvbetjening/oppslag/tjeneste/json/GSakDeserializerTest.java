@@ -1,6 +1,7 @@
 package no.nav.foreldrepenger.selvbetjening.oppslag.tjeneste.json;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
+import no.nav.foreldrepenger.selvbetjening.oppslag.json.Sak;
 import org.junit.Test;
 
 import java.util.List;
@@ -20,11 +21,8 @@ public class GSakDeserializerTest {
 
     private void assertFieldsContainTheRightValues(Sak sak) {
         assertEquals("theid", sak.getSaksnummer());
-        assertEquals("fagomr/sakstypen", sak.getBehandlingstema());
         assertEquals("ukjent", sak.getStatus());
         assertEquals(0, sak.getBehandlinger().size());
-        assertEquals(0, sak.getAktørIdBarn().size());
-        assertNull(sak.getAktørIdAnnenPart());
     }
 
 }

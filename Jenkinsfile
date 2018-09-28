@@ -13,7 +13,6 @@ node {
     def appConfig = "nais.yaml"
     def dockerRepo = "repo.adeo.no:5443"
     def groupId = "nais"
-    def environment = 't1'
     def zone = 'sbs'
     def namespace = 'default'
 
@@ -66,7 +65,7 @@ node {
   
 
 
-    stage("Deploy to t10") {
+    stage("Deploy to preprod (t10)") {
         withEnv(['HTTPS_PROXY=http://webproxy-internett.nav.no:8088',
                  'NO_PROXY=localhost,127.0.0.1,.local,.adeo.no,.nav.no,.aetat.no,.devillo.no,.oera.no',
                  'no_proxy=localhost,127.0.0.1,.local,.adeo.no,.nav.no,.aetat.no,.devillo.no,.oera.no'
@@ -91,37 +90,6 @@ node {
                 slackSend([
                         color: 'warning',
                         message: "Build ${releaseVersion} of ${app} could not be deployed to t10"
-                ])
-                throw new Exception("Deploy feilet :( \n Se https://jira.adeo.no/browse/" + deploy + " for detaljer", e)
-            }
-        }
-    }
-    
-      stage("Deploy to pre-prod") {
-        withEnv(['HTTPS_PROXY=http://webproxy-internett.nav.no:8088',
-                 'NO_PROXY=localhost,127.0.0.1,.local,.adeo.no,.nav.no,.aetat.no,.devillo.no,.oera.no',
-                 'no_proxy=localhost,127.0.0.1,.local,.adeo.no,.nav.no,.aetat.no,.devillo.no,.oera.no'
-                ]) {
-
-            System.setProperty("java.net.useSystemProxies", "true")
-            System.setProperty("http.nonProxyHosts", "*.adeo.no")
-
-            callback = "${env.BUILD_URL}input/Deploy/"
-
-            def deploy = deployLib.deployNaisApp(app, releaseVersion, environment, zone, namespace, callback, committer).key
-
-            try {
-                timeout(time: 15, unit: 'MINUTES') {
-                    input id: 'deploy', message: "Check status here:  https://jira.adeo.no/browse/${deploy}"
-                }
-                slackSend([
-                        color: 'good',
-                        message: "${app} version ${releaseVersion} has been deployed to pre-prod."
-                ])
-            } catch (Exception e) {
-                slackSend([
-                        color: 'warning',
-                        message: "Build ${releaseVersion} of ${app} could not be deployed to pre-prod"
                 ])
                 throw new Exception("Deploy feilet :( \n Se https://jira.adeo.no/browse/" + deploy + " for detaljer", e)
             }
