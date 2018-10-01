@@ -1,9 +1,9 @@
 package no.nav.foreldrepenger.selvbetjening.oppslag.tjeneste;
 
 import no.nav.foreldrepenger.selvbetjening.oppslag.json.*;
-import no.nav.foreldrepenger.selvbetjening.oppslag.tjeneste.json.Behandling;
+import no.nav.foreldrepenger.selvbetjening.oppslag.json.Behandling;
 import no.nav.foreldrepenger.selvbetjening.oppslag.tjeneste.json.PersonDto;
-import no.nav.foreldrepenger.selvbetjening.oppslag.tjeneste.json.Sak;
+import no.nav.foreldrepenger.selvbetjening.oppslag.json.Sak;
 import no.nav.foreldrepenger.selvbetjening.oppslag.tjeneste.json.SøkerinfoDto;
 import org.slf4j.Logger;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnProperty;
@@ -49,8 +49,8 @@ public class OppslagstjenesteStub implements Oppslag {
         PersonDto dto = new PersonDto();
         dto.fnr = "25987148243";
         dto.aktorId = "0123456789999";
-        dto.fornavn = "SIV";
-        dto.etternavn = "STUBSVEEN";
+        dto.fornavn = "SIGRID";
+        dto.etternavn = "HOELSVEEN";
         dto.fødselsdato = now().minusYears(21);
         dto.kjønn = "K";
         dto.landKode = NO;
@@ -58,10 +58,10 @@ public class OppslagstjenesteStub implements Oppslag {
         dto.bankkonto.kontonummer = "1234567890";
         dto.bankkonto.banknavn = "Stub NOR";
 
-        AnnenForelder annenForelder = new AnnenForelder("01017098765", "Steve", "Stubsveen", "Nichols",
+        AnnenForelder annenForelder = new AnnenForelder("01017098765", "Steve", "Grønland", "Nichols",
                 now().minusYears(45));
 
-        Barn barn = new Barn("01011812345", "Mo", null, "Stubsveen", "M", now().minusYears(1), annenForelder);
+        Barn barn = new Barn("01011812345", "Mo", null, "Hoelsveen", "M", now().minusYears(1), annenForelder);
         dto.barn = singletonList(barn);
 
         return dto;
@@ -71,8 +71,8 @@ public class OppslagstjenesteStub implements Oppslag {
     public List<Sak> hentSaker() {
         Behandling behandling = new Behandling("abc", "UTRED", "FP", "FORP_FODS", null, "4833", "NAV Torrevieja");
         return Arrays.asList(
-                new Sak("sak123", "status1", "behtema1", "aktør1", "annenAktør1", emptyList(), emptyList()),
-                new Sak("42", "LOP", "FORP_FODS", "1", "2", singletonList("3"), singletonList(behandling))
+                new Sak("sak123", "UBEH", emptyList()),
+                new Sak("42", "LOP", singletonList(behandling))
         );
     }
 

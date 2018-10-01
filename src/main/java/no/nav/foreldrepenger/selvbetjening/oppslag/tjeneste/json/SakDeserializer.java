@@ -2,6 +2,7 @@ package no.nav.foreldrepenger.selvbetjening.oppslag.tjeneste.json;
 
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import no.nav.foreldrepenger.selvbetjening.oppslag.json.Sak;
 
 import java.io.IOException;
 import java.util.Collections;
@@ -34,10 +35,6 @@ public class SakDeserializer {
     private Sak fromNode(JsonNode node) {
         return new Sak(node.get("sakId").asText(),
                 "ukjent",
-                node.get("fagomrade").asText() + "/" + node.get("sakstype").asText(),
-                null,
-                null,
-                Collections.emptyList(),
                 Collections.emptyList());
     }
 

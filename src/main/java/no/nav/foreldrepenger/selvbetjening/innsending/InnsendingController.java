@@ -1,5 +1,6 @@
 package no.nav.foreldrepenger.selvbetjening.innsending;
 
+import static no.nav.foreldrepenger.selvbetjening.felles.util.EnvUtil.CONFIDENTIAL;
 import static no.nav.foreldrepenger.selvbetjening.innsending.InnsendingController.REST_SOKNAD;
 import static org.springframework.http.MediaType.APPLICATION_JSON_VALUE;
 
@@ -7,10 +8,6 @@ import java.util.List;
 
 import javax.inject.Inject;
 
-import no.nav.foreldrepenger.selvbetjening.felles.storage.Storage;
-import no.nav.foreldrepenger.selvbetjening.felles.storage.StorageCrypto;
-import no.nav.foreldrepenger.selvbetjening.felles.util.FnrExtractor;
-import no.nav.security.oidc.context.OIDCRequestContextHolder;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.http.ResponseEntity;
@@ -21,10 +18,14 @@ import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.client.RestTemplate;
 
 import no.nav.foreldrepenger.selvbetjening.felles.attachments.exceptions.AttachmentsTooLargeException;
+import no.nav.foreldrepenger.selvbetjening.felles.storage.Storage;
+import no.nav.foreldrepenger.selvbetjening.felles.storage.StorageCrypto;
+import no.nav.foreldrepenger.selvbetjening.felles.util.FnrExtractor;
 import no.nav.foreldrepenger.selvbetjening.innsending.json.Kvittering;
 import no.nav.foreldrepenger.selvbetjening.innsending.json.Søknad;
 import no.nav.foreldrepenger.selvbetjening.innsending.json.Vedlegg;
 import no.nav.foreldrepenger.selvbetjening.innsending.tjeneste.Innsending;
+import no.nav.security.oidc.context.OIDCRequestContextHolder;
 import no.nav.security.spring.oidc.validation.api.ProtectedWithClaims;
 
 @RestController
@@ -60,14 +61,11 @@ public class InnsendingController {
 
     @PostMapping(consumes = APPLICATION_JSON_VALUE)
     public ResponseEntity<Kvittering> sendInn(@RequestBody Søknad søknad) {
-        LOG.info("Mottok søknad  {}", søknad);
-
+        LOG.info(CONFIDENTIAL, "Mottok søknad  {}", søknad);
         søknad.vedlegg.forEach(this::fetchAttachment);
         checkVedleggTooLarge(søknad.vedlegg);
         ResponseEntity<Kvittering> respons = innsending.sendInn(søknad);
-
         deleteFromTempStorage(FnrExtractor.extract(contextHolder), søknad);
-
         return respons;
     }
 

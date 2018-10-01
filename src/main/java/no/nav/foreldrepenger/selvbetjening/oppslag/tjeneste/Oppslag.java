@@ -2,7 +2,7 @@ package no.nav.foreldrepenger.selvbetjening.oppslag.tjeneste;
 
 import java.util.List;
 
-import no.nav.foreldrepenger.selvbetjening.oppslag.tjeneste.json.Sak;
+import no.nav.foreldrepenger.selvbetjening.oppslag.json.Sak;
 import no.nav.foreldrepenger.selvbetjening.oppslag.tjeneste.json.PersonDto;
 import no.nav.foreldrepenger.selvbetjening.oppslag.tjeneste.json.SøkerinfoDto;
 

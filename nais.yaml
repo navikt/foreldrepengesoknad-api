@@ -1,4 +1,5 @@
 name: foreldrepengesoknad-api
+team: nais
 image: repo.adeo.no:5443/foreldrepengesoknad-api
 replicas:
   min: 2

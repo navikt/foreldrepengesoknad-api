@@ -40,7 +40,7 @@ public class StorageController {
         Optional<String> encryptedValue = storage.get(directory, KEY);
         return encryptedValue
                 .map(ev -> ResponseEntity.ok().body(crypto.decrypt(ev, fnr)))
-                .orElse(ResponseEntity.notFound().build());
+                .orElse(ResponseEntity.noContent().build());
     }
 
     @PostMapping(consumes = APPLICATION_JSON_VALUE)

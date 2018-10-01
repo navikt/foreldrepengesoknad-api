@@ -1,12 +1,13 @@
 package no.nav.foreldrepenger.selvbetjening.oppslag.tjeneste.json;
 
-import com.neovisionaries.i18n.CountryCode;
-import no.nav.foreldrepenger.selvbetjening.oppslag.json.Bankkonto;
-import no.nav.foreldrepenger.selvbetjening.oppslag.json.Barn;
-
 import java.time.LocalDate;
 import java.util.List;
 import java.util.Objects;
+
+import com.neovisionaries.i18n.CountryCode;
+
+import no.nav.foreldrepenger.selvbetjening.oppslag.json.Bankkonto;
+import no.nav.foreldrepenger.selvbetjening.oppslag.json.Barn;
 
 public class PersonDto {
 
@@ -22,12 +23,15 @@ public class PersonDto {
     public Bankkonto bankkonto;
     public List<Barn> barn;
 
-    public PersonDto() {}
+    public PersonDto() {
+    }
 
     @Override
     public boolean equals(Object o) {
-        if (this == o) return true;
-        if (o == null || getClass() != o.getClass()) return false;
+        if (this == o)
+            return true;
+        if (o == null || getClass() != o.getClass())
+            return false;
         PersonDto personDto = (PersonDto) o;
         return Objects.equals(fnr, personDto.fnr);
     }
@@ -39,6 +43,10 @@ public class PersonDto {
 
     @Override
     public String toString() {
-        return "PersonDto { fnr='" + fnr + "' }";
+        return getClass().getSimpleName() + " [fnr=" + fnr + ", aktorId=" + aktorId + ", fornavn=" + fornavn
+                + ", mellomnavn=" + mellomnavn
+                + ", etternavn=" + etternavn + ", kjønn=" + kjønn + ", fødselsdato=" + fødselsdato + ", målform="
+                + målform + ", landKode=" + landKode + ", bankkonto=" + bankkonto + ", barn=" + barn + "]";
     }
+
 }

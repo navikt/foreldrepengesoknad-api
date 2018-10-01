@@ -1,4 +1,4 @@
-package no.nav.foreldrepenger.selvbetjening.oppslag.tjeneste.json;
+package no.nav.foreldrepenger.selvbetjening.oppslag.json;
 
 import com.fasterxml.jackson.annotation.JsonCreator;
 import com.fasterxml.jackson.annotation.JsonProperty;

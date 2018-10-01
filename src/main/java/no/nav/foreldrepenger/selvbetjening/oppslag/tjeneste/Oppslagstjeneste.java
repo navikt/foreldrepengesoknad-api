@@ -1,8 +1,8 @@
 package no.nav.foreldrepenger.selvbetjening.oppslag.tjeneste;
 
-import no.nav.foreldrepenger.selvbetjening.oppslag.tjeneste.json.SakDeserializer;
+import no.nav.foreldrepenger.selvbetjening.oppslag.json.Sak;
 import no.nav.foreldrepenger.selvbetjening.oppslag.tjeneste.json.PersonDto;
-import no.nav.foreldrepenger.selvbetjening.oppslag.tjeneste.json.Sak;
+import no.nav.foreldrepenger.selvbetjening.oppslag.tjeneste.json.SakDeserializer;
 import no.nav.foreldrepenger.selvbetjening.oppslag.tjeneste.json.SøkerinfoDto;
 import org.slf4j.Logger;
 import org.springframework.beans.factory.annotation.Value;
@@ -13,6 +13,7 @@ import org.springframework.web.client.RestTemplate;
 import javax.inject.Inject;
 import java.net.URI;
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 import java.util.Optional;
 
@@ -61,21 +62,24 @@ public class Oppslagstjeneste implements Oppslag {
         List<Sak> saker = new ArrayList<>();
 
         URI fpsakUri = fromUri(mottakServiceUrl).path("/mottak/saker").build().toUri();
-        List<Sak> fpsakSaker = asList(Optional.ofNullable(template.getForObject(fpsakUri, Sak[].class)).orElse(new Sak[]{}));
+        List<Sak> fpsakSaker = asList(
+                Optional.ofNullable(template.getForObject(fpsakUri, Sak[].class)).orElse(new Sak[] {}));
         saker.addAll(fpsakSaker);
 
-        URI gsakUri = fromUri(oppslagServiceUrl).path("/sak").build().toUri();
-        String sakerJson = template.getForObject(gsakUri, String.class);
+        URI sakUri = fromUri(oppslagServiceUrl).path("/sak").build().toUri();
+        String sakerJson = template.getForObject(sakUri, String.class);
         List<Sak> sakSaker = sakDeserializer.from(sakerJson);
         saker.addAll(sakSaker);
 
         LOG.info("Henter {} saker fra fpsak og {} saker fra Sak", fpsakSaker.size(), sakSaker.size());
+
         return saker;
     }
 
     @Override
     public String hentSøknad(String behandlingId) {
-        URI uri = fromUri(mottakServiceUrl).path("/mottak/soknad").queryParam("behandlingId", behandlingId).build().toUri();
+        URI uri = fromUri(mottakServiceUrl).path("/mottak/soknad").queryParam("behandlingId", behandlingId).build()
+                .toUri();
         LOG.info("Søknad URI: {}", uri);
         return template.getForObject(uri, String.class);
     }
