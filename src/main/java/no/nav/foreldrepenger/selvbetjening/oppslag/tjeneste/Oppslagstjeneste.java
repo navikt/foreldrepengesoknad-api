@@ -13,7 +13,6 @@ import org.springframework.web.client.RestTemplate;
 import javax.inject.Inject;
 import java.net.URI;
 import java.util.ArrayList;
-import java.util.Collections;
 import java.util.List;
 import java.util.Optional;
 
