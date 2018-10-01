@@ -1,6 +1,6 @@
 package no.nav.foreldrepenger.selvbetjening.oppslag.tjeneste;
 
-import no.nav.foreldrepenger.selvbetjening.oppslag.tjeneste.json.GSakDeserializer;
+import no.nav.foreldrepenger.selvbetjening.oppslag.tjeneste.json.SakDeserializer;
 import no.nav.foreldrepenger.selvbetjening.oppslag.tjeneste.json.PersonDto;
 import no.nav.foreldrepenger.selvbetjening.oppslag.tjeneste.json.Sak;
 import no.nav.foreldrepenger.selvbetjening.oppslag.tjeneste.json.SøkerinfoDto;
@@ -29,17 +29,17 @@ public class Oppslagstjeneste implements Oppslag {
     private final RestTemplate template;
     private final URI oppslagServiceUrl;
     private final URI mottakServiceUrl;
-    private GSakDeserializer gSakDeserializer;
+    private SakDeserializer sakDeserializer;
 
     @Inject
     public Oppslagstjeneste(@Value("${FPSOKNAD_OPPSLAG_API_URL}") URI oppslagUrl,
                             @Value("${FPSOKNAD_MOTTAK_API_URL}") URI mottakUrl,
                             RestTemplate template,
-                            GSakDeserializer gSakDeserializer) {
+                            SakDeserializer sakDeserializer) {
         this.oppslagServiceUrl = oppslagUrl;
         this.mottakServiceUrl = mottakUrl;
         this.template = template;
-        this.gSakDeserializer = gSakDeserializer;
+        this.sakDeserializer = sakDeserializer;
     }
 
     @Override
@@ -64,12 +64,12 @@ public class Oppslagstjeneste implements Oppslag {
         List<Sak> fpsakSaker = asList(Optional.ofNullable(template.getForObject(fpsakUri, Sak[].class)).orElse(new Sak[]{}));
         saker.addAll(fpsakSaker);
 
-        URI gsakUri = fromUri(oppslagServiceUrl).path("/gsak").build().toUri();
-        String gsakerJson = template.getForObject(gsakUri, String.class);
-        List<Sak> gsakSaker = gSakDeserializer.from(gsakerJson);
-        saker.addAll(gsakSaker);
+        URI gsakUri = fromUri(oppslagServiceUrl).path("/sak").build().toUri();
+        String sakerJson = template.getForObject(gsakUri, String.class);
+        List<Sak> sakSaker = sakDeserializer.from(sakerJson);
+        saker.addAll(sakSaker);
 
-        LOG.info("Henter {} saker fra fpsak og {} saker fra gsak", fpsakSaker.size(), gsakSaker.size());
+        LOG.info("Henter {} saker fra fpsak og {} saker fra Sak", fpsakSaker.size(), sakSaker.size());
         return saker;
     }
 
