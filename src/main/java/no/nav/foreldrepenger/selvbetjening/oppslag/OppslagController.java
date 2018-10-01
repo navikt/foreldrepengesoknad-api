@@ -56,7 +56,7 @@ public class OppslagController {
     public List<Sak> saker() {
         LOG.info("Henter saker...");
         List<Sak> saker = oppslag.hentSaker();
-        LOG.info(CONFIDENTIAL, "Fikk saker {}", saker);
+        LOG.info(CONFIDENTIAL, "Fikk {} sak(er) {}", saker.size(), saker);
         return saker;
     }
 
