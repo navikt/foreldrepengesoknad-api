@@ -7,7 +7,6 @@ import java.util.List;
 
 import javax.inject.Inject;
 
-import org.apache.commons.lang3.NotImplementedException;
 import org.slf4j.Logger;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RestController;
@@ -27,7 +26,6 @@ public class OppslagController {
     public static final String REST_PERSONINFO = "/rest/personinfo";
     private static final String REST_SØKERINFO = "/rest/sokerinfo";
     private static final String REST_SAKER = "/rest/saker";
-    private static final String REST_SØKNADER = "/rest/soknader";
 
     private static final Logger LOG = getLogger(OppslagController.class);
 
@@ -60,11 +58,6 @@ public class OppslagController {
         List<Sak> saker = oppslag.hentSaker();
         LOG.info(CONFIDENTIAL, "Fikk saker {}", saker);
         return saker;
-    }
-
-    @GetMapping(REST_SØKNADER)
-    public String søknad() {
-        throw new NotImplementedException("Uthenting av søknad ikke implementert");
     }
 
     @Override
