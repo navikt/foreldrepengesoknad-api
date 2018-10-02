@@ -1,15 +1,16 @@
 package no.nav.foreldrepenger.selvbetjening.oppslag.tjeneste.json;
 
-import com.fasterxml.jackson.databind.JsonNode;
-import com.fasterxml.jackson.databind.ObjectMapper;
-import no.nav.foreldrepenger.selvbetjening.oppslag.json.Sak;
+import static java.util.stream.Collectors.toList;
 
 import java.io.IOException;
 import java.util.Collections;
 import java.util.List;
 import java.util.stream.StreamSupport;
 
-import static java.util.stream.Collectors.toList;
+import com.fasterxml.jackson.databind.JsonNode;
+import com.fasterxml.jackson.databind.ObjectMapper;
+
+import no.nav.foreldrepenger.selvbetjening.oppslag.json.Sak;
 
 public class SakDeserializer {
 
@@ -34,7 +35,7 @@ public class SakDeserializer {
 
     private Sak fromNode(JsonNode node) {
         return new Sak(node.get("sakId").asText(),
-                "ukjent",
+                "ukjent", "FORP_FODS",
                 Collections.emptyList());
     }
 
