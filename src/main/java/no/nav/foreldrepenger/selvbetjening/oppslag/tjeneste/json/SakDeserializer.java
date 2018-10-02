@@ -11,11 +11,11 @@ import java.util.stream.StreamSupport;
 
 import static java.util.stream.Collectors.toList;
 
-public class GSakDeserializer {
+public class SakDeserializer {
 
     private ObjectMapper mapper;
 
-    public GSakDeserializer(ObjectMapper mapper) {
+    public SakDeserializer(ObjectMapper mapper) {
         this.mapper = mapper;
     }
 

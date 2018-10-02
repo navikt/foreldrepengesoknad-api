@@ -8,7 +8,7 @@ import javax.inject.Inject;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import no.nav.foreldrepenger.selvbetjening.felles.filters.CorsInterceptor;
-import no.nav.foreldrepenger.selvbetjening.oppslag.tjeneste.json.GSakDeserializer;
+import no.nav.foreldrepenger.selvbetjening.oppslag.tjeneste.json.SakDeserializer;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.boot.actuate.health.HealthIndicator;
 import org.springframework.context.annotation.Bean;
@@ -78,8 +78,8 @@ public class ApiConfiguration implements WebMvcConfigurer {
     }
 
     @Bean
-    GSakDeserializer gSakDeserializer() {
-        return new GSakDeserializer(objectMapper);
+    SakDeserializer sakDeserializer() {
+        return new SakDeserializer(objectMapper);
     }
 
     @Override
