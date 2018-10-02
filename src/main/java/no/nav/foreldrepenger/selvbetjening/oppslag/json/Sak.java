@@ -12,15 +12,21 @@ public class Sak {
 
     private final String saksnummer;
     private final String status;
+    private final String behandlingTema;
     private final List<Behandling> behandlinger;
 
     @JsonCreator
     public Sak(@JsonProperty("saksnummer") String saksnummer,
-            @JsonProperty("status") String status,
+            @JsonProperty("status") String status, @JsonProperty("behandlingTema") String behandlingTema,
             @JsonProperty("behandlinger") List<Behandling> behandlinger) {
         this.saksnummer = saksnummer;
         this.status = status;
+        this.behandlingTema = behandlingTema;
         this.behandlinger = Optional.ofNullable(behandlinger).orElse(emptyList());
+    }
+
+    public String getBehandlingTema() {
+        return behandlingTema;
     }
 
     public List<Behandling> getBehandlinger() {
@@ -37,8 +43,9 @@ public class Sak {
 
     @Override
     public String toString() {
-        return getClass().getSimpleName() + " [saksnummer=" + saksnummer + ", status=" + status + ", behandlinger="
-                + behandlinger + "]";
+        return getClass().getSimpleName() + " [saksnummer=" + saksnummer + ", status=" + status
+                + ", behandlingTema=" + behandlingTema
+                + ", behandlinger=" + behandlinger + "]";
     }
 
 }

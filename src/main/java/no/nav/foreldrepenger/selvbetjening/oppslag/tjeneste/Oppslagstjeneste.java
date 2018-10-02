@@ -83,12 +83,4 @@ public class Oppslagstjeneste implements Oppslag {
         }
     }
 
-    @Override
-    public String hentSøknad(String behandlingId) {
-        URI uri = fromUri(mottakServiceUrl).path("/mottak/soknad").queryParam("behandlingId", behandlingId).build()
-                .toUri();
-        LOG.info("Søknad URI: {}", uri);
-        return template.getForObject(uri, String.class);
-    }
-
 }

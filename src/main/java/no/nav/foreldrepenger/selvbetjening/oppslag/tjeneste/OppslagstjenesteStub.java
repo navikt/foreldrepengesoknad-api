@@ -1,22 +1,27 @@
 package no.nav.foreldrepenger.selvbetjening.oppslag.tjeneste;
 
-import no.nav.foreldrepenger.selvbetjening.oppslag.json.*;
-import no.nav.foreldrepenger.selvbetjening.oppslag.json.Behandling;
-import no.nav.foreldrepenger.selvbetjening.oppslag.tjeneste.json.PersonDto;
-import no.nav.foreldrepenger.selvbetjening.oppslag.json.Sak;
-import no.nav.foreldrepenger.selvbetjening.oppslag.tjeneste.json.SøkerinfoDto;
-import org.slf4j.Logger;
-import org.springframework.boot.autoconfigure.condition.ConditionalOnProperty;
-import org.springframework.stereotype.Service;
+import static com.neovisionaries.i18n.CountryCode.NO;
+import static java.time.LocalDate.now;
+import static java.util.Collections.emptyList;
+import static java.util.Collections.singletonList;
+import static org.slf4j.LoggerFactory.getLogger;
 
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
-import static com.neovisionaries.i18n.CountryCode.NO;
-import static java.time.LocalDate.now;
-import static java.util.Collections.*;
-import static org.slf4j.LoggerFactory.getLogger;
+import org.slf4j.Logger;
+import org.springframework.boot.autoconfigure.condition.ConditionalOnProperty;
+import org.springframework.stereotype.Service;
+
+import no.nav.foreldrepenger.selvbetjening.oppslag.json.AnnenForelder;
+import no.nav.foreldrepenger.selvbetjening.oppslag.json.Arbeidsforhold;
+import no.nav.foreldrepenger.selvbetjening.oppslag.json.Bankkonto;
+import no.nav.foreldrepenger.selvbetjening.oppslag.json.Barn;
+import no.nav.foreldrepenger.selvbetjening.oppslag.json.Behandling;
+import no.nav.foreldrepenger.selvbetjening.oppslag.json.Sak;
+import no.nav.foreldrepenger.selvbetjening.oppslag.tjeneste.json.PersonDto;
+import no.nav.foreldrepenger.selvbetjening.oppslag.tjeneste.json.SøkerinfoDto;
 
 @Service
 @ConditionalOnProperty(name = "stub.oppslag", havingValue = "true")
@@ -72,12 +77,7 @@ public class OppslagstjenesteStub implements Oppslag {
         Behandling behandling = new Behandling("abc", "UTRED", "FP", "FORP_FODS", null, "4833", "NAV Torrevieja");
         return Arrays.asList(
                 new Sak("sak123", "UBEH", emptyList()),
-                new Sak("42", "LOP", singletonList(behandling))
-        );
+                new Sak("42", "LOP", singletonList(behandling)));
     }
 
-    @Override
-    public String hentSøknad(String behandlingId) {
-        return "Hello world";
-    }
 }
