@@ -99,7 +99,7 @@ public class OpptjeningDto {
                     + ", regnskapsførere=" + regnskapsførere + ", næringsinntektBrutto=" + næringsinntektBrutto
                     + ", erNyOpprettet=" + erNyOpprettet + ", erNyIArbeidslivet=" + erNyIArbeidslivet + ", nærRelasjon="
                     + nærRelasjon + ", erVarigEndring=" + erVarigEndring + ", oppstartsDato=" + oppstartsDato
-                    + ", endringsDato=" + endringsDato + ", beskrivelseEndring=" + beskrivelseEndring + "]";
+                    + ", endringsDato=" + endringsDato + ", beskrivelseEndring=" + beskrivelseEndring + ", vedlegg=" + vedlegg.toString() +"]";
         }
 
         public String type;
