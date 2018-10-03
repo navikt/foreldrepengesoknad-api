@@ -117,6 +117,7 @@ public class OpptjeningDto {
         public LocalDate oppstartsDato;
         public LocalDate endringsDato;
         public String beskrivelseEndring;
+        public List<String> vedlegg;
 
         public EgenNæringDto(SelvstendigNæringsdrivendeInformasjon selvstendig) {
             NæringsinntektInformasjon næringsInfo = selvstendig.endringAvNæringsinntektInformasjon;
@@ -131,6 +132,7 @@ public class OpptjeningDto {
             this.arbeidsland = selvstendig.registrertILand;
             this.erNyIArbeidslivet = selvstendig.nyIArbeidslivet;
             this.erVarigEndring = selvstendig.hattVarigEndringAvNæringsinntektSiste4Kalenderår;
+            this.vedlegg = selvstendig.vedlegg;
 
             this.virksomhetsTyper.addAll(selvstendig.næringstyper);
 

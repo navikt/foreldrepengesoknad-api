@@ -18,5 +18,6 @@ public class SelvstendigNæringsdrivendeInformasjon {
     public TilknyttetPerson revisor;
     public Boolean hattVarigEndringAvNæringsinntektSiste4Kalenderår;
     public NæringsinntektInformasjon endringAvNæringsinntektInformasjon;
+    public List<String> vedlegg;
 
 }
