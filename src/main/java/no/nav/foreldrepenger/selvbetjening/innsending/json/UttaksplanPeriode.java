@@ -1,5 +1,7 @@
 package no.nav.foreldrepenger.selvbetjening.innsending.json;
 
+import java.util.List;
+
 public class UttaksplanPeriode {
     public String type;
     public String årsak;
@@ -7,10 +9,11 @@ public class UttaksplanPeriode {
 
     public Tidsperiode tidsperiode;
     public String forelder;
+    public List<String> vedlegg;
 
     @Override
     public String toString() {
         return "UttaksplanPeriode [type=" + type + ", årsak=" + årsak + ", konto=" + konto + ", tidsperiode="
-                + tidsperiode + ", forelder=" + forelder + "]";
+                + tidsperiode + ", forelder=" + forelder + ", vedlegg=" + vedlegg.toString() + "]";
     }
 }

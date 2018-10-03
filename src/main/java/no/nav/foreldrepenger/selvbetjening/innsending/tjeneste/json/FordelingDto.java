@@ -29,6 +29,7 @@ public class FordelingDto {
         public LocalDate tom;
         public String årsak;
         public String uttaksperiodeType;
+        public List<String> vedlegg;
 
         public FordelingPeriodeDto(UttaksplanPeriode u) {
             this.type = u.type;
@@ -36,6 +37,7 @@ public class FordelingDto {
             this.fom = u.tidsperiode.fom;
             this.tom = u.tidsperiode.tom;
             this.årsak = u.årsak;
+            this.vedlegg = u.vedlegg;
         }
     }
 }
