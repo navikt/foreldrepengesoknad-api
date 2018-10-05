@@ -8,6 +8,7 @@ import java.util.List;
 
 import javax.inject.Inject;
 
+import no.nav.foreldrepenger.selvbetjening.innsending.json.Ettersending;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.http.ResponseEntity;
@@ -66,6 +67,16 @@ public class InnsendingController {
         checkVedleggTooLarge(søknad.vedlegg);
         ResponseEntity<Kvittering> respons = innsending.sendInn(søknad);
         deleteFromTempStorage(FnrExtractor.extract(contextHolder), søknad);
+        return respons;
+    }
+
+    @PostMapping(path = "/ettersend", consumes = APPLICATION_JSON_VALUE)
+    public ResponseEntity<Kvittering> sendInn(@RequestBody Ettersending ettersending) {
+        LOG.info(CONFIDENTIAL, "Mottok ettersending  {}", ettersending);
+        ettersending.vedlegg.forEach(this::fetchAttachment);
+        checkVedleggTooLarge(ettersending.vedlegg);
+        ResponseEntity<Kvittering> respons = innsending.sendInn(ettersending);
+        ettersending.vedlegg.forEach(this::fetchAndDeleteAttachment);
         return respons;
     }
 

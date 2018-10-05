@@ -2,11 +2,9 @@ package no.nav.foreldrepenger.selvbetjening.innsending.tjeneste;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
-import no.nav.foreldrepenger.selvbetjening.innsending.json.Engangsstønad;
-import no.nav.foreldrepenger.selvbetjening.innsending.json.Foreldrepengesøknad;
-import no.nav.foreldrepenger.selvbetjening.innsending.json.Kvittering;
-import no.nav.foreldrepenger.selvbetjening.innsending.json.Søknad;
+import no.nav.foreldrepenger.selvbetjening.innsending.json.*;
 import no.nav.foreldrepenger.selvbetjening.innsending.tjeneste.json.EngangsstønadDto;
+import no.nav.foreldrepenger.selvbetjening.innsending.tjeneste.json.EttersendingDto;
 import no.nav.foreldrepenger.selvbetjening.innsending.tjeneste.json.ForeldrepengesøknadDto;
 import no.nav.foreldrepenger.selvbetjening.innsending.tjeneste.json.SøknadDto;
 import org.slf4j.Logger;
@@ -36,6 +34,11 @@ public class InnsendingstjenesteStub implements Innsending {
         return postStub(søknad);
     }
 
+    @Override
+    public ResponseEntity<Kvittering> sendInn(Ettersending ettersending) {
+        return postStub(ettersending);
+    }
+
     private ResponseEntity<Kvittering> postStub(Søknad søknad)  {
         SøknadDto dto;
         if (søknad instanceof Engangsstønad) {
@@ -49,6 +52,20 @@ public class InnsendingstjenesteStub implements Innsending {
         søknad.vedlegg.forEach(v -> {
             v.content = new byte[]{};
             dto.addVedlegg(v);
+        });
+
+        try {
+            LOG.info("Posting JSON (stub): {}", mapper.writeValueAsString(dto));
+        } catch (JsonProcessingException e) {
+            throw new RuntimeException(e);
+        }
+        return new ResponseEntity<>(Kvittering.STUB, OK);
+    }
+
+    private ResponseEntity<Kvittering> postStub(Ettersending ettersending)  {
+        EttersendingDto dto = new EttersendingDto(ettersending);
+        ettersending.vedlegg.forEach(v -> {
+            v.content = new byte[]{};
         });
 
         try {

@@ -8,6 +8,8 @@ import java.net.URI;
 import javax.inject.Inject;
 import javax.ws.rs.BadRequestException;
 
+import no.nav.foreldrepenger.selvbetjening.innsending.json.*;
+import no.nav.foreldrepenger.selvbetjening.innsending.tjeneste.json.EttersendingDto;
 import org.slf4j.Logger;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnProperty;
@@ -23,10 +25,6 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 
 import no.nav.foreldrepenger.selvbetjening.felles.attachments.Image2PDFConverter;
 import no.nav.foreldrepenger.selvbetjening.felles.util.Enabled;
-import no.nav.foreldrepenger.selvbetjening.innsending.json.Engangsstønad;
-import no.nav.foreldrepenger.selvbetjening.innsending.json.Foreldrepengesøknad;
-import no.nav.foreldrepenger.selvbetjening.innsending.json.Kvittering;
-import no.nav.foreldrepenger.selvbetjening.innsending.json.Søknad;
 import no.nav.foreldrepenger.selvbetjening.innsending.tjeneste.json.EngangsstønadDto;
 import no.nav.foreldrepenger.selvbetjening.innsending.tjeneste.json.ForeldrepengesøknadDto;
 import no.nav.foreldrepenger.selvbetjening.innsending.tjeneste.json.SøknadDto;
@@ -38,28 +36,37 @@ public class Innsendingstjeneste implements Innsending {
     private static final Logger LOG = getLogger(Innsendingstjeneste.class);
 
     private final Image2PDFConverter converter;
-    private final URI mottakServiceUrl;
+    private final URI mottakServiceSøknadUrl;
+    private final URI mottakServiceEttersendingUrl;
     private final RestTemplate template;
     @Inject
     private ObjectMapper mapper;
 
     public Innsendingstjeneste(@Value("${FPSOKNAD_MOTTAK_API_URL}") URI baseUri, RestTemplate template,
             Image2PDFConverter converter) {
-        this.mottakServiceUrl = mottakUriFra(baseUri);
+        this.mottakServiceSøknadUrl = mottakSøknadUriFra(baseUri);
+        this.mottakServiceEttersendingUrl = mottaEttersendingUriFra(baseUri);
         this.template = template;
         this.converter = converter;
     }
 
-    private static URI mottakUriFra(URI baseUri) {
+    private static URI mottakSøknadUriFra(URI baseUri) {
         return UriComponentsBuilder
                 .fromUri(baseUri)
                 .path("/mottak/send")
                 .build().toUri();
     }
 
+    private static URI mottaEttersendingUriFra(URI baseUri) {
+        return UriComponentsBuilder
+                .fromUri(baseUri)
+                .path("/mottak/ettersend")
+                .build().toUri();
+    }
+
     @Override
     public ResponseEntity<Kvittering> sendInn(Søknad søknad) {
-        LOG.trace("Poster søknad {} til {}", søknad, mottakServiceUrl);
+        LOG.trace("Poster søknad {} til {}", søknad, mottakServiceSøknadUrl);
         søknad.opprettet = now();
         return post(søknad);
     }
@@ -70,8 +77,9 @@ public class Innsendingstjeneste implements Innsending {
             throw new BadRequestException("Application with type foreldrepengesøknad is not supported yet");
         }
 
-        return template.postForEntity(mottakServiceUrl, body(søknad), Kvittering.class);
+        return template.postForEntity(mottakServiceSøknadUrl, body(søknad), Kvittering.class);
     }
+
 
     private HttpEntity<SøknadDto> body(@RequestBody Søknad søknad) {
         SøknadDto dto;
@@ -94,6 +102,25 @@ public class Innsendingstjeneste implements Innsending {
             dto.addVedlegg(v);
         });
 
+        return new HttpEntity<>(dto);
+    }
+
+    @Override
+    public ResponseEntity<Kvittering> sendInn(Ettersending ettersending) {
+        LOG.trace("Poster ettersending {} til {}", ettersending, mottakServiceEttersendingUrl);
+        return post(ettersending);
+    }
+
+    private ResponseEntity<Kvittering> post(Ettersending ettersending) {
+        return template.postForEntity(mottakServiceEttersendingUrl, body(ettersending), Kvittering.class);
+    }
+
+    private HttpEntity<EttersendingDto> body(@RequestBody Ettersending ettersending) {
+        EttersendingDto dto = new EttersendingDto(ettersending);
+        ettersending.vedlegg.forEach(v -> {
+            v.content = converter.convert(v.content);
+            dto.addVedlegg(v);
+        });
         return new HttpEntity<>(dto);
     }
 
