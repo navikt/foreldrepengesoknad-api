@@ -29,6 +29,8 @@ public class FordelingDto {
         public LocalDate tom;
         public String årsak;
         public String uttaksperiodeType;
+        public String virksomhetsNummer;
+        public Boolean erArbeidstaker;
         public List<String> vedlegg;
 
         public FordelingPeriodeDto(UttaksplanPeriode u) {
@@ -37,6 +39,8 @@ public class FordelingDto {
             this.fom = u.tidsperiode.fom;
             this.tom = u.tidsperiode.tom;
             this.årsak = u.årsak;
+            this.virksomhetsNummer = u.orgnr;
+            this.erArbeidstaker = u.årsak.equals("ARBEID");
             this.vedlegg = u.vedlegg;
         }
     }
