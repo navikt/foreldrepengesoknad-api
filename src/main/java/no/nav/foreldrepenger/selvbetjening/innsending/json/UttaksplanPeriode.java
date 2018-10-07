@@ -15,6 +15,6 @@ public class UttaksplanPeriode {
     @Override
     public String toString() {
         return "UttaksplanPeriode [type=" + type + ", årsak=" + årsak + ", konto=" + konto + ", tidsperiode="
-                + tidsperiode + ", orgnr=" + orgnr +", forelder=" + forelder + ", vedlegg=" + vedlegg.toString() + "]";
+                + tidsperiode + ", orgnr=" + orgnr +", forelder=" + forelder + ", vedlegg=" + vedlegg + "]";
     }
 }
