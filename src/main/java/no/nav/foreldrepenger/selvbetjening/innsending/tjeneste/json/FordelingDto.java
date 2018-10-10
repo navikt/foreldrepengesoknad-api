@@ -40,7 +40,7 @@ public class FordelingDto {
             this.tom = u.tidsperiode.tom;
             this.årsak = u.årsak;
             this.virksomhetsNummer = u.orgnr;
-            this.erArbeidstaker = u.årsak != null ? u.årsak.equals("ARBEID") : null;
+            this.erArbeidstaker = u.erArbeidstaker;
             this.vedlegg = u.vedlegg;
         }
     }
