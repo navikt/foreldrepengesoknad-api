@@ -30,6 +30,9 @@ public class FordelingDto {
         public String årsak;
         public String uttaksperiodeType;
         public String virksomhetsNummer;
+        public String arbeidstidProsent;
+        public Boolean ønskerSamtidigUttak;
+
         public Boolean erArbeidstaker;
         public List<String> vedlegg;
 
@@ -40,6 +43,8 @@ public class FordelingDto {
             this.tom = u.tidsperiode.tom;
             this.årsak = u.årsak;
             this.virksomhetsNummer = u.orgnr;
+            this.arbeidstidProsent = u.stillingsprosent;
+            this.ønskerSamtidigUttak = u.ønskerSamtidigUttak;
             this.erArbeidstaker = u.erArbeidstaker;
             this.vedlegg = u.vedlegg;
         }

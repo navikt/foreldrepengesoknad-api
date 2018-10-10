@@ -8,6 +8,8 @@ public class UttaksplanPeriode {
     public String konto;
     public String orgnr;
     public Boolean erArbeidstaker;
+    public String stillingsprosent;
+    public Boolean ønskerSamtidigUttak;
 
     public Tidsperiode tidsperiode;
     public String forelder;
@@ -16,6 +18,8 @@ public class UttaksplanPeriode {
     @Override
     public String toString() {
         return "UttaksplanPeriode [type=" + type + ", årsak=" + årsak + ", konto=" + konto + ", tidsperiode="
-                + tidsperiode + ", orgnr=" + orgnr + ", erArbeidstaker=" + erArbeidstaker + ", forelder=" + forelder + ", vedlegg=" + vedlegg + "]";
+                + tidsperiode + ", orgnr=" + orgnr + ", erArbeidstaker=" + erArbeidstaker + ", stillingsprosent="
+                + stillingsprosent + ", ønskerSamtidigUttak=" + ønskerSamtidigUttak + ", forelder="
+                + forelder + ", vedlegg=" + vedlegg + "]";
     }
 }
