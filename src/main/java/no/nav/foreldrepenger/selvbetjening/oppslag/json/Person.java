@@ -8,10 +8,10 @@ import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
 
-import static com.fasterxml.jackson.annotation.JsonInclude.Include.NON_NULL;
+import static com.fasterxml.jackson.annotation.JsonInclude.Include.NON_EMPTY;
 import static no.nav.foreldrepenger.selvbetjening.felles.util.IkkeNordiskEØSLandVelger.erIkkenordiskEØSLand;
 
-@JsonInclude(NON_NULL)
+@JsonInclude(NON_EMPTY)
 public class Person {
 
     public String fnr;
