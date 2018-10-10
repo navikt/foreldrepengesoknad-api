@@ -10,6 +10,7 @@ public class UttaksplanPeriode {
     public Boolean erArbeidstaker;
     public String stillingsprosent;
     public Boolean ønskerSamtidigUttak;
+    public Boolean gradert;
 
     public Tidsperiode tidsperiode;
     public String forelder;
@@ -19,7 +20,7 @@ public class UttaksplanPeriode {
     public String toString() {
         return "UttaksplanPeriode [type=" + type + ", årsak=" + årsak + ", konto=" + konto + ", tidsperiode="
                 + tidsperiode + ", orgnr=" + orgnr + ", erArbeidstaker=" + erArbeidstaker + ", stillingsprosent="
-                + stillingsprosent + ", ønskerSamtidigUttak=" + ønskerSamtidigUttak + ", forelder="
+                + stillingsprosent + ", ønskerSamtidigUttak=" + ønskerSamtidigUttak + ", gradert="+ gradert + ", forelder="
                 + forelder + ", vedlegg=" + vedlegg + "]";
     }
 }

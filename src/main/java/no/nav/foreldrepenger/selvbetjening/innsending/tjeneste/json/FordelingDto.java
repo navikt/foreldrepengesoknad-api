@@ -32,7 +32,7 @@ public class FordelingDto {
         public String virksomhetsNummer;
         public String arbeidstidProsent;
         public Boolean ønskerSamtidigUttak;
-
+        public Boolean gradert;
         public Boolean erArbeidstaker;
         public List<String> vedlegg;
 
@@ -45,6 +45,7 @@ public class FordelingDto {
             this.virksomhetsNummer = u.orgnr;
             this.arbeidstidProsent = u.stillingsprosent;
             this.ønskerSamtidigUttak = u.ønskerSamtidigUttak;
+            this.gradert = u.gradert;
             this.erArbeidstaker = u.erArbeidstaker;
             this.vedlegg = u.vedlegg;
         }
