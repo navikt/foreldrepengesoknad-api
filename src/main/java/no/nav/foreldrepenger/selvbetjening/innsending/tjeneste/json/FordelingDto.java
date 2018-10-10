@@ -32,12 +32,15 @@ public class FordelingDto {
         public String virksomhetsNummer;
         public String arbeidstidProsent;
         public Boolean ønskerSamtidigUttak;
-        public Boolean gradert;
         public Boolean erArbeidstaker;
         public List<String> vedlegg;
 
         public FordelingPeriodeDto(UttaksplanPeriode u) {
-            this.type = u.type;
+            if (u.gradert!= null) {
+                this.type = u.gradert ? "gradert" : u.type;
+            } else {
+                this.type = u.type;
+            }
             this.uttaksperiodeType = u.konto;
             this.fom = u.tidsperiode.fom;
             this.tom = u.tidsperiode.tom;
@@ -45,7 +48,6 @@ public class FordelingDto {
             this.virksomhetsNummer = u.orgnr;
             this.arbeidstidProsent = u.stillingsprosent;
             this.ønskerSamtidigUttak = u.ønskerSamtidigUttak;
-            this.gradert = u.gradert;
             this.erArbeidstaker = u.erArbeidstaker;
             this.vedlegg = u.vedlegg;
         }
