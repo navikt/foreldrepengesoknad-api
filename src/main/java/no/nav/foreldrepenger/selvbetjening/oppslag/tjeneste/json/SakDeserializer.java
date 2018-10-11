@@ -35,7 +35,7 @@ public class SakDeserializer {
     }
 
     private Sak fromNode(JsonNode node) {
-        return new Sak(node.get("sakId").asText(), node.get("fagsystemSakId").asText(),
+        return new Sak(node.get("sakId").asText(), node.get("fagsystemSakId") != null ? node.get("fagsystemSakId").asText() : null,
                 "ukjent", "FORP_FODS", now(),
                 Collections.emptyList());
 
