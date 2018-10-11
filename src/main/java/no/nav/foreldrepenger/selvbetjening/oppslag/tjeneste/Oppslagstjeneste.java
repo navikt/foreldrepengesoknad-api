@@ -2,7 +2,6 @@ package no.nav.foreldrepenger.selvbetjening.oppslag.tjeneste;
 
 import no.nav.foreldrepenger.selvbetjening.oppslag.json.Sak;
 import no.nav.foreldrepenger.selvbetjening.oppslag.tjeneste.json.PersonDto;
-import no.nav.foreldrepenger.selvbetjening.oppslag.tjeneste.json.SakDeserializer;
 import no.nav.foreldrepenger.selvbetjening.oppslag.tjeneste.json.SøkerinfoDto;
 import org.slf4j.Logger;
 import org.springframework.beans.factory.annotation.Value;
@@ -29,17 +28,14 @@ public class Oppslagstjeneste implements Oppslag {
     private final RestTemplate template;
     private final URI oppslagServiceUrl;
     private final URI mottakServiceUrl;
-    private SakDeserializer sakDeserializer;
 
     @Inject
     public Oppslagstjeneste(@Value("${FPSOKNAD_OPPSLAG_API_URL}") URI oppslagUrl,
                             @Value("${FPSOKNAD_MOTTAK_API_URL}") URI mottakUrl,
-                            RestTemplate template,
-                            SakDeserializer sakDeserializer) {
+                            RestTemplate template) {
         this.oppslagServiceUrl = oppslagUrl;
         this.mottakServiceUrl = mottakUrl;
         this.template = template;
-        this.sakDeserializer = sakDeserializer;
     }
 
     @Override
@@ -61,13 +57,11 @@ public class Oppslagstjeneste implements Oppslag {
         List<Sak> saker = new ArrayList<>();
 
         URI fpsakUri = fromUri(mottakServiceUrl).path("/mottak/saker").build().toUri();
-        List<Sak> fpsakSaker = asList(
-                Optional.ofNullable(template.getForObject(fpsakUri, Sak[].class)).orElse(new Sak[] {}));
+        List<Sak> fpsakSaker = asList(Optional.ofNullable(template.getForObject(fpsakUri, Sak[].class)).orElse(new Sak[] {}));
         saker.addAll(fpsakSaker);
 
         URI sakUri = fromUri(oppslagServiceUrl).path("/sak").build().toUri();
-        String sakerJson = template.getForObject(sakUri, String.class);
-        List<Sak> sakSaker = sakDeserializer.from(sakerJson);
+        List<Sak> sakSaker = asList(Optional.ofNullable(template.getForObject(sakUri, Sak[].class)).orElse(new Sak[] {}));
         saker.addAll(sakSaker);
 
         LOG.info("Henter {} saker fra fpsak og {} saker fra Sak", fpsakSaker.size(), sakSaker.size());
