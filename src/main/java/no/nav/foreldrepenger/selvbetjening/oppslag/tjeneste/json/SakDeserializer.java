@@ -10,6 +10,7 @@ import java.util.Collections;
 import java.util.List;
 import java.util.stream.StreamSupport;
 
+import static java.time.LocalDate.now;
 import static java.util.stream.Collectors.toList;
 
 public class SakDeserializer {
@@ -34,13 +35,10 @@ public class SakDeserializer {
     }
 
     private Sak fromNode(JsonNode node) {
-        try {
-            return new Sak(node.get("sakId").asText(), node.get("fagsystemSakId").asText(),
-                    "ukjent", "FORP_FODS", mapper.readValue(node.get("opprettet").asText(), LocalDate.class),
-                    Collections.emptyList());
-        } catch (IOException e) {
-            return null;
-        }
+        return new Sak(node.get("sakId").asText(), node.get("fagsystemSakId").asText(),
+                "ukjent", "FORP_FODS", now(),
+                Collections.emptyList());
+
     }
 
 }
