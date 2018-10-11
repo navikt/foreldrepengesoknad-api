@@ -36,7 +36,7 @@ public class FordelingDto {
         public List<String> vedlegg;
 
         public FordelingPeriodeDto(UttaksplanPeriode u) {
-            if (u.gradert!= null) {
+            if (u.gradert != null) {
                 this.type = u.gradert ? "gradert" : u.type;
             } else {
                 this.type = u.type;

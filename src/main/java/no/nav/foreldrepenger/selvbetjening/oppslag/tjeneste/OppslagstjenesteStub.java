@@ -76,8 +76,8 @@ public class OppslagstjenesteStub implements Oppslag {
     public List<Sak> hentSaker() {
         Behandling behandling = new Behandling("abc", "UTRED", "FP", "FORP_FODS", null, "4833", "NAV Torrevieja");
         return Arrays.asList(
-                new Sak("sak123", "UBEH", "FORP_FODS", emptyList()),
-                new Sak("42", "LOP", "FORP_FODS", singletonList(behandling)));
+                new Sak("sak123","fagsakId123", "UBEH", "FORP_FODS", now(), emptyList()),
+                new Sak("42", "fagsakId456","LOP", "FORP_FODS", now(), singletonList(behandling)));
     }
 
 }
