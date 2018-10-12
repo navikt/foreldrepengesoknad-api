@@ -40,6 +40,7 @@ public class FordelingDto {
         public FordelingPeriodeDto(UttaksplanPeriode u) {
             if (u.gradert != null) {
                 this.type = u.gradert ? "gradert" : u.type;
+                this.arbeidsForholdSomskalGraderes = u.gradert ? true : null;
             } else {
                 this.type = u.type;
             }
