@@ -33,6 +33,8 @@ public class FordelingDto {
         public String arbeidstidProsent;
         public Boolean ønskerSamtidigUttak;
         public Boolean erArbeidstaker;
+        public Boolean arbeidsForholdSomskalGraderes;
+        public String morsAktivitetIPerioden;
         public List<String> vedlegg;
 
         public FordelingPeriodeDto(UttaksplanPeriode u) {
@@ -49,6 +51,7 @@ public class FordelingDto {
             this.arbeidstidProsent = u.stillingsprosent;
             this.ønskerSamtidigUttak = u.ønskerSamtidigUttak;
             this.erArbeidstaker = u.erArbeidstaker;
+            this.morsAktivitetIPerioden = u.morsAktivitetIPerioden;
             this.vedlegg = u.vedlegg;
         }
     }
