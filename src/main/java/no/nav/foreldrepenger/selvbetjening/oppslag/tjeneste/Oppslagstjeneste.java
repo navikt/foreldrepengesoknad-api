@@ -56,15 +56,17 @@ public class Oppslagstjeneste implements Oppslag {
     public List<Sak> hentSaker() {
         List<Sak> saker = new ArrayList<>();
 
-        URI fpsakUri = fromUri(mottakServiceUrl).path("/mottak/saker").build().toUri();
-        List<Sak> fpsakSaker = asList(Optional.ofNullable(template.getForObject(fpsakUri, Sak[].class)).orElse(new Sak[] {}));
-        saker.addAll(fpsakSaker);
+        // TODO ta inn igjen for engangsstønad/foreldrepenger i november
+        //URI fpsakUri = fromUri(mottakServiceUrl).path("/mottak/saker").build().toUri();
+        //List<Sak> fpsakSaker = asList(Optional.ofNullable(template.getForObject(fpsakUri, Sak[].class)).orElse(new Sak[] {}));
+        //saker.addAll(fpsakSaker);
 
         URI sakUri = fromUri(oppslagServiceUrl).path("/sak").build().toUri();
         List<Sak> sakSaker = asList(Optional.ofNullable(template.getForObject(sakUri, Sak[].class)).orElse(new Sak[] {}));
         saker.addAll(sakSaker);
 
-        LOG.info("Henter {} saker fra fpsak og {} saker fra Sak", fpsakSaker.size(), sakSaker.size());
+        //LOG.info("Henter {} saker fra fpsak og {} saker fra Sak", fpsakSaker.size(), sakSaker.size());
+        LOG.info("Henter {} saker fra Sak", sakSaker.size());
 
         return saker;
     }
