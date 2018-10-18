@@ -16,6 +16,11 @@ public class StorageStub implements Storage {
     }
 
     @Override
+    public void putTmp(String directory, String key, String value) {
+        log.info("Would have stored in tmp: " + key + " -> " + value + " in directory " + directory);
+    }
+
+    @Override
     public Optional<String> get(String directory, String key) {
         // Attachment JSON encrypted with key/fnr: 12345678910
         return Optional.of("cbA7LYNQFEbOkXmsv9ORXXXgNcx/Tf8iBsiPVeVofuaYRxesQz8tg/" +
@@ -23,7 +28,18 @@ public class StorageStub implements Storage {
     }
 
     @Override
+    public Optional<String> getTmp(String directory, String key) {
+        return get(directory,key);
+    }
+
+    @Override
     public void delete(String directory, String key) {
         log.info("Would have deleted: " + key + " from directory " + directory);
+    }
+
+    @Override
+    public void deleteTmp(String directory, String key) {
+        log.info("Would have deleted from tmp: " + key + " from directory " + directory);
+
     }
 }
