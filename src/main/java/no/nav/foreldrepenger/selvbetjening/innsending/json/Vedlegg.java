@@ -9,5 +9,6 @@ public class Vedlegg {
     public String skjemanummer;
     public URI url;
     public byte[] content;
+    public String innsendingsType;
 }
 

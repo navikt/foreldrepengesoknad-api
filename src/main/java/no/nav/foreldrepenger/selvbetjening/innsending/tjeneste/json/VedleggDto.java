@@ -13,5 +13,6 @@ public class VedleggDto {
         public String id;
         public String beskrivelse;
         public String dokumentType;
+        public String innsendingsType;
     }
 }

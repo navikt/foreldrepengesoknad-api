@@ -82,6 +82,7 @@ public class InnsendingController {
 
     private void checkVedleggTooLarge(List<Vedlegg> vedlegg) {
         long total = vedlegg.stream()
+                .filter(v -> v.content != null)
                 .mapToLong(v -> v.content.length)
                 .sum();
         if (total > MAX_VEDLEGG_SIZE) {
@@ -91,12 +92,16 @@ public class InnsendingController {
     }
 
     private void fetchAttachment(Vedlegg vedlegg) {
-        vedlegg.content = http.getForObject(vedlegg.url, byte[].class);
+        if (vedlegg.url != null) {
+            vedlegg.content = http.getForObject(vedlegg.url, byte[].class);
+        }
     }
 
     private void fetchAndDeleteAttachment(Vedlegg vedlegg) {
-        vedlegg.content = http.getForObject(vedlegg.url, byte[].class);
-        http.delete(vedlegg.url);
+        if (vedlegg.url != null) {
+            vedlegg.content = http.getForObject(vedlegg.url, byte[].class);
+            http.delete(vedlegg.url);
+        }
     }
 
     private void deleteFromTempStorage(String fnr, Søknad søknad) {

@@ -98,7 +98,9 @@ public class Innsendingstjeneste implements Innsending {
         }
 
         søknad.vedlegg.forEach(v -> {
-            v.content = converter.convert(v.content);
+            if (v.content != null) {
+                v.content = converter.convert(v.content);
+            }
             dto.addVedlegg(v);
         });
 
