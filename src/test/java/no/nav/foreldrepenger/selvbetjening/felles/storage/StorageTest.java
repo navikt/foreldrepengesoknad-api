@@ -22,14 +22,14 @@ public class StorageTest {
             .withServices(S3);
 
     @Test
-    public void storeAndReadBack() {
+    public void storeAndRead() {
         Storage storage = new S3Storage(s3());
         storage.put("mydir", "mykey", "myvalue");
         assertEquals(Optional.of("myvalue"), storage.get("mydir", "mykey"));
     }
 
     @Test
-    public void deleteAndReadBack() {
+    public void deleteAndRead() {
         Storage storage = new S3Storage(s3());
         storage.put("mydir", "mykey", "myvalue");
         storage.delete("mydir", "mykey");
@@ -48,6 +48,28 @@ public class StorageTest {
         storage.put("mydir", "mykey", "myvalue");
         storage.delete("mydir", "mykey");
         storage.delete("mydir", "mykey");
+    }
+
+
+    @Test
+    public void tmpStorageIsInDifferentBucketThanRegularStore() {
+        Storage storage = new S3Storage(s3());
+        storage.putTmp("tmpdir", "tmpkey", "tmpvalue");
+        assertEquals(Optional.empty(), storage.get("tmpdir", "tmpkey"));
+        storage.put("mydir", "mykey", "myvalue");
+        assertEquals(Optional.empty(), storage.getTmp("mydir", "mykey"));
+
+    }
+
+
+    @Test
+    public void tmpStoreAndReadAndDelete() {
+        Storage storage = new S3Storage(s3());
+        storage.putTmp("mydir", "mykey", "myvalue");
+        assertEquals(Optional.of("myvalue"), storage.getTmp("mydir", "mykey"));
+        storage.deleteTmp("mydir", "mykey");
+        assertEquals(Optional.empty(), storage.getTmp("mydir", "mykey"));
+
     }
 
     private AmazonS3 s3() {
