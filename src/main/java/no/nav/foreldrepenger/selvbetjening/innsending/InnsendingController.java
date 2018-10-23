@@ -9,6 +9,7 @@ import java.util.List;
 import javax.inject.Inject;
 
 import no.nav.foreldrepenger.selvbetjening.innsending.json.Ettersending;
+import no.nav.security.oidc.api.ProtectedWithClaims;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.http.ResponseEntity;
@@ -27,7 +28,7 @@ import no.nav.foreldrepenger.selvbetjening.innsending.json.Søknad;
 import no.nav.foreldrepenger.selvbetjening.innsending.json.Vedlegg;
 import no.nav.foreldrepenger.selvbetjening.innsending.tjeneste.Innsending;
 import no.nav.security.oidc.context.OIDCRequestContextHolder;
-import no.nav.security.spring.oidc.validation.api.ProtectedWithClaims;
+
 
 @RestController
 @ProtectedWithClaims(issuer = "selvbetjening", claimMap = { "acr=Level4" })

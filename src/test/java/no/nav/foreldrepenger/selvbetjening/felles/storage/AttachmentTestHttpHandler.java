@@ -1,6 +1,6 @@
 package no.nav.foreldrepenger.selvbetjening.felles.storage;
 
-import no.nav.security.spring.oidc.test.JwtTokenGenerator;
+import no.nav.security.oidc.test.support.JwtTokenGenerator;
 import org.springframework.boot.test.web.client.TestRestTemplate;
 import org.springframework.core.io.ByteArrayResource;
 import org.springframework.http.*;

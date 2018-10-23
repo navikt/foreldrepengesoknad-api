@@ -9,7 +9,7 @@ import no.nav.foreldrepenger.selvbetjening.felles.storage.AttachmentTestHttpHand
 import no.nav.foreldrepenger.selvbetjening.innsending.json.Barn;
 import no.nav.foreldrepenger.selvbetjening.innsending.json.Engangsstønad;
 import no.nav.foreldrepenger.selvbetjening.innsending.json.Vedlegg;
-import no.nav.security.spring.oidc.test.JwtTokenGenerator;
+import no.nav.security.oidc.test.support.JwtTokenGenerator;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Tag;

@@ -6,7 +6,7 @@ import com.fasterxml.jackson.databind.SerializationFeature;
 import no.nav.foreldrepenger.selvbetjening.ApplicationLocal;
 import no.nav.foreldrepenger.selvbetjening.SlowTests;
 import no.nav.foreldrepenger.selvbetjening.stub.StubbedLocalStackContainer;
-import no.nav.security.spring.oidc.test.JwtTokenGenerator;
+import no.nav.security.oidc.test.support.JwtTokenGenerator;
 import org.junit.*;
 import org.junit.experimental.categories.Category;
 import org.junit.runner.RunWith;

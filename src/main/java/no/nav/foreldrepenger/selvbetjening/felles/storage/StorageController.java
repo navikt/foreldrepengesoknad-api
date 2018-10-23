@@ -1,8 +1,8 @@
 package no.nav.foreldrepenger.selvbetjening.felles.storage;
 
 import no.nav.foreldrepenger.selvbetjening.felles.util.FnrExtractor;
+import no.nav.security.oidc.api.ProtectedWithClaims;
 import no.nav.security.oidc.context.OIDCRequestContextHolder;
-import no.nav.security.spring.oidc.validation.api.ProtectedWithClaims;
 import org.slf4j.Logger;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;

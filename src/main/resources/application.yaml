@@ -12,6 +12,11 @@ spring :
   metrics.web.server.auto-time-requests: true
   servlet.multipart.max-file-size: 9MB
 no.nav.security.oidc:
+  # will send a x-token-expires-soon response header when a tokens remaining lifetime is
+  # less than or equal to this value (in minutes). set to 35 min to allow to refresh idporten login without entering credentials
+  # idporten session timeout is 30 min while azure ad b2c operates with 60 min lifetime, 35min will allow for 5 min reamining
+  # until token expires.
+  expirythreshold: 35
   issuers: selvbetjening
   issuer.selvbetjening:
     discoveryurl: <Set from Fasit>
