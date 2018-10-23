@@ -4,7 +4,7 @@ import java.util.List;
 
 public class Utenlandsopphold {
 
-    public Boolean fødselINorge;
+    public Boolean iNorgePåHendelsestidspunktet;
     public Boolean iNorgeNeste12Mnd;
     public Boolean iNorgeSiste12Mnd;
 

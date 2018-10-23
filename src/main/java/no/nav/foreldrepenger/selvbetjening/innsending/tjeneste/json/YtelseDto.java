@@ -99,7 +99,7 @@ public class YtelseDto {
         public MedlemsskapDto(Utenlandsopphold opphold) {
             this.norgeSiste12 = opphold.iNorgeSiste12Mnd;
             this.norgeNeste12 = opphold.iNorgeNeste12Mnd;
-            this.fødselNorge = opphold.fødselINorge;
+            this.fødselNorge = opphold.iNorgePåHendelsestidspunktet;
             this.arbeidSiste12 = "IKKE_ARBEIDET";
 
             for (UtenlandsoppholdPeriode tidligere : opphold.tidligereOpphold) {
