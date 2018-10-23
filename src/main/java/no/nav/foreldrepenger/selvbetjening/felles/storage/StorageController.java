@@ -37,7 +37,7 @@ public class StorageController {
         String fnr = FnrExtractor.extract(contextHolder);
         String directory = crypto.encryptDirectoryName(fnr);
         log.info("Retrieving søknad from directory " + directory);
-        Optional<String> encryptedValue = storage.get(directory, KEY);
+        Optional<String> encryptedValue = storage.getTmp(directory, KEY);
         return encryptedValue
                 .map(ev -> ResponseEntity.ok().body(crypto.decrypt(ev, fnr)))
                 .orElse(ResponseEntity.noContent().build());
@@ -49,7 +49,7 @@ public class StorageController {
         String directory = crypto.encryptDirectoryName(fnr);
         log.info("Writing søknad to directory " + directory);
         String encryptedValue = crypto.encrypt(soknad, fnr);
-        storage.put(directory, KEY, encryptedValue);
+        storage.putTmp(directory, KEY, encryptedValue);
         return ResponseEntity.noContent().build();
     }
 
@@ -58,7 +58,7 @@ public class StorageController {
         String fnr = FnrExtractor.extract(contextHolder);
         String directory = crypto.encryptDirectoryName(fnr);
         log.info("Deleting søknad from directory " + directory);
-        storage.delete(directory, KEY);
+        storage.deleteTmp(directory, KEY);
         return ResponseEntity.noContent().build();
     }
 
@@ -67,7 +67,7 @@ public class StorageController {
         String fnr = FnrExtractor.extract(contextHolder);
         String directory = crypto.encryptDirectoryName(fnr);
         log.info("Retrieving attachment from directory " + directory);
-        return storage.get(directory, key)
+        return storage.getTmp(directory, key)
                 .map(ev -> Attachment.fromJson(crypto.decrypt(ev, fnr)).asOKHTTPEntity())
                 .orElse(ResponseEntity.notFound().build());
     }
@@ -79,7 +79,7 @@ public class StorageController {
         String directory = crypto.encryptDirectoryName(fnr);
         log.info("Writing attachment to directory " + directory);
         String encryptedValue = crypto.encrypt(attachment.toJson(), fnr);
-        storage.put(directory, attachment.uuid, encryptedValue);
+        storage.putTmp(directory, attachment.uuid, encryptedValue);
         return ResponseEntity.created(attachment.uri()).build();
     }
 
@@ -89,7 +89,7 @@ public class StorageController {
         String fnr = FnrExtractor.extract(contextHolder);
         String directory = crypto.encryptDirectoryName(fnr);
         log.info("Deleting attachment from directory " + directory);
-        storage.delete(directory, key);
+        storage.deleteTmp(directory, key);
         return ResponseEntity.noContent().build();
     }
 
