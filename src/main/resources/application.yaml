@@ -3,8 +3,9 @@ info.app:
     build.time:  '@timestamp@' 
 management:
    endpoints.web.exposure.include:  info, health, metrics, prometheus
+   endpoints.web.base-path: /internal/actuator
 server:
-  servlet.context-path: /foreldrepengesoknad-api
+  servlet.context-path: /
   use-forward-headers: true
 spring :
   jackson.deserialization.accept_single_value_as_array: true

@@ -7,15 +7,15 @@ replicas:
   cpuThresholdPercentage: 50
 prometheus:
   enabled: true
-  path: /foreldrepengesoknad-api/actuator/prometheus
+  path: /internal/actuator/prometheus
 port: 8080
 healthcheck:
   liveness:
     initialDelay: 60
-    path: /foreldrepengesoknad-api/actuator/info
+    path: /internal/actuator/info
   readiness:
     initialDelay: 60
-    path: /foreldrepengesoknad-api/actuator/info
+    path: /internal/actuator/info
 resources:
   limits:
     cpu: 1500m
