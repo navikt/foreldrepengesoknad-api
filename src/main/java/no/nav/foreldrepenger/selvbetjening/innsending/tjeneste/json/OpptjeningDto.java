@@ -106,6 +106,7 @@ public class OpptjeningDto {
         public PeriodeDto periode = new PeriodeDto();
         public String orgName;
         public String orgNummer;
+        public Double stillingsprosent;
         public List<String> virksomhetsTyper = new ArrayList<>();
         public String arbeidsland;
         public List<RegnskapsførerDto> regnskapsførere = new ArrayList<>();
@@ -117,6 +118,7 @@ public class OpptjeningDto {
         public LocalDate oppstartsDato;
         public LocalDate endringsDato;
         public String beskrivelseEndring;
+
         public List<String> vedlegg;
 
         public EgenNæringDto(SelvstendigNæringsdrivendeInformasjon selvstendig) {
@@ -125,6 +127,7 @@ public class OpptjeningDto {
             TilknyttetPerson revisor = selvstendig.revisor;
 
             this.type = selvstendig.registrertINorge ? "norsk" : "utenlandsk";
+            this.stillingsprosent = selvstendig.stillingsprosent;
             this.orgNummer = selvstendig.registrertINorge ? selvstendig.organisasjonsnummer : null;
             this.orgName = selvstendig.navnPåNæringen;
             this.periode.fom = selvstendig.tidsperiode.fom;
