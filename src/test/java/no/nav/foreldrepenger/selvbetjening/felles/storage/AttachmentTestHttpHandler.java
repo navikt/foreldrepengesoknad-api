@@ -17,7 +17,7 @@ public class AttachmentTestHttpHandler {
 
     public AttachmentTestHttpHandler(TestRestTemplate http, int port, String fnr){
         this.http = http;
-        this.endpoint = "http://localhost:" + port + "/foreldrepengesoknad-api/rest/storage/vedlegg";
+        this.endpoint = "http://localhost:" + port + "/rest/storage/vedlegg";
         this.fnr = fnr;
     }
 

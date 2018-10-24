@@ -50,7 +50,7 @@ public class SoknadStorageHttpTest implements ApplicationContextAware {
     @Before
     public void setup() {
         mapper.disable(SerializationFeature.FAIL_ON_EMPTY_BEANS);
-        endpoint = "http://localhost:" + port + "/foreldrepengesoknad-api/rest/storage";
+        endpoint = "http://localhost:" + port + "/rest/storage";
     }
 
     private HttpHeaders createHeaders(MediaType mediaType) {

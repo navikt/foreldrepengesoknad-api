@@ -54,7 +54,7 @@ public class InnsendingHttpTest {
     @BeforeEach
     public void setup() {
         mapper.disable(SerializationFeature.FAIL_ON_EMPTY_BEANS);
-        endpoint = "http://localhost:" + port + "/foreldrepengesoknad-api/rest/engangsstonad";
+        endpoint = "http://localhost:" + port + "/rest/engangsstonad";
         attachmentHttpHandler = new AttachmentTestHttpHandler(http, port, FNR);
     }
 
