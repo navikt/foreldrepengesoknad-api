@@ -1,23 +1,25 @@
 package no.nav.foreldrepenger.selvbetjening.oppslag.tjeneste;
 
-import no.nav.foreldrepenger.selvbetjening.oppslag.json.Sak;
-import no.nav.foreldrepenger.selvbetjening.oppslag.tjeneste.json.PersonDto;
-import no.nav.foreldrepenger.selvbetjening.oppslag.tjeneste.json.SøkerinfoDto;
+import static java.util.Arrays.asList;
+import static org.slf4j.LoggerFactory.getLogger;
+import static org.springframework.web.util.UriComponentsBuilder.fromUri;
+
+import java.net.URI;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Optional;
+
+import javax.inject.Inject;
+
 import org.slf4j.Logger;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnProperty;
 import org.springframework.stereotype.Service;
 import org.springframework.web.client.RestTemplate;
 
-import javax.inject.Inject;
-import java.net.URI;
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Optional;
-
-import static java.util.Arrays.asList;
-import static org.slf4j.LoggerFactory.getLogger;
-import static org.springframework.web.util.UriComponentsBuilder.fromUri;
+import no.nav.foreldrepenger.selvbetjening.oppslag.json.Sak;
+import no.nav.foreldrepenger.selvbetjening.oppslag.tjeneste.json.PersonDto;
+import no.nav.foreldrepenger.selvbetjening.oppslag.tjeneste.json.SøkerinfoDto;
 
 @Service
 @ConditionalOnProperty(name = "stub.oppslag", havingValue = "false", matchIfMissing = true)

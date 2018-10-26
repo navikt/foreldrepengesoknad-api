@@ -1,15 +1,11 @@
 package no.nav.foreldrepenger.selvbetjening.innsending.tjeneste;
 
+import static java.time.LocalDateTime.now;
+import static no.nav.foreldrepenger.selvbetjening.felles.storage.AttachmentStorageHttpTest.getByteArrayResource;
+import static org.assertj.core.api.AssertionsForClassTypes.assertThat;
 
-import com.fasterxml.jackson.core.JsonProcessingException;
-import com.fasterxml.jackson.databind.ObjectMapper;
-import com.fasterxml.jackson.databind.SerializationFeature;
-import no.nav.foreldrepenger.selvbetjening.ApplicationLocal;
-import no.nav.foreldrepenger.selvbetjening.felles.storage.AttachmentTestHttpHandler;
-import no.nav.foreldrepenger.selvbetjening.innsending.json.Barn;
-import no.nav.foreldrepenger.selvbetjening.innsending.json.Engangsstønad;
-import no.nav.foreldrepenger.selvbetjening.innsending.json.Vedlegg;
-import no.nav.security.spring.oidc.test.JwtTokenGenerator;
+import java.net.URI;
+
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Tag;
@@ -21,15 +17,25 @@ import org.springframework.boot.test.web.client.TestRestTemplate;
 import org.springframework.boot.web.server.LocalServerPort;
 import org.springframework.context.ApplicationContext;
 import org.springframework.core.io.ByteArrayResource;
-import org.springframework.http.*;
+import org.springframework.http.HttpEntity;
+import org.springframework.http.HttpHeaders;
+import org.springframework.http.HttpMethod;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.MediaType;
+import org.springframework.http.ResponseEntity;
 import org.springframework.test.context.ActiveProfiles;
 import org.springframework.test.context.junit.jupiter.SpringExtension;
 
-import java.net.URI;
+import com.fasterxml.jackson.core.JsonProcessingException;
+import com.fasterxml.jackson.databind.ObjectMapper;
+import com.fasterxml.jackson.databind.SerializationFeature;
 
-import static java.time.LocalDateTime.now;
-import static no.nav.foreldrepenger.selvbetjening.felles.storage.AttachmentStorageHttpTest.getByteArrayResource;
-import static org.assertj.core.api.AssertionsForClassTypes.assertThat;
+import no.nav.foreldrepenger.selvbetjening.ApplicationLocal;
+import no.nav.foreldrepenger.selvbetjening.felles.storage.AttachmentTestHttpHandler;
+import no.nav.foreldrepenger.selvbetjening.innsending.json.Barn;
+import no.nav.foreldrepenger.selvbetjening.innsending.json.Engangsstønad;
+import no.nav.foreldrepenger.selvbetjening.innsending.json.Vedlegg;
+import no.nav.security.oidc.test.support.JwtTokenGenerator;
 
 @ExtendWith(SpringExtension.class)
 @SpringBootTest(classes = ApplicationLocal.class, webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT)
@@ -50,7 +56,6 @@ public class InnsendingHttpTest {
 
     private AttachmentTestHttpHandler attachmentHttpHandler;
 
-
     @BeforeEach
     public void setup() {
         mapper.disable(SerializationFeature.FAIL_ON_EMPTY_BEANS);
@@ -64,18 +69,20 @@ public class InnsendingHttpTest {
         URI attchmentLocation = postAttachmentOverHttp();
         ResponseEntity<String> response = postSoknadOverHttp(attchmentLocation);
         assertThat(response.getStatusCode()).isEqualTo(HttpStatus.OK);
-        assertThat(attachmentHttpHandler.getAttachment(attchmentLocation).getStatusCode()).isEqualTo(HttpStatus.NOT_FOUND);
+        assertThat(attachmentHttpHandler.getAttachment(attchmentLocation).getStatusCode())
+                .isEqualTo(HttpStatus.NOT_FOUND);
     }
 
     private ResponseEntity<String> postSoknadOverHttp(URI location) {
         String payload = engangsstonad(location);
-        return http.exchange(endpoint, HttpMethod.POST, new HttpEntity<>(payload, createHeaders(MediaType.APPLICATION_JSON)), String.class);
+        return http.exchange(endpoint, HttpMethod.POST,
+                new HttpEntity<>(payload, createHeaders(MediaType.APPLICATION_JSON)), String.class);
     }
-
 
     private URI postAttachmentOverHttp() {
         ByteArrayResource byteArrayResource = getByteArrayResource("pdf", "test.pdf");
-        ResponseEntity<String> postResponse = attachmentHttpHandler.postMultipart("vedlegg", MediaType.APPLICATION_PDF, byteArrayResource);
+        ResponseEntity<String> postResponse = attachmentHttpHandler.postMultipart("vedlegg", MediaType.APPLICATION_PDF,
+                byteArrayResource);
         URI location = postResponse.getHeaders().getLocation();
         assertThat(location).isNotNull();
         assertThat(postResponse.getStatusCode()).isEqualTo(HttpStatus.CREATED);

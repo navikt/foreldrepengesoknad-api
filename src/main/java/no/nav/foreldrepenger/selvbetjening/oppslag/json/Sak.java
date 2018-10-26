@@ -1,13 +1,13 @@
 package no.nav.foreldrepenger.selvbetjening.oppslag.json;
 
-import com.fasterxml.jackson.annotation.JsonCreator;
-import com.fasterxml.jackson.annotation.JsonProperty;
+import static java.util.Collections.emptyList;
 
 import java.time.LocalDate;
 import java.util.List;
 import java.util.Optional;
 
-import static java.util.Collections.emptyList;
+import com.fasterxml.jackson.annotation.JsonCreator;
+import com.fasterxml.jackson.annotation.JsonProperty;
 
 public class Sak {
 

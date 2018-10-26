@@ -1,12 +1,13 @@
 package no.nav.foreldrepenger.selvbetjening.innsending.json.arbeid;
 
-import com.fasterxml.jackson.annotation.JsonInclude;
-import no.nav.foreldrepenger.selvbetjening.innsending.json.Tidsperiode;
+import static com.fasterxml.jackson.annotation.JsonInclude.Include.NON_NULL;
 
 import java.util.ArrayList;
 import java.util.List;
 
-import static com.fasterxml.jackson.annotation.JsonInclude.Include.NON_NULL;
+import com.fasterxml.jackson.annotation.JsonInclude;
+
+import no.nav.foreldrepenger.selvbetjening.innsending.json.Tidsperiode;
 
 @JsonInclude(NON_NULL)
 public class AnnenInntekt {

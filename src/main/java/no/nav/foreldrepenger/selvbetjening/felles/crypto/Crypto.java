@@ -1,13 +1,14 @@
 package no.nav.foreldrepenger.selvbetjening.felles.crypto;
 
+import java.security.spec.KeySpec;
+import java.util.Base64;
+
 import javax.crypto.Cipher;
 import javax.crypto.SecretKey;
 import javax.crypto.SecretKeyFactory;
 import javax.crypto.spec.GCMParameterSpec;
 import javax.crypto.spec.PBEKeySpec;
 import javax.crypto.spec.SecretKeySpec;
-import java.security.spec.KeySpec;
-import java.util.Base64;
 
 public class Crypto {
 

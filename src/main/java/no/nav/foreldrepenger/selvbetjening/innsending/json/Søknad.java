@@ -1,14 +1,14 @@
 package no.nav.foreldrepenger.selvbetjening.innsending.json;
 
-import com.fasterxml.jackson.annotation.JsonSubTypes;
-import com.fasterxml.jackson.annotation.JsonSubTypes.Type;
-import com.fasterxml.jackson.annotation.JsonTypeInfo;
+import static com.fasterxml.jackson.annotation.JsonTypeInfo.Id.NAME;
 
 import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
 
-import static com.fasterxml.jackson.annotation.JsonTypeInfo.Id.NAME;
+import com.fasterxml.jackson.annotation.JsonSubTypes;
+import com.fasterxml.jackson.annotation.JsonSubTypes.Type;
+import com.fasterxml.jackson.annotation.JsonTypeInfo;
 
 
 @JsonTypeInfo(use = NAME, property = "type", visible = true)

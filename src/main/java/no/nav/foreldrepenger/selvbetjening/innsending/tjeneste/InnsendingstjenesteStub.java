@@ -1,23 +1,29 @@
 package no.nav.foreldrepenger.selvbetjening.innsending.tjeneste;
 
-import com.fasterxml.jackson.core.JsonProcessingException;
-import com.fasterxml.jackson.databind.ObjectMapper;
-import no.nav.foreldrepenger.selvbetjening.innsending.json.*;
-import no.nav.foreldrepenger.selvbetjening.innsending.tjeneste.json.EngangsstønadDto;
-import no.nav.foreldrepenger.selvbetjening.innsending.tjeneste.json.EttersendingDto;
-import no.nav.foreldrepenger.selvbetjening.innsending.tjeneste.json.ForeldrepengesøknadDto;
-import no.nav.foreldrepenger.selvbetjening.innsending.tjeneste.json.SøknadDto;
+import static java.time.LocalDateTime.now;
+import static org.slf4j.LoggerFactory.getLogger;
+import static org.springframework.http.HttpStatus.OK;
+
+import javax.inject.Inject;
+import javax.ws.rs.BadRequestException;
+
 import org.slf4j.Logger;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnProperty;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 
-import javax.inject.Inject;
-import javax.ws.rs.BadRequestException;
+import com.fasterxml.jackson.core.JsonProcessingException;
+import com.fasterxml.jackson.databind.ObjectMapper;
 
-import static java.time.LocalDateTime.now;
-import static org.slf4j.LoggerFactory.getLogger;
-import static org.springframework.http.HttpStatus.OK;
+import no.nav.foreldrepenger.selvbetjening.innsending.json.Engangsstønad;
+import no.nav.foreldrepenger.selvbetjening.innsending.json.Ettersending;
+import no.nav.foreldrepenger.selvbetjening.innsending.json.Foreldrepengesøknad;
+import no.nav.foreldrepenger.selvbetjening.innsending.json.Kvittering;
+import no.nav.foreldrepenger.selvbetjening.innsending.json.Søknad;
+import no.nav.foreldrepenger.selvbetjening.innsending.tjeneste.json.EngangsstønadDto;
+import no.nav.foreldrepenger.selvbetjening.innsending.tjeneste.json.EttersendingDto;
+import no.nav.foreldrepenger.selvbetjening.innsending.tjeneste.json.ForeldrepengesøknadDto;
+import no.nav.foreldrepenger.selvbetjening.innsending.tjeneste.json.SøknadDto;
 
 @Service
 @ConditionalOnProperty(name = "stub.mottak", havingValue = "true")

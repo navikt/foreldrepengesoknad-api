@@ -1,12 +1,13 @@
 package no.nav.foreldrepenger.selvbetjening.oppslag.json;
 
-import com.fasterxml.jackson.annotation.JsonInclude;
-import no.nav.foreldrepenger.selvbetjening.oppslag.tjeneste.json.SøkerinfoDto;
+import static com.fasterxml.jackson.annotation.JsonInclude.Include.NON_EMPTY;
 
 import java.util.ArrayList;
 import java.util.List;
 
-import static com.fasterxml.jackson.annotation.JsonInclude.Include.NON_EMPTY;
+import com.fasterxml.jackson.annotation.JsonInclude;
+
+import no.nav.foreldrepenger.selvbetjening.oppslag.tjeneste.json.SøkerinfoDto;
 
 @JsonInclude(NON_EMPTY)
 public class Søkerinfo {

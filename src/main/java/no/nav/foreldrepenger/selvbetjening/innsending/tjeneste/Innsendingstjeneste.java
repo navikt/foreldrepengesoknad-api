@@ -8,8 +8,6 @@ import java.net.URI;
 import javax.inject.Inject;
 import javax.ws.rs.BadRequestException;
 
-import no.nav.foreldrepenger.selvbetjening.innsending.json.*;
-import no.nav.foreldrepenger.selvbetjening.innsending.tjeneste.json.EttersendingDto;
 import org.slf4j.Logger;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnProperty;
@@ -25,7 +23,13 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 
 import no.nav.foreldrepenger.selvbetjening.felles.attachments.Image2PDFConverter;
 import no.nav.foreldrepenger.selvbetjening.felles.util.Enabled;
+import no.nav.foreldrepenger.selvbetjening.innsending.json.Engangsstønad;
+import no.nav.foreldrepenger.selvbetjening.innsending.json.Ettersending;
+import no.nav.foreldrepenger.selvbetjening.innsending.json.Foreldrepengesøknad;
+import no.nav.foreldrepenger.selvbetjening.innsending.json.Kvittering;
+import no.nav.foreldrepenger.selvbetjening.innsending.json.Søknad;
 import no.nav.foreldrepenger.selvbetjening.innsending.tjeneste.json.EngangsstønadDto;
+import no.nav.foreldrepenger.selvbetjening.innsending.tjeneste.json.EttersendingDto;
 import no.nav.foreldrepenger.selvbetjening.innsending.tjeneste.json.ForeldrepengesøknadDto;
 import no.nav.foreldrepenger.selvbetjening.innsending.tjeneste.json.SøknadDto;
 

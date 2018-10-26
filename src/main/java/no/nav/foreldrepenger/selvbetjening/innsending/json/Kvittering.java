@@ -1,11 +1,11 @@
 package no.nav.foreldrepenger.selvbetjening.innsending.json;
 
-import com.fasterxml.jackson.annotation.JsonInclude;
+import static com.fasterxml.jackson.annotation.JsonInclude.Include.NON_EMPTY;
+import static java.time.LocalDateTime.now;
 
 import java.time.LocalDateTime;
 
-import static com.fasterxml.jackson.annotation.JsonInclude.Include.NON_EMPTY;
-import static java.time.LocalDateTime.now;
+import com.fasterxml.jackson.annotation.JsonInclude;
 
 @JsonInclude(NON_EMPTY)
 public class Kvittering {

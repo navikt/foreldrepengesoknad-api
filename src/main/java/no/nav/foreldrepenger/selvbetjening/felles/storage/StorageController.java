@@ -1,19 +1,28 @@
 package no.nav.foreldrepenger.selvbetjening.felles.storage;
 
-import no.nav.foreldrepenger.selvbetjening.felles.util.FnrExtractor;
-import no.nav.security.oidc.context.OIDCRequestContextHolder;
-import no.nav.security.spring.oidc.validation.api.ProtectedWithClaims;
-import org.slf4j.Logger;
-import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.*;
-import org.springframework.web.multipart.MultipartFile;
-
-import javax.inject.Inject;
-import java.util.Optional;
-
 import static org.slf4j.LoggerFactory.getLogger;
 import static org.springframework.http.MediaType.APPLICATION_JSON_VALUE;
 import static org.springframework.http.MediaType.MULTIPART_FORM_DATA_VALUE;
+
+import java.util.Optional;
+
+import javax.inject.Inject;
+
+import org.slf4j.Logger;
+import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.DeleteMapping;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestPart;
+import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.multipart.MultipartFile;
+
+import no.nav.foreldrepenger.selvbetjening.felles.util.FnrExtractor;
+import no.nav.security.oidc.api.ProtectedWithClaims;
+import no.nav.security.oidc.context.OIDCRequestContextHolder;
 
 @RestController
 @ProtectedWithClaims(issuer = "selvbetjening", claimMap = {"acr=Level4"})

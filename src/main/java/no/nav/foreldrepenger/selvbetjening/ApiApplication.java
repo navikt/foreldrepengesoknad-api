@@ -5,7 +5,7 @@ import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.context.annotation.ComponentScan;
 
 import io.prometheus.client.hotspot.DefaultExports;
-import no.nav.security.spring.oidc.validation.api.EnableOIDCTokenValidation;
+import no.nav.security.spring.oidc.api.EnableOIDCTokenValidation;
 
 @SpringBootApplication
 @ComponentScan

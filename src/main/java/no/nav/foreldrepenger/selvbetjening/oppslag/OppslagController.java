@@ -17,7 +17,7 @@ import no.nav.foreldrepenger.selvbetjening.oppslag.json.Søkerinfo;
 import no.nav.foreldrepenger.selvbetjening.oppslag.tjeneste.Oppslag;
 import no.nav.foreldrepenger.selvbetjening.oppslag.tjeneste.json.PersonDto;
 import no.nav.foreldrepenger.selvbetjening.oppslag.tjeneste.json.SøkerinfoDto;
-import no.nav.security.spring.oidc.validation.api.ProtectedWithClaims;
+import no.nav.security.oidc.api.ProtectedWithClaims;
 
 @RestController
 @ProtectedWithClaims(issuer = "selvbetjening", claimMap = { "acr=Level4" })

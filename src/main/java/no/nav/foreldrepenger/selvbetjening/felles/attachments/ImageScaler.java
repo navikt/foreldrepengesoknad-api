@@ -1,14 +1,18 @@
 package no.nav.foreldrepenger.selvbetjening.felles.attachments;
 
-import no.nav.foreldrepenger.selvbetjening.felles.attachments.exceptions.AttachmentConversionException;
-import org.apache.pdfbox.pdmodel.common.PDRectangle;
-
-import javax.imageio.ImageIO;
-import java.awt.*;
+import java.awt.Dimension;
+import java.awt.Graphics2D;
+import java.awt.Image;
 import java.awt.image.BufferedImage;
 import java.io.ByteArrayInputStream;
 import java.io.ByteArrayOutputStream;
 import java.io.IOException;
+
+import javax.imageio.ImageIO;
+
+import org.apache.pdfbox.pdmodel.common.PDRectangle;
+
+import no.nav.foreldrepenger.selvbetjening.felles.attachments.exceptions.AttachmentConversionException;
 
 public class ImageScaler {
 

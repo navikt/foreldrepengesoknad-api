@@ -1,17 +1,23 @@
 package no.nav.foreldrepenger.selvbetjening.felles.storage;
 
-import com.amazonaws.services.s3.AmazonS3;
-import com.amazonaws.services.s3.model.*;
-import com.amazonaws.services.s3.model.lifecycle.LifecycleFilter;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
+import static java.util.stream.Collectors.joining;
 
-import javax.inject.Inject;
 import java.io.BufferedReader;
 import java.io.InputStreamReader;
 import java.util.Optional;
 
-import static java.util.stream.Collectors.joining;
+import javax.inject.Inject;
+
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
+import com.amazonaws.services.s3.AmazonS3;
+import com.amazonaws.services.s3.model.AmazonS3Exception;
+import com.amazonaws.services.s3.model.BucketLifecycleConfiguration;
+import com.amazonaws.services.s3.model.CannedAccessControlList;
+import com.amazonaws.services.s3.model.CreateBucketRequest;
+import com.amazonaws.services.s3.model.S3Object;
+import com.amazonaws.services.s3.model.lifecycle.LifecycleFilter;
 
 public class S3Storage implements Storage {
 

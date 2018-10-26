@@ -1,10 +1,10 @@
 package no.nav.foreldrepenger.selvbetjening.innsending.tjeneste.json;
 
-import no.nav.foreldrepenger.selvbetjening.innsending.json.Ettersending;
-import no.nav.foreldrepenger.selvbetjening.innsending.json.Vedlegg;
-
 import java.util.ArrayList;
 import java.util.List;
+
+import no.nav.foreldrepenger.selvbetjening.innsending.json.Ettersending;
+import no.nav.foreldrepenger.selvbetjening.innsending.json.Vedlegg;
 
 public class EttersendingDto {
     public String saksnr;

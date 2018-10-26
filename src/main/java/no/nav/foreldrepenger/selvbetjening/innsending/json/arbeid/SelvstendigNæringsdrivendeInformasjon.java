@@ -1,8 +1,8 @@
 package no.nav.foreldrepenger.selvbetjening.innsending.json.arbeid;
 
-import no.nav.foreldrepenger.selvbetjening.innsending.json.Tidsperiode;
-
 import java.util.List;
+
+import no.nav.foreldrepenger.selvbetjening.innsending.json.Tidsperiode;
 
 public class SelvstendigNæringsdrivendeInformasjon {
 

@@ -1,11 +1,11 @@
 package no.nav.foreldrepenger.selvbetjening.innsending.json;
 
+import java.util.ArrayList;
+import java.util.List;
+
 import no.nav.foreldrepenger.selvbetjening.innsending.json.arbeid.AnnenInntekt;
 import no.nav.foreldrepenger.selvbetjening.innsending.json.arbeid.FrilansInformasjon;
 import no.nav.foreldrepenger.selvbetjening.innsending.json.arbeid.SelvstendigNæringsdrivendeInformasjon;
-
-import java.util.ArrayList;
-import java.util.List;
 
 public class Søker {
 

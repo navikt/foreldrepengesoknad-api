@@ -1,18 +1,18 @@
 package no.nav.foreldrepenger.selvbetjening.felles.filters;
 
-import org.slf4j.Logger;
-import org.springframework.beans.factory.annotation.Value;
-import org.springframework.http.HttpRequest;
-import org.springframework.http.client.ClientHttpRequestExecution;
-import org.springframework.http.client.ClientHttpRequestInterceptor;
-import org.springframework.http.client.ClientHttpResponse;
+import static org.slf4j.LoggerFactory.getLogger;
 
 import java.io.IOException;
 import java.net.URI;
 import java.util.Map;
 import java.util.Optional;
 
-import static org.slf4j.LoggerFactory.getLogger;
+import org.slf4j.Logger;
+import org.springframework.beans.factory.annotation.Value;
+import org.springframework.http.HttpRequest;
+import org.springframework.http.client.ClientHttpRequestExecution;
+import org.springframework.http.client.ClientHttpRequestInterceptor;
+import org.springframework.http.client.ClientHttpResponse;
 
 public class ApiKeyInjectingClientInterceptor implements ClientHttpRequestInterceptor {
 

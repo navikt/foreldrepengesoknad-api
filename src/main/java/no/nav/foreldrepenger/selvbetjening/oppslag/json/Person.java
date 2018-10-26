@@ -1,15 +1,16 @@
 package no.nav.foreldrepenger.selvbetjening.oppslag.json;
 
-import com.fasterxml.jackson.annotation.JsonInclude;
-import com.neovisionaries.i18n.CountryCode;
-import no.nav.foreldrepenger.selvbetjening.oppslag.tjeneste.json.PersonDto;
+import static com.fasterxml.jackson.annotation.JsonInclude.Include.NON_EMPTY;
+import static no.nav.foreldrepenger.selvbetjening.felles.util.IkkeNordiskEØSLandVelger.erIkkenordiskEØSLand;
 
 import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
 
-import static com.fasterxml.jackson.annotation.JsonInclude.Include.NON_EMPTY;
-import static no.nav.foreldrepenger.selvbetjening.felles.util.IkkeNordiskEØSLandVelger.erIkkenordiskEØSLand;
+import com.fasterxml.jackson.annotation.JsonInclude;
+import com.neovisionaries.i18n.CountryCode;
+
+import no.nav.foreldrepenger.selvbetjening.oppslag.tjeneste.json.PersonDto;
 
 @JsonInclude(NON_EMPTY)
 public class Person {

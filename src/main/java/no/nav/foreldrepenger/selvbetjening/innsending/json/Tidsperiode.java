@@ -1,10 +1,10 @@
 package no.nav.foreldrepenger.selvbetjening.innsending.json;
 
-import com.fasterxml.jackson.annotation.JsonInclude;
+import static com.fasterxml.jackson.annotation.JsonInclude.Include.NON_NULL;
 
 import java.time.LocalDate;
 
-import static com.fasterxml.jackson.annotation.JsonInclude.Include.NON_NULL;
+import com.fasterxml.jackson.annotation.JsonInclude;
 
 @JsonInclude(NON_NULL)
 public class Tidsperiode {

@@ -1,13 +1,11 @@
 package no.nav.foreldrepenger.selvbetjening.felles.storage;
 
+import static org.assertj.core.api.AssertionsForClassTypes.assertThat;
 
-import com.fasterxml.jackson.databind.ObjectMapper;
-import com.fasterxml.jackson.databind.SerializationFeature;
-import no.nav.foreldrepenger.selvbetjening.ApplicationLocal;
-import no.nav.foreldrepenger.selvbetjening.SlowTests;
-import no.nav.foreldrepenger.selvbetjening.stub.StubbedLocalStackContainer;
-import no.nav.security.spring.oidc.test.JwtTokenGenerator;
-import org.junit.*;
+import org.junit.AfterClass;
+import org.junit.Before;
+import org.junit.FixMethodOrder;
+import org.junit.Test;
 import org.junit.experimental.categories.Category;
 import org.junit.runner.RunWith;
 import org.junit.runners.MethodSorters;
@@ -18,11 +16,22 @@ import org.springframework.boot.test.web.client.TestRestTemplate;
 import org.springframework.boot.web.server.LocalServerPort;
 import org.springframework.context.ApplicationContext;
 import org.springframework.context.ApplicationContextAware;
-import org.springframework.http.*;
+import org.springframework.http.HttpEntity;
+import org.springframework.http.HttpHeaders;
+import org.springframework.http.HttpMethod;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.MediaType;
+import org.springframework.http.ResponseEntity;
 import org.springframework.test.context.ActiveProfiles;
 import org.springframework.test.context.junit4.SpringRunner;
 
-import static org.assertj.core.api.AssertionsForClassTypes.assertThat;
+import com.fasterxml.jackson.databind.ObjectMapper;
+import com.fasterxml.jackson.databind.SerializationFeature;
+
+import no.nav.foreldrepenger.selvbetjening.ApplicationLocal;
+import no.nav.foreldrepenger.selvbetjening.SlowTests;
+import no.nav.foreldrepenger.selvbetjening.stub.StubbedLocalStackContainer;
+import no.nav.security.oidc.test.support.JwtTokenGenerator;
 
 @RunWith(SpringRunner.class)
 @SpringBootTest(classes = ApplicationLocal.class, webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT)
@@ -40,7 +49,6 @@ public class SoknadStorageHttpTest implements ApplicationContextAware {
     @Autowired
     private ObjectMapper mapper;
     private String endpoint;
-
 
     @AfterClass
     public static void destroy() {
@@ -64,10 +72,12 @@ public class SoknadStorageHttpTest implements ApplicationContextAware {
     public void store_and_retrieve_json_over_HTTP() {
         String payload = "en skikkelig, skikkelig, skikkelig (s3) nais søknad";
 
-        ResponseEntity<String> responseEntity = http.exchange(endpoint, HttpMethod.POST, new HttpEntity<>(payload, createHeaders(MediaType.APPLICATION_JSON)), String.class);
+        ResponseEntity<String> responseEntity = http.exchange(endpoint, HttpMethod.POST,
+                new HttpEntity<>(payload, createHeaders(MediaType.APPLICATION_JSON)), String.class);
         assertThat(responseEntity.getStatusCode()).isEqualTo(HttpStatus.NO_CONTENT);
 
-        ResponseEntity<String> getResponse = http.exchange(endpoint, HttpMethod.GET, new HttpEntity<>(createHeaders(MediaType.APPLICATION_JSON)), String.class);
+        ResponseEntity<String> getResponse = http.exchange(endpoint, HttpMethod.GET,
+                new HttpEntity<>(createHeaders(MediaType.APPLICATION_JSON)), String.class);
         assertThat(getResponse.getStatusCode()).isEqualTo(HttpStatus.OK);
         assertThat(getResponse.getBody()).isEqualTo(payload);
 

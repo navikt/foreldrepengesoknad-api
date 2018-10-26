@@ -1,8 +1,8 @@
 package no.nav.foreldrepenger.selvbetjening.innsending.json;
 
-import java.time.LocalDate;
-
 import static org.apache.commons.lang3.BooleanUtils.isTrue;
+
+import java.time.LocalDate;
 
 public class AnnenForelder {
     public Boolean kanIkkeOppgis;

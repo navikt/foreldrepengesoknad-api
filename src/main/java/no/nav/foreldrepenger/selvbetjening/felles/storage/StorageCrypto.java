@@ -1,8 +1,8 @@
 package no.nav.foreldrepenger.selvbetjening.felles.storage;
 
-import no.nav.foreldrepenger.selvbetjening.felles.crypto.Crypto;
-
 import static javax.xml.bind.DatatypeConverter.printHexBinary;
+
+import no.nav.foreldrepenger.selvbetjening.felles.crypto.Crypto;
 
 public class StorageCrypto {
 

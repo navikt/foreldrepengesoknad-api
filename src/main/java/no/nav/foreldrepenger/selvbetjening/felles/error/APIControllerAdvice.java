@@ -1,10 +1,17 @@
 package no.nav.foreldrepenger.selvbetjening.felles.error;
 
 import static java.util.stream.Collectors.toList;
-import static org.springframework.http.HttpStatus.*;
+import static org.springframework.http.HttpStatus.BAD_REQUEST;
+import static org.springframework.http.HttpStatus.INTERNAL_SERVER_ERROR;
+import static org.springframework.http.HttpStatus.NOT_FOUND;
+import static org.springframework.http.HttpStatus.PAYLOAD_TOO_LARGE;
+import static org.springframework.http.HttpStatus.UNAUTHORIZED;
+import static org.springframework.http.HttpStatus.UNPROCESSABLE_ENTITY;
 
 import java.util.Collections;
 import java.util.List;
+
+import javax.ws.rs.BadRequestException;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -24,8 +31,6 @@ import no.nav.foreldrepenger.selvbetjening.felles.attachments.exceptions.Attachm
 import no.nav.foreldrepenger.selvbetjening.felles.attachments.exceptions.AttachmentTypeUnsupportedException;
 import no.nav.foreldrepenger.selvbetjening.felles.attachments.exceptions.AttachmentsTooLargeException;
 import no.nav.security.spring.oidc.validation.interceptor.OIDCUnauthorizedException;
-
-import javax.ws.rs.BadRequestException;
 
 @ControllerAdvice
 public class APIControllerAdvice extends ResponseEntityExceptionHandler {

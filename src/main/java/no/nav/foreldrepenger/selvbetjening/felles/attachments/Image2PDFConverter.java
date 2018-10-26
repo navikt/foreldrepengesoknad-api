@@ -1,8 +1,17 @@
 package no.nav.foreldrepenger.selvbetjening.felles.attachments;
 
-import no.nav.foreldrepenger.selvbetjening.felles.attachments.exceptions.AttachmentConversionException;
-import no.nav.foreldrepenger.selvbetjening.felles.attachments.exceptions.AttachmentTypeUnsupportedException;
-import no.nav.foreldrepenger.selvbetjening.felles.attachments.exceptions.AttachmentsTooLargeException;
+import static java.util.Arrays.asList;
+import static org.springframework.http.MediaType.APPLICATION_PDF;
+import static org.springframework.http.MediaType.IMAGE_JPEG;
+import static org.springframework.http.MediaType.IMAGE_PNG;
+import static org.springframework.util.StreamUtils.copyToByteArray;
+
+import java.io.ByteArrayOutputStream;
+import java.io.IOException;
+import java.util.List;
+
+import javax.inject.Inject;
+
 import org.apache.pdfbox.pdmodel.PDDocument;
 import org.apache.pdfbox.pdmodel.PDPage;
 import org.apache.pdfbox.pdmodel.PDPageContentStream;
@@ -16,14 +25,9 @@ import org.springframework.core.io.Resource;
 import org.springframework.http.MediaType;
 import org.springframework.stereotype.Component;
 
-import javax.inject.Inject;
-import java.io.ByteArrayOutputStream;
-import java.io.IOException;
-import java.util.List;
-
-import static java.util.Arrays.asList;
-import static org.springframework.http.MediaType.*;
-import static org.springframework.util.StreamUtils.copyToByteArray;
+import no.nav.foreldrepenger.selvbetjening.felles.attachments.exceptions.AttachmentConversionException;
+import no.nav.foreldrepenger.selvbetjening.felles.attachments.exceptions.AttachmentTypeUnsupportedException;
+import no.nav.foreldrepenger.selvbetjening.felles.attachments.exceptions.AttachmentsTooLargeException;
 
 @Component
 public class Image2PDFConverter {

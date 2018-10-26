@@ -10,8 +10,8 @@ import org.springframework.context.annotation.Import;
 
 import io.prometheus.client.hotspot.DefaultExports;
 import no.nav.foreldrepenger.selvbetjening.felles.util.EnvUtil;
-import no.nav.security.spring.oidc.test.TokenGeneratorConfiguration;
-import no.nav.security.spring.oidc.validation.api.EnableOIDCTokenValidation;
+import no.nav.security.oidc.test.support.spring.TokenGeneratorConfiguration;
+import no.nav.security.spring.oidc.api.EnableOIDCTokenValidation;
 
 @SpringBootApplication
 @EnableOIDCTokenValidation(ignore = { "org.springframework", "springfox.documentation" })

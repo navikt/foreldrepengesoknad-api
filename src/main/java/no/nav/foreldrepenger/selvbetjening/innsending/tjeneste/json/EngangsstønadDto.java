@@ -1,12 +1,13 @@
 package no.nav.foreldrepenger.selvbetjening.innsending.tjeneste.json;
 
-import com.fasterxml.jackson.annotation.JsonInclude;
-import no.nav.foreldrepenger.selvbetjening.innsending.json.Engangsstønad;
+import static com.fasterxml.jackson.annotation.JsonInclude.Include.NON_EMPTY;
+import static java.time.LocalDateTime.now;
 
 import java.util.ArrayList;
 
-import static com.fasterxml.jackson.annotation.JsonInclude.Include.NON_EMPTY;
-import static java.time.LocalDateTime.now;
+import com.fasterxml.jackson.annotation.JsonInclude;
+
+import no.nav.foreldrepenger.selvbetjening.innsending.json.Engangsstønad;
 
 @JsonInclude(NON_EMPTY)
 public class EngangsstønadDto extends SøknadDto {

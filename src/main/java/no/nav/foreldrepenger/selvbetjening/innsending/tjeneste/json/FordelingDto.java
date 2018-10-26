@@ -1,13 +1,14 @@
 package no.nav.foreldrepenger.selvbetjening.innsending.tjeneste.json;
 
-import com.fasterxml.jackson.annotation.JsonInclude;
-import no.nav.foreldrepenger.selvbetjening.innsending.json.UttaksplanPeriode;
+import static com.fasterxml.jackson.annotation.JsonInclude.Include.NON_NULL;
 
 import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
 
-import static com.fasterxml.jackson.annotation.JsonInclude.Include.NON_NULL;
+import com.fasterxml.jackson.annotation.JsonInclude;
+
+import no.nav.foreldrepenger.selvbetjening.innsending.json.UttaksplanPeriode;
 
 public class FordelingDto {
 

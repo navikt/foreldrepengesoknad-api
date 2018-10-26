@@ -1,14 +1,15 @@
 package no.nav.foreldrepenger.selvbetjening.felles.storage;
 
-import com.google.gson.Gson;
+import java.io.IOException;
+import java.net.URI;
+import java.util.UUID;
+
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 
-import java.io.IOException;
-import java.net.URI;
-import java.util.UUID;
+import com.google.gson.Gson;
 
 public class Attachment {
     public final String filename;
