@@ -136,8 +136,8 @@ public class OpptjeningDto {
             this.periode.fom = selvstendig.tidsperiode.fom;
             this.periode.tom = selvstendig.tidsperiode.tom;
             this.arbeidsland = selvstendig.registrertILand;
-            this.erNyOpprettet = selvstendig.harBlittYrkesaktivILøpetAvDeTreSisteFerdigliknedeÅrene;
-            this.erNyIArbeidslivet = this.periode.fom.isAfter(fireÅrSiden.minusDays(1));
+            this.erNyIArbeidslivet = selvstendig.harBlittYrkesaktivILøpetAvDeTreSisteFerdigliknedeÅrene;
+            this.erNyOpprettet = this.periode.fom.isAfter(fireÅrSiden.minusDays(1));
             this.erVarigEndring = selvstendig.hattVarigEndringAvNæringsinntektSiste4Kalenderår;
             this.vedlegg = selvstendig.vedlegg;
 
