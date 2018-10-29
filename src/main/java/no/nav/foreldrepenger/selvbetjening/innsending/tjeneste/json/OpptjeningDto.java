@@ -1,6 +1,7 @@
 package no.nav.foreldrepenger.selvbetjening.innsending.tjeneste.json;
 
 import static com.fasterxml.jackson.annotation.JsonInclude.Include.NON_EMPTY;
+import static java.time.LocalDate.now;
 
 import java.time.LocalDate;
 import java.time.Period;
@@ -65,7 +66,7 @@ public class OpptjeningDto {
             this.periode.fom = frilansInformasjon.oppstart;
             this.harInntektFraFosterhjem = frilansInformasjon.driverFosterhjem;
 
-            LocalDate treMånederFørFom = LocalDate.now().minus(Period.ofDays(90));
+            LocalDate treMånederFørFom = now().minus(Period.ofDays(90));
             this.nyOppstartet = this.periode.fom.isAfter(treMånederFørFom);
 
             for (Frilansoppdrag o : frilansInformasjon.oppdragForNæreVennerEllerFamilieSiste10Mnd) {
@@ -126,7 +127,7 @@ public class OpptjeningDto {
             TilknyttetPerson regnskapsfører = selvstendig.regnskapsfører;
             TilknyttetPerson revisor = selvstendig.revisor;
 
-            LocalDate fireÅrSiden = LocalDate.now().minus(Period.ofYears(4)).minus(Period.ofDays(1));
+            LocalDate fireÅrSiden = now().minusYears(4);
 
             this.type = selvstendig.registrertINorge ? "norsk" : "utenlandsk";
             this.stillingsprosent = selvstendig.stillingsprosent;
@@ -136,7 +137,7 @@ public class OpptjeningDto {
             this.periode.tom = selvstendig.tidsperiode.tom;
             this.arbeidsland = selvstendig.registrertILand;
             this.erNyOpprettet = selvstendig.harBlittYrkesaktivILøpetAvDeTreSisteFerdigliknedeÅrene;
-            this.erNyIArbeidslivet = this.periode.fom.isAfter(fireÅrSiden);
+            this.erNyIArbeidslivet = this.periode.fom.isAfter(fireÅrSiden.minusDays(1));
             this.erVarigEndring = selvstendig.hattVarigEndringAvNæringsinntektSiste4Kalenderår;
             this.vedlegg = selvstendig.vedlegg;
 
