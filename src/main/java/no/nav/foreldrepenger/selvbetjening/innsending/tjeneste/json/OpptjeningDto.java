@@ -126,6 +126,8 @@ public class OpptjeningDto {
             TilknyttetPerson regnskapsfører = selvstendig.regnskapsfører;
             TilknyttetPerson revisor = selvstendig.revisor;
 
+            LocalDate fireÅrSiden = LocalDate.now().minus(Period.ofYears(4)).minus(Period.ofDays(1));
+
             this.type = selvstendig.registrertINorge ? "norsk" : "utenlandsk";
             this.stillingsprosent = selvstendig.stillingsprosent;
             this.orgNummer = selvstendig.registrertINorge ? selvstendig.organisasjonsnummer : null;
@@ -133,7 +135,8 @@ public class OpptjeningDto {
             this.periode.fom = selvstendig.tidsperiode.fom;
             this.periode.tom = selvstendig.tidsperiode.tom;
             this.arbeidsland = selvstendig.registrertILand;
-            this.erNyIArbeidslivet = selvstendig.nyIArbeidslivet;
+            this.erNyOpprettet = selvstendig.harBlittYrkesaktivILøpetAvDeTreSisteFerdigliknedeÅrene;
+            this.erNyIArbeidslivet = this.periode.fom.isAfter(fireÅrSiden);
             this.erVarigEndring = selvstendig.hattVarigEndringAvNæringsinntektSiste4Kalenderår;
             this.vedlegg = selvstendig.vedlegg;
 
