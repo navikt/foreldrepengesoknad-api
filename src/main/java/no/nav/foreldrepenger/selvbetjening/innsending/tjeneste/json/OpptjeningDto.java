@@ -140,8 +140,8 @@ public class OpptjeningDto {
             this.erNyOpprettet = this.periode.fom.isAfter(fireÅrSiden.minusDays(1));
             this.erVarigEndring = selvstendig.hattVarigEndringAvNæringsinntektSiste4Kalenderår;
             this.vedlegg = selvstendig.vedlegg;
-
             this.virksomhetsTyper.addAll(selvstendig.næringstyper);
+            this.oppstartsDato = selvstendig.oppstartsdato;
 
             if (næringsInfo != null) {
                 this.endringsDato = næringsInfo.dato;
