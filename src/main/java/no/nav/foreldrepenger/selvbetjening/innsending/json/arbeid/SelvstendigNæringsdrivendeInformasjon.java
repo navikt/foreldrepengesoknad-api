@@ -13,7 +13,7 @@ public class SelvstendigNæringsdrivendeInformasjon {
     public Boolean registrertINorge;
     public String registrertILand;
     public Double stillingsprosent;
-    public Boolean nyIArbeidslivet;
+    public Boolean harBlittYrkesaktivILøpetAvDeTreSisteFerdigliknedeÅrene;
     public TilknyttetPerson regnskapsfører;
     public TilknyttetPerson revisor;
     public Boolean hattVarigEndringAvNæringsinntektSiste4Kalenderår;
