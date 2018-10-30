@@ -14,6 +14,7 @@ import org.springframework.core.annotation.Order;
 import org.springframework.stereotype.Component;
 import org.springframework.web.filter.GenericFilterBean;
 
+import no.nav.foreldrepenger.selvbetjening.felles.util.EnvUtil;
 import no.nav.foreldrepenger.selvbetjening.felles.util.FnrExtractor;
 import no.nav.foreldrepenger.selvbetjening.felles.util.UUIDCallIdGenerator;
 import no.nav.security.oidc.context.OIDCRequestContextHolder;
@@ -35,7 +36,9 @@ public class CallIdAndUserIdFilter extends GenericFilterBean {
     @Override
     public void doFilter(ServletRequest request, ServletResponse response, FilterChain chain)
             throws IOException, ServletException {
-        MDC.put("Nav-UserId", FnrExtractor.extract(contextHolder));
+        if (EnvUtil.isDevOrPreprod(getEnvironment())) {
+            MDC.put("Nav-UserId", FnrExtractor.extract(contextHolder));
+        }
         getOrCreateCallId(request);
         chain.doFilter(request, response);
     }
