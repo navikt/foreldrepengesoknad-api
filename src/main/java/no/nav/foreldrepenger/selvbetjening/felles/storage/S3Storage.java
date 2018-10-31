@@ -97,7 +97,7 @@ public class S3Storage implements Storage {
                     .lines()
                     .collect(joining("\n"));
         } catch (AmazonS3Exception ex) {
-            LOG.warn("Unable to retrieve " + path + ", it probably doesn't exist");
+            LOG.trace("Unable to retrieve " + path + ", it probably doesn't exist");
             return null;
         }
 
