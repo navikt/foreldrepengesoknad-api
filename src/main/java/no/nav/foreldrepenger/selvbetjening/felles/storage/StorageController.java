@@ -45,7 +45,7 @@ public class StorageController {
     public ResponseEntity<String> getSoknad() {
         String fnr = FnrExtractor.extract(contextHolder);
         String directory = crypto.encryptDirectoryName(fnr);
-        log.info("Retrieving søknad from directory " + directory);
+        log.trace("Retrieving søknad from directory " + directory);
         Optional<String> encryptedValue = storage.getTmp(directory, KEY);
         return encryptedValue
                 .map(ev -> ResponseEntity.ok().body(crypto.decrypt(ev, fnr)))
@@ -56,7 +56,7 @@ public class StorageController {
     public ResponseEntity<String> storeSoknad(@RequestBody String soknad) {
         String fnr = FnrExtractor.extract(contextHolder);
         String directory = crypto.encryptDirectoryName(fnr);
-        log.info("Writing søknad to directory " + directory);
+        log.trace("Writing søknad to directory " + directory);
         String encryptedValue = crypto.encrypt(soknad, fnr);
         storage.putTmp(directory, KEY, encryptedValue);
         return ResponseEntity.noContent().build();
@@ -66,7 +66,7 @@ public class StorageController {
     public ResponseEntity<String> deleteSoknad() {
         String fnr = FnrExtractor.extract(contextHolder);
         String directory = crypto.encryptDirectoryName(fnr);
-        log.info("Deleting søknad from directory " + directory);
+        log.trace("Deleting søknad from directory " + directory);
         storage.deleteTmp(directory, KEY);
         return ResponseEntity.noContent().build();
     }
@@ -75,7 +75,7 @@ public class StorageController {
     public ResponseEntity<byte[]> getAttachment(@PathVariable("key") String key) {
         String fnr = FnrExtractor.extract(contextHolder);
         String directory = crypto.encryptDirectoryName(fnr);
-        log.info("Retrieving attachment from directory " + directory);
+        log.trace("Retrieving attachment from directory " + directory);
         return storage.getTmp(directory, key)
                 .map(ev -> Attachment.fromJson(crypto.decrypt(ev, fnr)).asOKHTTPEntity())
                 .orElse(ResponseEntity.notFound().build());
@@ -86,7 +86,7 @@ public class StorageController {
         Attachment attachment = Attachment.of(attachmentMultipartFile);
         String fnr = FnrExtractor.extract(contextHolder);
         String directory = crypto.encryptDirectoryName(fnr);
-        log.info("Writing attachment to directory " + directory);
+        log.trace("Writing attachment to directory " + directory);
         String encryptedValue = crypto.encrypt(attachment.toJson(), fnr);
         storage.putTmp(directory, attachment.uuid, encryptedValue);
         return ResponseEntity.created(attachment.uri()).build();
@@ -97,7 +97,7 @@ public class StorageController {
     public ResponseEntity<String> deleteAttachment(@PathVariable("key") String key) {
         String fnr = FnrExtractor.extract(contextHolder);
         String directory = crypto.encryptDirectoryName(fnr);
-        log.info("Deleting attachment from directory " + directory);
+        log.trace("Deleting attachment from directory " + directory);
         storage.deleteTmp(directory, key);
         return ResponseEntity.noContent().build();
     }

@@ -12,6 +12,7 @@ public class UttaksplanPeriode {
     public Boolean ønskerSamtidigUttak;
     public Boolean gradert;
     public String morsAktivitetIPerioden;
+    public Boolean ønskerFlerbarnsdager;
 
     public Tidsperiode tidsperiode;
     public String forelder;
@@ -19,19 +20,11 @@ public class UttaksplanPeriode {
 
     @Override
     public String toString() {
-        return "UttaksplanPeriode{" +
-                "type='" + type + '\'' +
-                ", årsak='" + årsak + '\'' +
-                ", konto='" + konto + '\'' +
-                ", orgnr='" + orgnr + '\'' +
-                ", erArbeidstaker=" + erArbeidstaker +
-                ", stillingsprosent='" + stillingsprosent + '\'' +
-                ", ønskerSamtidigUttak=" + ønskerSamtidigUttak +
-                ", gradert=" + gradert +
-                ", morsAktivitetIPerioden='" + morsAktivitetIPerioden + '\'' +
-                ", tidsperiode=" + tidsperiode +
-                ", forelder='" + forelder + '\'' +
-                ", vedlegg=" + vedlegg +
-                '}';
+        return "UttaksplanPeriode{" + "type='" + type + '\'' + ", årsak='" + årsak + '\'' + ", konto='" + konto + '\''
+                + ", orgnr='" + orgnr + '\'' + ", erArbeidstaker=" + erArbeidstaker + ", stillingsprosent='"
+                + stillingsprosent + '\'' + ", ønskerSamtidigUttak=" + ønskerSamtidigUttak + ", ønskerFlerbarnsdager="
+                + ønskerFlerbarnsdager + ", gradert=" + gradert + ", morsAktivitetIPerioden='" + morsAktivitetIPerioden
+                + '\'' + ", tidsperiode=" + tidsperiode + ", forelder='" + forelder + '\'' + ", vedlegg=" + vedlegg
+                + '}';
     }
 }

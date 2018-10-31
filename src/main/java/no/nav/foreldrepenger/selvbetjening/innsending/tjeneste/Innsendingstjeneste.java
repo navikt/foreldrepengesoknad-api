@@ -70,6 +70,7 @@ public class Innsendingstjeneste implements Innsending {
 
     @Override
     public ResponseEntity<Kvittering> sendInn(Søknad søknad) {
+        LOG.info("Sender inn søknad av type {}", søknad.type);
         LOG.trace("Poster søknad {} til {}", søknad, mottakServiceSøknadUrl);
         søknad.opprettet = now();
         return post(søknad);
@@ -113,6 +114,7 @@ public class Innsendingstjeneste implements Innsending {
 
     @Override
     public ResponseEntity<Kvittering> sendInn(Ettersending ettersending) {
+        LOG.info("Sender inn ettersending på sak {}", ettersending.saksnummer);
         LOG.trace("Poster ettersending {} til {}", ettersending, mottakServiceEttersendingUrl);
         return post(ettersending);
     }

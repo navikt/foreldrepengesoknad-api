@@ -37,6 +37,7 @@ public class FordelingDto {
         public Boolean arbeidsForholdSomskalGraderes;
         public String morsAktivitetsType;
         public List<String> vedlegg;
+        public Boolean ønskerFlerbarnsdager;
 
         public FordelingPeriodeDto(UttaksplanPeriode u) {
             if (u.gradert != null) {
@@ -45,6 +46,7 @@ public class FordelingDto {
             } else {
                 this.type = u.type;
             }
+            this.ønskerFlerbarnsdager = u.ønskerFlerbarnsdager;
             this.uttaksperiodeType = u.konto;
             this.fom = u.tidsperiode.fom;
             this.tom = u.tidsperiode.tom;

@@ -43,14 +43,14 @@ public class Oppslagstjeneste implements Oppslag {
     @Override
     public PersonDto hentPerson() {
         URI uri = fromUri(oppslagServiceUrl).path("/person").build().toUri();
-        LOG.info("Person URI: {}", uri);
+        LOG.trace("Person URI: {}", uri);
         return template.getForObject(uri, PersonDto.class);
     }
 
     @Override
     public SøkerinfoDto hentSøkerinfo() {
         URI uri = fromUri(oppslagServiceUrl).path("/oppslag").build().toUri();
-        LOG.info("Oppslag URI: {}", uri);
+        LOG.trace("Oppslag URI: {}", uri);
         return template.getForObject(uri, SøkerinfoDto.class);
     }
 
