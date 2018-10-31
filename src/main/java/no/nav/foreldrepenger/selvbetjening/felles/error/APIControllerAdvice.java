@@ -40,7 +40,7 @@ public class APIControllerAdvice extends ResponseEntityExceptionHandler {
     @ExceptionHandler(HttpClientErrorException.class)
     public ResponseEntity<Object> handleHttpClientException(HttpClientErrorException e, WebRequest request) {
         if (e.getStatusCode() == NOT_FOUND) {
-            return logAndHandle(NOT_FOUND, e, request);
+            return warnAndHandle(NOT_FOUND, e, request);
         }
         throw e;
     }
@@ -48,47 +48,59 @@ public class APIControllerAdvice extends ResponseEntityExceptionHandler {
     @ExceptionHandler(AttachmentsTooLargeException.class)
     @ResponseBody
     protected ResponseEntity<Object> handleTooLargeAttachmentsError(AttachmentsTooLargeException e, WebRequest req) {
-        return logAndHandle(PAYLOAD_TOO_LARGE, e, req);
+        return warnAndHandle(PAYLOAD_TOO_LARGE, e, req);
     }
 
     @ExceptionHandler(AttachmentTypeUnsupportedException.class)
     @ResponseBody
-    protected ResponseEntity<Object> handleUnsupportedAttachmentError(AttachmentTypeUnsupportedException e, WebRequest req) {
-        return logAndHandle(UNPROCESSABLE_ENTITY, e, req);
+    protected ResponseEntity<Object> handleUnsupportedAttachmentError(AttachmentTypeUnsupportedException e,
+            WebRequest req) {
+        return warnAndHandle(UNPROCESSABLE_ENTITY, e, req);
     }
 
     @ExceptionHandler(AttachmentConversionException.class)
     @ResponseBody
     protected ResponseEntity<Object> handleAttachmentConversionError(AttachmentConversionException e, WebRequest req) {
-        return logAndHandle(INTERNAL_SERVER_ERROR, e, req);
+        return warnAndHandle(INTERNAL_SERVER_ERROR, e, req);
     }
 
     @Override
-    protected ResponseEntity<Object> handleMethodArgumentNotValid(MethodArgumentNotValidException e, HttpHeaders headers, HttpStatus status, WebRequest req) {
-        return logAndHandle(UNPROCESSABLE_ENTITY, e, req, validationErrors(e));
+    protected ResponseEntity<Object> handleMethodArgumentNotValid(MethodArgumentNotValidException e,
+            HttpHeaders headers, HttpStatus status, WebRequest req) {
+        return warnAndHandle(UNPROCESSABLE_ENTITY, e, req, validationErrors(e));
     }
 
     @ExceptionHandler({ OIDCUnauthorizedException.class })
     public ResponseEntity<Object> handleUnauthorized(OIDCUnauthorizedException e, WebRequest req) {
-        return logAndHandle(UNAUTHORIZED, e, req);
+        return traceAndHandle(UNAUTHORIZED, e, req);
     }
 
     @ExceptionHandler(BadRequestException.class)
     public ResponseEntity<Object> handleBadRequest(BadRequestException e, WebRequest req) {
-        return logAndHandle(BAD_REQUEST, e, req);
+        return warnAndHandle(BAD_REQUEST, e, req);
     }
 
     @ExceptionHandler({ Exception.class })
     public ResponseEntity<Object> handleAll(Exception e, WebRequest req) {
-        return logAndHandle(INTERNAL_SERVER_ERROR, e, req);
+        return warnAndHandle(INTERNAL_SERVER_ERROR, e, req);
     }
 
-
-    private ResponseEntity<Object> logAndHandle(HttpStatus status, Exception e, WebRequest req) {
-        return logAndHandle(status, e, req, Collections.singletonList(e.getMessage()));
+    private ResponseEntity<Object> warnAndHandle(HttpStatus status, Exception e, WebRequest req) {
+        return warnAndHandle(status, e, req, Collections.singletonList(e.getMessage()));
     }
 
-    private ResponseEntity<Object> logAndHandle(HttpStatus status, Exception e, WebRequest req, List<String> messages) {
+    private ResponseEntity<Object> traceAndHandle(HttpStatus status, Exception e, WebRequest req) {
+        return traceAndHandle(status, e, req, Collections.singletonList(e.getMessage()));
+    }
+
+    private ResponseEntity<Object> traceAndHandle(HttpStatus status, Exception e, WebRequest req,
+            List<String> messages) {
+        LOG.trace("{}", messages, e);
+        return handleExceptionInternal(e, new ApiError(status, e, messages), new HttpHeaders(), status, req);
+    }
+
+    private ResponseEntity<Object> warnAndHandle(HttpStatus status, Exception e, WebRequest req,
+            List<String> messages) {
         LOG.warn("{}", messages, e);
         return handleExceptionInternal(e, new ApiError(status, e, messages), new HttpHeaders(), status, req);
     }
