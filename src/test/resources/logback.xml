@@ -6,8 +6,10 @@
         </encoder>
     </appender>
 
-   
+    <!-- Turn off Spring's warning logs for already resolved exceptions -->
+    <logger name="org.springframework.web.servlet.mvc.method.annotation.ExceptionHandlerExceptionResolver" level="ERROR" />
+
     <root level="INFO">
-        <appender-ref ref="consoleAppender" />
+        <appender-ref ref="consoleAppender"/>
     </root>
 </configuration>
