@@ -21,7 +21,6 @@ public class SøknadDto {
         VedleggDto vedleggDto = new VedleggDto();
         vedleggDto.type = "påkrevd";
         vedleggDto.metadata.id = vedlegg.id;
-        vedleggDto.metadata.beskrivelse = vedlegg.type;
         vedleggDto.metadata.dokumentType = vedlegg.skjemanummer;
         vedleggDto.metadata.innsendingsType = vedlegg.innsendingsType;
         vedleggDto.vedlegg = vedlegg.content;
