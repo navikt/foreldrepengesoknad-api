@@ -29,6 +29,14 @@
     </properties>
     <dependencies>
         <dependency>
+            <groupId>org.springframework.boot</groupId>
+            <artifactId>spring-boot-starter-cache</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>com.github.ben-manes.caffeine</groupId>
+            <artifactId>caffeine</artifactId>
+        </dependency>
+        <dependency>
             <groupId>com.neovisionaries</groupId>
             <artifactId>nv-i18n</artifactId>
             <version>1.22</version>
@@ -133,7 +141,7 @@
             </exclusions>
             <scope>test</scope>
         </dependency>
-       <dependency>
+        <dependency>
             <groupId>no.nav.security</groupId>
             <artifactId>oidc-spring-support</artifactId>
             <version>${oidc-spring-support.version}</version>
@@ -187,7 +195,8 @@
                     <plugin>
                         <artifactId>maven-surefire-plugin</artifactId>
                         <configuration>
-                            <groups>no.nav.foreldrepenger.selvbetjening.FastTests, no.nav.foreldrepenger.selvbetjening.SlowTests</groups>
+                            <groups>no.nav.foreldrepenger.selvbetjening.FastTests,
+                                no.nav.foreldrepenger.selvbetjening.SlowTests</groups>
                         </configuration>
                     </plugin>
                 </plugins>

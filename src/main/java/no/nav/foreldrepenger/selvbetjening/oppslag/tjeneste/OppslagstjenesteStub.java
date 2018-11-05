@@ -12,6 +12,7 @@ import java.util.List;
 
 import org.slf4j.Logger;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnProperty;
+import org.springframework.cache.annotation.Cacheable;
 import org.springframework.stereotype.Service;
 
 import no.nav.foreldrepenger.selvbetjening.oppslag.json.AnnenForelder;
@@ -76,8 +77,14 @@ public class OppslagstjenesteStub implements Oppslag {
     public List<Sak> hentSaker() {
         Behandling behandling = new Behandling("abc", "UTRED", "FP", "FORP_FODS", null, "4833", "NAV Torrevieja");
         return Arrays.asList(
-                new Sak("sak123","UBEH", now(), emptyList()),
+                new Sak("sak123", "UBEH", now(), emptyList()),
                 new Sak("42", "LOP", now(), singletonList(behandling)));
+    }
+
+    @Override
+    @Cacheable(cacheNames = "aktoer")
+    public String hentAktørId(String fnr) {
+        return "1234567890";
     }
 
 }

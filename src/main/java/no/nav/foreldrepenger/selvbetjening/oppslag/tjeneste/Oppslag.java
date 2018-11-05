@@ -14,4 +14,6 @@ public interface Oppslag {
 
     List<Sak> hentSaker();
 
+    String hentAktørId(String fnr);
+
 }

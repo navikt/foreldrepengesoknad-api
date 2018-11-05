@@ -20,12 +20,11 @@ import org.springframework.web.bind.annotation.RequestPart;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.multipart.MultipartFile;
 
-import no.nav.foreldrepenger.selvbetjening.felles.util.FnrExtractor;
+import no.nav.foreldrepenger.selvbetjening.felles.util.TokenHandler;
 import no.nav.security.oidc.api.ProtectedWithClaims;
-import no.nav.security.oidc.context.OIDCRequestContextHolder;
 
 @RestController
-@ProtectedWithClaims(issuer = "selvbetjening", claimMap = {"acr=Level4"})
+@ProtectedWithClaims(issuer = "selvbetjening", claimMap = { "acr=Level4" })
 @RequestMapping("/rest/storage")
 public class StorageController {
 
@@ -33,7 +32,7 @@ public class StorageController {
     private static final String KEY = "soknad";
 
     @Inject
-    private OIDCRequestContextHolder contextHolder;
+    private TokenHandler tokenHandler;
 
     @Inject
     private Storage storage;
@@ -43,7 +42,7 @@ public class StorageController {
 
     @GetMapping
     public ResponseEntity<String> getSoknad() {
-        String fnr = FnrExtractor.extract(contextHolder);
+        String fnr = tokenHandler.autentisertBruker();
         String directory = crypto.encryptDirectoryName(fnr);
         log.trace("Retrieving søknad from directory " + directory);
         Optional<String> encryptedValue = storage.getTmp(directory, KEY);
@@ -54,7 +53,7 @@ public class StorageController {
 
     @PostMapping(consumes = APPLICATION_JSON_VALUE)
     public ResponseEntity<String> storeSoknad(@RequestBody String soknad) {
-        String fnr = FnrExtractor.extract(contextHolder);
+        String fnr = tokenHandler.autentisertBruker();
         String directory = crypto.encryptDirectoryName(fnr);
         log.trace("Writing søknad to directory " + directory);
         String encryptedValue = crypto.encrypt(soknad, fnr);
@@ -64,7 +63,7 @@ public class StorageController {
 
     @DeleteMapping
     public ResponseEntity<String> deleteSoknad() {
-        String fnr = FnrExtractor.extract(contextHolder);
+        String fnr = tokenHandler.autentisertBruker();
         String directory = crypto.encryptDirectoryName(fnr);
         log.trace("Deleting søknad from directory " + directory);
         storage.deleteTmp(directory, KEY);
@@ -73,7 +72,7 @@ public class StorageController {
 
     @GetMapping(path = "vedlegg/{key}")
     public ResponseEntity<byte[]> getAttachment(@PathVariable("key") String key) {
-        String fnr = FnrExtractor.extract(contextHolder);
+        String fnr = tokenHandler.autentisertBruker();
         String directory = crypto.encryptDirectoryName(fnr);
         log.trace("Retrieving attachment from directory " + directory);
         return storage.getTmp(directory, key)
@@ -84,7 +83,7 @@ public class StorageController {
     @PostMapping(path = "/vedlegg", consumes = MULTIPART_FORM_DATA_VALUE)
     public ResponseEntity<String> storeAttachment(@RequestPart("vedlegg") MultipartFile attachmentMultipartFile) {
         Attachment attachment = Attachment.of(attachmentMultipartFile);
-        String fnr = FnrExtractor.extract(contextHolder);
+        String fnr = tokenHandler.autentisertBruker();
         String directory = crypto.encryptDirectoryName(fnr);
         log.trace("Writing attachment to directory " + directory);
         String encryptedValue = crypto.encrypt(attachment.toJson(), fnr);
@@ -92,10 +91,9 @@ public class StorageController {
         return ResponseEntity.created(attachment.uri()).build();
     }
 
-
     @DeleteMapping(path = "vedlegg/{key}")
     public ResponseEntity<String> deleteAttachment(@PathVariable("key") String key) {
-        String fnr = FnrExtractor.extract(contextHolder);
+        String fnr = tokenHandler.autentisertBruker();
         String directory = crypto.encryptDirectoryName(fnr);
         log.trace("Deleting attachment from directory " + directory);
         storage.deleteTmp(directory, key);

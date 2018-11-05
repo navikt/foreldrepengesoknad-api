@@ -20,14 +20,13 @@ import org.springframework.web.client.RestTemplate;
 import no.nav.foreldrepenger.selvbetjening.felles.attachments.exceptions.AttachmentsTooLargeException;
 import no.nav.foreldrepenger.selvbetjening.felles.storage.Storage;
 import no.nav.foreldrepenger.selvbetjening.felles.storage.StorageCrypto;
-import no.nav.foreldrepenger.selvbetjening.felles.util.FnrExtractor;
+import no.nav.foreldrepenger.selvbetjening.felles.util.TokenHandler;
 import no.nav.foreldrepenger.selvbetjening.innsending.json.Ettersending;
 import no.nav.foreldrepenger.selvbetjening.innsending.json.Kvittering;
 import no.nav.foreldrepenger.selvbetjening.innsending.json.Søknad;
 import no.nav.foreldrepenger.selvbetjening.innsending.json.Vedlegg;
 import no.nav.foreldrepenger.selvbetjening.innsending.tjeneste.Innsending;
 import no.nav.security.oidc.api.ProtectedWithClaims;
-import no.nav.security.oidc.context.OIDCRequestContextHolder;
 
 @RestController
 @ProtectedWithClaims(issuer = "selvbetjening", claimMap = { "acr=Level4" })
@@ -47,7 +46,7 @@ public class InnsendingController {
     public RestTemplate http;
 
     @Inject
-    private OIDCRequestContextHolder contextHolder;
+    private TokenHandler tokenHandler;
 
     @Inject
     private Storage storage;
@@ -66,7 +65,7 @@ public class InnsendingController {
         søknad.vedlegg.forEach(this::fetchAttachment);
         checkVedleggTooLarge(søknad.vedlegg);
         ResponseEntity<Kvittering> respons = innsending.sendInn(søknad);
-        deleteFromTempStorage(FnrExtractor.extract(contextHolder), søknad);
+        deleteFromTempStorage(tokenHandler.autentisertBruker(), søknad);
         return respons;
     }
 
