@@ -15,6 +15,7 @@ import org.springframework.boot.autoconfigure.condition.ConditionalOnProperty;
 import org.springframework.cache.annotation.Cacheable;
 import org.springframework.stereotype.Service;
 
+import no.nav.foreldrepenger.selvbetjening.oppslag.json.AktørId;
 import no.nav.foreldrepenger.selvbetjening.oppslag.json.AnnenForelder;
 import no.nav.foreldrepenger.selvbetjening.oppslag.json.Arbeidsforhold;
 import no.nav.foreldrepenger.selvbetjening.oppslag.json.Bankkonto;
@@ -83,8 +84,7 @@ public class OppslagstjenesteStub implements Oppslag {
 
     @Override
     @Cacheable(cacheNames = "aktoer")
-    public String hentAktørId(String fnr) {
-        return "1234567890";
+    public AktørId hentAktørId(String fnr) {
+        return new AktørId("1234567890");
     }
-
 }

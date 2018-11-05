@@ -19,6 +19,7 @@ import org.springframework.http.HttpHeaders;
 import org.springframework.stereotype.Service;
 import org.springframework.web.client.RestTemplate;
 
+import no.nav.foreldrepenger.selvbetjening.oppslag.json.AktørId;
 import no.nav.foreldrepenger.selvbetjening.oppslag.json.Sak;
 import no.nav.foreldrepenger.selvbetjening.oppslag.tjeneste.json.PersonDto;
 import no.nav.foreldrepenger.selvbetjening.oppslag.tjeneste.json.SøkerinfoDto;
@@ -81,14 +82,14 @@ public class Oppslagstjeneste implements Oppslag {
 
     @Override
     @Cacheable(cacheNames = "aktoer")
-    public String hentAktørId(String fnr) {
+    public AktørId hentAktørId(String fnr) {
         LOG.info("Henter aktørId");
         URI uri = fromUri(oppslagServiceUrl)
                 .path("/oppslag/aktorfnr")
                 .queryParams(queryParams("fnr", fnr))
                 .build()
                 .toUri();
-        String aktørId = template.getForObject(uri, String.class);
+        AktørId aktørId = template.getForObject(uri, AktørId.class);
         LOG.trace("Fikk aktørid " + aktørId);
         return aktørId;
     }

@@ -20,6 +20,7 @@ import org.springframework.stereotype.Component;
 import org.springframework.web.filter.GenericFilterBean;
 
 import no.nav.foreldrepenger.selvbetjening.felles.util.TokenHandler;
+import no.nav.foreldrepenger.selvbetjening.oppslag.json.AktørId;
 import no.nav.foreldrepenger.selvbetjening.oppslag.tjeneste.Oppslag;
 
 @Order(HIGHEST_PRECEDENCE)
@@ -53,9 +54,9 @@ public class IDToMDCFilterBean extends GenericFilterBean {
             if (isDevOrPreprod(getEnvironment())) {
                 MDC.put(NAV_USER_ID, fnr);
             }
-            String id = oppslag.hentAktørId(fnr);
+            AktørId id = oppslag.hentAktørId(fnr);
             LOG.trace("ID er {}", id);
-            MDC.put(NAV_AKTØR_ID, id);
+            MDC.put(NAV_AKTØR_ID, id.getAktør());
         } catch (Exception e) {
             LOG.trace("Noe gikk feil, MDC-verdier er inkomplette", e);
         }
