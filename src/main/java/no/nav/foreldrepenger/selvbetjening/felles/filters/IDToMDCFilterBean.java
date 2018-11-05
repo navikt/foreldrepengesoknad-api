@@ -40,7 +40,11 @@ public class IDToMDCFilterBean extends GenericFilterBean {
     public void doFilter(ServletRequest req, ServletResponse res, FilterChain chain)
             throws IOException, ServletException {
         if (handler.erAutentisert()) {
+            LOG.trace("Kopierer heder verdier hvis satt");
             copyHeadersToMDC();
+        }
+        else {
+            LOG.trace("Ikke autentisert, ingenting å sette");
         }
         chain.doFilter(req, res);
     }
