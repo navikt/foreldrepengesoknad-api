@@ -88,7 +88,9 @@ public class Oppslagstjeneste implements Oppslag {
                 .queryParams(queryParams("fnr", fnr))
                 .build()
                 .toUri();
-        return template.getForObject(uri, String.class);
+        String aktørId = template.getForObject(uri, String.class);
+        LOG.trace("Fikk aktørid " + aktørId);
+        return aktørId;
     }
 
     protected static HttpHeaders queryParams(String key, String value) {

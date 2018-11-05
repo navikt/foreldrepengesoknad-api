@@ -40,23 +40,24 @@ public class IDToMDCFilterBean extends GenericFilterBean {
     public void doFilter(ServletRequest req, ServletResponse res, FilterChain chain)
             throws IOException, ServletException {
         if (handler.erAutentisert()) {
-            LOG.trace("Kopierer heder verdier hvis satt");
             copyHeadersToMDC();
         }
         else {
-            LOG.trace("Ikke autentisert, ingenting å sette");
         }
         chain.doFilter(req, res);
     }
 
     private void copyHeadersToMDC() {
         try {
+            String fnr = handler.getSubject();
             if (isDevOrPreprod(getEnvironment())) {
-                MDC.put(NAV_USER_ID, handler.getSubject());
+                MDC.put(NAV_USER_ID, fnr);
             }
-            MDC.put(NAV_AKTØR_ID, oppslag.hentAktørId(handler.getSubject()));
+            String id = oppslag.hentAktørId(fnr);
+            LOG.trace("ID er {}", id);
+            MDC.put(NAV_AKTØR_ID, id);
         } catch (Exception e) {
-            LOG.warn("Noe gikk feil, MDC-verdier er inkomplette", e);
+            LOG.trace("Noe gikk feil, MDC-verdier er inkomplette", e);
         }
     }
 
