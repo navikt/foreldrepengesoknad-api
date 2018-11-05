@@ -54,9 +54,7 @@ public class IDToMDCFilterBean extends GenericFilterBean {
             if (isDevOrPreprod(getEnvironment())) {
                 MDC.put(NAV_USER_ID, fnr);
             }
-            AktørId id = oppslag.hentAktørId(fnr);
-            LOG.trace("ID er {}", id);
-            MDC.put(NAV_AKTØR_ID, id.getAktør());
+            MDC.put(NAV_AKTØR_ID, oppslag.hentAktørId(fnr).getAktør());
         } catch (Exception e) {
             LOG.trace("Noe gikk feil, MDC-verdier er inkomplette", e);
         }
