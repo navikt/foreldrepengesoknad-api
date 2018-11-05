@@ -75,7 +75,7 @@ public class Oppslagstjeneste implements Oppslag {
 
         // LOG.info("Henter {} saker fra fpsak og {} saker fra Sak", fpsakSaker.size(),
         // sakSaker.size());
-        LOG.info("Henter {} saker fra Sak", sakSaker.size());
+        LOG.info("Henter {} sak(er) fra Sak", sakSaker.size());
 
         return saker;
     }

@@ -10,6 +10,7 @@ import java.util.List;
 
 import javax.imageio.ImageIO;
 
+import no.nav.foreldrepenger.selvbetjening.felles.attachments.exceptions.AttachmentsTooLargeException;
 import org.apache.pdfbox.pdmodel.PDDocument;
 import org.apache.pdfbox.pdmodel.PDPage;
 import org.apache.pdfbox.pdmodel.common.PDRectangle;
@@ -27,6 +28,7 @@ public class DefaultPDF2ImageConverter implements PDF2ImageConverter {
 
     private static final int DPI = 300;
     private static final int FIRST_PAGE = 0;
+    private static final int MAX_PDF_PAGE_PIXELS = 25000000;
 
     @Override
     public List<byte[]> convertToImages(List<byte[]> pdfPages) {
@@ -66,6 +68,11 @@ public class DefaultPDF2ImageConverter implements PDF2ImageConverter {
         int widthPx = Math.round(widthPt * (DPI/72f));
         int heightPx = Math.round(heightPt * (DPI/72f));
         LOG.info("PDF page dimensions (pixels): {} x {}", widthPx, heightPx);
+
+        if (widthPx * heightPx > MAX_PDF_PAGE_PIXELS) {
+            LOG.warn("PDF har for stor dimensjon: {} x {}", widthPx, heightPx);
+            throw new AttachmentsTooLargeException("PDF har for stor dimensjon (høyde x bredde)");
+        }
     }
 
     private static byte[] toBytes(BufferedImage img) {
