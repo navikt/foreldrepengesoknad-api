@@ -84,7 +84,7 @@ public class Oppslagstjeneste implements Oppslag {
     public String hentAktørId(String fnr) {
         LOG.info("Henter aktørId");
         URI uri = fromUri(oppslagServiceUrl)
-                .path("/aktorfnr")
+                .path("/oppslag/aktorfnr")
                 .queryParams(queryParams("fnr", fnr))
                 .build()
                 .toUri();
