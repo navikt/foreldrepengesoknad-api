@@ -111,7 +111,7 @@ public class OpptjeningDto {
         public List<String> virksomhetsTyper = new ArrayList<>();
         public String arbeidsland;
         public List<RegnskapsførerDto> regnskapsførere = new ArrayList<>();
-        public int næringsinntektBrutto;
+        public Integer næringsinntektBrutto;
         public Boolean erNyOpprettet;
         public Boolean erNyIArbeidslivet;
         public Boolean nærRelasjon;
