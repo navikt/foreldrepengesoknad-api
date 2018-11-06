@@ -24,12 +24,10 @@
 
     <springProfile name="dev,preprod">
         <logger name="no.nav.foreldrepenger.selvbetjening" level="trace"/>
-        <logger name="org.springframework.web.client" level="trace"/>
     </springProfile>
 
     <!-- Turn off Spring's warning logs for already resolved exceptions -->
     <logger name="org.springframework.web.servlet.mvc.method.annotation.ExceptionHandlerExceptionResolver" level="ERROR" />
-
     <root level="info">
         <appender-ref ref="stdout"/>
     </root>

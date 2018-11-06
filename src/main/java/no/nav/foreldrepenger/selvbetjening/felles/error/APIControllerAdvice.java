@@ -30,6 +30,7 @@ import org.springframework.web.servlet.mvc.method.annotation.ResponseEntityExcep
 import no.nav.foreldrepenger.selvbetjening.felles.attachments.exceptions.AttachmentConversionException;
 import no.nav.foreldrepenger.selvbetjening.felles.attachments.exceptions.AttachmentTypeUnsupportedException;
 import no.nav.foreldrepenger.selvbetjening.felles.attachments.exceptions.AttachmentsTooLargeException;
+import no.nav.security.oidc.exceptions.OIDCTokenValidatorException;
 import no.nav.security.spring.oidc.validation.interceptor.OIDCUnauthorizedException;
 
 @ControllerAdvice
@@ -73,6 +74,11 @@ public class APIControllerAdvice extends ResponseEntityExceptionHandler {
     @ExceptionHandler({ OIDCUnauthorizedException.class })
     public ResponseEntity<Object> handleUnauthorized(OIDCUnauthorizedException e, WebRequest req) {
         return traceAndHandle(UNAUTHORIZED, e, req);
+    }
+
+    @ExceptionHandler({ OIDCTokenValidatorException.class })
+    public ResponseEntity<Object> handeExpiredToken(OIDCTokenValidatorException e, WebRequest req) {
+        return warnAndHandle(UNAUTHORIZED, e, req);
     }
 
     @ExceptionHandler(BadRequestException.class)
