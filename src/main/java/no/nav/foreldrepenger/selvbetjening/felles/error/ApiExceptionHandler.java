@@ -23,8 +23,10 @@ import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.bind.annotation.ControllerAdvice;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.ResponseBody;
+import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.client.HttpClientErrorException;
 import org.springframework.web.context.request.WebRequest;
+import org.springframework.web.multipart.MultipartException;
 import org.springframework.web.servlet.mvc.method.annotation.ResponseEntityExceptionHandler;
 
 import no.nav.foreldrepenger.selvbetjening.felles.attachments.exceptions.AttachmentConversionException;
@@ -34,10 +36,11 @@ import no.nav.security.oidc.exceptions.OIDCTokenValidatorException;
 import no.nav.security.spring.oidc.validation.interceptor.OIDCUnauthorizedException;
 
 @ControllerAdvice
-public class APIControllerAdvice extends ResponseEntityExceptionHandler {
+public class ApiExceptionHandler extends ResponseEntityExceptionHandler {
 
-    private static final Logger LOG = LoggerFactory.getLogger(APIControllerAdvice.class);
+    private static final Logger LOG = LoggerFactory.getLogger(ApiExceptionHandler.class);
 
+    @ResponseBody
     @ExceptionHandler(HttpClientErrorException.class)
     public ResponseEntity<Object> handleHttpClientException(HttpClientErrorException e, WebRequest request) {
         if (e.getStatusCode() == NOT_FOUND) {
@@ -46,47 +49,57 @@ public class APIControllerAdvice extends ResponseEntityExceptionHandler {
         throw e;
     }
 
-    @ExceptionHandler(AttachmentsTooLargeException.class)
     @ResponseBody
+    @ExceptionHandler(AttachmentsTooLargeException.class)
     protected ResponseEntity<Object> handleTooLargeAttachmentsError(AttachmentsTooLargeException e, WebRequest req) {
         return warnAndHandle(PAYLOAD_TOO_LARGE, e, req);
     }
 
-    @ExceptionHandler(AttachmentTypeUnsupportedException.class)
     @ResponseBody
-    protected ResponseEntity<Object> handleUnsupportedAttachmentError(AttachmentTypeUnsupportedException e,
-            WebRequest req) {
+    @ExceptionHandler(AttachmentTypeUnsupportedException.class)
+    protected ResponseEntity<Object> handleUnsupportedAttachmentError(AttachmentTypeUnsupportedException e, WebRequest req) {
         return warnAndHandle(UNPROCESSABLE_ENTITY, e, req);
     }
 
-    @ExceptionHandler(AttachmentConversionException.class)
     @ResponseBody
+    @ExceptionHandler(AttachmentConversionException.class)
     protected ResponseEntity<Object> handleAttachmentConversionError(AttachmentConversionException e, WebRequest req) {
         return warnAndHandle(INTERNAL_SERVER_ERROR, e, req);
     }
 
+    @ResponseBody
+    @ExceptionHandler(MultipartException.class)
+    @ResponseStatus(PAYLOAD_TOO_LARGE)
+    public ResponseEntity<Object> handleMultipartError(MultipartException e, WebRequest req) {
+        return warnAndHandle(PAYLOAD_TOO_LARGE, e, req);
+    }
+
     @Override
-    protected ResponseEntity<Object> handleMethodArgumentNotValid(MethodArgumentNotValidException e,
-            HttpHeaders headers, HttpStatus status, WebRequest req) {
+    @ResponseBody
+    protected ResponseEntity<Object> handleMethodArgumentNotValid(MethodArgumentNotValidException e, HttpHeaders headers, HttpStatus status, WebRequest req) {
         return warnAndHandle(UNPROCESSABLE_ENTITY, e, req, validationErrors(e));
     }
 
-    @ExceptionHandler({ OIDCUnauthorizedException.class })
+    @ResponseBody
+    @ExceptionHandler(OIDCUnauthorizedException.class)
     public ResponseEntity<Object> handleUnauthorized(OIDCUnauthorizedException e, WebRequest req) {
         return traceAndHandle(UNAUTHORIZED, e, req);
     }
 
-    @ExceptionHandler({ OIDCTokenValidatorException.class })
+    @ResponseBody
+    @ExceptionHandler(OIDCTokenValidatorException.class)
     public ResponseEntity<Object> handeExpiredToken(OIDCTokenValidatorException e, WebRequest req) {
         return warnAndHandle(UNAUTHORIZED, e, req);
     }
 
+    @ResponseBody
     @ExceptionHandler(BadRequestException.class)
     public ResponseEntity<Object> handleBadRequest(BadRequestException e, WebRequest req) {
         return warnAndHandle(BAD_REQUEST, e, req);
     }
 
-    @ExceptionHandler({ Exception.class })
+    @ResponseBody
+    @ExceptionHandler(Exception.class)
     public ResponseEntity<Object> handleAll(Exception e, WebRequest req) {
         return warnAndHandle(INTERNAL_SERVER_ERROR, e, req);
     }
@@ -99,14 +112,12 @@ public class APIControllerAdvice extends ResponseEntityExceptionHandler {
         return traceAndHandle(status, e, req, Collections.singletonList(e.getMessage()));
     }
 
-    private ResponseEntity<Object> traceAndHandle(HttpStatus status, Exception e, WebRequest req,
-            List<String> messages) {
+    private ResponseEntity<Object> traceAndHandle(HttpStatus status, Exception e, WebRequest req, List<String> messages) {
         LOG.trace("{}", messages, e);
         return handleExceptionInternal(e, new ApiError(status, e, messages), new HttpHeaders(), status, req);
     }
 
-    private ResponseEntity<Object> warnAndHandle(HttpStatus status, Exception e, WebRequest req,
-            List<String> messages) {
+    private ResponseEntity<Object> warnAndHandle(HttpStatus status, Exception e, WebRequest req, List<String> messages) {
         LOG.warn("{}", messages, e);
         return handleExceptionInternal(e, new ApiError(status, e, messages), new HttpHeaders(), status, req);
     }
