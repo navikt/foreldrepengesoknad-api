@@ -1,6 +1,6 @@
 package no.nav.foreldrepenger.selvbetjening.felles.filters;
 
-import static com.google.common.collect.Lists.newArrayList;
+import static no.nav.foreldrepenger.selvbetjening.felles.filters.FilterRegistrationUtil.urlPatternsFor;
 
 import org.springframework.boot.web.servlet.FilterRegistrationBean;
 import org.springframework.stereotype.Component;
@@ -10,6 +10,6 @@ public class IDFilterRegistrationBean extends FilterRegistrationBean<IDToMDCFilt
 
     public IDFilterRegistrationBean(IDToMDCFilterBean idFilter) {
         setFilter(idFilter);
-        setUrlPatterns(newArrayList("/rest/*"));
+        setUrlPatterns(urlPatternsFor("/rest/*"));
     }
 }

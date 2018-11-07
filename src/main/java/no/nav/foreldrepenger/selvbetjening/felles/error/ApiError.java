@@ -6,6 +6,7 @@ import static com.fasterxml.jackson.annotation.JsonInclude.Include.NON_NULL;
 
 import java.time.LocalDateTime;
 import java.util.List;
+import java.util.stream.Collectors;
 
 import org.slf4j.MDC;
 import org.springframework.http.HttpStatus;
@@ -27,7 +28,7 @@ class ApiError {
     ApiError(HttpStatus status, Throwable t, List<String> messages) {
         this.timestamp = LocalDateTime.now();
         this.status = status;
-        this.messages = messages;
+        this.messages = messages.stream().filter(s -> s != null).collect(Collectors.toList());
         this.uuid = uuid();
     }
 

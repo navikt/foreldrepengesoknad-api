@@ -1,19 +1,20 @@
 package no.nav.foreldrepenger.selvbetjening.felles.util;
 
 import static no.nav.foreldrepenger.selvbetjening.felles.Constants.ISSUER;
-import static no.nav.security.oidc.OIDCConstants.OIDC_VALIDATION_CONTEXT;
 
 import java.util.Date;
 import java.util.Optional;
+import java.util.function.Supplier;
 
 import org.springframework.stereotype.Component;
 
 import com.nimbusds.jwt.JWTClaimsSet;
 
-import no.nav.foreldrepenger.selvbetjening.felles.error.ForbiddenException;
+import no.nav.foreldrepenger.selvbetjening.felles.error.UnauthenticatedException;
 import no.nav.security.oidc.context.OIDCClaims;
 import no.nav.security.oidc.context.OIDCRequestContextHolder;
 import no.nav.security.oidc.context.OIDCValidationContext;
+import no.nav.security.oidc.context.TokenContext;
 
 @Component
 public class TokenHandler {
@@ -30,24 +31,28 @@ public class TokenHandler {
 
     public Date getExp() {
         return Optional.ofNullable(claimSet())
-                .map(s -> s.getExpirationTime())
+                .map(JWTClaimsSet::getExpirationTime)
                 .orElse(null);
     }
 
     public String getSubject() {
         return Optional.ofNullable(claimSet())
-                .map(s -> s.getSubject())
+                .map(JWTClaimsSet::getSubject)
                 .orElse(null);
     }
 
     public String autentisertBruker() {
         return Optional.ofNullable(getSubject())
-                .orElseThrow(() -> new ForbiddenException("Fant ikke subject"));
+                .orElseThrow(unauthenticated("Fant ikke subject"));
+    }
+
+    private static Supplier<? extends UnauthenticatedException> unauthenticated(String msg) {
+        return () -> new UnauthenticatedException(msg);
     }
 
     private JWTClaimsSet claimSet() {
         return Optional.ofNullable(claims())
-                .map(s -> s.getClaimSet())
+                .map(OIDCClaims::getClaimSet)
                 .orElse(null);
     }
 
@@ -58,9 +63,16 @@ public class TokenHandler {
     }
 
     private OIDCValidationContext context() {
-        return Optional.ofNullable(ctxHolder.getRequestAttribute(OIDC_VALIDATION_CONTEXT))
-                .map(s -> OIDCValidationContext.class.cast(s))
+        return Optional.ofNullable(ctxHolder.getOIDCValidationContext())
                 .orElse(null);
+    }
+
+    public String getToken() {
+        return Optional.ofNullable(context())
+                .map(c -> c.getToken(ISSUER))
+                .filter(s -> s != null)
+                .map(TokenContext::getIdToken)
+                .orElseThrow(unauthenticated("Fant ikke ID-token"));
     }
 
     @Override

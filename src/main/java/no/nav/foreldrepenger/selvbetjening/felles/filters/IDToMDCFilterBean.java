@@ -20,7 +20,6 @@ import org.springframework.stereotype.Component;
 import org.springframework.web.filter.GenericFilterBean;
 
 import no.nav.foreldrepenger.selvbetjening.felles.util.TokenHandler;
-import no.nav.foreldrepenger.selvbetjening.oppslag.json.AktørId;
 import no.nav.foreldrepenger.selvbetjening.oppslag.tjeneste.Oppslag;
 
 @Order(HIGHEST_PRECEDENCE)
