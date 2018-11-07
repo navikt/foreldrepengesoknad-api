@@ -1,22 +1,5 @@
 package no.nav.foreldrepenger.selvbetjening.innsending;
 
-import static no.nav.foreldrepenger.selvbetjening.felles.util.EnvUtil.CONFIDENTIAL;
-import static no.nav.foreldrepenger.selvbetjening.innsending.InnsendingController.REST_SOKNAD;
-import static org.springframework.http.MediaType.APPLICATION_JSON_VALUE;
-
-import java.util.List;
-
-import javax.inject.Inject;
-
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
-import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
-import org.springframework.web.client.RestTemplate;
-
 import no.nav.foreldrepenger.selvbetjening.felles.attachments.exceptions.AttachmentsTooLargeException;
 import no.nav.foreldrepenger.selvbetjening.felles.storage.Storage;
 import no.nav.foreldrepenger.selvbetjening.felles.storage.StorageCrypto;
@@ -27,9 +10,26 @@ import no.nav.foreldrepenger.selvbetjening.innsending.json.Søknad;
 import no.nav.foreldrepenger.selvbetjening.innsending.json.Vedlegg;
 import no.nav.foreldrepenger.selvbetjening.innsending.tjeneste.Innsending;
 import no.nav.security.oidc.api.ProtectedWithClaims;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.client.RestTemplate;
+
+import javax.inject.Inject;
+import java.util.List;
+
+import static java.lang.String.format;
+import static no.nav.foreldrepenger.selvbetjening.felles.util.EnvUtil.CONFIDENTIAL;
+import static no.nav.foreldrepenger.selvbetjening.innsending.InnsendingController.REST_SOKNAD;
+import static org.apache.commons.io.FileUtils.byteCountToDisplaySize;
+import static org.springframework.http.MediaType.APPLICATION_JSON_VALUE;
 
 @RestController
-@ProtectedWithClaims(issuer = "selvbetjening", claimMap = { "acr=Level4" })
+@ProtectedWithClaims(issuer = "selvbetjening", claimMap = {"acr=Level4"})
 @RequestMapping(REST_SOKNAD)
 public class InnsendingController {
 
@@ -37,8 +37,8 @@ public class InnsendingController {
 
     public static final String REST_SOKNAD = "/rest/soknad";
 
-    private static final double MB = 1024 * 1024;
-    private static final double MAX_VEDLEGG_SIZE = 7.5 * MB;
+    private static final long MB = 1024 * 1024;
+    private static final long MAX_VEDLEGG_SIZE = 8 * MB;
 
     private final Innsending innsending;
 
@@ -85,8 +85,12 @@ public class InnsendingController {
                 .mapToLong(v -> v.content.length)
                 .sum();
         if (total > MAX_VEDLEGG_SIZE) {
-            throw new AttachmentsTooLargeException("Samlet filstørrelse for alle vedlegg er " + total
-                    + ", men kan ikke overstige " + MAX_VEDLEGG_SIZE + " bytes");
+            throw new AttachmentsTooLargeException(
+                    format("Samlet filstørrelse for alle vedlegg er %s, men kan ikke overstige %s",
+                            byteCountToDisplaySize(total),
+                            byteCountToDisplaySize(MAX_VEDLEGG_SIZE)
+                    )
+            );
         }
     }
 
