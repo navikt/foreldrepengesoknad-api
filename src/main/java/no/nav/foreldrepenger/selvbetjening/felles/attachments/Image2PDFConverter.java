@@ -79,7 +79,7 @@ public class Image2PDFConverter {
             if (pdfPages.size() > MAX_PDF_PAGES_PR_DOCUMENT) {
                 LOG.warn("PDF inneholder {} sider, kan ikke overstige {}", pdfPages.size(), MAX_PDF_PAGES_PR_DOCUMENT);
                 throw new AttachmentsTooLargeException(
-                        "Antall sider pdf PDF-dokument kan ikke overstige " + MAX_PDF_PAGES_PR_DOCUMENT + ", fikk "
+                        "Du kan ikke laste opp en pdf som inneholder mer enn " + MAX_PDF_PAGES_PR_DOCUMENT + " sider, fikk "
                                 + pdfPages.size());
             }
             LOG.info("PDF inneholder {} sider, konverterer disse til bildeformat (fattigmanns virussscanner...)",
