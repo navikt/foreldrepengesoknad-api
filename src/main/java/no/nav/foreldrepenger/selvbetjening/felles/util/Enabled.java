@@ -6,10 +6,12 @@ import org.springframework.stereotype.Component;
 @Component
 public class Enabled {
 
-    public static boolean foreldrepengesøknad;
+    public static boolean endringssøknad;
 
-    public Enabled(@Value("${TOGGLES_ENABLE_FORELDREPENGESOKNAD:false}") boolean foreldrepengesøknad) {
-        Enabled.foreldrepengesøknad = foreldrepengesøknad;
+    public Enabled(
+            @Value("${TOGGLES_ENABLE_ENDRINGSSOKNAD:false}") boolean endringssøknad
+    ) {
+        Enabled.endringssøknad = endringssøknad;
     }
 
 }

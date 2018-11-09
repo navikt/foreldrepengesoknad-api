@@ -27,6 +27,7 @@ public class Søknad {
     public Utenlandsopphold informasjonOmUtenlandsopphold;
 
     public String situasjon;
+    public Boolean erEndringssøknad;
 
     public List<Vedlegg> vedlegg;
 

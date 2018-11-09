@@ -3,6 +3,7 @@ package no.nav.foreldrepenger.selvbetjening.innsending;
 import no.nav.foreldrepenger.selvbetjening.felles.attachments.exceptions.AttachmentsTooLargeException;
 import no.nav.foreldrepenger.selvbetjening.felles.storage.Storage;
 import no.nav.foreldrepenger.selvbetjening.felles.storage.StorageCrypto;
+import no.nav.foreldrepenger.selvbetjening.felles.util.Enabled;
 import no.nav.foreldrepenger.selvbetjening.felles.util.TokenHandler;
 import no.nav.foreldrepenger.selvbetjening.innsending.json.Ettersending;
 import no.nav.foreldrepenger.selvbetjening.innsending.json.Kvittering;
@@ -20,6 +21,7 @@ import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.client.RestTemplate;
 
 import javax.inject.Inject;
+import javax.ws.rs.BadRequestException;
 import java.util.List;
 
 import static java.lang.String.format;
@@ -61,7 +63,7 @@ public class InnsendingController {
 
     @PostMapping(consumes = APPLICATION_JSON_VALUE)
     public ResponseEntity<Kvittering> sendInn(@RequestBody Søknad søknad) {
-        LOG.info(CONFIDENTIAL, "Mottok søknad  {}", søknad);
+        LOG.info(CONFIDENTIAL, "Mottok søknad: {}", søknad);
         søknad.vedlegg.forEach(this::fetchAttachment);
         checkVedleggTooLarge(søknad.vedlegg);
         ResponseEntity<Kvittering> respons = innsending.sendInn(søknad);
@@ -71,11 +73,26 @@ public class InnsendingController {
 
     @PostMapping(path = "/ettersend", consumes = APPLICATION_JSON_VALUE)
     public ResponseEntity<Kvittering> sendInn(@RequestBody Ettersending ettersending) {
-        LOG.info(CONFIDENTIAL, "Mottok ettersending  {}", ettersending);
+        LOG.info(CONFIDENTIAL, "Mottok ettersending: {}", ettersending);
         ettersending.vedlegg.forEach(this::fetchAttachment);
         checkVedleggTooLarge(ettersending.vedlegg);
         ResponseEntity<Kvittering> respons = innsending.sendInn(ettersending);
         ettersending.vedlegg.forEach(this::fetchAndDeleteAttachment);
+        return respons;
+    }
+
+    @PostMapping(path = "/endre", consumes = APPLICATION_JSON_VALUE)
+    public ResponseEntity<Kvittering> endre(@RequestBody Søknad søknad) {
+        if (!Enabled.endringssøknad) {
+            LOG.info("Mottok endringssøknad, men den er togglet av!");
+            throw new BadRequestException("Endringssøknad is not supported yet");
+        }
+
+        LOG.info(CONFIDENTIAL, "Mottok endringssøknad: {}", søknad);
+        søknad.vedlegg.forEach(this::fetchAttachment);
+        checkVedleggTooLarge(søknad.vedlegg);
+        ResponseEntity<Kvittering> respons = innsending.endre(søknad);
+        søknad.vedlegg.forEach(this::fetchAndDeleteAttachment);
         return respons;
     }
 

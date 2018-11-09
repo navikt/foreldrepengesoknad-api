@@ -10,4 +10,6 @@ public interface Innsending {
 
     ResponseEntity<Kvittering> sendInn(Søknad søknad);
     ResponseEntity<Kvittering> sendInn(Ettersending søknad);
+    ResponseEntity<Kvittering> endre(Søknad søknad);
+
 }

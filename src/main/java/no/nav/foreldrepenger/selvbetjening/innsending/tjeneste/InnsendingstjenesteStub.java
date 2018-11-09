@@ -45,6 +45,11 @@ public class InnsendingstjenesteStub implements Innsending {
         return postStub(ettersending);
     }
 
+    @Override
+    public ResponseEntity<Kvittering> endre(Søknad søknad) {
+        return postStub(søknad);
+    }
+
     private ResponseEntity<Kvittering> postStub(Søknad søknad)  {
         SøknadDto dto;
         if (søknad instanceof Engangsstønad) {
@@ -70,9 +75,7 @@ public class InnsendingstjenesteStub implements Innsending {
 
     private ResponseEntity<Kvittering> postStub(Ettersending ettersending)  {
         EttersendingDto dto = new EttersendingDto(ettersending);
-        ettersending.vedlegg.forEach(v -> {
-            v.content = new byte[]{};
-        });
+        ettersending.vedlegg.forEach(v -> v.content = new byte[]{});
 
         try {
             LOG.info("Posting JSON (stub): {}", mapper.writeValueAsString(dto));

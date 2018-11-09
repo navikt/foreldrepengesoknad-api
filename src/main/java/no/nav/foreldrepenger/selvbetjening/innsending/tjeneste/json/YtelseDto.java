@@ -39,17 +39,22 @@ public class YtelseDto {
 
     public YtelseDto(Søknad søknad) {
         this.type = søknad.type;
-        this.medlemsskap = new MedlemsskapDto(søknad.informasjonOmUtenlandsopphold);
         this.relasjonTilBarn = new RelasjonTilBarnDto(søknad.barn, søknad.situasjon);
         this.annenForelder = new AnnenForelderDto(søknad.annenForelder);
+
+        if (!søknad.erEndringssøknad) {
+            this.medlemsskap = new MedlemsskapDto(søknad.informasjonOmUtenlandsopphold);
+        }
 
         if (søknad instanceof Foreldrepengesøknad) {
             Foreldrepengesøknad foreldrepengesøknad = (Foreldrepengesøknad) søknad;
             this.dekningsgrad = "GRAD" + foreldrepengesøknad.dekningsgrad;
-            this.opptjening = new OpptjeningDto(foreldrepengesøknad.søker);
-            this.fordeling = new FordelingDto(foreldrepengesøknad.uttaksplan,
-                    foreldrepengesøknad.annenForelder.erInformertOmSøknaden);
+            this.fordeling = new FordelingDto(foreldrepengesøknad.uttaksplan, foreldrepengesøknad.annenForelder.erInformertOmSøknaden);
             this.rettigheter = new RettigheterDto(foreldrepengesøknad);
+
+            if (!søknad.erEndringssøknad) {
+                this.opptjening = new OpptjeningDto(foreldrepengesøknad.søker);
+            }
         }
     }
 
