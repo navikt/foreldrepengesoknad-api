@@ -2,7 +2,7 @@ package no.nav.foreldrepenger.selvbetjening.felles.error;
 
 import static java.util.Arrays.asList;
 import static java.util.stream.Collectors.toList;
-import static org.apache.commons.lang3.exception.ExceptionUtils.getRootCauseMessage;
+import static org.apache.commons.lang3.exception.ExceptionUtils.getRootCause;
 import static org.springframework.http.HttpStatus.BAD_REQUEST;
 import static org.springframework.http.HttpStatus.FORBIDDEN;
 import static org.springframework.http.HttpStatus.INTERNAL_SERVER_ERROR;
@@ -148,6 +148,11 @@ public class ApiExceptionHandler extends ResponseEntityExceptionHandler {
                 .stream()
                 .map(this::errorMessage)
                 .collect(toList());
+    }
+
+    private String getRootCauseMessage(Throwable t) {
+        Throwable rootCause = getRootCause(t);
+        return rootCause == null ? t.getMessage() : rootCause.getMessage();
     }
 
     private String errorMessage(FieldError error) {
