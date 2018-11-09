@@ -4,6 +4,7 @@ import static com.google.common.base.Predicates.or;
 import static io.swagger.models.Scheme.HTTP;
 import static io.swagger.models.Scheme.HTTPS;
 import static java.util.stream.Collectors.toSet;
+import static no.nav.foreldrepenger.selvbetjening.felles.util.EnvUtil.PREPROD;
 import static no.nav.foreldrepenger.selvbetjening.innsending.InnsendingController.REST_SOKNAD;
 import static no.nav.foreldrepenger.selvbetjening.oppslag.OppslagController.REST_PERSONINFO;
 import static springfox.documentation.builders.PathSelectors.regex;
@@ -14,6 +15,7 @@ import java.util.stream.Stream;
 
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.context.annotation.Profile;
 
 import io.swagger.models.Scheme;
 import springfox.documentation.builders.RequestHandlerSelectors;
@@ -21,6 +23,7 @@ import springfox.documentation.spring.web.plugins.Docket;
 import springfox.documentation.swagger2.annotations.EnableSwagger2;
 
 @Configuration
+@Profile(PREPROD)
 @EnableSwagger2
 public class SwaggerConfiguration {
 
