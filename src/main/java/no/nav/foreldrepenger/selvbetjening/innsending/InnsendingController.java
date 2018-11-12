@@ -83,7 +83,7 @@ public class InnsendingController {
 
     @PostMapping(path = "/endre", consumes = APPLICATION_JSON_VALUE)
     public ResponseEntity<Kvittering> endre(@RequestBody Søknad søknad) {
-        if (!Enabled.endringssøknad) {
+        if (!Enabled.ENDRINGSSØKNAD) {
             LOG.info("Mottok endringssøknad, men den er togglet av!");
             throw new BadRequestException("Endringssøknad is not supported yet");
         }

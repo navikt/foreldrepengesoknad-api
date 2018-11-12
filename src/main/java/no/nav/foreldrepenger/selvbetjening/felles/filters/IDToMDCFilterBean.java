@@ -42,8 +42,6 @@ public class IDToMDCFilterBean extends GenericFilterBean {
         if (handler.erAutentisert()) {
             copyHeadersToMDC();
         }
-        else {
-        }
         chain.doFilter(req, res);
     }
 

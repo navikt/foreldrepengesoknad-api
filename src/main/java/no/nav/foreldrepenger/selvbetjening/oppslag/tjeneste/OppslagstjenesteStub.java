@@ -65,8 +65,7 @@ public class OppslagstjenesteStub implements Oppslag {
         dto.bankkonto.kontonummer = "1234567890";
         dto.bankkonto.banknavn = "Stub NOR";
 
-        AnnenForelder annenForelder = new AnnenForelder("01017098765", "Steve", "Grønland", "Nichols",
-                now().minusYears(45));
+        AnnenForelder annenForelder = new AnnenForelder("01017098765", "Steve", "Grønland", "Nichols", now().minusYears(45));
 
         Barn barn = new Barn("01011812345", "Mo", null, "Hoelsveen", "M", now().minusYears(1), annenForelder);
         dto.barn = singletonList(barn);

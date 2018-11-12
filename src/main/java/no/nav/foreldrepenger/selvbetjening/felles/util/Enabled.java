@@ -6,12 +6,15 @@ import org.springframework.stereotype.Component;
 @Component
 public class Enabled {
 
-    public static boolean endringssøknad;
+    public static boolean ENDRINGSSØKNAD;
+    public static boolean FPSAKSAKER;
 
     public Enabled(
-            @Value("${TOGGLES_ENABLE_ENDRINGSSOKNAD:false}") boolean endringssøknad
+            @Value("${TOGGLES_ENABLE_ENDRINGSSOKNAD:false}") boolean endringssøknad,
+            @Value("${TOGGLES_ENABLE_FPSAKSAKER:false}") boolean fpsakSaker
     ) {
-        Enabled.endringssøknad = endringssøknad;
+        Enabled.ENDRINGSSØKNAD = endringssøknad;
+        Enabled.FPSAKSAKER = fpsakSaker;
     }
 
 }
