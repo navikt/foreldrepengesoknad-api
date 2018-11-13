@@ -15,6 +15,7 @@ import javax.servlet.http.HttpServletRequest;
 
 import org.slf4j.MDC;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.core.Ordered;
 import org.springframework.core.annotation.Order;
 import org.springframework.stereotype.Component;
 import org.springframework.web.filter.GenericFilterBean;
@@ -22,7 +23,7 @@ import org.springframework.web.filter.GenericFilterBean;
 import no.nav.foreldrepenger.selvbetjening.felles.util.CallIdGenerator;
 
 @Component
-@Order(1)
+@Order(Ordered.HIGHEST_PRECEDENCE)
 public class HeadersToMDCFilterBean extends GenericFilterBean {
 
     private final CallIdGenerator generator;
