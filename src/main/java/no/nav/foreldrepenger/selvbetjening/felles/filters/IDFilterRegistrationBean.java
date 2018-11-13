@@ -10,6 +10,6 @@ public class IDFilterRegistrationBean extends FilterRegistrationBean<IDToMDCFilt
 
     public IDFilterRegistrationBean(IDToMDCFilterBean idFilter) {
         setFilter(idFilter);
-        setUrlPatterns(urlPatternsFor("/rest/*"));
+        setUrlPatterns(urlPatternsFor("/rest"));
     }
 }
