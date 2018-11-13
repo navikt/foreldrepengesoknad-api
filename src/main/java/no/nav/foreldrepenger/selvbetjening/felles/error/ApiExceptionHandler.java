@@ -133,7 +133,7 @@ public class ApiExceptionHandler extends ResponseEntityExceptionHandler {
             ServletWebRequest servletRequest = ServletWebRequest.class.cast(req);
             messages.add(servletRequest.getRequest().getRequestURI());
         }
-        LOG.trace("{}", messages, e);
+        LOG.trace("Messages: {}", messages, e);
         return handleExceptionInternal(e, new ApiError(status, e, messages), new HttpHeaders(), status, req);
     }
 
@@ -148,7 +148,7 @@ public class ApiExceptionHandler extends ResponseEntityExceptionHandler {
             ServletWebRequest servletRequest = ServletWebRequest.class.cast(req);
             messages.add(servletRequest.getRequest().getRequestURI());
         }
-        LOG.warn("{}", messages, e);
+        LOG.warn("Messages: {}", messages, e);
         return handleExceptionInternal(e, new ApiError(status, e, messages), new HttpHeaders(), status, req);
     }
 
