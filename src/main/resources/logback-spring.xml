@@ -28,6 +28,8 @@
 
     <!-- Turn off Spring's warning logs for already resolved exceptions -->
     <logger name="org.springframework.web.servlet.mvc.method.annotation.ExceptionHandlerExceptionResolver" level="ERROR" />
+    <logger name="org.apache.pdfbox.pdmodel.font" level="ERROR" />
+
     <root level="info">
         <appender-ref ref="stdout"/>
     </root>
