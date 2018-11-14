@@ -183,11 +183,13 @@ public class OpptjeningDto {
 
         public String type;
         public PeriodeDto periode = new PeriodeDto();
+        public List<String> vedlegg;
 
         public AnnenOpptjeningDto(AnnenInntekt annenInntekt) {
             this.type = annenInntekt.type;
             this.periode.fom = annenInntekt.tidsperiode.fom;
             this.periode.tom = annenInntekt.tidsperiode.tom;
+            this.vedlegg = annenInntekt.vedlegg;
         }
     }
 
