@@ -36,8 +36,7 @@ public class OpptjeningDto {
         for (AnnenInntekt annenInntekt : søker.andreInntekterSiste10Mnd) {
             if (annenInntekt.type.equals("JOBB_I_UTLANDET")) {
                 this.arbeidsforhold.add(new ArbeidsforholdDto(annenInntekt));
-            }
-            else {
+            } else {
                 this.annenOpptjening.add(new AnnenOpptjeningDto(annenInntekt));
             }
         }
@@ -96,11 +95,12 @@ public class OpptjeningDto {
         @Override
         public String toString() {
             return "EgenNæringDto [type=" + type + ", periode=" + periode + ", orgName=" + orgName + ", orgNummer="
-                    + orgNummer + ", virksomhetsTyper=" + virksomhetsTyper + ", arbeidsland=" + arbeidsland
+                    + orgNummer + ", virksomhetsTyper=" + virksomhetsTyper + ", registrertILand=" + registrertILand
                     + ", regnskapsførere=" + regnskapsførere + ", næringsinntektBrutto=" + næringsinntektBrutto
                     + ", erNyOpprettet=" + erNyOpprettet + ", erNyIArbeidslivet=" + erNyIArbeidslivet + ", nærRelasjon="
                     + nærRelasjon + ", erVarigEndring=" + erVarigEndring + ", oppstartsDato=" + oppstartsDato
-                    + ", endringsDato=" + endringsDato + ", beskrivelseEndring=" + beskrivelseEndring + ", vedlegg=" + vedlegg +"]";
+                    + ", endringsDato=" + endringsDato + ", beskrivelseEndring=" + beskrivelseEndring + ", vedlegg="
+                    + vedlegg + "]";
         }
 
         public String type;
@@ -109,7 +109,7 @@ public class OpptjeningDto {
         public String orgNummer;
         public Double stillingsprosent;
         public List<String> virksomhetsTyper = new ArrayList<>();
-        public String arbeidsland;
+        public String registrertILand;
         public List<RegnskapsførerDto> regnskapsførere = new ArrayList<>();
         public Integer næringsinntektBrutto;
         public Boolean erNyOpprettet;
@@ -135,7 +135,7 @@ public class OpptjeningDto {
             this.orgName = selvstendig.navnPåNæringen;
             this.periode.fom = selvstendig.tidsperiode.fom;
             this.periode.tom = selvstendig.tidsperiode.tom;
-            this.arbeidsland = selvstendig.registrertILand;
+            this.registrertILand = selvstendig.registrertILand;
             this.erNyIArbeidslivet = selvstendig.harBlittYrkesaktivILøpetAvDeTreSisteFerdigliknedeÅrene;
             this.erNyOpprettet = this.periode.fom.isAfter(fireÅrSiden.minusDays(1));
             this.erVarigEndring = selvstendig.hattVarigEndringAvNæringsinntektSiste4Kalenderår;
@@ -152,8 +152,7 @@ public class OpptjeningDto {
             if (regnskapsfører != null) {
                 regnskapsførere.add(new RegnskapsførerDto(regnskapsfører));
                 this.nærRelasjon = regnskapsfører.erNærVennEllerFamilie;
-            }
-            else if (revisor != null) {
+            } else if (revisor != null) {
                 regnskapsførere.add(new RegnskapsførerDto(revisor));
                 this.nærRelasjon = revisor.erNærVennEllerFamilie;
             }
