@@ -1,5 +1,7 @@
 package no.nav.foreldrepenger.selvbetjening.felles.storage;
 
+import static java.lang.String.format;
+import static org.apache.commons.io.FileUtils.byteCountToDisplaySize;
 import static org.slf4j.LoggerFactory.getLogger;
 import static org.springframework.http.MediaType.APPLICATION_JSON_VALUE;
 import static org.springframework.http.MediaType.MULTIPART_FORM_DATA_VALUE;
@@ -8,6 +10,7 @@ import java.util.Optional;
 
 import javax.inject.Inject;
 
+import no.nav.foreldrepenger.selvbetjening.felles.attachments.exceptions.AttachmentsTooLargeException;
 import org.slf4j.Logger;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.DeleteMapping;
@@ -30,6 +33,7 @@ public class StorageController {
 
     private static final Logger log = getLogger(StorageController.class);
     private static final String KEY = "soknad";
+    public static final int MAX_VEDLEGG_SIZE = 8 * 1024 * 1024;
 
     @Inject
     private TokenHandler tokenHandler;
@@ -83,6 +87,13 @@ public class StorageController {
     @PostMapping(path = "/vedlegg", consumes = MULTIPART_FORM_DATA_VALUE)
     public ResponseEntity<String> storeAttachment(@RequestPart("vedlegg") MultipartFile attachmentMultipartFile) {
         Attachment attachment = Attachment.of(attachmentMultipartFile);
+        if (attachment.size > MAX_VEDLEGG_SIZE) {
+            throw new AttachmentsTooLargeException(format("Vedlegg-størrelse er %s, men kan ikke overstige %s",
+                    byteCountToDisplaySize(attachment.size),
+                    byteCountToDisplaySize(MAX_VEDLEGG_SIZE)
+            ));
+        }
+
         String fnr = tokenHandler.autentisertBruker();
         String directory = crypto.encryptDirectoryName(fnr);
         log.trace("Writing attachment to directory " + directory);

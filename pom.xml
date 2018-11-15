@@ -10,6 +10,7 @@
     <version>0-SNAPSHOT</version>
     <name>foreldrepengesoknad-api</name>
     <description>API for selvbetjening av foreldrepenger og engangsstønad</description>
+
     <parent>
         <groupId>org.springframework.boot</groupId>
         <artifactId>spring-boot-starter-parent</artifactId>
@@ -27,6 +28,7 @@
         <springfox.version>2.8.0</springfox.version>
         <oidc-spring-support.version>0.2.12</oidc-spring-support.version>
     </properties>
+
     <dependencies>
         <dependency>
             <groupId>org.springframework.boot</groupId>

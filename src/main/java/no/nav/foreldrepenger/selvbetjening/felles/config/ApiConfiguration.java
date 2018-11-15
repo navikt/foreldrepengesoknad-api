@@ -1,11 +1,11 @@
 package no.nav.foreldrepenger.selvbetjening.felles.config;
 
-import static java.util.Arrays.asList;
-
-import java.net.URI;
-
-import javax.inject.Inject;
-
+import com.google.common.collect.ImmutableMap;
+import no.nav.foreldrepenger.selvbetjening.felles.filters.ApiKeyInjectingClientInterceptor;
+import no.nav.foreldrepenger.selvbetjening.felles.filters.CorsInterceptor;
+import no.nav.foreldrepenger.selvbetjening.felles.health.EnvironmentAwareServiceHealthIndicator;
+import no.nav.foreldrepenger.selvbetjening.felles.health.MottakPingService;
+import no.nav.foreldrepenger.selvbetjening.felles.health.OppslagPingService;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.boot.actuate.health.HealthIndicator;
 import org.springframework.context.annotation.Bean;
@@ -16,13 +16,10 @@ import org.springframework.web.client.RestTemplate;
 import org.springframework.web.servlet.config.annotation.InterceptorRegistry;
 import org.springframework.web.servlet.config.annotation.WebMvcConfigurer;
 
-import com.google.common.collect.ImmutableMap;
+import javax.inject.Inject;
+import java.net.URI;
 
-import no.nav.foreldrepenger.selvbetjening.felles.filters.ApiKeyInjectingClientInterceptor;
-import no.nav.foreldrepenger.selvbetjening.felles.filters.CorsInterceptor;
-import no.nav.foreldrepenger.selvbetjening.felles.health.EnvironmentAwareServiceHealthIndicator;
-import no.nav.foreldrepenger.selvbetjening.felles.health.MottakPingService;
-import no.nav.foreldrepenger.selvbetjening.felles.health.OppslagPingService;
+import static java.util.Arrays.asList;
 
 @Configuration
 public class ApiConfiguration implements WebMvcConfigurer {

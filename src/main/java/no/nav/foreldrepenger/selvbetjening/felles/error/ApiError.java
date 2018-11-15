@@ -1,23 +1,25 @@
 package no.nav.foreldrepenger.selvbetjening.felles.error;
 
-import static com.fasterxml.jackson.annotation.JsonFormat.Feature.WRITE_SINGLE_ELEM_ARRAYS_UNWRAPPED;
-import static com.fasterxml.jackson.annotation.JsonFormat.Shape.STRING;
-import static com.fasterxml.jackson.annotation.JsonInclude.Include.NON_NULL;
-
-import java.time.LocalDateTime;
-import java.util.List;
-import java.util.stream.Collectors;
-
+import com.fasterxml.jackson.annotation.JsonFormat;
+import com.fasterxml.jackson.annotation.JsonInclude;
 import org.slf4j.MDC;
 import org.springframework.http.HttpStatus;
 
-import com.fasterxml.jackson.annotation.JsonFormat;
-import com.fasterxml.jackson.annotation.JsonInclude;;
+import java.time.LocalDateTime;
+import java.util.List;
+import java.util.Objects;
+
+import static com.fasterxml.jackson.annotation.JsonFormat.Feature.WRITE_SINGLE_ELEM_ARRAYS_UNWRAPPED;
+import static com.fasterxml.jackson.annotation.JsonFormat.Shape.STRING;
+import static com.fasterxml.jackson.annotation.JsonInclude.Include.NON_NULL;
+import static java.time.LocalDateTime.now;
+import static java.util.stream.Collectors.toList;
 
 @JsonInclude(NON_NULL)
 class ApiError {
 
     private static final String UUID = "Nav-CallId";
+
     private final HttpStatus status;
     @JsonFormat(shape = STRING, pattern = "dd-MM-yyyy hh:mm:ss")
     private final LocalDateTime timestamp;
@@ -25,10 +27,10 @@ class ApiError {
     private final List<String> messages;
     private final String uuid;
 
-    ApiError(HttpStatus status, Throwable t, List<String> messages) {
-        this.timestamp = LocalDateTime.now();
+    ApiError(HttpStatus status, List<String> messages) {
+        this.timestamp = now();
         this.status = status;
-        this.messages = messages.stream().filter(s -> s != null).collect(Collectors.toList());
+        this.messages = messages.stream().filter(Objects::nonNull).collect(toList());
         this.uuid = uuid();
     }
 

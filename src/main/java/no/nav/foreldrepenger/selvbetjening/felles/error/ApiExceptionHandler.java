@@ -11,6 +11,7 @@ import static org.springframework.http.HttpStatus.PAYLOAD_TOO_LARGE;
 import static org.springframework.http.HttpStatus.UNAUTHORIZED;
 import static org.springframework.http.HttpStatus.UNPROCESSABLE_ENTITY;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import javax.ws.rs.BadRequestException;
@@ -29,6 +30,7 @@ import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.client.HttpClientErrorException;
 import org.springframework.web.context.request.ServletWebRequest;
 import org.springframework.web.context.request.WebRequest;
+import org.springframework.web.multipart.MaxUploadSizeExceededException;
 import org.springframework.web.multipart.MultipartException;
 import org.springframework.web.servlet.mvc.method.annotation.ResponseEntityExceptionHandler;
 
@@ -60,8 +62,7 @@ public class ApiExceptionHandler extends ResponseEntityExceptionHandler {
 
     @ResponseBody
     @ExceptionHandler(AttachmentTypeUnsupportedException.class)
-    protected ResponseEntity<Object> handleUnsupportedAttachmentError(AttachmentTypeUnsupportedException e,
-            WebRequest req) {
+    protected ResponseEntity<Object> handleUnsupportedAttachmentError(AttachmentTypeUnsupportedException e, WebRequest req) {
         return warnAndHandle(UNPROCESSABLE_ENTITY, e, req, getRootCauseMessage(e));
     }
 
@@ -73,15 +74,19 @@ public class ApiExceptionHandler extends ResponseEntityExceptionHandler {
 
     @ResponseBody
     @ExceptionHandler(MultipartException.class)
-    @ResponseStatus(PAYLOAD_TOO_LARGE)
     public ResponseEntity<Object> handleMultipartError(MultipartException e, WebRequest req) {
+        return warnAndHandle(PAYLOAD_TOO_LARGE, e, req, getRootCauseMessage(e));
+    }
+
+    @ResponseBody
+    @ExceptionHandler(MaxUploadSizeExceededException.class)
+    public ResponseEntity<Object> handleMaxUploadSizeExceededError(MaxUploadSizeExceededException e, WebRequest req) {
         return warnAndHandle(PAYLOAD_TOO_LARGE, e, req, getRootCauseMessage(e));
     }
 
     @Override
     @ResponseBody
-    protected ResponseEntity<Object> handleMethodArgumentNotValid(MethodArgumentNotValidException e,
-            HttpHeaders headers, HttpStatus status, WebRequest req) {
+    protected ResponseEntity<Object> handleMethodArgumentNotValid(MethodArgumentNotValidException e, HttpHeaders headers, HttpStatus status, WebRequest req) {
         return warnAndHandle(UNPROCESSABLE_ENTITY, e, req, validationErrors(e));
     }
 
@@ -100,8 +105,7 @@ public class ApiExceptionHandler extends ResponseEntityExceptionHandler {
     @ResponseBody
     @ExceptionHandler(OIDCTokenValidatorException.class)
     public ResponseEntity<Object> handleForbiddenOIDC(OIDCTokenValidatorException e, WebRequest req) {
-        return warnAndHandle(FORBIDDEN, e, req, e.getExpiryDate() != null ? e.getExpiryDate().toString() : null,
-                getRootCauseMessage(e));
+        return warnAndHandle(FORBIDDEN, e, req, e.getExpiryDate() != null ? e.getExpiryDate().toString() : null, getRootCauseMessage(e));
     }
 
     @ResponseBody
@@ -122,34 +126,30 @@ public class ApiExceptionHandler extends ResponseEntityExceptionHandler {
         return warnAndHandle(INTERNAL_SERVER_ERROR, e, req, getRootCauseMessage(e));
     }
 
-    private ResponseEntity<Object> traceAndHandle(HttpStatus status, Exception e, WebRequest req,
-            String... messages) {
+    private ResponseEntity<Object> traceAndHandle(HttpStatus status, Exception e, WebRequest req, String... messages) {
         return traceAndHandle(status, e, req, asList(messages));
     }
 
-    private ResponseEntity<Object> traceAndHandle(HttpStatus status, Exception e, WebRequest req,
-            List<String> messages) {
+    private ResponseEntity<Object> traceAndHandle(HttpStatus status, Exception e, WebRequest req, List<String> messages) {
         if (req instanceof ServletWebRequest) {
-            ServletWebRequest servletRequest = ServletWebRequest.class.cast(req);
+            ServletWebRequest servletRequest = (ServletWebRequest) req;
             messages.add(servletRequest.getRequest().getRequestURI());
         }
         LOG.trace("Messages: {}", messages, e);
-        return handleExceptionInternal(e, new ApiError(status, e, messages), new HttpHeaders(), status, req);
+        return handleExceptionInternal(e, new ApiError(status, messages), new HttpHeaders(), status, req);
     }
 
-    private ResponseEntity<Object> warnAndHandle(HttpStatus status, Exception e, WebRequest req,
-            String... messages) {
-        return warnAndHandle(status, e, req, asList(messages));
+    private ResponseEntity<Object> warnAndHandle(HttpStatus status, Exception e, WebRequest req, String... messages) {
+        return warnAndHandle(status, e, req, new ArrayList<>(asList(messages)));
     }
 
-    private ResponseEntity<Object> warnAndHandle(HttpStatus status, Exception e, WebRequest req,
-            List<String> messages) {
+    private ResponseEntity<Object> warnAndHandle(HttpStatus status, Exception e, WebRequest req, List<String> messages) {
         if (req instanceof ServletWebRequest) {
-            ServletWebRequest servletRequest = ServletWebRequest.class.cast(req);
+            ServletWebRequest servletRequest = (ServletWebRequest) req;
             messages.add(servletRequest.getRequest().getRequestURI());
         }
         LOG.warn("Messages: {}", messages, e);
-        return handleExceptionInternal(e, new ApiError(status, e, messages), new HttpHeaders(), status, req);
+        return handleExceptionInternal(e, new ApiError(status, messages), new HttpHeaders(), status, req);
     }
 
     private List<String> validationErrors(MethodArgumentNotValidException e) {

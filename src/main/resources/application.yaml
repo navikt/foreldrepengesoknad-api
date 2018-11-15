@@ -15,7 +15,8 @@ spring:
   jackson.deserialization.accept_single_value_as_array: true
   main.banner-mode: 'off'
   metrics.web.server.auto-time-requests: true
-  servlet.multipart.max-file-size: 9MB
+  servlet.multipart.max-file-size: 100MB
+  servlet.multipart.max-request-size: 100MB
 no.nav.security.oidc:
   issuers: selvbetjening
   issuer.selvbetjening:
