@@ -1,21 +1,19 @@
 package no.nav.foreldrepenger.selvbetjening.felles.attachments;
 
-import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertTrue;
-import static org.springframework.http.MediaType.IMAGE_GIF;
-
-import java.io.IOException;
-import java.util.Arrays;
-
 import no.nav.foreldrepenger.selvbetjening.SlowTests;
+import no.nav.foreldrepenger.selvbetjening.felles.attachments.exceptions.AttachmentTypeUnsupportedException;
+import no.nav.foreldrepenger.selvbetjening.felles.attachments.exceptions.AttachmentsTooLargeException;
 import org.apache.tika.Tika;
 import org.junit.BeforeClass;
 import org.junit.Test;
 import org.junit.experimental.categories.Category;
 import org.springframework.http.MediaType;
 
-import no.nav.foreldrepenger.selvbetjening.felles.attachments.exceptions.AttachmentTypeUnsupportedException;
-import no.nav.foreldrepenger.selvbetjening.felles.attachments.exceptions.AttachmentsTooLargeException;
+import java.util.Arrays;
+
+import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertTrue;
+import static org.springframework.http.MediaType.IMAGE_GIF;
 
 @Category(SlowTests.class)
 public class ImageByteArray2PDFConverterTest {
@@ -24,8 +22,8 @@ public class ImageByteArray2PDFConverterTest {
     private static Image2PDFConverter converter;
 
     @BeforeClass
-    public static void before() throws IOException {
-        converter = new Image2PDFConverter(new PDFPageSplitter(), new DefaultPDF2ImageConverter());
+    public static void before() {
+        converter = new Image2PDFConverter();
     }
 
     @Test
@@ -44,11 +42,8 @@ public class ImageByteArray2PDFConverterTest {
     }
 
     @Test
-    public void gifConvertsToPdfWhenConfigured() throws IOException {
-        assertTrue(isPdf(
-                new Image2PDFConverter(new PDFPageSplitter(),
-                        new DefaultPDF2ImageConverter(), IMAGE_GIF)
-                                .convert("pdf/loading.gif")));
+    public void gifConvertsToPdfWhenConfigured() {
+        assertTrue(isPdf(new Image2PDFConverter(IMAGE_GIF).convert("pdf/loading.gif")));
     }
 
     @Test
@@ -67,7 +62,7 @@ public class ImageByteArray2PDFConverterTest {
     }
 
     @Test(expected = AttachmentsTooLargeException.class)
-    public void testTooLargePdfFile() throws Exception {
+    public void testTooLargePdfFile() {
         converter.convert("pdf/spring-framework-reference.pdf");
 
     }

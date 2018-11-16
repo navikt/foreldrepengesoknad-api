@@ -27,35 +27,26 @@ import org.springframework.stereotype.Component;
 
 import no.nav.foreldrepenger.selvbetjening.felles.attachments.exceptions.AttachmentConversionException;
 import no.nav.foreldrepenger.selvbetjening.felles.attachments.exceptions.AttachmentTypeUnsupportedException;
-import no.nav.foreldrepenger.selvbetjening.felles.attachments.exceptions.AttachmentsTooLargeException;
 
 @Component
 public class Image2PDFConverter {
 
-    private final PDFPageSplitter pdfPageSplitter;
-    private final PDF2ImageConverter pdf2ImageConverter;
     private final List<MediaType> supportedMediaTypes;
 
     private static final PDRectangle A4 = PDRectangle.A4;
 
-    private static final int MAX_PDF_PAGES_PR_DOCUMENT = 5;
-
     private static final Logger LOG = LoggerFactory.getLogger(Image2PDFConverter.class);
 
     @Inject
-    public Image2PDFConverter(PDFPageSplitter splitter, PDF2ImageConverter converter) {
-        this(splitter, converter, IMAGE_JPEG, IMAGE_PNG);
+    public Image2PDFConverter() {
+        this(IMAGE_JPEG, IMAGE_PNG);
     }
 
-    public Image2PDFConverter(PDFPageSplitter splitter, PDF2ImageConverter converter,
-            MediaType... mediaTypes) {
-        this(splitter, converter, asList(mediaTypes));
+    public Image2PDFConverter(MediaType... mediaTypes) {
+        this(asList(mediaTypes));
     }
 
-    public Image2PDFConverter(PDFPageSplitter splitter, PDF2ImageConverter converter,
-            List<MediaType> mediaTypes) {
-        this.pdfPageSplitter = splitter;
-        this.pdf2ImageConverter = converter;
+    public Image2PDFConverter(List<MediaType> mediaTypes) {
         this.supportedMediaTypes = mediaTypes;
     }
 
@@ -74,19 +65,9 @@ public class Image2PDFConverter {
     public byte[] convert(byte[] bytes) {
         MediaType mediaType = mediaType(bytes);
         if (APPLICATION_PDF.equals(mediaType)) {
-            LOG.info("Innhold er allerede PDF, deles opp i deler");
-            List<byte[]> pdfPages = pdfPageSplitter.split(bytes);
-            if (pdfPages.size() > MAX_PDF_PAGES_PR_DOCUMENT) {
-                LOG.warn("PDF inneholder {} sider, kan ikke overstige {}", pdfPages.size(), MAX_PDF_PAGES_PR_DOCUMENT);
-                throw new AttachmentsTooLargeException(
-                        "Du kan ikke laste opp en pdf som inneholder mer enn " + MAX_PDF_PAGES_PR_DOCUMENT + " sider, fikk "
-                                + pdfPages.size());
-            }
-            LOG.info("PDF inneholder {} sider, konverterer disse til bildeformat (fattigmanns virussscanner...)",
-                    pdfPages.size());
-            return embedImagesInPdf(pdf2ImageConverter.convertToImages(pdfPages), "jpg");
+            return bytes;
         }
-        if (shouldConvertImage(mediaType)) {
+        if (validImageTypes(mediaType)) {
             return embedImagesInPdf(mediaType.getSubtype(), bytes);
         }
         throw new AttachmentTypeUnsupportedException(mediaType);
@@ -106,21 +87,14 @@ public class Image2PDFConverter {
         }
     }
 
-    private boolean shouldConvertImage(MediaType mediaType) {
-        boolean shouldConvert = supportedMediaTypes.contains(mediaType);
-        LOG.info("{} konvertere bytes av type {} til PDF", shouldConvert ? "Vil" : "Vil ikke", mediaType);
-        return shouldConvert;
+    private boolean validImageTypes(MediaType mediaType) {
+        boolean validImageTypes = supportedMediaTypes.contains(mediaType);
+        LOG.info("{} konvertere bytes av type {} til PDF", validImageTypes ? "Vil" : "Vil ikke", mediaType);
+        return validImageTypes;
     }
 
     private static MediaType mediaType(byte[] bytes) {
         return MediaType.valueOf(new Tika().detect(bytes));
-    }
-
-    @Override
-    public String toString() {
-        return getClass().getSimpleName() + " [splitter=" + pdfPageSplitter + ", supportedMediaTypes="
-                + supportedMediaTypes
-                + "]";
     }
 
     private static void addPDFPageFromImage(PDDocument doc, byte[] origImg, String imgFormat) {
