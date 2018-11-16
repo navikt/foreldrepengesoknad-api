@@ -1,8 +1,7 @@
 package no.nav.foreldrepenger.selvbetjening.felles.attachments;
 
-import no.nav.foreldrepenger.selvbetjening.SlowTests;
+import no.nav.foreldrepenger.selvbetjening.FastTests;
 import no.nav.foreldrepenger.selvbetjening.felles.attachments.exceptions.AttachmentTypeUnsupportedException;
-import no.nav.foreldrepenger.selvbetjening.felles.attachments.exceptions.AttachmentsTooLargeException;
 import org.apache.tika.Tika;
 import org.junit.BeforeClass;
 import org.junit.Test;
@@ -15,7 +14,7 @@ import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertTrue;
 import static org.springframework.http.MediaType.IMAGE_GIF;
 
-@Category(SlowTests.class)
+@Category(FastTests.class)
 public class ImageByteArray2PDFConverterTest {
     private static final byte[] PDFSIGNATURE = { 0x25, 0x50, 0x44, 0x46 };
 
@@ -61,8 +60,8 @@ public class ImageByteArray2PDFConverterTest {
         return Arrays.equals(Arrays.copyOfRange(fileContents, 0, PDFSIGNATURE.length), PDFSIGNATURE);
     }
 
-    @Test(expected = AttachmentsTooLargeException.class)
-    public void testTooLargePdfFile() {
+    @Test
+    public void pdfManyPages() {
         converter.convert("pdf/spring-framework-reference.pdf");
 
     }
