@@ -6,14 +6,10 @@ import org.slf4j.MDC;
 import org.springframework.http.HttpStatus;
 
 import java.time.LocalDateTime;
-import java.util.List;
-import java.util.Objects;
 
-import static com.fasterxml.jackson.annotation.JsonFormat.Feature.WRITE_SINGLE_ELEM_ARRAYS_UNWRAPPED;
 import static com.fasterxml.jackson.annotation.JsonFormat.Shape.STRING;
 import static com.fasterxml.jackson.annotation.JsonInclude.Include.NON_NULL;
 import static java.time.LocalDateTime.now;
-import static java.util.stream.Collectors.toList;
 
 @JsonInclude(NON_NULL)
 class ApiError {
@@ -23,14 +19,13 @@ class ApiError {
     private final HttpStatus status;
     @JsonFormat(shape = STRING, pattern = "dd-MM-yyyy hh:mm:ss")
     private final LocalDateTime timestamp;
-    @JsonFormat(with = WRITE_SINGLE_ELEM_ARRAYS_UNWRAPPED)
-    private final List<String> messages;
+    private final String message;
     private final String uuid;
 
-    ApiError(HttpStatus status, List<String> messages) {
+    ApiError(HttpStatus status, String message) {
         this.timestamp = now();
         this.status = status;
-        this.messages = messages.stream().filter(Objects::nonNull).collect(toList());
+        this.message = message;
         this.uuid = uuid();
     }
 
@@ -51,13 +46,8 @@ class ApiError {
         return timestamp;
     }
 
-    public List<String> getMessages() {
-        return messages;
+    public String getMessage() {
+        return message;
     }
 
-    @Override
-    public String toString() {
-        return getClass().getSimpleName() + "[status=" + status + ", timestamp=" + timestamp + ", messages=" + messages
-                + ", uuid=" + uuid + "]";
-    }
 }
