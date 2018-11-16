@@ -7,9 +7,10 @@ management:
 server:
   servlet.context-path: /
   use-forward-headers: true
+  error.whitelabel.enabled: false
 spring:
-  cache :
-     cache-names : aktoer
+  cache:
+     cache-names: aktoer
      caffeine.spec: maximumSize=100,expireAfterAccess=3600s
   application.name: foreldrepengesoknad-api
   jackson.deserialization.accept_single_value_as_array: true
@@ -17,6 +18,8 @@ spring:
   metrics.web.server.auto-time-requests: true
   servlet.multipart.max-file-size: 100MB
   servlet.multipart.max-request-size: 100MB
+  mvc.throw-exception-if-no-handler-found: true
+  resources.add-mappings: false
 no.nav.security.oidc:
   issuers: selvbetjening
   issuer.selvbetjening:
