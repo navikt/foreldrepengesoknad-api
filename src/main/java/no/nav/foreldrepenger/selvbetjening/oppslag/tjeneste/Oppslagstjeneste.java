@@ -81,7 +81,7 @@ public class Oppslagstjeneste implements Oppslag {
     @Override
     @Cacheable(cacheNames = "aktoer")
     public AktørId hentAktørId(String fnr) {
-        LOG.info("Henter aktørId");
+        LOG.trace("Henter aktørId");
         URI uri = fromUri(oppslagServiceUrl)
                 .path("/oppslag/aktorfnr")
                 .queryParams(fnr(fnr))
