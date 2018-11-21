@@ -1,18 +1,18 @@
 package no.nav.foreldrepenger.selvbetjening.felles.attachments;
 
-import java.awt.Dimension;
-import java.awt.Graphics2D;
-import java.awt.Image;
+import no.nav.foreldrepenger.selvbetjening.felles.attachments.exceptions.AttachmentConversionException;
+import org.apache.pdfbox.pdmodel.common.PDRectangle;
+
+import javax.imageio.ImageIO;
+import java.awt.*;
+import java.awt.geom.AffineTransform;
+import java.awt.image.AffineTransformOp;
 import java.awt.image.BufferedImage;
 import java.io.ByteArrayInputStream;
 import java.io.ByteArrayOutputStream;
 import java.io.IOException;
 
-import javax.imageio.ImageIO;
-
-import org.apache.pdfbox.pdmodel.common.PDRectangle;
-
-import no.nav.foreldrepenger.selvbetjening.felles.attachments.exceptions.AttachmentConversionException;
+import static java.awt.image.AffineTransformOp.TYPE_BILINEAR;
 
 public class ImageScaler {
 
@@ -20,15 +20,18 @@ public class ImageScaler {
         final PDRectangle A4 = PDRectangle.A4;
 
         try {
-            BufferedImage awtImage = ImageIO.read(new ByteArrayInputStream(origImage));
+            BufferedImage image = ImageIO.read(new ByteArrayInputStream(origImage));
+
+            image = rotatePortrait(image);
+
             Dimension pdfPageDim = new Dimension((int) A4.getWidth(), (int) A4.getHeight());
-            Dimension origDim = new Dimension(awtImage.getWidth(), awtImage.getHeight());
+            Dimension origDim = new Dimension(image.getWidth(), image.getHeight());
             Dimension newDim = getScaledDimension(origDim, pdfPageDim);
 
             if (newDim.equals(origDim)) {
                 return origImage;
             } else {
-                BufferedImage scaledImg = scaleDown(awtImage, newDim);
+                BufferedImage scaledImg = scaleDown(image, newDim);
                 return toBytes(scaledImg, format);
             }
         } catch (IOException ex) {
@@ -36,25 +39,38 @@ public class ImageScaler {
         }
     }
 
-    private static Dimension getScaledDimension(Dimension imgSize, Dimension boundary) {
-        int original_width = imgSize.width;
-        int original_height = imgSize.height;
-        int bound_width = boundary.width;
-        int bound_height = boundary.height;
-        int new_width = original_width;
-        int new_height = original_height;
-
-        if (original_width > bound_width) {
-            new_width = bound_width;
-            new_height = (new_width * original_height) / original_width;
+    private static BufferedImage rotatePortrait(BufferedImage image) {
+        if (image.getHeight() >= image.getWidth()) {
+            return image;
         }
 
-        if (new_height > bound_height) {
-            new_height = bound_height;
-            new_width = (new_height * original_width) / original_height;
+        BufferedImage rotatedImage = new BufferedImage(image.getHeight(), image.getWidth(), image.getType());
+        AffineTransform transform = new AffineTransform();
+        transform.rotate(Math.toRadians(90), image.getHeight() / 2f, image.getHeight() / 2f);
+        AffineTransformOp op = new AffineTransformOp(transform, TYPE_BILINEAR);
+        rotatedImage = op.filter(image, rotatedImage);
+        return rotatedImage;
+    }
+
+    private static Dimension getScaledDimension(Dimension imgSize, Dimension a4) {
+        int originalWidth = imgSize.width;
+        int originalHeight = imgSize.height;
+        int a4Width = a4.width;
+        int a4Height = a4.height;
+        int newWidth = originalWidth;
+        int newHeight = originalHeight;
+
+        if (originalWidth > a4Width) {
+            newWidth = a4Width;
+            newHeight = (newWidth * originalHeight) / originalWidth;
         }
 
-        return new Dimension(new_width, new_height);
+        if (newHeight > a4Height) {
+            newHeight = a4Height;
+            newWidth = (newHeight * originalWidth) / originalHeight;
+        }
+
+        return new Dimension(newWidth, newHeight);
     }
 
     private static BufferedImage scaleDown(BufferedImage origImage, Dimension newDim) {

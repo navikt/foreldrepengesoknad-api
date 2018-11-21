@@ -12,7 +12,7 @@ import java.net.URL;
 import java.nio.file.Files;
 import java.nio.file.Paths;
 
-import static org.junit.jupiter.api.Assertions.*;
+import static org.assertj.core.api.Assertions.assertThat;
 
 @Category(FastTests.class)
 public class ImageScalerTest {
@@ -22,7 +22,7 @@ public class ImageScalerTest {
         URL url = getClass().getResource("/pdf/jks.jpg");
         byte[] orig = Files.readAllBytes(Paths.get(url.toURI()));
         byte[] scaled = ImageScaler.downToA4(orig, "jpg");
-        assertEquals(scaled.length, orig.length);
+        assertThat(scaled.length).isEqualTo(orig.length);
     }
 
     @Test
@@ -32,8 +32,8 @@ public class ImageScalerTest {
         byte[] scaled = ImageScaler.downToA4(orig, "jpg");
         BufferedImage origImg = fromBytes(orig);
         BufferedImage scaledImg = fromBytes(scaled);
-        assertTrue(scaledImg.getWidth() < origImg.getWidth());
-        assertTrue(scaledImg.getHeight() < origImg.getHeight());
+        assertThat(scaledImg.getWidth()).isLessThan(origImg.getWidth());
+        assertThat(scaledImg.getHeight()).isLessThan(origImg.getHeight());
     }
 
     @Test
@@ -41,7 +41,18 @@ public class ImageScalerTest {
         URL url = getClass().getResource("/pdf/rdd.png");
         final byte[] orig = Files.readAllBytes(Paths.get(url.toURI()));
         final byte[] scaled = ImageScaler.downToA4(orig, "jpg");
-        assertTrue(hasJpgSignature(scaled));
+        assertThat(hasJpgSignature(scaled)).isTrue();
+    }
+
+    @Test
+    public void rotateLandscapeToPortrait() throws Exception {
+        URL url = getClass().getResource("/pdf/landscape.jpg");
+        byte[] orig = Files.readAllBytes(Paths.get(url.toURI()));
+        byte[] scaled = ImageScaler.downToA4(orig, "jpg");
+        BufferedImage origImg = fromBytes(orig);
+        BufferedImage scaledImg = fromBytes(scaled);
+        assertThat(origImg.getWidth()).isGreaterThan(origImg.getHeight());
+        assertThat(scaledImg.getHeight()).isGreaterThan(scaledImg.getWidth());
     }
 
     public boolean hasJpgSignature(byte[] bytes) {
