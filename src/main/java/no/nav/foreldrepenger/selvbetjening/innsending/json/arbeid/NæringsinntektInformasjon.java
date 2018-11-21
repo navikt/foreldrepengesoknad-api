@@ -4,6 +4,6 @@ import java.time.LocalDate;
 
 public class NæringsinntektInformasjon {
     public LocalDate dato;
-    public String næringsinntektEtterEndring;
+    public Integer næringsinntektEtterEndring;
     public String forklaring;
 }

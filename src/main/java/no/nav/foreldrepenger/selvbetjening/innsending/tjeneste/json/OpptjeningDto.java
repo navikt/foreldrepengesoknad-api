@@ -145,7 +145,7 @@ public class OpptjeningDto {
 
             if (næringsInfo != null) {
                 this.endringsDato = næringsInfo.dato;
-                this.næringsinntektBrutto = Integer.parseInt(næringsInfo.næringsinntektEtterEndring);
+                this.næringsinntektBrutto = næringsInfo.næringsinntektEtterEndring;
                 this.beskrivelseEndring = næringsInfo.forklaring;
             }
 
