@@ -11,11 +11,11 @@ import org.springframework.context.annotation.Configuration;
 public class InnsynConfig {
 
     private static final URI DEFAULT_URI = URI.create("http://fpsoknad-mottak");
-    private static final String DEFAULT_BASE_PATH = "/api/innsyn/";
-    private static final String DEFAULT_PING_PATH = "/ping";
+    private static final String DEFAULT_BASE_PATH = "/api";
+    private static final String DEFAULT_PING_PATH = DEFAULT_BASE_PATH + "/mottak/ping";
 
     static final String SAKSNUMMER = "saksnummer";
-    static final String UTTAKSPLAN = DEFAULT_BASE_PATH + "uttaksplan";
+    static final String UTTAKSPLAN = DEFAULT_BASE_PATH + "/innsyn/uttaksplan";
 
     String pingPath;
     boolean enabled;
