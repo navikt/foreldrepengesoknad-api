@@ -8,6 +8,7 @@ import static org.slf4j.LoggerFactory.getLogger;
 
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.Collections;
 import java.util.List;
 
 import org.slf4j.Logger;
@@ -22,6 +23,7 @@ import no.nav.foreldrepenger.selvbetjening.oppslag.json.Bankkonto;
 import no.nav.foreldrepenger.selvbetjening.oppslag.json.Barn;
 import no.nav.foreldrepenger.selvbetjening.oppslag.json.Behandling;
 import no.nav.foreldrepenger.selvbetjening.oppslag.json.Sak;
+import no.nav.foreldrepenger.selvbetjening.oppslag.tjeneste.innsyn.UttaksPeriode;
 import no.nav.foreldrepenger.selvbetjening.oppslag.tjeneste.json.PersonDto;
 import no.nav.foreldrepenger.selvbetjening.oppslag.tjeneste.json.SøkerinfoDto;
 
@@ -65,7 +67,8 @@ public class OppslagstjenesteStub implements Oppslag {
         dto.bankkonto.kontonummer = "1234567890";
         dto.bankkonto.banknavn = "Stub NOR";
 
-        AnnenForelder annenForelder = new AnnenForelder("01017098765", "Steve", "Grønland", "Nichols", now().minusYears(45));
+        AnnenForelder annenForelder = new AnnenForelder("01017098765", "Steve", "Grønland", "Nichols",
+                now().minusYears(45));
 
         Barn barn = new Barn("01011812345", "Mo", null, "Hoelsveen", "M", now().minusYears(1), annenForelder);
         dto.barn = singletonList(barn);
@@ -85,5 +88,10 @@ public class OppslagstjenesteStub implements Oppslag {
     @Cacheable(cacheNames = "aktoer")
     public AktørId hentAktørId(String fnr) {
         return new AktørId("1234567890");
+    }
+
+    @Override
+    public List<UttaksPeriode> hentUttaksPerioder(String fnr) {
+        return Collections.emptyList();
     }
 }
