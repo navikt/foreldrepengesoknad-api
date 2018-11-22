@@ -4,7 +4,6 @@ import java.util.List;
 
 import no.nav.foreldrepenger.selvbetjening.oppslag.json.AktørId;
 import no.nav.foreldrepenger.selvbetjening.oppslag.json.Sak;
-import no.nav.foreldrepenger.selvbetjening.oppslag.tjeneste.innsyn.UttaksPeriode;
 import no.nav.foreldrepenger.selvbetjening.oppslag.tjeneste.json.PersonDto;
 import no.nav.foreldrepenger.selvbetjening.oppslag.tjeneste.json.SøkerinfoDto;
 
@@ -17,7 +16,5 @@ public interface Oppslag {
     List<Sak> hentSaker();
 
     AktørId hentAktørId(String fnr);
-
-    List<UttaksPeriode> hentUttaksPerioder(String fnr);
 
 }

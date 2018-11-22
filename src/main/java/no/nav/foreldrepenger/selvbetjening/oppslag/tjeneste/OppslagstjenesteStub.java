@@ -8,7 +8,6 @@ import static org.slf4j.LoggerFactory.getLogger;
 
 import java.util.ArrayList;
 import java.util.Arrays;
-import java.util.Collections;
 import java.util.List;
 
 import org.slf4j.Logger;
@@ -23,7 +22,6 @@ import no.nav.foreldrepenger.selvbetjening.oppslag.json.Bankkonto;
 import no.nav.foreldrepenger.selvbetjening.oppslag.json.Barn;
 import no.nav.foreldrepenger.selvbetjening.oppslag.json.Behandling;
 import no.nav.foreldrepenger.selvbetjening.oppslag.json.Sak;
-import no.nav.foreldrepenger.selvbetjening.oppslag.tjeneste.innsyn.UttaksPeriode;
 import no.nav.foreldrepenger.selvbetjening.oppslag.tjeneste.json.PersonDto;
 import no.nav.foreldrepenger.selvbetjening.oppslag.tjeneste.json.SøkerinfoDto;
 
@@ -88,10 +86,5 @@ public class OppslagstjenesteStub implements Oppslag {
     @Cacheable(cacheNames = "aktoer")
     public AktørId hentAktørId(String fnr) {
         return new AktørId("1234567890");
-    }
-
-    @Override
-    public List<UttaksPeriode> hentUttaksPerioder(String fnr) {
-        return Collections.emptyList();
     }
 }

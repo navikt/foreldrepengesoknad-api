@@ -1,13 +1,11 @@
 package no.nav.foreldrepenger.selvbetjening.oppslag.tjeneste;
 
 import static java.util.Arrays.asList;
-import static java.util.Collections.emptyList;
 import static org.slf4j.LoggerFactory.getLogger;
 import static org.springframework.web.util.UriComponentsBuilder.fromUri;
 
 import java.net.URI;
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.List;
 import java.util.Optional;
 
@@ -24,7 +22,6 @@ import org.springframework.web.client.RestTemplate;
 import no.nav.foreldrepenger.selvbetjening.felles.util.Enabled;
 import no.nav.foreldrepenger.selvbetjening.oppslag.json.AktørId;
 import no.nav.foreldrepenger.selvbetjening.oppslag.json.Sak;
-import no.nav.foreldrepenger.selvbetjening.oppslag.tjeneste.innsyn.UttaksPeriode;
 import no.nav.foreldrepenger.selvbetjening.oppslag.tjeneste.json.PersonDto;
 import no.nav.foreldrepenger.selvbetjening.oppslag.tjeneste.json.SøkerinfoDto;
 
@@ -82,16 +79,6 @@ public class Oppslagstjeneste implements Oppslag {
         }
 
         return saker;
-    }
-
-    @Override
-    public List<UttaksPeriode> hentUttaksPerioder(String saksnummer) {
-        URI uri = fromUri(mottakServiceUrl).path("/innsyn/uttaksplan").queryParams(fnr("saksnummer", saksnummer))
-                .build().toUri();
-        return Optional.ofNullable(template.getForObject(uri, UttaksPeriode[].class))
-                .map(Arrays::asList)
-                .orElse(emptyList());
-
     }
 
     @Override
