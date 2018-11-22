@@ -31,7 +31,7 @@ public class FordelingDto {
         public String årsak;
         public String uttaksperiodeType;
         public String virksomhetsNummer;
-        public String arbeidstidProsent;
+        public Double arbeidstidProsent;
         public Boolean ønskerSamtidigUttak;
         public Boolean erArbeidstaker;
         public Boolean arbeidsForholdSomskalGraderes;
