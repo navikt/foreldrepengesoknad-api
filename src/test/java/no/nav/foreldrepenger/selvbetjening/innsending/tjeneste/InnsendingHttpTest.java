@@ -30,7 +30,7 @@ import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.SerializationFeature;
 
-import no.nav.foreldrepenger.selvbetjening.ApplicationLocal;
+import no.nav.foreldrepenger.selvbetjening.ApiApplicationLocal;
 import no.nav.foreldrepenger.selvbetjening.felles.storage.AttachmentTestHttpHandler;
 import no.nav.foreldrepenger.selvbetjening.innsending.json.Barn;
 import no.nav.foreldrepenger.selvbetjening.innsending.json.Engangsstønad;
@@ -38,7 +38,7 @@ import no.nav.foreldrepenger.selvbetjening.innsending.json.Vedlegg;
 import no.nav.security.oidc.test.support.JwtTokenGenerator;
 
 @ExtendWith(SpringExtension.class)
-@SpringBootTest(classes = ApplicationLocal.class, webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT)
+@SpringBootTest(classes = ApiApplicationLocal.class, webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT)
 @ActiveProfiles("dev, localstack")
 @Tag("SlowTests")
 public class InnsendingHttpTest {

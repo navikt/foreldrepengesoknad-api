@@ -18,10 +18,10 @@ import no.nav.security.spring.oidc.api.EnableOIDCTokenValidation;
 @EnableOIDCTokenValidation(ignore = { "org.springframework", "springfox.documentation" })
 @Import(value = TokenGeneratorConfiguration.class)
 @ComponentScan(excludeFilters = { @Filter(type = ASSIGNABLE_TYPE, value = ApiApplication.class) })
-public class ApplicationLocal {
+public class ApiApplicationLocal {
 
     public static void main(String[] args) {
-        SpringApplication app = new SpringApplication(ApplicationLocal.class);
+        SpringApplication app = new SpringApplication(ApiApplicationLocal.class);
         app.setAdditionalProfiles(DEV);
         app.run(args);
     }
