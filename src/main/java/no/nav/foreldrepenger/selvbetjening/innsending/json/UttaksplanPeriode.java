@@ -9,6 +9,7 @@ public class UttaksplanPeriode {
     public String orgnr;
     public Boolean erArbeidstaker;
     public Double stillingsprosent;
+    public Double samtidigUttakProsent;
     public Boolean ønskerSamtidigUttak;
     public Boolean gradert;
     public String morsAktivitetIPerioden;
