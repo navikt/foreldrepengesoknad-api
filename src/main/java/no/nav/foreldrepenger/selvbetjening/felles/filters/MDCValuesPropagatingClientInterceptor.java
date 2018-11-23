@@ -2,10 +2,12 @@ package no.nav.foreldrepenger.selvbetjening.felles.filters;
 
 import static no.nav.foreldrepenger.selvbetjening.felles.Constants.NAV_CALL_ID;
 import static no.nav.foreldrepenger.selvbetjening.felles.Constants.NAV_CONSUMER_ID;
+import static org.springframework.core.Ordered.LOWEST_PRECEDENCE;
 
 import java.io.IOException;
 
 import org.slf4j.MDC;
+import org.springframework.core.annotation.Order;
 import org.springframework.http.HttpRequest;
 import org.springframework.http.client.ClientHttpRequestExecution;
 import org.springframework.http.client.ClientHttpRequestInterceptor;
@@ -13,6 +15,7 @@ import org.springframework.http.client.ClientHttpResponse;
 import org.springframework.stereotype.Component;
 
 @Component
+@Order(LOWEST_PRECEDENCE)
 public class MDCValuesPropagatingClientInterceptor implements ClientHttpRequestInterceptor {
 
     @Override

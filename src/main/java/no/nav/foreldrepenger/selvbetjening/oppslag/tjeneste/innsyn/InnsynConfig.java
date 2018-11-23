@@ -3,6 +3,7 @@ package no.nav.foreldrepenger.selvbetjening.oppslag.tjeneste.innsyn;
 import java.net.URI;
 import java.util.Optional;
 
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.boot.context.properties.ConfigurationProperties;
 import org.springframework.context.annotation.Configuration;
 
@@ -10,7 +11,6 @@ import org.springframework.context.annotation.Configuration;
 @Configuration
 public class InnsynConfig {
 
-    private static final URI DEFAULT_URI = URI.create("http://fpsoknad-mottak");
     private static final String DEFAULT_BASE_PATH = "/api";
     private static final String DEFAULT_PING_PATH = DEFAULT_BASE_PATH + "/mottak/ping";
 
@@ -22,6 +22,11 @@ public class InnsynConfig {
     URI uri;
     String basePath;
 
+    public InnsynConfig(@Value("${FPSOKNAD_OPPSLAG_API_URL}") URI uri) {
+        this.uri = uri;
+
+    }
+
     public String getBasePath() {
         return Optional.ofNullable(basePath).orElse(DEFAULT_BASE_PATH);
     }
@@ -31,7 +36,7 @@ public class InnsynConfig {
     }
 
     public URI getUri() {
-        return Optional.ofNullable(uri).orElse(DEFAULT_URI);
+        return uri;
     }
 
     public void setUri(URI uri) {

@@ -15,32 +15,40 @@ import org.slf4j.Logger;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnProperty;
 import org.springframework.cache.annotation.Cacheable;
+import org.springframework.context.EnvironmentAware;
+import org.springframework.core.env.Environment;
 import org.springframework.http.HttpHeaders;
 import org.springframework.stereotype.Service;
 import org.springframework.web.client.RestTemplate;
 
 import no.nav.foreldrepenger.selvbetjening.felles.util.Enabled;
+import no.nav.foreldrepenger.selvbetjening.felles.util.EnvUtil;
 import no.nav.foreldrepenger.selvbetjening.oppslag.json.AktørId;
 import no.nav.foreldrepenger.selvbetjening.oppslag.json.Sak;
+import no.nav.foreldrepenger.selvbetjening.oppslag.tjeneste.innsyn.InnsynTjeneste;
+import no.nav.foreldrepenger.selvbetjening.oppslag.tjeneste.innsyn.UttaksPeriode;
 import no.nav.foreldrepenger.selvbetjening.oppslag.tjeneste.json.PersonDto;
 import no.nav.foreldrepenger.selvbetjening.oppslag.tjeneste.json.SøkerinfoDto;
 
 @Service
 @ConditionalOnProperty(name = "stub.oppslag", havingValue = "false", matchIfMissing = true)
-public class Oppslagstjeneste implements Oppslag {
+public class Oppslagstjeneste implements Oppslag, EnvironmentAware {
 
     private static final Logger LOG = getLogger(Oppslagstjeneste.class);
     private final RestTemplate template;
     private final URI oppslagServiceUrl;
     private final URI mottakServiceUrl;
+    private final InnsynTjeneste innsyn;
+    private Environment env,
 
     @Inject
     public Oppslagstjeneste(@Value("${FPSOKNAD_OPPSLAG_API_URL}") URI oppslagUrl,
             @Value("${FPSOKNAD_MOTTAK_API_URL}") URI mottakUrl,
-            RestTemplate template) {
+            RestTemplate template, InnsynTjeneste innsyn) {
         this.oppslagServiceUrl = oppslagUrl;
         this.mottakServiceUrl = mottakUrl;
         this.template = template;
+        this.innsyn = innsyn;
     }
 
     @Override
@@ -77,6 +85,16 @@ public class Oppslagstjeneste implements Oppslag {
         else {
             LOG.info("Henter {} sak(er) fra Sak", sakSaker.size());
         }
+        if (EnvUtil.isDevOrPreprod(env)) {
+            try {
+                for (Sak sak : saker) {
+                    List<UttaksPeriode> plan = innsyn.hentUttaksplan(sak.getSaksnummer());
+                    plan.stream().forEach(s -> LOG.info("Uttaksplan for {} er {}", sak.getSaksnummer(), s));
+                }
+            } catch (Exception e) {
+                LOG.trace("Dette gikk galt, men no worries, testing testing", e);
+            }
+        }
 
         return saker;
     }
@@ -98,6 +116,11 @@ public class Oppslagstjeneste implements Oppslag {
         HttpHeaders queryParams = new HttpHeaders();
         queryParams.add(key, value);
         return queryParams;
+    }
+
+    @Override
+    public void setEnvironment(Environment env) {
+        this.env = env;
     }
 
 }
