@@ -15,14 +15,14 @@ public class InnsynConfig {
     private static final String DEFAULT_PING_PATH = DEFAULT_BASE_PATH + "/mottak/ping";
 
     static final String SAKSNUMMER = "saksnummer";
-    static final String UTTAKSPLAN = DEFAULT_BASE_PATH + "/innsyn/uttaksplan";
+    static final String UTTAKSPLAN = "/innsyn/uttaksplan";
 
     String pingPath;
     boolean enabled;
     URI uri;
     String basePath;
 
-    public InnsynConfig(@Value("${FPSOKNAD_OPPSLAG_API_URL}") URI uri) {
+    public InnsynConfig(@Value("${FPSOKNAD_MOTTAK_API_URL}") URI uri) {
         this.uri = uri;
 
     }
