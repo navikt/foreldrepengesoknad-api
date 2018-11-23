@@ -39,7 +39,7 @@ public class Oppslagstjeneste implements Oppslag, EnvironmentAware {
     private final URI oppslagServiceUrl;
     private final URI mottakServiceUrl;
     private final InnsynTjeneste innsyn;
-    private Environment env,
+    private Environment env;
 
     @Inject
     public Oppslagstjeneste(@Value("${FPSOKNAD_OPPSLAG_API_URL}") URI oppslagUrl,
