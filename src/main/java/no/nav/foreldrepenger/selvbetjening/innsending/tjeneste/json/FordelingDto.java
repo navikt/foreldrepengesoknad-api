@@ -36,6 +36,7 @@ public class FordelingDto {
         public Boolean erArbeidstaker;
         public Boolean arbeidsForholdSomskalGraderes;
         public String morsAktivitetsType;
+        public Double samtidigUttakProsent;
         public List<String> vedlegg;
         public Boolean ønskerFlerbarnsdager;
 
@@ -50,6 +51,7 @@ public class FordelingDto {
             this.uttaksperiodeType = u.konto;
             this.fom = u.tidsperiode.fom;
             this.tom = u.tidsperiode.tom;
+            this.samtidigUttakProsent = u.samtidigUttakProsent;
             this.årsak = u.årsak;
             this.virksomhetsNummer = u.orgnr;
             this.arbeidstidProsent = u.stillingsprosent;
