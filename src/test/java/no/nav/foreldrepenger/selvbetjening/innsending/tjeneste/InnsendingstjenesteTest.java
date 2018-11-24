@@ -1,19 +1,5 @@
 package no.nav.foreldrepenger.selvbetjening.innsending.tjeneste;
 
-import no.nav.foreldrepenger.selvbetjening.felles.attachments.Image2PDFConverter;
-import no.nav.foreldrepenger.selvbetjening.innsending.json.*;
-import org.junit.Before;
-import org.junit.Test;
-import org.junit.runner.RunWith;
-import org.mockito.Mock;
-import org.mockito.junit.MockitoJUnitRunner;
-import org.springframework.http.HttpEntity;
-import org.springframework.http.ResponseEntity;
-import org.springframework.web.client.RestTemplate;
-
-import javax.ws.rs.BadRequestException;
-import java.net.URI;
-
 import static java.time.LocalDateTime.now;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.junit.jupiter.api.Assertions.assertThrows;
@@ -21,6 +7,22 @@ import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.ArgumentMatchers.eq;
 import static org.mockito.Mockito.when;
 import static org.springframework.http.HttpStatus.OK;
+
+import java.net.URI;
+
+import javax.ws.rs.BadRequestException;
+
+import org.junit.Before;
+import org.junit.Test;
+import org.junit.runner.RunWith;
+import org.mockito.Mock;
+import org.mockito.junit.MockitoJUnitRunner;
+import org.springframework.http.ResponseEntity;
+import org.springframework.web.client.RestTemplate;
+
+import no.nav.foreldrepenger.selvbetjening.felles.attachments.Image2PDFConverter;
+import no.nav.foreldrepenger.selvbetjening.innsending.json.Kvittering;
+import no.nav.foreldrepenger.selvbetjening.innsending.json.Søknad;
 
 @RunWith(MockitoJUnitRunner.class)
 public class InnsendingstjenesteTest {
@@ -36,20 +38,7 @@ public class InnsendingstjenesteTest {
     @Before
     public void setUp() throws Exception {
         innsending = new Innsendingstjeneste(new URI("uri"), template, converter);
-
-        when(template.postForEntity(any(URI.class), any(HttpEntity.class), eq(Kvittering.class))).thenReturn(kvittering());
-    }
-
-    @Test
-    public void testInnsendingAvEnkelEngangsstønad() {
-        ResponseEntity<Kvittering> response = innsending.sendInn(engangsstønad());
-        assertThat(response.getStatusCode()).isEqualByComparingTo(OK);
-    }
-
-    @Test
-    public void testInnsendingAvEnkelForeldrepengesøknad() {
-        ResponseEntity<Kvittering> response = innsending.sendInn(foreldrepengesøknad());
-        assertThat(response.getStatusCode()).isEqualByComparingTo(OK);
+        when(template.postForEntity(any(URI.class), any(Object.class), eq(Kvittering.class))).thenReturn(kvittering());
     }
 
     @Test
@@ -61,29 +50,4 @@ public class InnsendingstjenesteTest {
     private ResponseEntity<Kvittering> kvittering() {
         return new ResponseEntity<>(new Kvittering(now(), "1", "OK", "2", "3"), OK);
     }
-
-    public Engangsstønad engangsstønad() {
-        Engangsstønad engangsstønad = new Engangsstønad();
-        engangsstønad.opprettet = now();
-
-        Barn barn = new Barn();
-        barn.erBarnetFødt = false;
-        engangsstønad.barn = barn;
-
-        return engangsstønad;
-    }
-
-    private Foreldrepengesøknad foreldrepengesøknad() {
-        Foreldrepengesøknad foreldrepengesøknad = new Foreldrepengesøknad();
-        foreldrepengesøknad.opprettet = now();
-
-        Barn barn = new Barn();
-        barn.erBarnetFødt = true;
-        foreldrepengesøknad.barn = barn;
-
-        foreldrepengesøknad.situasjon = "adopsjon";
-
-        return foreldrepengesøknad;
-    }
-
 }
