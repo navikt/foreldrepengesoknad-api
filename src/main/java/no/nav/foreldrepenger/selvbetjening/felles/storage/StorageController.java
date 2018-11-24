@@ -1,6 +1,7 @@
 package no.nav.foreldrepenger.selvbetjening.felles.storage;
 
 import static java.lang.String.format;
+import static no.nav.foreldrepenger.selvbetjening.felles.Constants.ISSUER;
 import static org.apache.commons.io.FileUtils.byteCountToDisplaySize;
 import static org.slf4j.LoggerFactory.getLogger;
 import static org.springframework.http.MediaType.APPLICATION_JSON_VALUE;
@@ -10,7 +11,6 @@ import java.util.Optional;
 
 import javax.inject.Inject;
 
-import no.nav.foreldrepenger.selvbetjening.felles.attachments.exceptions.AttachmentsTooLargeException;
 import org.slf4j.Logger;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.DeleteMapping;
@@ -23,11 +23,12 @@ import org.springframework.web.bind.annotation.RequestPart;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.multipart.MultipartFile;
 
+import no.nav.foreldrepenger.selvbetjening.felles.attachments.exceptions.AttachmentsTooLargeException;
 import no.nav.foreldrepenger.selvbetjening.felles.util.TokenHandler;
 import no.nav.security.oidc.api.ProtectedWithClaims;
 
 @RestController
-@ProtectedWithClaims(issuer = "selvbetjening", claimMap = { "acr=Level4" })
+@ProtectedWithClaims(issuer = ISSUER, claimMap = { "acr=Level4" })
 @RequestMapping("/rest/storage")
 public class StorageController {
 
@@ -90,8 +91,7 @@ public class StorageController {
         if (attachment.size > MAX_VEDLEGG_SIZE) {
             throw new AttachmentsTooLargeException(format("Vedlegg-størrelse er %s, men kan ikke overstige %s",
                     byteCountToDisplaySize(attachment.size),
-                    byteCountToDisplaySize(MAX_VEDLEGG_SIZE)
-            ));
+                    byteCountToDisplaySize(MAX_VEDLEGG_SIZE)));
         }
 
         String fnr = tokenHandler.autentisertBruker();

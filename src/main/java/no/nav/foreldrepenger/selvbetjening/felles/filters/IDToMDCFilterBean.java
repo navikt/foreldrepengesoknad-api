@@ -21,7 +21,7 @@ import org.springframework.stereotype.Component;
 import org.springframework.web.filter.GenericFilterBean;
 
 import no.nav.foreldrepenger.selvbetjening.felles.util.TokenHandler;
-import no.nav.foreldrepenger.selvbetjening.oppslag.tjeneste.Oppslag;
+import no.nav.foreldrepenger.selvbetjening.tjeneste.oppslag.Oppslag;
 
 @Order(HIGHEST_PRECEDENCE)
 @Component

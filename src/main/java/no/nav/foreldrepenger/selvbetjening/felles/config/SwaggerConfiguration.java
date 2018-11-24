@@ -5,9 +5,9 @@ import static io.swagger.models.Scheme.HTTP;
 import static io.swagger.models.Scheme.HTTPS;
 import static java.util.stream.Collectors.toSet;
 import static no.nav.foreldrepenger.selvbetjening.felles.util.EnvUtil.PREPROD;
-import static no.nav.foreldrepenger.selvbetjening.innsending.InnsendingController.REST_SOKNAD;
-import static no.nav.foreldrepenger.selvbetjening.oppslag.OppslagController.OPPSLAG;
-import static no.nav.foreldrepenger.selvbetjening.oppslag.tjeneste.innsyn.InnsynController.INNSYN;
+import static no.nav.foreldrepenger.selvbetjening.tjeneste.innsending.InnsendingController.REST_SOKNAD;
+import static no.nav.foreldrepenger.selvbetjening.tjeneste.innsyn.InnsynController.INNSYN;
+import static no.nav.foreldrepenger.selvbetjening.tjeneste.oppslag.OppslagController.OPPSLAG;
 import static springfox.documentation.builders.PathSelectors.regex;
 import static springfox.documentation.spi.DocumentationType.SWAGGER_2;
 

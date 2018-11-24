@@ -7,7 +7,7 @@ import org.springframework.boot.actuate.health.HealthIndicator;
 import org.springframework.context.EnvironmentAware;
 import org.springframework.core.env.Environment;
 
-import no.nav.foreldrepenger.selvbetjening.oppslag.tjeneste.innsyn.Pingable;
+import no.nav.foreldrepenger.selvbetjening.tjeneste.Pingable;
 
 abstract class AbstractEnvironmentAwareHealthIndicator implements HealthIndicator, EnvironmentAware {
 
