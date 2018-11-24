@@ -6,6 +6,8 @@ import java.net.URI;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.context.EnvironmentAware;
+import org.springframework.core.env.Environment;
 import org.springframework.http.HttpEntity;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
@@ -19,14 +21,16 @@ import no.nav.foreldrepenger.selvbetjening.felles.error.NotFoundException;
 import no.nav.foreldrepenger.selvbetjening.felles.error.RemoteUnavailableException;
 import no.nav.foreldrepenger.selvbetjening.felles.error.UnauthenticatedException;
 import no.nav.foreldrepenger.selvbetjening.felles.error.UnauthorizedException;
+import no.nav.foreldrepenger.selvbetjening.felles.util.EnvUtil;
 import no.nav.foreldrepenger.selvbetjening.felles.util.TokenHandler;
 
-public abstract class AbstractRestConnection {
+public abstract class AbstractRestConnection implements EnvironmentAware, Pingable {
 
     private static final Logger LOG = LoggerFactory.getLogger(AbstractRestConnection.class);
 
-    private final RestTemplate template;
+    protected final RestTemplate template;
     private final TokenHandler tokenHandler;
+    private Environment env;
 
     protected abstract boolean isEnabled();
 
@@ -132,6 +136,10 @@ public abstract class AbstractRestConnection {
         }
     }
 
+    protected boolean isDevOrPreprod() {
+        return EnvUtil.isDevOrPreprod(env);
+    }
+
     protected static URI uri(URI base, String path) {
         return uri(base, path, null);
     }
@@ -147,5 +155,10 @@ public abstract class AbstractRestConnection {
         return UriComponentsBuilder
                 .fromUri(base)
                 .pathSegment(path);
+    }
+
+    @Override
+    public void setEnvironment(Environment env) {
+        this.env = env;
     }
 }

@@ -19,11 +19,22 @@ public class InnsynConfig {
 
     String pingPath;
     boolean enabled;
-    URI uri;
+    URI mottakURI;
+    URI oppslagURI;
     String basePath;
 
-    public InnsynConfig(@Value("${FPSOKNAD_MOTTAK_API_URL}") URI uri) {
-        this.uri = uri;
+    public InnsynConfig(@Value("${FPSOKNAD_MOTTAK_API_URL}") URI mottakURI,
+            @Value("${FPSOKNAD_OPPSLAG_API_URL}") URI oppslagURI) {
+        this.mottakURI = mottakURI;
+        this.oppslagURI = oppslagURI;
+    }
+
+    public URI getOppslagURI() {
+        return oppslagURI;
+    }
+
+    public void setOppslagURI(URI oppslagURI) {
+        this.oppslagURI = oppslagURI;
     }
 
     public String getBasePath() {
@@ -34,12 +45,12 @@ public class InnsynConfig {
         this.basePath = basePath;
     }
 
-    public URI getUri() {
-        return uri;
+    public URI getMottakURI() {
+        return mottakURI;
     }
 
-    public void setUri(URI uri) {
-        this.uri = uri;
+    public void setMottakURI(URI mottakURI) {
+        this.mottakURI = mottakURI;
     }
 
     public boolean isEnabled() {
@@ -60,7 +71,7 @@ public class InnsynConfig {
 
     @Override
     public String toString() {
-        return getClass().getSimpleName() + " [pingPath=" + pingPath + ", enabled=" + enabled + ", uri=" + uri
+        return getClass().getSimpleName() + " [pingPath=" + pingPath + ", enabled=" + enabled + ", uri=" + mottakURI
                 + ", basePath=" + basePath
                 + "]";
     }

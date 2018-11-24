@@ -1,6 +1,8 @@
 package no.nav.foreldrepenger.selvbetjening.felles.filters;
 
 import static no.nav.foreldrepenger.selvbetjening.felles.filters.FilterRegistrationUtil.urlPatternsFor;
+import static no.nav.foreldrepenger.selvbetjening.oppslag.OppslagController.OPPSLAG;
+import static no.nav.foreldrepenger.selvbetjening.oppslag.tjeneste.innsyn.InnsynController.INNSYN;
 
 import org.springframework.boot.web.servlet.FilterRegistrationBean;
 import org.springframework.stereotype.Component;
@@ -10,6 +12,6 @@ public class IDFilterRegistrationBean extends FilterRegistrationBean<IDToMDCFilt
 
     public IDFilterRegistrationBean(IDToMDCFilterBean idFilter) {
         setFilter(idFilter);
-        setUrlPatterns(urlPatternsFor("/rest"));
+        setUrlPatterns(urlPatternsFor(OPPSLAG, INNSYN));
     }
 }

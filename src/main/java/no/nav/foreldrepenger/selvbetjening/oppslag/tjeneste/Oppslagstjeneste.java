@@ -1,13 +1,9 @@
 package no.nav.foreldrepenger.selvbetjening.oppslag.tjeneste;
 
-import static java.util.Arrays.asList;
 import static org.slf4j.LoggerFactory.getLogger;
 import static org.springframework.web.util.UriComponentsBuilder.fromUri;
 
 import java.net.URI;
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Optional;
 
 import javax.inject.Inject;
 
@@ -21,12 +17,8 @@ import org.springframework.http.HttpHeaders;
 import org.springframework.stereotype.Service;
 import org.springframework.web.client.RestTemplate;
 
-import no.nav.foreldrepenger.selvbetjening.felles.util.Enabled;
-import no.nav.foreldrepenger.selvbetjening.felles.util.EnvUtil;
 import no.nav.foreldrepenger.selvbetjening.oppslag.json.AktørId;
-import no.nav.foreldrepenger.selvbetjening.oppslag.json.Sak;
 import no.nav.foreldrepenger.selvbetjening.oppslag.tjeneste.innsyn.InnsynTjeneste;
-import no.nav.foreldrepenger.selvbetjening.oppslag.tjeneste.innsyn.UttaksPeriode;
 import no.nav.foreldrepenger.selvbetjening.oppslag.tjeneste.json.PersonDto;
 import no.nav.foreldrepenger.selvbetjening.oppslag.tjeneste.json.SøkerinfoDto;
 
@@ -63,40 +55,6 @@ public class Oppslagstjeneste implements Oppslag, EnvironmentAware {
         URI uri = fromUri(oppslagServiceUrl).path("/oppslag").build().toUri();
         LOG.trace("Oppslag URI: {}", uri);
         return template.getForObject(uri, SøkerinfoDto.class);
-    }
-
-    @Override
-    public List<Sak> hentSaker() {
-        List<Sak> saker = new ArrayList<>();
-
-        URI sakUri = fromUri(oppslagServiceUrl).path("/sak").build().toUri();
-        List<Sak> sakSaker = asList(
-                Optional.ofNullable(template.getForObject(sakUri, Sak[].class)).orElse(new Sak[] {}));
-        saker.addAll(sakSaker);
-
-        if (Enabled.FPSAKSAKER) {
-            URI fpsakUri = fromUri(mottakServiceUrl).path("/mottak/saker").build().toUri();
-            List<Sak> fpsakSaker = asList(
-                    Optional.ofNullable(template.getForObject(fpsakUri, Sak[].class)).orElse(new Sak[] {}));
-            saker.addAll(fpsakSaker);
-
-            LOG.info("Henter {} sak(er) fra fpsak og {} sak(er) fra Sak", fpsakSaker.size(), sakSaker.size());
-        }
-        else {
-            LOG.info("Henter {} sak(er) fra Sak", sakSaker.size());
-        }
-        if (EnvUtil.isDevOrPreprod(env)) {
-            try {
-                for (Sak sak : saker) {
-                    List<UttaksPeriode> plan = innsyn.hentUttaksplan(sak.getSaksnummer());
-                    plan.stream().forEach(s -> LOG.info("Uttaksplan for {} er {}", sak.getSaksnummer(), s));
-                }
-            } catch (Exception e) {
-                LOG.trace("Dette gikk galt, men no worries, testing testing", e);
-            }
-        }
-
-        return saker;
     }
 
     @Override

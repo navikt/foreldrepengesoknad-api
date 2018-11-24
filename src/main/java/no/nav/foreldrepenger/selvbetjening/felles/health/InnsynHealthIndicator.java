@@ -5,9 +5,9 @@ import org.springframework.stereotype.Component;
 import no.nav.foreldrepenger.selvbetjening.oppslag.tjeneste.innsyn.InnsynConnection;
 
 @Component
-public class MottakHelthIndicator extends EnvironmentAwareHealthIndicator {
+public class InnsynHealthIndicator extends AbstractEnvironmentAwareHealthIndicator {
 
-    public MottakHelthIndicator(InnsynConnection connection) {
+    public InnsynHealthIndicator(InnsynConnection connection) {
         super(connection);
     }
 }

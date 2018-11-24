@@ -4,6 +4,8 @@ import java.util.List;
 
 import org.springframework.stereotype.Service;
 
+import no.nav.foreldrepenger.selvbetjening.oppslag.json.Sak;
+
 @Service
 public class InnsynTjeneste implements Innsyn {
 
@@ -16,6 +18,11 @@ public class InnsynTjeneste implements Innsyn {
     @Override
     public List<UttaksPeriode> hentUttaksplan(String saksnummer) {
         return innsynConnection.hentUttaksplan(saksnummer);
+    }
+
+    @Override
+    public List<Sak> hentSaker() {
+        return innsynConnection.hentSaker();
     }
 
     @Override
