@@ -1,4 +1,4 @@
-package no.nav.foreldrepenger.selvbetjening.felles.util;
+package no.nav.foreldrepenger.selvbetjening.tjeneste;
 
 import static no.nav.foreldrepenger.selvbetjening.felles.Constants.ISSUER;
 

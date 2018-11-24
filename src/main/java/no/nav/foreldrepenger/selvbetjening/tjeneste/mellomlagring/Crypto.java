@@ -1,4 +1,4 @@
-package no.nav.foreldrepenger.selvbetjening.felles.crypto;
+package no.nav.foreldrepenger.selvbetjening.tjeneste.mellomlagring;
 
 import java.security.spec.KeySpec;
 import java.util.Base64;

@@ -13,9 +13,9 @@ import com.amazonaws.client.builder.AwsClientBuilder;
 import com.amazonaws.services.s3.AmazonS3;
 import com.amazonaws.services.s3.AmazonS3ClientBuilder;
 
-import no.nav.foreldrepenger.selvbetjening.felles.storage.S3Storage;
-import no.nav.foreldrepenger.selvbetjening.felles.storage.Storage;
-import no.nav.foreldrepenger.selvbetjening.felles.storage.StorageCrypto;
+import no.nav.foreldrepenger.selvbetjening.tjeneste.mellomlagring.S3Storage;
+import no.nav.foreldrepenger.selvbetjening.tjeneste.mellomlagring.Storage;
+import no.nav.foreldrepenger.selvbetjening.tjeneste.mellomlagring.StorageCrypto;
 
 @Configuration
 @Profile("!dev")

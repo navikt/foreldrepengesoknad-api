@@ -1,7 +1,8 @@
 package no.nav.foreldrepenger.selvbetjening.felles.attachments;
 
-import no.nav.foreldrepenger.selvbetjening.felles.attachments.exceptions.AttachmentConversionException;
 import org.apache.pdfbox.pdmodel.common.PDRectangle;
+
+import no.nav.foreldrepenger.selvbetjening.felles.error.AttachmentConversionException;
 
 import javax.imageio.ImageIO;
 import java.awt.*;

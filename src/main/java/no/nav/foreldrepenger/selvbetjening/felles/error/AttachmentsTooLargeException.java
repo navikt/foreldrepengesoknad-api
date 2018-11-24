@@ -1,4 +1,4 @@
-package no.nav.foreldrepenger.selvbetjening.felles.attachments.exceptions;
+package no.nav.foreldrepenger.selvbetjening.felles.error;
 
 public class AttachmentsTooLargeException extends AttachmentException {
 

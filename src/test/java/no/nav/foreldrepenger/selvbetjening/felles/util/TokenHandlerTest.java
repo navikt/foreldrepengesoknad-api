@@ -22,6 +22,7 @@ import org.mockito.junit.MockitoJUnitRunner;
 import com.nimbusds.jwt.JWTClaimsSet;
 
 import no.nav.foreldrepenger.selvbetjening.felles.error.UnauthorizedException;
+import no.nav.foreldrepenger.selvbetjening.tjeneste.TokenHandler;
 import no.nav.security.oidc.context.OIDCClaims;
 import no.nav.security.oidc.context.OIDCRequestContextHolder;
 import no.nav.security.oidc.context.OIDCValidationContext;

@@ -20,15 +20,15 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.client.RestTemplate;
 
-import no.nav.foreldrepenger.selvbetjening.felles.attachments.exceptions.AttachmentsTooLargeException;
-import no.nav.foreldrepenger.selvbetjening.felles.storage.Storage;
-import no.nav.foreldrepenger.selvbetjening.felles.storage.StorageCrypto;
+import no.nav.foreldrepenger.selvbetjening.felles.error.AttachmentsTooLargeException;
 import no.nav.foreldrepenger.selvbetjening.felles.util.Enabled;
-import no.nav.foreldrepenger.selvbetjening.felles.util.TokenHandler;
+import no.nav.foreldrepenger.selvbetjening.tjeneste.TokenHandler;
 import no.nav.foreldrepenger.selvbetjening.tjeneste.innsending.domain.Ettersending;
 import no.nav.foreldrepenger.selvbetjening.tjeneste.innsending.domain.Kvittering;
 import no.nav.foreldrepenger.selvbetjening.tjeneste.innsending.domain.Søknad;
 import no.nav.foreldrepenger.selvbetjening.tjeneste.innsending.domain.Vedlegg;
+import no.nav.foreldrepenger.selvbetjening.tjeneste.mellomlagring.Storage;
+import no.nav.foreldrepenger.selvbetjening.tjeneste.mellomlagring.StorageCrypto;
 import no.nav.security.oidc.api.ProtectedWithClaims;
 
 @RestController

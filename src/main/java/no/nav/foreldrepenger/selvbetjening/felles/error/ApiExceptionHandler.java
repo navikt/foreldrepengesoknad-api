@@ -1,8 +1,5 @@
 package no.nav.foreldrepenger.selvbetjening.felles.error;
 
-import no.nav.foreldrepenger.selvbetjening.felles.attachments.exceptions.AttachmentConversionException;
-import no.nav.foreldrepenger.selvbetjening.felles.attachments.exceptions.AttachmentTypeUnsupportedException;
-import no.nav.foreldrepenger.selvbetjening.felles.attachments.exceptions.AttachmentsTooLargeException;
 import no.nav.security.oidc.exceptions.OIDCTokenValidatorException;
 import no.nav.security.spring.oidc.validation.interceptor.OIDCUnauthorizedException;
 import org.slf4j.Logger;

@@ -18,7 +18,7 @@ import org.springframework.stereotype.Component;
 import org.springframework.web.client.RestTemplate;
 
 import no.nav.foreldrepenger.selvbetjening.felles.util.Enabled;
-import no.nav.foreldrepenger.selvbetjening.felles.util.TokenHandler;
+import no.nav.foreldrepenger.selvbetjening.tjeneste.TokenHandler;
 
 @Component
 public class InnsynConnection extends AbstractRestConnection {

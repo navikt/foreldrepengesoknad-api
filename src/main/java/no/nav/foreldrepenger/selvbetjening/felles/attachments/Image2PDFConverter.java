@@ -25,8 +25,8 @@ import org.springframework.core.io.Resource;
 import org.springframework.http.MediaType;
 import org.springframework.stereotype.Component;
 
-import no.nav.foreldrepenger.selvbetjening.felles.attachments.exceptions.AttachmentConversionException;
-import no.nav.foreldrepenger.selvbetjening.felles.attachments.exceptions.AttachmentTypeUnsupportedException;
+import no.nav.foreldrepenger.selvbetjening.felles.error.AttachmentConversionException;
+import no.nav.foreldrepenger.selvbetjening.felles.error.AttachmentTypeUnsupportedException;
 
 @Component
 public class Image2PDFConverter {

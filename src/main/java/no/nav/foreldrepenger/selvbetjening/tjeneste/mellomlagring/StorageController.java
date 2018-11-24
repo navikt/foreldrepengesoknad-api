@@ -1,4 +1,4 @@
-package no.nav.foreldrepenger.selvbetjening.felles.storage;
+package no.nav.foreldrepenger.selvbetjening.tjeneste.mellomlagring;
 
 import static java.lang.String.format;
 import static no.nav.foreldrepenger.selvbetjening.felles.Constants.ISSUER;
@@ -23,8 +23,8 @@ import org.springframework.web.bind.annotation.RequestPart;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.multipart.MultipartFile;
 
-import no.nav.foreldrepenger.selvbetjening.felles.attachments.exceptions.AttachmentsTooLargeException;
-import no.nav.foreldrepenger.selvbetjening.felles.util.TokenHandler;
+import no.nav.foreldrepenger.selvbetjening.felles.error.AttachmentsTooLargeException;
+import no.nav.foreldrepenger.selvbetjening.tjeneste.TokenHandler;
 import no.nav.security.oidc.api.ProtectedWithClaims;
 
 @RestController

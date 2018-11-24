@@ -1,6 +1,8 @@
 package no.nav.foreldrepenger.selvbetjening.felles.crypto;
 
 import no.nav.foreldrepenger.selvbetjening.FastTests;
+import no.nav.foreldrepenger.selvbetjening.tjeneste.mellomlagring.Crypto;
+
 import org.junit.Test;
 import org.junit.experimental.categories.Category;
 

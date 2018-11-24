@@ -22,8 +22,8 @@ import no.nav.foreldrepenger.selvbetjening.felles.error.RemoteUnavailableExcepti
 import no.nav.foreldrepenger.selvbetjening.felles.error.UnauthenticatedException;
 import no.nav.foreldrepenger.selvbetjening.felles.error.UnauthorizedException;
 import no.nav.foreldrepenger.selvbetjening.felles.util.EnvUtil;
-import no.nav.foreldrepenger.selvbetjening.felles.util.TokenHandler;
 import no.nav.foreldrepenger.selvbetjening.tjeneste.Pingable;
+import no.nav.foreldrepenger.selvbetjening.tjeneste.TokenHandler;
 
 public abstract class AbstractRestConnection implements EnvironmentAware, Pingable {
 

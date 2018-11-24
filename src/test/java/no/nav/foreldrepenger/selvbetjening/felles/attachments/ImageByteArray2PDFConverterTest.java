@@ -1,7 +1,8 @@
 package no.nav.foreldrepenger.selvbetjening.felles.attachments;
 
 import no.nav.foreldrepenger.selvbetjening.FastTests;
-import no.nav.foreldrepenger.selvbetjening.felles.attachments.exceptions.AttachmentTypeUnsupportedException;
+import no.nav.foreldrepenger.selvbetjening.felles.error.AttachmentTypeUnsupportedException;
+
 import org.apache.tika.Tika;
 import org.junit.BeforeClass;
 import org.junit.Test;
