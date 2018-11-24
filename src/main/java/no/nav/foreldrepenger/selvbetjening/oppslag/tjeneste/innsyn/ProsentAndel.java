@@ -28,7 +28,7 @@ public class ProsentAndel {
 
     private static Double avrund(Double value, int presisjon) {
         if (presisjon < 0) {
-            throw new IllegalArgumentException(format("Presisjon må være positiv, var %s", presisjon));
+            throw new IllegalArgumentException(format("Presisjon kan ikke være negativ, var %s", presisjon));
         }
         try {
             BigDecimal bd = new BigDecimal(value);

@@ -1,29 +1,35 @@
 package no.nav.foreldrepenger.selvbetjening.innsending.tjeneste;
 
-import com.fasterxml.jackson.core.JsonProcessingException;
-import com.fasterxml.jackson.databind.ObjectMapper;
-import no.nav.foreldrepenger.selvbetjening.felles.attachments.Image2PDFConverter;
-import no.nav.foreldrepenger.selvbetjening.innsending.json.*;
-import no.nav.foreldrepenger.selvbetjening.innsending.tjeneste.json.EngangsstønadDto;
-import no.nav.foreldrepenger.selvbetjening.innsending.tjeneste.json.EttersendingDto;
-import no.nav.foreldrepenger.selvbetjening.innsending.tjeneste.json.ForeldrepengesøknadDto;
-import no.nav.foreldrepenger.selvbetjening.innsending.tjeneste.json.SøknadDto;
+import static java.time.LocalDateTime.now;
+import static org.slf4j.LoggerFactory.getLogger;
+
+import java.net.URI;
+
+import javax.inject.Inject;
+import javax.ws.rs.BadRequestException;
+
 import org.slf4j.Logger;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnProperty;
 import org.springframework.http.HttpEntity;
-import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.client.RestTemplate;
 import org.springframework.web.util.UriComponentsBuilder;
 
-import javax.inject.Inject;
-import javax.ws.rs.BadRequestException;
-import java.net.URI;
+import com.fasterxml.jackson.core.JsonProcessingException;
+import com.fasterxml.jackson.databind.ObjectMapper;
 
-import static java.time.LocalDateTime.now;
-import static org.slf4j.LoggerFactory.getLogger;
+import no.nav.foreldrepenger.selvbetjening.felles.attachments.Image2PDFConverter;
+import no.nav.foreldrepenger.selvbetjening.innsending.json.Engangsstønad;
+import no.nav.foreldrepenger.selvbetjening.innsending.json.Ettersending;
+import no.nav.foreldrepenger.selvbetjening.innsending.json.Foreldrepengesøknad;
+import no.nav.foreldrepenger.selvbetjening.innsending.json.Kvittering;
+import no.nav.foreldrepenger.selvbetjening.innsending.json.Søknad;
+import no.nav.foreldrepenger.selvbetjening.innsending.tjeneste.json.EngangsstønadDto;
+import no.nav.foreldrepenger.selvbetjening.innsending.tjeneste.json.EttersendingDto;
+import no.nav.foreldrepenger.selvbetjening.innsending.tjeneste.json.ForeldrepengesøknadDto;
+import no.nav.foreldrepenger.selvbetjening.innsending.tjeneste.json.SøknadDto;
 
 @Service
 @ConditionalOnProperty(name = "stub.mottak", havingValue = "false", matchIfMissing = true)
@@ -50,7 +56,7 @@ public class Innsendingstjeneste implements Innsending {
     }
 
     @Override
-    public ResponseEntity<Kvittering> sendInn(Søknad søknad) {
+    public Kvittering sendInn(Søknad søknad) {
         LOG.info("Sender inn søknad av type {}", søknad.type);
         LOG.trace("Poster søknad {} til {}", søknad, mottakServiceSøknadUrl);
         søknad.opprettet = now();
@@ -58,29 +64,29 @@ public class Innsendingstjeneste implements Innsending {
     }
 
     @Override
-    public ResponseEntity<Kvittering> sendInn(Ettersending ettersending) {
+    public Kvittering sendInn(Ettersending ettersending) {
         LOG.info("Sender inn ettersending på sak {}", ettersending.saksnummer);
         LOG.trace("Poster ettersending {} til {}", ettersending, mottakServiceEttersendingUrl);
         return post(ettersending);
     }
 
     @Override
-    public ResponseEntity<Kvittering> endre(Søknad søknad) {
+    public Kvittering endre(Søknad søknad) {
         LOG.info("Sender inn endringssøknad av type {}", søknad.type);
         LOG.trace("Poster endringssøknad {} til {}", søknad, mottakServiceEndringssøknadUrl);
         return postEndring(søknad);
     }
 
-    private ResponseEntity<Kvittering> post(Søknad søknad) {
-        return template.postForEntity(mottakServiceSøknadUrl, body(søknad), Kvittering.class);
+    private Kvittering post(Søknad søknad) {
+        return template.postForEntity(mottakServiceSøknadUrl, body(søknad), Kvittering.class).getBody();
     }
 
-    private ResponseEntity<Kvittering> post(Ettersending ettersending) {
-        return template.postForEntity(mottakServiceEttersendingUrl, body(ettersending), Kvittering.class);
+    private Kvittering post(Ettersending ettersending) {
+        return template.postForEntity(mottakServiceEttersendingUrl, body(ettersending), Kvittering.class).getBody();
     }
 
-    private ResponseEntity<Kvittering> postEndring(Søknad søknad) {
-        return template.postForEntity(mottakServiceEndringssøknadUrl, body(søknad), Kvittering.class);
+    private Kvittering postEndring(Søknad søknad) {
+        return template.postForEntity(mottakServiceEndringssøknadUrl, body(søknad), Kvittering.class).getBody();
     }
 
     private HttpEntity<SøknadDto> body(@RequestBody Søknad søknad) {
@@ -107,13 +113,13 @@ public class Innsendingstjeneste implements Innsending {
         return new HttpEntity<>(dto);
     }
 
-    private HttpEntity<EttersendingDto> body(@RequestBody Ettersending ettersending) {
+    private EttersendingDto body(@RequestBody Ettersending ettersending) {
         EttersendingDto dto = new EttersendingDto(ettersending);
         ettersending.vedlegg.forEach(v -> {
             v.content = converter.convert(v.content);
             dto.addVedlegg(v);
         });
-        return new HttpEntity<>(dto);
+        return dto;
     }
 
     private void logJSON(SøknadDto dto) {

@@ -24,7 +24,6 @@ public class InnsynConfig {
 
     public InnsynConfig(@Value("${FPSOKNAD_MOTTAK_API_URL}") URI uri) {
         this.uri = uri;
-
     }
 
     public String getBasePath() {

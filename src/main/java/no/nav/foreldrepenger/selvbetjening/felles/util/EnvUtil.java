@@ -15,7 +15,15 @@ public final class EnvUtil {
     }
 
     public static boolean isDevOrPreprod(Environment env) {
-        return env == null || env.acceptsProfiles(DEV, PREPROD);
+        return env == null || isDev(env) || isPreprod(env);
+    }
+
+    public static boolean isPreprod(Environment env) {
+        return env.acceptsProfiles(PREPROD);
+    }
+
+    public static boolean isDev(Environment env) {
+        return env.acceptsProfiles(DEV);
     }
 
     public static boolean isProd(Environment env) {
