@@ -1,9 +1,9 @@
 package no.nav.foreldrepenger.selvbetjening.tjeneste.innsending;
 
 import static java.lang.String.format;
-import static no.nav.foreldrepenger.selvbetjening.felles.Constants.ISSUER;
-import static no.nav.foreldrepenger.selvbetjening.felles.util.EnvUtil.CONFIDENTIAL;
 import static no.nav.foreldrepenger.selvbetjening.tjeneste.innsending.InnsendingController.REST_SOKNAD;
+import static no.nav.foreldrepenger.selvbetjening.util.Constants.ISSUER;
+import static no.nav.foreldrepenger.selvbetjening.util.EnvUtil.CONFIDENTIAL;
 import static org.apache.commons.io.FileUtils.byteCountToDisplaySize;
 import static org.springframework.http.MediaType.APPLICATION_JSON_VALUE;
 
@@ -20,8 +20,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.client.RestTemplate;
 
-import no.nav.foreldrepenger.selvbetjening.felles.error.AttachmentsTooLargeException;
-import no.nav.foreldrepenger.selvbetjening.felles.util.Enabled;
+import no.nav.foreldrepenger.selvbetjening.error.AttachmentsTooLargeException;
 import no.nav.foreldrepenger.selvbetjening.tjeneste.TokenHandler;
 import no.nav.foreldrepenger.selvbetjening.tjeneste.innsending.domain.Ettersending;
 import no.nav.foreldrepenger.selvbetjening.tjeneste.innsending.domain.Kvittering;
@@ -29,6 +28,7 @@ import no.nav.foreldrepenger.selvbetjening.tjeneste.innsending.domain.Søknad;
 import no.nav.foreldrepenger.selvbetjening.tjeneste.innsending.domain.Vedlegg;
 import no.nav.foreldrepenger.selvbetjening.tjeneste.mellomlagring.Storage;
 import no.nav.foreldrepenger.selvbetjening.tjeneste.mellomlagring.StorageCrypto;
+import no.nav.foreldrepenger.selvbetjening.util.Enabled;
 import no.nav.security.oidc.api.ProtectedWithClaims;
 
 @RestController

@@ -1,7 +1,7 @@
 package no.nav.foreldrepenger.selvbetjening.tjeneste.oppslag.domain;
 
 import static com.fasterxml.jackson.annotation.JsonInclude.Include.NON_EMPTY;
-import static no.nav.foreldrepenger.selvbetjening.felles.util.IkkeNordiskEØSLandVelger.erIkkenordiskEØSLand;
+import static no.nav.foreldrepenger.selvbetjening.util.IkkeNordiskEØSLandVelger.erIkkenordiskEØSLand;
 
 import java.time.LocalDate;
 import java.util.ArrayList;

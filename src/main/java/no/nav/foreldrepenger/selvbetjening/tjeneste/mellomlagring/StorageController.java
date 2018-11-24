@@ -1,7 +1,7 @@
 package no.nav.foreldrepenger.selvbetjening.tjeneste.mellomlagring;
 
 import static java.lang.String.format;
-import static no.nav.foreldrepenger.selvbetjening.felles.Constants.ISSUER;
+import static no.nav.foreldrepenger.selvbetjening.util.Constants.ISSUER;
 import static org.apache.commons.io.FileUtils.byteCountToDisplaySize;
 import static org.slf4j.LoggerFactory.getLogger;
 import static org.springframework.http.MediaType.APPLICATION_JSON_VALUE;
@@ -23,7 +23,7 @@ import org.springframework.web.bind.annotation.RequestPart;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.multipart.MultipartFile;
 
-import no.nav.foreldrepenger.selvbetjening.felles.error.AttachmentsTooLargeException;
+import no.nav.foreldrepenger.selvbetjening.error.AttachmentsTooLargeException;
 import no.nav.foreldrepenger.selvbetjening.tjeneste.TokenHandler;
 import no.nav.security.oidc.api.ProtectedWithClaims;
 

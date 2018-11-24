@@ -1,6 +1,6 @@
 package no.nav.foreldrepenger.selvbetjening;
 
-import static no.nav.foreldrepenger.selvbetjening.felles.util.EnvUtil.DEV;
+import static no.nav.foreldrepenger.selvbetjening.util.EnvUtil.DEV;
 import static org.springframework.context.annotation.FilterType.ASSIGNABLE_TYPE;
 
 import org.springframework.boot.SpringApplication;

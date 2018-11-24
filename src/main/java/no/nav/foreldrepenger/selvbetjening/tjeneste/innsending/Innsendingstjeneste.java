@@ -20,7 +20,7 @@ import org.springframework.web.util.UriComponentsBuilder;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 
-import no.nav.foreldrepenger.selvbetjening.felles.attachments.Image2PDFConverter;
+import no.nav.foreldrepenger.selvbetjening.attachments.Image2PDFConverter;
 import no.nav.foreldrepenger.selvbetjening.tjeneste.innsending.domain.Engangsstønad;
 import no.nav.foreldrepenger.selvbetjening.tjeneste.innsending.domain.Ettersending;
 import no.nav.foreldrepenger.selvbetjening.tjeneste.innsending.domain.Foreldrepengesøknad;

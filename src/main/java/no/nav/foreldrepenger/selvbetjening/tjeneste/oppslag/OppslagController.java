@@ -1,8 +1,8 @@
 package no.nav.foreldrepenger.selvbetjening.tjeneste.oppslag;
 
-import static no.nav.foreldrepenger.selvbetjening.felles.Constants.ISSUER;
-import static no.nav.foreldrepenger.selvbetjening.felles.util.EnvUtil.CONFIDENTIAL;
 import static no.nav.foreldrepenger.selvbetjening.tjeneste.innsyn.InnsynController.INNSYN;
+import static no.nav.foreldrepenger.selvbetjening.util.Constants.ISSUER;
+import static no.nav.foreldrepenger.selvbetjening.util.EnvUtil.CONFIDENTIAL;
 import static org.slf4j.LoggerFactory.getLogger;
 import static org.springframework.http.HttpHeaders.LOCATION;
 import static org.springframework.http.HttpStatus.MOVED_PERMANENTLY;

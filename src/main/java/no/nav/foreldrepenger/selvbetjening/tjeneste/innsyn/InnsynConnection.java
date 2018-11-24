@@ -17,8 +17,8 @@ import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Component;
 import org.springframework.web.client.RestTemplate;
 
-import no.nav.foreldrepenger.selvbetjening.felles.util.Enabled;
 import no.nav.foreldrepenger.selvbetjening.tjeneste.TokenHandler;
+import no.nav.foreldrepenger.selvbetjening.util.Enabled;
 
 @Component
 public class InnsynConnection extends AbstractRestConnection {

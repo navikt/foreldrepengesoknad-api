@@ -1,6 +1,6 @@
 package no.nav.foreldrepenger.selvbetjening.tjeneste.innsyn;
 
-import static no.nav.foreldrepenger.selvbetjening.felles.util.EnvUtil.CONFIDENTIAL;
+import static no.nav.foreldrepenger.selvbetjening.util.EnvUtil.CONFIDENTIAL;
 
 import java.net.URI;
 
@@ -17,13 +17,13 @@ import org.springframework.web.client.RestClientException;
 import org.springframework.web.client.RestTemplate;
 import org.springframework.web.util.UriComponentsBuilder;
 
-import no.nav.foreldrepenger.selvbetjening.felles.error.NotFoundException;
-import no.nav.foreldrepenger.selvbetjening.felles.error.RemoteUnavailableException;
-import no.nav.foreldrepenger.selvbetjening.felles.error.UnauthenticatedException;
-import no.nav.foreldrepenger.selvbetjening.felles.error.UnauthorizedException;
-import no.nav.foreldrepenger.selvbetjening.felles.util.EnvUtil;
+import no.nav.foreldrepenger.selvbetjening.error.NotFoundException;
+import no.nav.foreldrepenger.selvbetjening.error.RemoteUnavailableException;
+import no.nav.foreldrepenger.selvbetjening.error.UnauthenticatedException;
+import no.nav.foreldrepenger.selvbetjening.error.UnauthorizedException;
 import no.nav.foreldrepenger.selvbetjening.tjeneste.Pingable;
 import no.nav.foreldrepenger.selvbetjening.tjeneste.TokenHandler;
+import no.nav.foreldrepenger.selvbetjening.util.EnvUtil;
 
 public abstract class AbstractRestConnection implements EnvironmentAware, Pingable {
 

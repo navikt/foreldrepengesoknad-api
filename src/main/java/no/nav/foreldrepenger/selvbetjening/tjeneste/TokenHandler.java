@@ -1,6 +1,6 @@
 package no.nav.foreldrepenger.selvbetjening.tjeneste;
 
-import static no.nav.foreldrepenger.selvbetjening.felles.Constants.ISSUER;
+import static no.nav.foreldrepenger.selvbetjening.util.Constants.ISSUER;
 
 import java.util.Date;
 import java.util.Optional;
@@ -10,7 +10,7 @@ import org.springframework.stereotype.Component;
 
 import com.nimbusds.jwt.JWTClaimsSet;
 
-import no.nav.foreldrepenger.selvbetjening.felles.error.UnauthenticatedException;
+import no.nav.foreldrepenger.selvbetjening.error.UnauthenticatedException;
 import no.nav.security.oidc.context.OIDCClaims;
 import no.nav.security.oidc.context.OIDCRequestContextHolder;
 import no.nav.security.oidc.context.OIDCValidationContext;
