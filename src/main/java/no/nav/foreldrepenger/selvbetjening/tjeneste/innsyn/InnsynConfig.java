@@ -13,7 +13,6 @@ import org.springframework.context.annotation.Configuration;
 @Configuration
 public class InnsynConfig {
 
-    private static final String BASE_PATH = "/api";
     private static final String PING = "mottak/ping";
     private static final String FPSAK_SAKER = "innsyn/saker";
     private static final String SAK_SAKER = "sak";
@@ -26,8 +25,8 @@ public class InnsynConfig {
 
     public InnsynConfig(@Value("${FPSOKNAD_MOTTAK_API_URL}") URI mottakURI,
             @Value("${FPSOKNAD_OPPSLAG_API_URL}") URI oppslagURI) {
-        this.mottakURI = uri(mottakURI, BASE_PATH);
-        this.oppslagURI = uri(oppslagURI, BASE_PATH);
+        this.mottakURI = mottakURI;
+        this.oppslagURI = oppslagURI;
     }
 
     public URI getOppslagURI() {

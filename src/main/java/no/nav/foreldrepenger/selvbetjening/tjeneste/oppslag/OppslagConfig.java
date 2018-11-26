@@ -14,7 +14,6 @@ import org.springframework.context.annotation.Configuration;
 public class OppslagConfig {
 
     private static final String FNR = "fnr";
-    private static final String BASE_PATH = "api";
     private static final String PING = "oppslag/ping";
     private static final String PERSON = "person";
     private static final String SØKERINFO = "søkerinfo";
@@ -24,7 +23,7 @@ public class OppslagConfig {
     URI oppslagURI;
 
     public OppslagConfig(@Value("${FPSOKNAD_OPPSLAG_API_URL}") URI oppslagURI) {
-        this.oppslagURI = uri(oppslagURI, BASE_PATH);
+        this.oppslagURI = oppslagURI;
     }
 
     public URI getOppslagURI() {

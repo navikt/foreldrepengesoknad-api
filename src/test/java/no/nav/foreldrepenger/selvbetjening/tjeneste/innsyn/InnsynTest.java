@@ -29,8 +29,8 @@ import no.nav.security.spring.oidc.SpringOIDCRequestContextHolder;
 
 @Category(FastTests.class)
 @RunWith(SpringRunner.class)
-@TestPropertySource(properties = { "FPSOKNAD_MOTTAK_API_URL = http://www.mottak.no",
-        "FPSOKNAD_OPPSLAG_API_URL: http://www.oppslag.no" })
+@TestPropertySource(properties = { "FPSOKNAD_MOTTAK_API_URL = http://www.mottak.no/api",
+        "FPSOKNAD_OPPSLAG_API_URL: http://www.oppslag.no/api" })
 @ContextConfiguration(classes = { NotFoundException.class, InnsynConfig.class, TokenHandler.class,
         SpringOIDCRequestContextHolder.class })
 @RestClientTest
