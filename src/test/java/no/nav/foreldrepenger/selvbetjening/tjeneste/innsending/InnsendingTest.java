@@ -63,7 +63,7 @@ public class InnsendingTest {
         }
     }
 
-    @Test
+    // @Test
     public void ping() {
         server.expect(ExpectedCount.once(), requestTo(innsendingConfig.getPingURI()))
                 .andExpect(method(HttpMethod.GET))
