@@ -20,6 +20,8 @@ import no.nav.foreldrepenger.selvbetjening.filters.ApiKeyInjectingClientIntercep
 import no.nav.foreldrepenger.selvbetjening.filters.CorsInterceptor;
 import no.nav.foreldrepenger.selvbetjening.tjeneste.StatusCodeConvertingResponseErrorHandler;
 import no.nav.foreldrepenger.selvbetjening.tjeneste.TokenHandler;
+import no.nav.foreldrepenger.selvbetjening.tjeneste.innsending.InnsendingConfig;
+import no.nav.foreldrepenger.selvbetjening.tjeneste.oppslag.OppslagConfig;
 
 @Configuration
 public class ApiConfiguration implements WebMvcConfigurer {
@@ -30,11 +32,8 @@ public class ApiConfiguration implements WebMvcConfigurer {
     @Value("${FPSOKNAD_MOTTAK_API_URL}")
     private URI mottakServiceUri;
 
-    @Value("${FPSOKNAD_OPPSLAG_API_URL}")
-    private URI oppslagServiceUri;
-
     @Value("${FORELDREPENGESOKNAD_API_FPSOKNAD_MOTTAK_API_APIKEY_PASSWORD}")
-    String mottakApiKey;
+    String innsendingApiKey;
 
     @Value("${FORELDREPENGESOKNAD_API_FPSOKNAD_OPPSLAG_API_APIKEY_PASSWORD}")
     String oppslagApiKey;
@@ -51,11 +50,12 @@ public class ApiConfiguration implements WebMvcConfigurer {
     }
 
     @Bean
-    public ClientHttpRequestInterceptor apiKeyInjectingClientInterceptor() {
+    public ClientHttpRequestInterceptor apiKeyInjectingClientInterceptor(OppslagConfig oppslag,
+            InnsendingConfig innsending) {
         return new ApiKeyInjectingClientInterceptor(key,
                 ImmutableMap.<URI, String>builder()
-                        .put(mottakServiceUri, mottakApiKey)
-                        .put(oppslagServiceUri, oppslagApiKey)
+                        .put(innsending.getURI(), innsendingApiKey)
+                        .put(oppslag.getURI(), oppslagApiKey)
                         .build());
 
     }

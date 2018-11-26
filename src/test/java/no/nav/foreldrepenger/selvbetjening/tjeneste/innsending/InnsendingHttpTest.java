@@ -1,4 +1,4 @@
-package no.nav.foreldrepenger.selvbetjening.innsending.tjeneste;
+package no.nav.foreldrepenger.selvbetjening.tjeneste.innsending;
 
 import static java.time.LocalDateTime.now;
 import static no.nav.foreldrepenger.selvbetjening.felles.storage.AttachmentStorageHttpTest.getByteArrayResource;

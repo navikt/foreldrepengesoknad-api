@@ -20,34 +20,34 @@ public class OppslagConfig {
     private static final String AKTØRFNR = "oppslag/aktorfnr";
 
     boolean enabled;
-    URI oppslagURI;
+    URI uri;
 
-    public OppslagConfig(@Value("${FPSOKNAD_OPPSLAG_API_URL}") URI oppslagURI) {
-        this.oppslagURI = oppslagURI;
+    public OppslagConfig(@Value("${FPSOKNAD_OPPSLAG_API_URL}") URI uri) {
+        this.uri = uri;
     }
 
-    public URI getOppslagURI() {
-        return oppslagURI;
+    public URI getURI() {
+        return uri;
     }
 
-    public void setOppslagURI(URI oppslagURI) {
-        this.oppslagURI = oppslagURI;
+    public void setURI(URI uri) {
+        this.uri = uri;
     }
 
     URI getPingURI() {
-        return uri(getOppslagURI(), PING);
+        return uri(getURI(), PING);
     }
 
     URI getPersonURI() {
-        return uri(getOppslagURI(), PERSON);
+        return uri(getURI(), PERSON);
     }
 
     URI getSøkerinfoURI() {
-        return uri(getOppslagURI(), SØKERINFO);
+        return uri(getURI(), SØKERINFO);
     }
 
     URI getAktørIdURI(String fnr) {
-        return uri(getOppslagURI(), AKTØRFNR, queryParams(FNR, fnr));
+        return uri(getURI(), AKTØRFNR, queryParams(FNR, fnr));
     }
 
     public boolean isEnabled() {

@@ -3,6 +3,8 @@ package no.nav.foreldrepenger.selvbetjening.tjeneste.innsending;
 import static java.time.LocalDateTime.now;
 import static org.slf4j.LoggerFactory.getLogger;
 
+import java.net.URI;
+
 import javax.inject.Inject;
 import javax.ws.rs.BadRequestException;
 
@@ -83,5 +85,15 @@ public class InnsendingstjenesteStub implements Innsending {
             throw new RuntimeException(e);
         }
         return Kvittering.STUB;
+    }
+
+    @Override
+    public String ping() {
+        return "Hello earthlings";
+    }
+
+    @Override
+    public URI pingURI() {
+        return URI.create("http://www.vg.no");
     }
 }

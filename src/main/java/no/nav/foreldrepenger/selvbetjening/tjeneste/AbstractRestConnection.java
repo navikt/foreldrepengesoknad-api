@@ -4,8 +4,6 @@ import java.net.URI;
 
 import org.springframework.context.EnvironmentAware;
 import org.springframework.core.env.Environment;
-import org.springframework.http.HttpEntity;
-import org.springframework.http.ResponseEntity;
 import org.springframework.web.client.RestOperations;
 
 import no.nav.foreldrepenger.selvbetjening.error.NotFoundException;
@@ -46,8 +44,8 @@ public abstract class AbstractRestConnection implements EnvironmentAware {
         }
     }
 
-    protected <T> ResponseEntity<T> postForEntity(URI uri, HttpEntity<?> payload, Class<T> responseType) {
-        return operations.postForEntity(uri, payload, responseType);
+    protected <T> T postForObject(URI uri, Object payload, Class<T> responseType) {
+        return operations.postForObject(uri, payload, responseType);
     }
 
     protected boolean isDevOrPreprod() {
