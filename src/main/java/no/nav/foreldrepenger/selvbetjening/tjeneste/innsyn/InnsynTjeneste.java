@@ -7,7 +7,7 @@ import org.springframework.boot.autoconfigure.condition.ConditionalOnProperty;
 import org.springframework.stereotype.Service;
 
 @Service
-@ConditionalOnProperty(name = "stub.oppslag", havingValue = "false")
+@ConditionalOnProperty(name = "stub.oppslag", havingValue = "false", matchIfMissing = true)
 public class InnsynTjeneste implements Innsyn {
 
     private final InnsynConnection innsynConnection;
