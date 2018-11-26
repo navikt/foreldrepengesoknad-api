@@ -3,9 +3,11 @@ package no.nav.foreldrepenger.selvbetjening.tjeneste.innsyn;
 import java.net.URI;
 import java.util.List;
 
+import org.springframework.boot.autoconfigure.condition.ConditionalOnProperty;
 import org.springframework.stereotype.Service;
 
 @Service
+@ConditionalOnProperty(name = "stub.oppslag", havingValue = "false")
 public class InnsynTjeneste implements Innsyn {
 
     private final InnsynConnection innsynConnection;
