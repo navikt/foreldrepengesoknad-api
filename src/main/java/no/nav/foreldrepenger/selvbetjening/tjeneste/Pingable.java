@@ -5,7 +5,6 @@ import java.net.URI;
 public interface Pingable {
     String ping();
 
-    URI pingEndpoint();
+    URI pingURI();
 
-    String name();
 }

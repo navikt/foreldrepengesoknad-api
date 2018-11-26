@@ -27,4 +27,8 @@ public class InnsynTjeneste implements Innsyn {
     public String toString() {
         return getClass().getSimpleName() + " [innsynConnection=" + innsynConnection + "]";
     }
+
+    public void ping() {
+        innsynConnection.ping();
+    }
 }

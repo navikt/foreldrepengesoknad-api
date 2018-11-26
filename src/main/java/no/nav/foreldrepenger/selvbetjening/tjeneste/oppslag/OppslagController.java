@@ -21,8 +21,6 @@ import org.springframework.web.bind.annotation.RestController;
 import no.nav.foreldrepenger.selvbetjening.tjeneste.innsyn.Sak;
 import no.nav.foreldrepenger.selvbetjening.tjeneste.oppslag.domain.Person;
 import no.nav.foreldrepenger.selvbetjening.tjeneste.oppslag.domain.Søkerinfo;
-import no.nav.foreldrepenger.selvbetjening.tjeneste.oppslag.dto.PersonDto;
-import no.nav.foreldrepenger.selvbetjening.tjeneste.oppslag.dto.SøkerinfoDto;
 import no.nav.security.oidc.api.ProtectedWithClaims;
 import no.nav.security.oidc.api.Unprotected;
 
@@ -45,17 +43,17 @@ public class OppslagController {
     @GetMapping("/personinfo")
     public Person personinfo() {
         LOG.info("Henter personinfo...");
-        PersonDto person = oppslag.hentPerson();
-        LOG.info(CONFIDENTIAL, "Fikk personInfo {}", person);
-        return new Person(person);
+        Person person = oppslag.hentPerson();
+        LOG.info(CONFIDENTIAL, "Fikk person {}", person);
+        return person;
     }
 
     @GetMapping("/sokerinfo")
     public Søkerinfo søkerinfo() {
         LOG.info("Henter søkerinfo...");
-        SøkerinfoDto info = oppslag.hentSøkerinfo();
+        Søkerinfo info = oppslag.hentSøkerinfo();
         LOG.info(CONFIDENTIAL, "Fikk søkerinfo {}", info);
-        return new Søkerinfo(info);
+        return info;
     }
 
     @GetMapping("/saker")

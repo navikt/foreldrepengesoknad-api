@@ -1,4 +1,4 @@
-package no.nav.foreldrepenger.selvbetjening.tjeneste.innsyn;
+package no.nav.foreldrepenger.selvbetjening.tjeneste.oppslag;
 
 import java.net.URI;
 
@@ -8,24 +8,21 @@ import org.springframework.context.annotation.Configuration;
 import org.springframework.http.HttpHeaders;
 import org.springframework.web.util.UriComponentsBuilder;
 
-@ConfigurationProperties(prefix = "innsyn")
+@ConfigurationProperties(prefix = "oppslag")
 @Configuration
-public class InnsynConfig {
+public class OppslagConfig {
 
-    private static final String BASE_PATH = "/api";
-    private static final String PING = "mottak/ping";
-    static final String FPSAK_SAKER = "innsyn/saker";
-    static final String SAK_SAKER = "sak";
-    static final String SAKSNUMMER = "saksnummer";
-    static final String UTTAKSPLAN = "innsyn/uttaksplan";
+    private static final String BASE_PATH = "api";
+    private static final String PING = "oppslag/ping";
+    static final String PERSON = "person";
+    static final String SØKERINFO = "søkerinfo";
+    static final String AKTØRFNR = "oppslag/aktorfnr";
 
     boolean enabled;
-    URI mottakURI;
     URI oppslagURI;
+    String basePath;
 
-    public InnsynConfig(@Value("${FPSOKNAD_MOTTAK_API_URL}") URI mottakURI,
-            @Value("${FPSOKNAD_OPPSLAG_API_URL}") URI oppslagURI) {
-        this.mottakURI = uri(mottakURI, BASE_PATH);
+    public OppslagConfig(@Value("${FPSOKNAD_OPPSLAG_API_URL}") URI oppslagURI) {
         this.oppslagURI = uri(oppslagURI, BASE_PATH);
     }
 
@@ -37,12 +34,20 @@ public class InnsynConfig {
         this.oppslagURI = oppslagURI;
     }
 
-    private URI getMottakURI() {
-        return mottakURI;
+    URI getPingURI() {
+        return uri(getOppslagURI(), PING);
     }
 
-    public void setMottakURI(URI mottakURI) {
-        this.mottakURI = mottakURI;
+    URI getPersonURI() {
+        return uri(getOppslagURI(), PERSON);
+    }
+
+    URI getSøkerinfoURI() {
+        return uri(getOppslagURI(), SØKERINFO);
+    }
+
+    URI getAktørIdURI(String fnr) {
+        return uri(getOppslagURI(), AKTØRFNR, queryParams("fnr", fnr));
     }
 
     public boolean isEnabled() {
@@ -51,22 +56,6 @@ public class InnsynConfig {
 
     public void setEnabled(boolean enabled) {
         this.enabled = enabled;
-    }
-
-    URI getPingURI() {
-        return uri(getMottakURI(), PING);
-    }
-
-    URI getFpsakURI() {
-        return uri(getMottakURI(), FPSAK_SAKER);
-    }
-
-    URI getSakURI() {
-        return uri(getOppslagURI(), SAK_SAKER);
-    }
-
-    URI getUttakURI(String saksnummer) {
-        return uri(getMottakURI(), UTTAKSPLAN, queryParams(SAKSNUMMER, saksnummer));
     }
 
     protected static URI uri(URI base, String path) {
@@ -93,4 +82,9 @@ public class InnsynConfig {
         return queryParams;
     }
 
+    @Override
+    public String toString() {
+        return getClass().getSimpleName() + " [pingURI=" + getPingURI() + ", personURI=" + getPersonURI()
+                + ", søkerinfoURI=" + getSøkerinfoURI() + ", aktørIdURI=" + getAktørIdURI("42") + "]";
+    }
 }

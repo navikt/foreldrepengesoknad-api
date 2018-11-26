@@ -18,6 +18,8 @@ import com.google.common.collect.ImmutableMap;
 
 import no.nav.foreldrepenger.selvbetjening.filters.ApiKeyInjectingClientInterceptor;
 import no.nav.foreldrepenger.selvbetjening.filters.CorsInterceptor;
+import no.nav.foreldrepenger.selvbetjening.tjeneste.StatusCodeConvertingResponseErrorHandler;
+import no.nav.foreldrepenger.selvbetjening.tjeneste.TokenHandler;
 
 @Configuration
 public class ApiConfiguration implements WebMvcConfigurer {
@@ -41,9 +43,10 @@ public class ApiConfiguration implements WebMvcConfigurer {
     CorsInterceptor corsInterceptor;
 
     @Bean
-    public RestTemplate restTemplate(ClientHttpRequestInterceptor... interceptors) {
+    public RestTemplate restTemplate(TokenHandler tokenHandler, ClientHttpRequestInterceptor... interceptors) {
         RestTemplate template = new RestTemplate();
         template.setInterceptors(asList(interceptors));
+        template.setErrorHandler(new StatusCodeConvertingResponseErrorHandler(tokenHandler));
         return template;
     }
 

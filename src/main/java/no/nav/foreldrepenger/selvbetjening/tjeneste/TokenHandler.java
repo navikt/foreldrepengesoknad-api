@@ -14,7 +14,6 @@ import no.nav.foreldrepenger.selvbetjening.error.UnauthenticatedException;
 import no.nav.security.oidc.context.OIDCClaims;
 import no.nav.security.oidc.context.OIDCRequestContextHolder;
 import no.nav.security.oidc.context.OIDCValidationContext;
-import no.nav.security.oidc.context.TokenContext;
 
 @Component
 public class TokenHandler {
@@ -65,14 +64,6 @@ public class TokenHandler {
     private OIDCValidationContext context() {
         return Optional.ofNullable(ctxHolder.getOIDCValidationContext())
                 .orElse(null);
-    }
-
-    public String getToken() {
-        return Optional.ofNullable(context())
-                .map(c -> c.getToken(ISSUER))
-                .filter(s -> s != null)
-                .map(TokenContext::getIdToken)
-                .orElseThrow(unauthenticated("Fant ikke ID-token"));
     }
 
     @Override

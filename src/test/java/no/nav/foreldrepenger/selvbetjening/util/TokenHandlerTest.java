@@ -15,19 +15,22 @@ import java.util.Date;
 
 import org.junit.Before;
 import org.junit.Test;
+import org.junit.experimental.categories.Category;
 import org.junit.runner.RunWith;
 import org.mockito.Mock;
 import org.mockito.junit.MockitoJUnitRunner;
 
 import com.nimbusds.jwt.JWTClaimsSet;
 
-import no.nav.foreldrepenger.selvbetjening.error.UnauthorizedException;
+import no.nav.foreldrepenger.selvbetjening.FastTests;
+import no.nav.foreldrepenger.selvbetjening.error.UnauthenticatedException;
 import no.nav.foreldrepenger.selvbetjening.tjeneste.TokenHandler;
 import no.nav.security.oidc.context.OIDCClaims;
 import no.nav.security.oidc.context.OIDCRequestContextHolder;
 import no.nav.security.oidc.context.OIDCValidationContext;
 import no.nav.security.oidc.context.TokenContext;
 
+@Category(FastTests.class)
 @RunWith(MockitoJUnitRunner.Silent.class)
 public class TokenHandlerTest {
 
@@ -72,7 +75,7 @@ public class TokenHandlerTest {
         assertTrue(tokenHandler.erAutentisert());
     }
 
-    @Test(expected = UnauthorizedException.class)
+    @Test(expected = UnauthenticatedException.class)
     public void testNoContext() {
         when(holder.getOIDCValidationContext()).thenReturn(null);
         assertFalse(tokenHandler.erAutentisert());
@@ -81,7 +84,7 @@ public class TokenHandlerTest {
         tokenHandler.autentisertBruker();
     }
 
-    @Test(expected = UnauthorizedException.class)
+    @Test(expected = UnauthenticatedException.class)
     public void testNoClaims() {
         when(context.getClaims(eq(ISSUER))).thenReturn(null);
         assertFalse(tokenHandler.erAutentisert());
@@ -89,20 +92,14 @@ public class TokenHandlerTest {
         tokenHandler.autentisertBruker();
     }
 
-    @Test(expected = UnauthorizedException.class)
+    @Test(expected = UnauthenticatedException.class)
     public void testNoClaimset() {
         assertNull(tokenHandler.getSubject());
         assertFalse(tokenHandler.erAutentisert());
         tokenHandler.autentisertBruker();
     }
 
-    @Test(expected = UnauthorizedException.class)
-    public void testNoToken() {
-        when(context.getToken(eq(ISSUER))).thenReturn(null);
-        tokenHandler.getToken();
-    }
-
-    @Test(expected = UnauthorizedException.class)
+    @Test(expected = UnauthenticatedException.class)
     public void testNoSubject() {
         when(claims.getClaimSet()).thenReturn(new JWTClaimsSet.Builder().build());
         assertNull(tokenHandler.getSubject());

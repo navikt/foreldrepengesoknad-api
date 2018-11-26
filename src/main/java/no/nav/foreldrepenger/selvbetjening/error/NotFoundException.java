@@ -4,6 +4,10 @@ import static org.springframework.core.NestedExceptionUtils.getMostSpecificCause
 
 public class NotFoundException extends RuntimeException {
 
+    public NotFoundException() {
+        this(null, null);
+    }
+
     public NotFoundException(Throwable cause) {
         this(cause != null ? getMostSpecificCause(cause).getMessage() : null, cause);
     }

@@ -1,14 +1,14 @@
 package no.nav.foreldrepenger.selvbetjening.tjeneste.oppslag;
 
 import no.nav.foreldrepenger.selvbetjening.tjeneste.oppslag.domain.AktørId;
-import no.nav.foreldrepenger.selvbetjening.tjeneste.oppslag.dto.PersonDto;
-import no.nav.foreldrepenger.selvbetjening.tjeneste.oppslag.dto.SøkerinfoDto;
+import no.nav.foreldrepenger.selvbetjening.tjeneste.oppslag.domain.Person;
+import no.nav.foreldrepenger.selvbetjening.tjeneste.oppslag.domain.Søkerinfo;
 
 public interface Oppslag {
 
-    PersonDto hentPerson();
+    Person hentPerson();
 
-    SøkerinfoDto hentSøkerinfo();
+    Søkerinfo hentSøkerinfo();
 
     AktørId hentAktørId(String fnr);
 

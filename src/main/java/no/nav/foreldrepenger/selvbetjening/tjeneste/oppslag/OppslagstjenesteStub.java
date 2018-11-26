@@ -17,6 +17,8 @@ import no.nav.foreldrepenger.selvbetjening.tjeneste.oppslag.domain.AnnenForelder
 import no.nav.foreldrepenger.selvbetjening.tjeneste.oppslag.domain.Arbeidsforhold;
 import no.nav.foreldrepenger.selvbetjening.tjeneste.oppslag.domain.Bankkonto;
 import no.nav.foreldrepenger.selvbetjening.tjeneste.oppslag.domain.Barn;
+import no.nav.foreldrepenger.selvbetjening.tjeneste.oppslag.domain.Person;
+import no.nav.foreldrepenger.selvbetjening.tjeneste.oppslag.domain.Søkerinfo;
 import no.nav.foreldrepenger.selvbetjening.tjeneste.oppslag.dto.PersonDto;
 import no.nav.foreldrepenger.selvbetjening.tjeneste.oppslag.dto.SøkerinfoDto;
 
@@ -27,13 +29,13 @@ public class OppslagstjenesteStub implements Oppslag {
     private static final Logger LOG = getLogger(OppslagstjenesteStub.class);
 
     @Override
-    public PersonDto hentPerson() {
+    public Person hentPerson() {
         LOG.info("Stubber oppslag...");
-        return person();
+        return new Person(person());
     }
 
     @Override
-    public SøkerinfoDto hentSøkerinfo() {
+    public Søkerinfo hentSøkerinfo() {
         SøkerinfoDto dto = new SøkerinfoDto();
         dto.person = person();
         dto.arbeidsforhold = new ArrayList<>();
@@ -44,7 +46,7 @@ public class OppslagstjenesteStub implements Oppslag {
         arbeidsforhold.arbeidsgiverNavn = "navn";
         arbeidsforhold.stillingsprosent = 100d;
         dto.arbeidsforhold.add(arbeidsforhold);
-        return dto;
+        return new Søkerinfo(dto);
     }
 
     public static PersonDto person() {

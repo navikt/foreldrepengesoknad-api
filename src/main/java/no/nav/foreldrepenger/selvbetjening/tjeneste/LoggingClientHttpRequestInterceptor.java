@@ -1,4 +1,4 @@
-package no.nav.foreldrepenger.selvbetjening.tjeneste.innsyn;
+package no.nav.foreldrepenger.selvbetjening.tjeneste;
 
 import java.io.IOException;
 
