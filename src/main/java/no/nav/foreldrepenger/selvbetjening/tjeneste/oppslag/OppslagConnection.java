@@ -26,11 +26,11 @@ public class OppslagConnection extends AbstractRestConnection {
     }
 
     public PersonDto hentPerson() {
-        return getForObject(config.getPersonURI(), PersonDto.class);
+        return getForObject(config.getPersonURI(), PersonDto.class, true);
     }
 
     public SøkerinfoDto hentSøkerInfo() {
-        return getForObject(config.getSøkerinfoURI(), SøkerinfoDto.class);
+        return getForObject(config.getSøkerinfoURI(), SøkerinfoDto.class, true);
     }
 
     public AktørId HentAktørId(String fnr) {
