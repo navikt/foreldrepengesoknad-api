@@ -49,14 +49,14 @@ public class OppslagTest {
 
     private OppslagConnection oppslagConnection;
 
-    private Oppslagstjeneste oppslag;
+    private OppslagTjeneste oppslag;
 
     @Before
     public void restOperations() {
         oppslagConnection = new OppslagConnection(builder
                 .errorHandler(new StatusCodeConvertingResponseErrorHandler(tokenHandler))
                 .build(), oppslagConfig);
-        oppslag = new Oppslagstjeneste(oppslagConnection);
+        oppslag = new OppslagTjeneste(oppslagConnection);
     }
 
     @Test

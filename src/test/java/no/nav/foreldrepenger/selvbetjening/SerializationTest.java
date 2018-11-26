@@ -16,7 +16,7 @@ import javax.inject.Inject;
 import java.io.IOException;
 
 import static java.time.LocalDateTime.now;
-import static no.nav.foreldrepenger.selvbetjening.tjeneste.oppslag.OppslagstjenesteStub.person;
+import static no.nav.foreldrepenger.selvbetjening.tjeneste.oppslag.OppslagTjenesteStub.person;
 import static org.assertj.core.api.Assertions.assertThat;
 
 @RunWith(SpringJUnit4ClassRunner.class)

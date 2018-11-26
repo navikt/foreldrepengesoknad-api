@@ -25,7 +25,7 @@ import no.nav.foreldrepenger.selvbetjening.tjeneste.oppslag.dto.SøkerinfoDto;
 
 @Service
 @ConditionalOnProperty(name = "stub.oppslag", havingValue = "true")
-public class OppslagstjenesteStub implements Oppslag {
+public class OppslagTjenesteStub implements Oppslag {
 
     @Override
     public String ping() {
@@ -37,7 +37,7 @@ public class OppslagstjenesteStub implements Oppslag {
         return URI.create("http.//www.vg.no");
     }
 
-    private static final Logger LOG = getLogger(OppslagstjenesteStub.class);
+    private static final Logger LOG = getLogger(OppslagTjenesteStub.class);
 
     @Override
     public Person hentPerson() {

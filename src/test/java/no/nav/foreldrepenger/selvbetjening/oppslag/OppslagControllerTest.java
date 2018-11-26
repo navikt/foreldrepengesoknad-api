@@ -12,7 +12,7 @@ import org.mockito.junit.MockitoJUnitRunner;
 
 import no.nav.foreldrepenger.selvbetjening.FastTests;
 import no.nav.foreldrepenger.selvbetjening.tjeneste.oppslag.OppslagController;
-import no.nav.foreldrepenger.selvbetjening.tjeneste.oppslag.Oppslagstjeneste;
+import no.nav.foreldrepenger.selvbetjening.tjeneste.oppslag.OppslagTjeneste;
 import no.nav.foreldrepenger.selvbetjening.tjeneste.oppslag.domain.Person;
 import no.nav.foreldrepenger.selvbetjening.tjeneste.oppslag.dto.PersonDto;
 
@@ -21,7 +21,7 @@ import no.nav.foreldrepenger.selvbetjening.tjeneste.oppslag.dto.PersonDto;
 public class OppslagControllerTest {
 
     @Mock
-    private Oppslagstjeneste oppslagstjeneste;
+    private OppslagTjeneste oppslagstjeneste;
 
     @InjectMocks
     private OppslagController oppslagController;

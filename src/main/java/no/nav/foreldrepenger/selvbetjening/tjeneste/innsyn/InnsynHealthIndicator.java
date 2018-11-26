@@ -1,8 +1,8 @@
-package no.nav.foreldrepenger.selvbetjening.health;
+package no.nav.foreldrepenger.selvbetjening.tjeneste.innsyn;
 
 import org.springframework.stereotype.Component;
 
-import no.nav.foreldrepenger.selvbetjening.tjeneste.innsyn.Innsyn;
+import no.nav.foreldrepenger.selvbetjening.health.AbstractEnvironmentAwareHealthIndicator;
 
 @Component
 public class InnsynHealthIndicator extends AbstractEnvironmentAwareHealthIndicator {

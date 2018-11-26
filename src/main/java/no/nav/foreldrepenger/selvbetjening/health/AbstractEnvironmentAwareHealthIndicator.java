@@ -9,7 +9,7 @@ import org.springframework.core.env.Environment;
 
 import no.nav.foreldrepenger.selvbetjening.tjeneste.Pingable;
 
-abstract class AbstractEnvironmentAwareHealthIndicator implements HealthIndicator, EnvironmentAware {
+public abstract class AbstractEnvironmentAwareHealthIndicator implements HealthIndicator, EnvironmentAware {
 
     private final Pingable pingable;
     private Environment env;

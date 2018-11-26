@@ -14,12 +14,12 @@ import no.nav.foreldrepenger.selvbetjening.tjeneste.oppslag.domain.Søkerinfo;
 
 @Service
 @ConditionalOnProperty(name = "stub.oppslag", havingValue = "false", matchIfMissing = true)
-public class Oppslagstjeneste implements Oppslag {
+public class OppslagTjeneste implements Oppslag {
 
     private final OppslagConnection connection;
 
     @Inject
-    public Oppslagstjeneste(OppslagConnection connection) {
+    public OppslagTjeneste(OppslagConnection connection) {
         this.connection = connection;
     }
 
