@@ -1,7 +1,7 @@
 # REST-API for foreldrepenger/engangsstønad
 
 ## Kjøre opp lokalt
-* Kjør klassen ```ApplicationLocal``` fra IntelliJ med Spring-profilen *dev* satt
+* Kjør klassen ```ApiApplicationLocal``` fra IntelliJ med Spring-profilen *dev* satt
 
 ## Bygg
 * Hvis du kjører JDK 8: 
