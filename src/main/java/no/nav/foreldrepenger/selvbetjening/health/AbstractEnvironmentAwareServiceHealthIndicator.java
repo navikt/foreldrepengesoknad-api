@@ -23,14 +23,10 @@ abstract class AbstractEnvironmentAwareHealthIndicator implements HealthIndicato
         this.env = env;
     }
 
-    protected void checkHealth() {
-        pingable.ping();
-    }
-
     @Override
     public Health health() {
         try {
-            checkHealth();
+            pingable.ping();
             return up();
         } catch (Exception e) {
             return down(e);

@@ -48,22 +48,19 @@ public class InnsynTest {
     @Autowired
     private RestTemplateBuilder builder;
 
-    private InnsynConnection innsynConnection;
-
     private InnsynTjeneste innsyn;
 
     @Before
-    public void restOperations() {
-        innsynConnection = new InnsynConnection(builder
+    public void init() {
+        innsyn = new InnsynTjeneste(new InnsynConnection(builder
                 .errorHandler(new StatusCodeConvertingResponseErrorHandler(tokenHandler))
-                .build(), innsynConfig);
-        innsyn = new InnsynTjeneste(innsynConnection);
+                .build(), innsynConfig));
     }
 
     @Test
     public void uttaksplan() {
         server
-                .expect(ExpectedCount.once(), requestTo(innsynConnection.uttakURI("42")))
+                .expect(ExpectedCount.once(), requestTo(innsynConfig.getUttakURI("42")))
                 .andExpect(method(HttpMethod.GET))
                 .andRespond(withStatus(HttpStatus.OK));
         innsyn.hentUttaksplan("42");

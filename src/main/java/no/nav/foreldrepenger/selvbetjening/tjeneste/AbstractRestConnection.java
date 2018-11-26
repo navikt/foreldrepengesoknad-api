@@ -11,7 +11,7 @@ import org.springframework.web.client.RestOperations;
 import no.nav.foreldrepenger.selvbetjening.error.NotFoundException;
 import no.nav.foreldrepenger.selvbetjening.util.EnvUtil;
 
-public abstract class AbstractRestConnection implements EnvironmentAware, Pingable {
+public abstract class AbstractRestConnection implements EnvironmentAware {
 
     protected abstract boolean isEnabled();
 

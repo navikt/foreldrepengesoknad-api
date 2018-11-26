@@ -1,5 +1,7 @@
 package no.nav.foreldrepenger.selvbetjening.tjeneste.oppslag;
 
+import java.net.URI;
+
 import javax.inject.Inject;
 
 import org.springframework.boot.autoconfigure.condition.ConditionalOnProperty;
@@ -37,8 +39,14 @@ public class Oppslagstjeneste implements Oppslag {
         return connection.HentAktørId(fnr);
     }
 
-    public void ping() {
-        connection.ping();
+    @Override
+    public String ping() {
+        return connection.ping();
+    }
+
+    @Override
+    public URI pingURI() {
+        return connection.pingURI();
     }
 
     @Override

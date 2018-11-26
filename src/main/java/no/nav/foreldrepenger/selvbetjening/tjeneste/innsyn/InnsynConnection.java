@@ -33,17 +33,16 @@ public class InnsynConnection extends AbstractRestConnection {
         return innsynConfig.isEnabled();
     }
 
-    @Override
-    public String ping() {
+    String ping() {
         return ping(pingURI());
     }
 
-    public URI pingURI() {
+    URI pingURI() {
         return innsynConfig.getPingURI();
     }
 
     public List<UttaksPeriode> hentUttaksplan(String saksnummer) {
-        return Optional.ofNullable(getForObject(uttakURI(saksnummer), UttaksPeriode[].class))
+        return Optional.ofNullable(getForObject(innsynConfig.getUttakURI(saksnummer), UttaksPeriode[].class))
                 .map(Arrays::asList)
                 .orElse(emptyList());
     }
@@ -55,11 +54,6 @@ public class InnsynConnection extends AbstractRestConnection {
             visSaker(fpsakSaker);
         }
         return newArrayList(unmodifiableIterable(concat(sakSaker, fpsakSaker)));
-    }
-
-    URI uttakURI(String saksnummer) {
-        return innsynConfig.getUttakURI(saksnummer);
-
     }
 
     private List<Sak> saker(URI uri, String fra) {
@@ -89,6 +83,6 @@ public class InnsynConnection extends AbstractRestConnection {
     @Override
     public String toString() {
         return getClass().getSimpleName() + "pingURI=" + pingURI() + ", fpsakURI=" + innsynConfig.getFpsakURI()
-                + ", sakURI=" + innsynConfig.getSakURI() + ", uttakURI=" + uttakURI("42") + "]";
+                + ", sakURI=" + innsynConfig.getSakURI() + ", uttakURI=" + innsynConfig.getUttakURI("42") + "]";
     }
 }

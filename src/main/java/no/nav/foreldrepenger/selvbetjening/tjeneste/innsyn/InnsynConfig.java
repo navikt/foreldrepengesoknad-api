@@ -1,12 +1,13 @@
 package no.nav.foreldrepenger.selvbetjening.tjeneste.innsyn;
 
+import static no.nav.foreldrepenger.selvbetjening.util.URIUtils.queryParams;
+import static no.nav.foreldrepenger.selvbetjening.util.URIUtils.uri;
+
 import java.net.URI;
 
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.boot.context.properties.ConfigurationProperties;
 import org.springframework.context.annotation.Configuration;
-import org.springframework.http.HttpHeaders;
-import org.springframework.web.util.UriComponentsBuilder;
 
 @ConfigurationProperties(prefix = "innsyn")
 @Configuration
@@ -14,10 +15,10 @@ public class InnsynConfig {
 
     private static final String BASE_PATH = "/api";
     private static final String PING = "mottak/ping";
-    static final String FPSAK_SAKER = "innsyn/saker";
-    static final String SAK_SAKER = "sak";
-    static final String SAKSNUMMER = "saksnummer";
-    static final String UTTAKSPLAN = "innsyn/uttaksplan";
+    private static final String FPSAK_SAKER = "innsyn/saker";
+    private static final String SAK_SAKER = "sak";
+    private static final String SAKSNUMMER = "saksnummer";
+    private static final String UTTAKSPLAN = "innsyn/uttaksplan";
 
     boolean enabled;
     URI mottakURI;
@@ -67,30 +68,6 @@ public class InnsynConfig {
 
     URI getUttakURI(String saksnummer) {
         return uri(getMottakURI(), UTTAKSPLAN, queryParams(SAKSNUMMER, saksnummer));
-    }
-
-    protected static URI uri(URI base, String path) {
-        return uri(base, path, null);
-    }
-
-    protected static URI uri(URI base, String path, HttpHeaders queryParams) {
-        return builder(base, path, queryParams)
-                .build()
-                .toUri();
-    }
-
-    private static UriComponentsBuilder builder(URI base, String path, HttpHeaders queryParams) {
-        return UriComponentsBuilder
-                .fromUri(base)
-                .pathSegment(path)
-                .queryParams(queryParams);
-
-    }
-
-    protected static HttpHeaders queryParams(String key, String value) {
-        HttpHeaders queryParams = new HttpHeaders();
-        queryParams.add(key, value);
-        return queryParams;
     }
 
 }

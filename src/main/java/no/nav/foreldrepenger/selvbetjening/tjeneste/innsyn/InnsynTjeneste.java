@@ -1,5 +1,6 @@
 package no.nav.foreldrepenger.selvbetjening.tjeneste.innsyn;
 
+import java.net.URI;
 import java.util.List;
 
 import org.springframework.stereotype.Service;
@@ -28,7 +29,13 @@ public class InnsynTjeneste implements Innsyn {
         return getClass().getSimpleName() + " [innsynConnection=" + innsynConnection + "]";
     }
 
-    public void ping() {
-        innsynConnection.ping();
+    @Override
+    public String ping() {
+        return innsynConnection.ping();
+    }
+
+    @Override
+    public URI pingURI() {
+        return innsynConnection.pingURI();
     }
 }

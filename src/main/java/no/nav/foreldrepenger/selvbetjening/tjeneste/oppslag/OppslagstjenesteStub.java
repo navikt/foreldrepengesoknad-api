@@ -5,6 +5,7 @@ import static java.time.LocalDate.now;
 import static java.util.Collections.singletonList;
 import static org.slf4j.LoggerFactory.getLogger;
 
+import java.net.URI;
 import java.util.ArrayList;
 
 import org.slf4j.Logger;
@@ -25,6 +26,16 @@ import no.nav.foreldrepenger.selvbetjening.tjeneste.oppslag.dto.SøkerinfoDto;
 @Service
 @ConditionalOnProperty(name = "stub.oppslag", havingValue = "true")
 public class OppslagstjenesteStub implements Oppslag {
+
+    @Override
+    public String ping() {
+        return "hello earthlings";
+    }
+
+    @Override
+    public URI pingURI() {
+        return URI.create("http.//www.vg.no");
+    }
 
     private static final Logger LOG = getLogger(OppslagstjenesteStub.class);
 

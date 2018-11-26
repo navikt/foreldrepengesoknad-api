@@ -25,11 +25,6 @@ public class OppslagConnection extends AbstractRestConnection {
         return config.isEnabled();
     }
 
-    @Override
-    public String ping() {
-        return ping(pingURI());
-    }
-
     public PersonDto hentPerson() {
         return getForObject(config.getPersonURI(), PersonDto.class);
     }
@@ -42,7 +37,11 @@ public class OppslagConnection extends AbstractRestConnection {
         return getForObject(config.getAktørIdURI(fnr), AktørId.class, true);
     }
 
-    public URI pingURI() {
+    String ping() {
+        return ping(pingURI());
+    }
+
+    URI pingURI() {
         return config.getPingURI();
     }
 
