@@ -147,6 +147,8 @@ public class OpptjeningDto {
                 this.endringsDato = næringsInfo.dato;
                 this.næringsinntektBrutto = næringsInfo.næringsinntektEtterEndring;
                 this.beskrivelseEndring = næringsInfo.forklaring;
+            } else {
+                this.næringsinntektBrutto = selvstendig.næringsinntekt;
             }
 
             if (regnskapsfører != null) {
