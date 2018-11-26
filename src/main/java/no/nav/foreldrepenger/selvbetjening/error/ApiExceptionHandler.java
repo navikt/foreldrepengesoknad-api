@@ -1,7 +1,21 @@
 package no.nav.foreldrepenger.selvbetjening.error;
 
-import no.nav.security.oidc.exceptions.OIDCTokenValidatorException;
-import no.nav.security.spring.oidc.validation.interceptor.OIDCUnauthorizedException;
+import static java.util.Arrays.asList;
+import static java.util.stream.Collectors.toList;
+import static org.apache.commons.lang3.exception.ExceptionUtils.getRootCause;
+import static org.springframework.http.HttpStatus.BAD_REQUEST;
+import static org.springframework.http.HttpStatus.FORBIDDEN;
+import static org.springframework.http.HttpStatus.INTERNAL_SERVER_ERROR;
+import static org.springframework.http.HttpStatus.NOT_FOUND;
+import static org.springframework.http.HttpStatus.PAYLOAD_TOO_LARGE;
+import static org.springframework.http.HttpStatus.UNAUTHORIZED;
+import static org.springframework.http.HttpStatus.UNPROCESSABLE_ENTITY;
+
+import java.util.ArrayList;
+import java.util.List;
+
+import javax.ws.rs.BadRequestException;
+
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.http.HttpHeaders;
@@ -20,14 +34,8 @@ import org.springframework.web.multipart.MultipartException;
 import org.springframework.web.servlet.NoHandlerFoundException;
 import org.springframework.web.servlet.mvc.method.annotation.ResponseEntityExceptionHandler;
 
-import javax.ws.rs.BadRequestException;
-import java.util.ArrayList;
-import java.util.List;
-
-import static java.util.Arrays.asList;
-import static java.util.stream.Collectors.toList;
-import static org.apache.commons.lang3.exception.ExceptionUtils.getRootCause;
-import static org.springframework.http.HttpStatus.*;
+import no.nav.security.oidc.exceptions.OIDCTokenValidatorException;
+import no.nav.security.spring.oidc.validation.interceptor.OIDCUnauthorizedException;
 
 @ControllerAdvice
 public class ApiExceptionHandler extends ResponseEntityExceptionHandler {
@@ -51,7 +59,8 @@ public class ApiExceptionHandler extends ResponseEntityExceptionHandler {
 
     @ResponseBody
     @ExceptionHandler(AttachmentTypeUnsupportedException.class)
-    protected ResponseEntity<Object> handleUnsupportedAttachmentError(AttachmentTypeUnsupportedException e, WebRequest req) {
+    protected ResponseEntity<Object> handleUnsupportedAttachmentError(AttachmentTypeUnsupportedException e,
+            WebRequest req) {
         return handleError(UNPROCESSABLE_ENTITY, e, req, getRootCauseMessage(e));
     }
 
@@ -75,13 +84,15 @@ public class ApiExceptionHandler extends ResponseEntityExceptionHandler {
 
     @Override
     @ResponseBody
-    protected ResponseEntity<Object> handleMethodArgumentNotValid(MethodArgumentNotValidException e, HttpHeaders headers, HttpStatus status, WebRequest req) {
+    protected ResponseEntity<Object> handleMethodArgumentNotValid(MethodArgumentNotValidException e,
+            HttpHeaders headers, HttpStatus status, WebRequest req) {
         return handleError(UNPROCESSABLE_ENTITY, e, req, getRootCauseMessage(e), false, validationErrors(e));
     }
 
     @Override
     @ResponseBody
-    protected ResponseEntity<Object> handleNoHandlerFoundException(NoHandlerFoundException e, HttpHeaders headers, HttpStatus status, WebRequest req) {
+    protected ResponseEntity<Object> handleNoHandlerFoundException(NoHandlerFoundException e, HttpHeaders headers,
+            HttpStatus status, WebRequest req) {
         return handleError(NOT_FOUND, e, req, getRootCauseMessage(e));
     }
 
@@ -100,7 +111,8 @@ public class ApiExceptionHandler extends ResponseEntityExceptionHandler {
     @ResponseBody
     @ExceptionHandler(OIDCTokenValidatorException.class)
     public ResponseEntity<Object> handleForbiddenOIDC(OIDCTokenValidatorException e, WebRequest req) {
-        return handleError(FORBIDDEN, e, req, getRootCauseMessage(e), e.getExpiryDate() != null ? e.getExpiryDate().toString() : null);
+        return handleError(FORBIDDEN, e, req, getRootCauseMessage(e),
+                e.getExpiryDate() != null ? e.getExpiryDate().toString() : null);
     }
 
     @ResponseBody
@@ -116,20 +128,29 @@ public class ApiExceptionHandler extends ResponseEntityExceptionHandler {
     }
 
     @ResponseBody
+    @ExceptionHandler(NotFoundException.class)
+    public ResponseEntity<Object> notFound(NotFoundException e, WebRequest req) {
+        return handleError(NOT_FOUND, e, req, getRootCauseMessage(e));
+    }
+
+    @ResponseBody
     @ExceptionHandler(Exception.class)
     public ResponseEntity<Object> catchAll(Exception e, WebRequest req) {
         return handleError(INTERNAL_SERVER_ERROR, e, req, getRootCauseMessage(e));
     }
 
-    private ResponseEntity<Object> handleError(HttpStatus status, Exception e, WebRequest req, String message, String... extraInfo) {
+    private ResponseEntity<Object> handleError(HttpStatus status, Exception e, WebRequest req, String message,
+            String... extraInfo) {
         return handleError(status, e, req, message, false, extraInfo);
     }
 
-    private ResponseEntity<Object> handleError(HttpStatus status, Exception e, WebRequest req, String message, boolean trace, String... extraInfo) {
+    private ResponseEntity<Object> handleError(HttpStatus status, Exception e, WebRequest req, String message,
+            boolean trace, String... extraInfo) {
         return handleError(status, e, req, message, trace, new ArrayList<>(asList(extraInfo)));
     }
 
-    private ResponseEntity<Object> handleError(HttpStatus status, Exception e, WebRequest req, String message, boolean trace, List<String> extraInfo) {
+    private ResponseEntity<Object> handleError(HttpStatus status, Exception e, WebRequest req, String message,
+            boolean trace, List<String> extraInfo) {
         if (req instanceof ServletWebRequest) {
             ServletWebRequest servletRequest = (ServletWebRequest) req;
             extraInfo.add(servletRequest.getRequest().getRequestURI());
@@ -137,7 +158,8 @@ public class ApiExceptionHandler extends ResponseEntityExceptionHandler {
 
         if (trace) {
             LOG.trace("Error: {} - Extra info: {}", message, extraInfo, e);
-        } else {
+        }
+        else {
             LOG.warn("Error: {} - Extra info: {}", message, extraInfo, e);
         }
 
