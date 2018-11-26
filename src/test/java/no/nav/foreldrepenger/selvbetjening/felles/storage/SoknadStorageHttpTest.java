@@ -28,13 +28,13 @@ import org.springframework.test.context.junit4.SpringRunner;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.SerializationFeature;
 
-import no.nav.foreldrepenger.selvbetjening.ApplicationLocal;
+import no.nav.foreldrepenger.selvbetjening.ApiApplicationLocal;
 import no.nav.foreldrepenger.selvbetjening.SlowTests;
 import no.nav.foreldrepenger.selvbetjening.stub.StubbedLocalStackContainer;
 import no.nav.security.oidc.test.support.JwtTokenGenerator;
 
 @RunWith(SpringRunner.class)
-@SpringBootTest(classes = ApplicationLocal.class, webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT)
+@SpringBootTest(classes = ApiApplicationLocal.class, webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT)
 @ActiveProfiles("dev, localstack")
 @FixMethodOrder(MethodSorters.NAME_ASCENDING)
 @Category(SlowTests.class)

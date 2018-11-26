@@ -3,6 +3,9 @@ package no.nav.foreldrepenger.selvbetjening.felles.storage;
 import com.amazonaws.services.s3.AmazonS3;
 import com.amazonaws.services.s3.AmazonS3ClientBuilder;
 import no.nav.foreldrepenger.selvbetjening.SlowTests;
+import no.nav.foreldrepenger.selvbetjening.tjeneste.mellomlagring.S3Storage;
+import no.nav.foreldrepenger.selvbetjening.tjeneste.mellomlagring.Storage;
+
 import org.junit.Rule;
 import org.junit.Test;
 import org.junit.experimental.categories.Category;

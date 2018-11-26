@@ -2,8 +2,10 @@ package no.nav.foreldrepenger.selvbetjening;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
-import no.nav.foreldrepenger.selvbetjening.innsending.json.Barn;
-import no.nav.foreldrepenger.selvbetjening.innsending.json.Engangsstønad;
+
+import no.nav.foreldrepenger.selvbetjening.tjeneste.innsending.domain.Barn;
+import no.nav.foreldrepenger.selvbetjening.tjeneste.innsending.domain.Engangsstønad;
+
 import org.junit.Test;
 import org.junit.experimental.categories.Category;
 import org.junit.runner.RunWith;
@@ -14,7 +16,7 @@ import javax.inject.Inject;
 import java.io.IOException;
 
 import static java.time.LocalDateTime.now;
-import static no.nav.foreldrepenger.selvbetjening.oppslag.tjeneste.OppslagstjenesteStub.person;
+import static no.nav.foreldrepenger.selvbetjening.tjeneste.oppslag.OppslagstjenesteStub.person;
 import static org.assertj.core.api.Assertions.assertThat;
 
 @RunWith(SpringJUnit4ClassRunner.class)

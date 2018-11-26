@@ -2,9 +2,11 @@ package no.nav.foreldrepenger.selvbetjening.stub;
 
 import com.amazonaws.services.s3.AmazonS3;
 import com.amazonaws.services.s3.AmazonS3ClientBuilder;
-import no.nav.foreldrepenger.selvbetjening.felles.storage.S3Storage;
-import no.nav.foreldrepenger.selvbetjening.felles.storage.Storage;
-import no.nav.foreldrepenger.selvbetjening.felles.storage.StorageCrypto;
+
+import no.nav.foreldrepenger.selvbetjening.tjeneste.mellomlagring.S3Storage;
+import no.nav.foreldrepenger.selvbetjening.tjeneste.mellomlagring.Storage;
+import no.nav.foreldrepenger.selvbetjening.tjeneste.mellomlagring.StorageCrypto;
+
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.Profile;

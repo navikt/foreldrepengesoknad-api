@@ -1,0 +1,22 @@
+package no.nav.foreldrepenger.selvbetjening.tjeneste.oppslag.domain;
+
+import static com.fasterxml.jackson.annotation.JsonInclude.Include.NON_EMPTY;
+
+import java.util.ArrayList;
+import java.util.List;
+
+import com.fasterxml.jackson.annotation.JsonInclude;
+
+import no.nav.foreldrepenger.selvbetjening.tjeneste.oppslag.dto.SøkerinfoDto;
+
+@JsonInclude(NON_EMPTY)
+public class Søkerinfo {
+
+    public Person søker;
+    public List<Arbeidsforhold> arbeidsforhold = new ArrayList<>();
+
+    public Søkerinfo(SøkerinfoDto dto) {
+        this.søker = new Person(dto.person);
+        this.arbeidsforhold.addAll(dto.arbeidsforhold);
+    }
+}
