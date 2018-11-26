@@ -16,7 +16,7 @@ public class OppslagConfig {
     private static final String FNR = "fnr";
     private static final String PING = "oppslag/ping";
     private static final String PERSON = "person";
-    private static final String SØKERINFO = "sokerinfo";
+    private static final String SØKERINFO = "oppslag";
     private static final String AKTØRFNR = "oppslag/aktorfnr";
 
     boolean enabled;
