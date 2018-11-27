@@ -1,7 +1,7 @@
-package no.nav.foreldrepenger.selvbetjening.tjeneste.innsending;
+package no.nav.foreldrepenger.selvbetjening.tjeneste.mellomlagring;
 
 import static java.time.LocalDateTime.now;
-import static no.nav.foreldrepenger.selvbetjening.felles.storage.AttachmentStorageHttpTest.getByteArrayResource;
+import static no.nav.foreldrepenger.selvbetjening.tjeneste.mellomlagring.AttachmentStorageHttpTest.getByteArrayResource;
 import static org.assertj.core.api.AssertionsForClassTypes.assertThat;
 
 import java.net.URI;
@@ -31,7 +31,6 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.SerializationFeature;
 
 import no.nav.foreldrepenger.selvbetjening.ApiApplicationLocal;
-import no.nav.foreldrepenger.selvbetjening.felles.storage.AttachmentTestHttpHandler;
 import no.nav.foreldrepenger.selvbetjening.tjeneste.innsending.domain.Barn;
 import no.nav.foreldrepenger.selvbetjening.tjeneste.innsending.domain.Engangsstønad;
 import no.nav.foreldrepenger.selvbetjening.tjeneste.innsending.domain.Vedlegg;

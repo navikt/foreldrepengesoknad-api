@@ -14,8 +14,6 @@ import static org.springframework.http.HttpStatus.UNPROCESSABLE_ENTITY;
 import java.util.ArrayList;
 import java.util.List;
 
-import javax.ws.rs.BadRequestException;
-
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.http.HttpHeaders;
@@ -45,16 +43,7 @@ public class ApiExceptionHandler extends ResponseEntityExceptionHandler {
     @ResponseBody
     @ExceptionHandler(HttpClientErrorException.class)
     public ResponseEntity<Object> handleHttpClientException(HttpClientErrorException e, WebRequest request) {
-        if (e.getStatusCode() == NOT_FOUND) {
-            return handleError(NOT_FOUND, e, request, getRootCauseMessage(e));
-        }
-        throw e;
-    }
-
-    @ResponseBody
-    @ExceptionHandler(AttachmentsTooLargeException.class)
-    protected ResponseEntity<Object> handleTooLargeAttachmentsError(AttachmentsTooLargeException e, WebRequest req) {
-        return handleError(PAYLOAD_TOO_LARGE, e, req, getRootCauseMessage(e));
+        return handleError(BAD_REQUEST, e, request, getRootCauseMessage(e));
     }
 
     @ResponseBody
@@ -64,6 +53,13 @@ public class ApiExceptionHandler extends ResponseEntityExceptionHandler {
         return handleError(UNPROCESSABLE_ENTITY, e, req, getRootCauseMessage(e));
     }
 
+    @Override
+    @ResponseBody
+    protected ResponseEntity<Object> handleMethodArgumentNotValid(MethodArgumentNotValidException e,
+            HttpHeaders headers, HttpStatus status, WebRequest req) {
+        return handleError(UNPROCESSABLE_ENTITY, e, req, getRootCauseMessage(e), false, validationErrors(e));
+    }
+
     @ResponseBody
     @ExceptionHandler(AttachmentConversionException.class)
     protected ResponseEntity<Object> handleAttachmentConversionError(AttachmentConversionException e, WebRequest req) {
@@ -71,22 +67,10 @@ public class ApiExceptionHandler extends ResponseEntityExceptionHandler {
     }
 
     @ResponseBody
-    @ExceptionHandler(MultipartException.class)
-    public ResponseEntity<Object> handleMultipartError(MultipartException e, WebRequest req) {
+    @ExceptionHandler({ MultipartException.class, MaxUploadSizeExceededException.class,
+            AttachmentsTooLargeException.class })
+    public ResponseEntity<Object> handleTooLargeAttchment(Exception e, WebRequest req) {
         return handleError(PAYLOAD_TOO_LARGE, e, req, getRootCauseMessage(e));
-    }
-
-    @ResponseBody
-    @ExceptionHandler(MaxUploadSizeExceededException.class)
-    public ResponseEntity<Object> handleMaxUploadSizeExceededError(MaxUploadSizeExceededException e, WebRequest req) {
-        return handleError(PAYLOAD_TOO_LARGE, e, req, getRootCauseMessage(e));
-    }
-
-    @Override
-    @ResponseBody
-    protected ResponseEntity<Object> handleMethodArgumentNotValid(MethodArgumentNotValidException e,
-            HttpHeaders headers, HttpStatus status, WebRequest req) {
-        return handleError(UNPROCESSABLE_ENTITY, e, req, getRootCauseMessage(e), false, validationErrors(e));
     }
 
     @Override
@@ -97,14 +81,8 @@ public class ApiExceptionHandler extends ResponseEntityExceptionHandler {
     }
 
     @ResponseBody
-    @ExceptionHandler(OIDCUnauthorizedException.class)
-    public ResponseEntity<Object> handleUnauthorizedOIDC(OIDCUnauthorizedException e, WebRequest req) {
-        return handleError(UNAUTHORIZED, e, req, getRootCauseMessage(e), true);
-    }
-
-    @ResponseBody
-    @ExceptionHandler(UnauthorizedException.class)
-    public ResponseEntity<Object> handleUnauthorized(UnauthorizedException e, WebRequest req) {
+    @ExceptionHandler({ OIDCUnauthorizedException.class, UnauthorizedException.class })
+    public ResponseEntity<Object> handleUnauthorized(Exception e, WebRequest req) {
         return handleError(UNAUTHORIZED, e, req, getRootCauseMessage(e), true);
     }
 
@@ -119,12 +97,6 @@ public class ApiExceptionHandler extends ResponseEntityExceptionHandler {
     @ExceptionHandler(UnauthenticatedException.class)
     public ResponseEntity<Object> handeForbidden(UnauthenticatedException e, WebRequest req) {
         return handleError(FORBIDDEN, e, req, getRootCauseMessage(e));
-    }
-
-    @ResponseBody
-    @ExceptionHandler(BadRequestException.class)
-    public ResponseEntity<Object> handleBadRequest(BadRequestException e, WebRequest req) {
-        return handleError(BAD_REQUEST, e, req, getRootCauseMessage(e));
     }
 
     @ResponseBody

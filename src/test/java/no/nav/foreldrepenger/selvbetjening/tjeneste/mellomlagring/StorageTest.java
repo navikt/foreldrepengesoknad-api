@@ -1,21 +1,19 @@
-package no.nav.foreldrepenger.selvbetjening.felles.storage;
+package no.nav.foreldrepenger.selvbetjening.tjeneste.mellomlagring;
 
-import com.amazonaws.services.s3.AmazonS3;
-import com.amazonaws.services.s3.AmazonS3ClientBuilder;
-import no.nav.foreldrepenger.selvbetjening.SlowTests;
-import no.nav.foreldrepenger.selvbetjening.tjeneste.mellomlagring.S3Storage;
-import no.nav.foreldrepenger.selvbetjening.tjeneste.mellomlagring.Storage;
+import static org.junit.Assert.assertEquals;
+import static org.testcontainers.containers.localstack.LocalStackContainer.Service.S3;
+
+import java.util.Optional;
 
 import org.junit.Rule;
 import org.junit.Test;
 import org.junit.experimental.categories.Category;
 import org.testcontainers.containers.localstack.LocalStackContainer;
 
-import java.util.Optional;
+import com.amazonaws.services.s3.AmazonS3;
+import com.amazonaws.services.s3.AmazonS3ClientBuilder;
 
-import static org.junit.Assert.assertEquals;
-import static org.testcontainers.containers.localstack.LocalStackContainer.Service.S3;
-
+import no.nav.foreldrepenger.selvbetjening.SlowTests;
 
 @Category(SlowTests.class)
 public class StorageTest {
@@ -53,7 +51,6 @@ public class StorageTest {
         storage.delete("mydir", "mykey");
     }
 
-
     @Test
     public void tmpStorageIsInDifferentBucketThanRegularStore() {
         Storage storage = new S3Storage(s3());
@@ -63,7 +60,6 @@ public class StorageTest {
         assertEquals(Optional.empty(), storage.getTmp("mydir", "mykey"));
 
     }
-
 
     @Test
     public void tmpStoreAndReadAndDelete() {

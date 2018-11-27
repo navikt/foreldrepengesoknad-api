@@ -1,15 +1,14 @@
-package no.nav.foreldrepenger.selvbetjening.felles.crypto;
+package no.nav.foreldrepenger.selvbetjening.tjeneste.mellomlagring;
 
-import no.nav.foreldrepenger.selvbetjening.FastTests;
-import no.nav.foreldrepenger.selvbetjening.tjeneste.mellomlagring.Crypto;
+import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertNotEquals;
+
+import java.util.Base64;
 
 import org.junit.Test;
 import org.junit.experimental.categories.Category;
 
-import java.util.Base64;
-
-import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertNotEquals;
+import no.nav.foreldrepenger.selvbetjening.FastTests;
 
 @Category(FastTests.class)
 public class CryptoTest {

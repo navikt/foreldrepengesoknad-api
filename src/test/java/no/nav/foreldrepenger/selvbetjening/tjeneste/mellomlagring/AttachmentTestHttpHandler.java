@@ -1,4 +1,4 @@
-package no.nav.foreldrepenger.selvbetjening.felles.storage;
+package no.nav.foreldrepenger.selvbetjening.tjeneste.mellomlagring;
 
 import java.net.URI;
 
