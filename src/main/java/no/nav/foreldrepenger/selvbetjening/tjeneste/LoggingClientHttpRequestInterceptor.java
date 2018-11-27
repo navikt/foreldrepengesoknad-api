@@ -18,7 +18,7 @@ public class LoggingClientHttpRequestInterceptor implements ClientHttpRequestInt
     public ClientHttpResponse intercept(HttpRequest request, byte[] body, ClientHttpRequestExecution execution)
             throws IOException {
 
-        LOG.info("{} {}", request.getMethodValue(), request.getURI());
+        LOG.info("Executing {} - {}", request.getMethodValue(), request.getURI());
         return execution.execute(request, body);
     }
 }

@@ -35,13 +35,17 @@ public abstract class AbstractEnvironmentAwareHealthIndicator implements HealthI
 
     private Health up() {
         return isDevOrPreprod(env)
-                ? Health.up().withDetail(pingable.getClass().getSimpleName(), pingable.pingURI()).build()
+                ? Health.up()
+                        .withDetail(pingable.getClass().getSimpleName(), pingable.pingURI())
+                        .build()
                 : Health.up().build();
     }
 
     private Health down(Exception e) {
         return isDevOrPreprod(env)
-                ? Health.down().withDetail(pingable.getClass().getSimpleName(), pingable.pingURI()).withException(e)
+                ? Health.down()
+                        .withDetail(pingable.getClass().getSimpleName(), pingable.pingURI())
+                        .withException(e)
                         .build()
                 : Health.down().build();
     }
