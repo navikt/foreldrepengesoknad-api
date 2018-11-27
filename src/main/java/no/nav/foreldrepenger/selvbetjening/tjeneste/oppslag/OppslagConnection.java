@@ -37,11 +37,8 @@ public class OppslagConnection extends AbstractRestConnection {
         return getForObject(config.getAktørIdURI(fnr), AktørId.class, true);
     }
 
-    String ping() {
-        return ping(pingURI());
-    }
-
-    URI pingURI() {
+    @Override
+    protected URI pingURI() {
         return config.getPingURI();
     }
 

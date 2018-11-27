@@ -33,11 +33,8 @@ public class InnsynConnection extends AbstractRestConnection {
         return innsynConfig.isEnabled();
     }
 
-    String ping() {
-        return ping(pingURI());
-    }
-
-    URI pingURI() {
+    @Override
+    protected URI pingURI() {
         return innsynConfig.getPingURI();
     }
 

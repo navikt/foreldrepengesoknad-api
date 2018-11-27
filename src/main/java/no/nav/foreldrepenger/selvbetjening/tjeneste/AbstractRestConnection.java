@@ -25,8 +25,10 @@ public abstract class AbstractRestConnection implements EnvironmentAware {
         this.env = env;
     }
 
-    protected String ping(URI uri) {
-        return getForObject(uri, String.class);
+    protected abstract URI pingURI();
+
+    public String ping() {
+        return getForObject(pingURI(), String.class);
     }
 
     protected <T> T getForObject(URI uri, Class<T> responseType) {

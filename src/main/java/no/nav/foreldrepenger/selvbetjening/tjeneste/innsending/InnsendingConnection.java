@@ -49,11 +49,8 @@ public class InnsendingConnection extends AbstractRestConnection {
         return config.isEnabled();
     }
 
-    String ping() {
-        return ping(pingURI());
-    }
-
-    URI pingURI() {
+    @Override
+    protected URI pingURI() {
         return config.getPingURI();
     }
 

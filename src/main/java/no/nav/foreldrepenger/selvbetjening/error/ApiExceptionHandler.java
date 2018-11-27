@@ -127,14 +127,7 @@ public class ApiExceptionHandler extends ResponseEntityExceptionHandler {
             ServletWebRequest servletRequest = (ServletWebRequest) req;
             extraInfo.add(servletRequest.getRequest().getRequestURI());
         }
-
-        if (trace) {
-            LOG.trace("Error: {} - Extra info: {}", message, extraInfo, e);
-        }
-        else {
-            LOG.warn("Error: {} - Extra info: {}", message, extraInfo, e);
-        }
-
+        log(e, message, trace, extraInfo);
         return handleExceptionInternal(e, new ApiError(status, message), new HttpHeaders(), status, req);
     }
 
@@ -152,5 +145,14 @@ public class ApiExceptionHandler extends ResponseEntityExceptionHandler {
 
     private String errorMessage(FieldError error) {
         return error.getDefaultMessage() + " (" + error.getField() + ")";
+    }
+
+    private static void log(Exception e, String message, boolean trace, List<String> extraInfo) {
+        if (trace) {
+            LOG.trace("Error: {} - Extra info: {}", message, extraInfo, e);
+        }
+        else {
+            LOG.warn("Error: {} - Extra info: {}", message, extraInfo, e);
+        }
     }
 }
