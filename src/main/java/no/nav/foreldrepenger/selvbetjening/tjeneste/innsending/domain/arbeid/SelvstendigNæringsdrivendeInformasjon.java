@@ -21,6 +21,6 @@ public class SelvstendigNæringsdrivendeInformasjon {
     public Boolean hattVarigEndringAvNæringsinntektSiste4Kalenderår;
     public NæringsinntektInformasjon endringAvNæringsinntektInformasjon;
     public List<String> vedlegg;
-
+    public Integer næringsinntekt;
 
 }
