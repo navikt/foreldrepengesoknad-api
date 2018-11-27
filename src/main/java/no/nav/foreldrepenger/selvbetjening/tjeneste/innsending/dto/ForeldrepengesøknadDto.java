@@ -8,9 +8,11 @@ import no.nav.foreldrepenger.selvbetjening.tjeneste.innsending.domain.Foreldrepe
 
 public class ForeldrepengesøknadDto extends SøknadDto {
 
+    public String saksnr;
     public YtelseDto ytelse;
 
     public ForeldrepengesøknadDto(Foreldrepengesøknad søknad) {
+        this.saksnr = søknad.saksnummer;
         this.søker = new SøkerDto(søknad.søker.rolle);
         this.ytelse = new YtelseDto(søknad);
         this.vedlegg = new ArrayList<>();

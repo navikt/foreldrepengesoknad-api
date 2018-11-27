@@ -19,6 +19,7 @@ import com.fasterxml.jackson.annotation.JsonTypeInfo;
 public class Søknad {
 
     public String type;
+    public String saksnummer;
     public Søker søker;
     public LocalDateTime opprettet;
 
