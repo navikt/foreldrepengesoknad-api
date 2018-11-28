@@ -52,7 +52,7 @@ public class OppslagController {
     @GetMapping("/saker")
     @Unprotected
     public ResponseEntity<List<Sak>> saker() {
-        LOG.info("Redirigerer saksoppslag, klienten bør oppdateres");
+        LOG.info("Redirigerer saksoppslag til {}, klienten bør oppdateres", INNSYN + "/saker");
         return ResponseEntity
                 .status(MOVED_PERMANENTLY)
                 .header(LOCATION, INNSYN + "/saker")
