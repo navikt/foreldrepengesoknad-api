@@ -2,6 +2,8 @@ package no.nav.foreldrepenger.selvbetjening.tjeneste;
 
 import java.net.URI;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.context.EnvironmentAware;
 import org.springframework.core.env.Environment;
 import org.springframework.web.client.RestOperations;
@@ -10,6 +12,8 @@ import no.nav.foreldrepenger.selvbetjening.error.NotFoundException;
 import no.nav.foreldrepenger.selvbetjening.util.EnvUtil;
 
 public abstract class AbstractRestConnection implements EnvironmentAware {
+
+    protected static final Logger LOG = LoggerFactory.getLogger(AbstractRestConnection.class);
 
     protected abstract boolean isEnabled();
 

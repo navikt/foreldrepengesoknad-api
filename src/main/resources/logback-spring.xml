@@ -30,6 +30,7 @@
     <logger name="org.springframework.web.servlet.mvc.method.annotation.ExceptionHandlerExceptionResolver" level="ERROR" />
     <logger name="org.apache.pdfbox.pdmodel.font" level="ERROR" />
     <logger name="org.apache.pdfbox.rendering.CIDType0Glyph2D" level="ERROR" />
+    <logger name="org.apache.tika.parser.SQLite3Parser" level="ERROR" />
 
     <root level="info">
         <appender-ref ref="stdout"/>

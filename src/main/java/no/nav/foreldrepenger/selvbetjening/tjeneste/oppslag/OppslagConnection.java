@@ -1,5 +1,7 @@
 package no.nav.foreldrepenger.selvbetjening.tjeneste.oppslag;
 
+import static no.nav.foreldrepenger.selvbetjening.util.EnvUtil.CONFIDENTIAL;
+
 import java.net.URI;
 
 import org.springframework.stereotype.Component;
@@ -26,11 +28,17 @@ public class OppslagConnection extends AbstractRestConnection {
     }
 
     public PersonDto hentPerson() {
-        return getForObject(config.getPersonURI(), PersonDto.class, true);
+        PersonDto person = getForObject(config.getPersonURI(), PersonDto.class, true);
+        LOG.info(CONFIDENTIAL, "Fikk person {}", person);
+        return person;
+
     }
 
     public SøkerinfoDto hentSøkerInfo() {
-        return getForObject(config.getSøkerinfoURI(), SøkerinfoDto.class, true);
+        SøkerinfoDto info = getForObject(config.getSøkerinfoURI(), SøkerinfoDto.class, true);
+        LOG.info(CONFIDENTIAL, "Fikk søkerinfo {}", info);
+        return info;
+
     }
 
     public AktørId HentAktørId(String fnr) {

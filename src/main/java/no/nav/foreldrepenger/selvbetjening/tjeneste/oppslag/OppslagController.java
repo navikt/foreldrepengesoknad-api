@@ -2,7 +2,6 @@ package no.nav.foreldrepenger.selvbetjening.tjeneste.oppslag;
 
 import static no.nav.foreldrepenger.selvbetjening.tjeneste.innsyn.InnsynController.INNSYN;
 import static no.nav.foreldrepenger.selvbetjening.util.Constants.ISSUER;
-import static no.nav.foreldrepenger.selvbetjening.util.EnvUtil.CONFIDENTIAL;
 import static org.slf4j.LoggerFactory.getLogger;
 import static org.springframework.http.HttpHeaders.LOCATION;
 import static org.springframework.http.HttpStatus.MOVED_PERMANENTLY;
@@ -42,24 +41,18 @@ public class OppslagController {
 
     @GetMapping("/personinfo")
     public Person personinfo() {
-        LOG.info("Henter personinfo...");
-        Person person = oppslag.hentPerson();
-        LOG.info(CONFIDENTIAL, "Fikk person {}", person);
-        return person;
+        return oppslag.hentPerson();
     }
 
     @GetMapping("/sokerinfo")
     public Søkerinfo søkerinfo() {
-        LOG.info("Henter søkerinfo...");
-        Søkerinfo info = oppslag.hentSøkerinfo();
-        LOG.info(CONFIDENTIAL, "Fikk søkerinfo {}", info);
-        return info;
+        return oppslag.hentSøkerinfo();
     }
 
     @GetMapping("/saker")
     @Unprotected
     public ResponseEntity<List<Sak>> saker() {
-        LOG.warn("Redirigerer saksoppslag, klienten bør oppdateres");
+        LOG.info("Redirigerer saksoppslag, klienten bør oppdateres");
         return ResponseEntity
                 .status(MOVED_PERMANENTLY)
                 .header(LOCATION, INNSYN + "/saker")

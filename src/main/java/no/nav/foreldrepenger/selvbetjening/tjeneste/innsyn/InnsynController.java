@@ -34,7 +34,6 @@ public class InnsynController {
 
     @GetMapping("/saker")
     public List<Sak> saker() {
-        LOG.info("Henter saker...");
         List<Sak> saker = innsyn.hentSaker();
         LOG.info(CONFIDENTIAL, "Fikk {} sak(er) {}", saker.size(), saker);
         return saker;
