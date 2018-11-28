@@ -1,15 +1,12 @@
 package no.nav.foreldrepenger.selvbetjening.tjeneste.innsyn;
 
 import static no.nav.foreldrepenger.selvbetjening.util.Constants.ISSUER;
-import static no.nav.foreldrepenger.selvbetjening.util.EnvUtil.CONFIDENTIAL;
-import static org.slf4j.LoggerFactory.getLogger;
 import static org.springframework.http.MediaType.APPLICATION_JSON_VALUE;
 
 import java.util.List;
 
 import javax.inject.Inject;
 
-import org.slf4j.Logger;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
@@ -21,9 +18,7 @@ import no.nav.security.oidc.api.ProtectedWithClaims;
 @ProtectedWithClaims(issuer = ISSUER, claimMap = { "acr=Level4" })
 public class InnsynController {
 
-    public static final String INNSYN = "/innsyn";
-
-    private static final Logger LOG = getLogger(InnsynController.class);
+    public static final String INNSYN = "/rest/innsyn";
 
     private final Innsyn innsyn;
 
@@ -34,9 +29,7 @@ public class InnsynController {
 
     @GetMapping("/saker")
     public List<Sak> saker() {
-        List<Sak> saker = innsyn.hentSaker();
-        LOG.info(CONFIDENTIAL, "Fikk {} sak(er) {}", saker.size(), saker);
-        return saker;
+        return innsyn.hentSaker();
     }
 
     @Override
