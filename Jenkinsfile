@@ -60,6 +60,9 @@ node {
             ])
             throw new Exception("Bygget har feilet", e)
         }
+        finally {
+            junit '**/target/surefire-reports/*.xml'
+        }
     }
 
     stage("Deploy to preprod") {
