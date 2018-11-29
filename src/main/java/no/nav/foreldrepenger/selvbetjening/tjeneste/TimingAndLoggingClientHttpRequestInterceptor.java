@@ -21,7 +21,7 @@ public class TimingAndLoggingClientHttpRequestInterceptor implements ClientHttpR
     public ClientHttpResponse intercept(HttpRequest request, byte[] body, ClientHttpRequestExecution execution)
             throws IOException {
 
-        LOG.info("Eksekverer {} - {}", request.getMethodValue(), request.getURI());
+        LOG.info("{} - {}", request.getMethodValue(), request.getURI());
         StopWatch timer = new StopWatch();
         timer.start();
         ClientHttpResponse respons = execution.execute(request, body);
