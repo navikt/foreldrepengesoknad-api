@@ -10,6 +10,7 @@ import java.util.Arrays;
 import java.util.List;
 import java.util.Optional;
 
+import no.nav.foreldrepenger.selvbetjening.util.Enabled;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Component;
@@ -46,7 +47,12 @@ public class InnsynConnection extends AbstractRestConnection {
 
     public List<Sak> hentSaker() {
         List<Sak> sakSaker = saker(innsynConfig.getSakURI(), "SAK");
-        List<Sak> fpsakSaker = saker(innsynConfig.getFpsakURI(), "FPSAK");
+        List<Sak> fpsakSaker = emptyList();
+
+        if (Enabled.FPSAKSAKER) {
+            fpsakSaker = saker(innsynConfig.getFpsakURI(), "FPSAK");
+        }
+
         if (isDevOrPreprod()) {
             visSaker(fpsakSaker);
         }
