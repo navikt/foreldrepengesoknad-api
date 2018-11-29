@@ -9,9 +9,7 @@ import java.net.URI;
 import java.util.Arrays;
 import java.util.List;
 import java.util.Optional;
-import java.util.concurrent.TimeUnit;
 
-import org.apache.commons.lang3.time.StopWatch;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Component;
@@ -56,13 +54,10 @@ public class InnsynConnection extends AbstractRestConnection {
     }
 
     private List<Sak> saker(URI uri, String fra) {
-        StopWatch timer = new StopWatch();
-        timer.start();
         List<Sak> saker = Optional.ofNullable(getForObject(uri, Sak[].class))
                 .map(Arrays::asList)
                 .orElse(emptyList());
-        timer.stop();
-        LOG.info("Hentet {} sak(er) fra {}, dette tok {}ms", saker.size(), fra, timer.getTime(TimeUnit.MILLISECONDS));
+        LOG.info("Hentet {} sak(er) fra {}", saker.size(), fra);
         return saker;
 
     }
