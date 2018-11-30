@@ -3,7 +3,6 @@ package no.nav.foreldrepenger.selvbetjening.error;
 import static java.util.Arrays.asList;
 import static java.util.stream.Collectors.toList;
 import static org.apache.commons.lang3.exception.ExceptionUtils.getRootCause;
-import static org.springframework.http.HttpStatus.BAD_REQUEST;
 import static org.springframework.http.HttpStatus.FORBIDDEN;
 import static org.springframework.http.HttpStatus.INTERNAL_SERVER_ERROR;
 import static org.springframework.http.HttpStatus.NOT_FOUND;
@@ -25,6 +24,7 @@ import org.springframework.web.bind.annotation.ControllerAdvice;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.client.HttpClientErrorException;
+import org.springframework.web.client.HttpServerErrorException;
 import org.springframework.web.context.request.ServletWebRequest;
 import org.springframework.web.context.request.WebRequest;
 import org.springframework.web.multipart.MaxUploadSizeExceededException;
@@ -43,7 +43,13 @@ public class ApiExceptionHandler extends ResponseEntityExceptionHandler {
     @ResponseBody
     @ExceptionHandler(HttpClientErrorException.class)
     public ResponseEntity<Object> handleHttpClientException(HttpClientErrorException e, WebRequest request) {
-        return handleError(BAD_REQUEST, e, request, getRootCauseMessage(e));
+        return handleError(e.getStatusCode(), e, request, getRootCauseMessage(e));
+    }
+
+    @ResponseBody
+    @ExceptionHandler(HttpServerErrorException.class)
+    public ResponseEntity<Object> handleHttpServerException(HttpServerErrorException e, WebRequest request) {
+        return handleError(e.getStatusCode(), e, request, getRootCauseMessage(e));
     }
 
     @ResponseBody
