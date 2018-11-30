@@ -42,92 +42,91 @@ public class ApiExceptionHandler extends ResponseEntityExceptionHandler {
     @ResponseBody
     @ExceptionHandler(HttpStatusCodeException.class)
     public ResponseEntity<Object> handleHttpStatusCodeException(HttpStatusCodeException e, WebRequest request) {
-        return handleError(e.getStatusCode(), e, request, getRootCauseMessage(e));
+        return handle(e.getStatusCode(), e, request, getRootCauseMessage(e));
     }
 
     @ResponseBody
     @ExceptionHandler(AttachmentTypeUnsupportedException.class)
     protected ResponseEntity<Object> handleUnsupportedAttachmentError(AttachmentTypeUnsupportedException e,
             WebRequest req) {
-        return handleError(UNPROCESSABLE_ENTITY, e, req, getRootCauseMessage(e));
+        return handle(UNPROCESSABLE_ENTITY, e, req, getRootCauseMessage(e));
     }
 
     @Override
     @ResponseBody
     protected ResponseEntity<Object> handleMethodArgumentNotValid(MethodArgumentNotValidException e,
             HttpHeaders headers, HttpStatus status, WebRequest req) {
-        return handleError(UNPROCESSABLE_ENTITY, e, req, getRootCauseMessage(e), false, validationErrors(e));
+        return handle(UNPROCESSABLE_ENTITY, e, req, getRootCauseMessage(e), false, validationErrors(e));
     }
 
     @ResponseBody
     @ExceptionHandler(AttachmentConversionException.class)
     protected ResponseEntity<Object> handleAttachmentConversionError(AttachmentConversionException e, WebRequest req) {
-        return handleError(INTERNAL_SERVER_ERROR, e, req, getRootCauseMessage(e));
+        return handle(INTERNAL_SERVER_ERROR, e, req, getRootCauseMessage(e));
     }
 
     @ResponseBody
     @ExceptionHandler({ MultipartException.class, MaxUploadSizeExceededException.class,
             AttachmentsTooLargeException.class })
     public ResponseEntity<Object> handleTooLargeAttchment(Exception e, WebRequest req) {
-        return handleError(PAYLOAD_TOO_LARGE, e, req, getRootCauseMessage(e));
+        return handle(PAYLOAD_TOO_LARGE, e, req, getRootCauseMessage(e));
     }
 
     @Override
     @ResponseBody
     protected ResponseEntity<Object> handleNoHandlerFoundException(NoHandlerFoundException e, HttpHeaders headers,
             HttpStatus status, WebRequest req) {
-        return handleError(NOT_FOUND, e, req, getRootCauseMessage(e));
+        return handle(NOT_FOUND, e, req, getRootCauseMessage(e));
     }
 
     @ResponseBody
     @ExceptionHandler({ OIDCUnauthorizedException.class, UnauthorizedException.class })
     public ResponseEntity<Object> handleUnauthorized(Exception e, WebRequest req) {
-        return handleError(UNAUTHORIZED, e, req, getRootCauseMessage(e), true);
+        return handle(UNAUTHORIZED, e, req, getRootCauseMessage(e), true);
     }
 
     @ResponseBody
     @ExceptionHandler(OIDCTokenValidatorException.class)
     public ResponseEntity<Object> handleForbiddenOIDC(OIDCTokenValidatorException e, WebRequest req) {
-        return handleError(FORBIDDEN, e, req, getRootCauseMessage(e),
+        return handle(FORBIDDEN, e, req, getRootCauseMessage(e),
                 e.getExpiryDate() != null ? e.getExpiryDate().toString() : null);
     }
 
     @ResponseBody
     @ExceptionHandler(UnauthenticatedException.class)
     public ResponseEntity<Object> handeForbidden(UnauthenticatedException e, WebRequest req) {
-        return handleError(FORBIDDEN, e, req, getRootCauseMessage(e));
+        return handle(FORBIDDEN, e, req, getRootCauseMessage(e));
     }
 
     @ResponseBody
     @ExceptionHandler(NotFoundException.class)
     public ResponseEntity<Object> notFound(NotFoundException e, WebRequest req) {
-        return handleError(NOT_FOUND, e, req, getRootCauseMessage(e));
+        return handle(NOT_FOUND, e, req, getRootCauseMessage(e));
     }
 
     @ResponseBody
     @ExceptionHandler(Exception.class)
     public ResponseEntity<Object> catchAll(Exception e, WebRequest req) {
-        return handleError(INTERNAL_SERVER_ERROR, e, req, getRootCauseMessage(e));
+        return handle(INTERNAL_SERVER_ERROR, e, req, getRootCauseMessage(e));
     }
 
-    private ResponseEntity<Object> handleError(HttpStatus status, Exception e, WebRequest req, String message,
-            String... extraInfo) {
-        return handleError(status, e, req, message, false, extraInfo);
+    private ResponseEntity<Object> handle(HttpStatus status, Exception e, WebRequest req, String msg, String... extra) {
+        return handle(status, e, req, msg, false, extra);
     }
 
-    private ResponseEntity<Object> handleError(HttpStatus status, Exception e, WebRequest req, String message,
-            boolean trace, String... extraInfo) {
-        return handleError(status, e, req, message, trace, new ArrayList<>(asList(extraInfo)));
+    private ResponseEntity<Object> handle(HttpStatus status, Exception e, WebRequest req, String msg, boolean trace,
+            String... extra) {
+        return handle(status, e, req, msg, trace, new ArrayList<>(asList(extra)));
     }
 
-    private ResponseEntity<Object> handleError(HttpStatus status, Exception e, WebRequest req, String message,
-            boolean trace, List<String> extraInfo) {
+    private ResponseEntity<Object> handle(HttpStatus status, Exception e, WebRequest req, String msg,
+            boolean trace, List<String> extra) {
         if (req instanceof ServletWebRequest) {
             ServletWebRequest servletRequest = (ServletWebRequest) req;
-            extraInfo.add(servletRequest.getRequest().getRequestURI());
+            extra.add(servletRequest.getRequest().getRequestURI());
         }
-        log(e, message, trace, extraInfo);
-        return handleExceptionInternal(e, new ApiError(status, message), new HttpHeaders(), status, req);
+        log(e, msg, trace, extra);
+        return handleExceptionInternal(e, new ApiError(status, msg), new HttpHeaders(), status, req);
     }
 
     private List<String> validationErrors(MethodArgumentNotValidException e) {

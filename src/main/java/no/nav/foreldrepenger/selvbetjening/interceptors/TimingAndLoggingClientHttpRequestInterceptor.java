@@ -1,4 +1,4 @@
-package no.nav.foreldrepenger.selvbetjening.tjeneste;
+package no.nav.foreldrepenger.selvbetjening.interceptors;
 
 import static java.util.concurrent.TimeUnit.MILLISECONDS;
 
