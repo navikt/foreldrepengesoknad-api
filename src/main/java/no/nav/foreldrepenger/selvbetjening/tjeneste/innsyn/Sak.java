@@ -1,47 +1,29 @@
 package no.nav.foreldrepenger.selvbetjening.tjeneste.innsyn;
 
-import static java.util.Collections.emptyList;
+import com.fasterxml.jackson.annotation.JsonInclude;
+import no.nav.foreldrepenger.selvbetjening.tjeneste.oppslag.domain.Behandling;
 
 import java.time.LocalDate;
 import java.util.List;
-import java.util.Optional;
 
-import com.fasterxml.jackson.annotation.JsonCreator;
-import com.fasterxml.jackson.annotation.JsonProperty;
+import static com.fasterxml.jackson.annotation.JsonInclude.Include.NON_EMPTY;
 
-import no.nav.foreldrepenger.selvbetjening.tjeneste.oppslag.domain.Behandling;
-
+@JsonInclude(NON_EMPTY)
 public class Sak {
 
-    private final String saksnummer;
-    private final String status;
-    private final LocalDate opprettet;
-    private final List<Behandling> behandlinger;
+    public Sak() {}
 
-    @JsonCreator
-    public Sak(@JsonProperty("saksnummer") String saksnummer,
-            @JsonProperty("status") String status,
-            @JsonProperty("opprettet") LocalDate opprettet,
-            @JsonProperty("behandlinger") List<Behandling> behandlinger) {
+    public Sak(String type, String saksnummer, String status, LocalDate opprettet, List<Behandling> behandlinger) {
+        this.type = type;
         this.saksnummer = saksnummer;
         this.status = status;
         this.opprettet = opprettet;
-        this.behandlinger = Optional.ofNullable(behandlinger).orElse(emptyList());
+        this.behandlinger = behandlinger;
     }
 
-    public LocalDate getOpprettet() {
-        return opprettet;
-    }
-
-    public List<Behandling> getBehandlinger() {
-        return behandlinger;
-    }
-
-    public String getSaksnummer() {
-        return saksnummer;
-    }
-
-    public String getStatus() {
-        return status;
-    }
+    public String type;
+    public String saksnummer;
+    public String status;
+    public LocalDate opprettet;
+    public List<Behandling> behandlinger;
 }

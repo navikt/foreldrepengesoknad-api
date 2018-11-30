@@ -37,8 +37,10 @@ public class InnsynTjenesteStub implements Innsyn {
     public List<Sak> hentSaker() {
         Behandling behandling = new Behandling("abc", LocalDateTime.now(), LocalDateTime.now(), "UTRED", "FP",
                 "FORP_FODS", null, "4833", "NAV Torrevieja");
+
+
         return Arrays.asList(
-                new Sak("sak123", "UBEH", now(), emptyList()),
-                new Sak("42", "LOP", now(), singletonList(behandling)));
+                new Sak("SAK", "sak123", "UBEH", now(), emptyList()),
+                new Sak("FPSAK", "42", "LOP", now(), singletonList(behandling)));
     }
 }
