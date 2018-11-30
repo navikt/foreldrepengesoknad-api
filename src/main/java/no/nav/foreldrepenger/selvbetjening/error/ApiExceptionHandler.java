@@ -23,8 +23,7 @@ import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.bind.annotation.ControllerAdvice;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.ResponseBody;
-import org.springframework.web.client.HttpClientErrorException;
-import org.springframework.web.client.HttpServerErrorException;
+import org.springframework.web.client.HttpStatusCodeException;
 import org.springframework.web.context.request.ServletWebRequest;
 import org.springframework.web.context.request.WebRequest;
 import org.springframework.web.multipart.MaxUploadSizeExceededException;
@@ -41,14 +40,8 @@ public class ApiExceptionHandler extends ResponseEntityExceptionHandler {
     private static final Logger LOG = LoggerFactory.getLogger(ApiExceptionHandler.class);
 
     @ResponseBody
-    @ExceptionHandler(HttpClientErrorException.class)
-    public ResponseEntity<Object> handleHttpClientException(HttpClientErrorException e, WebRequest request) {
-        return handleError(e.getStatusCode(), e, request, getRootCauseMessage(e));
-    }
-
-    @ResponseBody
-    @ExceptionHandler(HttpServerErrorException.class)
-    public ResponseEntity<Object> handleHttpServerException(HttpServerErrorException e, WebRequest request) {
+    @ExceptionHandler(HttpStatusCodeException.class)
+    public ResponseEntity<Object> handleHttpStatusCodeException(HttpStatusCodeException e, WebRequest request) {
         return handleError(e.getStatusCode(), e, request, getRootCauseMessage(e));
     }
 
