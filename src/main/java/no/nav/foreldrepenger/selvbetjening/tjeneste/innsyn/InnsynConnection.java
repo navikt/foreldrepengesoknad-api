@@ -59,6 +59,9 @@ public class InnsynConnection extends AbstractRestConnection {
         List<Sak> saker = Optional.ofNullable(getForObject(uri, Sak[].class))
                 .map(Arrays::asList)
                 .orElse(emptyList());
+
+        saker.forEach(sak -> sak.type = fra);
+
         LOG.info("Hentet {} sak(er) fra {}", saker.size(), fra);
         return saker;
 
@@ -67,7 +70,7 @@ public class InnsynConnection extends AbstractRestConnection {
     private void visSaker(List<Sak> saker) {
         try {
             saker.stream()
-                    .map(Sak::getSaksnummer)
+                    .map(sak -> sak.saksnummer)
                     .forEach(this::planFor);
         } catch (Exception e) {
             LOG.trace("Dette gikk galt, men frykt ikke, dette er bare en test foreløpig", e);
