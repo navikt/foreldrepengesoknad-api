@@ -35,9 +35,8 @@ public class InnsynTjenesteStub implements Innsyn {
 
     @Override
     public List<Sak> hentSaker() {
-        Behandling behandling = new Behandling("abc", LocalDateTime.now(), LocalDateTime.now(), "UTRED", "FP",
+        Behandling behandling = new Behandling(LocalDateTime.now(), LocalDateTime.now(), "UTRED", "FP",
                 "FORP_FODS", null, "4833", "NAV Torrevieja");
-
 
         return Arrays.asList(
                 new Sak("SAK", "sak123", "UBEH", now(), emptyList()),
