@@ -9,7 +9,6 @@ public class Behandling {
 
     private final LocalDateTime opprettetTidspunkt;
     private final LocalDateTime endretTidspunkt;
-    private final String id;
     private final String status;
     private final String type;
     private final String tema;
@@ -18,7 +17,7 @@ public class Behandling {
     private final String behandlendeEnhetNavn;
 
     @JsonCreator
-    public Behandling(@JsonProperty("id") String id,
+    public Behandling(
             @JsonProperty("opprettetTidspunkt") LocalDateTime opprettetTidspunkt,
             @JsonProperty("endretTidspunkt") LocalDateTime endretTidspunkt, @JsonProperty("status") String status,
             @JsonProperty("type") String type,
@@ -26,7 +25,6 @@ public class Behandling {
             @JsonProperty("årsak") String årsak,
             @JsonProperty("behandlendeEnhet") String behandlendeEnhet,
             @JsonProperty("behandlendeEnhetNavn") String behandlendeEnhetNavn) {
-        this.id = id;
         this.opprettetTidspunkt = opprettetTidspunkt;
         this.endretTidspunkt = endretTidspunkt;
         this.status = status;
@@ -47,10 +45,6 @@ public class Behandling {
 
     public String getStatus() {
         return status;
-    }
-
-    public String getId() {
-        return id;
     }
 
     public String getType() {
@@ -76,8 +70,7 @@ public class Behandling {
     @Override
     public String toString() {
         return getClass().getSimpleName() + "[opprettetTidspunkt=" + opprettetTidspunkt + ", endretTidspunkt="
-                + endretTidspunkt + ", id="
-                + id + ", status=" + status + ", type=" + type + ", tema=" + tema + ", årsak=" + årsak
+                + endretTidspunkt + ", status=" + status + ", type=" + type + ", tema=" + tema + ", årsak=" + årsak
                 + ", behandlendeEnhet=" + behandlendeEnhet + ", behandlendeEnhetNavn=" + behandlendeEnhetNavn + "]";
     }
 
