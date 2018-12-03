@@ -24,7 +24,6 @@ import com.nimbusds.jwt.JWTClaimsSet;
 
 import no.nav.foreldrepenger.selvbetjening.FastTests;
 import no.nav.foreldrepenger.selvbetjening.error.UnauthenticatedException;
-import no.nav.foreldrepenger.selvbetjening.tjeneste.TokenHandler;
 import no.nav.security.oidc.context.OIDCClaims;
 import no.nav.security.oidc.context.OIDCRequestContextHolder;
 import no.nav.security.oidc.context.OIDCValidationContext;
@@ -32,7 +31,7 @@ import no.nav.security.oidc.context.TokenContext;
 
 @Category(FastTests.class)
 @RunWith(MockitoJUnitRunner.Silent.class)
-public class TokenHandlerTest {
+public class TokenHelperTest {
 
     private static final String FNR = "42";
     @Mock
@@ -44,13 +43,13 @@ public class TokenHandlerTest {
     @Mock
     private TokenContext tokenContext;
 
-    private TokenHandler tokenHandler;
+    private TokenHelper tokenHandler;
 
     @Before
     public void before() {
         when(holder.getOIDCValidationContext()).thenReturn(context);
         when(context.getClaims(eq(ISSUER))).thenReturn(claims);
-        tokenHandler = new TokenHandler(holder);
+        tokenHandler = new TokenHelper(holder);
     }
 
     @Test

@@ -1,11 +1,11 @@
 package no.nav.foreldrepenger.selvbetjening.stub;
 
+import java.util.Optional;
+
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import no.nav.foreldrepenger.selvbetjening.tjeneste.mellomlagring.Storage;
-
-import java.util.Optional;
 
 public class StorageStub implements Storage {
 

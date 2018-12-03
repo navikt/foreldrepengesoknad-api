@@ -21,7 +21,6 @@ import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.client.RestTemplate;
 
 import no.nav.foreldrepenger.selvbetjening.error.AttachmentsTooLargeException;
-import no.nav.foreldrepenger.selvbetjening.tjeneste.TokenHandler;
 import no.nav.foreldrepenger.selvbetjening.tjeneste.innsending.domain.Ettersending;
 import no.nav.foreldrepenger.selvbetjening.tjeneste.innsending.domain.Kvittering;
 import no.nav.foreldrepenger.selvbetjening.tjeneste.innsending.domain.Søknad;
@@ -29,6 +28,7 @@ import no.nav.foreldrepenger.selvbetjening.tjeneste.innsending.domain.Vedlegg;
 import no.nav.foreldrepenger.selvbetjening.tjeneste.mellomlagring.Storage;
 import no.nav.foreldrepenger.selvbetjening.tjeneste.mellomlagring.StorageCrypto;
 import no.nav.foreldrepenger.selvbetjening.util.Enabled;
+import no.nav.foreldrepenger.selvbetjening.util.TokenHelper;
 import no.nav.security.oidc.api.ProtectedWithClaims;
 
 @RestController
@@ -49,7 +49,7 @@ public class InnsendingController {
     public RestTemplate http;
 
     @Inject
-    private TokenHandler tokenHandler;
+    private TokenHelper tokenHandler;
 
     @Inject
     private Storage storage;

@@ -1,4 +1,4 @@
-package no.nav.foreldrepenger.selvbetjening.tjeneste;
+package no.nav.foreldrepenger.selvbetjening.util;
 
 import static no.nav.foreldrepenger.selvbetjening.util.Constants.ISSUER;
 
@@ -16,11 +16,11 @@ import no.nav.security.oidc.context.OIDCRequestContextHolder;
 import no.nav.security.oidc.context.OIDCValidationContext;
 
 @Component
-public class TokenHandler {
+public class TokenHelper {
 
     private final OIDCRequestContextHolder ctxHolder;
 
-    public TokenHandler(OIDCRequestContextHolder ctxHolder) {
+    public TokenHelper(OIDCRequestContextHolder ctxHolder) {
         this.ctxHolder = ctxHolder;
     }
 

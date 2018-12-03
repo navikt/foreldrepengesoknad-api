@@ -1,4 +1,4 @@
-package no.nav.foreldrepenger.selvbetjening.interceptors;
+package no.nav.foreldrepenger.selvbetjening.interceptors.client;
 
 import static no.nav.foreldrepenger.selvbetjening.util.Constants.NAV_CALL_ID;
 import static no.nav.foreldrepenger.selvbetjening.util.Constants.NAV_CONSUMER_ID;

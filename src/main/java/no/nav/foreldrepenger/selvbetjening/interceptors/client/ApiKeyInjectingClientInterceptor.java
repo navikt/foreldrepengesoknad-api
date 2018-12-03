@@ -1,4 +1,4 @@
-package no.nav.foreldrepenger.selvbetjening.interceptors;
+package no.nav.foreldrepenger.selvbetjening.interceptors.client;
 
 import static org.slf4j.LoggerFactory.getLogger;
 

@@ -9,8 +9,11 @@ import javax.inject.Inject;
 
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
+import no.nav.foreldrepenger.selvbetjening.tjeneste.innsyn.saker.Sak;
+import no.nav.foreldrepenger.selvbetjening.tjeneste.innsyn.uttaksplan.UttaksPeriode;
 import no.nav.security.oidc.api.ProtectedWithClaims;
 
 @RestController
@@ -30,6 +33,11 @@ public class InnsynController {
     @GetMapping("/saker")
     public List<Sak> saker() {
         return innsyn.hentSaker();
+    }
+
+    @GetMapping(value = "/uttaksplan")
+    public List<UttaksPeriode> uttaksplan(@RequestParam(name = "saksnummer") String saksnummer) {
+        return innsyn.hentUttaksplan(saksnummer);
     }
 
     @Override

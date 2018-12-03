@@ -1,10 +1,12 @@
 package no.nav.foreldrepenger.selvbetjening;
 
-import com.fasterxml.jackson.core.JsonProcessingException;
-import com.fasterxml.jackson.databind.ObjectMapper;
+import static java.time.LocalDateTime.now;
+import static no.nav.foreldrepenger.selvbetjening.tjeneste.oppslag.OppslagTjenesteStub.person;
+import static org.assertj.core.api.Assertions.assertThat;
 
-import no.nav.foreldrepenger.selvbetjening.tjeneste.innsending.domain.Barn;
-import no.nav.foreldrepenger.selvbetjening.tjeneste.innsending.domain.Engangsstønad;
+import java.io.IOException;
+
+import javax.inject.Inject;
 
 import org.junit.Test;
 import org.junit.experimental.categories.Category;
@@ -12,12 +14,11 @@ import org.junit.runner.RunWith;
 import org.springframework.boot.test.autoconfigure.json.AutoConfigureJsonTesters;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 
-import javax.inject.Inject;
-import java.io.IOException;
+import com.fasterxml.jackson.core.JsonProcessingException;
+import com.fasterxml.jackson.databind.ObjectMapper;
 
-import static java.time.LocalDateTime.now;
-import static no.nav.foreldrepenger.selvbetjening.tjeneste.oppslag.OppslagTjenesteStub.person;
-import static org.assertj.core.api.Assertions.assertThat;
+import no.nav.foreldrepenger.selvbetjening.tjeneste.innsending.domain.Barn;
+import no.nav.foreldrepenger.selvbetjening.tjeneste.innsending.domain.Engangsstønad;
 
 @RunWith(SpringJUnit4ClassRunner.class)
 @Category(FastTests.class)

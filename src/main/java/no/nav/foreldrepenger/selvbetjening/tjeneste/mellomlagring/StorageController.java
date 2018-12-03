@@ -24,7 +24,7 @@ import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.multipart.MultipartFile;
 
 import no.nav.foreldrepenger.selvbetjening.error.AttachmentsTooLargeException;
-import no.nav.foreldrepenger.selvbetjening.tjeneste.TokenHandler;
+import no.nav.foreldrepenger.selvbetjening.util.TokenHelper;
 import no.nav.security.oidc.api.ProtectedWithClaims;
 
 @RestController
@@ -37,7 +37,7 @@ public class StorageController {
     public static final int MAX_VEDLEGG_SIZE = 8 * 1024 * 1024;
 
     @Inject
-    private TokenHandler tokenHandler;
+    private TokenHelper tokenHandler;
 
     @Inject
     private Storage storage;

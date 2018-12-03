@@ -26,21 +26,21 @@ import org.springframework.test.web.client.MockRestServiceServer;
 import no.nav.foreldrepenger.selvbetjening.FastTests;
 import no.nav.foreldrepenger.selvbetjening.attachments.Image2PDFConverter;
 import no.nav.foreldrepenger.selvbetjening.tjeneste.StatusCodeConvertingResponseErrorHandler;
-import no.nav.foreldrepenger.selvbetjening.tjeneste.TokenHandler;
 import no.nav.foreldrepenger.selvbetjening.tjeneste.innsending.domain.Søknad;
+import no.nav.foreldrepenger.selvbetjening.util.TokenHelper;
 import no.nav.security.spring.oidc.SpringOIDCRequestContextHolder;
 
 @Category(FastTests.class)
 @RunWith(SpringRunner.class)
 @TestPropertySource(properties = { "FPSOKNAD_MOTTAK_API_URL = http://www.mottak.no/api" })
 @ContextConfiguration(classes = { NotFoundException.class, InnsendingConfig.class, Image2PDFConverter.class,
-        TokenHandler.class, SpringOIDCRequestContextHolder.class })
+        TokenHelper.class, SpringOIDCRequestContextHolder.class })
 @RestClientTest
 
 public class InnsendingTest {
 
     @Mock
-    TokenHandler tokenHandler;
+    TokenHelper tokenHandler;
     @Autowired
     private InnsendingConfig innsendingConfig;
 

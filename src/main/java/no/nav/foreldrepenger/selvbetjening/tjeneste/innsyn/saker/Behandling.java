@@ -1,4 +1,4 @@
-package no.nav.foreldrepenger.selvbetjening.tjeneste.oppslag.domain;
+package no.nav.foreldrepenger.selvbetjening.tjeneste.innsyn.saker;
 
 import java.time.LocalDateTime;
 
@@ -13,6 +13,7 @@ public class Behandling {
     private final String type;
     private final String tema;
     private final String årsak;
+    private final BehandlingResultatType behandlingResultatType;
     private final String behandlendeEnhet;
     private final String behandlendeEnhetNavn;
 
@@ -23,6 +24,7 @@ public class Behandling {
             @JsonProperty("type") String type,
             @JsonProperty("tema") String tema,
             @JsonProperty("årsak") String årsak,
+            @JsonProperty("behandlingResultatType") BehandlingResultatType behandlingResultatType,
             @JsonProperty("behandlendeEnhet") String behandlendeEnhet,
             @JsonProperty("behandlendeEnhetNavn") String behandlendeEnhetNavn) {
         this.opprettetTidspunkt = opprettetTidspunkt;
@@ -31,8 +33,13 @@ public class Behandling {
         this.type = type;
         this.tema = tema;
         this.årsak = årsak;
+        this.behandlingResultatType = behandlingResultatType;
         this.behandlendeEnhet = behandlendeEnhet;
         this.behandlendeEnhetNavn = behandlendeEnhetNavn;
+    }
+
+    public BehandlingResultatType getBehandlingResultatType() {
+        return behandlingResultatType;
     }
 
     public LocalDateTime getOpprettetTidspunkt() {
@@ -69,9 +76,11 @@ public class Behandling {
 
     @Override
     public String toString() {
-        return getClass().getSimpleName() + "[opprettetTidspunkt=" + opprettetTidspunkt + ", endretTidspunkt="
-                + endretTidspunkt + ", status=" + status + ", type=" + type + ", tema=" + tema + ", årsak=" + årsak
-                + ", behandlendeEnhet=" + behandlendeEnhet + ", behandlendeEnhetNavn=" + behandlendeEnhetNavn + "]";
+        return getClass().getSimpleName() + " [opprettetTidspunkt=" + opprettetTidspunkt + ", endretTidspunkt="
+                + endretTidspunkt
+                + ", status=" + status + ", type=" + type + ", tema=" + tema + ", årsak=" + årsak
+                + ", behandlingResultatType=" + behandlingResultatType + ", behandlendeEnhet=" + behandlendeEnhet
+                + ", behandlendeEnhetNavn=" + behandlendeEnhetNavn + "]";
     }
 
 }

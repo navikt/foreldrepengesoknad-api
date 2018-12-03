@@ -1,4 +1,4 @@
-package no.nav.foreldrepenger.selvbetjening.interceptors;
+package no.nav.foreldrepenger.selvbetjening.filters;
 
 import static com.google.common.net.HttpHeaders.ACCESS_CONTROL_ALLOW_CREDENTIALS;
 import static com.google.common.net.HttpHeaders.ACCESS_CONTROL_ALLOW_HEADERS;

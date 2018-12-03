@@ -1,17 +1,17 @@
-package no.nav.foreldrepenger.selvbetjening.tjeneste.innsyn;
+package no.nav.foreldrepenger.selvbetjening.tjeneste.innsyn.saker;
 
-import com.fasterxml.jackson.annotation.JsonInclude;
-import no.nav.foreldrepenger.selvbetjening.tjeneste.oppslag.domain.Behandling;
+import static com.fasterxml.jackson.annotation.JsonInclude.Include.NON_EMPTY;
 
 import java.time.LocalDate;
 import java.util.List;
 
-import static com.fasterxml.jackson.annotation.JsonInclude.Include.NON_EMPTY;
+import com.fasterxml.jackson.annotation.JsonInclude;
 
 @JsonInclude(NON_EMPTY)
 public class Sak {
 
-    public Sak() {}
+    public Sak() {
+    }
 
     public Sak(String type, String saksnummer, String status, LocalDate opprettet, List<Behandling> behandlinger) {
         this.type = type;

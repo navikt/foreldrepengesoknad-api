@@ -12,7 +12,10 @@ import java.util.List;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnProperty;
 import org.springframework.stereotype.Service;
 
-import no.nav.foreldrepenger.selvbetjening.tjeneste.oppslag.domain.Behandling;
+import no.nav.foreldrepenger.selvbetjening.tjeneste.innsyn.saker.Behandling;
+import no.nav.foreldrepenger.selvbetjening.tjeneste.innsyn.saker.BehandlingResultatType;
+import no.nav.foreldrepenger.selvbetjening.tjeneste.innsyn.saker.Sak;
+import no.nav.foreldrepenger.selvbetjening.tjeneste.innsyn.uttaksplan.UttaksPeriode;
 
 @Service
 @ConditionalOnProperty(name = "stub.oppslag", havingValue = "true")
@@ -36,7 +39,7 @@ public class InnsynTjenesteStub implements Innsyn {
     @Override
     public List<Sak> hentSaker() {
         Behandling behandling = new Behandling(LocalDateTime.now(), LocalDateTime.now(), "UTRED", "FP",
-                "FORP_FODS", null, "4833", "NAV Torrevieja");
+                "FORP_FODS", null, BehandlingResultatType.AVSLÅTT, "4833", "NAV Torrevieja");
 
         return Arrays.asList(
                 new Sak("SAK", "sak123", "UBEH", now(), emptyList()),

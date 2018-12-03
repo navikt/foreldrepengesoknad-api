@@ -6,6 +6,9 @@ import java.util.List;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnProperty;
 import org.springframework.stereotype.Service;
 
+import no.nav.foreldrepenger.selvbetjening.tjeneste.innsyn.saker.Sak;
+import no.nav.foreldrepenger.selvbetjening.tjeneste.innsyn.uttaksplan.UttaksPeriode;
+
 @Service
 @ConditionalOnProperty(name = "stub.oppslag", havingValue = "false", matchIfMissing = true)
 public class InnsynTjeneste implements Innsyn {
