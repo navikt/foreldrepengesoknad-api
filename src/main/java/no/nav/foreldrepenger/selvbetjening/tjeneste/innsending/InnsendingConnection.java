@@ -7,6 +7,7 @@ import java.net.URI;
 import javax.inject.Inject;
 import javax.ws.rs.BadRequestException;
 
+import no.nav.foreldrepenger.selvbetjening.tjeneste.innsending.domain.*;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Component;
@@ -17,11 +18,6 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 
 import no.nav.foreldrepenger.selvbetjening.attachments.Image2PDFConverter;
 import no.nav.foreldrepenger.selvbetjening.tjeneste.AbstractRestConnection;
-import no.nav.foreldrepenger.selvbetjening.tjeneste.innsending.domain.Engangsstønad;
-import no.nav.foreldrepenger.selvbetjening.tjeneste.innsending.domain.Ettersending;
-import no.nav.foreldrepenger.selvbetjening.tjeneste.innsending.domain.Foreldrepengesøknad;
-import no.nav.foreldrepenger.selvbetjening.tjeneste.innsending.domain.Kvittering;
-import no.nav.foreldrepenger.selvbetjening.tjeneste.innsending.domain.Søknad;
 import no.nav.foreldrepenger.selvbetjening.tjeneste.innsending.dto.EngangsstønadDto;
 import no.nav.foreldrepenger.selvbetjening.tjeneste.innsending.dto.EttersendingDto;
 import no.nav.foreldrepenger.selvbetjening.tjeneste.innsending.dto.ForeldrepengesøknadDto;
@@ -80,22 +76,22 @@ public class InnsendingConnection extends AbstractRestConnection {
             LOG.warn("Mottok en søknad av ukjent type..");
             throw new BadRequestException("Unknown application type");
         }
-        søknad.vedlegg.forEach(v -> {
-            if (v.content != null) {
-                v.content = converter.convert(v.content);
-            }
-            dto.addVedlegg(v);
-        });
+        søknad.vedlegg.forEach(v -> dto.addVedlegg(convert(v)));
         return dto;
     }
 
     private EttersendingDto body(Ettersending ettersending) {
         EttersendingDto dto = new EttersendingDto(ettersending);
-        ettersending.vedlegg.forEach(v -> {
-            v.content = converter.convert(v.content);
-            dto.addVedlegg(v);
-        });
+        ettersending.vedlegg.forEach(v -> dto.addVedlegg(convert(v)));
         return dto;
+    }
+
+    private Vedlegg convert(Vedlegg v) {
+        Vedlegg vedlegg = v.kopi();
+        if (v.content != null && v.content.length > 0) {
+            vedlegg.content = converter.convert(v.content);
+        }
+        return vedlegg;
     }
 
     private void logJSON(SøknadDto dto) {
