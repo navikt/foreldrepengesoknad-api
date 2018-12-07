@@ -80,9 +80,16 @@ public class ApiExceptionHandler extends ResponseEntityExceptionHandler {
     }
 
     @ResponseBody
-    @ExceptionHandler({ OIDCUnauthorizedException.class, UnauthorizedException.class })
-    public ResponseEntity<Object> handleUnauthorized(Exception e, WebRequest req) {
+    @ExceptionHandler(OIDCUnauthorizedException.class)
+    public ResponseEntity<Object> handleUnauthorizedOIDC(OIDCUnauthorizedException e, WebRequest req) {
         return handle(UNAUTHORIZED, e, req, getRootCauseMessage(e), true);
+    }
+
+    @ResponseBody
+    @ExceptionHandler(UnauthorizedException.class)
+    public ResponseEntity<Object> handleUnauthorized(UnauthorizedException e, WebRequest req) {
+        return handle(UNAUTHORIZED, e, req, getRootCauseMessage(e), true,
+                e.getExpDate() != null ? e.getExpDate().toString() : null);
     }
 
     @ResponseBody
@@ -94,8 +101,9 @@ public class ApiExceptionHandler extends ResponseEntityExceptionHandler {
 
     @ResponseBody
     @ExceptionHandler(UnauthenticatedException.class)
-    public ResponseEntity<Object> handeForbidden(UnauthenticatedException e, WebRequest req) {
-        return handle(FORBIDDEN, e, req, getRootCauseMessage(e));
+    public ResponseEntity<Object> handleForbidden(UnauthenticatedException e, WebRequest req) {
+        return handle(FORBIDDEN, e, req, getRootCauseMessage(e), false,
+                e.getExpDate() != null ? e.getExpDate().toString() : null);
     }
 
     @ResponseBody
