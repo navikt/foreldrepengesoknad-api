@@ -7,7 +7,6 @@ import org.slf4j.LoggerFactory;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.client.ClientHttpResponse;
 import org.springframework.web.client.DefaultResponseErrorHandler;
-import org.springframework.web.client.HttpClientErrorException;
 
 import no.nav.foreldrepenger.selvbetjening.error.NotFoundException;
 import no.nav.foreldrepenger.selvbetjening.error.UnauthenticatedException;
@@ -25,15 +24,13 @@ public class StatusCodeConvertingResponseErrorHandler extends DefaultResponseErr
 
     @Override
     protected void handleError(ClientHttpResponse res, HttpStatus code) throws IOException {
-        LOG.info("Håndterer feilkode {}", code);
         switch (code) {
         case NOT_FOUND:
-            throw new NotFoundException(res.getStatusText(), new HttpClientErrorException(code));
+            throw new NotFoundException(res.getStatusText());
         case UNAUTHORIZED:
-            throw new UnauthorizedException(res.getStatusText(), new HttpClientErrorException(code));
+            throw new UnauthorizedException(res.getStatusText(), tokenHandler.getExp());
         case FORBIDDEN:
-            throw new UnauthenticatedException(res.getStatusText(), tokenHandler.getExp(),
-                    new HttpClientErrorException(code));
+            throw new UnauthenticatedException(res.getStatusText(), tokenHandler.getExp());
         default:
             super.handleError(res, code);
         }

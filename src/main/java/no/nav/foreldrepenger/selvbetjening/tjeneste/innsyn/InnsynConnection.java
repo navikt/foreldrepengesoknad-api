@@ -54,6 +54,7 @@ public class InnsynConnection extends AbstractRestConnection {
         if (isDevOrPreprod()) {
             visSaker(fpsakSaker);
         }
+
         return newArrayList(unmodifiableIterable(concat(sakSaker, fpsakSaker)));
     }
 
