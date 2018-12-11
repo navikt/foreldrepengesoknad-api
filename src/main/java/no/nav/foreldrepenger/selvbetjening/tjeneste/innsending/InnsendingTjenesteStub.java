@@ -27,9 +27,9 @@ import no.nav.foreldrepenger.selvbetjening.tjeneste.innsending.dto.SøknadDto;
 
 @Service
 @ConditionalOnProperty(name = "stub.mottak", havingValue = "true")
-public class InnsendingstjenesteStub implements Innsending {
+public class InnsendingTjenesteStub implements Innsending {
 
-    private static final Logger LOG = getLogger(InnsendingstjenesteStub.class);
+    private static final Logger LOG = getLogger(InnsendingTjenesteStub.class);
 
     @Inject
     private ObjectMapper mapper;

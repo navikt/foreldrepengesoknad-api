@@ -1,5 +1,7 @@
 package no.nav.foreldrepenger.selvbetjening.tjeneste.innsending.domain;
 
+import no.nav.foreldrepenger.selvbetjening.tjeneste.innsyn.uttaksplan.UttaksPeriode;
+
 import java.util.List;
 
 public class UttaksplanPeriode {
@@ -19,4 +21,22 @@ public class UttaksplanPeriode {
     public String forelder;
     public List<String> vedlegg;
 
+    public Boolean graderingInnvilget;
+    public String status;
+
+    @SuppressWarnings("unused")
+    public UttaksplanPeriode() {}
+
+    public UttaksplanPeriode(UttaksPeriode u) {
+        this.tidsperiode = new Tidsperiode();
+        this.tidsperiode.fom = u.getPeriode().getFom();
+        this.tidsperiode.tom = u.getPeriode().getTom();
+
+        this.ønskerSamtidigUttak = u.getSamtidigUttak();
+        this.konto = u.getStønadskontotype().toString();
+        this.stillingsprosent = u.getArbeidstidProsent().getProsent();
+
+        this.graderingInnvilget = u.getGraderingInnvilget();
+        this.status = u.getPeriodeResultatType().toString();
+    }
 }

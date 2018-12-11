@@ -7,6 +7,7 @@ import java.util.List;
 
 import javax.inject.Inject;
 
+import no.nav.foreldrepenger.selvbetjening.tjeneste.innsending.domain.UttaksplanPeriode;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
@@ -36,7 +37,7 @@ public class InnsynController {
     }
 
     @GetMapping(value = "/uttaksplan")
-    public List<UttaksPeriode> uttaksplan(@RequestParam(name = "saksnummer") String saksnummer) {
+    public List<UttaksplanPeriode> uttaksplan(@RequestParam(name = "saksnummer") String saksnummer) {
         return innsyn.hentUttaksplan(saksnummer);
     }
 

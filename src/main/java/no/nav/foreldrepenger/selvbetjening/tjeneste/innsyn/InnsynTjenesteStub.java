@@ -1,21 +1,20 @@
 package no.nav.foreldrepenger.selvbetjening.tjeneste.innsyn;
 
-import static java.time.LocalDate.now;
-import static java.util.Collections.emptyList;
-import static java.util.Collections.singletonList;
+import no.nav.foreldrepenger.selvbetjening.tjeneste.innsending.domain.UttaksplanPeriode;
+import no.nav.foreldrepenger.selvbetjening.tjeneste.innsyn.saker.Behandling;
+import no.nav.foreldrepenger.selvbetjening.tjeneste.innsyn.saker.BehandlingResultatType;
+import no.nav.foreldrepenger.selvbetjening.tjeneste.innsyn.saker.Sak;
+import org.springframework.boot.autoconfigure.condition.ConditionalOnProperty;
+import org.springframework.stereotype.Service;
 
 import java.net.URI;
 import java.time.LocalDateTime;
 import java.util.Arrays;
 import java.util.List;
 
-import org.springframework.boot.autoconfigure.condition.ConditionalOnProperty;
-import org.springframework.stereotype.Service;
-
-import no.nav.foreldrepenger.selvbetjening.tjeneste.innsyn.saker.Behandling;
-import no.nav.foreldrepenger.selvbetjening.tjeneste.innsyn.saker.BehandlingResultatType;
-import no.nav.foreldrepenger.selvbetjening.tjeneste.innsyn.saker.Sak;
-import no.nav.foreldrepenger.selvbetjening.tjeneste.innsyn.uttaksplan.UttaksPeriode;
+import static java.time.LocalDate.now;
+import static java.util.Collections.emptyList;
+import static java.util.Collections.singletonList;
 
 @Service
 @ConditionalOnProperty(name = "stub.oppslag", havingValue = "true")
@@ -32,7 +31,7 @@ public class InnsynTjenesteStub implements Innsyn {
     }
 
     @Override
-    public List<UttaksPeriode> hentUttaksplan(String saksnummer) {
+    public List<UttaksplanPeriode> hentUttaksplan(String saksnummer) {
         return null;
     }
 
