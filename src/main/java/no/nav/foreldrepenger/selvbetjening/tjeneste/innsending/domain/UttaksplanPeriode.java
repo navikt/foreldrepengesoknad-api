@@ -1,9 +1,13 @@
 package no.nav.foreldrepenger.selvbetjening.tjeneste.innsending.domain;
 
+import com.fasterxml.jackson.annotation.JsonInclude;
 import no.nav.foreldrepenger.selvbetjening.tjeneste.innsyn.uttaksplan.UttaksPeriode;
 
 import java.util.List;
 
+import static com.fasterxml.jackson.annotation.JsonInclude.Include.NON_EMPTY;
+
+@JsonInclude(NON_EMPTY)
 public class UttaksplanPeriode {
     public String type;
     public String årsak;
