@@ -12,7 +12,7 @@ public class UttaksplanPeriode {
     public String type;
     public String årsak;
     public String konto;
-    public String orgnr;
+    public List<String> orgnumre;
     public Boolean erArbeidstaker;
     public Double stillingsprosent;
     public Double samtidigUttakProsent;

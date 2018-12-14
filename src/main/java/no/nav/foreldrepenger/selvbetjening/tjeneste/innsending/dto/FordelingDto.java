@@ -30,7 +30,7 @@ public class FordelingDto {
         public LocalDate tom;
         public String årsak;
         public String uttaksperiodeType;
-        public String virksomhetsNummer;
+        public List<String> virksomhetsnummer;
         public Double arbeidstidProsent;
         public Boolean ønskerSamtidigUttak;
         public Boolean erArbeidstaker;
@@ -53,7 +53,7 @@ public class FordelingDto {
             this.tom = u.tidsperiode.tom;
             this.samtidigUttakProsent = u.samtidigUttakProsent;
             this.årsak = u.årsak;
-            this.virksomhetsNummer = u.orgnr;
+            this.virksomhetsnummer = u.orgnumre;
             this.arbeidstidProsent = u.stillingsprosent;
             this.ønskerSamtidigUttak = u.ønskerSamtidigUttak;
             this.erArbeidstaker = u.erArbeidstaker;
