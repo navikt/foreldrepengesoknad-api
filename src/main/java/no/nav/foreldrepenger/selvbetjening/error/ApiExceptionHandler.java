@@ -131,7 +131,7 @@ public class ApiExceptionHandler extends ResponseEntityExceptionHandler {
             boolean trace, List<String> extra) {
         if (req instanceof ServletWebRequest) {
             ServletWebRequest servletRequest = (ServletWebRequest) req;
-            extra.add(servletRequest.getRequest().getRequestURI());
+            extra.add(servletRequest.getHttpMethod() + " " + servletRequest.getRequest().getRequestURI());
         }
         log(e, msg, trace, extra);
         return handleExceptionInternal(e, new ApiError(status, msg), new HttpHeaders(), status, req);
