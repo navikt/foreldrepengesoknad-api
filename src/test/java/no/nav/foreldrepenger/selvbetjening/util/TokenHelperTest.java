@@ -23,11 +23,11 @@ import org.mockito.junit.MockitoJUnitRunner;
 import com.nimbusds.jwt.JWTClaimsSet;
 
 import no.nav.foreldrepenger.selvbetjening.FastTests;
-import no.nav.foreldrepenger.selvbetjening.error.UnauthenticatedException;
 import no.nav.security.oidc.context.OIDCClaims;
 import no.nav.security.oidc.context.OIDCRequestContextHolder;
 import no.nav.security.oidc.context.OIDCValidationContext;
 import no.nav.security.oidc.context.TokenContext;
+import no.nav.security.oidc.exceptions.OIDCTokenValidatorException;
 
 @Category(FastTests.class)
 @RunWith(MockitoJUnitRunner.Silent.class)
@@ -74,7 +74,7 @@ public class TokenHelperTest {
         assertTrue(tokenHandler.erAutentisert());
     }
 
-    @Test(expected = UnauthenticatedException.class)
+    @Test(expected = OIDCTokenValidatorException.class)
     public void testNoContext() {
         when(holder.getOIDCValidationContext()).thenReturn(null);
         assertFalse(tokenHandler.erAutentisert());
@@ -83,7 +83,7 @@ public class TokenHelperTest {
         tokenHandler.autentisertBruker();
     }
 
-    @Test(expected = UnauthenticatedException.class)
+    @Test(expected = OIDCTokenValidatorException.class)
     public void testNoClaims() {
         when(context.getClaims(eq(ISSUER))).thenReturn(null);
         assertFalse(tokenHandler.erAutentisert());
@@ -91,14 +91,14 @@ public class TokenHelperTest {
         tokenHandler.autentisertBruker();
     }
 
-    @Test(expected = UnauthenticatedException.class)
+    @Test(expected = OIDCTokenValidatorException.class)
     public void testNoClaimset() {
         assertNull(tokenHandler.getSubject());
         assertFalse(tokenHandler.erAutentisert());
         tokenHandler.autentisertBruker();
     }
 
-    @Test(expected = UnauthenticatedException.class)
+    @Test(expected = OIDCTokenValidatorException.class)
     public void testNoSubject() {
         when(claims.getClaimSet()).thenReturn(new JWTClaimsSet.Builder().build());
         assertNull(tokenHandler.getSubject());

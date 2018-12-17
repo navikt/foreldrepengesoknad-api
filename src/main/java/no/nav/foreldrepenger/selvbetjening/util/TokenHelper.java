@@ -10,10 +10,10 @@ import org.springframework.stereotype.Component;
 
 import com.nimbusds.jwt.JWTClaimsSet;
 
-import no.nav.foreldrepenger.selvbetjening.error.UnauthenticatedException;
 import no.nav.security.oidc.context.OIDCClaims;
 import no.nav.security.oidc.context.OIDCRequestContextHolder;
 import no.nav.security.oidc.context.OIDCValidationContext;
+import no.nav.security.oidc.exceptions.OIDCTokenValidatorException;
 
 @Component
 public class TokenHelper {
@@ -45,8 +45,8 @@ public class TokenHelper {
                 .orElseThrow(unauthenticated("Fant ikke subject"));
     }
 
-    private static Supplier<? extends UnauthenticatedException> unauthenticated(String msg) {
-        return () -> new UnauthenticatedException(msg);
+    private Supplier<? extends OIDCTokenValidatorException> unauthenticated(String msg) {
+        return () -> new OIDCTokenValidatorException(msg, getExp());
     }
 
     private JWTClaimsSet claimSet() {

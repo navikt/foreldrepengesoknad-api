@@ -104,13 +104,6 @@ public class ApiExceptionHandler extends ResponseEntityExceptionHandler {
     }
 
     @ResponseBody
-    @ExceptionHandler(UnauthenticatedException.class)
-    public ResponseEntity<Object> handleForbidden(UnauthenticatedException e, WebRequest req) {
-        return handle(FORBIDDEN, e, req, getRootCauseMessage(e), false,
-                e.getExpDate() != null ? e.getExpDate().toString() : null);
-    }
-
-    @ResponseBody
     @ExceptionHandler(Exception.class)
     public ResponseEntity<Object> catchAll(Exception e, WebRequest req) {
         return handle(INTERNAL_SERVER_ERROR, e, req, getRootCauseMessage(e));
