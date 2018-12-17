@@ -97,13 +97,6 @@ public class ApiExceptionHandler extends ResponseEntityExceptionHandler {
     }
 
     @ResponseBody
-    @ExceptionHandler(UnauthorizedException.class)
-    public ResponseEntity<Object> handleUnauthorized(UnauthorizedException e, WebRequest req) {
-        return handle(UNAUTHORIZED, e, req, getRootCauseMessage(e), true,
-                e.getExpDate() != null ? e.getExpDate().toString() : null);
-    }
-
-    @ResponseBody
     @ExceptionHandler(OIDCTokenValidatorException.class)
     public ResponseEntity<Object> handleForbiddenOIDC(OIDCTokenValidatorException e, WebRequest req) {
         return handle(FORBIDDEN, e, req, getRootCauseMessage(e),
