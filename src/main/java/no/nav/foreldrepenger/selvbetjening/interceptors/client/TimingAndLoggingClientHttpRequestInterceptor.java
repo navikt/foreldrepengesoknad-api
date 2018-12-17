@@ -29,6 +29,11 @@ public class TimingAndLoggingClientHttpRequestInterceptor implements ClientHttpR
         timer.start();
         ClientHttpResponse respons = execution.execute(request, body);
         timer.stop();
+        log(request, respons, timer);
+        return respons;
+    }
+
+    private static void log(HttpRequest request, ClientHttpResponse respons, StopWatch timer) throws IOException {
         if (hasError(respons.getStatusCode())) {
             LOG.warn("{} - {} - ({}). Dette tok {}ms", request.getMethodValue(), request.getURI(),
                     respons.getStatusCode(), timer.getTime(MILLISECONDS));
@@ -37,10 +42,10 @@ public class TimingAndLoggingClientHttpRequestInterceptor implements ClientHttpR
             LOG.info("{} - {} - ({}). Dette tok {}ms", request.getMethodValue(), request.getURI(),
                     respons.getStatusCode(), timer.getTime(MILLISECONDS));
         }
-        return respons;
+
     }
 
-    protected boolean hasError(HttpStatus code) {
+    protected static boolean hasError(HttpStatus code) {
         return code.series() == CLIENT_ERROR || code.series() == SERVER_ERROR;
     }
 }
