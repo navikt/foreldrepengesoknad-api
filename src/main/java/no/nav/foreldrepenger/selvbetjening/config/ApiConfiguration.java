@@ -18,7 +18,6 @@ import com.google.common.collect.ImmutableMap;
 
 import no.nav.foreldrepenger.selvbetjening.filters.CorsInterceptor;
 import no.nav.foreldrepenger.selvbetjening.interceptors.client.ApiKeyInjectingClientInterceptor;
-import no.nav.foreldrepenger.selvbetjening.tjeneste.StatusCodeConvertingResponseErrorHandler;
 import no.nav.foreldrepenger.selvbetjening.tjeneste.innsending.InnsendingConfig;
 import no.nav.foreldrepenger.selvbetjening.tjeneste.oppslag.OppslagConfig;
 import no.nav.foreldrepenger.selvbetjening.util.TokenHelper;
@@ -46,9 +45,7 @@ public class ApiConfiguration implements WebMvcConfigurer {
             ClientHttpRequestInterceptor... interceptors) {
         return new RestTemplateBuilder()
                 .interceptors(interceptors)
-                .errorHandler(new StatusCodeConvertingResponseErrorHandler(tokenHandler))
                 .build();
-
     }
 
     @Bean

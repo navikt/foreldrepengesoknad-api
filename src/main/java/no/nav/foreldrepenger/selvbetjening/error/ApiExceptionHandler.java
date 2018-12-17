@@ -13,6 +13,8 @@ import static org.springframework.http.HttpStatus.UNPROCESSABLE_ENTITY;
 import java.util.ArrayList;
 import java.util.List;
 
+import javax.inject.Inject;
+
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.http.HttpHeaders;
@@ -31,18 +33,27 @@ import org.springframework.web.multipart.MultipartException;
 import org.springframework.web.servlet.NoHandlerFoundException;
 import org.springframework.web.servlet.mvc.method.annotation.ResponseEntityExceptionHandler;
 
+import no.nav.foreldrepenger.selvbetjening.util.TokenHelper;
 import no.nav.security.oidc.exceptions.OIDCTokenValidatorException;
 import no.nav.security.spring.oidc.validation.interceptor.OIDCUnauthorizedException;
 
 @ControllerAdvice
 public class ApiExceptionHandler extends ResponseEntityExceptionHandler {
 
+    @Inject
+    TokenHelper tokenHelper;
+
     private static final Logger LOG = LoggerFactory.getLogger(ApiExceptionHandler.class);
 
     @ResponseBody
     @ExceptionHandler(HttpStatusCodeException.class)
-    public ResponseEntity<Object> handleHttpStatusCodeException(HttpStatusCodeException e, WebRequest request) {
-        return handle(e.getStatusCode(), e, request, getRootCauseMessage(e));
+    public ResponseEntity<Object> handleHttpStatusCodeException(HttpStatusCodeException e, WebRequest req) {
+        if (e.getStatusCode().equals(UNAUTHORIZED) || e.getStatusCode().equals(FORBIDDEN)) {
+            if (tokenHelper.getExp() != null) {
+                return handle(e.getStatusCode(), e, req, null, false, tokenHelper.getExp().toString());
+            }
+        }
+        return handle(e.getStatusCode(), e, req, getRootCauseMessage(e));
     }
 
     @ResponseBody
@@ -104,12 +115,6 @@ public class ApiExceptionHandler extends ResponseEntityExceptionHandler {
     public ResponseEntity<Object> handleForbidden(UnauthenticatedException e, WebRequest req) {
         return handle(FORBIDDEN, e, req, getRootCauseMessage(e), false,
                 e.getExpDate() != null ? e.getExpDate().toString() : null);
-    }
-
-    @ResponseBody
-    @ExceptionHandler(NotFoundException.class)
-    public ResponseEntity<Object> notFound(NotFoundException e, WebRequest req) {
-        return handle(NOT_FOUND, e, req, getRootCauseMessage(e));
     }
 
     @ResponseBody

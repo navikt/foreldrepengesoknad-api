@@ -23,7 +23,6 @@ import org.springframework.test.web.client.ExpectedCount;
 import org.springframework.test.web.client.MockRestServiceServer;
 
 import no.nav.foreldrepenger.selvbetjening.FastTests;
-import no.nav.foreldrepenger.selvbetjening.tjeneste.StatusCodeConvertingResponseErrorHandler;
 import no.nav.foreldrepenger.selvbetjening.util.TokenHelper;
 import no.nav.security.spring.oidc.SpringOIDCRequestContextHolder;
 
@@ -53,7 +52,6 @@ public class InnsynTest {
     @Before
     public void init() {
         innsyn = new InnsynTjeneste(new InnsynConnection(builder
-                .errorHandler(new StatusCodeConvertingResponseErrorHandler(tokenHandler))
                 .build(), innsynConfig));
     }
 

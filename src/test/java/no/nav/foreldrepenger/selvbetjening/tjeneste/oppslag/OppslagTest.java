@@ -23,7 +23,6 @@ import org.springframework.test.web.client.ExpectedCount;
 import org.springframework.test.web.client.MockRestServiceServer;
 
 import no.nav.foreldrepenger.selvbetjening.FastTests;
-import no.nav.foreldrepenger.selvbetjening.tjeneste.StatusCodeConvertingResponseErrorHandler;
 import no.nav.foreldrepenger.selvbetjening.util.TokenHelper;
 import no.nav.security.spring.oidc.SpringOIDCRequestContextHolder;
 
@@ -54,7 +53,6 @@ public class OppslagTest {
     @Before
     public void restOperations() {
         oppslagConnection = new OppslagConnection(builder
-                .errorHandler(new StatusCodeConvertingResponseErrorHandler(tokenHandler))
                 .build(), oppslagConfig);
         oppslag = new OppslagTjeneste(oppslagConnection);
     }
