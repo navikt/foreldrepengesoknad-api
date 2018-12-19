@@ -12,6 +12,7 @@ import java.util.List;
 import javax.inject.Inject;
 import javax.ws.rs.BadRequestException;
 
+import no.nav.security.oidc.exceptions.OIDCTokenValidatorException;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -64,7 +65,7 @@ public class InnsendingController {
     }
 
     @PostMapping(consumes = APPLICATION_JSON_VALUE)
-    public Kvittering sendInn(@RequestBody Søknad søknad) {
+    public Kvittering sendInn(@RequestBody Søknad søknad) throws OIDCTokenValidatorException {
         LOG.info(CONFIDENTIAL, "Mottok søknad: {}", søknad);
         søknad.vedlegg.forEach(this::fetchAttachment);
         checkVedleggTooLarge(søknad.vedlegg, søknad.type);

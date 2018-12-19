@@ -67,7 +67,7 @@ public class TokenHelperTest {
     }
 
     @Test
-    public void testOK() {
+    public void testOK() throws OIDCTokenValidatorException {
         when(claims.getClaimSet()).thenReturn(new JWTClaimsSet.Builder().subject(FNR).build());
         assertEquals(FNR, tokenHandler.autentisertBruker());
         assertEquals(FNR, tokenHandler.getSubject());
@@ -75,7 +75,7 @@ public class TokenHelperTest {
     }
 
     @Test(expected = OIDCTokenValidatorException.class)
-    public void testNoContext() {
+    public void testNoContext() throws OIDCTokenValidatorException {
         when(holder.getOIDCValidationContext()).thenReturn(null);
         assertFalse(tokenHandler.erAutentisert());
         assertNull(tokenHandler.getSubject());
@@ -84,7 +84,7 @@ public class TokenHelperTest {
     }
 
     @Test(expected = OIDCTokenValidatorException.class)
-    public void testNoClaims() {
+    public void testNoClaims() throws OIDCTokenValidatorException {
         when(context.getClaims(eq(ISSUER))).thenReturn(null);
         assertFalse(tokenHandler.erAutentisert());
         assertNull(tokenHandler.getSubject());
@@ -92,14 +92,14 @@ public class TokenHelperTest {
     }
 
     @Test(expected = OIDCTokenValidatorException.class)
-    public void testNoClaimset() {
+    public void testNoClaimset() throws OIDCTokenValidatorException {
         assertNull(tokenHandler.getSubject());
         assertFalse(tokenHandler.erAutentisert());
         tokenHandler.autentisertBruker();
     }
 
     @Test(expected = OIDCTokenValidatorException.class)
-    public void testNoSubject() {
+    public void testNoSubject() throws OIDCTokenValidatorException {
         when(claims.getClaimSet()).thenReturn(new JWTClaimsSet.Builder().build());
         assertNull(tokenHandler.getSubject());
         assertFalse(tokenHandler.erAutentisert());

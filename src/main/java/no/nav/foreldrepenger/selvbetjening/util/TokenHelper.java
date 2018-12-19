@@ -40,7 +40,7 @@ public class TokenHelper {
                 .orElse(null);
     }
 
-    public String autentisertBruker() {
+    public String autentisertBruker() throws OIDCTokenValidatorException {
         return Optional.ofNullable(getSubject())
                 .orElseThrow(unauthenticated("Fant ikke subject"));
     }

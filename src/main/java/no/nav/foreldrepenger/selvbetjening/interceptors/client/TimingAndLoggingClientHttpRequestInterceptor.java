@@ -24,7 +24,6 @@ public class TimingAndLoggingClientHttpRequestInterceptor implements ClientHttpR
     public ClientHttpResponse intercept(HttpRequest request, byte[] body, ClientHttpRequestExecution execution)
             throws IOException {
 
-        LOG.info("{} - {}", request.getMethodValue(), request.getURI());
         StopWatch timer = new StopWatch();
         timer.start();
         ClientHttpResponse respons = execution.execute(request, body);
@@ -33,13 +32,12 @@ public class TimingAndLoggingClientHttpRequestInterceptor implements ClientHttpR
         return respons;
     }
 
-    private static void log(HttpRequest request, HttpStatus code, StopWatch timer) throws IOException {
+    private static void log(HttpRequest request, HttpStatus code, StopWatch timer) {
         if (hasError(code)) {
-            LOG.warn("{} - {} - ({}). Dette tok {}ms", request.getMethodValue(), request.getURI(),
+            LOG.warn("{} - {} - ({}). Dette tok {}ms", request.getMethodValue(), request.getURI().getPath(),
                     code, timer.getTime(MILLISECONDS));
-        }
-        else {
-            LOG.info("{} - {} - ({}). Dette tok {}ms", request.getMethodValue(), request.getURI(),
+        } else {
+            LOG.info("{} - {} - ({}). Dette tok {}ms", request.getMethodValue(), request.getURI().getPath(),
                     code, timer.getTime(MILLISECONDS));
         }
 
