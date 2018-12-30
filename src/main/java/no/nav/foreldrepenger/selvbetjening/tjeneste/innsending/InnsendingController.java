@@ -12,6 +12,7 @@ import java.util.List;
 import javax.inject.Inject;
 import javax.ws.rs.BadRequestException;
 
+import no.nav.security.oidc.exceptions.OIDCTokenValidatorException;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -21,7 +22,6 @@ import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.client.RestTemplate;
 
 import no.nav.foreldrepenger.selvbetjening.error.AttachmentsTooLargeException;
-import no.nav.foreldrepenger.selvbetjening.tjeneste.TokenHandler;
 import no.nav.foreldrepenger.selvbetjening.tjeneste.innsending.domain.Ettersending;
 import no.nav.foreldrepenger.selvbetjening.tjeneste.innsending.domain.Kvittering;
 import no.nav.foreldrepenger.selvbetjening.tjeneste.innsending.domain.Søknad;
@@ -29,6 +29,7 @@ import no.nav.foreldrepenger.selvbetjening.tjeneste.innsending.domain.Vedlegg;
 import no.nav.foreldrepenger.selvbetjening.tjeneste.mellomlagring.Storage;
 import no.nav.foreldrepenger.selvbetjening.tjeneste.mellomlagring.StorageCrypto;
 import no.nav.foreldrepenger.selvbetjening.util.Enabled;
+import no.nav.foreldrepenger.selvbetjening.util.TokenHelper;
 import no.nav.security.oidc.api.ProtectedWithClaims;
 
 @RestController
@@ -41,7 +42,8 @@ public class InnsendingController {
     public static final String REST_SOKNAD = "/rest/soknad";
 
     private static final long MB = 1024 * 1024;
-    private static final long MAX_VEDLEGG_SIZE = 8 * MB;
+    private static final long MAX_VEDLEGG_SIZE = 32 * MB;
+    private static final long MAX_VEDLEGG_SIZE_DOKMOT = 8 * MB;
 
     private final Innsending innsending;
 
@@ -49,7 +51,7 @@ public class InnsendingController {
     public RestTemplate http;
 
     @Inject
-    private TokenHandler tokenHandler;
+    private TokenHelper tokenHandler;
 
     @Inject
     private Storage storage;
@@ -63,10 +65,10 @@ public class InnsendingController {
     }
 
     @PostMapping(consumes = APPLICATION_JSON_VALUE)
-    public Kvittering sendInn(@RequestBody Søknad søknad) {
+    public Kvittering sendInn(@RequestBody Søknad søknad) throws OIDCTokenValidatorException {
         LOG.info(CONFIDENTIAL, "Mottok søknad: {}", søknad);
         søknad.vedlegg.forEach(this::fetchAttachment);
-        checkVedleggTooLarge(søknad.vedlegg);
+        checkVedleggTooLarge(søknad.vedlegg, søknad.type);
         Kvittering respons = innsending.sendInn(søknad);
         deleteFromTempStorage(tokenHandler.autentisertBruker(), søknad);
         return respons;
@@ -76,7 +78,7 @@ public class InnsendingController {
     public Kvittering sendInn(@RequestBody Ettersending ettersending) {
         LOG.info(CONFIDENTIAL, "Mottok ettersending: {}", ettersending);
         ettersending.vedlegg.forEach(this::fetchAttachment);
-        checkVedleggTooLarge(ettersending.vedlegg);
+        checkVedleggTooLarge(ettersending.vedlegg, "ettersending");
         Kvittering respons = innsending.sendInn(ettersending);
         ettersending.vedlegg.forEach(this::fetchAndDeleteAttachment);
         return respons;
@@ -91,22 +93,22 @@ public class InnsendingController {
 
         LOG.info(CONFIDENTIAL, "Mottok endringssøknad: {}", søknad);
         søknad.vedlegg.forEach(this::fetchAttachment);
-        checkVedleggTooLarge(søknad.vedlegg);
+        checkVedleggTooLarge(søknad.vedlegg, søknad.type);
         Kvittering respons = innsending.endre(søknad);
         søknad.vedlegg.forEach(this::fetchAndDeleteAttachment);
         return respons;
     }
 
-    private void checkVedleggTooLarge(List<Vedlegg> vedlegg) {
+    private void checkVedleggTooLarge(List<Vedlegg> vedlegg, String type) {
         long total = vedlegg.stream()
                 .filter(v -> v.content != null)
                 .mapToLong(v -> v.content.length)
                 .sum();
-        if (total > MAX_VEDLEGG_SIZE) {
-            throw new AttachmentsTooLargeException(
-                    format("Samlet filstørrelse for alle vedlegg er %s, men kan ikke overstige %s",
-                            byteCountToDisplaySize(total),
-                            byteCountToDisplaySize(MAX_VEDLEGG_SIZE)));
+
+        long max = type.equals("engangsstønad") ? MAX_VEDLEGG_SIZE_DOKMOT : MAX_VEDLEGG_SIZE;
+
+        if (total > max) {
+            throw new AttachmentsTooLargeException(format("Samlet filstørrelse for alle vedlegg er %s, men må være mindre enn %s", mb(total), mb(max)));
         }
     }
 
@@ -126,5 +128,9 @@ public class InnsendingController {
     private void deleteFromTempStorage(String fnr, Søknad søknad) {
         søknad.vedlegg.forEach(this::fetchAndDeleteAttachment);
         storage.delete(crypto.encryptDirectoryName(fnr), "soknad");
+    }
+
+    private String mb(long byteCount) {
+        return byteCountToDisplaySize(byteCount);
     }
 }

@@ -52,10 +52,10 @@ public class CorsInterceptor extends HandlerInterceptorAdapter {
             response.setHeader(ACCESS_CONTROL_ALLOW_ORIGIN, origin);
             response.setHeader(ACCESS_CONTROL_ALLOW_CREDENTIALS, "true");
         }
-        if (request.getMethod().equals(HttpMethod.POST)){
+        if (request.getMethod().equals(HttpMethod.POST)) {
             response.setHeader(ACCESS_CONTROL_EXPOSE_HEADERS, "location");
         }
-        if (request.getMethod().equals(HttpMethod.OPTIONS)){
+        if (request.getMethod().equals(HttpMethod.OPTIONS)) {
             response.setHeader(ACCESS_CONTROL_ALLOW_METHODS, "POST, GET, OPTIONS, DELETE");
             response.setHeader(ACCESS_CONTROL_ALLOW_HEADERS, "Content-Type");
         }

@@ -11,6 +11,7 @@ import java.util.Optional;
 
 import javax.inject.Inject;
 
+import no.nav.security.oidc.exceptions.OIDCTokenValidatorException;
 import org.slf4j.Logger;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.DeleteMapping;
@@ -24,7 +25,7 @@ import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.multipart.MultipartFile;
 
 import no.nav.foreldrepenger.selvbetjening.error.AttachmentsTooLargeException;
-import no.nav.foreldrepenger.selvbetjening.tjeneste.TokenHandler;
+import no.nav.foreldrepenger.selvbetjening.util.TokenHelper;
 import no.nav.security.oidc.api.ProtectedWithClaims;
 
 @RestController
@@ -37,7 +38,7 @@ public class StorageController {
     public static final int MAX_VEDLEGG_SIZE = 8 * 1024 * 1024;
 
     @Inject
-    private TokenHandler tokenHandler;
+    private TokenHelper tokenHandler;
 
     @Inject
     private Storage storage;
@@ -46,7 +47,7 @@ public class StorageController {
     private StorageCrypto crypto;
 
     @GetMapping
-    public ResponseEntity<String> getSoknad() {
+    public ResponseEntity<String> getSoknad() throws OIDCTokenValidatorException {
         String fnr = tokenHandler.autentisertBruker();
         String directory = crypto.encryptDirectoryName(fnr);
         log.trace("Retrieving søknad from directory " + directory);
@@ -57,7 +58,7 @@ public class StorageController {
     }
 
     @PostMapping(consumes = APPLICATION_JSON_VALUE)
-    public ResponseEntity<String> storeSoknad(@RequestBody String soknad) {
+    public ResponseEntity<String> storeSoknad(@RequestBody String soknad) throws OIDCTokenValidatorException {
         String fnr = tokenHandler.autentisertBruker();
         String directory = crypto.encryptDirectoryName(fnr);
         log.trace("Writing søknad to directory " + directory);
@@ -67,7 +68,7 @@ public class StorageController {
     }
 
     @DeleteMapping
-    public ResponseEntity<String> deleteSoknad() {
+    public ResponseEntity<String> deleteSoknad() throws OIDCTokenValidatorException {
         String fnr = tokenHandler.autentisertBruker();
         String directory = crypto.encryptDirectoryName(fnr);
         log.trace("Deleting søknad from directory " + directory);
@@ -76,7 +77,7 @@ public class StorageController {
     }
 
     @GetMapping(path = "vedlegg/{key}")
-    public ResponseEntity<byte[]> getAttachment(@PathVariable("key") String key) {
+    public ResponseEntity<byte[]> getAttachment(@PathVariable("key") String key) throws OIDCTokenValidatorException {
         String fnr = tokenHandler.autentisertBruker();
         String directory = crypto.encryptDirectoryName(fnr);
         log.trace("Retrieving attachment from directory " + directory);
@@ -86,7 +87,7 @@ public class StorageController {
     }
 
     @PostMapping(path = "/vedlegg", consumes = MULTIPART_FORM_DATA_VALUE)
-    public ResponseEntity<String> storeAttachment(@RequestPart("vedlegg") MultipartFile attachmentMultipartFile) {
+    public ResponseEntity<String> storeAttachment(@RequestPart("vedlegg") MultipartFile attachmentMultipartFile) throws OIDCTokenValidatorException {
         Attachment attachment = Attachment.of(attachmentMultipartFile);
         if (attachment.size > MAX_VEDLEGG_SIZE) {
             throw new AttachmentsTooLargeException(format("Vedlegg-størrelse er %s, men kan ikke overstige %s",
@@ -103,7 +104,7 @@ public class StorageController {
     }
 
     @DeleteMapping(path = "vedlegg/{key}")
-    public ResponseEntity<String> deleteAttachment(@PathVariable("key") String key) {
+    public ResponseEntity<String> deleteAttachment(@PathVariable("key") String key) throws OIDCTokenValidatorException {
         String fnr = tokenHandler.autentisertBruker();
         String directory = crypto.encryptDirectoryName(fnr);
         log.trace("Deleting attachment from directory " + directory);

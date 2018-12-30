@@ -1,4 +1,4 @@
-package no.nav.foreldrepenger.selvbetjening.filters;
+package no.nav.foreldrepenger.selvbetjening.interceptors.client;
 
 import static org.slf4j.LoggerFactory.getLogger;
 
@@ -21,20 +21,24 @@ public class ApiKeyInjectingClientInterceptor implements ClientHttpRequestInterc
     private final Map<URI, String> apiKeys;
     private final String headerKey;
 
-    public ApiKeyInjectingClientInterceptor(@Value("${apikeys.key:x-nav-apiKey}") String headerKey, Map<URI, String> apiKeys) {
+    public ApiKeyInjectingClientInterceptor(@Value("${apikeys.key:x-nav-apiKey}") String headerKey,
+            Map<URI, String> apiKeys) {
         this.headerKey = headerKey;
         this.apiKeys = apiKeys;
     }
 
     @Override
-    public ClientHttpResponse intercept(HttpRequest request, byte[] body, ClientHttpRequestExecution execution) throws IOException {
+    public ClientHttpResponse intercept(HttpRequest request, byte[] body, ClientHttpRequestExecution execution)
+            throws IOException {
         URI destination = request.getURI();
         Optional<String> apiKey = apiKeyFor(destination);
         if (apiKey.isPresent()) {
             LOG.trace("Injisert API-key som header {} for {}", headerKey, destination);
             request.getHeaders().add(headerKey, apiKey.get());
-        } else {
-            LOG.trace("Ingen API-key ble funnet for {} (sjekket {} konfigurasjoner)", destination, apiKeys.values().size());
+        }
+        else {
+            LOG.trace("Ingen API-key ble funnet for {} (sjekket {} konfigurasjoner)", destination,
+                    apiKeys.values().size());
         }
         return execution.execute(request, body);
     }

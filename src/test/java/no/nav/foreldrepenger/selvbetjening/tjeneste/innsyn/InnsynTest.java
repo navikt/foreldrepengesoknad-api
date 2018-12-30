@@ -23,22 +23,21 @@ import org.springframework.test.web.client.ExpectedCount;
 import org.springframework.test.web.client.MockRestServiceServer;
 
 import no.nav.foreldrepenger.selvbetjening.FastTests;
-import no.nav.foreldrepenger.selvbetjening.tjeneste.StatusCodeConvertingResponseErrorHandler;
-import no.nav.foreldrepenger.selvbetjening.tjeneste.TokenHandler;
+import no.nav.foreldrepenger.selvbetjening.util.TokenHelper;
 import no.nav.security.spring.oidc.SpringOIDCRequestContextHolder;
 
 @Category(FastTests.class)
 @RunWith(SpringRunner.class)
 @TestPropertySource(properties = { "FPSOKNAD_MOTTAK_API_URL = http://www.mottak.no/api",
         "FPSOKNAD_OPPSLAG_API_URL: http://www.oppslag.no/api" })
-@ContextConfiguration(classes = { NotFoundException.class, InnsynConfig.class, TokenHandler.class,
+@ContextConfiguration(classes = { NotFoundException.class, InnsynConfig.class, TokenHelper.class,
         SpringOIDCRequestContextHolder.class })
 @RestClientTest
 
 public class InnsynTest {
 
     @Mock
-    TokenHandler tokenHandler;
+    TokenHelper tokenHandler;
     @Autowired
     private InnsynConfig innsynConfig;
 
@@ -53,7 +52,6 @@ public class InnsynTest {
     @Before
     public void init() {
         innsyn = new InnsynTjeneste(new InnsynConnection(builder
-                .errorHandler(new StatusCodeConvertingResponseErrorHandler(tokenHandler))
                 .build(), innsynConfig));
     }
 

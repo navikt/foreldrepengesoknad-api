@@ -20,8 +20,8 @@ import org.springframework.core.annotation.Order;
 import org.springframework.stereotype.Component;
 import org.springframework.web.filter.GenericFilterBean;
 
-import no.nav.foreldrepenger.selvbetjening.tjeneste.TokenHandler;
 import no.nav.foreldrepenger.selvbetjening.tjeneste.oppslag.Oppslag;
+import no.nav.foreldrepenger.selvbetjening.util.TokenHelper;
 
 @Order(HIGHEST_PRECEDENCE)
 @Component
@@ -30,9 +30,9 @@ public class IDToMDCFilterBean extends GenericFilterBean {
     private static final Logger LOG = LoggerFactory.getLogger(IDToMDCFilterBean.class);
 
     private final Oppslag oppslag;
-    private final TokenHandler handler;
+    private final TokenHelper handler;
 
-    public IDToMDCFilterBean(TokenHandler handler, Oppslag oppslag) {
+    public IDToMDCFilterBean(TokenHelper handler, Oppslag oppslag) {
         this.handler = handler;
         this.oppslag = oppslag;
     }

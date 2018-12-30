@@ -23,21 +23,20 @@ import org.springframework.test.web.client.ExpectedCount;
 import org.springframework.test.web.client.MockRestServiceServer;
 
 import no.nav.foreldrepenger.selvbetjening.FastTests;
-import no.nav.foreldrepenger.selvbetjening.tjeneste.StatusCodeConvertingResponseErrorHandler;
-import no.nav.foreldrepenger.selvbetjening.tjeneste.TokenHandler;
+import no.nav.foreldrepenger.selvbetjening.util.TokenHelper;
 import no.nav.security.spring.oidc.SpringOIDCRequestContextHolder;
 
 @Category(FastTests.class)
 @RunWith(SpringRunner.class)
 @TestPropertySource(properties = { "FPSOKNAD_OPPSLAG_API_URL: http://www.oppslag.no" })
-@ContextConfiguration(classes = { NotFoundException.class, OppslagConfig.class, TokenHandler.class,
+@ContextConfiguration(classes = { NotFoundException.class, OppslagConfig.class, TokenHelper.class,
         SpringOIDCRequestContextHolder.class })
 @RestClientTest
 
 public class OppslagTest {
 
     @Mock
-    TokenHandler tokenHandler;
+    TokenHelper tokenHandler;
     @Autowired
     private OppslagConfig oppslagConfig;
 
@@ -54,7 +53,6 @@ public class OppslagTest {
     @Before
     public void restOperations() {
         oppslagConnection = new OppslagConnection(builder
-                .errorHandler(new StatusCodeConvertingResponseErrorHandler(tokenHandler))
                 .build(), oppslagConfig);
         oppslag = new OppslagTjeneste(oppslagConnection);
     }

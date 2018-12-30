@@ -1,17 +1,17 @@
 package no.nav.foreldrepenger.selvbetjening.stub;
 
+import static org.testcontainers.containers.localstack.LocalStackContainer.Service.S3;
+
+import org.springframework.context.annotation.Bean;
+import org.springframework.context.annotation.Configuration;
+import org.springframework.context.annotation.Profile;
+
 import com.amazonaws.services.s3.AmazonS3;
 import com.amazonaws.services.s3.AmazonS3ClientBuilder;
 
 import no.nav.foreldrepenger.selvbetjening.tjeneste.mellomlagring.S3Storage;
 import no.nav.foreldrepenger.selvbetjening.tjeneste.mellomlagring.Storage;
 import no.nav.foreldrepenger.selvbetjening.tjeneste.mellomlagring.StorageCrypto;
-
-import org.springframework.context.annotation.Bean;
-import org.springframework.context.annotation.Configuration;
-import org.springframework.context.annotation.Profile;
-
-import static org.testcontainers.containers.localstack.LocalStackContainer.Service.S3;
 
 @Configuration
 @Profile("dev")

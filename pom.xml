@@ -25,8 +25,8 @@
         <java.version>1.8</java.version>
         <maven.compiler.source>1.8</maven.compiler.source>
         <maven.compiler.target>1.8</maven.compiler.target>
-        <springfox.version>2.8.0</springfox.version>
-        <oidc-spring-support.version>0.2.12</oidc-spring-support.version>
+        <springfox.version>2.9.2</springfox.version>
+        <oidc-spring-support.version>0.2.13</oidc-spring-support.version>
     </properties>
 
     <dependencies>
@@ -108,12 +108,12 @@
         <dependency>
             <groupId>org.apache.tika</groupId>
             <artifactId>tika-parsers</artifactId>
-            <version>1.19</version>
+            <version>1.20</version>
         </dependency>
         <dependency>
             <groupId>com.amazonaws</groupId>
             <artifactId>aws-java-sdk-s3</artifactId>
-            <version>1.11.461</version>
+            <version>1.11.473</version>
         </dependency>
 
         <dependency>

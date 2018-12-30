@@ -6,9 +6,10 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.context.EnvironmentAware;
 import org.springframework.core.env.Environment;
+import org.springframework.http.HttpStatus;
+import org.springframework.web.client.HttpClientErrorException;
 import org.springframework.web.client.RestOperations;
 
-import no.nav.foreldrepenger.selvbetjening.error.NotFoundException;
 import no.nav.foreldrepenger.selvbetjening.util.EnvUtil;
 
 public abstract class AbstractRestConnection implements EnvironmentAware {
@@ -42,8 +43,8 @@ public abstract class AbstractRestConnection implements EnvironmentAware {
     protected <T> T getForObject(URI uri, Class<T> responseType, boolean doThrow) {
         try {
             return operations.getForObject(uri, responseType);
-        } catch (NotFoundException e) {
-            if (doThrow) {
+        } catch (HttpClientErrorException e) {
+            if (doThrow && e.getStatusCode().equals(HttpStatus.NOT_FOUND)) {
                 throw e;
             }
             return null;

@@ -1,4 +1,4 @@
-package no.nav.foreldrepenger.selvbetjening.tjeneste.oppslag.domain;
+package no.nav.foreldrepenger.selvbetjening.tjeneste.innsyn.saker;
 
 import java.time.LocalDateTime;
 
@@ -9,32 +9,37 @@ public class Behandling {
 
     private final LocalDateTime opprettetTidspunkt;
     private final LocalDateTime endretTidspunkt;
-    private final String id;
     private final String status;
     private final String type;
     private final String tema;
     private final String årsak;
+    private final BehandlingResultatType behandlingResultatType;
     private final String behandlendeEnhet;
     private final String behandlendeEnhetNavn;
 
     @JsonCreator
-    public Behandling(@JsonProperty("id") String id,
+    public Behandling(
             @JsonProperty("opprettetTidspunkt") LocalDateTime opprettetTidspunkt,
             @JsonProperty("endretTidspunkt") LocalDateTime endretTidspunkt, @JsonProperty("status") String status,
             @JsonProperty("type") String type,
             @JsonProperty("tema") String tema,
             @JsonProperty("årsak") String årsak,
+            @JsonProperty("behandlingResultatType") BehandlingResultatType behandlingResultatType,
             @JsonProperty("behandlendeEnhet") String behandlendeEnhet,
             @JsonProperty("behandlendeEnhetNavn") String behandlendeEnhetNavn) {
-        this.id = id;
         this.opprettetTidspunkt = opprettetTidspunkt;
         this.endretTidspunkt = endretTidspunkt;
         this.status = status;
         this.type = type;
         this.tema = tema;
         this.årsak = årsak;
+        this.behandlingResultatType = behandlingResultatType;
         this.behandlendeEnhet = behandlendeEnhet;
         this.behandlendeEnhetNavn = behandlendeEnhetNavn;
+    }
+
+    public BehandlingResultatType getBehandlingResultatType() {
+        return behandlingResultatType;
     }
 
     public LocalDateTime getOpprettetTidspunkt() {
@@ -47,10 +52,6 @@ public class Behandling {
 
     public String getStatus() {
         return status;
-    }
-
-    public String getId() {
-        return id;
     }
 
     public String getType() {
@@ -75,10 +76,11 @@ public class Behandling {
 
     @Override
     public String toString() {
-        return getClass().getSimpleName() + "[opprettetTidspunkt=" + opprettetTidspunkt + ", endretTidspunkt="
-                + endretTidspunkt + ", id="
-                + id + ", status=" + status + ", type=" + type + ", tema=" + tema + ", årsak=" + årsak
-                + ", behandlendeEnhet=" + behandlendeEnhet + ", behandlendeEnhetNavn=" + behandlendeEnhetNavn + "]";
+        return getClass().getSimpleName() + " [opprettetTidspunkt=" + opprettetTidspunkt + ", endretTidspunkt="
+                + endretTidspunkt
+                + ", status=" + status + ", type=" + type + ", tema=" + tema + ", årsak=" + årsak
+                + ", behandlingResultatType=" + behandlingResultatType + ", behandlendeEnhet=" + behandlendeEnhet
+                + ", behandlendeEnhetNavn=" + behandlendeEnhetNavn + "]";
     }
 
 }

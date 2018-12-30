@@ -17,7 +17,7 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
-import no.nav.foreldrepenger.selvbetjening.tjeneste.innsyn.Sak;
+import no.nav.foreldrepenger.selvbetjening.tjeneste.innsyn.saker.Sak;
 import no.nav.foreldrepenger.selvbetjening.tjeneste.oppslag.domain.Person;
 import no.nav.foreldrepenger.selvbetjening.tjeneste.oppslag.domain.Søkerinfo;
 import no.nav.security.oidc.api.ProtectedWithClaims;

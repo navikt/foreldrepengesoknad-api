@@ -47,6 +47,10 @@ public class ProsentAndel {
         }
     }
 
+    public Double getProsent() {
+        return prosent;
+    }
+
     @Override
     public String toString() {
         return getClass().getSimpleName() + " [prosent=" + prosent + "]";

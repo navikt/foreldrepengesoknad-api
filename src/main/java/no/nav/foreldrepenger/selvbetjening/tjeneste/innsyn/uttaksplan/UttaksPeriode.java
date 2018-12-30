@@ -1,4 +1,4 @@
-package no.nav.foreldrepenger.selvbetjening.tjeneste.innsyn;
+package no.nav.foreldrepenger.selvbetjening.tjeneste.innsyn.uttaksplan;
 
 import java.time.LocalDate;
 
@@ -6,6 +6,10 @@ import javax.validation.Valid;
 
 import com.fasterxml.jackson.annotation.JsonAlias;
 import com.fasterxml.jackson.annotation.JsonProperty;
+
+import no.nav.foreldrepenger.selvbetjening.tjeneste.innsyn.LukketPeriode;
+import no.nav.foreldrepenger.selvbetjening.tjeneste.innsyn.PeriodeResultatType;
+import no.nav.foreldrepenger.selvbetjening.tjeneste.innsyn.ProsentAndel;
 
 public class UttaksPeriode {
 
