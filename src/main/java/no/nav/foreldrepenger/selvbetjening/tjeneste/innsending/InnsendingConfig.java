@@ -11,11 +11,11 @@ import org.springframework.context.annotation.Configuration;
 @ConfigurationProperties(prefix = "innsending")
 @Configuration
 public class InnsendingConfig {
-    private static final String ENDRE = "/mottak/endreV2";
+    private static final String ENDRE = "/mottak/endre";
 
     private static final String ETTERSEND = "/mottak/ettersend";
 
-    private static final String SEND = "/mottak/sendV2";
+    private static final String SEND = "/mottak/send";
 
     private static final String PING = "mottak/ping";
 
