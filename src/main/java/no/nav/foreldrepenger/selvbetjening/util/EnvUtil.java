@@ -3,7 +3,6 @@ package no.nav.foreldrepenger.selvbetjening.util;
 import org.slf4j.Marker;
 import org.slf4j.MarkerFactory;
 import org.springframework.core.env.Environment;
-import org.springframework.core.env.Profiles;
 
 public final class EnvUtil {
 
@@ -20,11 +19,11 @@ public final class EnvUtil {
     }
 
     public static boolean isPreprod(Environment env) {
-        return env.acceptsProfiles(Profiles.of(PREPROD));
+        return env.acceptsProfiles(PREPROD);
     }
 
     public static boolean isDev(Environment env) {
-        return env.acceptsProfiles(Profiles.of(DEV));
+        return env.acceptsProfiles(DEV);
     }
 
     public static boolean isProd(Environment env) {
