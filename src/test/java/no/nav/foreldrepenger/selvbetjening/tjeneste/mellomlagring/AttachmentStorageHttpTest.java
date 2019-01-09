@@ -8,18 +8,14 @@ import java.nio.file.Files;
 import java.nio.file.Paths;
 import java.util.Arrays;
 
-import org.junit.AfterClass;
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.experimental.categories.Category;
 import org.junit.runner.RunWith;
-import org.springframework.beans.BeansException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.boot.test.web.client.TestRestTemplate;
 import org.springframework.boot.web.server.LocalServerPort;
-import org.springframework.context.ApplicationContext;
-import org.springframework.context.ApplicationContextAware;
 import org.springframework.core.io.ByteArrayResource;
 import org.springframework.core.io.ClassPathResource;
 import org.springframework.http.HttpEntity;
@@ -28,7 +24,9 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.test.context.ActiveProfiles;
+import org.springframework.test.context.TestContext;
 import org.springframework.test.context.junit4.SpringRunner;
+import org.springframework.test.context.support.AbstractTestExecutionListener;
 
 import no.nav.foreldrepenger.selvbetjening.ApiApplicationLocal;
 import no.nav.foreldrepenger.selvbetjening.SlowTests;
@@ -38,23 +36,24 @@ import no.nav.foreldrepenger.selvbetjening.stub.StubbedLocalStackContainer;
 @SpringBootTest(classes = ApiApplicationLocal.class, webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT)
 @ActiveProfiles("dev,localstack")
 @Category(SlowTests.class)
-public class AttachmentStorageHttpTest implements ApplicationContextAware {
+public class AttachmentStorageHttpTest extends AbstractTestExecutionListener {
 
     private static final String FNR = "12345678910";
     private static final byte[] PDFSIGNATURE = { 0x25, 0x50, 0x44, 0x46 };
-    private static ApplicationContext applicationContext;
 
     @LocalServerPort
     private int port;
 
     @Autowired
-    private TestRestTemplate testRestTemplate;
+    private StubbedLocalStackContainer stubbedLocalStackContainer;
 
+    @Autowired
+    private TestRestTemplate testRestTemplate;
     public AttachmentTestHttpHandler http;
 
-    @AfterClass
-    public static void destroy() {
-        applicationContext.getBean("stubbedLocalStackContainer", StubbedLocalStackContainer.class).stopContainer();
+    @Override
+    public void afterTestClass(TestContext testContext) throws Exception {
+        stubbedLocalStackContainer.stopContainer();
     }
 
     @Before
@@ -131,10 +130,5 @@ public class AttachmentStorageHttpTest implements ApplicationContextAware {
         } catch (IOException e) {
             throw new RuntimeException(e);
         }
-    }
-
-    @Override
-    public void setApplicationContext(ApplicationContext applicationContext) throws BeansException {
-        this.applicationContext = applicationContext;
     }
 }

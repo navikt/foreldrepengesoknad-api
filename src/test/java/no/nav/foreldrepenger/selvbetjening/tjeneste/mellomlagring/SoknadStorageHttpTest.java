@@ -2,20 +2,16 @@ package no.nav.foreldrepenger.selvbetjening.tjeneste.mellomlagring;
 
 import static org.assertj.core.api.AssertionsForClassTypes.assertThat;
 
-import org.junit.AfterClass;
 import org.junit.Before;
 import org.junit.FixMethodOrder;
 import org.junit.Test;
 import org.junit.experimental.categories.Category;
 import org.junit.runner.RunWith;
 import org.junit.runners.MethodSorters;
-import org.springframework.beans.BeansException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.boot.test.web.client.TestRestTemplate;
 import org.springframework.boot.web.server.LocalServerPort;
-import org.springframework.context.ApplicationContext;
-import org.springframework.context.ApplicationContextAware;
 import org.springframework.http.HttpEntity;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpMethod;
@@ -23,7 +19,9 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.test.context.ActiveProfiles;
+import org.springframework.test.context.TestContext;
 import org.springframework.test.context.junit4.SpringRunner;
+import org.springframework.test.context.support.AbstractTestExecutionListener;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.SerializationFeature;
@@ -38,21 +36,22 @@ import no.nav.security.oidc.test.support.JwtTokenGenerator;
 @ActiveProfiles("dev, localstack")
 @FixMethodOrder(MethodSorters.NAME_ASCENDING)
 @Category(SlowTests.class)
-public class SoknadStorageHttpTest implements ApplicationContextAware {
+public class SoknadStorageHttpTest extends AbstractTestExecutionListener {
 
     private static final String FNR = "12345678901";
-    private static ApplicationContext applicationContext;
     @LocalServerPort
     private int port;
     @Autowired
     private TestRestTemplate http;
     @Autowired
     private ObjectMapper mapper;
+    @Autowired
+    private StubbedLocalStackContainer stubbedLocalStackContainer;
     private String endpoint;
 
-    @AfterClass
-    public static void destroy() {
-        applicationContext.getBean("stubbedLocalStackContainer", StubbedLocalStackContainer.class).stopContainer();
+    @Override
+    public void afterTestClass(TestContext testContext) throws Exception {
+        stubbedLocalStackContainer.stopContainer();
     }
 
     @Before
@@ -83,8 +82,4 @@ public class SoknadStorageHttpTest implements ApplicationContextAware {
 
     }
 
-    @Override
-    public void setApplicationContext(ApplicationContext applicationContext) throws BeansException {
-        this.applicationContext = applicationContext;
-    }
 }
