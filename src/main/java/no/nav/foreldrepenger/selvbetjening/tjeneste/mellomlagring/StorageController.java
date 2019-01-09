@@ -11,7 +11,6 @@ import java.util.Optional;
 
 import javax.inject.Inject;
 
-import no.nav.security.oidc.exceptions.OIDCTokenValidatorException;
 import org.slf4j.Logger;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.DeleteMapping;
@@ -27,12 +26,14 @@ import org.springframework.web.multipart.MultipartFile;
 import no.nav.foreldrepenger.selvbetjening.error.AttachmentsTooLargeException;
 import no.nav.foreldrepenger.selvbetjening.util.TokenHelper;
 import no.nav.security.oidc.api.ProtectedWithClaims;
+import no.nav.security.oidc.exceptions.OIDCTokenValidatorException;
 
 @RestController
 @ProtectedWithClaims(issuer = ISSUER, claimMap = { "acr=Level4" })
-@RequestMapping("/rest/storage")
+@RequestMapping(StorageController.REST_STORAGE)
 public class StorageController {
 
+    public static final String REST_STORAGE = "/rest/storage";
     private static final Logger log = getLogger(StorageController.class);
     private static final String KEY = "soknad";
     public static final int MAX_VEDLEGG_SIZE = 8 * 1024 * 1024;
@@ -87,7 +88,8 @@ public class StorageController {
     }
 
     @PostMapping(path = "/vedlegg", consumes = MULTIPART_FORM_DATA_VALUE)
-    public ResponseEntity<String> storeAttachment(@RequestPart("vedlegg") MultipartFile attachmentMultipartFile) throws OIDCTokenValidatorException {
+    public ResponseEntity<String> storeAttachment(@RequestPart("vedlegg") MultipartFile attachmentMultipartFile)
+            throws OIDCTokenValidatorException {
         Attachment attachment = Attachment.of(attachmentMultipartFile);
         if (attachment.size > MAX_VEDLEGG_SIZE) {
             throw new AttachmentsTooLargeException(format("Vedlegg-størrelse er %s, men kan ikke overstige %s",

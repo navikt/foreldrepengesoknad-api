@@ -1,6 +1,17 @@
 package no.nav.foreldrepenger.selvbetjening.tjeneste.mellomlagring;
 
+import static com.fasterxml.jackson.databind.SerializationFeature.FAIL_ON_EMPTY_BEANS;
+import static no.nav.foreldrepenger.selvbetjening.tjeneste.mellomlagring.StorageController.REST_STORAGE;
+import static no.nav.security.oidc.test.support.JwtTokenGenerator.createSignedJWT;
 import static org.assertj.core.api.AssertionsForClassTypes.assertThat;
+import static org.springframework.http.HttpHeaders.AUTHORIZATION;
+import static org.springframework.http.HttpHeaders.CONTENT_TYPE;
+import static org.springframework.http.HttpMethod.GET;
+import static org.springframework.http.HttpStatus.NO_CONTENT;
+import static org.springframework.http.HttpStatus.OK;
+import static org.springframework.http.MediaType.APPLICATION_JSON_VALUE;
+
+import java.net.URI;
 
 import org.junit.Before;
 import org.junit.FixMethodOrder;
@@ -14,22 +25,18 @@ import org.springframework.boot.test.web.client.TestRestTemplate;
 import org.springframework.boot.web.server.LocalServerPort;
 import org.springframework.http.HttpEntity;
 import org.springframework.http.HttpHeaders;
-import org.springframework.http.HttpMethod;
-import org.springframework.http.HttpStatus;
-import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.test.context.ActiveProfiles;
 import org.springframework.test.context.TestContext;
 import org.springframework.test.context.junit4.SpringRunner;
 import org.springframework.test.context.support.AbstractTestExecutionListener;
+import org.springframework.web.util.UriComponentsBuilder;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
-import com.fasterxml.jackson.databind.SerializationFeature;
 
 import no.nav.foreldrepenger.selvbetjening.ApiApplicationLocal;
 import no.nav.foreldrepenger.selvbetjening.SlowTests;
 import no.nav.foreldrepenger.selvbetjening.stub.StubbedLocalStackContainer;
-import no.nav.security.oidc.test.support.JwtTokenGenerator;
 
 @RunWith(SpringRunner.class)
 @SpringBootTest(classes = ApiApplicationLocal.class, webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT)
@@ -47,7 +54,7 @@ public class SoknadStorageHttpTest extends AbstractTestExecutionListener {
     private ObjectMapper mapper;
     @Autowired
     private StubbedLocalStackContainer stubbedLocalStackContainer;
-    private String endpoint;
+    private URI endpoint;
 
     @Override
     public void afterTestClass(TestContext testContext) throws Exception {
@@ -56,30 +63,33 @@ public class SoknadStorageHttpTest extends AbstractTestExecutionListener {
 
     @Before
     public void setup() {
-        mapper.disable(SerializationFeature.FAIL_ON_EMPTY_BEANS);
-        endpoint = "http://localhost:" + port + "/rest/storage";
+        mapper.disable(FAIL_ON_EMPTY_BEANS);
+        endpoint = UriComponentsBuilder
+                .newInstance()
+                .scheme("http")
+                .host("localhost")
+                .port(port)
+                .path(REST_STORAGE)
+                .build()
+                .toUri();
     }
 
-    private HttpHeaders createHeaders(MediaType mediaType) {
+    private HttpHeaders createHeaders(String mediaType) {
         HttpHeaders headers = new HttpHeaders();
-        headers.add("Content-Type", mediaType.toString());
-        headers.add("Authorization", "bearer " + JwtTokenGenerator.createSignedJWT(FNR).serialize());
+        headers.add(CONTENT_TYPE, mediaType);
+        headers.add(AUTHORIZATION, "bearer " + createSignedJWT(FNR).serialize());
         return headers;
     }
 
     @Test
     public void store_and_retrieve_json_over_HTTP() {
         String payload = "en skikkelig, skikkelig, skikkelig (s3) nais søknad";
-
-        ResponseEntity<String> responseEntity = http.exchange(endpoint, HttpMethod.POST,
-                new HttpEntity<>(payload, createHeaders(MediaType.APPLICATION_JSON)), String.class);
-        assertThat(responseEntity.getStatusCode()).isEqualTo(HttpStatus.NO_CONTENT);
-
-        ResponseEntity<String> getResponse = http.exchange(endpoint, HttpMethod.GET,
-                new HttpEntity<>(createHeaders(MediaType.APPLICATION_JSON)), String.class);
-        assertThat(getResponse.getStatusCode()).isEqualTo(HttpStatus.OK);
+        ResponseEntity<String> responseEntity = http.postForEntity(endpoint,
+                new HttpEntity<>(payload, createHeaders(APPLICATION_JSON_VALUE)), String.class);
+        assertThat(responseEntity.getStatusCode()).isEqualTo(NO_CONTENT);
+        ResponseEntity<String> getResponse = http.exchange(endpoint, GET,
+                new HttpEntity<>(createHeaders(APPLICATION_JSON_VALUE)), String.class);
+        assertThat(getResponse.getStatusCode()).isEqualTo(OK);
         assertThat(getResponse.getBody()).isEqualTo(payload);
-
     }
-
 }
