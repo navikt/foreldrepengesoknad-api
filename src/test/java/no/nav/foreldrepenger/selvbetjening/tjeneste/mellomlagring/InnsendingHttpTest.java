@@ -1,11 +1,12 @@
 package no.nav.foreldrepenger.selvbetjening.tjeneste.mellomlagring;
 
-import static java.time.LocalDateTime.now;
-import static no.nav.foreldrepenger.selvbetjening.tjeneste.mellomlagring.AttachmentStorageHttpTest.getByteArrayResource;
-import static org.assertj.core.api.AssertionsForClassTypes.assertThat;
-
-import java.net.URI;
-
+import com.fasterxml.jackson.core.JsonProcessingException;
+import com.fasterxml.jackson.databind.ObjectMapper;
+import com.fasterxml.jackson.databind.SerializationFeature;
+import no.nav.foreldrepenger.selvbetjening.ApiApplicationLocal;
+import no.nav.foreldrepenger.selvbetjening.SlowTests;
+import no.nav.foreldrepenger.selvbetjening.tjeneste.innsending.domain.*;
+import no.nav.security.oidc.test.support.JwtTokenGenerator;
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.experimental.categories.Category;
@@ -14,27 +15,18 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.boot.test.web.client.TestRestTemplate;
 import org.springframework.boot.web.server.LocalServerPort;
-import org.springframework.context.ApplicationContext;
 import org.springframework.core.io.ByteArrayResource;
-import org.springframework.http.HttpEntity;
-import org.springframework.http.HttpHeaders;
-import org.springframework.http.HttpMethod;
-import org.springframework.http.HttpStatus;
-import org.springframework.http.MediaType;
-import org.springframework.http.ResponseEntity;
+import org.springframework.http.*;
 import org.springframework.test.context.ActiveProfiles;
 import org.springframework.test.context.junit4.SpringRunner;
 
-import com.fasterxml.jackson.core.JsonProcessingException;
-import com.fasterxml.jackson.databind.ObjectMapper;
-import com.fasterxml.jackson.databind.SerializationFeature;
+import java.net.URI;
 
-import no.nav.foreldrepenger.selvbetjening.ApiApplicationLocal;
-import no.nav.foreldrepenger.selvbetjening.SlowTests;
-import no.nav.foreldrepenger.selvbetjening.tjeneste.innsending.domain.Barn;
-import no.nav.foreldrepenger.selvbetjening.tjeneste.innsending.domain.Engangsstønad;
-import no.nav.foreldrepenger.selvbetjening.tjeneste.innsending.domain.Vedlegg;
-import no.nav.security.oidc.test.support.JwtTokenGenerator;
+import static java.time.LocalDateTime.now;
+import static java.util.Collections.emptyList;
+import static javax.ws.rs.core.MediaType.APPLICATION_JSON;
+import static no.nav.foreldrepenger.selvbetjening.tjeneste.mellomlagring.AttachmentStorageHttpTest.getByteArrayResource;
+import static org.assertj.core.api.AssertionsForClassTypes.assertThat;
 
 @SpringBootTest(classes = ApiApplicationLocal.class, webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT)
 @ActiveProfiles("dev, localstack")
@@ -43,7 +35,6 @@ import no.nav.security.oidc.test.support.JwtTokenGenerator;
 public class InnsendingHttpTest {
 
     private static final String FNR = "12345678910";
-    private static ApplicationContext applicationContext;
     @LocalServerPort
     private int port;
 
@@ -58,13 +49,11 @@ public class InnsendingHttpTest {
     @Before
     public void setup() {
         mapper.disable(SerializationFeature.FAIL_ON_EMPTY_BEANS);
-        endpoint = "http://localhost:" + port + "/rest/engangsstonad";
+        endpoint = "http://localhost:" + port + "/rest/soknad";
         attachmentHttpHandler = new AttachmentTestHttpHandler(http, port, FNR);
     }
 
     @Test
-    // @DisplayName("Add an attachment, and then post the Søknad with a reference to
-    // the attachment")
     public void sendSoknad() {
         URI attchmentLocation = postAttachmentOverHttp();
         ResponseEntity<String> response = postSoknadOverHttp(attchmentLocation);
@@ -76,7 +65,7 @@ public class InnsendingHttpTest {
     private ResponseEntity<String> postSoknadOverHttp(URI location) {
         String payload = engangsstonad(location);
         return http.exchange(endpoint, HttpMethod.POST,
-                new HttpEntity<>(payload, createHeaders(MediaType.APPLICATION_JSON)), String.class);
+                new HttpEntity<>(payload, createHeaders()), String.class);
     }
 
     private URI postAttachmentOverHttp() {
@@ -89,9 +78,9 @@ public class InnsendingHttpTest {
         return location;
     }
 
-    private HttpHeaders createHeaders(MediaType mediaType) {
+    private HttpHeaders createHeaders() {
         HttpHeaders headers = new HttpHeaders();
-        headers.add("Content-Type", mediaType.toString());
+        headers.add("Content-Type", APPLICATION_JSON);
         headers.add("Authorization", "bearer " + JwtTokenGenerator.createSignedJWT(FNR).serialize());
         return headers;
     }
@@ -100,10 +89,26 @@ public class InnsendingHttpTest {
         try {
             Engangsstønad engangsstønad = new Engangsstønad();
             engangsstønad.opprettet = now();
+            engangsstønad.type = "engangsstønad";
 
             Barn barn = new Barn();
             barn.erBarnetFødt = false;
             engangsstønad.barn = barn;
+
+
+            AnnenForelder annenForelder = new AnnenForelder();
+            annenForelder.kanIkkeOppgis = true;
+            engangsstønad.annenForelder = annenForelder;
+
+            Utenlandsopphold utenlandsopphold = new Utenlandsopphold();
+            utenlandsopphold.iNorgeNeste12Mnd = true;
+            utenlandsopphold.iNorgeSiste12Mnd = true;
+            utenlandsopphold.iNorgePåHendelsestidspunktet = true;
+            utenlandsopphold.senereOpphold = emptyList();
+            utenlandsopphold.tidligereOpphold = emptyList();
+            engangsstønad.informasjonOmUtenlandsopphold = utenlandsopphold;
+
+            engangsstønad.erEndringssøknad = false;
 
             Vedlegg vedlegg = new Vedlegg();
             vedlegg.url = location;
