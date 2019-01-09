@@ -6,11 +6,9 @@ import static org.assertj.core.api.AssertionsForClassTypes.assertThat;
 
 import java.net.URI;
 
-import org.junit.jupiter.api.BeforeEach;
-import org.junit.jupiter.api.DisplayName;
-import org.junit.jupiter.api.Tag;
-import org.junit.jupiter.api.Test;
-import org.junit.jupiter.api.extension.ExtendWith;
+import org.junit.Before;
+import org.junit.Test;
+import org.junit.experimental.categories.Category;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.boot.test.web.client.TestRestTemplate;
@@ -24,22 +22,22 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.test.context.ActiveProfiles;
-import org.springframework.test.context.junit.jupiter.SpringExtension;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.SerializationFeature;
 
 import no.nav.foreldrepenger.selvbetjening.ApiApplicationLocal;
+import no.nav.foreldrepenger.selvbetjening.SlowTests;
 import no.nav.foreldrepenger.selvbetjening.tjeneste.innsending.domain.Barn;
 import no.nav.foreldrepenger.selvbetjening.tjeneste.innsending.domain.Engangsstønad;
 import no.nav.foreldrepenger.selvbetjening.tjeneste.innsending.domain.Vedlegg;
 import no.nav.security.oidc.test.support.JwtTokenGenerator;
 
-@ExtendWith(SpringExtension.class)
+//@ExtendWith(SpringExtension.class)
 @SpringBootTest(classes = ApiApplicationLocal.class, webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT)
 @ActiveProfiles("dev, localstack")
-@Tag("SlowTests")
+@Category(SlowTests.class)
 public class InnsendingHttpTest {
 
     private static final String FNR = "12345678910";
@@ -55,7 +53,7 @@ public class InnsendingHttpTest {
 
     private AttachmentTestHttpHandler attachmentHttpHandler;
 
-    @BeforeEach
+    @Before
     public void setup() {
         mapper.disable(SerializationFeature.FAIL_ON_EMPTY_BEANS);
         endpoint = "http://localhost:" + port + "/rest/engangsstonad";
@@ -63,7 +61,8 @@ public class InnsendingHttpTest {
     }
 
     @Test
-    @DisplayName("Add an attachment, and then post the Søknad with a reference to the attachment")
+    // @DisplayName("Add an attachment, and then post the Søknad with a reference to
+    // the attachment")
     public void sendSoknad() {
         URI attchmentLocation = postAttachmentOverHttp();
         ResponseEntity<String> response = postSoknadOverHttp(attchmentLocation);
