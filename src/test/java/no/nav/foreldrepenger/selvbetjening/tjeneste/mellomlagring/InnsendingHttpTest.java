@@ -5,16 +5,21 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.SerializationFeature;
 import no.nav.foreldrepenger.selvbetjening.ApiApplicationLocal;
 import no.nav.foreldrepenger.selvbetjening.SlowTests;
+import no.nav.foreldrepenger.selvbetjening.stub.StubbedLocalStackContainer;
 import no.nav.foreldrepenger.selvbetjening.tjeneste.innsending.domain.*;
 import no.nav.security.oidc.test.support.JwtTokenGenerator;
+import org.junit.AfterClass;
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.experimental.categories.Category;
 import org.junit.runner.RunWith;
+import org.springframework.beans.BeansException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.boot.test.web.client.TestRestTemplate;
 import org.springframework.boot.web.server.LocalServerPort;
+import org.springframework.context.ApplicationContext;
+import org.springframework.context.ApplicationContextAware;
 import org.springframework.core.io.ByteArrayResource;
 import org.springframework.http.*;
 import org.springframework.test.context.ActiveProfiles;
@@ -28,13 +33,14 @@ import static javax.ws.rs.core.MediaType.APPLICATION_JSON;
 import static no.nav.foreldrepenger.selvbetjening.tjeneste.mellomlagring.AttachmentStorageHttpTest.getByteArrayResource;
 import static org.assertj.core.api.AssertionsForClassTypes.assertThat;
 
+@RunWith(SpringRunner.class)
 @SpringBootTest(classes = ApiApplicationLocal.class, webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT)
 @ActiveProfiles("dev, localstack")
-@RunWith(SpringRunner.class)
 @Category(SlowTests.class)
-public class InnsendingHttpTest {
+public class InnsendingHttpTest implements ApplicationContextAware {
 
     private static final String FNR = "12345678910";
+    private static ApplicationContext applicationContext;
     @LocalServerPort
     private int port;
 
@@ -45,6 +51,11 @@ public class InnsendingHttpTest {
     private String endpoint;
 
     private AttachmentTestHttpHandler attachmentHttpHandler;
+
+    @AfterClass
+    public static void destroy() {
+        applicationContext.getBean("stubbedLocalStackContainer", StubbedLocalStackContainer.class).stopContainer();
+    }
 
     @Before
     public void setup() {
@@ -118,5 +129,10 @@ public class InnsendingHttpTest {
             throw new RuntimeException(e);
         }
 
+    }
+
+    @Override
+    public void setApplicationContext(ApplicationContext applicationContext) throws BeansException {
+        InnsendingHttpTest.applicationContext = applicationContext;
     }
 }
