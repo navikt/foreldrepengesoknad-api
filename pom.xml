@@ -181,7 +181,7 @@
                     <plugin>
                         <artifactId>maven-surefire-plugin</artifactId>
                         <configuration>
-                            <groups>no.nav.foreldrepenger.selvbetjening.FastTests</groups>
+                            <excludedGroups>no.nav.foreldrepenger.selvbetjening.SlowTests</excludedGroups>
                         </configuration>
                     </plugin>
                 </plugins>
@@ -192,17 +192,6 @@
             <activation>
                 <activeByDefault>false</activeByDefault>
             </activation>
-            <build>
-                <plugins>
-                    <plugin>
-                        <artifactId>maven-surefire-plugin</artifactId>
-                        <configuration>
-                            <groups>no.nav.foreldrepenger.selvbetjening.FastTests,
-                                no.nav.foreldrepenger.selvbetjening.SlowTests</groups>
-                        </configuration>
-                    </plugin>
-                </plugins>
-            </build>
         </profile>
     </profiles>
 </project>

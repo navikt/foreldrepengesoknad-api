@@ -1,35 +1,26 @@
 package no.nav.foreldrepenger.selvbetjening.util;
 
-import static no.nav.foreldrepenger.selvbetjening.util.Constants.ISSUER;
-import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertFalse;
-import static org.junit.Assert.assertNotNull;
-import static org.junit.Assert.assertNull;
-import static org.junit.Assert.assertTrue;
-import static org.mockito.ArgumentMatchers.eq;
-import static org.mockito.Mockito.when;
-
-import java.time.LocalDateTime;
-import java.time.ZoneId;
-import java.util.Date;
-
-import org.junit.Before;
-import org.junit.Test;
-import org.junit.experimental.categories.Category;
-import org.junit.runner.RunWith;
-import org.mockito.Mock;
-import org.mockito.junit.MockitoJUnitRunner;
-
 import com.nimbusds.jwt.JWTClaimsSet;
-
-import no.nav.foreldrepenger.selvbetjening.FastTests;
 import no.nav.security.oidc.context.OIDCClaims;
 import no.nav.security.oidc.context.OIDCRequestContextHolder;
 import no.nav.security.oidc.context.OIDCValidationContext;
 import no.nav.security.oidc.context.TokenContext;
 import no.nav.security.oidc.exceptions.OIDCTokenValidatorException;
+import org.junit.Before;
+import org.junit.Test;
+import org.junit.runner.RunWith;
+import org.mockito.Mock;
+import org.mockito.junit.MockitoJUnitRunner;
 
-@Category(FastTests.class)
+import java.time.LocalDateTime;
+import java.time.ZoneId;
+import java.util.Date;
+
+import static no.nav.foreldrepenger.selvbetjening.util.Constants.ISSUER;
+import static org.junit.Assert.*;
+import static org.mockito.ArgumentMatchers.eq;
+import static org.mockito.Mockito.when;
+
 @RunWith(MockitoJUnitRunner.Silent.class)
 public class TokenHelperTest {
 

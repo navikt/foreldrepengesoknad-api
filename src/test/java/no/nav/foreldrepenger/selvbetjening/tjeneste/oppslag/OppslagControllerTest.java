@@ -1,20 +1,16 @@
 package no.nav.foreldrepenger.selvbetjening.tjeneste.oppslag;
 
-import static org.assertj.core.api.Assertions.assertThat;
-import static org.mockito.Mockito.when;
-
+import no.nav.foreldrepenger.selvbetjening.tjeneste.oppslag.domain.Person;
+import no.nav.foreldrepenger.selvbetjening.tjeneste.oppslag.dto.PersonDto;
 import org.junit.Test;
-import org.junit.experimental.categories.Category;
 import org.junit.runner.RunWith;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.MockitoJUnitRunner;
 
-import no.nav.foreldrepenger.selvbetjening.FastTests;
-import no.nav.foreldrepenger.selvbetjening.tjeneste.oppslag.domain.Person;
-import no.nav.foreldrepenger.selvbetjening.tjeneste.oppslag.dto.PersonDto;
+import static org.assertj.core.api.Assertions.assertThat;
+import static org.mockito.Mockito.when;
 
-@Category(FastTests.class)
 @RunWith(MockitoJUnitRunner.class)
 public class OppslagControllerTest {
 

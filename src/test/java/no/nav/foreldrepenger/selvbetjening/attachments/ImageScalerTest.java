@@ -1,7 +1,8 @@
 package no.nav.foreldrepenger.selvbetjening.attachments;
 
-import static org.assertj.core.api.Assertions.assertThat;
+import org.junit.Test;
 
+import javax.imageio.ImageIO;
 import java.awt.image.BufferedImage;
 import java.io.ByteArrayInputStream;
 import java.io.InputStream;
@@ -9,14 +10,8 @@ import java.net.URL;
 import java.nio.file.Files;
 import java.nio.file.Paths;
 
-import javax.imageio.ImageIO;
+import static org.assertj.core.api.Assertions.assertThat;
 
-import org.junit.Test;
-import org.junit.experimental.categories.Category;
-
-import no.nav.foreldrepenger.selvbetjening.FastTests;
-
-@Category(FastTests.class)
 public class ImageScalerTest {
 
     @Test

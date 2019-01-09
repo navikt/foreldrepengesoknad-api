@@ -1,21 +1,17 @@
 package no.nav.foreldrepenger.selvbetjening.attachments;
 
+import no.nav.foreldrepenger.selvbetjening.error.AttachmentTypeUnsupportedException;
+import org.apache.tika.Tika;
+import org.junit.BeforeClass;
+import org.junit.Test;
+import org.springframework.http.MediaType;
+
+import java.util.Arrays;
+
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertTrue;
 import static org.springframework.http.MediaType.IMAGE_GIF;
 
-import java.util.Arrays;
-
-import org.apache.tika.Tika;
-import org.junit.BeforeClass;
-import org.junit.Test;
-import org.junit.experimental.categories.Category;
-import org.springframework.http.MediaType;
-
-import no.nav.foreldrepenger.selvbetjening.FastTests;
-import no.nav.foreldrepenger.selvbetjening.error.AttachmentTypeUnsupportedException;
-
-@Category(FastTests.class)
 public class ImageByteArray2PDFConverterTest {
     private static final byte[] PDFSIGNATURE = { 0x25, 0x50, 0x44, 0x46 };
 

@@ -1,15 +1,11 @@
 package no.nav.foreldrepenger.selvbetjening.tjeneste.innsending;
 
-import static org.springframework.test.web.client.match.MockRestRequestMatchers.method;
-import static org.springframework.test.web.client.match.MockRestRequestMatchers.requestTo;
-import static org.springframework.test.web.client.response.MockRestResponseCreators.withStatus;
-
-import javax.ws.rs.BadRequestException;
-import javax.ws.rs.NotFoundException;
-
+import no.nav.foreldrepenger.selvbetjening.attachments.Image2PDFConverter;
+import no.nav.foreldrepenger.selvbetjening.tjeneste.innsending.domain.Søknad;
+import no.nav.foreldrepenger.selvbetjening.util.TokenHelper;
+import no.nav.security.spring.oidc.SpringOIDCRequestContextHolder;
 import org.junit.Before;
 import org.junit.Test;
-import org.junit.experimental.categories.Category;
 import org.junit.runner.RunWith;
 import org.mockito.Mock;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -23,13 +19,13 @@ import org.springframework.test.context.junit4.SpringRunner;
 import org.springframework.test.web.client.ExpectedCount;
 import org.springframework.test.web.client.MockRestServiceServer;
 
-import no.nav.foreldrepenger.selvbetjening.FastTests;
-import no.nav.foreldrepenger.selvbetjening.attachments.Image2PDFConverter;
-import no.nav.foreldrepenger.selvbetjening.tjeneste.innsending.domain.Søknad;
-import no.nav.foreldrepenger.selvbetjening.util.TokenHelper;
-import no.nav.security.spring.oidc.SpringOIDCRequestContextHolder;
+import javax.ws.rs.BadRequestException;
+import javax.ws.rs.NotFoundException;
 
-@Category(FastTests.class)
+import static org.springframework.test.web.client.match.MockRestRequestMatchers.method;
+import static org.springframework.test.web.client.match.MockRestRequestMatchers.requestTo;
+import static org.springframework.test.web.client.response.MockRestResponseCreators.withStatus;
+
 @RunWith(SpringRunner.class)
 @TestPropertySource(properties = { "FPSOKNAD_MOTTAK_API_URL = http://www.mottak.no/api" })
 @ContextConfiguration(classes = { NotFoundException.class, InnsendingConfig.class, Image2PDFConverter.class,
