@@ -1,37 +1,41 @@
 package no.nav.foreldrepenger.selvbetjening.error;
 
-import com.fasterxml.jackson.annotation.JsonFormat;
-import com.fasterxml.jackson.annotation.JsonInclude;
+import static com.fasterxml.jackson.annotation.JsonFormat.Feature.WRITE_SINGLE_ELEM_ARRAYS_UNWRAPPED;
+import static com.fasterxml.jackson.annotation.JsonFormat.Shape.STRING;
+import static java.util.stream.Collectors.toList;
+import static org.springframework.core.NestedExceptionUtils.getMostSpecificCause;
+
+import java.time.LocalDateTime;
+import java.util.List;
+
 import org.slf4j.MDC;
 import org.springframework.http.HttpStatus;
 
-import java.time.LocalDateTime;
+import com.fasterxml.jackson.annotation.JsonFormat;
+import com.fasterxml.jackson.annotation.JsonInclude;
+import com.google.common.collect.Lists;
 
-import static com.fasterxml.jackson.annotation.JsonFormat.Shape.STRING;
-import static com.fasterxml.jackson.annotation.JsonInclude.Include.NON_NULL;
-import static java.time.LocalDateTime.now;
+import no.nav.foreldrepenger.selvbetjening.util.Constants;
 
-@JsonInclude(NON_NULL)
+@JsonInclude(JsonInclude.Include.NON_NULL)
 class ApiError {
-
-    private static final String UUID = "Nav-CallId";
 
     private final HttpStatus status;
     @JsonFormat(shape = STRING, pattern = "dd-MM-yyyy hh:mm:ss")
     private final LocalDateTime timestamp;
-    private final String message;
+    @JsonFormat(with = WRITE_SINGLE_ELEM_ARRAYS_UNWRAPPED)
+    private final List<String> messages;
     private final String uuid;
 
-    ApiError(HttpStatus status, String message) {
-        this.timestamp = now();
-        this.status = status;
-        this.message = message;
-        this.uuid = uuid();
+    ApiError(HttpStatus status, Throwable t, Object... objects) {
+        this(status, t, null, objects);
     }
 
-    private static String uuid() {
-        String uuid = MDC.get(UUID);
-        return uuid != null ? uuid : MDC.get("X-" + UUID);
+    ApiError(HttpStatus status, Throwable t, String destination, Object... objects) {
+        this.timestamp = LocalDateTime.now();
+        this.status = status;
+        this.messages = messages(t, destination, objects);
+        this.uuid = MDC.get(Constants.NAV_CALL_ID);
     }
 
     public String getUuid() {
@@ -46,8 +50,23 @@ class ApiError {
         return timestamp;
     }
 
-    public String getMessage() {
-        return message;
+    public List<String> getMessages() {
+        return messages;
     }
 
+    private static List<String> messages(Throwable t, String destination, Object... objects) {
+        List<Object> messages = Lists.newArrayList(objects);
+        messages.add(getMostSpecificCause(t).getMessage());
+        messages.add(destination);
+        return messages.stream()
+                .filter(s -> s != null)
+                .map(Object::toString)
+                .collect(toList());
+    }
+
+    @Override
+    public String toString() {
+        return getClass().getSimpleName() + "[status=" + status + ", timestamp=" + timestamp + ", messages=" + messages
+                + ", uuid=" + uuid + "]";
+    }
 }
