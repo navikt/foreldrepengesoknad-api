@@ -1,4 +1,4 @@
-package no.nav.foreldrepenger.selvbetjening.attachments;
+package no.nav.foreldrepenger.selvbetjening.vedlegg;
 
 import org.apache.pdfbox.pdmodel.common.PDRectangle;
 

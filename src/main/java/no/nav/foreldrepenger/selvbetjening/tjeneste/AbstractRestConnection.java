@@ -1,33 +1,25 @@
 package no.nav.foreldrepenger.selvbetjening.tjeneste;
 
+import static no.nav.foreldrepenger.selvbetjening.util.EnvUtil.CONFIDENTIAL;
+import static org.springframework.http.HttpStatus.NOT_FOUND;
+
 import java.net.URI;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.springframework.context.EnvironmentAware;
-import org.springframework.core.env.Environment;
-import org.springframework.http.HttpStatus;
 import org.springframework.web.client.HttpClientErrorException;
 import org.springframework.web.client.RestOperations;
 
-import no.nav.foreldrepenger.selvbetjening.util.EnvUtil;
-
-public abstract class AbstractRestConnection implements EnvironmentAware {
+public abstract class AbstractRestConnection {
 
     protected static final Logger LOG = LoggerFactory.getLogger(AbstractRestConnection.class);
 
     protected abstract boolean isEnabled();
 
     private final RestOperations operations;
-    private Environment env;
 
     public AbstractRestConnection(RestOperations operations) {
         this.operations = operations;
-    }
-
-    @Override
-    public void setEnvironment(Environment env) {
-        this.env = env;
     }
 
     protected abstract URI pingURI();
@@ -42,21 +34,22 @@ public abstract class AbstractRestConnection implements EnvironmentAware {
 
     protected <T> T getForObject(URI uri, Class<T> responseType, boolean doThrow) {
         try {
-            return operations.getForObject(uri, responseType);
+            T respons = operations.getForObject(uri, responseType);
+            if (respons != null) {
+                LOG.trace(CONFIDENTIAL, "Respons: {}", respons);
+            }
+            return respons;
         } catch (HttpClientErrorException e) {
-            if (doThrow && e.getStatusCode().equals(HttpStatus.NOT_FOUND)) {
+            if (doThrow && e.getStatusCode().equals(NOT_FOUND)) {
                 throw e;
             }
+            LOG.info("Fant intet objekt på {}, returnerer null", uri);
             return null;
         }
     }
 
     protected <T> T postForObject(URI uri, Object payload, Class<T> responseType) {
         return operations.postForObject(uri, payload, responseType);
-    }
-
-    protected boolean isDevOrPreprod() {
-        return EnvUtil.isDevOrPreprod(env);
     }
 
     @Override

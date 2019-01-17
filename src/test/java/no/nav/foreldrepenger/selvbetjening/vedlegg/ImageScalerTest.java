@@ -1,6 +1,8 @@
-package no.nav.foreldrepenger.selvbetjening.attachments;
+package no.nav.foreldrepenger.selvbetjening.vedlegg;
 
 import org.junit.Test;
+
+import no.nav.foreldrepenger.selvbetjening.vedlegg.ImageScaler;
 
 import javax.imageio.ImageIO;
 import java.awt.image.BufferedImage;

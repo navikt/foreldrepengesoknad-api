@@ -7,7 +7,6 @@ import java.net.URI;
 import javax.inject.Inject;
 import javax.ws.rs.BadRequestException;
 
-import no.nav.foreldrepenger.selvbetjening.tjeneste.innsending.domain.*;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Component;
@@ -16,12 +15,18 @@ import org.springframework.web.client.RestOperations;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 
-import no.nav.foreldrepenger.selvbetjening.attachments.Image2PDFConverter;
 import no.nav.foreldrepenger.selvbetjening.tjeneste.AbstractRestConnection;
+import no.nav.foreldrepenger.selvbetjening.tjeneste.innsending.domain.Engangsstønad;
+import no.nav.foreldrepenger.selvbetjening.tjeneste.innsending.domain.Ettersending;
+import no.nav.foreldrepenger.selvbetjening.tjeneste.innsending.domain.Foreldrepengesøknad;
+import no.nav.foreldrepenger.selvbetjening.tjeneste.innsending.domain.Kvittering;
+import no.nav.foreldrepenger.selvbetjening.tjeneste.innsending.domain.Søknad;
+import no.nav.foreldrepenger.selvbetjening.tjeneste.innsending.domain.Vedlegg;
 import no.nav.foreldrepenger.selvbetjening.tjeneste.innsending.dto.EngangsstønadDto;
 import no.nav.foreldrepenger.selvbetjening.tjeneste.innsending.dto.EttersendingDto;
 import no.nav.foreldrepenger.selvbetjening.tjeneste.innsending.dto.ForeldrepengesøknadDto;
 import no.nav.foreldrepenger.selvbetjening.tjeneste.innsending.dto.SøknadDto;
+import no.nav.foreldrepenger.selvbetjening.vedlegg.Image2PDFConverter;
 
 @Component
 public class InnsendingConnection extends AbstractRestConnection {

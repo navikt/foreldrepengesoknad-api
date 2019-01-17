@@ -1,8 +1,8 @@
 package no.nav.foreldrepenger.selvbetjening.tjeneste.innsending;
 
-import no.nav.foreldrepenger.selvbetjening.attachments.Image2PDFConverter;
 import no.nav.foreldrepenger.selvbetjening.tjeneste.innsending.domain.Søknad;
 import no.nav.foreldrepenger.selvbetjening.util.TokenHelper;
+import no.nav.foreldrepenger.selvbetjening.vedlegg.Image2PDFConverter;
 import no.nav.security.spring.oidc.SpringOIDCRequestContextHolder;
 import org.junit.Before;
 import org.junit.Test;

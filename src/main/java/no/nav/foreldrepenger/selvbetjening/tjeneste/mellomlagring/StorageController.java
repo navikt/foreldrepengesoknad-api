@@ -108,8 +108,7 @@ public class StorageController {
 
     @DeleteMapping(path = "vedlegg/{key}")
     public ResponseEntity<String> deleteAttachment(@PathVariable("key") String key) throws OIDCTokenValidatorException {
-        String fnr = tokenHelper.autentisertBruker();
-        String directory = crypto.encryptDirectoryName(fnr);
+        String directory = crypto.encryptDirectoryName(tokenHelper.autentisertBruker());
         LOG.trace("Fjerner vedlegg fra katalog {}", directory);
         storage.deleteTmp(directory, key);
         return ResponseEntity.noContent().build();

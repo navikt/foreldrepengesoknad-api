@@ -15,7 +15,6 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
-import org.springframework.web.client.RestTemplate;
 
 import no.nav.foreldrepenger.selvbetjening.error.AttachmentsTooLargeException;
 import no.nav.foreldrepenger.selvbetjening.tjeneste.innsending.domain.Ettersending;
@@ -43,7 +42,7 @@ public class InnsendingController {
 
     private final Innsending innsending;
 
-    private final RestTemplate http;
+    private final VedleggTjeneste vedleggTjeneste;
 
     private final TokenHelper tokenHandler;
 
@@ -51,10 +50,11 @@ public class InnsendingController {
 
     private final StorageCrypto crypto;
 
-    public InnsendingController(Innsending innsending, RestTemplate http, TokenHelper tokenHandler, Storage storage,
+    public InnsendingController(Innsending innsending, VedleggTjeneste vedleggTjeneste, TokenHelper tokenHandler,
+            Storage storage,
             StorageCrypto crypto) {
         this.innsending = innsending;
-        this.http = http;
+        this.vedleggTjeneste = vedleggTjeneste;
         this.tokenHandler = tokenHandler;
         this.storage = storage;
         this.crypto = crypto;
@@ -106,14 +106,13 @@ public class InnsendingController {
 
     private void fetchAttachment(Vedlegg vedlegg) {
         if (vedlegg.url != null) {
-            vedlegg.content = http.getForObject(vedlegg.url, byte[].class);
+            vedlegg.content = vedleggTjeneste.hentVedlegg(vedlegg.url);
         }
     }
 
     private void fetchAndDeleteAttachment(Vedlegg vedlegg) {
         if (vedlegg.url != null) {
-            vedlegg.content = http.getForObject(vedlegg.url, byte[].class);
-            http.delete(vedlegg.url);
+            vedlegg.content = vedleggTjeneste.hentOgSlettVedlegg(vedlegg.url);
         }
     }
 

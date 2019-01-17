@@ -24,7 +24,7 @@ public class S3Storage implements Storage {
     private static final String BUCKET_LAGRING_SOKNAD = "foreldrepengesoknad";
     private static final String BUCKET_MELLOMLAGRING_SOKNAD = "mellomlagring";
     private static final Logger LOG = LoggerFactory.getLogger(S3Storage.class);
-    private AmazonS3 s3;
+    private final AmazonS3 s3;
 
     @Inject
     public S3Storage(AmazonS3 s3) {
@@ -52,7 +52,6 @@ public class S3Storage implements Storage {
         return Optional.ofNullable(readString(BUCKET_LAGRING_SOKNAD, directory, key));
     }
 
-
     @Override
     public Optional<String> getTmp(String directory, String key) {
         return Optional.ofNullable(readString(BUCKET_MELLOMLAGRING_SOKNAD, directory, key));
@@ -67,7 +66,6 @@ public class S3Storage implements Storage {
     public void deleteTmp(String directory, String key) {
         deleteString(BUCKET_MELLOMLAGRING_SOKNAD, directory, key);
     }
-
 
     private void ensureBucketExists(String bucketName, Integer expirationInDays) {
         boolean bucketExists = s3.listBuckets().stream()
@@ -97,16 +95,16 @@ public class S3Storage implements Storage {
                     .lines()
                     .collect(joining("\n"));
         } catch (AmazonS3Exception ex) {
-            LOG.trace("Unable to retrieve " + path + ", it probably doesn't exist");
+            LOG.trace("Kunne ikke hente {}, finnes sannsynligvis ikke", path);
             return null;
         }
 
     }
 
-    private BucketLifecycleConfiguration objectExpiresInDays(Integer days) {
+    private static BucketLifecycleConfiguration objectExpiresInDays(Integer days) {
         return new BucketLifecycleConfiguration().withRules(
                 new BucketLifecycleConfiguration.Rule()
-                        .withId("soknad-retention-policy-"+days)
+                        .withId("soknad-retention-policy-" + days)
                         .withFilter(new LifecycleFilter())
                         .withStatus(BucketLifecycleConfiguration.ENABLED)
                         .withExpirationInDays(days));
@@ -116,8 +114,12 @@ public class S3Storage implements Storage {
         s3.deleteObject(bucketName, fileName(directory, key));
     }
 
-    private String fileName(String directory, String key) {
+    private static String fileName(String directory, String key) {
         return directory + "_" + key;
     }
 
+    @Override
+    public String toString() {
+        return getClass().getSimpleName() + " [s3=" + s3 + "]";
+    }
 }

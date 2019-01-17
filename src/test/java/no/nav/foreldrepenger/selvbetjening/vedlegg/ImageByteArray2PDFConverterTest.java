@@ -1,6 +1,8 @@
-package no.nav.foreldrepenger.selvbetjening.attachments;
+package no.nav.foreldrepenger.selvbetjening.vedlegg;
 
 import no.nav.foreldrepenger.selvbetjening.error.AttachmentTypeUnsupportedException;
+import no.nav.foreldrepenger.selvbetjening.vedlegg.Image2PDFConverter;
+
 import org.apache.tika.Tika;
 import org.junit.BeforeClass;
 import org.junit.Test;

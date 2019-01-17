@@ -1,4 +1,4 @@
-package no.nav.foreldrepenger.selvbetjening.attachments;
+package no.nav.foreldrepenger.selvbetjening.vedlegg;
 
 import static java.util.Arrays.asList;
 import static org.springframework.http.MediaType.APPLICATION_PDF;
