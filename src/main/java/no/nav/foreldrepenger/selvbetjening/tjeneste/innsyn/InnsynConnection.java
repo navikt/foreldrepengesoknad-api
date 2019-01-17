@@ -1,24 +1,21 @@
 package no.nav.foreldrepenger.selvbetjening.tjeneste.innsyn;
 
-import static com.google.common.collect.Iterables.concat;
-import static com.google.common.collect.Iterables.unmodifiableIterable;
-import static com.google.common.collect.Lists.newArrayList;
-import static java.util.Collections.emptyList;
+import no.nav.foreldrepenger.selvbetjening.tjeneste.AbstractRestConnection;
+import no.nav.foreldrepenger.selvbetjening.tjeneste.innsyn.saker.Sak;
+import no.nav.foreldrepenger.selvbetjening.tjeneste.innsyn.uttaksplan.UttaksPeriode;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+import org.springframework.stereotype.Component;
+import org.springframework.web.client.RestOperations;
 
 import java.net.URI;
 import java.util.Arrays;
 import java.util.List;
 import java.util.Optional;
 
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
-import org.springframework.stereotype.Component;
-import org.springframework.web.client.RestOperations;
-
-import no.nav.foreldrepenger.selvbetjening.tjeneste.AbstractRestConnection;
-import no.nav.foreldrepenger.selvbetjening.tjeneste.innsyn.saker.Sak;
-import no.nav.foreldrepenger.selvbetjening.tjeneste.innsyn.uttaksplan.UttaksPeriode;
-import no.nav.foreldrepenger.selvbetjening.util.Enabled;
+import static java.util.Collections.emptyList;
+import static java.util.stream.Collectors.toList;
+import static java.util.stream.Stream.concat;
 
 @Component
 public class InnsynConnection extends AbstractRestConnection {
@@ -48,14 +45,10 @@ public class InnsynConnection extends AbstractRestConnection {
     }
 
     public List<Sak> hentSaker() {
-        List<Sak> sakSaker = saker(innsynConfig.getSakURI(), "SAK");
-        List<Sak> fpsakSaker = Enabled.FPSAKSAKER ? saker(innsynConfig.getFpsakURI(), "FPSAK") : emptyList();
+        List<Sak> sak = saker(innsynConfig.getSakURI(), "SAK");
+        List<Sak> fpsak = saker(innsynConfig.getFpsakURI(), "FPSAK");
 
-        if (isDevOrPreprod()) {
-            visSaker(fpsakSaker);
-        }
-
-        return newArrayList(unmodifiableIterable(concat(sakSaker, fpsakSaker)));
+        return concat(sak.stream(), fpsak.stream()).collect(toList());
     }
 
     private List<Sak> saker(URI uri, String fra) {
@@ -70,24 +63,4 @@ public class InnsynConnection extends AbstractRestConnection {
 
     }
 
-    private void visSaker(List<Sak> saker) {
-        try {
-            saker.stream()
-                    .map(sak -> sak.saksnummer)
-                    .forEach(this::planFor);
-        } catch (Exception e) {
-            LOG.trace("Dette gikk galt, men frykt ikke, dette er bare en test foreløpig", e);
-        }
-    }
-
-    private void planFor(String saksnummer) {
-        hentUttaksplan(saksnummer).stream()
-                .forEach(s -> LOG.info("Uttaksplan for {} er {}", saksnummer, s));
-    }
-
-    @Override
-    public String toString() {
-        return getClass().getSimpleName() + "pingURI=" + pingURI() + ", fpsakURI=" + innsynConfig.getFpsakURI()
-                + ", sakURI=" + innsynConfig.getSakURI() + ", uttakURI=" + innsynConfig.getUttakURI("42") + "]";
-    }
 }

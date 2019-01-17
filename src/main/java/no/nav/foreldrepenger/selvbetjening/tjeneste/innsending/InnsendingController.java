@@ -1,17 +1,14 @@
 package no.nav.foreldrepenger.selvbetjening.tjeneste.innsending;
 
-import static java.lang.String.format;
-import static no.nav.foreldrepenger.selvbetjening.tjeneste.innsending.InnsendingController.REST_SOKNAD;
-import static no.nav.foreldrepenger.selvbetjening.util.Constants.ISSUER;
-import static no.nav.foreldrepenger.selvbetjening.util.EnvUtil.CONFIDENTIAL;
-import static org.apache.commons.io.FileUtils.byteCountToDisplaySize;
-import static org.springframework.http.MediaType.APPLICATION_JSON_VALUE;
-
-import java.util.List;
-
-import javax.inject.Inject;
-import javax.ws.rs.BadRequestException;
-
+import no.nav.foreldrepenger.selvbetjening.error.AttachmentsTooLargeException;
+import no.nav.foreldrepenger.selvbetjening.tjeneste.innsending.domain.Ettersending;
+import no.nav.foreldrepenger.selvbetjening.tjeneste.innsending.domain.Kvittering;
+import no.nav.foreldrepenger.selvbetjening.tjeneste.innsending.domain.Søknad;
+import no.nav.foreldrepenger.selvbetjening.tjeneste.innsending.domain.Vedlegg;
+import no.nav.foreldrepenger.selvbetjening.tjeneste.mellomlagring.Storage;
+import no.nav.foreldrepenger.selvbetjening.tjeneste.mellomlagring.StorageCrypto;
+import no.nav.foreldrepenger.selvbetjening.util.TokenHelper;
+import no.nav.security.oidc.api.ProtectedWithClaims;
 import no.nav.security.oidc.exceptions.OIDCTokenValidatorException;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -21,16 +18,15 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.client.RestTemplate;
 
-import no.nav.foreldrepenger.selvbetjening.error.AttachmentsTooLargeException;
-import no.nav.foreldrepenger.selvbetjening.tjeneste.innsending.domain.Ettersending;
-import no.nav.foreldrepenger.selvbetjening.tjeneste.innsending.domain.Kvittering;
-import no.nav.foreldrepenger.selvbetjening.tjeneste.innsending.domain.Søknad;
-import no.nav.foreldrepenger.selvbetjening.tjeneste.innsending.domain.Vedlegg;
-import no.nav.foreldrepenger.selvbetjening.tjeneste.mellomlagring.Storage;
-import no.nav.foreldrepenger.selvbetjening.tjeneste.mellomlagring.StorageCrypto;
-import no.nav.foreldrepenger.selvbetjening.util.Enabled;
-import no.nav.foreldrepenger.selvbetjening.util.TokenHelper;
-import no.nav.security.oidc.api.ProtectedWithClaims;
+import javax.inject.Inject;
+import java.util.List;
+
+import static java.lang.String.format;
+import static no.nav.foreldrepenger.selvbetjening.tjeneste.innsending.InnsendingController.REST_SOKNAD;
+import static no.nav.foreldrepenger.selvbetjening.util.Constants.ISSUER;
+import static no.nav.foreldrepenger.selvbetjening.util.EnvUtil.CONFIDENTIAL;
+import static org.apache.commons.io.FileUtils.byteCountToDisplaySize;
+import static org.springframework.http.MediaType.APPLICATION_JSON_VALUE;
 
 @RestController
 @ProtectedWithClaims(issuer = ISSUER, claimMap = { "acr=Level4" })
@@ -86,11 +82,6 @@ public class InnsendingController {
 
     @PostMapping(path = "/endre", consumes = APPLICATION_JSON_VALUE)
     public Kvittering endre(@RequestBody Søknad søknad) {
-        if (!Enabled.ENDRINGSSØKNAD) {
-            LOG.info("Mottok endringssøknad, men den er togglet av!");
-            throw new BadRequestException("Endringssøknad is not supported yet");
-        }
-
         LOG.info(CONFIDENTIAL, "Mottok endringssøknad: {}", søknad);
         søknad.vedlegg.forEach(this::fetchAttachment);
         checkVedleggTooLarge(søknad.vedlegg, søknad.type);
