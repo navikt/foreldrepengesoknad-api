@@ -3,7 +3,7 @@ package no.nav.foreldrepenger.selvbetjening.filters;
 import static no.nav.foreldrepenger.selvbetjening.util.Constants.NAV_AKTØR_ID;
 import static no.nav.foreldrepenger.selvbetjening.util.Constants.NAV_USER_ID;
 import static no.nav.foreldrepenger.selvbetjening.util.EnvUtil.isDevOrPreprod;
-import static org.springframework.core.Ordered.HIGHEST_PRECEDENCE;
+import static org.springframework.core.Ordered.LOWEST_PRECEDENCE;
 
 import java.io.IOException;
 
@@ -22,24 +22,24 @@ import org.springframework.web.filter.GenericFilterBean;
 import no.nav.foreldrepenger.selvbetjening.tjeneste.oppslag.Oppslag;
 import no.nav.foreldrepenger.selvbetjening.util.TokenHelper;
 
-@Order(HIGHEST_PRECEDENCE)
+@Order(LOWEST_PRECEDENCE)
 @Component
 public class IDToMDCFilterBean extends GenericFilterBean {
 
     private static final Logger LOG = LoggerFactory.getLogger(IDToMDCFilterBean.class);
 
     private final Oppslag oppslag;
-    private final TokenHelper handler;
+    private final TokenHelper helper;
 
-    public IDToMDCFilterBean(TokenHelper handler, Oppslag oppslag) {
-        this.handler = handler;
+    public IDToMDCFilterBean(TokenHelper helper, Oppslag oppslag) {
+        this.helper = helper;
         this.oppslag = oppslag;
     }
 
     @Override
     public void doFilter(ServletRequest req, ServletResponse res, FilterChain chain)
             throws IOException, ServletException {
-        if (handler.erAutentisert()) {
+        if (helper.erAutentisert()) {
             copyHeadersToMDC();
         }
         chain.doFilter(req, res);
@@ -47,7 +47,7 @@ public class IDToMDCFilterBean extends GenericFilterBean {
 
     private void copyHeadersToMDC() {
         try {
-            String fnr = handler.getSubject();
+            String fnr = helper.getSubject();
             if (isDevOrPreprod(getEnvironment())) {
                 MDC.put(NAV_USER_ID, fnr);
             }
@@ -59,6 +59,6 @@ public class IDToMDCFilterBean extends GenericFilterBean {
 
     @Override
     public String toString() {
-        return getClass().getSimpleName() + " [oppslag=" + oppslag + ", handler=" + handler + "]";
+        return getClass().getSimpleName() + " [oppslag=" + oppslag + ", helper=" + helper + "]";
     }
 }

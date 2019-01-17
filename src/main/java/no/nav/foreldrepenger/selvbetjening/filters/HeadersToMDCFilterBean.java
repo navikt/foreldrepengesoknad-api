@@ -2,6 +2,7 @@ package no.nav.foreldrepenger.selvbetjening.filters;
 
 import static no.nav.foreldrepenger.selvbetjening.util.Constants.NAV_CALL_ID;
 import static no.nav.foreldrepenger.selvbetjening.util.Constants.NAV_CONSUMER_ID;
+import static org.springframework.core.Ordered.HIGHEST_PRECEDENCE;
 
 import java.io.IOException;
 import java.util.Optional;
@@ -15,7 +16,6 @@ import javax.servlet.http.HttpServletRequest;
 
 import org.slf4j.MDC;
 import org.springframework.beans.factory.annotation.Value;
-import org.springframework.core.PriorityOrdered;
 import org.springframework.core.annotation.Order;
 import org.springframework.stereotype.Component;
 import org.springframework.web.filter.GenericFilterBean;
@@ -23,7 +23,7 @@ import org.springframework.web.filter.GenericFilterBean;
 import no.nav.foreldrepenger.selvbetjening.util.CallIdGenerator;
 
 @Component
-@Order(PriorityOrdered.HIGHEST_PRECEDENCE)
+@Order(HIGHEST_PRECEDENCE)
 public class HeadersToMDCFilterBean extends GenericFilterBean {
 
     private final CallIdGenerator generator;
