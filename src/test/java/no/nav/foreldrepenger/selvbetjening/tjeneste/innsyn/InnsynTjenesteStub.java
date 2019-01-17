@@ -2,7 +2,6 @@ package no.nav.foreldrepenger.selvbetjening.tjeneste.innsyn;
 
 import no.nav.foreldrepenger.selvbetjening.tjeneste.innsending.domain.UttaksplanPeriode;
 import no.nav.foreldrepenger.selvbetjening.tjeneste.innsyn.saker.Behandling;
-import no.nav.foreldrepenger.selvbetjening.tjeneste.innsyn.saker.BehandlingResultatType;
 import no.nav.foreldrepenger.selvbetjening.tjeneste.innsyn.saker.Sak;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnProperty;
 import org.springframework.stereotype.Service;
@@ -37,11 +36,13 @@ public class InnsynTjenesteStub implements Innsyn {
 
     @Override
     public List<Sak> hentSaker() {
-        Behandling behandling = new Behandling(LocalDateTime.now(), LocalDateTime.now(), "UTRED", "FP",
-                "FORP_FODS", null, BehandlingResultatType.AVSLÅTT, "4833", "NAV Torrevieja");
+        LocalDateTime mottattdato = LocalDateTime.now().minusDays(7);
+
+        Behandling behandling = new Behandling(mottattdato, mottattdato.plusHours(2), "AVSLU", "FP",
+                "FORP_FODS", null, null, "4869", "NAV Torrevieja");
 
         return Arrays.asList(
-                new Sak("SAK", "sak123", "UBEH", now(), emptyList()),
-                new Sak("FPSAK", "42", "LOP", now(), singletonList(behandling)));
+                new Sak("SAK", "LA8PV", "UBEH", now().minusYears(1), emptyList()),
+                new Sak("FPSAK", "424242424", "LOP", mottattdato.toLocalDate(), singletonList(behandling)));
     }
 }
