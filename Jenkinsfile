@@ -7,7 +7,7 @@ node {
     def commitHash, commitHashShort, commitUrl
     def repo = "navikt"
     def app = "foreldrepengesoknad-api"
-    def committer, committerEmail, changelog, releaseVersion
+    def committer, committerEmail, releaseVersion
     def mvnHome = tool "maven-3.3.9"
     def mvn = "${mvnHome}/bin/mvn"
     def appConfig = "nais.yaml"
@@ -26,7 +26,6 @@ node {
         commitUrl = "https://github.com/${repo}/${app}/commit/${commitHash}"
         committer = sh(script: 'git log -1 --pretty=format:"%an"', returnStdout: true).trim()
         committerEmail = sh(script: 'git log -1 --pretty=format:"%ae"', returnStdout: true).trim()
-        changelog = sh(script: 'git log `git describe --tags --abbrev=0`..HEAD --oneline', returnStdout: true)
 
         releaseVersion = "${env.major_version}.${env.BUILD_NUMBER}-${commitHashShort}"
     }
@@ -46,12 +45,12 @@ node {
 
             slackSend([
                     color: 'good',
-                    message: "Build <${env.BUILD_URL}|#${env.BUILD_NUMBER}> (<${commitUrl}|${commitHashShort}>) of ${repo}/${app}@master by ${committer} passed  (${changelog})"
+                    message: "Build <${env.BUILD_URL}|#${env.BUILD_NUMBER}> (<${commitUrl}|${commitHashShort}>) of ${repo}/${app}@master by ${committer} passed"
             ])
         } catch (Exception ex) {
             slackSend([
                     color: 'danger',
-                    message: "Build <${env.BUILD_URL}|#${env.BUILD_NUMBER}> (<${commitUrl}|${commitHashShort}>) of ${repo}/${app}@master by ${committer} failed (${changelog})"
+                    message: "Build <${env.BUILD_URL}|#${env.BUILD_NUMBER}> (<${commitUrl}|${commitHashShort}>) of ${repo}/${app}@master by ${committer} failed"
             ])
             throw new Exception("Bygget har feilet", e)
         }
