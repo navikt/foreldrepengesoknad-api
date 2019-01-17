@@ -1,5 +1,22 @@
 package no.nav.foreldrepenger.selvbetjening.tjeneste.innsending;
 
+import static java.lang.String.format;
+import static no.nav.foreldrepenger.selvbetjening.tjeneste.innsending.InnsendingController.REST_SOKNAD;
+import static no.nav.foreldrepenger.selvbetjening.util.Constants.ISSUER;
+import static no.nav.foreldrepenger.selvbetjening.util.EnvUtil.CONFIDENTIAL;
+import static org.apache.commons.io.FileUtils.byteCountToDisplaySize;
+import static org.springframework.http.MediaType.APPLICATION_JSON_VALUE;
+
+import java.util.List;
+
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.client.RestTemplate;
+
 import no.nav.foreldrepenger.selvbetjening.error.AttachmentsTooLargeException;
 import no.nav.foreldrepenger.selvbetjening.tjeneste.innsending.domain.Ettersending;
 import no.nav.foreldrepenger.selvbetjening.tjeneste.innsending.domain.Kvittering;
@@ -10,27 +27,10 @@ import no.nav.foreldrepenger.selvbetjening.tjeneste.mellomlagring.StorageCrypto;
 import no.nav.foreldrepenger.selvbetjening.util.TokenHelper;
 import no.nav.security.oidc.api.ProtectedWithClaims;
 import no.nav.security.oidc.exceptions.OIDCTokenValidatorException;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
-import org.springframework.web.client.RestTemplate;
-
-import javax.inject.Inject;
-import java.util.List;
-
-import static java.lang.String.format;
-import static no.nav.foreldrepenger.selvbetjening.tjeneste.innsending.InnsendingController.REST_SOKNAD;
-import static no.nav.foreldrepenger.selvbetjening.util.Constants.ISSUER;
-import static no.nav.foreldrepenger.selvbetjening.util.EnvUtil.CONFIDENTIAL;
-import static org.apache.commons.io.FileUtils.byteCountToDisplaySize;
-import static org.springframework.http.MediaType.APPLICATION_JSON_VALUE;
 
 @RestController
 @ProtectedWithClaims(issuer = ISSUER, claimMap = { "acr=Level4" })
-@RequestMapping(REST_SOKNAD)
+@RequestMapping(path = REST_SOKNAD, produces = APPLICATION_JSON_VALUE)
 public class InnsendingController {
 
     private static final Logger LOG = LoggerFactory.getLogger(InnsendingController.class);
@@ -43,24 +43,24 @@ public class InnsendingController {
 
     private final Innsending innsending;
 
-    @Inject
-    public RestTemplate http;
+    private final RestTemplate http;
 
-    @Inject
-    private TokenHelper tokenHandler;
+    private final TokenHelper tokenHandler;
 
-    @Inject
-    private Storage storage;
+    private final Storage storage;
 
-    @Inject
-    private StorageCrypto crypto;
+    private final StorageCrypto crypto;
 
-    @Inject
-    public InnsendingController(Innsending innsending) {
+    public InnsendingController(Innsending innsending, RestTemplate http, TokenHelper tokenHandler, Storage storage,
+            StorageCrypto crypto) {
         this.innsending = innsending;
+        this.http = http;
+        this.tokenHandler = tokenHandler;
+        this.storage = storage;
+        this.crypto = crypto;
     }
 
-    @PostMapping(consumes = APPLICATION_JSON_VALUE)
+    @PostMapping
     public Kvittering sendInn(@RequestBody Søknad søknad) throws OIDCTokenValidatorException {
         LOG.info(CONFIDENTIAL, "Mottok søknad: {}", søknad);
         søknad.vedlegg.forEach(this::fetchAttachment);
@@ -70,7 +70,7 @@ public class InnsendingController {
         return respons;
     }
 
-    @PostMapping(path = "/ettersend", consumes = APPLICATION_JSON_VALUE)
+    @PostMapping("/ettersend")
     public Kvittering sendInn(@RequestBody Ettersending ettersending) {
         LOG.info(CONFIDENTIAL, "Mottok ettersending: {}", ettersending);
         ettersending.vedlegg.forEach(this::fetchAttachment);
@@ -80,7 +80,7 @@ public class InnsendingController {
         return respons;
     }
 
-    @PostMapping(path = "/endre", consumes = APPLICATION_JSON_VALUE)
+    @PostMapping("/endre")
     public Kvittering endre(@RequestBody Søknad søknad) {
         LOG.info(CONFIDENTIAL, "Mottok endringssøknad: {}", søknad);
         søknad.vedlegg.forEach(this::fetchAttachment);
@@ -90,7 +90,7 @@ public class InnsendingController {
         return respons;
     }
 
-    private void checkVedleggTooLarge(List<Vedlegg> vedlegg, String type) {
+    private static void checkVedleggTooLarge(List<Vedlegg> vedlegg, String type) {
         long total = vedlegg.stream()
                 .filter(v -> v.content != null)
                 .mapToLong(v -> v.content.length)
@@ -99,7 +99,8 @@ public class InnsendingController {
         long max = type.equals("engangsstønad") ? MAX_VEDLEGG_SIZE_DOKMOT : MAX_VEDLEGG_SIZE;
 
         if (total > max) {
-            throw new AttachmentsTooLargeException(format("Samlet filstørrelse for alle vedlegg er %s, men må være mindre enn %s", mb(total), mb(max)));
+            throw new AttachmentsTooLargeException(format(
+                    "Samlet filstørrelse for alle vedlegg er %s, men må være mindre enn %s", mb(total), mb(max)));
         }
     }
 
@@ -121,7 +122,7 @@ public class InnsendingController {
         storage.delete(crypto.encryptDirectoryName(fnr), "soknad");
     }
 
-    private String mb(long byteCount) {
+    private static String mb(long byteCount) {
         return byteCountToDisplaySize(byteCount);
     }
 }
