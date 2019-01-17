@@ -1,14 +1,11 @@
 package no.nav.foreldrepenger.selvbetjening.error;
 
-import static java.util.stream.Collectors.toList;
 import static org.springframework.http.HttpStatus.FORBIDDEN;
 import static org.springframework.http.HttpStatus.INTERNAL_SERVER_ERROR;
 import static org.springframework.http.HttpStatus.NOT_FOUND;
 import static org.springframework.http.HttpStatus.PAYLOAD_TOO_LARGE;
 import static org.springframework.http.HttpStatus.UNAUTHORIZED;
 import static org.springframework.http.HttpStatus.UNPROCESSABLE_ENTITY;
-
-import java.util.List;
 
 import javax.inject.Inject;
 
@@ -114,14 +111,14 @@ public class ApiExceptionHandler extends ResponseEntityExceptionHandler {
         return handleExceptionInternal(e, apiError, headers, status, req);
     }
 
-    private List<String> validationErrors(MethodArgumentNotValidException e) {
+    private Object[] validationErrors(MethodArgumentNotValidException e) {
         return e.getBindingResult().getFieldErrors()
                 .stream()
-                .map(this::errorMessage)
-                .collect(toList());
+                .map(ApiExceptionHandler::errorMessage)
+                .toArray();
     }
 
-    private String errorMessage(FieldError error) {
+    private static String errorMessage(FieldError error) {
         return error.getDefaultMessage() + " (" + error.getField() + ")";
     }
 
