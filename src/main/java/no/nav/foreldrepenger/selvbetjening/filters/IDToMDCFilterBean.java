@@ -3,7 +3,6 @@ package no.nav.foreldrepenger.selvbetjening.filters;
 import static no.nav.foreldrepenger.selvbetjening.util.Constants.NAV_AKTØR_ID;
 import static no.nav.foreldrepenger.selvbetjening.util.Constants.NAV_USER_ID;
 import static no.nav.foreldrepenger.selvbetjening.util.EnvUtil.isDevOrPreprod;
-import static org.springframework.core.NestedExceptionUtils.getMostSpecificCause;
 import static org.springframework.core.Ordered.HIGHEST_PRECEDENCE;
 
 import java.io.IOException;
@@ -54,8 +53,7 @@ public class IDToMDCFilterBean extends GenericFilterBean {
             }
             MDC.put(NAV_AKTØR_ID, oppslag.hentAktørId(fnr).getAktør());
         } catch (Exception e) {
-            LOG.info("Noe gikk feil {}, ikke kritisk, men MDC-verdier er inkomplette",
-                    getMostSpecificCause(e).getMessage());
+            LOG.info("Noe gikk feil. ikke kritisk, men MDC-verdier er inkomplette", e);
         }
     }
 
