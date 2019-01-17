@@ -1,6 +1,7 @@
 package no.nav.foreldrepenger.selvbetjening.tjeneste.innsyn.saker;
 
 import java.time.LocalDateTime;
+import java.util.List;
 
 import com.fasterxml.jackson.annotation.JsonCreator;
 import com.fasterxml.jackson.annotation.JsonProperty;
@@ -16,6 +17,7 @@ public class Behandling {
     private final BehandlingResultatType behandlingResultatType;
     private final String behandlendeEnhet;
     private final String behandlendeEnhetNavn;
+    private List<String> inntektsmeldinger;
 
     @JsonCreator
     public Behandling(
@@ -26,7 +28,8 @@ public class Behandling {
             @JsonProperty("årsak") String årsak,
             @JsonProperty("behandlingResultatType") BehandlingResultatType behandlingResultatType,
             @JsonProperty("behandlendeEnhet") String behandlendeEnhet,
-            @JsonProperty("behandlendeEnhetNavn") String behandlendeEnhetNavn) {
+            @JsonProperty("behandlendeEnhetNavn") String behandlendeEnhetNavn,
+            @JsonProperty("inntektsmeldinger") List<String> inntektsmeldinger) {
         this.opprettetTidspunkt = opprettetTidspunkt;
         this.endretTidspunkt = endretTidspunkt;
         this.status = status;
@@ -36,6 +39,15 @@ public class Behandling {
         this.behandlingResultatType = behandlingResultatType;
         this.behandlendeEnhet = behandlendeEnhet;
         this.behandlendeEnhetNavn = behandlendeEnhetNavn;
+        this.inntektsmeldinger = inntektsmeldinger;
+    }
+
+    public List<String> getInntektsmeldinger() {
+        return inntektsmeldinger;
+    }
+
+    public void setInntektsmeldinger(List<String> inntektsmeldinger) {
+        this.inntektsmeldinger = inntektsmeldinger;
     }
 
     public BehandlingResultatType getBehandlingResultatType() {
@@ -80,7 +92,7 @@ public class Behandling {
                 + endretTidspunkt
                 + ", status=" + status + ", type=" + type + ", tema=" + tema + ", årsak=" + årsak
                 + ", behandlingResultatType=" + behandlingResultatType + ", behandlendeEnhet=" + behandlendeEnhet
-                + ", behandlendeEnhetNavn=" + behandlendeEnhetNavn + "]";
+                + ", behandlendeEnhetNavn=" + behandlendeEnhetNavn + ", inntektsmeldinger=" + inntektsmeldinger + "]";
     }
 
 }

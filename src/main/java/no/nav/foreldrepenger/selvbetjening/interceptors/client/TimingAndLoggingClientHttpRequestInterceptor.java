@@ -36,11 +36,11 @@ public class TimingAndLoggingClientHttpRequestInterceptor implements ClientHttpR
         if (hasError(code)) {
             LOG.warn("{} - {} - ({}). Dette tok {}ms", request.getMethodValue(), request.getURI().getPath(),
                     code, timer.getTime(MILLISECONDS));
-        } else {
+        }
+        else {
             LOG.info("{} - {} - ({}). Dette tok {}ms", request.getMethodValue(), request.getURI().getPath(),
                     code, timer.getTime(MILLISECONDS));
         }
-
     }
 
     protected static boolean hasError(HttpStatus code) {
