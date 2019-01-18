@@ -82,7 +82,7 @@ public class StorageController {
     public ResponseEntity<byte[]> getAttachment(@PathVariable("key") String key) throws OIDCTokenValidatorException {
         String fnr = tokenHelper.autentisertBruker();
         String directory = crypto.encryptDirectoryName(fnr);
-        LOG.info("Henter vedlegg {} fra katalog {}", key, directory);
+        LOG.info("Henter vedlegg med nøkkel {} fra katalog {}", key, directory);
         return storage.getTmp(directory, key)
                 .map(ev -> Attachment.fromJson(crypto.decrypt(ev, fnr)).asOKHTTPEntity())
                 .orElse(ResponseEntity.notFound().build());
@@ -100,7 +100,7 @@ public class StorageController {
 
         String fnr = tokenHelper.autentisertBruker();
         String directory = crypto.encryptDirectoryName(fnr);
-        LOG.info("Skriver vedlegg {} til katalog {}", attachment.uuid, directory);
+        LOG.info("Skriver vedlegg {} til katalog {}", attachment, directory);
         String encryptedValue = crypto.encrypt(attachment.toJson(), fnr);
         storage.putTmp(directory, attachment.uuid, encryptedValue);
         return ResponseEntity.created(attachment.uri()).build();
@@ -109,7 +109,7 @@ public class StorageController {
     @DeleteMapping("vedlegg/{key}")
     public ResponseEntity<String> deleteAttachment(@PathVariable("key") String key) throws OIDCTokenValidatorException {
         String directory = crypto.encryptDirectoryName(tokenHelper.autentisertBruker());
-        LOG.info("Fjerner vedlegg {} fra katalog {}", key, directory);
+        LOG.info("Fjerner vedlegg med nøkkel {} fra katalog {}", key, directory);
         storage.deleteTmp(directory, key);
         return ResponseEntity.noContent().build();
     }
