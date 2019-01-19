@@ -10,3 +10,7 @@ no.nav.security.oidc:
      discoveryurl: http://metadata
      accepted_audience: aud-localhost
      cookie_name: localhost-idtoken
+     
+spring :
+   http.log-request-details : true      
+   jackson.deserialization.fail-on-unknown-properties: false

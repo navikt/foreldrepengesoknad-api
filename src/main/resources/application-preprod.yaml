@@ -4,6 +4,8 @@ management:
       security.enabled : false
       health.show-details : always
       
-spring.jackson.deserialization.fail-on-unknown-properties: false
+spring :
+    http.log-request-details : true      
+    jackson.deserialization.fail-on-unknown-properties: false
                
        
