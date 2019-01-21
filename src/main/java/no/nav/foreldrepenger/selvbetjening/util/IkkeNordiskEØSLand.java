@@ -6,7 +6,6 @@ import static com.neovisionaries.i18n.CountryCode.BG;
 import static com.neovisionaries.i18n.CountryCode.CH;
 import static com.neovisionaries.i18n.CountryCode.CY;
 import static com.neovisionaries.i18n.CountryCode.CZ;
-import static com.neovisionaries.i18n.CountryCode.DE;
 import static com.neovisionaries.i18n.CountryCode.EE;
 import static com.neovisionaries.i18n.CountryCode.ES;
 import static com.neovisionaries.i18n.CountryCode.FR;
@@ -25,52 +24,53 @@ import static com.neovisionaries.i18n.CountryCode.PL;
 import static com.neovisionaries.i18n.CountryCode.PT;
 import static com.neovisionaries.i18n.CountryCode.RO;
 import static com.neovisionaries.i18n.CountryCode.SI;
-import static com.neovisionaries.i18n.CountryCode.SK;
 import static com.neovisionaries.i18n.CountryCode.UK;
 
 import java.util.Arrays;
-import java.util.List;
+import java.util.stream.Collectors;
 
 import com.neovisionaries.i18n.CountryCode;
 
-public final class IkkeNordiskEØSLandVelger {
+public enum IkkeNordiskEØSLand {
 
-    private static final List<CountryCode> IKKENORDISKEØSLAND = Arrays.asList(
-            BE, /* Belgia */
-            BG, /* Bulgaria */
-            EE, /* Estland */
-            FR, /* Frankrike */
-            GR, /* Hellas */
-            IE, /* Irland */
-            IT, /* Italia */
-            HR, /* Kroatia */
-            CY, /* Kypros */
-            LV, /* Latvia */
-            LI, /* Lichtenstein */
-            LT, /* Litauen */
-            LU, /* Luxemburg */
-            MT, /* Malta */
-            NL, /* Nederland */
-            PL, /* Polen */
-            PT, /* Portugal */
-            RO, /* Romania */
-            SK, /* Slovakia */
-            SI, /* Slovenia */
-            ES, /* Spania */
-            UK, /* Storbritannia og Nord Irland */
-            CH, /* Sveits */
-            CZ, /* Tsjekkia */
-            DE, /* Tyskland */
-            HU, /* Ungarn */
-            AT /* Østerrike */
-    );
+    BELGIA(BE), 
+    BULGARIA(BG), 
+    ESTLAND(EE),
+    FRANKRIKE(FR), 
+    HELLAS(GR), 
+    IRLAND(IE), 
+    ITALIA(IT), 
+    KROATIA(HR), 
+    KYPROS(CY), 
+    LATVIA(LV), 
+    LICHTENSTEIN(LI), 
+    LITAUEN(LT), 
+    LUXEMBURG(LU),
+    MALTA(MT),
+    NEDERLAND(NL),
+    POLEN(PL),
+    PORTUGAL(PT),
+    ROMANIA(RO), 
+    SLOVENIA(SI), 
+    SPANIA(ES), 
+    STIRBRITANNIAOGNORDIRLAND(UK), 
+    SVEITS(CH),
+    TSJEKKIA(GR),
+    TYSKLAND(CZ),
+    UNGARN(HU),
+    ØSTERRIKE(AT);
 
-    private IkkeNordiskEØSLandVelger() {
+    private final CountryCode land;
 
+    IkkeNordiskEØSLand(CountryCode land) {
+        this.land = land;
     }
 
-    public static boolean erIkkenordiskEØSLand(CountryCode cc) {
-        return IKKENORDISKEØSLAND.contains(cc);
+    public static boolean ikkeNordiskEøsLand(CountryCode landKode) {
+        return Arrays.stream(values())
+                .map(cc -> cc.land)
+                .collect(Collectors.toList())
+                .contains(landKode);
     }
 
 }

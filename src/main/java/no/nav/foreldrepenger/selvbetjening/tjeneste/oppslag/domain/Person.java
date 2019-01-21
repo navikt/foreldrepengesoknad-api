@@ -1,7 +1,6 @@
 package no.nav.foreldrepenger.selvbetjening.tjeneste.oppslag.domain;
 
 import static com.fasterxml.jackson.annotation.JsonInclude.Include.NON_EMPTY;
-import static no.nav.foreldrepenger.selvbetjening.util.IkkeNordiskEØSLandVelger.erIkkenordiskEØSLand;
 
 import java.time.LocalDate;
 import java.util.ArrayList;
@@ -12,6 +11,7 @@ import com.neovisionaries.i18n.CountryCode;
 
 import no.nav.foreldrepenger.selvbetjening.tjeneste.oppslag.dto.PersonDto;
 import no.nav.foreldrepenger.selvbetjening.util.Enabled;
+import no.nav.foreldrepenger.selvbetjening.util.IkkeNordiskEØSLand;
 
 @JsonInclude(NON_EMPTY)
 public class Person {
@@ -37,7 +37,7 @@ public class Person {
         this.fødselsdato = dto.fødselsdato;
         this.målform = dto.målform;
         this.land = dto.landKode;
-        this.ikkeNordiskEøsLand = erIkkenordiskEØSLand(dto.landKode);
+        this.ikkeNordiskEøsLand = IkkeNordiskEØSLand.ikkeNordiskEøsLand(dto.landKode);
         this.bankkonto = dto.bankkonto;
 
         if (Enabled.TPSBARN && dto.barn != null) {
