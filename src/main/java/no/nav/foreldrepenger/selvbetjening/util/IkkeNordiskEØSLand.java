@@ -27,7 +27,7 @@ import static com.neovisionaries.i18n.CountryCode.SI;
 import static com.neovisionaries.i18n.CountryCode.UK;
 
 import java.util.Arrays;
-import java.util.stream.Collectors;
+import static java.util.stream.Collectors.toList;
 
 import com.neovisionaries.i18n.CountryCode;
 
@@ -53,7 +53,7 @@ public enum IkkeNordiskEØSLand {
     ROMANIA(RO), 
     SLOVENIA(SI), 
     SPANIA(ES), 
-    STIRBRITANNIAOGNORDIRLAND(UK), 
+    STORBRITANNIAOGNORDIRLAND(UK), 
     SVEITS(CH),
     TSJEKKIA(GR),
     TYSKLAND(CZ),
@@ -69,7 +69,7 @@ public enum IkkeNordiskEØSLand {
     public static boolean ikkeNordiskEøsLand(CountryCode landKode) {
         return Arrays.stream(values())
                 .map(cc -> cc.land)
-                .collect(Collectors.toList())
+                .collect(toList())
                 .contains(landKode);
     }
 
