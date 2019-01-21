@@ -5,6 +5,7 @@ import static org.apache.commons.lang3.BooleanUtils.isTrue;
 import java.time.LocalDate;
 
 public class AnnenForelder {
+
     public Boolean kanIkkeOppgis;
     public String fornavn;
     public String etternavn;
@@ -26,6 +27,14 @@ public class AnnenForelder {
         else {
             return "norsk";
         }
+    }
+
+    @Override
+    public String toString() {
+        return getClass().getSimpleName() + " [kanIkkeOppgis=" + kanIkkeOppgis + ", fornavn=" + fornavn + ", etternavn="
+                + etternavn + ", fnr=" + fnr + ", utenlandskFnr=" + utenlandskFnr + ", bostedsland=" + bostedsland
+                + ", harRettPåForeldrepenger=" + harRettPåForeldrepenger + ", erInformertOmSøknaden="
+                + erInformertOmSøknaden + ", erForSyk=" + erForSyk + ", datoForAleneomsorg=" + datoForAleneomsorg + "]";
     }
 
 }

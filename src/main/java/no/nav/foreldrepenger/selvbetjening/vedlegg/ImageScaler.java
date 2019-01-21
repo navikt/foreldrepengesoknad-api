@@ -1,11 +1,10 @@
 package no.nav.foreldrepenger.selvbetjening.vedlegg;
 
-import org.apache.pdfbox.pdmodel.common.PDRectangle;
+import static java.awt.image.AffineTransformOp.TYPE_BILINEAR;
 
-import no.nav.foreldrepenger.selvbetjening.error.AttachmentConversionException;
-
-import javax.imageio.ImageIO;
-import java.awt.*;
+import java.awt.Dimension;
+import java.awt.Graphics2D;
+import java.awt.Image;
 import java.awt.geom.AffineTransform;
 import java.awt.image.AffineTransformOp;
 import java.awt.image.BufferedImage;
@@ -13,9 +12,17 @@ import java.io.ByteArrayInputStream;
 import java.io.ByteArrayOutputStream;
 import java.io.IOException;
 
-import static java.awt.image.AffineTransformOp.TYPE_BILINEAR;
+import javax.imageio.ImageIO;
+
+import org.apache.pdfbox.pdmodel.common.PDRectangle;
+
+import no.nav.foreldrepenger.selvbetjening.error.AttachmentConversionException;
 
 public class ImageScaler {
+
+    private ImageScaler() {
+
+    }
 
     public static byte[] downToA4(byte[] origImage, String format) {
         final PDRectangle A4 = PDRectangle.A4;
@@ -31,7 +38,8 @@ public class ImageScaler {
 
             if (newDim.equals(origDim)) {
                 return origImage;
-            } else {
+            }
+            else {
                 BufferedImage scaledImg = scaleDown(image, newDim);
                 return toBytes(scaledImg, format);
             }
@@ -63,12 +71,12 @@ public class ImageScaler {
 
         if (originalWidth > a4Width) {
             newWidth = a4Width;
-            newHeight = (newWidth * originalHeight) / originalWidth;
+            newHeight = newWidth * originalHeight / originalWidth;
         }
 
         if (newHeight > a4Height) {
             newHeight = a4Height;
-            newWidth = (newHeight * originalWidth) / originalHeight;
+            newWidth = newHeight * originalWidth / originalHeight;
         }
 
         return new Dimension(newWidth, newHeight);

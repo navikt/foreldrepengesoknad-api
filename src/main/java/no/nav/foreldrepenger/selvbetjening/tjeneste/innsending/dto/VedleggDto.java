@@ -1,8 +1,8 @@
 package no.nav.foreldrepenger.selvbetjening.tjeneste.innsending.dto;
 
-import com.fasterxml.jackson.annotation.JsonInclude;
-
 import static com.fasterxml.jackson.annotation.JsonInclude.Include.NON_EMPTY;
+
+import com.fasterxml.jackson.annotation.JsonInclude;
 
 @JsonInclude(NON_EMPTY)
 public class VedleggDto {

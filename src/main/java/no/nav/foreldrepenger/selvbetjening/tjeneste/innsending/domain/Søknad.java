@@ -10,7 +10,6 @@ import com.fasterxml.jackson.annotation.JsonSubTypes;
 import com.fasterxml.jackson.annotation.JsonSubTypes.Type;
 import com.fasterxml.jackson.annotation.JsonTypeInfo;
 
-
 @JsonTypeInfo(use = NAME, property = "type", visible = true)
 @JsonSubTypes({
         @Type(value = Engangsstønad.class, name = "engangsstønad"),
@@ -32,7 +31,7 @@ public class Søknad {
 
     public List<Vedlegg> vedlegg;
 
-    public Søknad(){
+    public Søknad() {
         vedlegg = new ArrayList<>();
     }
 }

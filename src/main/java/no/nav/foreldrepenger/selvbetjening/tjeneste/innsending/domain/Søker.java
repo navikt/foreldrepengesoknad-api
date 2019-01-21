@@ -17,4 +17,13 @@ public class Søker {
     public List<SelvstendigNæringsdrivendeInformasjon> selvstendigNæringsdrivendeInformasjon = new ArrayList<>();
     public List<AnnenInntekt> andreInntekterSiste10Mnd = new ArrayList<>();
 
+    @Override
+    public String toString() {
+        return getClass().getSimpleName() + " [rolle=" + rolle + ", erAleneOmOmsorg=" + erAleneOmOmsorg
+                + ", frilansInformasjon="
+                + frilansInformasjon + ", selvstendigNæringsdrivendeInformasjon="
+                + selvstendigNæringsdrivendeInformasjon + ", andreInntekterSiste10Mnd=" + andreInntekterSiste10Mnd
+                + "]";
+    }
+
 }

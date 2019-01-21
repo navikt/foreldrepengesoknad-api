@@ -23,4 +23,18 @@ public class SelvstendigNæringsdrivendeInformasjon {
     public List<String> vedlegg;
     public Integer næringsinntekt;
 
+    @Override
+    public String toString() {
+        return getClass().getSimpleName() + " [næringstyper=" + næringstyper + ", tidsperiode=" + tidsperiode
+                + ", navnPåNæringen=" + navnPåNæringen + ", organisasjonsnummer=" + organisasjonsnummer
+                + ", registrertINorge=" + registrertINorge + ", registrertILand=" + registrertILand
+                + ", stillingsprosent=" + stillingsprosent + ", harBlittYrkesaktivILøpetAvDeTreSisteFerdigliknedeÅrene="
+                + harBlittYrkesaktivILøpetAvDeTreSisteFerdigliknedeÅrene + ", oppstartsdato=" + oppstartsdato
+                + ", regnskapsfører=" + regnskapsfører + ", revisor=" + revisor
+                + ", hattVarigEndringAvNæringsinntektSiste4Kalenderår="
+                + hattVarigEndringAvNæringsinntektSiste4Kalenderår + ", endringAvNæringsinntektInformasjon="
+                + endringAvNæringsinntektInformasjon + ", vedlegg=" + vedlegg + ", næringsinntekt=" + næringsinntekt
+                + "]";
+    }
+
 }

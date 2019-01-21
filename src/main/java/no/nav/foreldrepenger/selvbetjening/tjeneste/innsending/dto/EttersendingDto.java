@@ -11,7 +11,7 @@ public class EttersendingDto {
     public List<VedleggDto> vedlegg = new ArrayList<>();
 
     public EttersendingDto(Ettersending ettersending) {
-        this.saksnr =  ettersending.saksnummer;
+        this.saksnr = ettersending.saksnummer;
     }
 
     public void addVedlegg(Vedlegg vedlegg) {

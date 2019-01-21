@@ -15,7 +15,8 @@ public class AnnenForelder {
     public String etternavn;
     public LocalDate fødselsdato;
 
-    public AnnenForelder() {}
+    public AnnenForelder() {
+    }
 
     public AnnenForelder(String fnr, String fornavn, String mellomnavn, String etternavn, LocalDate fødselsdato) {
         this.fnr = fnr;

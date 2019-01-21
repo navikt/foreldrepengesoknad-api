@@ -9,8 +9,7 @@ public class Enabled {
     public static boolean TPSBARN;
 
     public Enabled(
-            @Value("${TOGGLES_ENABLE_TPSBARN:false}") boolean tpsBarn
-    ) {
+            @Value("${TOGGLES_ENABLE_TPSBARN:false}") boolean tpsBarn) {
         Enabled.TPSBARN = tpsBarn;
     }
 

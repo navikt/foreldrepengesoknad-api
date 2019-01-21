@@ -10,4 +10,10 @@ public class FrilansInformasjon {
     public Boolean driverFosterhjem;
     public List<Frilansoppdrag> oppdragForNæreVennerEllerFamilieSiste10Mnd = new ArrayList<>();
 
+    @Override
+    public String toString() {
+        return getClass().getSimpleName() + " [oppstart=" + oppstart + ", driverFosterhjem=" + driverFosterhjem
+                + ", oppdragForNæreVennerEllerFamilieSiste10Mnd=" + oppdragForNæreVennerEllerFamilieSiste10Mnd + "]";
+    }
+
 }

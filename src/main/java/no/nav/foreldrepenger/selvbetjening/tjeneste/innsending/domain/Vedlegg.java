@@ -20,4 +20,3 @@ public class Vedlegg {
         return kopi;
     }
 }
-

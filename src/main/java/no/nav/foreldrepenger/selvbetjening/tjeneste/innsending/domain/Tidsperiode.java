@@ -10,4 +10,9 @@ import com.fasterxml.jackson.annotation.JsonInclude;
 public class Tidsperiode {
     public LocalDate fom;
     public LocalDate tom;
+
+    @Override
+    public String toString() {
+        return getClass().getSimpleName() + " [fom=" + fom + ", tom=" + tom + "]";
+    }
 }

@@ -9,7 +9,6 @@ public class Foreldrepengesøknad extends Søknad {
 
     @Override
     public String toString() {
-        return "Foreldrepengesøknad [dekningsgrad=" + dekningsgrad + ", uttaksplan=" + uttaksplan + "]";
+        return getClass().getSimpleName() + " [dekningsgrad=" + dekningsgrad + ", uttaksplan=" + uttaksplan + "]";
     }
-
 }

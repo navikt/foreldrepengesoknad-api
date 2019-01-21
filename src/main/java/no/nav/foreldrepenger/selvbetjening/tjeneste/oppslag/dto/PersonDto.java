@@ -28,10 +28,12 @@ public class PersonDto {
 
     @Override
     public boolean equals(Object o) {
-        if (this == o)
+        if (this == o) {
             return true;
-        if (o == null || getClass() != o.getClass())
+        }
+        if (o == null || getClass() != o.getClass()) {
             return false;
+        }
         PersonDto personDto = (PersonDto) o;
         return Objects.equals(fnr, personDto.fnr);
     }

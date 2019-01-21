@@ -18,7 +18,6 @@ public class Barn {
     public LocalDate termindato;
     public LocalDate terminbekreftelseDato;
 
-
     public LocalDate adopsjonsdato;
     public List<String> adopsjonsvedtak = new ArrayList<>();
     public LocalDate ankomstdato;
@@ -36,6 +35,17 @@ public class Barn {
         alleVedlegg.addAll(adopsjonsvedtak);
         alleVedlegg.addAll(dokumentasjonAvAleneomsorg);
         return alleVedlegg;
+    }
+
+    @Override
+    public String toString() {
+        return getClass().getSimpleName() + " [erBarnetFødt=" + erBarnetFødt + ", fødselsdatoer=" + fødselsdatoer
+                + ", antallBarn=" + antallBarn
+                + ", terminbekreftelse=" + terminbekreftelse + ", termindato=" + termindato + ", terminbekreftelseDato="
+                + terminbekreftelseDato + ", adopsjonsdato=" + adopsjonsdato + ", adopsjonsvedtak=" + adopsjonsvedtak
+                + ", ankomstdato=" + ankomstdato + ", adopsjonAvEktefellesBarn=" + adopsjonAvEktefellesBarn
+                + ", foreldreansvarsdato=" + foreldreansvarsdato + ", omsorgsovertakelse=" + omsorgsovertakelse
+                + ", dokumentasjonAvAleneomsorg=" + dokumentasjonAvAleneomsorg + "]";
     }
 
 }

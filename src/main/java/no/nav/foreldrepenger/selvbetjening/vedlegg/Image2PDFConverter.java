@@ -42,11 +42,11 @@ public class Image2PDFConverter {
         this(IMAGE_JPEG, IMAGE_PNG);
     }
 
-    public Image2PDFConverter(MediaType... mediaTypes) {
+    Image2PDFConverter(MediaType... mediaTypes) {
         this(asList(mediaTypes));
     }
 
-    public Image2PDFConverter(List<MediaType> mediaTypes) {
+    private Image2PDFConverter(List<MediaType> mediaTypes) {
         this.supportedMediaTypes = mediaTypes;
     }
 
@@ -107,7 +107,10 @@ public class Image2PDFConverter {
         } catch (IOException ex) {
             throw new AttachmentConversionException("Konvertering av vedlegg feilet", ex);
         }
-
     }
 
+    @Override
+    public String toString() {
+        return getClass().getSimpleName() + " [supportedMediaTypes=" + supportedMediaTypes + "]";
+    }
 }

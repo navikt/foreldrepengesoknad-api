@@ -35,7 +35,6 @@ public class MetricsConfiguration {
         return new ProcessorMetrics();
     }
 
-
     @Bean
     public JvmMemoryMetrics jvmMemoryMetrics() {
         return new JvmMemoryMetrics();

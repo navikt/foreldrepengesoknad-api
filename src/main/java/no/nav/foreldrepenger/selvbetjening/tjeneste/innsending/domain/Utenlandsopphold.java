@@ -11,4 +11,12 @@ public class Utenlandsopphold {
     public List<UtenlandsoppholdPeriode> tidligereOpphold;
     public List<UtenlandsoppholdPeriode> senereOpphold;
 
+    @Override
+    public String toString() {
+        return getClass().getSimpleName() + " [iNorgePåHendelsestidspunktet=" + iNorgePåHendelsestidspunktet
+                + ", iNorgeNeste12Mnd="
+                + iNorgeNeste12Mnd + ", iNorgeSiste12Mnd=" + iNorgeSiste12Mnd + ", tidligereOpphold=" + tidligereOpphold
+                + ", senereOpphold=" + senereOpphold + "]";
+    }
+
 }

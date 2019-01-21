@@ -22,7 +22,8 @@ public class Barn {
 
     }
 
-    public Barn(String fnr, String fornavn, String mellomnavn, String etternavn, String kjønn, LocalDate fødselsdato, AnnenForelder annenForelder) {
+    public Barn(String fnr, String fornavn, String mellomnavn, String etternavn, String kjønn, LocalDate fødselsdato,
+            AnnenForelder annenForelder) {
         this.fnr = fnr;
         this.fornavn = fornavn;
         this.mellomnavn = mellomnavn;

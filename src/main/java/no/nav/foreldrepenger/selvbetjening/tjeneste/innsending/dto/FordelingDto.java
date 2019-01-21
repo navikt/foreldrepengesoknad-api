@@ -44,7 +44,8 @@ public class FordelingDto {
             if (u.gradert != null) {
                 this.type = u.gradert ? "gradert" : u.type;
                 this.arbeidsForholdSomskalGraderes = u.gradert ? true : null;
-            } else {
+            }
+            else {
                 this.type = u.type;
             }
             this.ønskerFlerbarnsdager = u.ønskerFlerbarnsdager;

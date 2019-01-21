@@ -7,7 +7,7 @@ public class Ettersending {
     public String saksnummer;
     public List<Vedlegg> vedlegg;
 
-    public Ettersending(){
+    public Ettersending() {
         vedlegg = new ArrayList<>();
     }
 }

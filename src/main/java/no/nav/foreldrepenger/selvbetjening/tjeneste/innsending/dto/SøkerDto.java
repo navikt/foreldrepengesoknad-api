@@ -12,7 +12,8 @@ public class SøkerDto {
     public SøkerDto(String rolle) {
         if (morFarEllerMedmor(rolle)) {
             this.søknadsRolle = rolle;
-        } else {
+        }
+        else {
             this.søknadsRolle = "ANDRE";
         }
     }

@@ -49,7 +49,8 @@ public class YtelseDto {
         if (søknad instanceof Foreldrepengesøknad) {
             Foreldrepengesøknad foreldrepengesøknad = (Foreldrepengesøknad) søknad;
             this.dekningsgrad = "GRAD" + foreldrepengesøknad.dekningsgrad;
-            this.fordeling = new FordelingDto(foreldrepengesøknad.uttaksplan, foreldrepengesøknad.annenForelder.erInformertOmSøknaden);
+            this.fordeling = new FordelingDto(foreldrepengesøknad.uttaksplan,
+                    foreldrepengesøknad.annenForelder.erInformertOmSøknaden);
             this.rettigheter = new RettigheterDto(foreldrepengesøknad);
 
             if (!søknad.erEndringssøknad) {
@@ -62,7 +63,8 @@ public class YtelseDto {
     public class AnnenForelderDto {
         @Override
         public String toString() {
-            return "AnnenForelderDto [type=" + type + ", id=" + id + ", fnr=" + fnr + ", land=" + land + ", navn=" + navn + "]";
+            return "AnnenForelderDto [type=" + type + ", id=" + id + ", fnr=" + fnr + ", land=" + land + ", navn="
+                    + navn + "]";
         }
 
         public String type;

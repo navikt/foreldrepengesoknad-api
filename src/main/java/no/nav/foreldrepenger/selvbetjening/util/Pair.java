@@ -8,7 +8,7 @@ public final class Pair<T1, T2> {
     private final T2 second;
 
     public static <T1, T2> Pair<T1, T2> of(T1 first, T2 second) {
-        return new Pair<T1, T2>(first, second);
+        return new Pair<>(first, second);
     }
 
     private Pair(T1 first, T2 second) {

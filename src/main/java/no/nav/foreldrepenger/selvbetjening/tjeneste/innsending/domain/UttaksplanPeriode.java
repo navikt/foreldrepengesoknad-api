@@ -1,11 +1,12 @@
 package no.nav.foreldrepenger.selvbetjening.tjeneste.innsending.domain;
 
-import com.fasterxml.jackson.annotation.JsonInclude;
-import no.nav.foreldrepenger.selvbetjening.tjeneste.innsyn.uttaksplan.UttaksPeriode;
+import static com.fasterxml.jackson.annotation.JsonInclude.Include.NON_EMPTY;
 
 import java.util.List;
 
-import static com.fasterxml.jackson.annotation.JsonInclude.Include.NON_EMPTY;
+import com.fasterxml.jackson.annotation.JsonInclude;
+
+import no.nav.foreldrepenger.selvbetjening.tjeneste.innsyn.uttaksplan.UttaksPeriode;
 
 @JsonInclude(NON_EMPTY)
 public class UttaksplanPeriode {
@@ -29,7 +30,8 @@ public class UttaksplanPeriode {
     public String status;
 
     @SuppressWarnings("unused")
-    public UttaksplanPeriode() {}
+    public UttaksplanPeriode() {
+    }
 
     public UttaksplanPeriode(UttaksPeriode u) {
         this.tidsperiode = new Tidsperiode();
@@ -42,5 +44,17 @@ public class UttaksplanPeriode {
 
         this.graderingInnvilget = u.getGraderingInnvilget();
         this.status = u.getPeriodeResultatType().toString();
+    }
+
+    @Override
+    public String toString() {
+        return getClass().getSimpleName() + "[type=" + type + ", årsak=" + årsak + ", konto=" + konto + ", orgnumre="
+                + orgnumre
+                + ", erArbeidstaker=" + erArbeidstaker + ", stillingsprosent=" + stillingsprosent
+                + ", samtidigUttakProsent=" + samtidigUttakProsent + ", ønskerSamtidigUttak=" + ønskerSamtidigUttak
+                + ", gradert=" + gradert + ", morsAktivitetIPerioden=" + morsAktivitetIPerioden
+                + ", ønskerFlerbarnsdager=" + ønskerFlerbarnsdager + ", tidsperiode=" + tidsperiode + ", forelder="
+                + forelder + ", vedlegg=" + vedlegg + ", graderingInnvilget=" + graderingInnvilget + ", status="
+                + status + "]";
     }
 }

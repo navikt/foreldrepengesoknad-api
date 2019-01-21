@@ -18,4 +18,11 @@ public class AnnenInntekt {
     public Tidsperiode tidsperiode;
     public Boolean erNærVennEllerFamilieMedArbeisdgiver;
     public List<String> vedlegg = new ArrayList<>();
+
+    @Override
+    public String toString() {
+        return getClass().getSimpleName() + " [type=" + type + ", land=" + land + ", arbeidsgiverNavn="
+                + arbeidsgiverNavn + ", tidsperiode=" + tidsperiode + ", erNærVennEllerFamilieMedArbeisdgiver="
+                + erNærVennEllerFamilieMedArbeisdgiver + ", vedlegg=" + vedlegg + "]";
+    }
 }

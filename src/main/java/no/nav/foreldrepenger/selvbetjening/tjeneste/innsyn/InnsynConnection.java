@@ -1,21 +1,22 @@
 package no.nav.foreldrepenger.selvbetjening.tjeneste.innsyn;
 
-import no.nav.foreldrepenger.selvbetjening.tjeneste.AbstractRestConnection;
-import no.nav.foreldrepenger.selvbetjening.tjeneste.innsyn.saker.Sak;
-import no.nav.foreldrepenger.selvbetjening.tjeneste.innsyn.uttaksplan.UttaksPeriode;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
-import org.springframework.stereotype.Component;
-import org.springframework.web.client.RestOperations;
+import static java.util.Collections.emptyList;
+import static java.util.stream.Collectors.toList;
+import static java.util.stream.Stream.concat;
 
 import java.net.URI;
 import java.util.Arrays;
 import java.util.List;
 import java.util.Optional;
 
-import static java.util.Collections.emptyList;
-import static java.util.stream.Collectors.toList;
-import static java.util.stream.Stream.concat;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+import org.springframework.stereotype.Component;
+import org.springframework.web.client.RestOperations;
+
+import no.nav.foreldrepenger.selvbetjening.tjeneste.AbstractRestConnection;
+import no.nav.foreldrepenger.selvbetjening.tjeneste.innsyn.saker.Sak;
+import no.nav.foreldrepenger.selvbetjening.tjeneste.innsyn.uttaksplan.UttaksPeriode;
 
 @Component
 public class InnsynConnection extends AbstractRestConnection {
