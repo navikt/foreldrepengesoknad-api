@@ -4,7 +4,6 @@ import static no.nav.foreldrepenger.selvbetjening.util.Constants.ISSUER;
 
 import java.util.Date;
 import java.util.Optional;
-import java.util.function.Supplier;
 
 import org.springframework.stereotype.Component;
 
@@ -40,13 +39,9 @@ public class TokenHelper {
                 .orElse(null);
     }
 
-    public String autentisertBruker() throws OIDCTokenValidatorException {
+    public String autentisertBruker() {
         return Optional.ofNullable(getSubject())
-                .orElseThrow(unauthenticated("Fant ikke subject"));
-    }
-
-    private Supplier<? extends OIDCTokenValidatorException> unauthenticated(String msg) {
-        return () -> new OIDCTokenValidatorException(msg, getExp());
+                .orElseThrow(() -> new OIDCTokenValidatorException("Fant ikke subject", getExp()));
     }
 
     private JWTClaimsSet claimSet() {
