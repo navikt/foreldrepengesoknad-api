@@ -22,7 +22,7 @@ import org.springframework.stereotype.Component;
 import org.springframework.web.filter.GenericFilterBean;
 
 import no.nav.foreldrepenger.selvbetjening.util.CallIdGenerator;
-import no.nav.foreldrepenger.selvbetjening.util.TokenHelper;
+import no.nav.foreldrepenger.selvbetjening.util.TokenUtil;
 
 @Component
 @Order(HIGHEST_PRECEDENCE)
@@ -30,11 +30,10 @@ public class HeadersToMDCFilterBean extends GenericFilterBean {
 
     private final CallIdGenerator generator;
     private final String applicationName;
-    private final TokenHelper tokenUtil;
-    private final TokenHelper tokenUtil;
+    private final TokenUtil tokenUtil;
 
     @Inject
-    public HeadersToMDCFilterBean(CallIdGenerator generator, TokenHelper tokenUtil,
+    public HeadersToMDCFilterBean(CallIdGenerator generator, TokenUtil tokenUtil,
             @Value("${spring.application.name}") String applicationName) {
         this.generator = generator;
         this.tokenUtil = tokenUtil;
