@@ -20,7 +20,7 @@ import org.springframework.stereotype.Component;
 import org.springframework.web.filter.GenericFilterBean;
 
 import no.nav.foreldrepenger.selvbetjening.tjeneste.oppslag.Oppslag;
-import no.nav.foreldrepenger.selvbetjening.util.TokenHelper;
+import no.nav.foreldrepenger.selvbetjening.util.TokenUtil;
 
 @Order(LOWEST_PRECEDENCE)
 @Component
@@ -29,9 +29,9 @@ public class IDToMDCFilterBean extends GenericFilterBean {
     private static final Logger LOG = LoggerFactory.getLogger(IDToMDCFilterBean.class);
 
     private final Oppslag oppslag;
-    private final TokenHelper helper;
+    private final TokenUtil helper;
 
-    public IDToMDCFilterBean(TokenHelper helper, Oppslag oppslag) {
+    public IDToMDCFilterBean(TokenUtil helper, Oppslag oppslag) {
         this.helper = helper;
         this.oppslag = oppslag;
     }

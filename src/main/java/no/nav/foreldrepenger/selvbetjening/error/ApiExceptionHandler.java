@@ -27,7 +27,7 @@ import org.springframework.web.multipart.MultipartException;
 import org.springframework.web.servlet.NoHandlerFoundException;
 import org.springframework.web.servlet.mvc.method.annotation.ResponseEntityExceptionHandler;
 
-import no.nav.foreldrepenger.selvbetjening.util.TokenHelper;
+import no.nav.foreldrepenger.selvbetjening.util.TokenUtil;
 import no.nav.security.oidc.exceptions.OIDCTokenValidatorException;
 import no.nav.security.spring.oidc.validation.interceptor.OIDCUnauthorizedException;
 
@@ -35,7 +35,7 @@ import no.nav.security.spring.oidc.validation.interceptor.OIDCUnauthorizedExcept
 public class ApiExceptionHandler extends ResponseEntityExceptionHandler {
 
     @Inject
-    TokenHelper tokenHelper;
+    TokenUtil tokenHelper;
 
     private static final Logger LOG = LoggerFactory.getLogger(ApiExceptionHandler.class);
 
@@ -43,7 +43,7 @@ public class ApiExceptionHandler extends ResponseEntityExceptionHandler {
     @ExceptionHandler(HttpStatusCodeException.class)
     public ResponseEntity<Object> handleHttpStatusCodeException(HttpStatusCodeException e, WebRequest request) {
         if (e.getStatusCode().equals(UNAUTHORIZED) || e.getStatusCode().equals(FORBIDDEN)) {
-            return logAndHandle(e.getStatusCode(), e, request, tokenHelper.getExp());
+            return logAndHandle(e.getStatusCode(), e, request, tokenHelper.getExpiryDate());
         }
         return logAndHandle(e.getStatusCode(), e, request);
     }

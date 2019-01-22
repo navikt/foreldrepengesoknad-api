@@ -1,6 +1,6 @@
 package no.nav.foreldrepenger.selvbetjening.tjeneste.oppslag;
 
-import no.nav.foreldrepenger.selvbetjening.util.TokenHelper;
+import no.nav.foreldrepenger.selvbetjening.util.TokenUtil;
 import no.nav.security.spring.oidc.SpringOIDCRequestContextHolder;
 import org.junit.Before;
 import org.junit.Test;
@@ -25,14 +25,14 @@ import static org.springframework.test.web.client.response.MockRestResponseCreat
 
 @RunWith(SpringRunner.class)
 @TestPropertySource(properties = { "FPSOKNAD_OPPSLAG_API_URL: http://www.oppslag.no" })
-@ContextConfiguration(classes = { NotFoundException.class, OppslagConfig.class, TokenHelper.class,
+@ContextConfiguration(classes = { NotFoundException.class, OppslagConfig.class, TokenUtil.class,
         SpringOIDCRequestContextHolder.class })
 @RestClientTest
 
 public class OppslagTest {
 
     @Mock
-    TokenHelper tokenHandler;
+    TokenUtil tokenHandler;
     @Autowired
     private OppslagConfig oppslagConfig;
 

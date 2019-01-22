@@ -20,7 +20,7 @@ import no.nav.foreldrepenger.selvbetjening.filters.CorsInterceptor;
 import no.nav.foreldrepenger.selvbetjening.interceptors.client.ApiKeyInjectingClientInterceptor;
 import no.nav.foreldrepenger.selvbetjening.tjeneste.innsending.InnsendingConfig;
 import no.nav.foreldrepenger.selvbetjening.tjeneste.oppslag.OppslagConfig;
-import no.nav.foreldrepenger.selvbetjening.util.TokenHelper;
+import no.nav.foreldrepenger.selvbetjening.util.TokenUtil;
 
 @Configuration
 public class ApiConfiguration implements WebMvcConfigurer {
@@ -41,7 +41,7 @@ public class ApiConfiguration implements WebMvcConfigurer {
     CorsInterceptor corsInterceptor;
 
     @Bean
-    public RestOperations restTemplate(TokenHelper tokenHandler, ObjectMapper objectMapper,
+    public RestOperations restTemplate(TokenUtil tokenHandler, ObjectMapper objectMapper,
             ClientHttpRequestInterceptor... interceptors) {
         return new RestTemplateBuilder()
                 .interceptors(interceptors)

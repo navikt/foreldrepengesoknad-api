@@ -1,6 +1,6 @@
 package no.nav.foreldrepenger.selvbetjening.tjeneste.innsyn;
 
-import no.nav.foreldrepenger.selvbetjening.util.TokenHelper;
+import no.nav.foreldrepenger.selvbetjening.util.TokenUtil;
 import no.nav.security.spring.oidc.SpringOIDCRequestContextHolder;
 import org.junit.Before;
 import org.junit.Test;
@@ -26,14 +26,14 @@ import static org.springframework.test.web.client.response.MockRestResponseCreat
 @RunWith(SpringRunner.class)
 @TestPropertySource(properties = { "FPSOKNAD_MOTTAK_API_URL = http://www.mottak.no/api",
         "FPSOKNAD_OPPSLAG_API_URL: http://www.oppslag.no/api" })
-@ContextConfiguration(classes = { NotFoundException.class, InnsynConfig.class, TokenHelper.class,
+@ContextConfiguration(classes = { NotFoundException.class, InnsynConfig.class, TokenUtil.class,
         SpringOIDCRequestContextHolder.class })
 @RestClientTest
 
 public class InnsynTest {
 
     @Mock
-    TokenHelper tokenHandler;
+    TokenUtil tokenHandler;
     @Autowired
     private InnsynConfig innsynConfig;
 

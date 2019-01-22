@@ -15,11 +15,11 @@ import no.nav.security.oidc.context.OIDCValidationContext;
 import no.nav.security.oidc.exceptions.OIDCTokenValidatorException;
 
 @Component
-public class TokenHelper {
+public class TokenUtil {
 
     private final OIDCRequestContextHolder ctxHolder;
 
-    public TokenHelper(OIDCRequestContextHolder ctxHolder) {
+    public TokenUtil(OIDCRequestContextHolder ctxHolder) {
         this.ctxHolder = ctxHolder;
     }
 
@@ -27,7 +27,7 @@ public class TokenHelper {
         return getSubject() != null;
     }
 
-    public Date getExp() {
+    public Date getExpiryDate() {
         return Optional.ofNullable(claimSet())
                 .map(JWTClaimsSet::getExpirationTime)
                 .orElse(null);
@@ -41,7 +41,7 @@ public class TokenHelper {
 
     public String autentisertBruker() {
         return Optional.ofNullable(getSubject())
-                .orElseThrow(() -> new OIDCTokenValidatorException("Fant ikke subject", getExp()));
+                .orElseThrow(() -> new OIDCTokenValidatorException("Fant ikke subject", getExpiryDate()));
     }
 
     private JWTClaimsSet claimSet() {

@@ -2,6 +2,7 @@ package no.nav.foreldrepenger.selvbetjening.filters;
 
 import static no.nav.foreldrepenger.selvbetjening.util.Constants.NAV_CALL_ID;
 import static no.nav.foreldrepenger.selvbetjening.util.Constants.NAV_CONSUMER_ID;
+import static no.nav.foreldrepenger.selvbetjening.util.Constants.NAV_TOKEN_EXPIRY_ID;
 import static org.springframework.core.Ordered.HIGHEST_PRECEDENCE;
 
 import java.io.IOException;
@@ -21,6 +22,7 @@ import org.springframework.stereotype.Component;
 import org.springframework.web.filter.GenericFilterBean;
 
 import no.nav.foreldrepenger.selvbetjening.util.CallIdGenerator;
+import no.nav.foreldrepenger.selvbetjening.util.TokenHelper;
 
 @Component
 @Order(HIGHEST_PRECEDENCE)
@@ -28,11 +30,14 @@ public class HeadersToMDCFilterBean extends GenericFilterBean {
 
     private final CallIdGenerator generator;
     private final String applicationName;
+    private final TokenHelper tokenUtil;
+    private final TokenHelper tokenUtil;
 
     @Inject
-    public HeadersToMDCFilterBean(CallIdGenerator generator,
+    public HeadersToMDCFilterBean(CallIdGenerator generator, TokenHelper tokenUtil,
             @Value("${spring.application.name}") String applicationName) {
         this.generator = generator;
+        this.tokenUtil = tokenUtil;
         this.applicationName = applicationName;
     }
 
@@ -46,6 +51,9 @@ public class HeadersToMDCFilterBean extends GenericFilterBean {
     private void putValues(HttpServletRequest request) {
         putValue(NAV_CONSUMER_ID, request.getHeader(NAV_CONSUMER_ID), applicationName);
         putValue(NAV_CALL_ID, request.getHeader(NAV_CALL_ID), generator.create());
+        if (tokenUtil.getExpiryDate() != null) {
+            putValue(NAV_TOKEN_EXPIRY_ID, tokenUtil.getExpiryDate().toString(), null);
+        }
     }
 
     private static void putValue(String key, String value, String defaultValue) {

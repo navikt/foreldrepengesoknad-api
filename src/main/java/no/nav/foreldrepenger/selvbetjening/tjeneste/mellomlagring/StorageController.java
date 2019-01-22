@@ -22,7 +22,7 @@ import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.multipart.MultipartFile;
 
 import no.nav.foreldrepenger.selvbetjening.error.AttachmentsTooLargeException;
-import no.nav.foreldrepenger.selvbetjening.util.TokenHelper;
+import no.nav.foreldrepenger.selvbetjening.util.TokenUtil;
 import no.nav.security.oidc.api.ProtectedWithClaims;
 import no.nav.security.oidc.exceptions.OIDCTokenValidatorException;
 
@@ -36,13 +36,13 @@ public class StorageController {
     private static final String KEY = "soknad";
     public static final int MAX_VEDLEGG_SIZE = 8 * 1024 * 1024;
 
-    private final TokenHelper tokenHelper;
+    private final TokenUtil tokenHelper;
 
     private final Storage storage;
 
     private final StorageCrypto crypto;
 
-    public StorageController(TokenHelper tokenHelper, Storage storage, StorageCrypto crypto) {
+    public StorageController(TokenUtil tokenHelper, Storage storage, StorageCrypto crypto) {
         this.tokenHelper = tokenHelper;
         this.storage = storage;
         this.crypto = crypto;

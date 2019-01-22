@@ -22,7 +22,7 @@ import static org.mockito.ArgumentMatchers.eq;
 import static org.mockito.Mockito.when;
 
 @RunWith(MockitoJUnitRunner.Silent.class)
-public class TokenHelperTest {
+public class TokenUtilTest {
 
     private static final String FNR = "42";
     @Mock
@@ -34,13 +34,13 @@ public class TokenHelperTest {
     @Mock
     private TokenContext tokenContext;
 
-    private TokenHelper tokenHandler;
+    private TokenUtil tokenHandler;
 
     @Before
     public void before() {
         when(holder.getOIDCValidationContext()).thenReturn(context);
         when(context.getClaims(eq(ISSUER))).thenReturn(claims);
-        tokenHandler = new TokenHelper(holder);
+        tokenHandler = new TokenUtil(holder);
     }
 
     @Test
@@ -49,7 +49,7 @@ public class TokenHelperTest {
                 .subject(FNR)
                 .expirationTime(toDate(LocalDateTime.now().plusHours(1)))
                 .build());
-        assertNotNull(tokenHandler.getExp());
+        assertNotNull(tokenHandler.getExpiryDate());
 
     }
 
@@ -70,7 +70,7 @@ public class TokenHelperTest {
         when(holder.getOIDCValidationContext()).thenReturn(null);
         assertFalse(tokenHandler.erAutentisert());
         assertNull(tokenHandler.getSubject());
-        assertNull(tokenHandler.getExp());
+        assertNull(tokenHandler.getExpiryDate());
         tokenHandler.autentisertBruker();
     }
 

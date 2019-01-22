@@ -23,7 +23,7 @@ import no.nav.foreldrepenger.selvbetjening.tjeneste.innsending.domain.Søknad;
 import no.nav.foreldrepenger.selvbetjening.tjeneste.innsending.domain.Vedlegg;
 import no.nav.foreldrepenger.selvbetjening.tjeneste.mellomlagring.Storage;
 import no.nav.foreldrepenger.selvbetjening.tjeneste.mellomlagring.StorageCrypto;
-import no.nav.foreldrepenger.selvbetjening.util.TokenHelper;
+import no.nav.foreldrepenger.selvbetjening.util.TokenUtil;
 import no.nav.security.oidc.api.ProtectedWithClaims;
 import no.nav.security.oidc.exceptions.OIDCTokenValidatorException;
 
@@ -44,13 +44,13 @@ public class InnsendingController {
 
     private final VedleggTjeneste vedleggTjeneste;
 
-    private final TokenHelper tokenHandler;
+    private final TokenUtil tokenHandler;
 
     private final Storage storage;
 
     private final StorageCrypto crypto;
 
-    public InnsendingController(Innsending innsending, VedleggTjeneste vedleggTjeneste, TokenHelper tokenHandler,
+    public InnsendingController(Innsending innsending, VedleggTjeneste vedleggTjeneste, TokenUtil tokenHandler,
             Storage storage,
             StorageCrypto crypto) {
         this.innsending = innsending;
