@@ -3,19 +3,17 @@ package no.nav.foreldrepenger.selvbetjening.error;
 import static com.fasterxml.jackson.annotation.JsonFormat.Feature.WRITE_SINGLE_ELEM_ARRAYS_UNWRAPPED;
 import static com.fasterxml.jackson.annotation.JsonFormat.Shape.STRING;
 import static java.util.stream.Collectors.toList;
+import static no.nav.foreldrepenger.selvbetjening.util.MDCUtil.callId;
 import static org.springframework.core.NestedExceptionUtils.getMostSpecificCause;
 
 import java.time.LocalDateTime;
 import java.util.List;
 
-import org.slf4j.MDC;
 import org.springframework.http.HttpStatus;
 
 import com.fasterxml.jackson.annotation.JsonFormat;
 import com.fasterxml.jackson.annotation.JsonInclude;
 import com.google.common.collect.Lists;
-
-import no.nav.foreldrepenger.selvbetjening.util.Constants;
 
 @JsonInclude(JsonInclude.Include.NON_NULL)
 class ApiError {
@@ -35,7 +33,7 @@ class ApiError {
         this.timestamp = LocalDateTime.now();
         this.status = status;
         this.messages = messages(t, destination, objects);
-        this.uuid = MDC.get(Constants.NAV_CALL_ID);
+        this.uuid = callId();
     }
 
     public String getUuid() {
