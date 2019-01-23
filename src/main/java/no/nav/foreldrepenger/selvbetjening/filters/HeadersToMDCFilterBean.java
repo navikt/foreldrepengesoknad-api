@@ -3,10 +3,10 @@ package no.nav.foreldrepenger.selvbetjening.filters;
 import static no.nav.foreldrepenger.selvbetjening.util.Constants.NAV_CALL_ID;
 import static no.nav.foreldrepenger.selvbetjening.util.Constants.NAV_CONSUMER_ID;
 import static no.nav.foreldrepenger.selvbetjening.util.Constants.NAV_TOKEN_EXPIRY_ID;
+import static no.nav.foreldrepenger.selvbetjening.util.MDCUtil.toMDC;
 import static org.springframework.core.Ordered.HIGHEST_PRECEDENCE;
 
 import java.io.IOException;
-import java.util.Optional;
 
 import javax.inject.Inject;
 import javax.servlet.FilterChain;
@@ -15,7 +15,6 @@ import javax.servlet.ServletRequest;
 import javax.servlet.ServletResponse;
 import javax.servlet.http.HttpServletRequest;
 
-import org.slf4j.MDC;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.core.annotation.Order;
 import org.springframework.stereotype.Component;
@@ -48,20 +47,15 @@ public class HeadersToMDCFilterBean extends GenericFilterBean {
     }
 
     private void putValues(HttpServletRequest request) {
-        putValue(NAV_CONSUMER_ID, request.getHeader(NAV_CONSUMER_ID), applicationName);
-        putValue(NAV_CALL_ID, request.getHeader(NAV_CALL_ID), generator.create());
-        if (tokenUtil.getExpiryDate() != null) {
-            putValue(NAV_TOKEN_EXPIRY_ID, tokenUtil.getExpiryDate().toString(), null);
-        }
-    }
-
-    private static void putValue(String key, String value, String defaultValue) {
-        MDC.put(key, Optional.ofNullable(value).orElse(defaultValue));
+        toMDC(NAV_CONSUMER_ID, request.getHeader(NAV_CONSUMER_ID), applicationName);
+        toMDC(NAV_CALL_ID, request.getHeader(NAV_CALL_ID), generator.create());
+        toMDC(NAV_TOKEN_EXPIRY_ID, tokenUtil.getExpiryDate());
     }
 
     @Override
     public String toString() {
-        return getClass().getSimpleName() + " [generator=" + generator + ", applicationName=" + applicationName + "]";
+        return getClass().getSimpleName() + " [generator=" + generator + ", applicationName=" + applicationName
+                + ", tokenUtil=" + tokenUtil + "]";
     }
 
 }
