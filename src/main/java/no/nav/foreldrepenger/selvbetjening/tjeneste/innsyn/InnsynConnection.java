@@ -57,7 +57,7 @@ public class InnsynConnection extends AbstractRestConnection {
                 .map(Arrays::asList)
                 .orElse(emptyList());
 
-        saker.forEach(sak -> sak.type = fra);
+        saker.forEach(sak -> sak.setType(fra));
 
         LOG.info("Hentet {} sak(er) fra {}", saker.size(), fra);
         return saker;
