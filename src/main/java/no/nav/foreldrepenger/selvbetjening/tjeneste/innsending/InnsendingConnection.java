@@ -81,6 +81,7 @@ public class InnsendingConnection extends AbstractRestConnection {
             LOG.warn("Mottok en søknad av ukjent type..");
             throw new BadRequestException("Unknown application type");
         }
+        dto.tilleggsopplysninger = søknad.tilleggsopplysninger;
         søknad.vedlegg.forEach(v -> dto.addVedlegg(convert(v)));
         return dto;
     }

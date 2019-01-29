@@ -28,6 +28,7 @@ public class Søknad {
 
     public String situasjon;
     public Boolean erEndringssøknad;
+    public String tilleggsopplysninger;
 
     public List<Vedlegg> vedlegg;
 

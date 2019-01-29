@@ -16,6 +16,7 @@ public class SøknadDto {
     public LocalDateTime mottattdato;
     public SøkerDto søker;
     public List<VedleggDto> vedlegg = new ArrayList<>();
+    public String tilleggsopplysninger;
 
     public void addVedlegg(Vedlegg vedlegg) {
         VedleggDto vedleggDto = new VedleggDto();
