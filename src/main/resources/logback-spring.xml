@@ -24,7 +24,7 @@
 
     <springProfile name="dev,preprod">
         <logger name="no.nav.foreldrepenger.selvbetjening" level="trace"/>
-        <logger name=" no.nav.security.spring.oidc" level="trace"/>
+        <logger name="no.nav.security.spring.oidc" level="trace"/>
     </springProfile>
 
     <!-- Turn off Spring's warning logs for already resolved exceptions -->
