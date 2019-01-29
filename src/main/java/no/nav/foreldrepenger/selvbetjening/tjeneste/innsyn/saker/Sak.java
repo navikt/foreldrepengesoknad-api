@@ -10,8 +10,11 @@ import com.fasterxml.jackson.annotation.JsonInclude;
 @JsonInclude(NON_EMPTY)
 public class Sak {
 
-    public Sak() {
-    }
+    public String type;
+    public String saksnummer;
+    public String status;
+    public LocalDate opprettet;
+    public List<Behandling> behandlinger;
 
     public Sak(String type, String saksnummer, String status, LocalDate opprettet, List<Behandling> behandlinger) {
         this.type = type;
@@ -21,9 +24,10 @@ public class Sak {
         this.behandlinger = behandlinger;
     }
 
-    public String type;
-    public String saksnummer;
-    public String status;
-    public LocalDate opprettet;
-    public List<Behandling> behandlinger;
+    @Override
+    public String toString() {
+        return getClass().getSimpleName() + "[type=" + type + ", saksnummer=" + saksnummer + ", status=" + status
+                + ", opprettet=" + opprettet
+                + ", behandlinger=" + behandlinger + "]";
+    }
 }
