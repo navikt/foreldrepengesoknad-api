@@ -14,6 +14,8 @@ import javax.servlet.ServletRequest;
 import javax.servlet.ServletResponse;
 import javax.servlet.http.HttpServletRequest;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.core.annotation.Order;
 import org.springframework.stereotype.Component;
@@ -25,6 +27,7 @@ import no.nav.foreldrepenger.selvbetjening.util.TokenUtil;
 @Component
 @Order(HIGHEST_PRECEDENCE)
 public class HeadersToMDCFilterBean extends GenericFilterBean {
+    private static final Logger LOG = LoggerFactory.getLogger(HeadersToMDCFilterBean.class);
 
     private final CallIdGenerator generator;
     private final String applicationName;
@@ -46,8 +49,13 @@ public class HeadersToMDCFilterBean extends GenericFilterBean {
     }
 
     private void putValues(HttpServletRequest request) {
-        toMDC(NAV_CONSUMER_ID, request.getHeader(NAV_CONSUMER_ID), applicationName);
-        toMDC(NAV_CALL_ID, request.getHeader(NAV_CALL_ID), generator.create());
+        try {
+            toMDC(NAV_CONSUMER_ID, request.getHeader(NAV_CONSUMER_ID), applicationName);
+            toMDC(NAV_CALL_ID, request.getHeader(NAV_CALL_ID), generator.create());
+        } catch (Exception e) {
+            LOG.warn("Noe gikk galt ved setting av MDC-verdier for request {}, MDC-verdier er inkomplette",
+                    request.getRequestURI(), e);
+        }
     }
 
     @Override
