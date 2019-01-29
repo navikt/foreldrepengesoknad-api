@@ -44,8 +44,10 @@ public class HeadersToMDCFilterBean extends GenericFilterBean {
     @Override
     public void doFilter(ServletRequest request, ServletResponse response, FilterChain chain)
             throws IOException, ServletException {
+        LOG.trace("Executing");
         putValues(HttpServletRequest.class.cast(request));
         chain.doFilter(request, response);
+        LOG.trace("Executing done ");
     }
 
     private void putValues(HttpServletRequest request) {
