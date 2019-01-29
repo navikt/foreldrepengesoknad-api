@@ -41,12 +41,14 @@ public class IDToMDCFilterBean extends GenericFilterBean {
     @Override
     public void doFilter(ServletRequest req, ServletResponse res, FilterChain chain)
             throws IOException, ServletException {
-        LOG.trace("Executing");
+        LOG.trace("Executing {} for {}", getClass().getSimpleName(),
+                HttpServletRequest.class.cast(req).getRequestURI());
         if (tokenUtil.erAutentisert()) {
             copyHeadersToMDC(HttpServletRequest.class.cast(req));
         }
         chain.doFilter(req, res);
-        LOG.trace("Executing done");
+        LOG.trace("Executing {} done for {}", getClass().getSimpleName(),
+                HttpServletRequest.class.cast(req).getRequestURI());
     }
 
     private void copyHeadersToMDC(HttpServletRequest req) {
