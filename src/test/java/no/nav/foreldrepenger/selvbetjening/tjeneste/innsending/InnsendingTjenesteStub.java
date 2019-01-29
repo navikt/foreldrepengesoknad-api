@@ -62,6 +62,7 @@ public class InnsendingTjenesteStub implements Innsending {
             throw new BadRequestException("Unknown application type");
         }
 
+        dto.tilleggsopplysninger = søknad.tilleggsopplysninger;
         søknad.vedlegg.forEach(v -> {
             v.content = new byte[] {};
             dto.addVedlegg(v);
