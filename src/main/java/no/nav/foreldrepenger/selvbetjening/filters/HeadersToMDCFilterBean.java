@@ -44,12 +44,15 @@ public class HeadersToMDCFilterBean extends GenericFilterBean {
     @Override
     public void doFilter(ServletRequest req, ServletResponse response, FilterChain chain)
             throws IOException, ServletException {
-        LOG.trace("Executing {} for {}", getClass().getSimpleName(),
-                HttpServletRequest.class.cast(req).getRequestURI());
-        putValues(HttpServletRequest.class.cast(req));
+        String uri = HttpServletRequest.class.cast(req).getRequestURI();
+        if (!uri.contains("internal")) {
+            LOG.trace("Executing {} for {}", getClass().getSimpleName(), uri);
+            putValues(HttpServletRequest.class.cast(req));
+        }
         chain.doFilter(req, response);
-        LOG.trace("Executing {} done for {}", getClass().getSimpleName(),
-                HttpServletRequest.class.cast(req).getRequestURI());
+        if (!uri.contains("internal")) {
+            LOG.trace("Executing {} done for {}", getClass().getSimpleName(), uri);
+        }
     }
 
     private void putValues(HttpServletRequest request) {
