@@ -43,7 +43,7 @@ public class IDToMDCFilterBean extends GenericFilterBean {
             throws IOException, ServletException {
         String uri = HttpServletRequest.class.cast(req).getRequestURI();
         if (tokenUtil.erAutentisert()) {
-            LOG.trace("Executing {} for {}", getClass().getSimpleName(), uri);
+            LOG.trace("Executing {} for {} for subject {}", getClass().getSimpleName(), uri, tokenUtil.getSubject());
             copyHeadersToMDC(HttpServletRequest.class.cast(req));
         }
         chain.doFilter(req, res);
