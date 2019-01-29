@@ -1,8 +1,10 @@
 package no.nav.foreldrepenger.selvbetjening.filters;
 
 import static no.nav.foreldrepenger.selvbetjening.util.Constants.NAV_AKTØR_ID;
+import static no.nav.foreldrepenger.selvbetjening.util.Constants.NAV_TOKEN_EXPIRY_ID;
 import static no.nav.foreldrepenger.selvbetjening.util.Constants.NAV_USER_ID;
 import static no.nav.foreldrepenger.selvbetjening.util.EnvUtil.isDevOrPreprod;
+import static no.nav.foreldrepenger.selvbetjening.util.MDCUtil.toMDC;
 import static org.springframework.core.Ordered.LOWEST_PRECEDENCE;
 
 import java.io.IOException;
@@ -51,6 +53,7 @@ public class IDToMDCFilterBean extends GenericFilterBean {
             if (isDevOrPreprod(getEnvironment())) {
                 MDC.put(NAV_USER_ID, fnr);
             }
+            toMDC(NAV_TOKEN_EXPIRY_ID, helper.getExpiryDate());
             MDC.put(NAV_AKTØR_ID, oppslag.hentAktørId(fnr).getAktør());
         } catch (Exception e) {
             LOG.info("Noe gikk feil. ikke kritisk, men MDC-verdier er inkomplette", e);

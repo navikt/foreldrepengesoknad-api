@@ -2,7 +2,6 @@ package no.nav.foreldrepenger.selvbetjening.filters;
 
 import static no.nav.foreldrepenger.selvbetjening.util.Constants.NAV_CALL_ID;
 import static no.nav.foreldrepenger.selvbetjening.util.Constants.NAV_CONSUMER_ID;
-import static no.nav.foreldrepenger.selvbetjening.util.Constants.NAV_TOKEN_EXPIRY_ID;
 import static no.nav.foreldrepenger.selvbetjening.util.MDCUtil.toMDC;
 import static org.springframework.core.Ordered.HIGHEST_PRECEDENCE;
 
@@ -49,7 +48,6 @@ public class HeadersToMDCFilterBean extends GenericFilterBean {
     private void putValues(HttpServletRequest request) {
         toMDC(NAV_CONSUMER_ID, request.getHeader(NAV_CONSUMER_ID), applicationName);
         toMDC(NAV_CALL_ID, request.getHeader(NAV_CALL_ID), generator.create());
-        toMDC(NAV_TOKEN_EXPIRY_ID, tokenUtil.getExpiryDate());
     }
 
     @Override
