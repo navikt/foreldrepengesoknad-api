@@ -7,7 +7,9 @@ import java.time.LocalDate;
 import java.util.List;
 import java.util.Optional;
 
+import com.fasterxml.jackson.annotation.JsonCreator;
 import com.fasterxml.jackson.annotation.JsonInclude;
+import com.fasterxml.jackson.annotation.JsonProperty;
 
 @JsonInclude(NON_EMPTY)
 public class Sak {
@@ -19,7 +21,10 @@ public class Sak {
     private final String saksnummer;
     private final List<Behandling> behandlinger;
 
-    public Sak(String type, String saksnummer, String status, LocalDate opprettet, List<Behandling> behandlinger) {
+    @JsonCreator
+    public Sak(@JsonProperty("type") String type, @JsonProperty("saksnummer") String saksnummer,
+            @JsonProperty("status") String status, @JsonProperty("opprettet") LocalDate opprettet,
+            @JsonProperty("behandlinger") List<Behandling> behandlinger) {
         this.type = type;
         this.saksnummer = saksnummer;
         this.status = status;
