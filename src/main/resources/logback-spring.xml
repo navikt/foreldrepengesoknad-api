@@ -24,6 +24,7 @@
 
     <springProfile name="dev,preprod">
         <logger name="no.nav.foreldrepenger.selvbetjening" level="trace"/>
+        <logger name="no.nav.security.spring.oidc.validation" level="trace"/>
     </springProfile>
 
     <!-- Turn off Spring's warning logs for already resolved exceptions -->
@@ -31,7 +32,6 @@
     <logger name="org.apache.pdfbox.pdmodel.font" level="ERROR" />
     <logger name="org.apache.pdfbox.rendering.CIDType0Glyph2D" level="ERROR" />
     <logger name="org.apache.tika.parser.SQLite3Parser" level="ERROR" />
-
     <root level="info">
         <appender-ref ref="stdout"/>
     </root>
