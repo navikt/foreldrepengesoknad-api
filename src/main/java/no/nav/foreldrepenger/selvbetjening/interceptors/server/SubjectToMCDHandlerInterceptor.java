@@ -11,13 +11,12 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.context.annotation.DependsOn;
 import org.springframework.core.annotation.Order;
-import org.springframework.stereotype.Component;
 import org.springframework.web.servlet.HandlerInterceptor;
 
 import no.nav.foreldrepenger.selvbetjening.tjeneste.oppslag.Oppslag;
 import no.nav.foreldrepenger.selvbetjening.util.TokenUtil;
 
-@Component
+//@Component
 @Order(HIGHEST_PRECEDENCE)
 @DependsOn("oppslagTjeneste")
 public class SubjectToMCDHandlerInterceptor implements HandlerInterceptor {

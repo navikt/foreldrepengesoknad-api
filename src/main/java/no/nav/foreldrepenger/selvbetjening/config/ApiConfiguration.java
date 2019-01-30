@@ -18,7 +18,6 @@ import com.google.common.collect.ImmutableMap;
 
 import no.nav.foreldrepenger.selvbetjening.filters.CorsInterceptor;
 import no.nav.foreldrepenger.selvbetjening.interceptors.client.ApiKeyInjectingClientInterceptor;
-import no.nav.foreldrepenger.selvbetjening.interceptors.server.SubjectToMCDHandlerInterceptor;
 import no.nav.foreldrepenger.selvbetjening.tjeneste.innsending.InnsendingConfig;
 import no.nav.foreldrepenger.selvbetjening.tjeneste.oppslag.OppslagConfig;
 import no.nav.foreldrepenger.selvbetjening.util.TokenUtil;
@@ -40,8 +39,8 @@ public class ApiConfiguration implements WebMvcConfigurer {
 
     @Inject
     CorsInterceptor corsInterceptor;
-    @Inject
-    SubjectToMCDHandlerInterceptor subjectInterceptor;
+    // @Inject
+    // SubjectToMCDHandlerInterceptor subjectInterceptor;
 
     @Bean
     public RestOperations restTemplate(TokenUtil tokenHandler, ObjectMapper objectMapper,
@@ -64,7 +63,7 @@ public class ApiConfiguration implements WebMvcConfigurer {
 
     @Override
     public void addInterceptors(InterceptorRegistry registry) {
-        registry.addInterceptor(subjectInterceptor);
+        // registry.addInterceptor(subjectInterceptor);
         registry.addInterceptor(corsInterceptor);
     }
 }
