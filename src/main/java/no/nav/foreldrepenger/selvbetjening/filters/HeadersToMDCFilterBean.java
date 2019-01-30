@@ -45,23 +45,19 @@ public class HeadersToMDCFilterBean extends GenericFilterBean {
     public void doFilter(ServletRequest req, ServletResponse response, FilterChain chain)
             throws IOException, ServletException {
         String uri = HttpServletRequest.class.cast(req).getRequestURI();
-        if (!uri.contains("internal")) {
-            LOG.trace("Executing {} for {}", getClass().getSimpleName(), uri);
-            putValues(HttpServletRequest.class.cast(req));
-        }
+        LOG.trace("Eksekverer filter {} for {}", getClass().getSimpleName(), uri);
+        putValues(HttpServletRequest.class.cast(req), uri);
         chain.doFilter(req, response);
-        if (!uri.contains("internal")) {
-            LOG.trace("Executing {} done for {}", getClass().getSimpleName(), uri);
-        }
+        LOG.trace("Filter {} for {} ferdig", getClass().getSimpleName(), uri);
+
     }
 
-    private void putValues(HttpServletRequest request) {
+    private void putValues(HttpServletRequest request, String uri) {
         try {
             toMDC(NAV_CONSUMER_ID, request.getHeader(NAV_CONSUMER_ID), applicationName);
             toMDC(NAV_CALL_ID, request.getHeader(NAV_CALL_ID), generator.create());
         } catch (Exception e) {
-            LOG.warn("Noe gikk galt ved setting av MDC-verdier for request {}, MDC-verdier er inkomplette",
-                    request.getRequestURI(), e);
+            LOG.warn("Noe gikk galt ved setting av MDC-verdier for request {}, MDC-verdier er inkomplette", uri, e);
         }
     }
 

@@ -1,6 +1,6 @@
 package no.nav.foreldrepenger.selvbetjening.filters;
 
-import static no.nav.foreldrepenger.selvbetjening.filters.FilterRegistrationUtil.always;
+import static no.nav.foreldrepenger.selvbetjening.filters.FilterRegistrationUtil.urlPatternsFor;
 
 import org.springframework.boot.web.servlet.FilterRegistrationBean;
 import org.springframework.stereotype.Component;
@@ -10,6 +10,6 @@ public class HeadersToMDCFilterRegistrationBean extends FilterRegistrationBean<H
 
     public HeadersToMDCFilterRegistrationBean(HeadersToMDCFilterBean headersFilter) {
         setFilter(headersFilter);
-        setUrlPatterns(always());
+        urlPatternsFor("/rest/*");
     }
 }

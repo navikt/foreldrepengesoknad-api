@@ -42,17 +42,13 @@ public class IDToMDCFilterBean extends GenericFilterBean {
     public void doFilter(ServletRequest req, ServletResponse res, FilterChain chain)
             throws IOException, ServletException {
         String uri = HttpServletRequest.class.cast(req).getRequestURI();
-        if (tokenUtil.erAutentisert()) {
-            LOG.trace("Executing {} for {} for subject {}", getClass().getSimpleName(), uri, tokenUtil.getSubject());
-            copyHeadersToMDC(HttpServletRequest.class.cast(req));
-        }
+        LOG.trace("Eksekverer filter {} for {}", getClass().getSimpleName(), uri);
+        copyHeadersToMDC(uri);
         chain.doFilter(req, res);
-        if (tokenUtil.erAutentisert()) {
-            LOG.trace("Executing {} done for {}", getClass().getSimpleName(), uri);
-        }
+        LOG.trace("Filter {} for {} ferdig", getClass().getSimpleName(), uri);
     }
 
-    private void copyHeadersToMDC(HttpServletRequest req) {
+    private void copyHeadersToMDC(String uri) {
         try {
             String fnr = tokenUtil.getSubject();
             if (isDevOrPreprod(getEnvironment())) {
@@ -61,8 +57,7 @@ public class IDToMDCFilterBean extends GenericFilterBean {
             toMDC(NAV_TOKEN_EXPIRY_ID, tokenUtil.getExpiryDate());
             toMDC(NAV_AKTØR_ID, oppslag.hentAktørId(fnr).getAktør());
         } catch (Exception e) {
-            LOG.warn("Noe gikk galt ved setting av MDC-verdier for request {}, MDC-verdier er inkomplette",
-                    req.getRequestURI(), e);
+            LOG.warn("Noe gikk galt ved setting av MDC-verdier for request {}, MDC-verdier er inkomplette", uri, e);
         }
     }
 
