@@ -5,7 +5,7 @@ import static no.nav.foreldrepenger.selvbetjening.util.Constants.NAV_TOKEN_EXPIR
 import static no.nav.foreldrepenger.selvbetjening.util.Constants.NAV_USER_ID;
 import static no.nav.foreldrepenger.selvbetjening.util.EnvUtil.isDevOrPreprod;
 import static no.nav.foreldrepenger.selvbetjening.util.MDCUtil.toMDC;
-import static org.springframework.core.Ordered.LOWEST_PRECEDENCE;
+import static org.springframework.core.Ordered.HIGHEST_PRECEDENCE;
 
 import java.io.IOException;
 
@@ -24,7 +24,7 @@ import org.springframework.web.filter.GenericFilterBean;
 import no.nav.foreldrepenger.selvbetjening.tjeneste.oppslag.Oppslag;
 import no.nav.foreldrepenger.selvbetjening.util.TokenUtil;
 
-@Order(LOWEST_PRECEDENCE)
+@Order(HIGHEST_PRECEDENCE)
 @Component
 public class IDToMDCFilterBean extends GenericFilterBean {
 
