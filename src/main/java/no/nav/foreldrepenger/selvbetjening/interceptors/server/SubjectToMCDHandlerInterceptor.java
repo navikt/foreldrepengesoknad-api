@@ -35,7 +35,7 @@ public class SubjectToMCDHandlerInterceptor implements HandlerInterceptor {
     public boolean preHandle(HttpServletRequest request, HttpServletResponse response, Object handler)
             throws Exception {
         try {
-            LOG.info("Eksekverer interceptor {}", getClass().getSimpleName());
+            LOG.info("SubjectToMCDHandlerInterceptor {}", getClass().getSimpleName());
             if (tokenUtil.erAutentisert()) {
                 LOG.info("Henter ID");
                 toMDC(NAV_AKTØR_ID, oppslag.hentAktørId(tokenUtil.getSubject()).getAktør());
