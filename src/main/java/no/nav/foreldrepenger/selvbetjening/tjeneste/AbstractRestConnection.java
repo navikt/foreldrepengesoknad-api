@@ -40,7 +40,7 @@ public abstract class AbstractRestConnection {
             }
             return respons;
         } catch (HttpClientErrorException e) {
-            if (doThrow && e.getStatusCode().equals(NOT_FOUND)) {
+            if (doThrow) {
                 throw e;
             }
             LOG.info("Fant intet objekt på {}, returnerer null", uri);
