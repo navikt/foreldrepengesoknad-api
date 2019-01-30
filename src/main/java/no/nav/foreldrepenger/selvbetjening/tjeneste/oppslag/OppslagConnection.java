@@ -28,21 +28,21 @@ public class OppslagConnection extends AbstractRestConnection {
     }
 
     public PersonDto hentPerson() {
-        PersonDto person = getForObject(config.getPersonURI(), PersonDto.class, true);
+        PersonDto person = getForObject(config.getPersonURI(), PersonDto.class);
         LOG.info(CONFIDENTIAL, "Fikk person {}", person);
         return person;
 
     }
 
     public SøkerinfoDto hentSøkerInfo() {
-        SøkerinfoDto info = getForObject(config.getSøkerinfoURI(), SøkerinfoDto.class, true);
+        SøkerinfoDto info = getForObject(config.getSøkerinfoURI(), SøkerinfoDto.class);
         LOG.info(CONFIDENTIAL, "Fikk søkerinfo {}", info);
         return info;
 
     }
 
     public AktørId HentAktørId(String fnr) {
-        return getForObject(config.getAktørIdURI(fnr), AktørId.class, true);
+        return getForObject(config.getAktørIdURI(fnr), AktørId.class);
     }
 
     @Override

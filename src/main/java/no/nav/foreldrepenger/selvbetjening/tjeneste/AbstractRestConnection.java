@@ -29,7 +29,7 @@ public abstract class AbstractRestConnection {
     }
 
     protected <T> T getForObject(URI uri, Class<T> responseType) {
-        return getForObject(uri, responseType, false);
+        return getForObject(uri, responseType, true);
     }
 
     protected <T> T getForObject(URI uri, Class<T> responseType, boolean doThrow) {
@@ -40,11 +40,11 @@ public abstract class AbstractRestConnection {
             }
             return respons;
         } catch (HttpClientErrorException e) {
-            if (doThrow) {
-                throw e;
+            if (!doThrow && NOT_FOUND.equals(e.getStatusCode())) {
+                LOG.info("Fant intet objekt på {}, returnerer null", uri);
+                return null;
             }
-            LOG.info("Fant intet objekt på {}, returnerer null", uri);
-            return null;
+            throw e;
         }
     }
 

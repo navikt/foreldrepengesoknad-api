@@ -40,7 +40,7 @@ public class InnsynConnection extends AbstractRestConnection {
     }
 
     public List<UttaksPeriode> hentUttaksplan(String saksnummer) {
-        return Optional.ofNullable(getForObject(innsynConfig.getUttakURI(saksnummer), UttaksPeriode[].class))
+        return Optional.ofNullable(getForObject(innsynConfig.getUttakURI(saksnummer), UttaksPeriode[].class, false))
                 .map(Arrays::asList)
                 .orElse(emptyList());
     }
@@ -53,7 +53,7 @@ public class InnsynConnection extends AbstractRestConnection {
     }
 
     private List<Sak> saker(URI uri, String fra) {
-        List<Sak> saker = Optional.ofNullable(getForObject(uri, Sak[].class))
+        List<Sak> saker = Optional.ofNullable(getForObject(uri, Sak[].class, false))
                 .map(Arrays::asList)
                 .orElse(emptyList());
 
