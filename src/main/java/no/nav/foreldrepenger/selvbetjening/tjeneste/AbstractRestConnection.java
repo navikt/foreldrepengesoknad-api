@@ -32,7 +32,7 @@ public abstract class AbstractRestConnection {
         return getForObject(uri, responseType, true);
     }
 
-    protected <T> T getForObject(URI uri, Class<T> responseType, boolean doThrow) {
+    protected <T> T getForObject(URI uri, Class<T> responseType, boolean throwOnNotFound) {
         try {
             T respons = operations.getForObject(uri, responseType);
             if (respons != null) {
@@ -40,7 +40,7 @@ public abstract class AbstractRestConnection {
             }
             return respons;
         } catch (HttpClientErrorException e) {
-            if (!doThrow && NOT_FOUND.equals(e.getStatusCode())) {
+            if (!throwOnNotFound && NOT_FOUND.equals(e.getStatusCode())) {
                 LOG.info("Fant intet objekt på {}, returnerer null", uri);
                 return null;
             }
