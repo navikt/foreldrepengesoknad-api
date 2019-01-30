@@ -33,7 +33,7 @@ public class ApiKeyInjectingClientInterceptor implements ClientHttpRequestInterc
         URI destination = request.getURI();
         Optional<String> apiKey = apiKeyFor(destination);
         if (apiKey.isPresent()) {
-            LOG.trace("Injisert API-key som header {} for {}", headerKey, destination);
+            LOG.trace("Injisert API-key som header {} for {}", headerKey, destination, new Exception());
             request.getHeaders().add(headerKey, apiKey.get());
         }
         else {
