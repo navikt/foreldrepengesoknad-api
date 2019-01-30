@@ -1,5 +1,6 @@
 package no.nav.foreldrepenger.selvbetjening.filters;
 
+import static no.nav.foreldrepenger.selvbetjening.filters.FilterRegistrationUtil.ALWAYS;
 import static no.nav.foreldrepenger.selvbetjening.filters.FilterRegistrationUtil.urlPatternsFor;
 
 import org.springframework.boot.web.servlet.FilterRegistrationBean;
@@ -10,6 +11,6 @@ public class IDFilterRegistrationBean extends FilterRegistrationBean<IDToMDCFilt
 
     public IDFilterRegistrationBean(IDToMDCFilterBean idFilter) {
         setFilter(idFilter);
-        urlPatternsFor("/rest/*");
+        urlPatternsFor("/rest" + ALWAYS);
     }
 }

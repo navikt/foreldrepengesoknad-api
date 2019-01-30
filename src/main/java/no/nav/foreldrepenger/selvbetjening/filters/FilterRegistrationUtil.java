@@ -8,7 +8,7 @@ import java.util.List;
 
 final class FilterRegistrationUtil {
 
-    private static final String ALWAYS = "/*";
+    static final String ALWAYS = "/*";
 
     private FilterRegistrationUtil() {
     }
