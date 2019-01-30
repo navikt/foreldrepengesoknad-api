@@ -23,7 +23,7 @@ import no.nav.foreldrepenger.selvbetjening.tjeneste.oppslag.domain.Søkerinfo;
 import no.nav.foreldrepenger.selvbetjening.tjeneste.oppslag.dto.PersonDto;
 import no.nav.foreldrepenger.selvbetjening.tjeneste.oppslag.dto.SøkerinfoDto;
 
-@Service
+@Service("oppslagTjeneste")
 @ConditionalOnProperty(name = "stub.oppslag", havingValue = "true")
 public class OppslagTjenesteStub implements Oppslag {
 
