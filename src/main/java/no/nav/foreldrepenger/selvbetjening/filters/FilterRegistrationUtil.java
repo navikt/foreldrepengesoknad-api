@@ -8,18 +8,18 @@ import java.util.List;
 
 final class FilterRegistrationUtil {
 
-    static final String ALWAYS = "/*";
+    static final String WILDCARD = "/*";
 
     private FilterRegistrationUtil() {
     }
 
     static List<String> urlPatternsFor(String... patterns) {
         return Arrays.stream(patterns)
-                .map(pattern -> pattern + ALWAYS)
+                .map(pattern -> pattern + WILDCARD)
                 .collect(toList());
     }
 
     static List<String> always() {
-        return singletonList(ALWAYS);
+        return singletonList(WILDCARD);
     }
 }

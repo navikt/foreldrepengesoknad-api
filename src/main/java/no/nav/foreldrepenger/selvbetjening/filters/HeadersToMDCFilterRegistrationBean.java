@@ -1,6 +1,5 @@
 package no.nav.foreldrepenger.selvbetjening.filters;
 
-import static no.nav.foreldrepenger.selvbetjening.filters.FilterRegistrationUtil.ALWAYS;
 import static no.nav.foreldrepenger.selvbetjening.filters.FilterRegistrationUtil.urlPatternsFor;
 
 import org.slf4j.Logger;
@@ -14,7 +13,7 @@ public class HeadersToMDCFilterRegistrationBean extends FilterRegistrationBean<H
 
     public HeadersToMDCFilterRegistrationBean(HeadersToMDCFilterBean headersFilter) {
         setFilter(headersFilter);
-        urlPatternsFor("/rest" + ALWAYS);
+        urlPatternsFor("/rest");
         LOG.info("Registrert filter {}", this);
     }
 }
