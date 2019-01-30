@@ -9,6 +9,7 @@ import javax.servlet.http.HttpServletResponse;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.context.annotation.Lazy;
 import org.springframework.core.annotation.Order;
 import org.springframework.stereotype.Component;
 import org.springframework.web.servlet.HandlerInterceptor;
@@ -18,6 +19,7 @@ import no.nav.foreldrepenger.selvbetjening.util.TokenUtil;
 
 @Component
 @Order(HIGHEST_PRECEDENCE)
+@Lazy
 public class SubjectToMCDHandlerInterceptor implements HandlerInterceptor {
 
     private static final Logger LOG = LoggerFactory.getLogger(SubjectToMCDHandlerInterceptor.class);
