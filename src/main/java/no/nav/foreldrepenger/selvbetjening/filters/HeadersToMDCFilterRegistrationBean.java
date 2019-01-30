@@ -13,7 +13,7 @@ public class HeadersToMDCFilterRegistrationBean extends FilterRegistrationBean<H
 
     public HeadersToMDCFilterRegistrationBean(HeadersToMDCFilterBean headersFilter) {
         setFilter(headersFilter);
-        urlPatternsFor("/rest");
+        setUrlPatterns(urlPatternsFor("/rest"));
         LOG.info("Registrert filter {}", this);
     }
 }
