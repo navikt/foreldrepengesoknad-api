@@ -1,6 +1,5 @@
 package no.nav.foreldrepenger.selvbetjening.filters;
 
-import static no.nav.foreldrepenger.selvbetjening.util.Constants.NAV_AKTØR_ID;
 import static no.nav.foreldrepenger.selvbetjening.util.Constants.NAV_TOKEN_EXPIRY_ID;
 import static no.nav.foreldrepenger.selvbetjening.util.Constants.NAV_USER_ID;
 import static no.nav.foreldrepenger.selvbetjening.util.EnvUtil.isDevOrPreprod;
@@ -56,7 +55,7 @@ public class IDToMDCFilterBean extends GenericFilterBean {
             }
             if (tokenUtil.erAutentisert()) {
                 toMDC(NAV_TOKEN_EXPIRY_ID, tokenUtil.getExpiryDate());
-                toMDC(NAV_AKTØR_ID, oppslag.hentAktørId(fnr).getAktør());
+                // toMDC(NAV_AKTØR_ID, oppslag.hentAktørId(fnr).getAktør());
             }
         } catch (Exception e) {
             LOG.warn("Noe gikk galt ved setting av MDC-verdier for request {}, MDC-verdier er inkomplette", uri, e);
