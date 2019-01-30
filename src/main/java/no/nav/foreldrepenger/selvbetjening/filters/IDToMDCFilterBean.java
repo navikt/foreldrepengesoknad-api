@@ -54,8 +54,10 @@ public class IDToMDCFilterBean extends GenericFilterBean {
             if (isDevOrPreprod(getEnvironment())) {
                 toMDC(NAV_USER_ID, fnr);
             }
-            toMDC(NAV_TOKEN_EXPIRY_ID, tokenUtil.getExpiryDate());
-            toMDC(NAV_AKTØR_ID, oppslag.hentAktørId(fnr).getAktør());
+            if (tokenUtil.erAutentisert()) {
+                toMDC(NAV_TOKEN_EXPIRY_ID, tokenUtil.getExpiryDate());
+                toMDC(NAV_AKTØR_ID, oppslag.hentAktørId(fnr).getAktør());
+            }
         } catch (Exception e) {
             LOG.warn("Noe gikk galt ved setting av MDC-verdier for request {}, MDC-verdier er inkomplette", uri, e);
         }

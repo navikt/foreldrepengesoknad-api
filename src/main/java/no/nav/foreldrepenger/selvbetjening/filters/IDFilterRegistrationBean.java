@@ -16,6 +16,5 @@ public class IDFilterRegistrationBean extends FilterRegistrationBean<IDToMDCFilt
         setFilter(idFilter);
         urlPatternsFor("/rest" + ALWAYS);
         LOG.info("Registrert filter {}", this);
-
     }
 }
