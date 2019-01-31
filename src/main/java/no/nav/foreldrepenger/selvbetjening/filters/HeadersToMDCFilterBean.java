@@ -45,10 +45,8 @@ public class HeadersToMDCFilterBean extends GenericFilterBean {
     public void doFilter(ServletRequest req, ServletResponse response, FilterChain chain)
             throws IOException, ServletException {
         String uri = HttpServletRequest.class.cast(req).getRequestURI();
-        LOG.trace("Eksekverer filter {} for {}", getClass().getSimpleName(), uri);
         putValues(HttpServletRequest.class.cast(req), uri);
         chain.doFilter(req, response);
-        LOG.trace("Filter {} for {} ferdig", getClass().getSimpleName(), uri);
 
     }
 

@@ -41,10 +41,8 @@ public class IDToMDCFilterBean extends GenericFilterBean {
     public void doFilter(ServletRequest req, ServletResponse res, FilterChain chain)
             throws IOException, ServletException {
         String uri = HttpServletRequest.class.cast(req).getRequestURI();
-        LOG.trace("Eksekverer filter {} for {}", getClass().getSimpleName(), uri);
         copyHeadersToMDC(uri);
         chain.doFilter(req, res);
-        LOG.trace("Filter {} for {} ferdig", getClass().getSimpleName(), uri);
     }
 
     private void copyHeadersToMDC(String uri) {
