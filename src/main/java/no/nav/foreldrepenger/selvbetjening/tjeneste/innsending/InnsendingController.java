@@ -117,8 +117,9 @@ public class InnsendingController {
     }
 
     private void deleteFromTempStorage(String fnr, Søknad søknad) {
+        LOG.info("Sletter mellomlagret søknad og vedlegg");
         søknad.vedlegg.forEach(this::deleteAttachment);
-        storage.delete(crypto.encryptDirectoryName(fnr), "soknad");
+        storage.deleteTmp(crypto.encryptDirectoryName(fnr), "soknad");
     }
 
     private static String mb(long byteCount) {
