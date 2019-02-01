@@ -18,17 +18,23 @@ class VedleggTjeneste implements Vedlegg {
     }
 
     @Override
-    public byte[] hentVedlegg(URI uri) {
-        LOG.info("Henter vedlegg fra {}", uri);
-        return operations.getForObject(uri, byte[].class);
+    public byte[] hentVedlegg(URI url) {
+        LOG.info("Henter vedlegg fra {}", url);
+        return operations.getForObject(url, byte[].class);
     }
 
     @Override
-    public byte[] hentOgSlettVedlegg(URI uri) {
-        byte[] vedlegg = hentVedlegg(uri);
-        operations.delete(uri);
-        LOG.info("Sletter vedlegg på  {}", uri);
+    public byte[] hentOgSlettVedlegg(URI url) {
+        byte[] vedlegg = hentVedlegg(url);
+        operations.delete(url);
+        LOG.info("Sletter vedlegg på  {}", url);
         return vedlegg;
+    }
+
+    @Override
+    public void slettVedlegg(URI url) {
+        LOG.info("Sletter vedlegg på  {}", url);
+        operations.delete(url);
     }
 
     @Override

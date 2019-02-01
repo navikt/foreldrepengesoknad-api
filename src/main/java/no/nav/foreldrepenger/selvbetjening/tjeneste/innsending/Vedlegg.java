@@ -4,8 +4,9 @@ import java.net.URI;
 
 interface Vedlegg {
 
-    byte[] hentVedlegg(URI uri);
+    byte[] hentVedlegg(URI url);
 
     byte[] hentOgSlettVedlegg(URI url);
 
+    void slettVedlegg(URI url);
 }

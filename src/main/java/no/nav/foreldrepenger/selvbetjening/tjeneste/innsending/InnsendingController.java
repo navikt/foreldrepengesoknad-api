@@ -76,7 +76,7 @@ public class InnsendingController {
         ettersending.vedlegg.forEach(this::fetchAttachment);
         checkVedleggTooLarge(ettersending.vedlegg, "ettersending");
         Kvittering respons = innsending.sendInn(ettersending);
-        ettersending.vedlegg.forEach(this::fetchAndDeleteAttachment);
+        ettersending.vedlegg.forEach(this::deleteAttachment);
         return respons;
     }
 
@@ -86,7 +86,7 @@ public class InnsendingController {
         søknad.vedlegg.forEach(this::fetchAttachment);
         checkVedleggTooLarge(søknad.vedlegg, søknad.type);
         Kvittering respons = innsending.endre(søknad);
-        søknad.vedlegg.forEach(this::fetchAndDeleteAttachment);
+        deleteFromTempStorage(tokenHandler.autentisertBruker(), søknad);
         return respons;
     }
 
@@ -110,14 +110,14 @@ public class InnsendingController {
         }
     }
 
-    private void fetchAndDeleteAttachment(Vedlegg vedlegg) {
+    private void deleteAttachment(Vedlegg vedlegg) {
         if (vedlegg.url != null) {
-            vedlegg.content = vedleggTjeneste.hentOgSlettVedlegg(vedlegg.url);
+            vedleggTjeneste.slettVedlegg(vedlegg.url);
         }
     }
 
     private void deleteFromTempStorage(String fnr, Søknad søknad) {
-        søknad.vedlegg.forEach(this::fetchAndDeleteAttachment);
+        søknad.vedlegg.forEach(this::deleteAttachment);
         storage.delete(crypto.encryptDirectoryName(fnr), "soknad");
     }
 

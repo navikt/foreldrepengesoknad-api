@@ -47,7 +47,7 @@ node {
                     color: 'good',
                     message: "Build <${env.BUILD_URL}|#${env.BUILD_NUMBER}> (<${commitUrl}|${commitHashShort}>) of ${repo}/${app}@master by ${committer} passed"
             ])
-        } catch (Exception ex) {
+        } catch (Exception e) {
             slackSend([
                     color: 'danger',
                     message: "Build <${env.BUILD_URL}|#${env.BUILD_NUMBER}> (<${commitUrl}|${commitHashShort}>) of ${repo}/${app}@master by ${committer} failed"
@@ -129,7 +129,7 @@ node {
                 timeout(time: 5, unit: 'MINUTES') {
                     input id: 'prod', message: "Deploy to prod?"
                 }
-            } catch (Exception ex) {
+            } catch (Exception ignored) {
                 echo "Timeout, will not deploy to prod"
                 currentBuild.result = 'SUCCESS'
                 return
