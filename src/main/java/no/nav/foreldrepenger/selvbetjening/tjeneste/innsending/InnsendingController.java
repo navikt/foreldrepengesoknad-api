@@ -1,14 +1,13 @@
 package no.nav.foreldrepenger.selvbetjening.tjeneste.innsending;
 
-import static java.lang.String.format;
-import static no.nav.foreldrepenger.selvbetjening.tjeneste.innsending.InnsendingController.REST_SOKNAD;
-import static no.nav.foreldrepenger.selvbetjening.util.Constants.ISSUER;
-import static no.nav.foreldrepenger.selvbetjening.util.EnvUtil.CONFIDENTIAL;
-import static org.apache.commons.io.FileUtils.byteCountToDisplaySize;
-import static org.springframework.http.MediaType.APPLICATION_JSON_VALUE;
-
-import java.util.List;
-
+import no.nav.foreldrepenger.selvbetjening.error.AttachmentsTooLargeException;
+import no.nav.foreldrepenger.selvbetjening.tjeneste.innsending.domain.Ettersending;
+import no.nav.foreldrepenger.selvbetjening.tjeneste.innsending.domain.Kvittering;
+import no.nav.foreldrepenger.selvbetjening.tjeneste.innsending.domain.Søknad;
+import no.nav.foreldrepenger.selvbetjening.tjeneste.innsending.domain.Vedlegg;
+import no.nav.foreldrepenger.selvbetjening.tjeneste.mellomlagring.StorageService;
+import no.nav.security.oidc.api.ProtectedWithClaims;
+import no.nav.security.oidc.exceptions.OIDCTokenValidatorException;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -16,16 +15,14 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
-import no.nav.foreldrepenger.selvbetjening.error.AttachmentsTooLargeException;
-import no.nav.foreldrepenger.selvbetjening.tjeneste.innsending.domain.Ettersending;
-import no.nav.foreldrepenger.selvbetjening.tjeneste.innsending.domain.Kvittering;
-import no.nav.foreldrepenger.selvbetjening.tjeneste.innsending.domain.Søknad;
-import no.nav.foreldrepenger.selvbetjening.tjeneste.innsending.domain.Vedlegg;
-import no.nav.foreldrepenger.selvbetjening.tjeneste.mellomlagring.Storage;
-import no.nav.foreldrepenger.selvbetjening.tjeneste.mellomlagring.StorageCrypto;
-import no.nav.foreldrepenger.selvbetjening.util.TokenUtil;
-import no.nav.security.oidc.api.ProtectedWithClaims;
-import no.nav.security.oidc.exceptions.OIDCTokenValidatorException;
+import java.util.List;
+
+import static java.lang.String.format;
+import static no.nav.foreldrepenger.selvbetjening.tjeneste.innsending.InnsendingController.REST_SOKNAD;
+import static no.nav.foreldrepenger.selvbetjening.util.Constants.ISSUER;
+import static no.nav.foreldrepenger.selvbetjening.util.EnvUtil.CONFIDENTIAL;
+import static org.apache.commons.io.FileUtils.byteCountToDisplaySize;
+import static org.springframework.http.MediaType.APPLICATION_JSON_VALUE;
 
 @RestController
 @ProtectedWithClaims(issuer = ISSUER, claimMap = { "acr=Level4" })
@@ -41,56 +38,44 @@ public class InnsendingController {
     private static final long MAX_VEDLEGG_SIZE_DOKMOT = 8 * MB;
 
     private final Innsending innsending;
+    private final StorageService storageService;
 
-    private final VedleggTjeneste vedleggTjeneste;
-
-    private final TokenUtil tokenHandler;
-
-    private final Storage storage;
-
-    private final StorageCrypto crypto;
-
-    public InnsendingController(Innsending innsending, VedleggTjeneste vedleggTjeneste, TokenUtil tokenHandler,
-            Storage storage,
-            StorageCrypto crypto) {
+    public InnsendingController(Innsending innsending, StorageService storageService) {
         this.innsending = innsending;
-        this.vedleggTjeneste = vedleggTjeneste;
-        this.tokenHandler = tokenHandler;
-        this.storage = storage;
-        this.crypto = crypto;
+        this.storageService = storageService;
     }
 
     @PostMapping
     public Kvittering sendInn(@RequestBody Søknad søknad) throws OIDCTokenValidatorException {
         LOG.info(CONFIDENTIAL, "Mottok søknad: {}", søknad);
-        søknad.vedlegg.forEach(this::fetchAttachment);
-        checkVedleggTooLarge(søknad.vedlegg, søknad.type);
+        søknad.vedlegg.forEach(this::hentVedlegg);
+        sjekkSamletStørrelseVedlegg(søknad.vedlegg, søknad.type);
         Kvittering respons = innsending.sendInn(søknad);
-        deleteFromTempStorage(tokenHandler.autentisertBruker(), søknad);
+        slettMellomlagring(søknad);
         return respons;
     }
 
     @PostMapping("/ettersend")
     public Kvittering sendInn(@RequestBody Ettersending ettersending) {
         LOG.info(CONFIDENTIAL, "Mottok ettersending: {}", ettersending);
-        ettersending.vedlegg.forEach(this::fetchAttachment);
-        checkVedleggTooLarge(ettersending.vedlegg, "ettersending");
+        ettersending.vedlegg.forEach(this::hentVedlegg);
+        sjekkSamletStørrelseVedlegg(ettersending.vedlegg, "ettersending");
         Kvittering respons = innsending.sendInn(ettersending);
-        ettersending.vedlegg.forEach(this::deleteAttachment);
+        ettersending.vedlegg.forEach(this::slettVedlegg);
         return respons;
     }
 
     @PostMapping("/endre")
     public Kvittering endre(@RequestBody Søknad søknad) {
         LOG.info(CONFIDENTIAL, "Mottok endringssøknad: {}", søknad);
-        søknad.vedlegg.forEach(this::fetchAttachment);
-        checkVedleggTooLarge(søknad.vedlegg, søknad.type);
+        søknad.vedlegg.forEach(this::hentVedlegg);
+        sjekkSamletStørrelseVedlegg(søknad.vedlegg, søknad.type);
         Kvittering respons = innsending.endre(søknad);
-        deleteFromTempStorage(tokenHandler.autentisertBruker(), søknad);
+        slettMellomlagring(søknad);
         return respons;
     }
 
-    private static void checkVedleggTooLarge(List<Vedlegg> vedlegg, String type) {
+    private static void sjekkSamletStørrelseVedlegg (List<Vedlegg> vedlegg, String type) {
         long total = vedlegg.stream()
                 .filter(v -> v.content != null)
                 .mapToLong(v -> v.content.length)
@@ -104,22 +89,24 @@ public class InnsendingController {
         }
     }
 
-    private void fetchAttachment(Vedlegg vedlegg) {
+    private void hentVedlegg(Vedlegg vedlegg) {
         if (vedlegg.url != null) {
-            vedlegg.content = vedleggTjeneste.hentVedlegg(vedlegg.url);
+            vedlegg.content = storageService.hentVedlegg(vedlegg.uuid)
+                    .map(a -> a.bytes)
+                    .orElse(new byte[] {});
         }
     }
 
-    private void deleteAttachment(Vedlegg vedlegg) {
-        if (vedlegg.url != null) {
-            vedleggTjeneste.slettVedlegg(vedlegg.url);
-        }
-    }
-
-    private void deleteFromTempStorage(String fnr, Søknad søknad) {
+    private void slettMellomlagring(Søknad søknad) {
         LOG.info("Sletter mellomlagret søknad og vedlegg");
-        søknad.vedlegg.forEach(this::deleteAttachment);
-        storage.deleteTmp(crypto.encryptDirectoryName(fnr), "soknad");
+        søknad.vedlegg.forEach(this::slettVedlegg);
+        storageService.slettSøknad();
+    }
+
+    private void slettVedlegg(Vedlegg vedlegg) {
+        if (vedlegg.url != null) {
+            storageService.slettVedlegg(vedlegg.uuid);
+        }
     }
 
     private static String mb(long byteCount) {

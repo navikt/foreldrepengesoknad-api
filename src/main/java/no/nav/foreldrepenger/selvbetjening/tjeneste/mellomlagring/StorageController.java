@@ -1,30 +1,19 @@
 package no.nav.foreldrepenger.selvbetjening.tjeneste.mellomlagring;
 
-import static java.lang.String.format;
-import static no.nav.foreldrepenger.selvbetjening.util.Constants.ISSUER;
-import static org.apache.commons.io.FileUtils.byteCountToDisplaySize;
-import static org.slf4j.LoggerFactory.getLogger;
-import static org.springframework.http.MediaType.APPLICATION_JSON_VALUE;
-import static org.springframework.http.MediaType.MULTIPART_FORM_DATA_VALUE;
+import no.nav.foreldrepenger.selvbetjening.error.AttachmentsTooLargeException;
+import no.nav.security.oidc.api.ProtectedWithClaims;
+import no.nav.security.oidc.exceptions.OIDCTokenValidatorException;
+import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.*;
+import org.springframework.web.multipart.MultipartFile;
 
 import java.util.Optional;
 
-import org.slf4j.Logger;
-import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.DeleteMapping;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestPart;
-import org.springframework.web.bind.annotation.RestController;
-import org.springframework.web.multipart.MultipartFile;
-
-import no.nav.foreldrepenger.selvbetjening.error.AttachmentsTooLargeException;
-import no.nav.foreldrepenger.selvbetjening.util.TokenUtil;
-import no.nav.security.oidc.api.ProtectedWithClaims;
-import no.nav.security.oidc.exceptions.OIDCTokenValidatorException;
+import static java.lang.String.format;
+import static no.nav.foreldrepenger.selvbetjening.util.Constants.ISSUER;
+import static org.apache.commons.io.FileUtils.byteCountToDisplaySize;
+import static org.springframework.http.MediaType.APPLICATION_JSON_VALUE;
+import static org.springframework.http.MediaType.MULTIPART_FORM_DATA_VALUE;
 
 @RestController
 @ProtectedWithClaims(issuer = ISSUER, claimMap = { "acr=Level4" })
@@ -32,59 +21,39 @@ import no.nav.security.oidc.exceptions.OIDCTokenValidatorException;
 public class StorageController {
 
     public static final String REST_STORAGE = "/rest/storage";
-    private static final Logger LOG = getLogger(StorageController.class);
-    private static final String KEY = "soknad";
     public static final int MAX_VEDLEGG_SIZE = 8 * 1024 * 1024;
 
-    private final TokenUtil tokenHelper;
+    private final StorageService service;
 
-    private final Storage storage;
-
-    private final StorageCrypto crypto;
-
-    public StorageController(TokenUtil tokenHelper, Storage storage, StorageCrypto crypto) {
-        this.tokenHelper = tokenHelper;
-        this.storage = storage;
-        this.crypto = crypto;
+    public StorageController(StorageService service) {
+        this.service = service;
     }
 
     @GetMapping
     public ResponseEntity<String> getSoknad() throws OIDCTokenValidatorException {
-        String fnr = tokenHelper.autentisertBruker();
-        String directory = crypto.encryptDirectoryName(fnr);
-        LOG.trace("Henter søknad fra katalog {}", directory);
-        Optional<String> encryptedValue = storage.getTmp(directory, KEY);
-        return encryptedValue
-                .map(ev -> ResponseEntity.ok().body(crypto.decrypt(ev, fnr)))
+        Optional<String> muligSøknad = service.hentSøknad();
+        return muligSøknad
+                .map(s -> ResponseEntity.ok().body(s))
                 .orElse(ResponseEntity.noContent().build());
     }
 
     @PostMapping(consumes = APPLICATION_JSON_VALUE)
     public ResponseEntity<String> storeSoknad(@RequestBody String soknad) throws OIDCTokenValidatorException {
-        String fnr = tokenHelper.autentisertBruker();
-        String directory = crypto.encryptDirectoryName(fnr);
-        LOG.trace("Skriver søknad til katalog {}", directory);
-        String encryptedValue = crypto.encrypt(soknad, fnr);
-        storage.putTmp(directory, KEY, encryptedValue);
+        service.lagreSøknad(soknad);
         return ResponseEntity.noContent().build();
     }
 
     @DeleteMapping
     public ResponseEntity<String> deleteSoknad() throws OIDCTokenValidatorException {
-        String fnr = tokenHelper.autentisertBruker();
-        String directory = crypto.encryptDirectoryName(fnr);
-        LOG.info("Fjerner søknad fra katalog {}", directory);
-        storage.deleteTmp(directory, KEY);
+        service.slettSøknad();
         return ResponseEntity.noContent().build();
     }
 
     @GetMapping("vedlegg/{key}")
     public ResponseEntity<byte[]> getAttachment(@PathVariable("key") String key) throws OIDCTokenValidatorException {
-        String fnr = tokenHelper.autentisertBruker();
-        String directory = crypto.encryptDirectoryName(fnr);
-        LOG.info("Henter vedlegg med nøkkel {} fra katalog {}", key, directory);
-        return storage.getTmp(directory, key)
-                .map(ev -> Attachment.fromJson(crypto.decrypt(ev, fnr)).asOKHTTPEntity())
+        Optional<Attachment> muligVedlegg = service.hentVedlegg(key);
+        return muligVedlegg
+                .map(Attachment::asOKHTTPEntity)
                 .orElse(ResponseEntity.notFound().build());
     }
 
@@ -98,25 +67,14 @@ public class StorageController {
                     byteCountToDisplaySize(MAX_VEDLEGG_SIZE)));
         }
 
-        String fnr = tokenHelper.autentisertBruker();
-        String directory = crypto.encryptDirectoryName(fnr);
-        LOG.info("Skriver vedlegg {} til katalog {}", attachment, directory);
-        String encryptedValue = crypto.encrypt(attachment.toJson(), fnr);
-        storage.putTmp(directory, attachment.uuid, encryptedValue);
-        return ResponseEntity.created(attachment.uri()).build();
+        service.lagreVedlegg(attachment);
+        return ResponseEntity.created(attachment.uri()).body(attachment.uuid);
     }
 
     @DeleteMapping("vedlegg/{key}")
     public ResponseEntity<String> deleteAttachment(@PathVariable("key") String key) throws OIDCTokenValidatorException {
-        String directory = crypto.encryptDirectoryName(tokenHelper.autentisertBruker());
-        LOG.info("Fjerner vedlegg med nøkkel {} fra katalog {}", key, directory);
-        storage.deleteTmp(directory, key);
+        service.slettVedlegg(key);
         return ResponseEntity.noContent().build();
     }
 
-    @Override
-    public String toString() {
-        return getClass().getSimpleName() + " [tokenHelper=" + tokenHelper + ", storage=" + storage + ", crypto="
-                + crypto + "]";
-    }
 }
