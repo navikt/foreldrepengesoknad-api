@@ -14,7 +14,7 @@ public class Behandling {
     private final String type;
     private final String tema;
     private final String årsak;
-    private final BehandlingResultat behandlingResultat;
+    private final String behandlingResultat;
     private final String behandlendeEnhet;
     private final String behandlendeEnhetNavn;
     private List<String> inntektsmeldinger;
@@ -26,7 +26,7 @@ public class Behandling {
             @JsonProperty("type") String type,
             @JsonProperty("tema") String tema,
             @JsonProperty("årsak") String årsak,
-            @JsonProperty("behandlingResultat") BehandlingResultat behandlingResultat,
+            @JsonProperty("behandlingResultat") String behandlingResultat,
             @JsonProperty("behandlendeEnhet") String behandlendeEnhet,
             @JsonProperty("behandlendeEnhetNavn") String behandlendeEnhetNavn,
             @JsonProperty("inntektsmeldinger") List<String> inntektsmeldinger) {
@@ -50,7 +50,7 @@ public class Behandling {
         this.inntektsmeldinger = inntektsmeldinger;
     }
 
-    public BehandlingResultat getBehandlingResultat() {
+    public String getBehandlingResultat() {
         return behandlingResultat;
     }
 
