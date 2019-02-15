@@ -89,24 +89,21 @@ public class YtelseDto {
 
     @JsonInclude(NON_EMPTY)
     public class MedlemsskapDto {
+
         @Override
         public String toString() {
-            return "MedlemsskapDto [norgeSiste12=" + norgeSiste12 + ", norgeNeste12=" + norgeNeste12 + ", fødselNorge="
-                    + fødselNorge + ", arbeidSiste12=" + arbeidSiste12 + ", utenlandsopphold=" + utenlandsopphold
-                    + ", framtidigUtenlandsopphold=" + framtidigUtenlandsopphold + "]";
+            return "MedlemsskapDto{" +
+                    "arbeidSiste12='" + arbeidSiste12 + '\'' +
+                    ", utenlandsopphold=" + utenlandsopphold +
+                    ", framtidigUtenlandsopphold=" + framtidigUtenlandsopphold +
+                    '}';
         }
 
-        public Boolean norgeSiste12;
-        public Boolean norgeNeste12;
-        public Boolean fødselNorge;
         public String arbeidSiste12;
         public List<UtenlandsoppholdPeriodeDto> utenlandsopphold = new ArrayList<>();
         public List<UtenlandsoppholdPeriodeDto> framtidigUtenlandsopphold = new ArrayList<>();
 
         public MedlemsskapDto(Utenlandsopphold opphold) {
-            this.norgeSiste12 = opphold.iNorgeSiste12Mnd;
-            this.norgeNeste12 = opphold.iNorgeNeste12Mnd;
-            this.fødselNorge = opphold.iNorgePåHendelsestidspunktet;
             this.arbeidSiste12 = "IKKE_ARBEIDET";
 
             for (UtenlandsoppholdPeriode tidligere : opphold.tidligereOpphold) {
