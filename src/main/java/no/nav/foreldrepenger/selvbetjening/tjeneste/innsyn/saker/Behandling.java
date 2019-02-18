@@ -14,7 +14,7 @@ public class Behandling {
     private final String type;
     private final String tema;
     private final String årsak;
-    private final BehandlingResultatType behandlingResultatType;
+    private final String behandlingResultat;
     private final String behandlendeEnhet;
     private final String behandlendeEnhetNavn;
     private List<String> inntektsmeldinger;
@@ -26,7 +26,7 @@ public class Behandling {
             @JsonProperty("type") String type,
             @JsonProperty("tema") String tema,
             @JsonProperty("årsak") String årsak,
-            @JsonProperty("behandlingResultatType") BehandlingResultatType behandlingResultatType,
+            @JsonProperty("behandlingResultat") String behandlingResultat,
             @JsonProperty("behandlendeEnhet") String behandlendeEnhet,
             @JsonProperty("behandlendeEnhetNavn") String behandlendeEnhetNavn,
             @JsonProperty("inntektsmeldinger") List<String> inntektsmeldinger) {
@@ -36,7 +36,7 @@ public class Behandling {
         this.type = type;
         this.tema = tema;
         this.årsak = årsak;
-        this.behandlingResultatType = behandlingResultatType;
+        this.behandlingResultat = behandlingResultat;
         this.behandlendeEnhet = behandlendeEnhet;
         this.behandlendeEnhetNavn = behandlendeEnhetNavn;
         this.inntektsmeldinger = inntektsmeldinger;
@@ -50,8 +50,8 @@ public class Behandling {
         this.inntektsmeldinger = inntektsmeldinger;
     }
 
-    public BehandlingResultatType getBehandlingResultatType() {
-        return behandlingResultatType;
+    public String getBehandlingResultat() {
+        return behandlingResultat;
     }
 
     public LocalDateTime getOpprettetTidspunkt() {
@@ -91,7 +91,7 @@ public class Behandling {
         return getClass().getSimpleName() + " [opprettetTidspunkt=" + opprettetTidspunkt + ", endretTidspunkt="
                 + endretTidspunkt
                 + ", status=" + status + ", type=" + type + ", tema=" + tema + ", årsak=" + årsak
-                + ", behandlingResultatType=" + behandlingResultatType + ", behandlendeEnhet=" + behandlendeEnhet
+                + ", behandlingResultat=" + behandlingResultat + ", behandlendeEnhet=" + behandlendeEnhet
                 + ", behandlendeEnhetNavn=" + behandlendeEnhetNavn + ", inntektsmeldinger=" + inntektsmeldinger + "]";
     }
 

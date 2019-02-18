@@ -6,6 +6,7 @@ public class Vedlegg {
 
     public String id;
     public String skjemanummer;
+    public String uuid;
     public URI url;
     public byte[] content;
     public String innsendingsType;
@@ -14,6 +15,7 @@ public class Vedlegg {
         Vedlegg kopi = new Vedlegg();
         kopi.id = this.id;
         kopi.skjemanummer = this.skjemanummer;
+        kopi.uuid = this.uuid;
         kopi.url = this.url;
         kopi.innsendingsType = this.innsendingsType;
 

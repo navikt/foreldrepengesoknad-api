@@ -22,7 +22,6 @@ public class Person {
     public String etternavn;
     public String kjønn;
     public LocalDate fødselsdato;
-    public String målform;
     public CountryCode land;
     public Boolean ikkeNordiskEøsLand;
     public Bankkonto bankkonto;
@@ -35,7 +34,6 @@ public class Person {
         this.mellomnavn = dto.mellomnavn;
         this.kjønn = dto.kjønn;
         this.fødselsdato = dto.fødselsdato;
-        this.målform = dto.målform;
         this.land = dto.landKode;
         this.ikkeNordiskEøsLand = ikkeNordiskEøsLand(dto.landKode);
         this.bankkonto = dto.bankkonto;
@@ -51,7 +49,7 @@ public class Person {
     public String toString() {
         return getClass().getSimpleName() + " [fnr=" + fnr + ", fornavn=" + fornavn + ", mellomnavn=" + mellomnavn
                 + ", etternavn=" + etternavn
-                + ", kjønn=" + kjønn + ", fødselsdato=" + fødselsdato + ", målform=" + målform + ", land=" + land
+                + ", kjønn=" + kjønn + ", fødselsdato=" + fødselsdato + ", land=" + land
                 + ", ikkeNordiskEøsLand=" + ikkeNordiskEøsLand + ", bankkonto=" + bankkonto + ", barn=" + barn + "]";
     }
 
