@@ -1,5 +1,5 @@
 name: foreldrepengesoknad-api
-team: nais
+team: bris
 image: repo.adeo.no:5443/foreldrepengesoknad-api
 replicas:
   min: 2
@@ -27,7 +27,7 @@ webproxy: true
 fasitResources:
   used:
   - alias: FPSOKNADAPI_PROPERTIES
-    resourceType: applicationProperties 
+    resourceType: applicationProperties
   - alias: aad_b2c_clientid
     resourceType: credential
     propertyMap:
@@ -40,7 +40,7 @@ fasitResources:
     resourceType: credential
   - alias: fpsoknad-oppslag-api
     resourceType: restservice
-  - alias: foreldrepengesoknad-api-fpsoknad-mottak-api-apiKey  
+  - alias: foreldrepengesoknad-api-fpsoknad-mottak-api-apiKey
     resourceType: credential
   - alias: fpsoknad-mottak-api
     resourceType: restservice
@@ -54,4 +54,3 @@ fasitResources:
     resourceType: applicationProperties
   - alias: loadbalancer:foreldrepengesoknad-api
     resourceType: loadbalancerconfig
-    
