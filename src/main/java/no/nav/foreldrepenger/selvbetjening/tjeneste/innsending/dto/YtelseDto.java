@@ -40,7 +40,10 @@ public class YtelseDto {
     public YtelseDto(Søknad søknad) {
         this.type = søknad.type;
         this.relasjonTilBarn = new RelasjonTilBarnDto(søknad.barn, søknad.situasjon);
-        this.annenForelder = new AnnenForelderDto(søknad.annenForelder);
+
+        if (søknad.annenForelder != null) {
+            this.annenForelder = new AnnenForelderDto(søknad.annenForelder);
+        }
 
         if (!søknad.erEndringssøknad) {
             this.medlemsskap = new MedlemsskapDto(søknad.informasjonOmUtenlandsopphold);
