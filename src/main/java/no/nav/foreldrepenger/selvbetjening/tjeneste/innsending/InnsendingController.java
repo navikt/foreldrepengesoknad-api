@@ -35,7 +35,6 @@ public class InnsendingController {
 
     private static final long MB = 1024 * 1024;
     private static final long MAX_VEDLEGG_SIZE = 32 * MB;
-    private static final long MAX_VEDLEGG_SIZE_DOKMOT = 8 * MB;
 
     private final Innsending innsending;
     private final StorageService storageService;
@@ -49,7 +48,7 @@ public class InnsendingController {
     public Kvittering sendInn(@RequestBody Søknad søknad) throws OIDCTokenValidatorException {
         LOG.info(CONFIDENTIAL, "Mottok søknad: {}", søknad);
         søknad.vedlegg.forEach(this::hentVedlegg);
-        sjekkSamletStørrelseVedlegg(søknad.vedlegg, søknad.type);
+        sjekkSamletStørrelseVedlegg(søknad.vedlegg);
         Kvittering respons = innsending.sendInn(søknad);
         slettMellomlagring(søknad);
         return respons;
@@ -59,7 +58,7 @@ public class InnsendingController {
     public Kvittering sendInn(@RequestBody Ettersending ettersending) {
         LOG.info(CONFIDENTIAL, "Mottok ettersending: {}", ettersending);
         ettersending.vedlegg.forEach(this::hentVedlegg);
-        sjekkSamletStørrelseVedlegg(ettersending.vedlegg, "ettersending");
+        sjekkSamletStørrelseVedlegg(ettersending.vedlegg);
         Kvittering respons = innsending.sendInn(ettersending);
         ettersending.vedlegg.forEach(this::slettVedlegg);
         return respons;
@@ -69,23 +68,20 @@ public class InnsendingController {
     public Kvittering endre(@RequestBody Søknad søknad) {
         LOG.info(CONFIDENTIAL, "Mottok endringssøknad: {}", søknad);
         søknad.vedlegg.forEach(this::hentVedlegg);
-        sjekkSamletStørrelseVedlegg(søknad.vedlegg, søknad.type);
+        sjekkSamletStørrelseVedlegg(søknad.vedlegg);
         Kvittering respons = innsending.endre(søknad);
         slettMellomlagring(søknad);
         return respons;
     }
 
-    private static void sjekkSamletStørrelseVedlegg (List<Vedlegg> vedlegg, String type) {
+    private static void sjekkSamletStørrelseVedlegg (List<Vedlegg> vedlegg) {
         long total = vedlegg.stream()
                 .filter(v -> v.content != null)
                 .mapToLong(v -> v.content.length)
                 .sum();
 
-        long max = type.equals("engangsstønad") ? MAX_VEDLEGG_SIZE_DOKMOT : MAX_VEDLEGG_SIZE;
-
-        if (total > max) {
-            throw new AttachmentsTooLargeException(format(
-                    "Samlet filstørrelse for alle vedlegg er %s, men må være mindre enn %s", mb(total), mb(max)));
+        if (total > MAX_VEDLEGG_SIZE) {
+            throw new AttachmentsTooLargeException(format("Samlet filstørrelse for alle vedlegg er %s, men må være mindre enn %s", mb(total), mb(MAX_VEDLEGG_SIZE)));
         }
     }
 
