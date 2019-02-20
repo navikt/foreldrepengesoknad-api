@@ -64,6 +64,16 @@ public class InnsendingController {
         return respons;
     }
 
+    @PostMapping("/ettersend/engangsstonad")
+    public Kvittering sendInnForEngangsstonad(@RequestBody Ettersending ettersending) {
+        LOG.info(CONFIDENTIAL, "Mottok ettersending: {}", ettersending);
+        ettersending.vedlegg.forEach(this::hentVedlegg);
+        sjekkSamletStørrelseVedlegg(ettersending.vedlegg);
+        Kvittering respons = innsending.sendInnForEngangsstonad(ettersending);
+        ettersending.vedlegg.forEach(this::slettVedlegg);
+        return respons;
+    }
+
     @PostMapping("/endre")
     public Kvittering endre(@RequestBody Søknad søknad) {
         LOG.info(CONFIDENTIAL, "Mottok endringssøknad: {}", søknad);

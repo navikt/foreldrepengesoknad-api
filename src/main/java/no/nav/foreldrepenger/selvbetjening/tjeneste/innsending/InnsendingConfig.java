@@ -15,6 +15,8 @@ public class InnsendingConfig {
 
     private static final String ETTERSEND = "/mottak/ettersend";
 
+    private static final String ETTERSEND_ES = "/mottak/ettersendES";
+
     private static final String SEND = "/mottak/send";
 
     private static final String PING = "mottak/ping";
@@ -48,6 +50,10 @@ public class InnsendingConfig {
 
     URI getEttersendingURI() {
         return uri(getURI(), ETTERSEND);
+    }
+
+    URI getEngangsstonadEttersendingURI() {
+        return uri(getURI(), ETTERSEND_ES);
     }
 
     public boolean isEnabled() {
