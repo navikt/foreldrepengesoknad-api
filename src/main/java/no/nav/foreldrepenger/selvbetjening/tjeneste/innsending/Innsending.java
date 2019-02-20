@@ -9,8 +9,6 @@ public interface Innsending extends Pingable {
 
     Kvittering sendInn(Søknad søknad);
 
-    Kvittering sendInnForEngangsstonad(Ettersending søknad);
-
     Kvittering sendInn(Ettersending søknad);
 
     Kvittering endre(Søknad søknad);

@@ -46,11 +46,6 @@ public class InnsendingTjenesteStub implements Innsending {
     }
 
     @Override
-    public Kvittering sendInnForEngangsstonad(Ettersending ettersending) {
-        return postStub(ettersending);
-    }
-
-    @Override
     public Kvittering endre(Søknad søknad) {
         return postStub(søknad);
     }

@@ -32,14 +32,8 @@ public class InnsendingTjeneste implements Innsending {
 
     @Override
     public Kvittering sendInn(Ettersending ettersending) {
-        LOG.info("Sender inn ettersending for foreldrepenger på sak {}", ettersending.saksnummer);
+        LOG.info("Sender inn ettersending på sak {}", ettersending.saksnummer);
         return connection.ettersend(ettersending);
-    }
-
-    @Override
-    public Kvittering sendInnForEngangsstonad(Ettersending ettersending) {
-        LOG.info("Sender inn ettersending for en engangsstonad på sak {}", ettersending.saksnummer);
-        return connection.ettersendForEngangsstonad(ettersending);
     }
 
     @Override
