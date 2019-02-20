@@ -6,6 +6,7 @@ import no.nav.foreldrepenger.selvbetjening.tjeneste.innsending.domain.Kvittering
 import no.nav.foreldrepenger.selvbetjening.tjeneste.innsending.domain.Søknad;
 import no.nav.foreldrepenger.selvbetjening.tjeneste.innsending.domain.Vedlegg;
 import no.nav.foreldrepenger.selvbetjening.tjeneste.mellomlagring.StorageService;
+import no.nav.foreldrepenger.selvbetjening.util.Enabled;
 import no.nav.security.oidc.api.ProtectedWithClaims;
 import no.nav.security.oidc.exceptions.OIDCTokenValidatorException;
 import org.slf4j.Logger;
@@ -15,6 +16,7 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
+import javax.ws.rs.BadRequestException;
 import java.util.List;
 
 import static java.lang.String.format;
@@ -46,6 +48,10 @@ public class InnsendingController {
 
     @PostMapping
     public Kvittering sendInn(@RequestBody Søknad søknad) throws OIDCTokenValidatorException {
+        if (!Enabled.SVANGERSKAPSPENGER && søknad.type.equals("svangerskapspenger")) {
+            throw new BadRequestException("Svangerskapspenger er ikke støttet");
+        }
+
         LOG.info(CONFIDENTIAL, "Mottok søknad: {}", søknad);
         søknad.vedlegg.forEach(this::hentVedlegg);
         sjekkSamletStørrelseVedlegg(søknad.vedlegg);
