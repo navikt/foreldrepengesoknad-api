@@ -13,7 +13,8 @@ import com.fasterxml.jackson.annotation.JsonTypeInfo;
 @JsonTypeInfo(use = NAME, property = "type", visible = true)
 @JsonSubTypes({
         @Type(value = Engangsstønad.class, name = "engangsstønad"),
-        @Type(value = Foreldrepengesøknad.class, name = "foreldrepenger")
+        @Type(value = Foreldrepengesøknad.class, name = "foreldrepenger"),
+        @Type(value = Svangerskapspengesøknad.class, name = "svangerskapspenger")
 })
 public class Søknad {
 

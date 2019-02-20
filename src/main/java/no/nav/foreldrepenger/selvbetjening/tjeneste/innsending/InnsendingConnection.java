@@ -7,6 +7,7 @@ import java.net.URI;
 import javax.inject.Inject;
 import javax.ws.rs.BadRequestException;
 
+import no.nav.foreldrepenger.selvbetjening.tjeneste.innsending.domain.*;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Component;
@@ -16,12 +17,6 @@ import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 
 import no.nav.foreldrepenger.selvbetjening.tjeneste.AbstractRestConnection;
-import no.nav.foreldrepenger.selvbetjening.tjeneste.innsending.domain.Engangsstønad;
-import no.nav.foreldrepenger.selvbetjening.tjeneste.innsending.domain.Ettersending;
-import no.nav.foreldrepenger.selvbetjening.tjeneste.innsending.domain.Foreldrepengesøknad;
-import no.nav.foreldrepenger.selvbetjening.tjeneste.innsending.domain.Kvittering;
-import no.nav.foreldrepenger.selvbetjening.tjeneste.innsending.domain.Søknad;
-import no.nav.foreldrepenger.selvbetjening.tjeneste.innsending.domain.Vedlegg;
 import no.nav.foreldrepenger.selvbetjening.tjeneste.innsending.dto.EngangsstønadDto;
 import no.nav.foreldrepenger.selvbetjening.tjeneste.innsending.dto.EttersendingDto;
 import no.nav.foreldrepenger.selvbetjening.tjeneste.innsending.dto.ForeldrepengesøknadDto;
@@ -72,12 +67,14 @@ public class InnsendingConnection extends AbstractRestConnection {
         SøknadDto dto;
         if (søknad instanceof Engangsstønad) {
             dto = new EngangsstønadDto((Engangsstønad) søknad);
-        }
-        else if (søknad instanceof Foreldrepengesøknad) {
+            logJSON(dto);
+        } else if (søknad instanceof Foreldrepengesøknad) {
             dto = new ForeldrepengesøknadDto((Foreldrepengesøknad) søknad);
             logJSON(dto);
-        }
-        else {
+        } else if (søknad instanceof Svangerskapspengesøknad) {
+            dto = new SvangerskapspengesøknadDto((Svangerskapspengesøknad) søknad);
+            logJSON(dto);
+        } else {
             LOG.warn("Mottok en søknad av ukjent type..");
             throw new BadRequestException("Unknown application type");
         }
