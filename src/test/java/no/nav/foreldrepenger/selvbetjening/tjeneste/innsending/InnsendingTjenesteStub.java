@@ -9,17 +9,13 @@ import javax.inject.Inject;
 import javax.ws.rs.BadRequestException;
 
 import no.nav.foreldrepenger.selvbetjening.tjeneste.innsending.domain.*;
+import no.nav.foreldrepenger.selvbetjening.tjeneste.innsending.dto.*;
 import org.slf4j.Logger;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnProperty;
 import org.springframework.stereotype.Service;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
-
-import no.nav.foreldrepenger.selvbetjening.tjeneste.innsending.dto.EngangsstønadDto;
-import no.nav.foreldrepenger.selvbetjening.tjeneste.innsending.dto.EttersendingDto;
-import no.nav.foreldrepenger.selvbetjening.tjeneste.innsending.dto.ForeldrepengesøknadDto;
-import no.nav.foreldrepenger.selvbetjening.tjeneste.innsending.dto.SøknadDto;
 
 @Service
 @ConditionalOnProperty(name = "stub.mottak", havingValue = "true")

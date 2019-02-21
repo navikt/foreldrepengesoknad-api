@@ -2,20 +2,17 @@ package no.nav.foreldrepenger.selvbetjening.tjeneste.innsending.dto;
 
 import static com.fasterxml.jackson.annotation.JsonInclude.Include.NON_EMPTY;
 import static com.fasterxml.jackson.annotation.JsonInclude.Include.NON_NULL;
+import static java.util.stream.Collectors.toList;
 import static org.apache.commons.lang3.StringUtils.isEmpty;
 
 import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.stream.Collectors;
 
 import com.fasterxml.jackson.annotation.JsonInclude;
 
-import no.nav.foreldrepenger.selvbetjening.tjeneste.innsending.domain.AnnenForelder;
-import no.nav.foreldrepenger.selvbetjening.tjeneste.innsending.domain.Barn;
-import no.nav.foreldrepenger.selvbetjening.tjeneste.innsending.domain.Foreldrepengesøknad;
-import no.nav.foreldrepenger.selvbetjening.tjeneste.innsending.domain.Søknad;
-import no.nav.foreldrepenger.selvbetjening.tjeneste.innsending.domain.Utenlandsopphold;
-import no.nav.foreldrepenger.selvbetjening.tjeneste.innsending.domain.UtenlandsoppholdPeriode;
+import no.nav.foreldrepenger.selvbetjening.tjeneste.innsending.domain.*;
 
 @JsonInclude(NON_NULL)
 public class YtelseDto {
@@ -23,19 +20,12 @@ public class YtelseDto {
     public String type;
     public MedlemsskapDto medlemsskap;
     public RelasjonTilBarnDto relasjonTilBarn;
-
-    @Override
-    public String toString() {
-        return "YtelseDto [type=" + type + ", medlemsskap=" + medlemsskap + ", relasjonTilBarn=" + relasjonTilBarn
-                + ", annenForelder=" + annenForelder + ", dekningsgrad=" + dekningsgrad + ", opptjening=" + opptjening
-                + ", fordeling=" + fordeling + ", rettigheter=" + rettigheter + "]";
-    }
-
     public AnnenForelderDto annenForelder;
     public String dekningsgrad;
     public OpptjeningDto opptjening;
     public FordelingDto fordeling;
     public RettigheterDto rettigheter;
+    public List<TilretteleggingDto> tilrettelegging;
 
     public YtelseDto(Søknad søknad) {
         this.type = søknad.type;
@@ -59,6 +49,11 @@ public class YtelseDto {
             if (!søknad.erEndringssøknad) {
                 this.opptjening = new OpptjeningDto(foreldrepengesøknad.søker);
             }
+        }
+
+        if (søknad instanceof Svangerskapspengesøknad) {
+            Svangerskapspengesøknad svangerskapspengesøknad = (Svangerskapspengesøknad) søknad;
+            this.tilrettelegging = svangerskapspengesøknad.tilrettelegging.stream().map(TilretteleggingDto::new).collect(toList());
         }
     }
 
@@ -206,6 +201,30 @@ public class YtelseDto {
             this.harAleneOmsorgForBarnet = foreldrepengesøknad.søker.erAleneOmOmsorg;
             this.harAnnenForelderRett = foreldrepengesøknad.annenForelder.harRettPåForeldrepenger;
             this.datoForAleneomsorg = foreldrepengesøknad.annenForelder.datoForAleneomsorg;
+        }
+    }
+
+    @JsonInclude(NON_NULL)
+    public class TilretteleggingDto {
+        public LocalDate behovForTilretteleggingFom;
+        public LocalDate tilrettelagtArbeidFom;
+        public Double stillingsprosent;
+        public ArbeidsforholdDto arbeidsforhold;
+
+        public TilretteleggingDto(Tilrettelegging tilrettelegging) {
+            this.behovForTilretteleggingFom = tilrettelegging.behovForTilretteleggingFom;
+            this.tilrettelagtArbeidFom = tilrettelegging.tilrettelagtArbeidFom;
+            this.stillingsprosent = tilrettelegging.stillingsprosent;
+            this.arbeidsforhold = new ArbeidsforholdDto(tilrettelegging.arbeidsgiverId);
+        }
+    }
+
+    @JsonInclude(NON_NULL)
+    public class ArbeidsforholdDto {
+        public String identifikator;
+
+        public ArbeidsforholdDto(String arbeidsgiverId) {
+            this.identifikator = arbeidsgiverId;
         }
     }
 }
