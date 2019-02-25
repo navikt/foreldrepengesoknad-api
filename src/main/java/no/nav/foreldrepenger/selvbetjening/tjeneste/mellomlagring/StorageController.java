@@ -14,6 +14,7 @@ import static no.nav.foreldrepenger.selvbetjening.util.Constants.ISSUER;
 import static org.apache.commons.io.FileUtils.byteCountToDisplaySize;
 import static org.springframework.http.MediaType.APPLICATION_JSON_VALUE;
 import static org.springframework.http.MediaType.MULTIPART_FORM_DATA_VALUE;
+import static org.springframework.http.ResponseEntity.*;
 
 @RestController
 @ProtectedWithClaims(issuer = ISSUER, claimMap = { "acr=Level4" })
@@ -33,20 +34,20 @@ public class StorageController {
     public ResponseEntity<String> getSoknad() throws OIDCTokenValidatorException {
         Optional<String> muligSøknad = service.hentSøknad();
         return muligSøknad
-                .map(s -> ResponseEntity.ok().body(s))
-                .orElse(ResponseEntity.noContent().build());
+                .map(s -> ok().body(s))
+                .orElse(noContent().build());
     }
 
     @PostMapping(consumes = APPLICATION_JSON_VALUE)
     public ResponseEntity<String> storeSoknad(@RequestBody String soknad) throws OIDCTokenValidatorException {
         service.lagreSøknad(soknad);
-        return ResponseEntity.noContent().build();
+        return noContent().build();
     }
 
     @DeleteMapping
     public ResponseEntity<String> deleteSoknad() throws OIDCTokenValidatorException {
         service.slettSøknad();
-        return ResponseEntity.noContent().build();
+        return noContent().build();
     }
 
     @GetMapping("vedlegg/{key}")
@@ -54,27 +55,30 @@ public class StorageController {
         Optional<Attachment> muligVedlegg = service.hentVedlegg(key);
         return muligVedlegg
                 .map(Attachment::asOKHTTPEntity)
-                .orElse(ResponseEntity.notFound().build());
+                .orElse(notFound().build());
     }
 
     @PostMapping(path = "/vedlegg", consumes = MULTIPART_FORM_DATA_VALUE)
-    public ResponseEntity<String> storeAttachment(@RequestPart("vedlegg") MultipartFile attachmentMultipartFile)
-            throws OIDCTokenValidatorException {
+    public ResponseEntity<String> storeAttachment(@RequestPart("vedlegg") MultipartFile attachmentMultipartFile) throws OIDCTokenValidatorException {
         Attachment attachment = Attachment.of(attachmentMultipartFile);
         if (attachment.size > MAX_VEDLEGG_SIZE) {
-            throw new AttachmentsTooLargeException(format("Vedlegg-størrelse er %s, men kan ikke overstige %s",
-                    byteCountToDisplaySize(attachment.size),
-                    byteCountToDisplaySize(MAX_VEDLEGG_SIZE)));
+            throw new AttachmentsTooLargeException(tooLargeErrorMessage(attachment.size));
         }
 
         service.lagreVedlegg(attachment);
-        return ResponseEntity.created(attachment.uri()).body(attachment.uuid);
+        return created(attachment.uri()).body(attachment.uuid);
     }
 
     @DeleteMapping("vedlegg/{key}")
     public ResponseEntity<String> deleteAttachment(@PathVariable("key") String key) throws OIDCTokenValidatorException {
         service.slettVedlegg(key);
-        return ResponseEntity.noContent().build();
+        return noContent().build();
+    }
+
+    private String tooLargeErrorMessage(long attachmentSize) {
+        return format("Vedlegg-størrelse er %s, men kan ikke overstige %s",
+                byteCountToDisplaySize(attachmentSize),
+                byteCountToDisplaySize(MAX_VEDLEGG_SIZE));
     }
 
 }
