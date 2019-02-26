@@ -75,6 +75,21 @@ public class StorageController {
         return noContent().build();
     }
 
+    @GetMapping("kvittering/{type}")
+    public ResponseEntity<String> getKvittering(@PathVariable("type") String type) {
+        Optional<String> muligKvittering = service.hentKvittering(type);
+        return muligKvittering
+                .map(kvittering -> ok().body(kvittering))
+                .orElse(noContent().build());
+    }
+
+    @PostMapping(value = "kvittering/{type}", consumes = APPLICATION_JSON_VALUE)
+    public ResponseEntity<String> storeKvittering(@PathVariable("type") String type, @RequestBody String kvittering) {
+        service.lagreKvittering(type, kvittering);
+        return noContent().build();
+    }
+
+
     private String tooLargeErrorMessage(long attachmentSize) {
         return format("Vedlegg-størrelse er %s, men kan ikke overstige %s",
                 byteCountToDisplaySize(attachmentSize),

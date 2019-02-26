@@ -21,17 +21,19 @@ import com.amazonaws.services.s3.model.lifecycle.LifecycleFilter;
 
 public class S3Storage implements Storage {
 
-    private static final String BUCKET_LAGRING_SOKNAD = "foreldrepengesoknad";
-    private static final String BUCKET_MELLOMLAGRING_SOKNAD = "mellomlagring";
     private static final Logger LOG = LoggerFactory.getLogger(S3Storage.class);
+
+    private static final String BUCKET_FORELDREPENGER = "foreldrepengesoknad";
+    private static final String BUCKET_FORELDREPENGER_MELLOMLAGRING = "mellomlagring";
+
     private final AmazonS3 s3;
 
     @Inject
     public S3Storage(AmazonS3 s3) {
         this.s3 = s3;
         try {
-            ensureBucketExists(BUCKET_LAGRING_SOKNAD, 60);
-            ensureBucketExists(BUCKET_MELLOMLAGRING_SOKNAD, 1);
+            ensureBucketExists(BUCKET_FORELDREPENGER, 365);
+            ensureBucketExists(BUCKET_FORELDREPENGER_MELLOMLAGRING, 1);
         } catch (Exception ex) {
             LOG.error("Could not create S3 bucket", ex);
         }
@@ -39,43 +41,45 @@ public class S3Storage implements Storage {
 
     @Override
     public void put(String directory, String key, String value) {
-        writeString(BUCKET_LAGRING_SOKNAD, directory, key, value);
+        writeString(BUCKET_FORELDREPENGER, directory, key, value);
     }
 
     @Override
     public void putTmp(String directory, String key, String value) {
-        writeString(BUCKET_MELLOMLAGRING_SOKNAD, directory, key, value);
+        writeString(BUCKET_FORELDREPENGER_MELLOMLAGRING, directory, key, value);
     }
 
     @Override
     public Optional<String> get(String directory, String key) {
-        return Optional.ofNullable(readString(BUCKET_LAGRING_SOKNAD, directory, key));
+        return Optional.ofNullable(readString(BUCKET_FORELDREPENGER, directory, key));
     }
 
     @Override
     public Optional<String> getTmp(String directory, String key) {
-        return Optional.ofNullable(readString(BUCKET_MELLOMLAGRING_SOKNAD, directory, key));
+        return Optional.ofNullable(readString(BUCKET_FORELDREPENGER_MELLOMLAGRING, directory, key));
     }
 
     @Override
     public void delete(String directory, String key) {
-        deleteString(BUCKET_LAGRING_SOKNAD, directory, key);
+        deleteString(BUCKET_FORELDREPENGER, directory, key);
     }
 
     @Override
     public void deleteTmp(String directory, String key) {
-        deleteString(BUCKET_MELLOMLAGRING_SOKNAD, directory, key);
+        deleteString(BUCKET_FORELDREPENGER_MELLOMLAGRING, directory, key);
     }
 
-    private void ensureBucketExists(String bucketName, Integer expirationInDays) {
+    private void ensureBucketExists(String bucketName) {
         boolean bucketExists = s3.listBuckets().stream()
                 .anyMatch(b -> b.getName().equals(bucketName));
         if (!bucketExists) {
             createBucket(bucketName);
         }
+    }
 
+    private void ensureBucketExists(String bucketName, Integer expirationInDays) {
+        ensureBucketExists(bucketName);
         s3.setBucketLifecycleConfiguration(bucketName, objectExpiresInDays(expirationInDays));
-
     }
 
     private void createBucket(String bucketName) {

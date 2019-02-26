@@ -10,8 +10,8 @@ import static org.slf4j.LoggerFactory.getLogger;
 
 @Service
 public class StorageService {
-
     private static final Logger LOG = getLogger(StorageService.class);
+
     private static final String SØKNAD = "soknad";
 
     private final TokenUtil tokenHelper;
@@ -28,7 +28,8 @@ public class StorageService {
         String fnr = tokenHelper.autentisertBruker();
         String directory = crypto.encryptDirectoryName(fnr);
         LOG.trace("Henter søknad fra katalog {}", directory);
-        return storage.getTmp(directory, SØKNAD).map(s -> crypto.decrypt(s, fnr));
+        return storage.getTmp(directory, SØKNAD)
+                .map(søknad -> crypto.decrypt(søknad, fnr));
     }
 
     public void lagreSøknad(String søknad) {
@@ -67,5 +68,21 @@ public class StorageService {
         String directory = crypto.encryptDirectoryName(tokenHelper.autentisertBruker());
         LOG.info("Fjerner vedlegg med nøkkel {} fra katalog {}", key, directory);
         storage.deleteTmp(directory, key);
+    }
+
+    public Optional<String> hentKvittering(String type) {
+        String fnr = tokenHelper.autentisertBruker();
+        String directory = crypto.encryptDirectoryName(fnr);
+        LOG.trace("Henter kvittering fra katalog {}", directory);
+        return storage.get(directory, type)
+                .map(kvittering -> crypto.decrypt(kvittering, fnr));
+    }
+
+    public void lagreKvittering(String type, String kvittering) {
+        String fnr = tokenHelper.autentisertBruker();
+        String directory = crypto.encryptDirectoryName(fnr);
+        LOG.trace("Skriver kvittering til katalog {}", directory);
+        String encryptedValue = crypto.encrypt(kvittering, fnr);
+        storage.put(directory, type, encryptedValue);
     }
 }
