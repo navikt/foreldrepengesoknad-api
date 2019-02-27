@@ -144,7 +144,7 @@ node {
 
                 slackSend([
                         color: 'good',
-                        message: "${app} version ${releaseVersion} has been deployed to production."
+                        message: "${app} version ${releaseVersion} has been deployed to production :rocket:"
                 ])
             } catch (Exception e) {
                 slackSend([
