@@ -9,6 +9,7 @@ public class AnnenForelder {
     public Boolean kanIkkeOppgis;
     public String fornavn;
     public String etternavn;
+    public String navn;
     public String fnr;
     public Boolean utenlandskFnr;
     public String bostedsland;
