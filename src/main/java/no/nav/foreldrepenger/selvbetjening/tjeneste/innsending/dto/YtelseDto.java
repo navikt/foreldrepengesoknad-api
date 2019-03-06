@@ -36,21 +36,17 @@ public class YtelseDto {
 
         if (!søknad.erEndringssøknad) {
             this.medlemsskap = new MedlemsskapDto(søknad.informasjonOmUtenlandsopphold);
+            if (søknad instanceof Foreldrepengesøknad || søknad instanceof Svangerskapspengesøknad) {
+                this.opptjening = new OpptjeningDto(søknad.søker);
+            }
         }
 
         if (søknad instanceof Foreldrepengesøknad) {
             Foreldrepengesøknad foreldrepengesøknad = (Foreldrepengesøknad) søknad;
             this.dekningsgrad = "GRAD" + foreldrepengesøknad.dekningsgrad;
-            this.fordeling = new FordelingDto(foreldrepengesøknad.uttaksplan,
-                    foreldrepengesøknad.annenForelder.erInformertOmSøknaden);
+            this.fordeling = new FordelingDto(foreldrepengesøknad.uttaksplan, foreldrepengesøknad.annenForelder.erInformertOmSøknaden);
             this.rettigheter = new RettigheterDto(foreldrepengesøknad);
-
-            if (!søknad.erEndringssøknad) {
-                this.opptjening = new OpptjeningDto(foreldrepengesøknad.søker);
-            }
-        }
-
-        if (søknad instanceof Svangerskapspengesøknad) {
+        } else if (søknad instanceof Svangerskapspengesøknad) {
             Svangerskapspengesøknad svangerskapspengesøknad = (Svangerskapspengesøknad) søknad;
             this.tilrettelegging = svangerskapspengesøknad.tilrettelegging.stream().map(TilretteleggingDto::new).collect(toList());
         }
@@ -58,11 +54,6 @@ public class YtelseDto {
 
     @JsonInclude(NON_NULL)
     public class AnnenForelderDto {
-        @Override
-        public String toString() {
-            return "AnnenForelderDto [type=" + type + ", id=" + id + ", fnr=" + fnr + ", land=" + land + ", navn="
-                    + navn + "]";
-        }
 
         public String type;
         public String id;
@@ -91,15 +82,6 @@ public class YtelseDto {
     @JsonInclude(NON_EMPTY)
     public class MedlemsskapDto {
 
-        @Override
-        public String toString() {
-            return "MedlemsskapDto{" +
-                    "arbeidSiste12='" + arbeidSiste12 + '\'' +
-                    ", utenlandsopphold=" + utenlandsopphold +
-                    ", framtidigUtenlandsopphold=" + framtidigUtenlandsopphold +
-                    '}';
-        }
-
         public String arbeidSiste12;
         public List<UtenlandsoppholdPeriodeDto> utenlandsopphold = new ArrayList<>();
         public List<UtenlandsoppholdPeriodeDto> framtidigUtenlandsopphold = new ArrayList<>();
@@ -114,14 +96,9 @@ public class YtelseDto {
                 framtidigUtenlandsopphold.add(new UtenlandsoppholdPeriodeDto(senere));
             }
         }
-
     }
 
     public class UtenlandsoppholdPeriodeDto {
-        @Override
-        public String toString() {
-            return "UtenlandsoppholdPeriodeDto [land=" + land + ", varighet=" + varighet + "]";
-        }
 
         public String land;
         public PeriodeDto varighet = new PeriodeDto();
@@ -143,15 +120,6 @@ public class YtelseDto {
         public List<LocalDate> fødselsdato;
         public LocalDate omsorgsovertakelsesdato;
         public LocalDate ankomstDato;
-
-        @Override
-        public String toString() {
-            return "RelasjonTilBarnDto [type=" + type + ", antallBarn=" + antallBarn + ", terminDato=" + terminDato
-                    + ", vedlegg=" + vedlegg + ", utstedtDato=" + utstedtDato + ", fødselsdato=" + fødselsdato
-                    + ", omsorgsovertakelsesdato=" + omsorgsovertakelsesdato + ", ankomstDato=" + ankomstDato
-                    + ", ektefellesBarn=" + ektefellesBarn + "]";
-        }
-
         public Boolean ektefellesBarn;
 
         public RelasjonTilBarnDto(Barn barn, String situasjon) {
@@ -190,11 +158,6 @@ public class YtelseDto {
 
     @JsonInclude(NON_NULL)
     public class RettigheterDto {
-        @Override
-        public String toString() {
-            return "RettigheterDto [harAnnenForelderRett=" + harAnnenForelderRett + ", harAleneOmsorgForBarnet="
-                    + harAleneOmsorgForBarnet + ", datoForAleneomsorg=" + datoForAleneomsorg + "]";
-        }
 
         public Boolean harAnnenForelderRett;
         public Boolean harAleneOmsorgForBarnet;
