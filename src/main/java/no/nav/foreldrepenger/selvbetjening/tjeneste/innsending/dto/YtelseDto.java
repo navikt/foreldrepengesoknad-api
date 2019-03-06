@@ -2,6 +2,8 @@ package no.nav.foreldrepenger.selvbetjening.tjeneste.innsending.dto;
 
 import com.fasterxml.jackson.annotation.JsonInclude;
 import no.nav.foreldrepenger.selvbetjening.tjeneste.innsending.domain.*;
+import no.nav.foreldrepenger.selvbetjening.tjeneste.innsending.domain.tilrettelegging.Arbeidsforhold;
+import no.nav.foreldrepenger.selvbetjening.tjeneste.innsending.domain.tilrettelegging.Tilrettelegging;
 
 import java.time.LocalDate;
 import java.util.ArrayList;
@@ -28,7 +30,23 @@ public class YtelseDto {
 
     public YtelseDto(Søknad søknad) {
         this.type = søknad.type;
-        this.relasjonTilBarn = new RelasjonTilBarnDto(søknad.barn, søknad.situasjon);
+
+        if (søknad instanceof Foreldrepengesøknad) {
+            Foreldrepengesøknad foreldrepengesøknad = (Foreldrepengesøknad) søknad;
+            this.relasjonTilBarn = new RelasjonTilBarnDto(søknad.barn, søknad.situasjon);
+            this.dekningsgrad = "GRAD" + foreldrepengesøknad.dekningsgrad;
+            this.fordeling = new FordelingDto(foreldrepengesøknad.uttaksplan, foreldrepengesøknad.annenForelder.erInformertOmSøknaden);
+            this.rettigheter = new RettigheterDto(foreldrepengesøknad);
+        }
+
+        if (søknad instanceof Engangsstønad) {
+            this.relasjonTilBarn = new RelasjonTilBarnDto(søknad.barn, søknad.situasjon);
+        }
+
+        if (søknad instanceof Svangerskapspengesøknad) {
+            Svangerskapspengesøknad svangerskapspengesøknad = (Svangerskapspengesøknad) søknad;
+            this.tilrettelegging = svangerskapspengesøknad.tilrettelegging.stream().map(TilretteleggingDto::new).collect(toList());
+        }
 
         if (søknad.annenForelder != null) {
             this.annenForelder = new AnnenForelderDto(søknad.annenForelder);
@@ -39,16 +57,6 @@ public class YtelseDto {
             if (søknad instanceof Foreldrepengesøknad || søknad instanceof Svangerskapspengesøknad) {
                 this.opptjening = new OpptjeningDto(søknad.søker);
             }
-        }
-
-        if (søknad instanceof Foreldrepengesøknad) {
-            Foreldrepengesøknad foreldrepengesøknad = (Foreldrepengesøknad) søknad;
-            this.dekningsgrad = "GRAD" + foreldrepengesøknad.dekningsgrad;
-            this.fordeling = new FordelingDto(foreldrepengesøknad.uttaksplan, foreldrepengesøknad.annenForelder.erInformertOmSøknaden);
-            this.rettigheter = new RettigheterDto(foreldrepengesøknad);
-        } else if (søknad instanceof Svangerskapspengesøknad) {
-            Svangerskapspengesøknad svangerskapspengesøknad = (Svangerskapspengesøknad) søknad;
-            this.tilrettelegging = svangerskapspengesøknad.tilrettelegging.stream().map(TilretteleggingDto::new).collect(toList());
         }
     }
 
@@ -172,25 +180,33 @@ public class YtelseDto {
 
     @JsonInclude(NON_NULL)
     public class TilretteleggingDto {
+        public String type;
         public LocalDate behovForTilretteleggingFom;
         public LocalDate tilrettelagtArbeidFom;
+        public LocalDate slutteArbeidFom;
         public Double stillingsprosent;
         public ArbeidsforholdDto arbeidsforhold;
+        public List<String> vedlegg;
 
         public TilretteleggingDto(Tilrettelegging tilrettelegging) {
+            this.type = tilrettelegging.type;
+            this.arbeidsforhold = new ArbeidsforholdDto(tilrettelegging.arbeidsforhold);
             this.behovForTilretteleggingFom = tilrettelegging.behovForTilretteleggingFom;
             this.tilrettelagtArbeidFom = tilrettelegging.tilrettelagtArbeidFom;
             this.stillingsprosent = tilrettelegging.stillingsprosent;
-            this.arbeidsforhold = new ArbeidsforholdDto(tilrettelegging.arbeidsgiverId);
+            this.slutteArbeidFom = tilrettelegging.slutteArbeidFom;
+            this.vedlegg = tilrettelegging.vedlegg;
         }
     }
 
     @JsonInclude(NON_NULL)
     public class ArbeidsforholdDto {
+        public String type;
         public String identifikator;
 
-        public ArbeidsforholdDto(String arbeidsgiverId) {
-            this.identifikator = arbeidsgiverId;
+        public ArbeidsforholdDto(Arbeidsforhold arbeidsforhold) {
+            this.type = arbeidsforhold.type;
+            this.identifikator = arbeidsforhold.id;
         }
     }
 }
