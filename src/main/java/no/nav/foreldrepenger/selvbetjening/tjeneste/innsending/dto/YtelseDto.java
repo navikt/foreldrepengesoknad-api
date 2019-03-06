@@ -1,18 +1,17 @@
 package no.nav.foreldrepenger.selvbetjening.tjeneste.innsending.dto;
 
-import static com.fasterxml.jackson.annotation.JsonInclude.Include.NON_EMPTY;
-import static com.fasterxml.jackson.annotation.JsonInclude.Include.NON_NULL;
-import static java.util.stream.Collectors.toList;
-import static org.apache.commons.lang3.StringUtils.isEmpty;
+import com.fasterxml.jackson.annotation.JsonInclude;
+import no.nav.foreldrepenger.selvbetjening.tjeneste.innsending.domain.*;
 
 import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.stream.Collectors;
 
-import com.fasterxml.jackson.annotation.JsonInclude;
-
-import no.nav.foreldrepenger.selvbetjening.tjeneste.innsending.domain.*;
+import static com.fasterxml.jackson.annotation.JsonInclude.Include.NON_EMPTY;
+import static com.fasterxml.jackson.annotation.JsonInclude.Include.NON_NULL;
+import static java.util.stream.Collectors.toList;
+import static org.apache.commons.lang3.StringUtils.isEmpty;
+import static org.apache.commons.lang3.StringUtils.isNotBlank;
 
 @JsonInclude(NON_NULL)
 public class YtelseDto {
@@ -73,7 +72,7 @@ public class YtelseDto {
 
         public AnnenForelderDto(AnnenForelder annenForelder) {
             this.type = annenForelder.type();
-            this.navn = type.equals("ukjent") ? null : annenForelder.fornavn + " " + annenForelder.etternavn;
+            this.navn = type.equals("ukjent") ? null : navn(annenForelder);
             this.land = annenForelder.bostedsland;
 
             if (annenForelder.type().equals("norsk")) {
@@ -82,6 +81,10 @@ public class YtelseDto {
             else if (annenForelder.type().equals("utenlandsk")) {
                 this.id = annenForelder.fnr;
             }
+        }
+
+        private String navn(AnnenForelder annenForelder) {
+            return isNotBlank(annenForelder.navn) ? annenForelder.navn : annenForelder.fornavn + " " + annenForelder.etternavn;
         }
     }
 
