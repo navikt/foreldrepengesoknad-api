@@ -1,5 +1,7 @@
 package no.nav.foreldrepenger.selvbetjening.tjeneste.innsending.domain;
 
-public class Svangerskapspengesøknad extends Søknad {
+import java.util.List;
 
+public class Svangerskapspengesøknad extends Søknad {
+    public List<Tilrettelegging> tilrettelegging;
 }

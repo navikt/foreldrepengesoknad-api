@@ -1,10 +1,7 @@
-package no.nav.foreldrepenger.selvbetjening.tjeneste.innsending;
+package no.nav.foreldrepenger.selvbetjening.tjeneste.innsending.dto;
 
 import com.fasterxml.jackson.annotation.JsonInclude;
 import no.nav.foreldrepenger.selvbetjening.tjeneste.innsending.domain.Svangerskapspengesøknad;
-import no.nav.foreldrepenger.selvbetjening.tjeneste.innsending.dto.SøkerDto;
-import no.nav.foreldrepenger.selvbetjening.tjeneste.innsending.dto.SøknadDto;
-import no.nav.foreldrepenger.selvbetjening.tjeneste.innsending.dto.YtelseDto;
 
 import java.util.ArrayList;
 
