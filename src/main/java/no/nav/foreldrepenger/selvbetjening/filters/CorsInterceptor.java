@@ -37,7 +37,11 @@ public class CorsInterceptor extends HandlerInterceptorAdapter {
             "https://foreldrepengeoversikt.nais.oera-q.local," +
             "https://foreldrepenger-t10.nav.no," +
             "https://foreldrepenger-q.nav.no," +
-            "https://foreldrepenger.nav.no}") String... allowedOrigins) {
+            "https://foreldrepenger.nav.no," +
+            "https://svangerskapspengesoknad-t10.nav.no," +
+            "https://svangerskapspengesoknad-q.nav.no," +
+            "https://svangerskapspengesoknad.nav.no," +
+            "}") String... allowedOrigins) {
         this(Arrays.asList(allowedOrigins));
     }
 
