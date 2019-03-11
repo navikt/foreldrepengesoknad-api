@@ -1,14 +1,14 @@
 package no.nav.foreldrepenger.selvbetjening.tjeneste.innsending.dto;
 
-import static com.fasterxml.jackson.annotation.JsonInclude.Include.NON_NULL;
+import com.fasterxml.jackson.annotation.JsonInclude;
+import no.nav.foreldrepenger.selvbetjening.tjeneste.innsending.domain.UttaksplanPeriode;
 
 import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
 
-import com.fasterxml.jackson.annotation.JsonInclude;
-
-import no.nav.foreldrepenger.selvbetjening.tjeneste.innsending.domain.UttaksplanPeriode;
+import static com.fasterxml.jackson.annotation.JsonInclude.Include.NON_NULL;
+import static org.apache.commons.lang3.BooleanUtils.isTrue;
 
 public class FordelingDto {
 
@@ -41,11 +41,10 @@ public class FordelingDto {
         public Boolean ønskerFlerbarnsdager;
 
         public FordelingPeriodeDto(UttaksplanPeriode u) {
-            if (u.gradert != null) {
-                this.type = u.gradert ? "gradert" : u.type;
-                this.arbeidsForholdSomskalGraderes = u.gradert ? true : null;
-            }
-            else {
+            if (isTrue(u.gradert)) {
+                this.type = "gradert";
+                this.arbeidsForholdSomskalGraderes = true;
+            } else {
                 this.type = u.type;
             }
             this.ønskerFlerbarnsdager = u.ønskerFlerbarnsdager;

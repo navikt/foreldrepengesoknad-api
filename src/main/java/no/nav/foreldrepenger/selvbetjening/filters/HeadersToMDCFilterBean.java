@@ -1,19 +1,7 @@
 package no.nav.foreldrepenger.selvbetjening.filters;
 
-import static no.nav.foreldrepenger.selvbetjening.util.Constants.NAV_CALL_ID;
-import static no.nav.foreldrepenger.selvbetjening.util.Constants.NAV_CONSUMER_ID;
-import static no.nav.foreldrepenger.selvbetjening.util.MDCUtil.toMDC;
-import static org.springframework.core.Ordered.LOWEST_PRECEDENCE;
-
-import java.io.IOException;
-
-import javax.inject.Inject;
-import javax.servlet.FilterChain;
-import javax.servlet.ServletException;
-import javax.servlet.ServletRequest;
-import javax.servlet.ServletResponse;
-import javax.servlet.http.HttpServletRequest;
-
+import no.nav.foreldrepenger.selvbetjening.util.CallIdGenerator;
+import no.nav.foreldrepenger.selvbetjening.util.TokenUtil;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Value;
@@ -21,11 +9,20 @@ import org.springframework.core.annotation.Order;
 import org.springframework.stereotype.Component;
 import org.springframework.web.filter.GenericFilterBean;
 
-import no.nav.foreldrepenger.selvbetjening.util.CallIdGenerator;
-import no.nav.foreldrepenger.selvbetjening.util.TokenUtil;
+import javax.inject.Inject;
+import javax.servlet.FilterChain;
+import javax.servlet.ServletException;
+import javax.servlet.ServletRequest;
+import javax.servlet.ServletResponse;
+import javax.servlet.http.HttpServletRequest;
+import java.io.IOException;
+
+import static no.nav.foreldrepenger.selvbetjening.util.Constants.NAV_CALL_ID;
+import static no.nav.foreldrepenger.selvbetjening.util.Constants.NAV_CONSUMER_ID;
+import static no.nav.foreldrepenger.selvbetjening.util.MDCUtil.toMDC;
 
 @Component
-@Order(LOWEST_PRECEDENCE)
+@Order
 public class HeadersToMDCFilterBean extends GenericFilterBean {
     private static final Logger LOG = LoggerFactory.getLogger(HeadersToMDCFilterBean.class);
 
@@ -44,8 +41,8 @@ public class HeadersToMDCFilterBean extends GenericFilterBean {
     @Override
     public void doFilter(ServletRequest req, ServletResponse response, FilterChain chain)
             throws IOException, ServletException {
-        String uri = HttpServletRequest.class.cast(req).getRequestURI();
-        putValues(HttpServletRequest.class.cast(req), uri);
+        String uri = ((HttpServletRequest) req).getRequestURI();
+        putValues((HttpServletRequest) req, uri);
         chain.doFilter(req, response);
 
     }

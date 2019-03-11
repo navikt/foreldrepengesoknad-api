@@ -15,7 +15,7 @@ import org.springframework.http.client.ClientHttpResponse;
 import org.springframework.stereotype.Component;
 
 @Component
-@Order(LOWEST_PRECEDENCE)
+@Order
 public class MDCValuesPropagatingClientInterceptor implements ClientHttpRequestInterceptor {
 
     @Override

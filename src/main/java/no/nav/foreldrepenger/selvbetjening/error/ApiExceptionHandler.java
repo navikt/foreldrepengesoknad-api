@@ -1,14 +1,8 @@
 package no.nav.foreldrepenger.selvbetjening.error;
 
-import static org.springframework.http.HttpStatus.FORBIDDEN;
-import static org.springframework.http.HttpStatus.INTERNAL_SERVER_ERROR;
-import static org.springframework.http.HttpStatus.NOT_FOUND;
-import static org.springframework.http.HttpStatus.PAYLOAD_TOO_LARGE;
-import static org.springframework.http.HttpStatus.UNAUTHORIZED;
-import static org.springframework.http.HttpStatus.UNPROCESSABLE_ENTITY;
-
-import javax.inject.Inject;
-
+import no.nav.foreldrepenger.selvbetjening.util.TokenUtil;
+import no.nav.security.oidc.exceptions.OIDCTokenValidatorException;
+import no.nav.security.spring.oidc.validation.interceptor.OIDCUnauthorizedException;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.http.HttpHeaders;
@@ -27,9 +21,9 @@ import org.springframework.web.multipart.MultipartException;
 import org.springframework.web.servlet.NoHandlerFoundException;
 import org.springframework.web.servlet.mvc.method.annotation.ResponseEntityExceptionHandler;
 
-import no.nav.foreldrepenger.selvbetjening.util.TokenUtil;
-import no.nav.security.oidc.exceptions.OIDCTokenValidatorException;
-import no.nav.security.spring.oidc.validation.interceptor.OIDCUnauthorizedException;
+import javax.inject.Inject;
+
+import static org.springframework.http.HttpStatus.*;
 
 @ControllerAdvice
 public class ApiExceptionHandler extends ResponseEntityExceptionHandler {
@@ -128,6 +122,6 @@ public class ApiExceptionHandler extends ResponseEntityExceptionHandler {
     }
 
     private static String destFra(WebRequest req) {
-        return ServletWebRequest.class.cast(req).getRequest().getRequestURI();
+        return ((ServletWebRequest) req).getRequest().getRequestURI();
     }
 }

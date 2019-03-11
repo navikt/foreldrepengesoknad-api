@@ -1,9 +1,10 @@
 package no.nav.foreldrepenger.selvbetjening.config;
 
-import java.net.URI;
-
-import javax.inject.Inject;
-
+import com.google.common.collect.ImmutableMap;
+import no.nav.foreldrepenger.selvbetjening.filters.CorsInterceptor;
+import no.nav.foreldrepenger.selvbetjening.interceptors.client.ApiKeyInjectingClientInterceptor;
+import no.nav.foreldrepenger.selvbetjening.tjeneste.innsending.InnsendingConfig;
+import no.nav.foreldrepenger.selvbetjening.tjeneste.oppslag.OppslagConfig;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.boot.web.client.RestTemplateBuilder;
 import org.springframework.context.annotation.Bean;
@@ -13,14 +14,8 @@ import org.springframework.web.client.RestOperations;
 import org.springframework.web.servlet.config.annotation.InterceptorRegistry;
 import org.springframework.web.servlet.config.annotation.WebMvcConfigurer;
 
-import com.fasterxml.jackson.databind.ObjectMapper;
-import com.google.common.collect.ImmutableMap;
-
-import no.nav.foreldrepenger.selvbetjening.filters.CorsInterceptor;
-import no.nav.foreldrepenger.selvbetjening.interceptors.client.ApiKeyInjectingClientInterceptor;
-import no.nav.foreldrepenger.selvbetjening.tjeneste.innsending.InnsendingConfig;
-import no.nav.foreldrepenger.selvbetjening.tjeneste.oppslag.OppslagConfig;
-import no.nav.foreldrepenger.selvbetjening.util.TokenUtil;
+import javax.inject.Inject;
+import java.net.URI;
 
 @Configuration
 public class ApiConfiguration implements WebMvcConfigurer {
@@ -39,12 +34,9 @@ public class ApiConfiguration implements WebMvcConfigurer {
 
     @Inject
     CorsInterceptor corsInterceptor;
-    // @Inject
-    // SubjectToMCDHandlerInterceptor subjectInterceptor;
 
     @Bean
-    public RestOperations restTemplate(TokenUtil tokenHandler, ObjectMapper objectMapper,
-            ClientHttpRequestInterceptor... interceptors) {
+    public RestOperations restTemplate(ClientHttpRequestInterceptor... interceptors) {
         return new RestTemplateBuilder()
                 .interceptors(interceptors)
                 .build();
@@ -63,7 +55,6 @@ public class ApiConfiguration implements WebMvcConfigurer {
 
     @Override
     public void addInterceptors(InterceptorRegistry registry) {
-        // registry.addInterceptor(subjectInterceptor);
         registry.addInterceptor(corsInterceptor);
     }
 }
