@@ -1,7 +1,7 @@
 @Library('deploy')
 import deploy
 
-def deployLib = new deploy()
+def deployLib = new deploy() as Object
 
 node {
     def commitHash, commitHashShort, commitUrl
@@ -9,7 +9,7 @@ node {
     def app = "foreldrepengesoknad-api"
     def committer, committerEmail, releaseVersion
     def mvnHome = tool "maven-3.3.9"
-    def mvn = "${mvnHome}/bin/mvn"
+    def mvn = "${mvnHome}/bin/mvn" as String
     def appConfig = "nais.yaml"
     def dockerRepo = "repo.adeo.no:5443"
     def groupId = "nais"
@@ -79,12 +79,12 @@ node {
                                 color  : 'good',
                                 message: "${app} version ${releaseVersion} has been deployed to T10."
                         ])
-                    } catch (Exception ex) {
+                    } catch (Exception e) {
                         slackSend([
                                 color  : 'danger',
                                 message: "Unable to deploy ${app} version ${releaseVersion} to T10. See https://jira.adeo.no/browse/${deploy} for details"
                         ])
-                        throw new Exception("Deploy feilet :( \n Se https://jira.adeo.no/browse/" + deploy + " for detaljer", ex)
+                        throw new Exception("Deploy feilet :( \n Se https://jira.adeo.no/browse/${deploy} for detaljer", e)
                     }
                 }
             }
@@ -107,12 +107,12 @@ node {
                                 color  : 'good',
                                 message: "${app} version ${releaseVersion} has been deployed to Q1."
                         ])
-                    } catch (Exception ex) {
+                    } catch (Exception e) {
                         slackSend([
                                 color  : 'danger',
                                 message: "Unable to deploy ${app} version ${releaseVersion} to Q1. See https://jira.adeo.no/browse/${deploy} for details"
                         ])
-                        throw new Exception("Deploy feilet :( \n Se https://jira.adeo.no/browse/" + deploy + " for detaljer", ex)
+                        throw new Exception("Deploy feilet :( \n Se https://jira.adeo.no/browse/${deploy} for detaljer", e)
                     }
                 }
             }
@@ -151,7 +151,7 @@ node {
                         color: 'danger',
                         message: "Build ${releaseVersion} of ${app} could not be deployed to production"
                 ])
-                throw new Exception("Deploy feilet :( \n Se https://jira.adeo.no/browse/" + deploy + " for detaljer", e)
+                throw new Exception("Deploy feilet :( \n Se https://jira.adeo.no/browse/${deploy} for detaljer", e)
             }
         }
     }
