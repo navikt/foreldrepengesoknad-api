@@ -12,6 +12,7 @@ import java.util.List;
 import static com.fasterxml.jackson.annotation.JsonInclude.Include.NON_EMPTY;
 import static com.fasterxml.jackson.annotation.JsonInclude.Include.NON_NULL;
 import static java.util.stream.Collectors.toList;
+import static org.apache.commons.collections4.CollectionUtils.isNotEmpty;
 import static org.apache.commons.lang3.StringUtils.isEmpty;
 import static org.apache.commons.lang3.StringUtils.isNotBlank;
 
@@ -27,6 +28,9 @@ public class YtelseDto {
     public FordelingDto fordeling;
     public RettigheterDto rettigheter;
     public List<TilretteleggingDto> tilrettelegging;
+
+    public LocalDate termindato;
+    public LocalDate fødselsdato;
 
     public YtelseDto(Søknad søknad) {
         this.type = søknad.type;
@@ -45,6 +49,10 @@ public class YtelseDto {
 
         if (søknad instanceof Svangerskapspengesøknad) {
             Svangerskapspengesøknad svangerskapspengesøknad = (Svangerskapspengesøknad) søknad;
+            this.termindato = svangerskapspengesøknad.barn.termindato;
+            if (isNotEmpty(svangerskapspengesøknad.barn.fødselsdatoer)) {
+                this.fødselsdato = svangerskapspengesøknad.barn.fødselsdatoer.get(0);
+            }
             this.tilrettelegging = svangerskapspengesøknad.tilrettelegging.stream().map(TilretteleggingDto::new).collect(toList());
         }
 
