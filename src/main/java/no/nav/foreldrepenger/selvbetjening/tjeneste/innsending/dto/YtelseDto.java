@@ -210,11 +210,18 @@ public class YtelseDto {
     @JsonInclude(NON_NULL)
     public class ArbeidsforholdDto {
         public String type;
-        public String identifikator;
+        public String orgnr;
+        public String fnr;
 
         public ArbeidsforholdDto(Arbeidsforhold arbeidsforhold) {
             this.type = arbeidsforhold.type;
-            this.identifikator = arbeidsforhold.id;
+
+            if (arbeidsforhold.type.equals("virksomhet")) {
+                this.orgnr = arbeidsforhold.id;
+            } else {
+                this.fnr = arbeidsforhold.id;
+            }
+
         }
     }
 }
