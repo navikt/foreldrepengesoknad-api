@@ -34,6 +34,8 @@ public class FordelingDto {
         public Double arbeidstidProsent;
         public Boolean ønskerSamtidigUttak;
         public Boolean erArbeidstaker;
+        public Boolean frilans;
+        public Boolean selvstendig;
         public Boolean arbeidsForholdSomskalGraderes;
         public String morsAktivitetsType;
         public Double samtidigUttakProsent;
@@ -57,6 +59,8 @@ public class FordelingDto {
             this.arbeidstidProsent = u.stillingsprosent;
             this.ønskerSamtidigUttak = u.ønskerSamtidigUttak;
             this.erArbeidstaker = u.erArbeidstaker;
+            this.frilans = u.erFrilanser;
+            this.selvstendig = u.erSelvstendig;
             this.morsAktivitetsType = u.morsAktivitetIPerioden;
             this.vedlegg = u.vedlegg;
         }

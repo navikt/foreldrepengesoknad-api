@@ -54,7 +54,7 @@ public class OppslagTjenesteStub implements Oppslag {
         arbeidsforhold.arbeidsgiverId = "123456789";
         arbeidsforhold.arbeidsgiverIdType = "orgnr";
         arbeidsforhold.fom = now().minusYears(2);
-        arbeidsforhold.arbeidsgiverNavn = "navn";
+        arbeidsforhold.arbeidsgiverNavn = "KJELL T. RINGS SYKKELVERKSTED";
         arbeidsforhold.stillingsprosent = 100d;
         dto.arbeidsforhold.add(arbeidsforhold);
         return new Søkerinfo(dto);

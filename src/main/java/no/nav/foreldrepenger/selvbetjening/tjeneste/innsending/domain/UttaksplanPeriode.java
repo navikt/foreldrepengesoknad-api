@@ -15,6 +15,8 @@ public class UttaksplanPeriode {
     public String konto;
     public List<String> orgnumre;
     public Boolean erArbeidstaker;
+    public Boolean erFrilanser;
+    public Boolean erSelvstendig;
     public Double stillingsprosent;
     public Double samtidigUttakProsent;
     public Boolean ønskerSamtidigUttak;
@@ -46,15 +48,4 @@ public class UttaksplanPeriode {
         this.status = u.getPeriodeResultatType().toString();
     }
 
-    @Override
-    public String toString() {
-        return getClass().getSimpleName() + "[type=" + type + ", årsak=" + årsak + ", konto=" + konto + ", orgnumre="
-                + orgnumre
-                + ", erArbeidstaker=" + erArbeidstaker + ", stillingsprosent=" + stillingsprosent
-                + ", samtidigUttakProsent=" + samtidigUttakProsent + ", ønskerSamtidigUttak=" + ønskerSamtidigUttak
-                + ", gradert=" + gradert + ", morsAktivitetIPerioden=" + morsAktivitetIPerioden
-                + ", ønskerFlerbarnsdager=" + ønskerFlerbarnsdager + ", tidsperiode=" + tidsperiode + ", forelder="
-                + forelder + ", vedlegg=" + vedlegg + ", graderingInnvilget=" + graderingInnvilget + ", status="
-                + status + "]";
-    }
 }
