@@ -10,6 +10,7 @@ import org.springframework.stereotype.Service;
 
 import no.nav.foreldrepenger.selvbetjening.tjeneste.innsending.domain.UttaksplanPeriode;
 import no.nav.foreldrepenger.selvbetjening.tjeneste.innsyn.saker.Sak;
+import no.nav.foreldrepenger.selvbetjening.tjeneste.innsyn.vedtak.Vedtak;
 
 @Service
 @ConditionalOnProperty(name = "stub.oppslag", havingValue = "false", matchIfMissing = true)
@@ -27,6 +28,11 @@ public class InnsynTjeneste implements Innsyn {
                 .stream()
                 .map(UttaksplanPeriode::new)
                 .collect(toList());
+    }
+
+    @Override
+    public Vedtak hentVedtak(String saksnummer) {
+        return innsynConnection.hentVedtak(saksnummer);
     }
 
     @Override
@@ -48,4 +54,5 @@ public class InnsynTjeneste implements Innsyn {
     public String toString() {
         return getClass().getSimpleName() + " [innsynConnection=" + innsynConnection + "]";
     }
+
 }

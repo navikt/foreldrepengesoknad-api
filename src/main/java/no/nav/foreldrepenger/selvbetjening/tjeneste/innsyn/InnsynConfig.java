@@ -18,6 +18,7 @@ public class InnsynConfig {
     private static final String SAK_SAKER = "sak";
     private static final String SAKSNUMMER = "saksnummer";
     private static final String UTTAKSPLAN = "innsyn/uttaksplan";
+    private static final String VEDTAK = "innsyn/vedtak";
 
     boolean enabled;
     URI mottakURI;
@@ -67,6 +68,11 @@ public class InnsynConfig {
 
     URI getUttakURI(String saksnummer) {
         return uri(getMottakURI(), UTTAKSPLAN, queryParams(SAKSNUMMER, saksnummer));
+    }
+
+    public URI getVedtakURI(String saksnummer) {
+        return uri(getMottakURI(), VEDTAK, queryParams(SAKSNUMMER, saksnummer));
+
     }
 
 }

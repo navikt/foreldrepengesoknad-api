@@ -44,6 +44,6 @@ public class TimingAndLoggingClientHttpRequestInterceptor implements ClientHttpR
     }
 
     private static boolean hasError(HttpStatus code) {
-        return code.series() == CLIENT_ERROR || code.series() == SERVER_ERROR;
+        return code.series().equals(CLIENT_ERROR) || code.series().equals(SERVER_ERROR);
     }
 }

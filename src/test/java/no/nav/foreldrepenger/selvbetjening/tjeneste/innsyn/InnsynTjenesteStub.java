@@ -16,6 +16,7 @@ import org.springframework.stereotype.Service;
 import no.nav.foreldrepenger.selvbetjening.tjeneste.innsending.domain.UttaksplanPeriode;
 import no.nav.foreldrepenger.selvbetjening.tjeneste.innsyn.saker.Behandling;
 import no.nav.foreldrepenger.selvbetjening.tjeneste.innsyn.saker.Sak;
+import no.nav.foreldrepenger.selvbetjening.tjeneste.innsyn.vedtak.Vedtak;
 
 @Service
 @ConditionalOnProperty(name = "stub.oppslag", havingValue = "true")
@@ -46,5 +47,10 @@ public class InnsynTjenesteStub implements Innsyn {
         return Arrays.asList(
                 new Sak("SAK", "LA8PV", "UBEH", now().minusYears(1), emptyList()),
                 new Sak("FPSAK", "424242424", "LOP", mottattdato.toLocalDate(), singletonList(behandling)));
+    }
+
+    @Override
+    public Vedtak hentVedtak(String saksnummer) {
+        return null;
     }
 }
