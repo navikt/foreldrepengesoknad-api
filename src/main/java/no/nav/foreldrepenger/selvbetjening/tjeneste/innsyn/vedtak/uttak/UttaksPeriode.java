@@ -2,6 +2,9 @@ package no.nav.foreldrepenger.selvbetjening.tjeneste.innsyn.vedtak.uttak;
 
 import java.util.List;
 
+import com.fasterxml.jackson.annotation.JsonCreator;
+import com.fasterxml.jackson.annotation.JsonProperty;
+
 import no.nav.foreldrepenger.selvbetjening.tjeneste.innsyn.LukketPeriode;
 
 public class UttaksPeriode {
@@ -16,10 +19,16 @@ public class UttaksPeriode {
     private final Boolean manueltBehandlet;
     private final ManuellBehandlingsÅrsak manuellBehandlingsårsak;
 
-    public UttaksPeriode(LukketPeriode periode, UttaksPeriodeResultatType resultatType,
-            UttaksPeriodeResultatÅrsak årsak, String begrunnelse, List<PeriodeAktivitet> periodeAktiviteter,
-            Boolean graderingInnvilget, Boolean samtidigUttak, Boolean manueltBehandlet,
-            ManuellBehandlingsÅrsak manuellBehandlingsårsak) {
+    @JsonCreator
+    public UttaksPeriode(@JsonProperty("periode") LukketPeriode periode,
+            @JsonProperty("resultatType") UttaksPeriodeResultatType resultatType,
+            @JsonProperty("årsak") UttaksPeriodeResultatÅrsak årsak,
+            @JsonProperty("begrunnelse") String begrunnelse,
+            @JsonProperty("periodeAktiviteter") List<PeriodeAktivitet> periodeAktiviteter,
+            @JsonProperty("graderingInnvilget") Boolean graderingInnvilget,
+            @JsonProperty("samtidigUttak") Boolean samtidigUttak,
+            @JsonProperty("manueltBehandlet") Boolean manueltBehandlet,
+            @JsonProperty("periode") ManuellBehandlingsÅrsak manuellBehandlingsårsak) {
         this.periode = periode;
         this.resultatType = resultatType;
         this.årsak = årsak;

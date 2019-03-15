@@ -72,7 +72,6 @@ public class InnsynConfig {
 
     public URI getVedtakURI(String saksnummer) {
         return uri(getMottakURI(), VEDTAK, queryParams(SAKSNUMMER, saksnummer));
-
     }
 
 }

@@ -1,5 +1,8 @@
 package no.nav.foreldrepenger.selvbetjening.tjeneste.innsyn.vedtak.uttak;
 
+import com.fasterxml.jackson.annotation.JsonCreator;
+import com.fasterxml.jackson.annotation.JsonProperty;
+
 import no.nav.foreldrepenger.selvbetjening.tjeneste.innsyn.uttaksplan.StønadskontoType;
 
 public class PeriodeAktivitet {
@@ -14,9 +17,16 @@ public class PeriodeAktivitet {
     private final ArbeidType arbeidType;
     private final String virksomhet;
 
-    public PeriodeAktivitet(String arbeidsforholdId, ProsentAndel arbeidstidProsent, AvslagsÅrsak avslagsÅrsak,
-            Boolean gradering, Integer trekkDager, StønadskontoType trekkonto, ProsentAndel utbetalingProsent,
-            ArbeidType arbeidType, String virksomhet) {
+    @JsonCreator
+    public PeriodeAktivitet(@JsonProperty("arbeidsforholdId") String arbeidsforholdId,
+            @JsonProperty("arbeidstidProsent") ProsentAndel arbeidstidProsent,
+            @JsonProperty("avslagsÅrsak") AvslagsÅrsak avslagsÅrsak,
+            @JsonProperty("gradering") Boolean gradering,
+            @JsonProperty("trekkDager") Integer trekkDager,
+            @JsonProperty("trekkonto") StønadskontoType trekkonto,
+            @JsonProperty("utbetalingProsent") ProsentAndel utbetalingProsent,
+            @JsonProperty("arbeidType") ArbeidType arbeidType,
+            @JsonProperty("virksomhet") String virksomhet) {
         this.arbeidsforholdId = arbeidsforholdId;
         this.arbeidstidProsent = arbeidstidProsent;
         this.avslagsÅrsak = avslagsÅrsak;
