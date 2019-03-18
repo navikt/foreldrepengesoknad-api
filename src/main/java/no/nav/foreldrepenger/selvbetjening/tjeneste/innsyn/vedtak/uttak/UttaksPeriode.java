@@ -40,6 +40,42 @@ public class UttaksPeriode {
         this.manuellBehandlingsårsak = manuellBehandlingsårsak;
     }
 
+    public LukketPeriode getPeriode() {
+        return periode;
+    }
+
+    public UttaksPeriodeResultatType getResultatType() {
+        return resultatType;
+    }
+
+    public UttaksPeriodeResultatÅrsak getÅrsak() {
+        return årsak;
+    }
+
+    public String getBegrunnelse() {
+        return begrunnelse;
+    }
+
+    public List<PeriodeAktivitet> getPeriodeAktiviteter() {
+        return periodeAktiviteter;
+    }
+
+    public Boolean getGraderingInnvilget() {
+        return graderingInnvilget;
+    }
+
+    public Boolean getSamtidigUttak() {
+        return samtidigUttak;
+    }
+
+    public Boolean getManueltBehandlet() {
+        return manueltBehandlet;
+    }
+
+    public ManuellBehandlingsÅrsak getManuellBehandlingsårsak() {
+        return manuellBehandlingsårsak;
+    }
+
     @Override
     public String toString() {
         return getClass().getSimpleName() + " [periode=" + periode + ", resultatType=" + resultatType + ", årsak="
