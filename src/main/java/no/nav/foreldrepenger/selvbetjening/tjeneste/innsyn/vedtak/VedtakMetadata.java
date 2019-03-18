@@ -3,16 +3,14 @@ package no.nav.foreldrepenger.selvbetjening.tjeneste.innsyn.vedtak;
 import com.fasterxml.jackson.annotation.JsonCreator;
 import com.fasterxml.jackson.annotation.JsonProperty;
 
-import no.nav.foreldrepenger.selvbetjening.tjeneste.innsyn.vedtak.uttak.Versjon;
-
 public class VedtakMetadata {
 
     private final String journalpostId;
-    private final Versjon versjon;
+    private final String versjon;
 
     @JsonCreator
     public VedtakMetadata(@JsonProperty("journalpostId") String journalpostId,
-            @JsonProperty("versjon") Versjon versjon) {
+            @JsonProperty("versjon") String versjon) {
         this.journalpostId = journalpostId;
         this.versjon = versjon;
     }
@@ -21,7 +19,7 @@ public class VedtakMetadata {
         return journalpostId;
     }
 
-    public Versjon getVersjon() {
+    public String getVersjon() {
         return versjon;
     }
 
