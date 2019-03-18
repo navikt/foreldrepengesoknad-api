@@ -28,7 +28,7 @@ public class UttaksPeriode {
             @JsonProperty("graderingInnvilget") Boolean graderingInnvilget,
             @JsonProperty("samtidigUttak") Boolean samtidigUttak,
             @JsonProperty("manueltBehandlet") Boolean manueltBehandlet,
-            @JsonProperty("periode") ManuellBehandlingsÅrsak manuellBehandlingsårsak) {
+            @JsonProperty("manuellBehandlingsårsak") ManuellBehandlingsÅrsak manuellBehandlingsårsak) {
         this.periode = periode;
         this.resultatType = resultatType;
         this.årsak = årsak;
