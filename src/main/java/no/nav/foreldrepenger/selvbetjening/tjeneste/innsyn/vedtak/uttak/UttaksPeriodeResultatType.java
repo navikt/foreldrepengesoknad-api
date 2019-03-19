@@ -4,7 +4,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 public enum UttaksPeriodeResultatType {
-    INNVILGET;
+    INNVILGET, AVSLÅTT;
 
     private static final Logger LOG = LoggerFactory.getLogger(UttaksPeriodeResultatType.class);
 
