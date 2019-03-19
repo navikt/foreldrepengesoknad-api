@@ -12,8 +12,8 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
-import no.nav.foreldrepenger.selvbetjening.tjeneste.innsending.domain.UttaksplanPeriode;
 import no.nav.foreldrepenger.selvbetjening.tjeneste.innsyn.saker.Sak;
+import no.nav.foreldrepenger.selvbetjening.tjeneste.innsyn.uttaksplan.Uttaksplan;
 import no.nav.foreldrepenger.selvbetjening.tjeneste.innsyn.vedtak.Vedtak;
 import no.nav.security.oidc.api.ProtectedWithClaims;
 
@@ -37,7 +37,7 @@ public class InnsynController {
     }
 
     @GetMapping("/uttaksplan")
-    public List<UttaksplanPeriode> uttaksplan(@RequestParam(name = "saksnummer") String saksnummer) {
+    public Uttaksplan uttaksplan(@RequestParam(name = "saksnummer") String saksnummer) {
         return innsyn.hentUttaksplan(saksnummer);
     }
 

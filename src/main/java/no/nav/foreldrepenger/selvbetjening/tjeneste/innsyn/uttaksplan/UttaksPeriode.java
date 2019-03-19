@@ -1,6 +1,7 @@
 package no.nav.foreldrepenger.selvbetjening.tjeneste.innsyn.uttaksplan;
 
 import java.time.LocalDate;
+import java.util.Objects;
 
 import javax.validation.Valid;
 
@@ -80,6 +81,31 @@ public class UttaksPeriode {
 
     public Boolean getGjelderAnnenPart() {
         return gjelderAnnenPart;
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(gjelderAnnenPart, utbetalingprosent, arbeidstidProsent, trekkDager, stønadskontotype,
+                periode, samtidigUttak, graderingInnvilget, periodeResultatType);
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) {
+            return true;
+        }
+        if (o == null || getClass() != o.getClass()) {
+            return false;
+        }
+        UttaksPeriode that = (UttaksPeriode) o;
+        return Objects.equals(gjelderAnnenPart, that.gjelderAnnenPart)
+                && Objects.equals(this.utbetalingprosent, that.utbetalingprosent)
+                && Objects.equals(this.arbeidstidProsent, that.arbeidstidProsent)
+                && Objects.equals(this.trekkDager, that.trekkDager)
+                && Objects.equals(this.stønadskontotype, that.stønadskontotype)
+                && Objects.equals(this.periode, that.periode)
+                && Objects.equals(this.samtidigUttak, that.samtidigUttak)
+                && Objects.equals(this.graderingInnvilget, that.graderingInnvilget);
     }
 
     @Override

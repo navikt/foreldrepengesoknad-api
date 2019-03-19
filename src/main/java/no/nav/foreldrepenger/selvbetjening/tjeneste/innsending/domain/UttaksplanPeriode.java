@@ -31,7 +31,6 @@ public class UttaksplanPeriode {
     public Boolean graderingInnvilget;
     public String status;
 
-    @SuppressWarnings("unused")
     public UttaksplanPeriode() {
     }
 

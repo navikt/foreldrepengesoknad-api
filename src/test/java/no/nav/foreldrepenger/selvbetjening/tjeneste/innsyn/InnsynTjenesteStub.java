@@ -13,9 +13,9 @@ import java.util.List;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnProperty;
 import org.springframework.stereotype.Service;
 
-import no.nav.foreldrepenger.selvbetjening.tjeneste.innsending.domain.UttaksplanPeriode;
 import no.nav.foreldrepenger.selvbetjening.tjeneste.innsyn.saker.Behandling;
 import no.nav.foreldrepenger.selvbetjening.tjeneste.innsyn.saker.Sak;
+import no.nav.foreldrepenger.selvbetjening.tjeneste.innsyn.uttaksplan.Uttaksplan;
 import no.nav.foreldrepenger.selvbetjening.tjeneste.innsyn.vedtak.Vedtak;
 
 @Service
@@ -33,7 +33,7 @@ public class InnsynTjenesteStub implements Innsyn {
     }
 
     @Override
-    public List<UttaksplanPeriode> hentUttaksplan(String saksnummer) {
+    public Uttaksplan hentUttaksplan(String saksnummer) {
         return null;
     }
 

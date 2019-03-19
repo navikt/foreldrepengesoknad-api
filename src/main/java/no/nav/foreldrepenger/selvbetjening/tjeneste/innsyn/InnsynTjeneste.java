@@ -1,15 +1,13 @@
 package no.nav.foreldrepenger.selvbetjening.tjeneste.innsyn;
 
-import static java.util.stream.Collectors.toList;
-
 import java.net.URI;
 import java.util.List;
 
 import org.springframework.boot.autoconfigure.condition.ConditionalOnProperty;
 import org.springframework.stereotype.Service;
 
-import no.nav.foreldrepenger.selvbetjening.tjeneste.innsending.domain.UttaksplanPeriode;
 import no.nav.foreldrepenger.selvbetjening.tjeneste.innsyn.saker.Sak;
+import no.nav.foreldrepenger.selvbetjening.tjeneste.innsyn.uttaksplan.Uttaksplan;
 import no.nav.foreldrepenger.selvbetjening.tjeneste.innsyn.vedtak.Vedtak;
 
 @Service
@@ -23,11 +21,8 @@ public class InnsynTjeneste implements Innsyn {
     }
 
     @Override
-    public List<UttaksplanPeriode> hentUttaksplan(String saksnummer) {
-        return innsynConnection.hentUttaksplan(saksnummer)
-                .stream()
-                .map(UttaksplanPeriode::new)
-                .collect(toList());
+    public Uttaksplan hentUttaksplan(String saksnummer) {
+        return innsynConnection.hentUttaksplan(saksnummer);
     }
 
     @Override

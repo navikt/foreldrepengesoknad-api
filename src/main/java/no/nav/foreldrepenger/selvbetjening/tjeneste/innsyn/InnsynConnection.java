@@ -16,7 +16,7 @@ import org.springframework.web.client.RestOperations;
 
 import no.nav.foreldrepenger.selvbetjening.tjeneste.AbstractRestConnection;
 import no.nav.foreldrepenger.selvbetjening.tjeneste.innsyn.saker.Sak;
-import no.nav.foreldrepenger.selvbetjening.tjeneste.innsyn.uttaksplan.UttaksPeriode;
+import no.nav.foreldrepenger.selvbetjening.tjeneste.innsyn.uttaksplan.Uttaksplan;
 import no.nav.foreldrepenger.selvbetjening.tjeneste.innsyn.vedtak.Vedtak;
 
 @Component
@@ -40,10 +40,8 @@ public class InnsynConnection extends AbstractRestConnection {
         return innsynConfig.getPingURI();
     }
 
-    public List<UttaksPeriode> hentUttaksplan(String saksnummer) {
-        return Optional.ofNullable(getForObject(innsynConfig.getUttakURI(saksnummer), UttaksPeriode[].class, false))
-                .map(Arrays::asList)
-                .orElse(emptyList());
+    public Uttaksplan hentUttaksplan(String saksnummer) {
+        return getForObject(innsynConfig.getUttakURI(saksnummer), Uttaksplan.class, false);
     }
 
     public Vedtak hentVedtak(String saksnummer) {
