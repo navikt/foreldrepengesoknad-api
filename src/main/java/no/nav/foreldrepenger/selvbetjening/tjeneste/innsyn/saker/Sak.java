@@ -19,17 +19,22 @@ public class Sak {
     private final String status;
     private final LocalDate opprettet;
     private final String saksnummer;
+    private final String fagsakId;
     private final List<Behandling> behandlinger;
 
     @JsonCreator
-    public Sak(@JsonProperty("type") String type, @JsonProperty("saksnummer") String saksnummer,
-            @JsonProperty("status") String status, @JsonProperty("opprettet") LocalDate opprettet,
-            @JsonProperty("behandlinger") List<Behandling> behandlinger) {
+    public Sak(@JsonProperty("type") String type,
+               @JsonProperty("saksnummer") String saksnummer,
+               @JsonProperty("status") String status,
+               @JsonProperty("opprettet") LocalDate opprettet,
+               @JsonProperty("fagsakId") String fagsakId,
+               @JsonProperty("behandlinger") List<Behandling> behandlinger) {
         this.type = type;
         this.saksnummer = saksnummer;
         this.status = status;
         this.opprettet = opprettet;
-        this.behandlinger = behandlinger = Optional.ofNullable(behandlinger).orElse(emptyList());
+        this.fagsakId = fagsakId;
+        this.behandlinger = Optional.ofNullable(behandlinger).orElse(emptyList());
     }
 
     public String getType() {
@@ -48,6 +53,10 @@ public class Sak {
         return opprettet;
     }
 
+    public String getFagsakId() {
+        return fagsakId;
+    }
+
     public List<Behandling> getBehandlinger() {
         return behandlinger;
     }
@@ -58,8 +67,13 @@ public class Sak {
 
     @Override
     public String toString() {
-        return getClass().getSimpleName() + "[type=" + type + ", saksnummer=" + saksnummer + ", status=" + status
-                + ", opprettet=" + opprettet
-                + ", behandlinger=" + behandlinger + "]";
+        return "Sak{" +
+                "type='" + type + '\'' +
+                ", status='" + status + '\'' +
+                ", opprettet=" + opprettet +
+                ", saksnummer='" + saksnummer + '\'' +
+                ", fagsakId='" + fagsakId + '\'' +
+                ", behandlinger=" + behandlinger +
+                '}';
     }
 }

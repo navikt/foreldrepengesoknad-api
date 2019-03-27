@@ -45,8 +45,8 @@ public class InnsynTjenesteStub implements Innsyn {
                 "FORP_FODS", null, null, "4869", "NAV Torrevieja", Collections.emptyList());
 
         return Arrays.asList(
-                new Sak("SAK", "LA8PV", "UBEH", now().minusYears(1), emptyList()),
-                new Sak("FPSAK", "424242424", "LOP", mottattdato.toLocalDate(), singletonList(behandling)));
+                new Sak("SAK", "123234545", "UBEH", now().minusYears(1), "LA8PV", emptyList()),
+                new Sak("FPSAK", "424242424", "LOP", mottattdato.toLocalDate(), null, singletonList(behandling)));
     }
 
     @Override
