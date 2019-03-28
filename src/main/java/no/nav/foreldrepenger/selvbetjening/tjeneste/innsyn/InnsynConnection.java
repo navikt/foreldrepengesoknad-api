@@ -48,7 +48,7 @@ public class InnsynConnection extends AbstractRestConnection {
     public List<Sak> hentSaker() {
         List<Sak> saker = saker(innsynConfig.getFpsakURI(), "FPSAK");
         if (saker.isEmpty()) {
-            saker.addAll(saker(innsynConfig.getSakURI(), "SAK"));
+            saker = saker(innsynConfig.getSakURI(), "SAK");
         }
 
         return saker;
