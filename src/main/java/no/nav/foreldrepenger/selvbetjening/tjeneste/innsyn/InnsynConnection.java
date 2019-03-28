@@ -1,23 +1,20 @@
 package no.nav.foreldrepenger.selvbetjening.tjeneste.innsyn;
 
-import static java.util.Collections.emptyList;
-import static java.util.stream.Collectors.toList;
-import static java.util.stream.Stream.concat;
+import no.nav.foreldrepenger.selvbetjening.tjeneste.AbstractRestConnection;
+import no.nav.foreldrepenger.selvbetjening.tjeneste.innsyn.saker.Sak;
+import no.nav.foreldrepenger.selvbetjening.tjeneste.innsyn.uttaksplan.Uttaksplan;
+import no.nav.foreldrepenger.selvbetjening.tjeneste.innsyn.vedtak.Vedtak;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+import org.springframework.stereotype.Component;
+import org.springframework.web.client.RestOperations;
 
 import java.net.URI;
 import java.util.Arrays;
 import java.util.List;
 import java.util.Optional;
 
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
-import org.springframework.stereotype.Component;
-import org.springframework.web.client.RestOperations;
-
-import no.nav.foreldrepenger.selvbetjening.tjeneste.AbstractRestConnection;
-import no.nav.foreldrepenger.selvbetjening.tjeneste.innsyn.saker.Sak;
-import no.nav.foreldrepenger.selvbetjening.tjeneste.innsyn.uttaksplan.Uttaksplan;
-import no.nav.foreldrepenger.selvbetjening.tjeneste.innsyn.vedtak.Vedtak;
+import static java.util.Collections.emptyList;
 
 @Component
 public class InnsynConnection extends AbstractRestConnection {
@@ -49,10 +46,12 @@ public class InnsynConnection extends AbstractRestConnection {
     }
 
     public List<Sak> hentSaker() {
-        List<Sak> sak = saker(innsynConfig.getSakURI(), "SAK");
-        List<Sak> fpsak = saker(innsynConfig.getFpsakURI(), "FPSAK");
+        List<Sak> saker = saker(innsynConfig.getFpsakURI(), "FPSAK");
+        if (saker.isEmpty()) {
+            saker.addAll(saker(innsynConfig.getSakURI(), "SAK"));
+        }
 
-        return concat(sak.stream(), fpsak.stream()).collect(toList());
+        return saker;
     }
 
     private List<Sak> saker(URI uri, String fra) {
