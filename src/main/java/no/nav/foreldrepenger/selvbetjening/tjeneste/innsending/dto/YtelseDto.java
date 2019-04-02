@@ -132,8 +132,8 @@ public class YtelseDto {
 
         public UtenlandsoppholdPeriodeDto(UtenlandsoppholdPeriode periode) {
             this.land = periode.land;
-            this.varighet.fom = periode.periode.fom;
-            this.varighet.tom = periode.periode.tom;
+            this.varighet.fom = periode.tidsperiode.fom;
+            this.varighet.tom = periode.tidsperiode.tom;
         }
     }
 
