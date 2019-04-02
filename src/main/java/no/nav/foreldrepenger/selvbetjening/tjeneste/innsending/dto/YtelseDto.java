@@ -1,20 +1,28 @@
 package no.nav.foreldrepenger.selvbetjening.tjeneste.innsending.dto;
 
-import com.fasterxml.jackson.annotation.JsonInclude;
-import no.nav.foreldrepenger.selvbetjening.tjeneste.innsending.domain.*;
-import no.nav.foreldrepenger.selvbetjening.tjeneste.innsending.domain.tilrettelegging.Arbeidsforhold;
-import no.nav.foreldrepenger.selvbetjening.tjeneste.innsending.domain.tilrettelegging.Tilrettelegging;
-
-import java.time.LocalDate;
-import java.util.ArrayList;
-import java.util.List;
-
 import static com.fasterxml.jackson.annotation.JsonInclude.Include.NON_EMPTY;
 import static com.fasterxml.jackson.annotation.JsonInclude.Include.NON_NULL;
 import static java.util.stream.Collectors.toList;
 import static org.apache.commons.collections4.CollectionUtils.isNotEmpty;
 import static org.apache.commons.lang3.StringUtils.isEmpty;
 import static org.apache.commons.lang3.StringUtils.isNotBlank;
+
+import java.time.LocalDate;
+import java.util.ArrayList;
+import java.util.List;
+
+import com.fasterxml.jackson.annotation.JsonInclude;
+
+import no.nav.foreldrepenger.selvbetjening.tjeneste.innsending.domain.AnnenForelder;
+import no.nav.foreldrepenger.selvbetjening.tjeneste.innsending.domain.Barn;
+import no.nav.foreldrepenger.selvbetjening.tjeneste.innsending.domain.Engangsstønad;
+import no.nav.foreldrepenger.selvbetjening.tjeneste.innsending.domain.Foreldrepengesøknad;
+import no.nav.foreldrepenger.selvbetjening.tjeneste.innsending.domain.Svangerskapspengesøknad;
+import no.nav.foreldrepenger.selvbetjening.tjeneste.innsending.domain.Søknad;
+import no.nav.foreldrepenger.selvbetjening.tjeneste.innsending.domain.Utenlandsopphold;
+import no.nav.foreldrepenger.selvbetjening.tjeneste.innsending.domain.UtenlandsoppholdPeriode;
+import no.nav.foreldrepenger.selvbetjening.tjeneste.innsending.domain.tilrettelegging.Arbeidsforhold;
+import no.nav.foreldrepenger.selvbetjening.tjeneste.innsending.domain.tilrettelegging.Tilrettelegging;
 
 @JsonInclude(NON_NULL)
 public class YtelseDto {
@@ -39,7 +47,8 @@ public class YtelseDto {
             Foreldrepengesøknad foreldrepengesøknad = (Foreldrepengesøknad) søknad;
             this.relasjonTilBarn = new RelasjonTilBarnDto(søknad.barn, søknad.situasjon);
             this.dekningsgrad = "GRAD" + foreldrepengesøknad.dekningsgrad;
-            this.fordeling = new FordelingDto(foreldrepengesøknad.uttaksplan, foreldrepengesøknad.annenForelder.erInformertOmSøknaden);
+            this.fordeling = new FordelingDto(foreldrepengesøknad.uttaksplan,
+                    foreldrepengesøknad.annenForelder.erInformertOmSøknaden);
             this.rettigheter = new RettigheterDto(foreldrepengesøknad);
         }
 
@@ -53,7 +62,8 @@ public class YtelseDto {
             if (isNotEmpty(svangerskapspengesøknad.barn.fødselsdatoer)) {
                 this.fødselsdato = svangerskapspengesøknad.barn.fødselsdatoer.get(0);
             }
-            this.tilrettelegging = svangerskapspengesøknad.tilrettelegging.stream().map(TilretteleggingDto::new).collect(toList());
+            this.tilrettelegging = svangerskapspengesøknad.tilrettelegging.stream().map(TilretteleggingDto::new)
+                    .collect(toList());
         }
 
         if (søknad.annenForelder != null) {
@@ -91,7 +101,8 @@ public class YtelseDto {
         }
 
         private String navn(AnnenForelder annenForelder) {
-            return isNotBlank(annenForelder.navn) ? annenForelder.navn : annenForelder.fornavn + " " + annenForelder.etternavn;
+            return isNotBlank(annenForelder.navn) ? annenForelder.navn
+                    : annenForelder.fornavn + " " + annenForelder.etternavn;
         }
     }
 
@@ -121,8 +132,8 @@ public class YtelseDto {
 
         public UtenlandsoppholdPeriodeDto(UtenlandsoppholdPeriode periode) {
             this.land = periode.land;
-            this.varighet.fom = periode.tidsperiode.fom;
-            this.varighet.tom = periode.tidsperiode.tom;
+            this.varighet.fom = periode.periode.fom;
+            this.varighet.tom = periode.periode.tom;
         }
     }
 
@@ -218,7 +229,8 @@ public class YtelseDto {
 
             if (arbeidsforhold.type.equals("virksomhet")) {
                 this.orgnr = arbeidsforhold.id;
-            } else {
+            }
+            else {
                 this.fnr = arbeidsforhold.id;
             }
 
