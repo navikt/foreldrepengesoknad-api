@@ -1,12 +1,13 @@
 package no.nav.foreldrepenger.selvbetjening.tjeneste.innsending.dto;
 
-import com.fasterxml.jackson.annotation.JsonInclude;
-import no.nav.foreldrepenger.selvbetjening.tjeneste.innsending.domain.Svangerskapspengesøknad;
+import static com.fasterxml.jackson.annotation.JsonInclude.Include.NON_EMPTY;
+import static java.time.LocalDate.now;
 
 import java.util.ArrayList;
 
-import static com.fasterxml.jackson.annotation.JsonInclude.Include.NON_EMPTY;
-import static java.time.LocalDateTime.now;
+import com.fasterxml.jackson.annotation.JsonInclude;
+
+import no.nav.foreldrepenger.selvbetjening.tjeneste.innsending.domain.Svangerskapspengesøknad;
 
 @JsonInclude(NON_EMPTY)
 public class SvangerskapspengesøknadDto extends SøknadDto {
