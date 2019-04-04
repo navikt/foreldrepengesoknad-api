@@ -30,23 +30,23 @@ public class StorageController {
         this.service = service;
     }
 
-    @GetMapping
-    public ResponseEntity<String> getSoknad() throws OIDCTokenValidatorException {
-        Optional<String> muligSøknad = service.hentSøknad();
+    @GetMapping("{type}")
+    public ResponseEntity<String> getSoknad(@PathVariable("type") String type) throws OIDCTokenValidatorException {
+        Optional<String> muligSøknad = service.hentSøknad(type);
         return muligSøknad
                 .map(s -> ok().body(s))
                 .orElse(noContent().build());
     }
 
-    @PostMapping(consumes = APPLICATION_JSON_VALUE)
-    public ResponseEntity<String> storeSoknad(@RequestBody String soknad) throws OIDCTokenValidatorException {
-        service.lagreSøknad(soknad);
+    @PostMapping(value = "{type}", consumes = APPLICATION_JSON_VALUE)
+    public ResponseEntity<String> storeSoknad(@PathVariable("type") String type, @RequestBody String soknad) throws OIDCTokenValidatorException {
+        service.lagreSøknad(soknad, type);
         return noContent().build();
     }
 
-    @DeleteMapping
-    public ResponseEntity<String> deleteSoknad() throws OIDCTokenValidatorException {
-        service.slettSøknad();
+    @DeleteMapping(value = "{type}", consumes = APPLICATION_JSON_VALUE)
+    public ResponseEntity<String> deleteSoknad(@PathVariable("type") String type) throws OIDCTokenValidatorException {
+        service.slettSøknad(type);
         return noContent().build();
     }
 

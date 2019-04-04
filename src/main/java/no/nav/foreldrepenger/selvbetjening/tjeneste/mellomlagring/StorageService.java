@@ -12,8 +12,6 @@ import static org.slf4j.LoggerFactory.getLogger;
 public class StorageService {
     private static final Logger LOG = getLogger(StorageService.class);
 
-    private static final String SØKNAD = "soknad";
-
     private final TokenUtil tokenHelper;
     private final Storage storage;
     private final StorageCrypto crypto;
@@ -24,27 +22,27 @@ public class StorageService {
         this.crypto = crypto;
     }
 
-    public Optional<String> hentSøknad() {
+    public Optional<String> hentSøknad(String type) {
         String fnr = tokenHelper.autentisertBruker();
         String directory = crypto.encryptDirectoryName(fnr);
         LOG.trace("Henter søknad fra katalog {}", directory);
-        return storage.getTmp(directory, SØKNAD)
+        return storage.getTmp(directory, type)
                 .map(søknad -> crypto.decrypt(søknad, fnr));
     }
 
-    public void lagreSøknad(String søknad) {
+    public void lagreSøknad(String søknad, String type) {
         String fnr = tokenHelper.autentisertBruker();
         String directory = crypto.encryptDirectoryName(fnr);
         LOG.trace("Skriver søknad til katalog {}", directory);
         String encryptedValue = crypto.encrypt(søknad, fnr);
-        storage.putTmp(directory, SØKNAD, encryptedValue);
+        storage.putTmp(directory, type, encryptedValue);
     }
 
-    public void slettSøknad() {
+    public void slettSøknad(String type) {
         String fnr = tokenHelper.autentisertBruker();
         String directory = crypto.encryptDirectoryName(fnr);
         LOG.info("Fjerner søknad fra katalog {}", directory);
-        storage.deleteTmp(directory, SØKNAD);
+        storage.deleteTmp(directory, type);
     }
 
     public Optional<Attachment> hentVedlegg(String key) {

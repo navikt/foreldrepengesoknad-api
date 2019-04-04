@@ -102,7 +102,7 @@ public class InnsendingController {
     private void slettMellomlagring(Søknad søknad) {
         LOG.info("Sletter mellomlagret søknad og vedlegg");
         søknad.vedlegg.forEach(this::slettVedlegg);
-        storageService.slettSøknad();
+        storageService.slettSøknad(søknad.type);
     }
 
     private void slettVedlegg(Vedlegg vedlegg) {
