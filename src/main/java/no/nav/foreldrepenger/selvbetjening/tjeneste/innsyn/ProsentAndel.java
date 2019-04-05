@@ -1,58 +1,37 @@
 package no.nav.foreldrepenger.selvbetjening.tjeneste.innsyn;
 
-import static java.lang.String.format;
-import static java.math.RoundingMode.HALF_UP;
-
 import java.math.BigDecimal;
-import java.util.Optional;
+import java.math.RoundingMode;
 
-import com.fasterxml.jackson.annotation.JsonValue;
+import com.fasterxml.jackson.annotation.JsonCreator;
+import com.fasterxml.jackson.annotation.JsonProperty;
 
 public class ProsentAndel {
 
-    @JsonValue
     @Prosent
     private final Double prosent;
 
-    public static ProsentAndel valueOf(String prosent) {
-        return new ProsentAndel(Optional.ofNullable(prosent)
-                .map(s -> s.replace("%", ""))
-                .map(String::trim)
-                .map(ProsentAndel::konverter)
-                .orElseThrow(() -> new IllegalArgumentException("Prosentandel må være satt")));
+    @JsonCreator
+    public ProsentAndel(@JsonProperty("prosent") Double prosent) {
+        this.prosent = round(prosent, 1);
     }
 
-    public ProsentAndel(Double prosent) {
-        this.prosent = avrund(prosent, 1);
-    }
-
-    private static Double avrund(Double value, int presisjon) {
-        if (presisjon < 0) {
-            throw new IllegalArgumentException(format("Presisjon kan ikke være negativ, var %s", presisjon));
+    private static double round(double value, int places) {
+        if (places < 0) {
+            throw new IllegalArgumentException();
         }
-        try {
-            BigDecimal bd = new BigDecimal(value);
-            bd = bd.setScale(presisjon, HALF_UP);
-            return bd.doubleValue();
-        } catch (NumberFormatException e) {
-            throw new IllegalArgumentException(format("Kunne ikke konvertere %s til presisjon %", value, presisjon), e);
-        }
-    }
 
-    private static Double konverter(String value) {
-        try {
-            return Double.valueOf(value);
-        } catch (NumberFormatException e) {
-            throw new IllegalArgumentException(format("Kunne ikke formattere %s til double", value), e);
-        }
-    }
-
-    public Double getProsent() {
-        return prosent;
+        BigDecimal bd = new BigDecimal(value);
+        bd = bd.setScale(places, RoundingMode.HALF_UP);
+        return bd.doubleValue();
     }
 
     @Override
     public String toString() {
         return getClass().getSimpleName() + " [prosent=" + prosent + "]";
+    }
+
+    public Double getProsent() {
+        return prosent;
     }
 }
