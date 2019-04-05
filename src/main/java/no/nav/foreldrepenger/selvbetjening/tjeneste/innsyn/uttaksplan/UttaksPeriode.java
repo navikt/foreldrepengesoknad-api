@@ -14,6 +14,7 @@ import no.nav.foreldrepenger.selvbetjening.tjeneste.innsyn.ProsentAndel;
 
 public class UttaksPeriode {
 
+    private final UtsettelsePeriodeType utsettelsePeriodeType;
     private final PeriodeResultatType periodeResultatType;
     private final Boolean graderingInnvilget;
     private final Boolean samtidigUttak;
@@ -27,7 +28,8 @@ public class UttaksPeriode {
     private final ProsentAndel utbetalingprosent;
     private final Boolean gjelderAnnenPart;
 
-    public UttaksPeriode(@JsonProperty("periodeResultatType") PeriodeResultatType periodeResultatType,
+    public UttaksPeriode(@JsonProperty("utsettelsePeriodeType") UtsettelsePeriodeType utsettelsePeriodeType,
+            @JsonProperty("periodeResultatType") PeriodeResultatType periodeResultatType,
             @JsonProperty("graderingInnvilget") Boolean graderingInnvilget,
             @JsonProperty("samtidigUttak") Boolean samtidigUttak,
             @JsonProperty("fom") LocalDate fom, @JsonProperty("tom") LocalDate tom,
@@ -36,6 +38,7 @@ public class UttaksPeriode {
             @JsonProperty("arbeidstidprosent") ProsentAndel arbeidstidProsent,
             @JsonProperty("utbetalingprosent") ProsentAndel utbetalingprosent,
             @JsonProperty("gjelderAnnenPart") Boolean gjelderAnnenPart) {
+        this.utsettelsePeriodeType = utsettelsePeriodeType;
         this.periodeResultatType = periodeResultatType;
         this.graderingInnvilget = graderingInnvilget;
         this.samtidigUttak = samtidigUttak;
@@ -45,6 +48,10 @@ public class UttaksPeriode {
         this.arbeidstidProsent = arbeidstidProsent;
         this.utbetalingprosent = utbetalingprosent;
         this.gjelderAnnenPart = gjelderAnnenPart;
+    }
+
+    public UtsettelsePeriodeType getUtsettelsePeriodeType() {
+        return utsettelsePeriodeType;
     }
 
     public PeriodeResultatType getPeriodeResultatType() {
