@@ -20,21 +20,28 @@ public class Sak {
     private final LocalDate opprettet;
     private final String saksnummer;
     private final String fagsakId;
+    private final String fnrAnnenPart;
     private final List<Behandling> behandlinger;
 
     @JsonCreator
     public Sak(@JsonProperty("type") String type,
-               @JsonProperty("saksnummer") String saksnummer,
-               @JsonProperty("status") String status,
-               @JsonProperty("opprettet") LocalDate opprettet,
-               @JsonProperty("fagsakId") String fagsakId,
-               @JsonProperty("behandlinger") List<Behandling> behandlinger) {
+            @JsonProperty("saksnummer") String saksnummer,
+            @JsonProperty("status") String status,
+            @JsonProperty("opprettet") LocalDate opprettet,
+            @JsonProperty("fagsakId") String fagsakId,
+            @JsonProperty("fnrAnnenPart") String fnrAnnenPart,
+            @JsonProperty("behandlinger") List<Behandling> behandlinger) {
         this.type = type;
         this.saksnummer = saksnummer;
         this.status = status;
         this.opprettet = opprettet;
         this.fagsakId = fagsakId;
+        this.fnrAnnenPart = fnrAnnenPart;
         this.behandlinger = Optional.ofNullable(behandlinger).orElse(emptyList());
+    }
+
+    public String getFnrAnnenPart() {
+        return fnrAnnenPart;
     }
 
     public String getType() {
@@ -67,13 +74,9 @@ public class Sak {
 
     @Override
     public String toString() {
-        return "Sak{" +
-                "type='" + type + '\'' +
-                ", status='" + status + '\'' +
-                ", opprettet=" + opprettet +
-                ", saksnummer='" + saksnummer + '\'' +
-                ", fagsakId='" + fagsakId + '\'' +
-                ", behandlinger=" + behandlinger +
-                '}';
+        return getClass().getSimpleName() + " [type=" + type + ", status=" + status + ", opprettet=" + opprettet
+                + ", saksnummer=" + saksnummer
+                + ", fagsakId=" + fagsakId + ", fnrAnnenPart=" + fnrAnnenPart + ", behandlinger=" + behandlinger + "]";
     }
+
 }

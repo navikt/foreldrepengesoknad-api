@@ -1,6 +1,14 @@
 package no.nav.foreldrepenger.selvbetjening.tjeneste.innsyn;
 
-import no.nav.foreldrepenger.selvbetjening.tjeneste.innsyn.saker.Sak;
+import static java.time.LocalDate.now;
+import static java.util.Collections.emptyList;
+import static org.assertj.core.api.Assertions.assertThat;
+import static org.mockito.ArgumentMatchers.any;
+import static org.mockito.ArgumentMatchers.eq;
+import static org.mockito.Mockito.when;
+
+import java.util.List;
+
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.mockito.InjectMocks;
@@ -8,14 +16,7 @@ import org.mockito.Mock;
 import org.mockito.junit.MockitoJUnitRunner;
 import org.springframework.web.client.RestOperations;
 
-import java.util.List;
-
-import static java.time.LocalDate.now;
-import static java.util.Collections.emptyList;
-import static org.assertj.core.api.Assertions.assertThat;
-import static org.mockito.ArgumentMatchers.any;
-import static org.mockito.ArgumentMatchers.eq;
-import static org.mockito.Mockito.when;
+import no.nav.foreldrepenger.selvbetjening.tjeneste.innsyn.saker.Sak;
 
 @RunWith(MockitoJUnitRunner.class)
 public class InnsynConnectionTest {
@@ -57,11 +58,11 @@ public class InnsynConnectionTest {
     }
 
     private Sak[] sakerFraFpsak() {
-        return new Sak[] { new Sak("FPSAK", "1", "UBEH", now().minusMonths(1), null, emptyList()) };
+        return new Sak[] { new Sak("FPSAK", "1", "UBEH", now().minusMonths(1), null, null, emptyList()) };
     }
 
     private Sak[] sakerFraInfotrygd() {
-        return new Sak[] { new Sak("SAK", "9", null, now().minusMonths(2), "LA8PV", emptyList()) };
+        return new Sak[] { new Sak("SAK", "9", null, now().minusMonths(2), "LA8PV", null, emptyList()) };
     }
 
 }
