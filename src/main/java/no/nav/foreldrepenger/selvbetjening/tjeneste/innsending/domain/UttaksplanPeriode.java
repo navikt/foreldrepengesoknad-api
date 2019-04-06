@@ -41,7 +41,7 @@ public class UttaksplanPeriode {
 
         this.ønskerSamtidigUttak = u.getSamtidigUttak();
         this.konto = u.getStønadskontotype().toString();
-        this.stillingsprosent = u.getArbeidstidProsent().getProsent();
+        this.stillingsprosent = u.getArbeidstidProsent().doubleValue();
 
         this.graderingInnvilget = u.getGraderingInnvilget();
         this.status = u.getPeriodeResultatType().toString();

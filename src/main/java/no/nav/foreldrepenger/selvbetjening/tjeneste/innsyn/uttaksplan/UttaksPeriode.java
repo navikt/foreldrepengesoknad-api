@@ -10,7 +10,6 @@ import com.fasterxml.jackson.annotation.JsonProperty;
 
 import no.nav.foreldrepenger.selvbetjening.tjeneste.innsyn.LukketPeriode;
 import no.nav.foreldrepenger.selvbetjening.tjeneste.innsyn.PeriodeResultatType;
-import no.nav.foreldrepenger.selvbetjening.tjeneste.innsyn.ProsentAndel;
 
 public class UttaksPeriode {
 
@@ -23,9 +22,9 @@ public class UttaksPeriode {
     private final StønadskontoType stønadskontotype;
     private final Integer trekkDager;
     @Valid
-    private final ProsentAndel arbeidstidProsent;
+    private final Integer arbeidstidProsent;
     @Valid
-    private final ProsentAndel utbetalingprosent;
+    private final Integer utbetalingprosent;
     private final Boolean gjelderAnnenPart;
 
     public UttaksPeriode(@JsonProperty("utsettelsePeriodeType") UtsettelsePeriodeType utsettelsePeriodeType,
@@ -35,8 +34,8 @@ public class UttaksPeriode {
             @JsonProperty("fom") LocalDate fom, @JsonProperty("tom") LocalDate tom,
             @JsonProperty("stønadskontotype") @JsonAlias("trekkonto") StønadskontoType stønadskontotype,
             @JsonProperty("trekkDager") Integer trekkDager,
-            @JsonProperty("arbeidstidprosent") ProsentAndel arbeidstidProsent,
-            @JsonProperty("utbetalingprosent") ProsentAndel utbetalingprosent,
+            @JsonProperty("arbeidstidprosent") Integer arbeidstidProsent,
+            @JsonProperty("utbetalingprosent") Integer utbetalingprosent,
             @JsonProperty("gjelderAnnenPart") Boolean gjelderAnnenPart) {
         this.utsettelsePeriodeType = utsettelsePeriodeType;
         this.periodeResultatType = periodeResultatType;
@@ -78,11 +77,11 @@ public class UttaksPeriode {
         return trekkDager;
     }
 
-    public ProsentAndel getArbeidstidProsent() {
+    public Integer getArbeidstidProsent() {
         return arbeidstidProsent;
     }
 
-    public ProsentAndel getUtbetalingprosent() {
+    public Integer getUtbetalingprosent() {
         return utbetalingprosent;
     }
 
