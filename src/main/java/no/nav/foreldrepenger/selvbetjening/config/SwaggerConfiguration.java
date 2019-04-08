@@ -42,6 +42,8 @@ public class SwaggerConfiguration {
     }
 
     private static Set<String> allProtocols() {
-        return Stream.of(new Scheme[] { HTTPS, HTTP }).map(Scheme::toValue).collect(toSet());
+        return Stream.of(new Scheme[] { HTTPS, HTTP })
+                .map(Scheme::toValue)
+                .collect(toSet());
     }
 }

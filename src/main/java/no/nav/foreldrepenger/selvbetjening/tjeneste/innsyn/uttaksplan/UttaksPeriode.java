@@ -13,6 +13,8 @@ import no.nav.foreldrepenger.selvbetjening.tjeneste.innsyn.PeriodeResultatType;
 
 public class UttaksPeriode {
 
+    private final OppholdÅrsak oppholdÅrsak;
+    private final OverføringÅrsak overføringÅrsak;
     private final UtsettelsePeriodeType utsettelsePeriodeType;
     private final PeriodeResultatType periodeResultatType;
     private final Boolean graderingInnvilget;
@@ -27,7 +29,10 @@ public class UttaksPeriode {
     private final Integer utbetalingprosent;
     private final Boolean gjelderAnnenPart;
 
-    public UttaksPeriode(@JsonProperty("utsettelsePeriodeType") UtsettelsePeriodeType utsettelsePeriodeType,
+    public UttaksPeriode(
+            @JsonProperty("oppholdÅrsak") OppholdÅrsak oppholdÅrsak,
+            @JsonProperty("overføringÅrsak") OverføringÅrsak overføringÅrsak,
+            @JsonProperty("utsettelsePeriodeType") UtsettelsePeriodeType utsettelsePeriodeType,
             @JsonProperty("periodeResultatType") PeriodeResultatType periodeResultatType,
             @JsonProperty("graderingInnvilget") Boolean graderingInnvilget,
             @JsonProperty("samtidigUttak") Boolean samtidigUttak,
@@ -37,6 +42,8 @@ public class UttaksPeriode {
             @JsonProperty("arbeidstidprosent") Integer arbeidstidProsent,
             @JsonProperty("utbetalingprosent") Integer utbetalingprosent,
             @JsonProperty("gjelderAnnenPart") Boolean gjelderAnnenPart) {
+        this.oppholdÅrsak = oppholdÅrsak;
+        this.overføringÅrsak = overføringÅrsak;
         this.utsettelsePeriodeType = utsettelsePeriodeType;
         this.periodeResultatType = periodeResultatType;
         this.graderingInnvilget = graderingInnvilget;
@@ -92,7 +99,7 @@ public class UttaksPeriode {
     @Override
     public int hashCode() {
         return Objects.hash(gjelderAnnenPart, utbetalingprosent, arbeidstidProsent, trekkDager, stønadskontotype,
-                periode, samtidigUttak, graderingInnvilget, periodeResultatType);
+                periode, samtidigUttak, graderingInnvilget, periodeResultatType, oppholdÅrsak, overføringÅrsak);
     }
 
     @Override
@@ -106,6 +113,8 @@ public class UttaksPeriode {
         UttaksPeriode that = (UttaksPeriode) o;
         return Objects.equals(gjelderAnnenPart, that.gjelderAnnenPart)
                 && Objects.equals(this.utbetalingprosent, that.utbetalingprosent)
+                && Objects.equals(this.overføringÅrsak, that.overføringÅrsak)
+                && Objects.equals(this.oppholdÅrsak, that.oppholdÅrsak)
                 && Objects.equals(this.arbeidstidProsent, that.arbeidstidProsent)
                 && Objects.equals(this.trekkDager, that.trekkDager)
                 && Objects.equals(this.stønadskontotype, that.stønadskontotype)
@@ -116,11 +125,12 @@ public class UttaksPeriode {
 
     @Override
     public String toString() {
-        return getClass().getSimpleName() + " [periodeResultatType=" + periodeResultatType + ", graderingInnvilget="
-                + graderingInnvilget + ", samtidigUttak=" + samtidigUttak + ", periode=" + periode
-                + ", stønadskontotype=" + stønadskontotype + ", trekkDager=" + trekkDager + ", arbeidstidProsent="
-                + arbeidstidProsent + ", utbetalingprosent=" + utbetalingprosent + ", gjelderAnnenPart="
-                + gjelderAnnenPart + "]";
+        return getClass().getSimpleName() + " [oppholdÅrsak=" + oppholdÅrsak + ", overføringÅrsak=" + overføringÅrsak
+                + ", utsettelsePeriodeType=" + utsettelsePeriodeType + ", periodeResultatType=" + periodeResultatType
+                + ", graderingInnvilget=" + graderingInnvilget + ", samtidigUttak=" + samtidigUttak + ", periode="
+                + periode + ", stønadskontotype=" + stønadskontotype + ", trekkDager=" + trekkDager
+                + ", arbeidstidProsent=" + arbeidstidProsent + ", utbetalingprosent=" + utbetalingprosent
+                + ", gjelderAnnenPart=" + gjelderAnnenPart + "]";
     }
 
 }
