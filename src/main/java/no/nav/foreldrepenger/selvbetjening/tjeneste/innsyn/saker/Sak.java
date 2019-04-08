@@ -20,7 +20,7 @@ public class Sak {
     private final LocalDate opprettet;
     private final String saksnummer;
     private final String fagsakId;
-    private final String fnrAnnenPart;
+    private final AnnenPart annenPart;
     private final List<Behandling> behandlinger;
 
     @JsonCreator
@@ -29,19 +29,19 @@ public class Sak {
             @JsonProperty("status") String status,
             @JsonProperty("opprettet") LocalDate opprettet,
             @JsonProperty("fagsakId") String fagsakId,
-            @JsonProperty("fnrAnnenPart") String fnrAnnenPart,
+            @JsonProperty("annenPart") AnnenPart annenPart,
             @JsonProperty("behandlinger") List<Behandling> behandlinger) {
         this.type = type;
         this.saksnummer = saksnummer;
         this.status = status;
         this.opprettet = opprettet;
         this.fagsakId = fagsakId;
-        this.fnrAnnenPart = fnrAnnenPart;
+        this.annenPart = annenPart;
         this.behandlinger = Optional.ofNullable(behandlinger).orElse(emptyList());
     }
 
-    public String getFnrAnnenPart() {
-        return fnrAnnenPart;
+    public AnnenPart getAnnenPart() {
+        return annenPart;
     }
 
     public String getType() {
@@ -76,7 +76,7 @@ public class Sak {
     public String toString() {
         return getClass().getSimpleName() + " [type=" + type + ", status=" + status + ", opprettet=" + opprettet
                 + ", saksnummer=" + saksnummer
-                + ", fagsakId=" + fagsakId + ", fnrAnnenPart=" + fnrAnnenPart + ", behandlinger=" + behandlinger + "]";
+                + ", fagsakId=" + fagsakId + ", annenPart=" + annenPart + ", behandlinger=" + behandlinger + "]";
     }
 
 }
