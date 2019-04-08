@@ -3,13 +3,15 @@ package no.nav.foreldrepenger.selvbetjening.tjeneste.innsyn.saker;
 import com.fasterxml.jackson.annotation.JsonCreator;
 import com.fasterxml.jackson.annotation.JsonProperty;
 
+import no.nav.foreldrepenger.selvbetjening.tjeneste.oppslag.domain.AktørId;
+
 public class AnnenPart {
     private final String fnr;
-    private final String aktørId;
+    private final AktørId aktørId;
     private final Navn navn;
 
     @JsonCreator
-    public AnnenPart(@JsonProperty("fnr") String fnr, @JsonProperty("aktørId") String aktørId,
+    public AnnenPart(@JsonProperty("fnr") String fnr, @JsonProperty("aktørId") AktørId aktørId,
             @JsonProperty("navn") Navn navn) {
         this.fnr = fnr;
         this.aktørId = aktørId;
@@ -20,7 +22,7 @@ public class AnnenPart {
         return fnr;
     }
 
-    public String getAktørId() {
+    public AktørId getAktørId() {
         return aktørId;
     }
 

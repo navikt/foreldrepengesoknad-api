@@ -11,8 +11,8 @@ public class AktørId {
     private final String aktørId;
 
     @NotNull
-    public AktørId(String aktør) {
-        this.aktørId = Objects.requireNonNull(aktør);
+    public AktørId(String aktørId) {
+        this.aktørId = Objects.requireNonNull(aktørId);
     }
 
     @Override
