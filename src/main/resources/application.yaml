@@ -13,7 +13,9 @@ spring:
      cache-names: aktoer
      caffeine.spec: maximumSize=100,expireAfterAccess=3600s
   application.name: foreldrepengesoknad-api
-  jackson.deserialization.accept_single_value_as_array: true
+  jackson:
+     deserialization.accept_single_value_as_array: true
+     default-property-inclusion :  non_null
   main.banner-mode: 'off'
   metrics.web.server.auto-time-requests: true
   servlet.multipart.max-file-size: 100MB
