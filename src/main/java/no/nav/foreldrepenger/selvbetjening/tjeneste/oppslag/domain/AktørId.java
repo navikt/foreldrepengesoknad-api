@@ -8,16 +8,16 @@ import com.fasterxml.jackson.annotation.JsonValue;
 
 public class AktørId {
 
-    private final String aktør;
+    private final String aktørId;
 
     @NotNull
     public AktørId(String aktør) {
-        this.aktør = Objects.requireNonNull(aktør);
+        this.aktørId = Objects.requireNonNull(aktør);
     }
 
     @Override
     public int hashCode() {
-        return Objects.hashCode(aktør);
+        return Objects.hashCode(aktørId);
     }
 
     @Override
@@ -29,16 +29,16 @@ public class AktørId {
             return false;
         }
         AktørId that = (AktørId) o;
-        return Objects.equals(aktør, that.aktør);
+        return Objects.equals(aktørId, that.aktørId);
     }
 
     @JsonValue
-    public String getAktør() {
-        return aktør;
+    public String getAktørId() {
+        return aktørId;
     }
 
     @Override
     public String toString() {
-        return getClass().getSimpleName() + " [aktør=" + aktør + "]";
+        return getClass().getSimpleName() + " [aktørId=" + aktørId + "]";
     }
 }

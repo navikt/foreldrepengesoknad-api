@@ -39,7 +39,7 @@ public class SubjectToMCDHandlerInterceptor implements HandlerInterceptor {
             LOG.info("SubjectToMCDHandlerInterceptor {}", getClass().getSimpleName());
             if (tokenUtil.erAutentisert()) {
                 LOG.info("Henter ID");
-                toMDC(NAV_AKTØR_ID, oppslag.hentAktørId(tokenUtil.getSubject()).getAktør());
+                toMDC(NAV_AKTØR_ID, oppslag.hentAktørId(tokenUtil.getSubject()).getAktørId());
                 LOG.info("Hentet ID OK");
             }
         } catch (Exception e) {

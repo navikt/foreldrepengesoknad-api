@@ -20,7 +20,7 @@ public class Sak {
     private final LocalDate opprettet;
     private final String saksnummer;
     private final String fagsakId;
-    private final AnnenPart annenPart;
+    private AnnenPart annenPart;
     private final List<Behandling> behandlinger;
 
     @JsonCreator
@@ -42,6 +42,10 @@ public class Sak {
 
     public AnnenPart getAnnenPart() {
         return annenPart;
+    }
+
+    public void setAnnenPart(AnnenPart annenPart) {
+        this.annenPart = annenPart;
     }
 
     public String getType() {
