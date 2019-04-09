@@ -49,9 +49,8 @@ public class ApiExceptionHandler extends ResponseEntityExceptionHandler {
     }
 
     @ResponseBody
-    @ExceptionHandler(AttachmentTypeUnsupportedException.class)
-    protected ResponseEntity<Object> handleUnsupportedAttachmentError(AttachmentTypeUnsupportedException e,
-            WebRequest req) {
+    @ExceptionHandler({AttachmentTypeUnsupportedException.class, AttachmentConversionException.class})
+    protected ResponseEntity<Object> handleAttachmentException(AttachmentException e, WebRequest req) {
         return logAndHandle(UNPROCESSABLE_ENTITY, e, req);
     }
 
@@ -62,11 +61,6 @@ public class ApiExceptionHandler extends ResponseEntityExceptionHandler {
         return logAndHandle(UNPROCESSABLE_ENTITY, e, req, validationErrors(e));
     }
 
-    @ResponseBody
-    @ExceptionHandler(AttachmentConversionException.class)
-    protected ResponseEntity<Object> handleAttachmentConversionError(AttachmentConversionException e, WebRequest req) {
-        return logAndHandle(INTERNAL_SERVER_ERROR, e, req);
-    }
 
     @ResponseBody
     @ExceptionHandler({ MultipartException.class, MaxUploadSizeExceededException.class,
