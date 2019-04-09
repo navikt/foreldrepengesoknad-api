@@ -26,6 +26,7 @@ import org.springframework.http.MediaType;
 import org.springframework.stereotype.Component;
 
 import no.nav.foreldrepenger.selvbetjening.error.AttachmentConversionException;
+import no.nav.foreldrepenger.selvbetjening.error.AttachmentException;
 import no.nav.foreldrepenger.selvbetjening.error.AttachmentTypeUnsupportedException;
 
 @Component
@@ -53,7 +54,11 @@ public class Image2PDFConverter {
     byte[] convert(String classPathResource) {
         try {
             return convert(new ClassPathResource(classPathResource));
-        } catch (Exception e) {
+        } 
+        catch (AttachmentException e) {
+        	throw e;
+        }
+        catch (Exception e) {
             throw new AttachmentConversionException("Kunne ikke konvertere vedlegg " + classPathResource, e);
         }
     }
