@@ -15,10 +15,14 @@ import java.io.IOException;
 import javax.imageio.ImageIO;
 
 import org.apache.pdfbox.pdmodel.common.PDRectangle;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import no.nav.foreldrepenger.selvbetjening.error.AttachmentConversionException;
 
 public class ImageScaler {
+	
+	private static final Logger LOG = LoggerFactory.getLogger(ImageScaler.class);
 
     private ImageScaler() {
 
@@ -28,19 +32,16 @@ public class ImageScaler {
         final PDRectangle A4 = PDRectangle.A4;
 
         try {
-            BufferedImage image = ImageIO.read(new ByteArrayInputStream(origImage));
-
-            image = rotatePortrait(image);
-
+            BufferedImage rotatedImage = rotatePortrait(ImageIO.read(new ByteArrayInputStream(origImage)));
             Dimension pdfPageDim = new Dimension((int) A4.getWidth(), (int) A4.getHeight());
-            Dimension origDim = new Dimension(image.getWidth(), image.getHeight());
+            Dimension origDim = new Dimension(rotatedImage.getWidth(), rotatedImage.getHeight());
             Dimension newDim = getScaledDimension(origDim, pdfPageDim);
 
             if (newDim.equals(origDim)) {
                 return origImage;
             }
             else {
-                BufferedImage scaledImg = scaleDown(image, newDim);
+                BufferedImage scaledImg = scaleDown(rotatedImage, newDim);
                 return toBytes(scaledImg, format);
             }
         } catch (IOException ex) {
@@ -49,19 +50,24 @@ public class ImageScaler {
     }
 
     private static BufferedImage rotatePortrait(BufferedImage image) {
-        if (image.getHeight() >= image.getWidth()) {
-            return image;
+    	
+        if (shouldRotate(image)) {	
+            BufferedImage rotatedImage = new BufferedImage(image.getHeight(), image.getWidth(), image.getType());
+            AffineTransform transform = new AffineTransform();
+            transform.rotate(Math.toRadians(90), image.getHeight() / 2f, image.getHeight() / 2f);
+            AffineTransformOp op = new AffineTransformOp(transform, TYPE_BILINEAR);
+            rotatedImage = op.filter(image, rotatedImage);
+            return rotatedImage;
         }
-
-        BufferedImage rotatedImage = new BufferedImage(image.getHeight(), image.getWidth(), image.getType());
-        AffineTransform transform = new AffineTransform();
-        transform.rotate(Math.toRadians(90), image.getHeight() / 2f, image.getHeight() / 2f);
-        AffineTransformOp op = new AffineTransformOp(transform, TYPE_BILINEAR);
-        rotatedImage = op.filter(image, rotatedImage);
-        return rotatedImage;
+        LOG.warn("Roterer ikke bilde");
+        return image;
     }
 
-    private static Dimension getScaledDimension(Dimension imgSize, Dimension a4) {
+    private static boolean shouldRotate(BufferedImage image) {
+    	return image.getHeight() < image.getWidth() && image.getType() != BufferedImage.TYPE_CUSTOM;
+	}
+
+	private static Dimension getScaledDimension(Dimension imgSize, Dimension a4) {
         int originalWidth = imgSize.width;
         int originalHeight = imgSize.height;
         int a4Width = a4.width;
