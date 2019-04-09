@@ -1,9 +1,17 @@
+no.nav.security.oidc:
+  issuers: selvbetjening
+  issuer.selvbetjening:
+    discoveryurl: <Set from Fasit>
+    accepted_audience: <Set from Fasit>
+    cookie_name: selvbetjening-idtoken   
 info.app:
   version: '@project.version@'
   build.time: '@timestamp@'
 management:
-  endpoints.web.exposure.include:  info, health, metrics, prometheus
-  endpoints.web.base-path: /internal/actuator
+  metrics.web.server.auto-time-requests : true
+  endpoints:
+      web.exposure.include:  info, health, metrics, prometheus
+      web.base-path: /internal/actuator
 server:
   servlet.context-path: /
   use-forward-headers: true
@@ -13,18 +21,17 @@ spring:
      cache-names: aktoer
      caffeine.spec: maximumSize=100,expireAfterAccess=3600s
   application.name: foreldrepengesoknad-api
-  jackson:
-     deserialization.accept_single_value_as_array: true
-     default-property-inclusion :  non_null
+  jackson :
+      default-property-inclusion :  non-absent
+      mapper :
+         accept-case-insensitive-properties: true
+      deserialization :
+         accept-single-value-as-array: true
+         fail-on-unknown-properties: true
+      serialization :
+         fail-on-empty-beans: false
   main.banner-mode: 'off'
-  metrics.web.server.auto-time-requests: true
   servlet.multipart.max-file-size: 100MB
   servlet.multipart.max-request-size: 100MB
   mvc.throw-exception-if-no-handler-found: true
   resources.add-mappings: false
-no.nav.security.oidc:
-  issuers: selvbetjening
-  issuer.selvbetjening:
-    discoveryurl: <Set from Fasit>
-    accepted_audience: <Set from Fasit>
-    cookie_name: selvbetjening-idtoken

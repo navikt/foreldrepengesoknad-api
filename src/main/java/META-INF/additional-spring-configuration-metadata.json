@@ -1,0 +1,10 @@
+{"properties": [
+  {
+    "name": "info.app",
+    "description": "A description for 'info.app'"
+  },
+  {
+    "name": "no.nav.security.oidc",
+    "description": "A description for 'no.nav.security.oidc'"
+  }
+]}
