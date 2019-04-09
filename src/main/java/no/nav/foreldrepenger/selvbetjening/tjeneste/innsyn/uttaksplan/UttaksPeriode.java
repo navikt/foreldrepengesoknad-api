@@ -23,12 +23,13 @@ public class UttaksPeriode {
     private final LukketPeriode periode;
     private final StønadskontoType stønadskontotype;
     private final Integer trekkDager;
-    @Valid
     private final Integer arbeidstidProsent;
-    @Valid
     private final Integer utbetalingprosent;
     private final Boolean gjelderAnnenPart;
     private final GraderingAvslagÅrsak graderingAvslagÅrsak;
+    private final Boolean flerbarnsdager;
+    private final Boolean manueltBehandlet;
+    private final Integer  samtidigUttaksprosent;
 
     public UttaksPeriode(
             @JsonProperty("oppholdÅrsak") OppholdÅrsak oppholdÅrsak,
@@ -43,7 +44,10 @@ public class UttaksPeriode {
             @JsonProperty("arbeidstidprosent") Integer arbeidstidProsent,
             @JsonProperty("utbetalingprosent") Integer utbetalingprosent,
             @JsonProperty("gjelderAnnenPart") Boolean gjelderAnnenPart,
-            @JsonProperty("graderingAvslagÅrsak") GraderingAvslagÅrsak graderingAvslagÅrsak) {
+            @JsonProperty("graderingAvslagÅrsak") GraderingAvslagÅrsak graderingAvslagÅrsak,
+            @JsonProperty("manueltBehandlet") Boolean manueltBehandlet,
+            @JsonProperty("samtidigUttaksprosent") Integer samtidigUttaksprosent,
+            @JsonProperty("flerbarnsdager") Boolean flerbarnsdager) {
         this.oppholdÅrsak = oppholdÅrsak;
         this.overføringÅrsak = overføringÅrsak;
         this.utsettelsePeriodeType = utsettelsePeriodeType;
@@ -57,9 +61,24 @@ public class UttaksPeriode {
         this.utbetalingprosent = utbetalingprosent;
         this.gjelderAnnenPart = gjelderAnnenPart;
         this.graderingAvslagÅrsak = graderingAvslagÅrsak;
+        this.manueltBehandlet = manueltBehandlet;
+        this.samtidigUttaksprosent = samtidigUttaksprosent;
+        this.flerbarnsdager  = flerbarnsdager;
     }
 
-    public OppholdÅrsak getOppholdÅrsak() {
+    public Boolean getFlerbarnsdager() {
+		return flerbarnsdager;
+	}
+
+	public Boolean getManueltBehandlet() {
+		return manueltBehandlet;
+	}
+
+	public Integer getSamtidigUttaksprosent() {
+		return samtidigUttaksprosent;
+	}
+
+	public OppholdÅrsak getOppholdÅrsak() {
 		return oppholdÅrsak;
 	}
 
