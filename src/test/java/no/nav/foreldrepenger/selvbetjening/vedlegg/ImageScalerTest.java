@@ -13,6 +13,7 @@ import java.nio.file.Files;
 import java.nio.file.Paths;
 
 import static org.assertj.core.api.Assertions.assertThat;
+import static org.junit.Assert.assertEquals;
 
 public class ImageScalerTest {
 
@@ -52,6 +53,14 @@ public class ImageScalerTest {
         BufferedImage scaledImg = fromBytes(scaled);
         assertThat(origImg.getWidth()).isGreaterThan(origImg.getHeight());
         assertThat(scaledImg.getHeight()).isGreaterThan(scaledImg.getWidth());
+    }
+    
+    @Test
+    public void lavOgBred() throws Exception {
+        URL url = getClass().getResource("/pdf/lavogbred.png");
+        byte[] orig = Files.readAllBytes(Paths.get(url.toURI()));
+        byte[] scaled = ImageScaler.downToA4(orig, "png");
+        assertEquals(orig, scaled);
     }
 
     public boolean hasJpgSignature(byte[] bytes) {
