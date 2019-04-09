@@ -78,15 +78,15 @@ public class UttaksPeriode {
 		return samtidigUttaksprosent;
 	}
 
-	public OppholdÅrsak getOppholdÅrsak() {
+	public OppholdÅrsak getOppholdAarsak() {
 		return oppholdAarsak;
 	}
 
-	public OverføringÅrsak getOverføringÅrsak() {
+	public OverføringÅrsak getOverfoeringAarsak() {
 		return overfoeringAarsak;
 	}
 
-	public GraderingAvslagÅrsak getGraderingAvslagÅrsak() {
+	public GraderingAvslagÅrsak getGraderingAvslagAarsak() {
 		return graderingAvslagAarsak;
 	}
 
