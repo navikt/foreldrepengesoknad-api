@@ -53,7 +53,7 @@ public class Image2PDFConverter {
     byte[] convert(String classPathResource) {
         try {
             return convert(new ClassPathResource(classPathResource));
-        } catch (IOException e) {
+        } catch (Exception e) {
             throw new AttachmentConversionException("Kunne ikke konvertere vedlegg " + classPathResource, e);
         }
     }
@@ -82,7 +82,7 @@ public class Image2PDFConverter {
             images.forEach(i -> addPDFPageFromImage(doc, i, imgType));
             doc.save(outputStream);
             return outputStream.toByteArray();
-        } catch (IOException ex) {
+        } catch (Exception ex) {
             throw new AttachmentConversionException("Konvertering av vedlegg feilet", ex);
         }
     }
@@ -104,7 +104,7 @@ public class Image2PDFConverter {
         try (PDPageContentStream contentStream = new PDPageContentStream(doc, page)) {
             PDImageXObject ximage = PDImageXObject.createFromByteArray(doc, scaledImg, "img");
             contentStream.drawImage(ximage, (int) A4.getLowerLeftX(), (int) A4.getLowerLeftY());
-        } catch (IOException ex) {
+        } catch (Exception ex) {
             throw new AttachmentConversionException("Konvertering av vedlegg feilet", ex);
         }
     }
