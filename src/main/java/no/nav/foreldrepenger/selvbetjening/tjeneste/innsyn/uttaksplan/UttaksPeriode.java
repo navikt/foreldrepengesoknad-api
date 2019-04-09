@@ -28,6 +28,7 @@ public class UttaksPeriode {
     @Valid
     private final Integer utbetalingprosent;
     private final Boolean gjelderAnnenPart;
+    private final GraderingAvslagÅrsak graderingAvslagÅrsak;
 
     public UttaksPeriode(
             @JsonProperty("oppholdÅrsak") OppholdÅrsak oppholdÅrsak,
@@ -41,7 +42,8 @@ public class UttaksPeriode {
             @JsonProperty("trekkDager") Integer trekkDager,
             @JsonProperty("arbeidstidprosent") Integer arbeidstidProsent,
             @JsonProperty("utbetalingprosent") Integer utbetalingprosent,
-            @JsonProperty("gjelderAnnenPart") Boolean gjelderAnnenPart) {
+            @JsonProperty("gjelderAnnenPart") Boolean gjelderAnnenPart,
+            @JsonProperty("graderingAvslagÅrsak") GraderingAvslagÅrsak graderingAvslagÅrsak) {
         this.oppholdÅrsak = oppholdÅrsak;
         this.overføringÅrsak = overføringÅrsak;
         this.utsettelsePeriodeType = utsettelsePeriodeType;
@@ -54,9 +56,22 @@ public class UttaksPeriode {
         this.arbeidstidProsent = arbeidstidProsent;
         this.utbetalingprosent = utbetalingprosent;
         this.gjelderAnnenPart = gjelderAnnenPart;
+        this.graderingAvslagÅrsak = graderingAvslagÅrsak;
     }
 
-    public UtsettelsePeriodeType getUtsettelsePeriodeType() {
+    public OppholdÅrsak getOppholdÅrsak() {
+		return oppholdÅrsak;
+	}
+
+	public OverføringÅrsak getOverføringÅrsak() {
+		return overføringÅrsak;
+	}
+
+	public GraderingAvslagÅrsak getGraderingAvslagÅrsak() {
+		return graderingAvslagÅrsak;
+	}
+
+	public UtsettelsePeriodeType getUtsettelsePeriodeType() {
         return utsettelsePeriodeType;
     }
 
