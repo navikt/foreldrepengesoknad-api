@@ -55,13 +55,7 @@ public class ImageScalerTest {
         assertThat(scaledImg.getHeight()).isGreaterThan(scaledImg.getWidth());
     }
     
-    @Test
-    public void lavOgBred() throws Exception {
-        URL url = getClass().getResource("/pdf/lavogbred.png");
-        byte[] orig = Files.readAllBytes(Paths.get(url.toURI()));
-        byte[] scaled = ImageScaler.downToA4(orig, "png");
-        assertEquals(orig, scaled);
-    }
+   
 
     public boolean hasJpgSignature(byte[] bytes) {
         return (bytes[0] & 0XFF) == 0xFF &&
