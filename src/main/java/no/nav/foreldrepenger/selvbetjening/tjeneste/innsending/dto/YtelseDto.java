@@ -94,8 +94,7 @@ public class YtelseDto {
 
             if (annenForelder.type().equals("norsk")) {
                 this.fnr = annenForelder.fnr;
-            }
-            else if (annenForelder.type().equals("utenlandsk")) {
+            } else if (annenForelder.type().equals("utenlandsk")) {
                 this.id = annenForelder.fnr;
             }
         }
@@ -164,8 +163,7 @@ public class YtelseDto {
         private String type(Boolean erBarnetFødt, String situasjon) {
             if (isEmpty(situasjon) || situasjon.equals("fødsel")) {
                 return erBarnetFødt ? "fødsel" : "termin";
-            }
-            else {
+            } else {
                 return situasjon;
             }
         }
@@ -173,11 +171,9 @@ public class YtelseDto {
         private LocalDate omsorgsovertakelsesdato(Barn barn) {
             if (barn.adopsjonsdato != null) {
                 return barn.adopsjonsdato;
-            }
-            else if (barn.foreldreansvarsdato != null) {
+            } else if (barn.foreldreansvarsdato != null) {
                 return barn.foreldreansvarsdato;
-            }
-            else {
+            } else {
                 return null;
             }
         }
@@ -229,8 +225,7 @@ public class YtelseDto {
 
             if (arbeidsforhold.type.equals("virksomhet")) {
                 this.orgnr = arbeidsforhold.id;
-            }
-            else {
+            } else {
                 this.fnr = arbeidsforhold.id;
             }
 

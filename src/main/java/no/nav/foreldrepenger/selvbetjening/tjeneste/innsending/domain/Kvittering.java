@@ -9,7 +9,8 @@ import com.fasterxml.jackson.annotation.JsonInclude;
 
 @JsonInclude(NON_EMPTY)
 public class Kvittering {
-    public static final Kvittering STUB = new Kvittering(now(),"deadbeef-69-cafebabe-42", "PÅGÅR", "12345", "67890", new byte[0]);
+    public static final Kvittering STUB = new Kvittering(now(), "deadbeef-69-cafebabe-42", "PÅGÅR", "12345", "67890",
+            new byte[0]);
 
     public LocalDateTime mottattDato;
     public String referanseId;
@@ -19,9 +20,11 @@ public class Kvittering {
     public byte[] pdf;
 
     @SuppressWarnings("unused")
-    public Kvittering() {}
+    public Kvittering() {
+    }
 
-    public Kvittering(LocalDateTime mottattDato, String referanseId, String leveranseStatus, String journalId, String saksNr, byte[] pdf) {
+    public Kvittering(LocalDateTime mottattDato, String referanseId, String leveranseStatus, String journalId,
+            String saksNr, byte[] pdf) {
         this.mottattDato = mottattDato;
         this.referanseId = referanseId;
         this.leveranseStatus = leveranseStatus;

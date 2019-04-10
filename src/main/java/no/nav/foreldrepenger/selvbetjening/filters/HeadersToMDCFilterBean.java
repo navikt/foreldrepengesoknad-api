@@ -1,13 +1,10 @@
 package no.nav.foreldrepenger.selvbetjening.filters;
 
-import no.nav.foreldrepenger.selvbetjening.util.CallIdGenerator;
-import no.nav.foreldrepenger.selvbetjening.util.TokenUtil;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
-import org.springframework.beans.factory.annotation.Value;
-import org.springframework.core.annotation.Order;
-import org.springframework.stereotype.Component;
-import org.springframework.web.filter.GenericFilterBean;
+import static no.nav.foreldrepenger.selvbetjening.util.Constants.NAV_CALL_ID;
+import static no.nav.foreldrepenger.selvbetjening.util.Constants.NAV_CONSUMER_ID;
+import static no.nav.foreldrepenger.selvbetjening.util.MDCUtil.toMDC;
+
+import java.io.IOException;
 
 import javax.inject.Inject;
 import javax.servlet.FilterChain;
@@ -15,11 +12,16 @@ import javax.servlet.ServletException;
 import javax.servlet.ServletRequest;
 import javax.servlet.ServletResponse;
 import javax.servlet.http.HttpServletRequest;
-import java.io.IOException;
 
-import static no.nav.foreldrepenger.selvbetjening.util.Constants.NAV_CALL_ID;
-import static no.nav.foreldrepenger.selvbetjening.util.Constants.NAV_CONSUMER_ID;
-import static no.nav.foreldrepenger.selvbetjening.util.MDCUtil.toMDC;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+import org.springframework.beans.factory.annotation.Value;
+import org.springframework.core.annotation.Order;
+import org.springframework.stereotype.Component;
+import org.springframework.web.filter.GenericFilterBean;
+
+import no.nav.foreldrepenger.selvbetjening.util.CallIdGenerator;
+import no.nav.foreldrepenger.selvbetjening.util.TokenUtil;
 
 @Component
 @Order

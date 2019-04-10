@@ -1,10 +1,9 @@
 package no.nav.foreldrepenger.selvbetjening.config;
 
-import com.google.common.collect.ImmutableMap;
-import no.nav.foreldrepenger.selvbetjening.filters.CorsInterceptor;
-import no.nav.foreldrepenger.selvbetjening.interceptors.client.ApiKeyInjectingClientInterceptor;
-import no.nav.foreldrepenger.selvbetjening.tjeneste.innsending.InnsendingConfig;
-import no.nav.foreldrepenger.selvbetjening.tjeneste.oppslag.OppslagConfig;
+import java.net.URI;
+
+import javax.inject.Inject;
+
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.boot.web.client.RestTemplateBuilder;
 import org.springframework.context.annotation.Bean;
@@ -14,8 +13,12 @@ import org.springframework.web.client.RestOperations;
 import org.springframework.web.servlet.config.annotation.InterceptorRegistry;
 import org.springframework.web.servlet.config.annotation.WebMvcConfigurer;
 
-import javax.inject.Inject;
-import java.net.URI;
+import com.google.common.collect.ImmutableMap;
+
+import no.nav.foreldrepenger.selvbetjening.filters.CorsInterceptor;
+import no.nav.foreldrepenger.selvbetjening.interceptors.client.ApiKeyInjectingClientInterceptor;
+import no.nav.foreldrepenger.selvbetjening.tjeneste.innsending.InnsendingConfig;
+import no.nav.foreldrepenger.selvbetjening.tjeneste.oppslag.OppslagConfig;
 
 @Configuration
 public class ApiConfiguration implements WebMvcConfigurer {

@@ -1,5 +1,23 @@
 package no.nav.foreldrepenger.selvbetjening.tjeneste.innsending;
 
+import static java.lang.String.format;
+import static no.nav.foreldrepenger.selvbetjening.tjeneste.innsending.InnsendingController.REST_SOKNAD;
+import static no.nav.foreldrepenger.selvbetjening.util.Constants.ISSUER;
+import static no.nav.foreldrepenger.selvbetjening.util.EnvUtil.CONFIDENTIAL;
+import static org.apache.commons.io.FileUtils.byteCountToDisplaySize;
+import static org.springframework.http.MediaType.APPLICATION_JSON_VALUE;
+
+import java.util.List;
+
+import javax.ws.rs.BadRequestException;
+
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RestController;
+
 import no.nav.foreldrepenger.selvbetjening.error.AttachmentsTooLargeException;
 import no.nav.foreldrepenger.selvbetjening.tjeneste.innsending.domain.Ettersending;
 import no.nav.foreldrepenger.selvbetjening.tjeneste.innsending.domain.Kvittering;
@@ -9,22 +27,6 @@ import no.nav.foreldrepenger.selvbetjening.tjeneste.mellomlagring.StorageService
 import no.nav.foreldrepenger.selvbetjening.util.Enabled;
 import no.nav.security.oidc.api.ProtectedWithClaims;
 import no.nav.security.oidc.exceptions.OIDCTokenValidatorException;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
-
-import javax.ws.rs.BadRequestException;
-import java.util.List;
-
-import static java.lang.String.format;
-import static no.nav.foreldrepenger.selvbetjening.tjeneste.innsending.InnsendingController.REST_SOKNAD;
-import static no.nav.foreldrepenger.selvbetjening.util.Constants.ISSUER;
-import static no.nav.foreldrepenger.selvbetjening.util.EnvUtil.CONFIDENTIAL;
-import static org.apache.commons.io.FileUtils.byteCountToDisplaySize;
-import static org.springframework.http.MediaType.APPLICATION_JSON_VALUE;
 
 @RestController
 @ProtectedWithClaims(issuer = ISSUER, claimMap = { "acr=Level4" })
@@ -80,14 +82,16 @@ public class InnsendingController {
         return respons;
     }
 
-    private static void sjekkSamletStørrelseVedlegg (List<Vedlegg> vedlegg) {
+    private static void sjekkSamletStørrelseVedlegg(List<Vedlegg> vedlegg) {
         long total = vedlegg.stream()
                 .filter(v -> v.content != null)
                 .mapToLong(v -> v.content.length)
                 .sum();
 
         if (total > MAX_VEDLEGG_SIZE) {
-            throw new AttachmentsTooLargeException(format("Samlet filstørrelse for alle vedlegg er %s, men må være mindre enn %s", mb(total), mb(MAX_VEDLEGG_SIZE)));
+            throw new AttachmentsTooLargeException(
+                    format("Samlet filstørrelse for alle vedlegg er %s, men må være mindre enn %s", mb(total),
+                            mb(MAX_VEDLEGG_SIZE)));
         }
     }
 

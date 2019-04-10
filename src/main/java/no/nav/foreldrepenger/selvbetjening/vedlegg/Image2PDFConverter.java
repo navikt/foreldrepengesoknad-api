@@ -54,11 +54,9 @@ public class Image2PDFConverter {
     byte[] convert(String classPathResource) {
         try {
             return convert(new ClassPathResource(classPathResource));
-        } 
-        catch (AttachmentException e) {
-        	throw e;
-        }
-        catch (Exception e) {
+        } catch (AttachmentException e) {
+            throw e;
+        } catch (Exception e) {
             throw new AttachmentConversionException("Kunne ikke konvertere vedlegg " + classPathResource, e);
         }
     }

@@ -36,8 +36,7 @@ public class OpptjeningDto {
         for (AnnenInntekt annenInntekt : søker.andreInntekterSiste10Mnd) {
             if (annenInntekt.type.equals("JOBB_I_UTLANDET")) {
                 this.arbeidsforhold.add(new ArbeidsforholdDto(annenInntekt));
-            }
-            else {
+            } else {
                 this.annenOpptjening.add(new AnnenOpptjeningDto(annenInntekt));
             }
         }
@@ -148,16 +147,14 @@ public class OpptjeningDto {
                 this.endringsDato = næringsInfo.dato;
                 this.næringsinntektBrutto = næringsInfo.næringsinntektEtterEndring;
                 this.beskrivelseEndring = næringsInfo.forklaring;
-            }
-            else {
+            } else {
                 this.næringsinntektBrutto = selvstendig.næringsinntekt;
             }
 
             if (regnskapsfører != null) {
                 regnskapsførere.add(new RegnskapsførerDto(regnskapsfører));
                 this.nærRelasjon = regnskapsfører.erNærVennEllerFamilie;
-            }
-            else if (revisor != null) {
+            } else if (revisor != null) {
                 regnskapsførere.add(new RegnskapsførerDto(revisor));
                 this.nærRelasjon = revisor.erNærVennEllerFamilie;
             }

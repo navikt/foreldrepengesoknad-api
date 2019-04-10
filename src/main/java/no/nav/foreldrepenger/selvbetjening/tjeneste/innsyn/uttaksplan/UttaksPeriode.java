@@ -29,10 +29,10 @@ public class UttaksPeriode {
     private final Boolean gjelderAnnenPart;
     private final Boolean flerbarnsdager;
     private final Boolean manueltBehandlet;
-    private final Integer  samtidigUttaksprosent;
+    private final Integer samtidigUttaksprosent;
 
     public UttaksPeriode(
-    		@JsonProperty("oppholdAarsak") OppholdÅrsak oppholdAarsak,
+            @JsonProperty("oppholdAarsak") OppholdÅrsak oppholdAarsak,
             @JsonProperty("overfoeringAarsak") OverføringÅrsak overfoeringAarsak,
             @JsonProperty("graderingAvslagAarsak") GraderingAvslagÅrsak graderingAvslagAarsak,
             @JsonProperty("utsettelsePeriodeType") UtsettelsePeriodeType utsettelsePeriodeType,
@@ -63,34 +63,34 @@ public class UttaksPeriode {
         this.graderingAvslagAarsak = graderingAvslagAarsak;
         this.manueltBehandlet = manueltBehandlet;
         this.samtidigUttaksprosent = samtidigUttaksprosent;
-        this.flerbarnsdager  = flerbarnsdager;
+        this.flerbarnsdager = flerbarnsdager;
     }
 
     public Boolean getFlerbarnsdager() {
-		return flerbarnsdager;
-	}
+        return flerbarnsdager;
+    }
 
-	public Boolean getManueltBehandlet() {
-		return manueltBehandlet;
-	}
+    public Boolean getManueltBehandlet() {
+        return manueltBehandlet;
+    }
 
-	public Integer getSamtidigUttaksprosent() {
-		return samtidigUttaksprosent;
-	}
+    public Integer getSamtidigUttaksprosent() {
+        return samtidigUttaksprosent;
+    }
 
-	public OppholdÅrsak getOppholdAarsak() {
-		return oppholdAarsak;
-	}
+    public OppholdÅrsak getOppholdAarsak() {
+        return oppholdAarsak;
+    }
 
-	public OverføringÅrsak getOverfoeringAarsak() {
-		return overfoeringAarsak;
-	}
+    public OverføringÅrsak getOverfoeringAarsak() {
+        return overfoeringAarsak;
+    }
 
-	public GraderingAvslagÅrsak getGraderingAvslagAarsak() {
-		return graderingAvslagAarsak;
-	}
+    public GraderingAvslagÅrsak getGraderingAvslagAarsak() {
+        return graderingAvslagAarsak;
+    }
 
-	public UtsettelsePeriodeType getUtsettelsePeriodeType() {
+    public UtsettelsePeriodeType getUtsettelsePeriodeType() {
         return utsettelsePeriodeType;
     }
 
@@ -159,7 +159,8 @@ public class UttaksPeriode {
 
     @Override
     public String toString() {
-        return getClass().getSimpleName() + " [oppholdAarsak=" + oppholdAarsak + ", overfoeringAarsak=" + overfoeringAarsak
+        return getClass().getSimpleName() + " [oppholdAarsak=" + oppholdAarsak + ", overfoeringAarsak="
+                + overfoeringAarsak
                 + ", utsettelsePeriodeType=" + utsettelsePeriodeType + ", periodeResultatType=" + periodeResultatType
                 + ", graderingInnvilget=" + graderingInnvilget + ", samtidigUttak=" + samtidigUttak + ", periode="
                 + periode + ", stønadskontotype=" + stønadskontotype + ", trekkDager=" + trekkDager

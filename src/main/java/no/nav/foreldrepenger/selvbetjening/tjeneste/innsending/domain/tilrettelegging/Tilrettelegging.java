@@ -1,11 +1,11 @@
 package no.nav.foreldrepenger.selvbetjening.tjeneste.innsending.domain.tilrettelegging;
 
-import com.fasterxml.jackson.annotation.JsonInclude;
+import static com.fasterxml.jackson.annotation.JsonInclude.Include.NON_EMPTY;
 
 import java.time.LocalDate;
 import java.util.List;
 
-import static com.fasterxml.jackson.annotation.JsonInclude.Include.NON_EMPTY;
+import com.fasterxml.jackson.annotation.JsonInclude;
 
 @JsonInclude(NON_EMPTY)
 public class Tilrettelegging {

@@ -1,12 +1,13 @@
 package no.nav.foreldrepenger.selvbetjening.tjeneste.mellomlagring;
 
-import no.nav.foreldrepenger.selvbetjening.util.TokenUtil;
-import org.slf4j.Logger;
-import org.springframework.stereotype.Service;
+import static org.slf4j.LoggerFactory.getLogger;
 
 import java.util.Optional;
 
-import static org.slf4j.LoggerFactory.getLogger;
+import org.slf4j.Logger;
+import org.springframework.stereotype.Service;
+
+import no.nav.foreldrepenger.selvbetjening.util.TokenUtil;
 
 @Service
 public class StorageService {

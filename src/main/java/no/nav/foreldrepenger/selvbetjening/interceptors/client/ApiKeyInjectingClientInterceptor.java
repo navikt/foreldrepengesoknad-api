@@ -35,8 +35,7 @@ public class ApiKeyInjectingClientInterceptor implements ClientHttpRequestInterc
         if (apiKey.isPresent()) {
             LOG.trace("Injisert API-key som header {} for {}", headerKey, destination, new Exception());
             request.getHeaders().add(headerKey, apiKey.get());
-        }
-        else {
+        } else {
             LOG.trace("Ingen API-key ble funnet for {} (sjekket {} konfigurasjoner)", destination,
                     apiKeys.values().size());
         }

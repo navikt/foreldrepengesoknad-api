@@ -11,8 +11,7 @@ public class Enabled {
 
     public Enabled(
             @Value("${TOGGLES_ENABLE_TPSBARN:false}") boolean tpsBarn,
-            @Value("${TOGGLES_ENABLE_SVANGERSKAPSPENGER:false}") boolean svangerskapspenger
-            ) {
+            @Value("${TOGGLES_ENABLE_SVANGERSKAPSPENGER:false}") boolean svangerskapspenger) {
         Enabled.TPSBARN = tpsBarn;
         Enabled.SVANGERSKAPSPENGER = svangerskapspenger;
     }

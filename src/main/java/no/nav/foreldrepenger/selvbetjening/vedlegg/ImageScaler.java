@@ -1,6 +1,7 @@
 package no.nav.foreldrepenger.selvbetjening.vedlegg;
 
 import static java.awt.image.AffineTransformOp.TYPE_BILINEAR;
+import static java.awt.image.BufferedImage.TYPE_CUSTOM;
 
 import java.awt.Dimension;
 import java.awt.Graphics2D;
@@ -21,8 +22,8 @@ import org.slf4j.LoggerFactory;
 import no.nav.foreldrepenger.selvbetjening.error.AttachmentConversionException;
 
 public class ImageScaler {
-	
-	private static final Logger LOG = LoggerFactory.getLogger(ImageScaler.class); 
+
+    private static final Logger LOG = LoggerFactory.getLogger(ImageScaler.class);
 
     private ImageScaler() {
 
@@ -42,8 +43,7 @@ public class ImageScaler {
 
             if (newDim.equals(origDim)) {
                 return origImage;
-            }
-            else {
+            } else {
                 BufferedImage scaledImg = scaleDown(image, newDim);
                 return toBytes(scaledImg, format);
             }
@@ -56,10 +56,10 @@ public class ImageScaler {
         if (image.getHeight() >= image.getWidth()) {
             return image;
         }
-        if (image.getType() == BufferedImage.TYPE_CUSTOM) {
-        	LOG.warn("Kan ikke rotere bilde med ukjent type");
-        	return image;
-        	
+        if (image.getType() == TYPE_CUSTOM) {
+            LOG.warn("Kan ikke rotere bilde med ukjent type");
+            return image;
+
         }
 
         BufferedImage rotatedImage = new BufferedImage(image.getHeight(), image.getWidth(), image.getType());

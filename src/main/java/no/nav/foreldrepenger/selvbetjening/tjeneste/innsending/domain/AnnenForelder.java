@@ -21,11 +21,9 @@ public class AnnenForelder {
     public String type() {
         if (isTrue(kanIkkeOppgis)) {
             return "ukjent";
-        }
-        else if (isTrue(utenlandskFnr)) {
+        } else if (isTrue(utenlandskFnr)) {
             return "utenlandsk";
-        }
-        else {
+        } else {
             return "norsk";
         }
     }
