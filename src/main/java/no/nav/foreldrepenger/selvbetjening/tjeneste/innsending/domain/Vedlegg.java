@@ -10,6 +10,7 @@ public class Vedlegg {
     public URI url;
     public byte[] content;
     public String innsendingsType;
+    public String beskrivelse;
 
     public Vedlegg kopi() {
         Vedlegg kopi = new Vedlegg();
@@ -18,6 +19,7 @@ public class Vedlegg {
         kopi.uuid = this.uuid;
         kopi.url = this.url;
         kopi.innsendingsType = this.innsendingsType;
+        kopi.beskrivelse = this.beskrivelse;
 
         return kopi;
     }
