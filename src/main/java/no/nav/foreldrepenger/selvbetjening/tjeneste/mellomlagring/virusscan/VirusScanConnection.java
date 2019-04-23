@@ -25,7 +25,10 @@ public class VirusScanConnection extends AbstractRestConnection {
 
     public boolean scan(Attachment attachment) {
         try {
-            return Result.OK.equals(postForObject(config.getUri(), attachment.bytes, ScanResult.class).getResult());
+            LOG.info("Scanner");
+            ScanResult scanResult = postForObject(config.getUri(), attachment.bytes, ScanResult.class);
+            LOG.info("Fikk scan result {}", scanResult);
+            return Result.OK.equals(scanResult.getResult());
         } catch (Exception e) {
             LOG.warn("Kunne ikke scanne {}", attachment.uuid, e);
             return true;
