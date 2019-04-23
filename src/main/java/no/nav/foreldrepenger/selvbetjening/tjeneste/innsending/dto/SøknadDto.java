@@ -24,6 +24,7 @@ public class SøknadDto {
         vedleggDto.metadata.id = vedlegg.id;
         vedleggDto.metadata.dokumentType = vedlegg.skjemanummer;
         vedleggDto.metadata.innsendingsType = vedlegg.innsendingsType;
+        vedleggDto.metadata.beskrivelse = vedlegg.beskrivelse;
         vedleggDto.vedlegg = vedlegg.content;
         this.vedlegg.add(vedleggDto);
     }
