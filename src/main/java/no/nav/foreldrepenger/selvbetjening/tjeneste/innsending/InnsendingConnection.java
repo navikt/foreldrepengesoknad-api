@@ -3,6 +3,8 @@ package no.nav.foreldrepenger.selvbetjening.tjeneste.innsending;
 import static java.time.LocalDateTime.now;
 
 import java.net.URI;
+import java.time.LocalDate;
+import java.time.LocalDateTime;
 
 import javax.inject.Inject;
 import javax.ws.rs.BadRequestException;
@@ -85,6 +87,7 @@ public class InnsendingConnection extends AbstractRestConnection {
             LOG.warn("Mottok en søknad av ukjent type {}", søknad.getClass().getSimpleName());
             throw new BadRequestException("Unknown application type " + søknad.getClass().getSimpleName());
         }
+        dto.mottattdato = LocalDate.now();
         dto.tilleggsopplysninger = søknad.tilleggsopplysninger;
         søknad.vedlegg.forEach(v -> dto.addVedlegg(convert(v)));
         return dto;
