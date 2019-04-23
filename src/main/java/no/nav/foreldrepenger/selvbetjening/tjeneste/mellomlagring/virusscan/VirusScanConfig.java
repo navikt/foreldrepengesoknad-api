@@ -26,4 +26,9 @@ public class VirusScanConfig {
     public URI getUri() {
         return URI.create("http://clamav.nais/scan");
     }
+
+    @Override
+    public String toString() {
+        return getClass().getSimpleName() + " [enabled=" + enabled + ",uri=" + getUri() + "]";
+    }
 }
