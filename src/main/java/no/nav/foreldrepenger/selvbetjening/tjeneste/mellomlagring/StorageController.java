@@ -73,6 +73,7 @@ public class StorageController {
     @PostMapping(path = "/vedlegg", consumes = MULTIPART_FORM_DATA_VALUE)
     public ResponseEntity<String> storeAttachment(@RequestPart("vedlegg") MultipartFile attachmentMultipartFile) {
         Attachment attachment = Attachment.of(attachmentMultipartFile);
+        LOG.info("Scanner vedlegg {} ({})", attachment.uuid, attachment.uri());
         if (virusScanner.scan(attachment)) {
             LOG.info("Virusscanning av {} er OK", attachment.uuid);
         }
