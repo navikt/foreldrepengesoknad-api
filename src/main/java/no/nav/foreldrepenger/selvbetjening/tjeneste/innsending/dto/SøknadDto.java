@@ -13,7 +13,6 @@ import no.nav.foreldrepenger.selvbetjening.tjeneste.innsending.domain.Vedlegg;
 @JsonInclude(NON_EMPTY)
 public class SøknadDto {
 
-    public LocalDateTime mottattdato;
     public SøkerDto søker;
     public List<VedleggDto> vedlegg = new ArrayList<>();
     public String tilleggsopplysninger;

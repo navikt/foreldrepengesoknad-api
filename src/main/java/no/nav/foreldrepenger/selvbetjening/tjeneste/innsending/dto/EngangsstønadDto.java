@@ -18,7 +18,5 @@ public class EngangsstønadDto extends SøknadDto {
         this.søker = new SøkerDto("MOR");
         this.ytelse = new YtelseDto(søknad);
         this.vedlegg = new ArrayList<>();
-        this.mottattdato = now();
-
     }
 }

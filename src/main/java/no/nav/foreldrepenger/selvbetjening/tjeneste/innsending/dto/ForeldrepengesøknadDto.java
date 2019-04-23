@@ -16,7 +16,6 @@ public class ForeldrepengesøknadDto extends SøknadDto {
         this.søker = new SøkerDto(søknad.søker.rolle);
         this.ytelse = new YtelseDto(søknad);
         this.vedlegg = new ArrayList<>();
-        this.mottattdato = now();
     }
 
 }
