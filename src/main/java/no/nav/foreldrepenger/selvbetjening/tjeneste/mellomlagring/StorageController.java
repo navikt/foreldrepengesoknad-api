@@ -1,8 +1,6 @@
 package no.nav.foreldrepenger.selvbetjening.tjeneste.mellomlagring;
 
-import static java.lang.String.format;
 import static no.nav.foreldrepenger.selvbetjening.util.Constants.ISSUER;
-import static org.apache.commons.io.FileUtils.byteCountToDisplaySize;
 import static org.springframework.http.MediaType.APPLICATION_JSON_VALUE;
 import static org.springframework.http.MediaType.MULTIPART_FORM_DATA_VALUE;
 import static org.springframework.http.ResponseEntity.created;
@@ -12,6 +10,8 @@ import static org.springframework.http.ResponseEntity.ok;
 
 import java.util.Optional;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -23,73 +23,73 @@ import org.springframework.web.bind.annotation.RequestPart;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.multipart.MultipartFile;
 
-import no.nav.foreldrepenger.selvbetjening.error.AttachmentsTooLargeException;
+import no.nav.foreldrepenger.selvbetjening.tjeneste.mellomlagring.virusscan.VirusScanner;
 import no.nav.security.oidc.api.ProtectedWithClaims;
-import no.nav.security.oidc.exceptions.OIDCTokenValidatorException;
 
 @RestController
 @ProtectedWithClaims(issuer = ISSUER, claimMap = { "acr=Level4" })
 @RequestMapping(StorageController.REST_STORAGE)
 public class StorageController {
 
+    private static final Logger LOG = LoggerFactory.getLogger(StorageController.class);
     public static final String REST_STORAGE = "/rest/storage";
-    public static final int MAX_VEDLEGG_SIZE = 8 * 1024 * 1024;
 
-    private final StorageService service;
+    private final StorageService storageService;
+    private final VirusScanner virusScanner;
 
-    public StorageController(StorageService service) {
-        this.service = service;
+    public StorageController(StorageService storageService, VirusScanner virusScanner) {
+        this.storageService = storageService;
+        this.virusScanner = virusScanner;
     }
 
     @GetMapping
-    public ResponseEntity<String> getSoknad() throws OIDCTokenValidatorException {
-        Optional<String> muligSøknad = service.hentSøknad();
+    public ResponseEntity<String> getSoknad() {
+        Optional<String> muligSøknad = storageService.hentSøknad();
         return muligSøknad
                 .map(s -> ok().body(s))
                 .orElse(noContent().build());
     }
 
     @PostMapping(consumes = APPLICATION_JSON_VALUE)
-    public ResponseEntity<String> storeSoknad(@RequestBody String soknad) throws OIDCTokenValidatorException {
-        service.lagreSøknad(soknad);
+    public ResponseEntity<String> storeSoknad(@RequestBody String soknad) {
+        storageService.lagreSøknad(soknad);
         return noContent().build();
     }
 
     @DeleteMapping
-    public ResponseEntity<String> deleteSoknad() throws OIDCTokenValidatorException {
-        service.slettSøknad();
+    public ResponseEntity<String> deleteSoknad() {
+        storageService.slettSøknad();
         return noContent().build();
     }
 
     @GetMapping("vedlegg/{key}")
-    public ResponseEntity<byte[]> getAttachment(@PathVariable("key") String key) throws OIDCTokenValidatorException {
-        Optional<Attachment> muligVedlegg = service.hentVedlegg(key);
+    public ResponseEntity<byte[]> getAttachment(@PathVariable("key") String key) {
+        Optional<Attachment> muligVedlegg = storageService.hentVedlegg(key);
         return muligVedlegg
                 .map(Attachment::asOKHTTPEntity)
                 .orElse(notFound().build());
     }
 
     @PostMapping(path = "/vedlegg", consumes = MULTIPART_FORM_DATA_VALUE)
-    public ResponseEntity<String> storeAttachment(@RequestPart("vedlegg") MultipartFile attachmentMultipartFile)
-            throws OIDCTokenValidatorException {
+    public ResponseEntity<String> storeAttachment(@RequestPart("vedlegg") MultipartFile attachmentMultipartFile) {
         Attachment attachment = Attachment.of(attachmentMultipartFile);
-        if (attachment.size > MAX_VEDLEGG_SIZE) {
-            throw new AttachmentsTooLargeException(tooLargeErrorMessage(attachment.size));
+        if (virusScanner.scan(attachment)) {
+            LOG.info("Virusscanning av {} er OK", attachment.uuid);
         }
+        storageService.lagreVedlegg(attachment);
 
-        service.lagreVedlegg(attachment);
         return created(attachment.uri()).body(attachment.uuid);
     }
 
     @DeleteMapping("vedlegg/{key}")
-    public ResponseEntity<String> deleteAttachment(@PathVariable("key") String key) throws OIDCTokenValidatorException {
-        service.slettVedlegg(key);
+    public ResponseEntity<String> deleteAttachment(@PathVariable("key") String key) {
+        storageService.slettVedlegg(key);
         return noContent().build();
     }
 
     @GetMapping("kvittering/{type}")
     public ResponseEntity<String> getKvittering(@PathVariable("type") String type) {
-        Optional<String> muligKvittering = service.hentKvittering(type);
+        Optional<String> muligKvittering = storageService.hentKvittering(type);
         return muligKvittering
                 .map(kvittering -> ok().body(kvittering))
                 .orElse(noContent().build());
@@ -97,14 +97,14 @@ public class StorageController {
 
     @PostMapping(value = "kvittering/{type}", consumes = APPLICATION_JSON_VALUE)
     public ResponseEntity<String> storeKvittering(@PathVariable("type") String type, @RequestBody String kvittering) {
-        service.lagreKvittering(type, kvittering);
+        storageService.lagreKvittering(type, kvittering);
         return noContent().build();
     }
 
-    private String tooLargeErrorMessage(long attachmentSize) {
-        return format("Vedlegg-størrelse er %s, men kan ikke overstige %s",
-                byteCountToDisplaySize(attachmentSize),
-                byteCountToDisplaySize(MAX_VEDLEGG_SIZE));
+    @Override
+    public String toString() {
+        return getClass().getSimpleName() + " [storageService=" + storageService + ", virusScanner=" + virusScanner
+                + "]";
     }
 
 }

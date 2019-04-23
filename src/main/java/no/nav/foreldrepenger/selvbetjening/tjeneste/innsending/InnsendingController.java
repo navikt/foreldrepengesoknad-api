@@ -6,7 +6,7 @@ import static no.nav.foreldrepenger.selvbetjening.util.Constants.ISSUER;
 import static no.nav.foreldrepenger.selvbetjening.util.EnvUtil.CONFIDENTIAL;
 import static org.apache.commons.io.FileUtils.byteCountToDisplaySize;
 import static org.springframework.http.MediaType.APPLICATION_JSON_VALUE;
-
+import static no.nav.foreldrepenger.selvbetjening.tjeneste.mellomlagring.Attachment.MAX_TOTAL_VEDLEGG_SIZE;
 import java.util.List;
 
 import javax.ws.rs.BadRequestException;
@@ -26,7 +26,6 @@ import no.nav.foreldrepenger.selvbetjening.tjeneste.innsending.domain.Vedlegg;
 import no.nav.foreldrepenger.selvbetjening.tjeneste.mellomlagring.StorageService;
 import no.nav.foreldrepenger.selvbetjening.util.Enabled;
 import no.nav.security.oidc.api.ProtectedWithClaims;
-import no.nav.security.oidc.exceptions.OIDCTokenValidatorException;
 
 @RestController
 @ProtectedWithClaims(issuer = ISSUER, claimMap = { "acr=Level4" })
@@ -37,9 +36,6 @@ public class InnsendingController {
 
     public static final String REST_SOKNAD = "/rest/soknad";
 
-    private static final long MB = 1024 * 1024;
-    private static final long MAX_VEDLEGG_SIZE = 32 * MB;
-
     private final Innsending innsending;
     private final StorageService storageService;
 
@@ -49,12 +45,13 @@ public class InnsendingController {
     }
 
     @PostMapping
-    public Kvittering sendInn(@RequestBody Søknad søknad) throws OIDCTokenValidatorException {
+    public Kvittering sendInn(@RequestBody Søknad søknad) {
         if (!Enabled.SVANGERSKAPSPENGER && søknad.type.equals("svangerskapspenger")) {
+            LOG.info("Støtter ikke svangerskapspenger foreløpig");
             throw new BadRequestException("Svangerskapspenger er ikke støttet");
         }
-
-        LOG.info(CONFIDENTIAL, "Mottok søknad: {}", søknad);
+        LOG.info("Mottok søknad");
+        LOG.info(CONFIDENTIAL, "{}", søknad);
         søknad.vedlegg.forEach(this::hentVedlegg);
         sjekkSamletStørrelseVedlegg(søknad.vedlegg);
         Kvittering respons = innsending.sendInn(søknad);
@@ -64,7 +61,8 @@ public class InnsendingController {
 
     @PostMapping("/ettersend")
     public Kvittering sendInn(@RequestBody Ettersending ettersending) {
-        LOG.info(CONFIDENTIAL, "Mottok ettersending: {}", ettersending);
+        LOG.info("Mottok ettersending");
+        LOG.info(CONFIDENTIAL, "{}", ettersending);
         ettersending.vedlegg.forEach(this::hentVedlegg);
         sjekkSamletStørrelseVedlegg(ettersending.vedlegg);
         Kvittering respons = innsending.sendInn(ettersending);
@@ -74,7 +72,8 @@ public class InnsendingController {
 
     @PostMapping("/endre")
     public Kvittering endre(@RequestBody Søknad søknad) {
-        LOG.info(CONFIDENTIAL, "Mottok endringssøknad: {}", søknad);
+        LOG.info(CONFIDENTIAL, "Mottok endringssøknad");
+        LOG.info(CONFIDENTIAL, "{}", søknad);
         søknad.vedlegg.forEach(this::hentVedlegg);
         sjekkSamletStørrelseVedlegg(søknad.vedlegg);
         Kvittering respons = innsending.endre(søknad);
@@ -88,10 +87,10 @@ public class InnsendingController {
                 .mapToLong(v -> v.content.length)
                 .sum();
 
-        if (total > MAX_VEDLEGG_SIZE) {
+        if (total > MAX_TOTAL_VEDLEGG_SIZE) {
             throw new AttachmentsTooLargeException(
                     format("Samlet filstørrelse for alle vedlegg er %s, men må være mindre enn %s", mb(total),
-                            mb(MAX_VEDLEGG_SIZE)));
+                            mb(MAX_TOTAL_VEDLEGG_SIZE)));
         }
     }
 

@@ -82,8 +82,8 @@ public class InnsendingConnection extends AbstractRestConnection {
             dto = new SvangerskapspengesøknadDto((Svangerskapspengesøknad) søknad);
             logJSON(dto);
         } else {
-            LOG.warn("Mottok en søknad av ukjent type..");
-            throw new BadRequestException("Unknown application type");
+            LOG.warn("Mottok en søknad av ukjent type {}", søknad.getClass().getSimpleName());
+            throw new BadRequestException("Unknown application type " + søknad.getClass().getSimpleName());
         }
         dto.tilleggsopplysninger = søknad.tilleggsopplysninger;
         søknad.vedlegg.forEach(v -> dto.addVedlegg(convert(v)));
@@ -108,7 +108,7 @@ public class InnsendingConnection extends AbstractRestConnection {
         try {
             LOG.trace("JSON er {}", mapper.writerWithDefaultPrettyPrinter().writeValueAsString(dto));
         } catch (JsonProcessingException e) {
-            e.printStackTrace();
+
         }
     }
 

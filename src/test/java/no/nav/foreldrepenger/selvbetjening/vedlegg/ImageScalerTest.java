@@ -1,10 +1,7 @@
 package no.nav.foreldrepenger.selvbetjening.vedlegg;
 
-import org.junit.Test;
+import static org.assertj.core.api.Assertions.assertThat;
 
-import no.nav.foreldrepenger.selvbetjening.vedlegg.ImageScaler;
-
-import javax.imageio.ImageIO;
 import java.awt.image.BufferedImage;
 import java.io.ByteArrayInputStream;
 import java.io.InputStream;
@@ -12,8 +9,9 @@ import java.net.URL;
 import java.nio.file.Files;
 import java.nio.file.Paths;
 
-import static org.assertj.core.api.Assertions.assertThat;
-import static org.junit.Assert.assertEquals;
+import javax.imageio.ImageIO;
+
+import org.junit.Test;
 
 public class ImageScalerTest {
 
@@ -54,8 +52,6 @@ public class ImageScalerTest {
         assertThat(origImg.getWidth()).isGreaterThan(origImg.getHeight());
         assertThat(scaledImg.getHeight()).isGreaterThan(scaledImg.getWidth());
     }
-    
-   
 
     public boolean hasJpgSignature(byte[] bytes) {
         return (bytes[0] & 0XFF) == 0xFF &&
