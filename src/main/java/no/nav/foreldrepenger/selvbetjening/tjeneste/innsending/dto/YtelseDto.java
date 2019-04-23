@@ -219,9 +219,13 @@ public class YtelseDto {
         public String type;
         public String orgnr;
         public String fnr;
+        public String risikoFaktorer;
+        public String tilretteleggingstiltak;
 
         public ArbeidsforholdDto(Arbeidsforhold arbeidsforhold) {
             this.type = arbeidsforhold.type;
+            this.risikoFaktorer = arbeidsforhold.risikofaktorer;
+            this.tilretteleggingstiltak = arbeidsforhold.tilretteleggingstiltak;
 
             if (arbeidsforhold.type.equals("virksomhet")) {
                 this.orgnr = arbeidsforhold.id;
