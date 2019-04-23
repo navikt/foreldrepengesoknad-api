@@ -2,7 +2,7 @@ package no.nav.foreldrepenger.selvbetjening.tjeneste.innsending.dto;
 
 import static com.fasterxml.jackson.annotation.JsonInclude.Include.NON_EMPTY;
 
-import java.time.LocalDate;
+import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -13,7 +13,7 @@ import no.nav.foreldrepenger.selvbetjening.tjeneste.innsending.domain.Vedlegg;
 @JsonInclude(NON_EMPTY)
 public class SøknadDto {
 
-    public LocalDate mottattdato;
+    public LocalDateTime mottattdato;
     public SøkerDto søker;
     public List<VedleggDto> vedlegg = new ArrayList<>();
     public String tilleggsopplysninger;

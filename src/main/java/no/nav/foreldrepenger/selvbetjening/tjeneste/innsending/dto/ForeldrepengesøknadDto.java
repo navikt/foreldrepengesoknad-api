@@ -1,6 +1,6 @@
 package no.nav.foreldrepenger.selvbetjening.tjeneste.innsending.dto;
 
-import static java.time.LocalDate.now;
+import static java.time.LocalDateTime.now;
 
 import java.util.ArrayList;
 
