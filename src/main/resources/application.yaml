@@ -27,7 +27,7 @@ spring:
          accept-case-insensitive-properties: true
       deserialization :
          accept-single-value-as-array: true
-         fail-on-unknown-properties: true
+         fail-on-unknown-properties: false
       serialization :
          fail-on-empty-beans: false
   main.banner-mode: 'off'
