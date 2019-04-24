@@ -1,4 +1,4 @@
-package no.nav.foreldrepenger.selvbetjening.tjeneste.mellomlagring.virusscan;
+package no.nav.foreldrepenger.selvbetjening.tjeneste.virusscan;
 
 import java.net.URI;
 
@@ -26,7 +26,7 @@ public class VirusScanConnection extends AbstractRestConnection {
     public boolean scan(Attachment attachment) {
         try {
             LOG.info("Scanner");
-            ScanResult scanResult = postForObject(config.getUri(), attachment.bytes, ScanResult.class);
+            ScanResult scanResult = putForObject(config.getUri(), attachment.bytes, ScanResult.class);
             LOG.info("Fikk scan result {}", scanResult);
             return Result.OK.equals(scanResult.getResult());
         } catch (Exception e) {

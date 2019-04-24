@@ -1,4 +1,4 @@
-package no.nav.foreldrepenger.selvbetjening.tjeneste.mellomlagring.virusscan;
+package no.nav.foreldrepenger.selvbetjening.tjeneste.virusscan;
 
 import no.nav.foreldrepenger.selvbetjening.tjeneste.mellomlagring.Attachment;
 

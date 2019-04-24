@@ -1,4 +1,4 @@
-package no.nav.foreldrepenger.selvbetjening.tjeneste.mellomlagring.virusscan;
+package no.nav.foreldrepenger.selvbetjening.tjeneste.virusscan;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
