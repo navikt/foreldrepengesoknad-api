@@ -7,8 +7,8 @@
     </appender>
 
     <!-- Turn off Spring's warning logs for already resolved exceptions -->
-    <logger name="org.springframework.web.servlet.mvc.method.annotation.ExceptionHandlerExceptionResolver" level="ERROR" />
-
+    <logger name="org.springframework.web.servlet.mvc.method.annotation" level="DEBUG" />
+  <!--    <logger name="org.springframework.web.servlet.mvc.method.annotation.ExceptionHandlerExceptionResolver" level="ERROR" /> -->
     <logger name="no.nav.foreldrepenger.selvbetjening" level="TRACE" />
 
     <root level="INFO">
