@@ -24,7 +24,7 @@ public class VirusScanConfig {
     }
 
     public URI getUri() {
-        return URI.create("http://clamav.nais/scan");
+        return URI.create("http://clamav.nais.svc.nais.local/scan"); // hardcode for now
     }
 
     @Override
