@@ -1,11 +1,9 @@
 management:
    endpoints.web.exposure.include:  '*'
    endpoint :
-      security.enabled : false
       health.show-details : always
       
 spring :
     http.log-request-details : true      
-    jackson.deserialization.fail-on-unknown-properties: false
                
-       
+virus.enabled : true         

@@ -2,7 +2,6 @@ management :
    endpoints.web.exposure.include:  '*'
    endpoint: 
      health.show-details : always
-     security.enabled : false
                    
 no.nav.security.oidc:
   issuers: selvbetjening
@@ -13,4 +12,5 @@ no.nav.security.oidc:
      
 spring :
    http.log-request-details : true      
-   jackson.deserialization.fail-on-unknown-properties: false
+ 
+virus.enabled : false  
