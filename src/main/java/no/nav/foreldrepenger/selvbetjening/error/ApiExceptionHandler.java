@@ -40,9 +40,10 @@ public class ApiExceptionHandler extends ResponseEntityExceptionHandler {
 
     private static final Logger LOG = LoggerFactory.getLogger(ApiExceptionHandler.class);
 
-    @ExceptionHandler
-    public ResponseEntity<Object> handleBadRequest(HttpMessageNotReadableException e, WebRequest request) {
-        return logAndHandle(HttpStatus.BAD_REQUEST, e, request);
+    @Override
+    protected ResponseEntity<Object> handleHttpMessageNotReadable(HttpMessageNotReadableException e,
+            HttpHeaders headers, HttpStatus status, WebRequest req) {
+        return logAndHandle(UNPROCESSABLE_ENTITY, e, req);
     }
 
     @ResponseBody
