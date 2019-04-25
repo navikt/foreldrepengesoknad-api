@@ -7,7 +7,7 @@ import org.springframework.context.annotation.Configuration;
 
 @ConfigurationProperties(prefix = "virus")
 @Configuration
-public class VirusScanConfig {
+class VirusScanConfig {
 
     boolean enabled = true;
 

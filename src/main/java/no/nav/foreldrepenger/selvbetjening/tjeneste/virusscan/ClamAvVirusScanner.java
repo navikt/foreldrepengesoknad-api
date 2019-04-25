@@ -21,7 +21,7 @@ public class ClamAvVirusScanner implements VirusScanner {
         if (connection.isEnabled()) {
             return connection.scan(attachment);
         }
-        LOG.info("Virus scanning is disabled");
+        LOG.info("Virusscanning er ikke aktivert");
         return true;
     }
 

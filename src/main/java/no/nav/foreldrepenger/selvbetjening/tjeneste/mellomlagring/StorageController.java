@@ -32,7 +32,6 @@ import no.nav.security.oidc.api.ProtectedWithClaims;
 @RequestMapping(StorageController.REST_STORAGE)
 public class StorageController {
 
-    private static final Logger LOG = LoggerFactory.getLogger(StorageController.class);
     public static final String REST_STORAGE = "/rest/storage";
 
     private final StorageService storageService;

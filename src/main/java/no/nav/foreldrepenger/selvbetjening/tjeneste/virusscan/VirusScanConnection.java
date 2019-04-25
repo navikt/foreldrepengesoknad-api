@@ -16,7 +16,7 @@ import io.micrometer.core.instrument.Metrics;
 import no.nav.foreldrepenger.selvbetjening.tjeneste.mellomlagring.Attachment;
 
 @Component
-public class VirusScanConnection {
+class VirusScanConnection {
 
     private static final Logger LOG = LoggerFactory.getLogger(VirusScanConnection.class);
     private static final Counter INGENVIRUS_COUNTER = counter("virus", "OK");
