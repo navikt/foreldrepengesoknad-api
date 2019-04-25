@@ -33,11 +33,9 @@ public class StorageController {
     public static final String REST_STORAGE = "/rest/storage";
 
     private final StorageService storageService;
-    private final VirusScanner virusScanner;
 
-    public StorageController(StorageService storageService, VirusScanner virusScanner) {
+    public StorageController(StorageService storageService) {
         this.storageService = storageService;
-        this.virusScanner = virusScanner;
     }
 
     @GetMapping
@@ -71,9 +69,6 @@ public class StorageController {
     @PostMapping(path = "/vedlegg", consumes = MULTIPART_FORM_DATA_VALUE)
     public ResponseEntity<String> storeAttachment(@RequestPart("vedlegg") MultipartFile attachmentMultipartFile) {
         Attachment attachment = Attachment.of(attachmentMultipartFile);
-        if (!virusScanner.scan(attachment)) {
-            throw new AttachmentVirusException(attachment);
-        }
         storageService.lagreVedlegg(attachment);
         return created(attachment.uri()).body(attachment.uuid);
     }
@@ -100,8 +95,7 @@ public class StorageController {
 
     @Override
     public String toString() {
-        return getClass().getSimpleName() + " [storageService=" + storageService + ", virusScanner=" + virusScanner
-                + "]";
+        return getClass().getSimpleName() + " [storageService=" + storageService + "]";
     }
 
 }

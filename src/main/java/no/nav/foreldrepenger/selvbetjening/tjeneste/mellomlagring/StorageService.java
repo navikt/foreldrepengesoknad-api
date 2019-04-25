@@ -7,6 +7,8 @@ import java.util.Optional;
 import org.slf4j.Logger;
 import org.springframework.stereotype.Service;
 
+import no.nav.foreldrepenger.selvbetjening.error.AttachmentVirusException;
+import no.nav.foreldrepenger.selvbetjening.tjeneste.virusscan.VirusScanner;
 import no.nav.foreldrepenger.selvbetjening.util.TokenUtil;
 
 @Service
@@ -18,11 +20,13 @@ public class StorageService {
     private final TokenUtil tokenHelper;
     private final Storage storage;
     private final StorageCrypto crypto;
+    private final VirusScanner virusScanner;
 
-    public StorageService(TokenUtil tokenHelper, Storage storage, StorageCrypto crypto) {
+    public StorageService(TokenUtil tokenHelper, Storage storage, VirusScanner virusScanner, StorageCrypto crypto) {
         this.tokenHelper = tokenHelper;
         this.storage = storage;
         this.crypto = crypto;
+        this.virusScanner = virusScanner;
     }
 
     public Optional<String> hentSøknad() {
@@ -58,6 +62,9 @@ public class StorageService {
     }
 
     public void lagreVedlegg(Attachment attachment) {
+        if (!virusScanner.scan(attachment)) {
+            throw new AttachmentVirusException(attachment);
+        }
         String fnr = tokenHelper.autentisertBruker();
         String directory = crypto.encryptDirectoryName(fnr);
         LOG.info("Skriver vedlegg {} til katalog {}", attachment, directory);

@@ -16,7 +16,7 @@ import no.nav.foreldrepenger.selvbetjening.error.AttachmentsTooLargeException;
 
 public class Attachment {
 
-    private static final long MB = 1024 * 1024;
+    private static final long MB = 1024L * 1024L;
     public static final long MAX_TOTAL_VEDLEGG_SIZE = 32 * MB;
     public static final long MAX_VEDLEGG_SIZE = 8 * MB;
 
