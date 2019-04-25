@@ -1,32 +1,35 @@
 package no.nav.foreldrepenger.selvbetjening.tjeneste.virusscan;
 
-import java.net.URI;
 import static org.springframework.http.MediaType.APPLICATION_PDF;
+import static no.nav.foreldrepenger.selvbetjening.tjeneste.virusscan.Result.OK;
 
+import java.net.URI;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+import org.springframework.http.RequestEntity;
 import org.springframework.stereotype.Component;
 import org.springframework.web.client.RestOperations;
 
 import io.micrometer.core.instrument.Counter;
 import io.micrometer.core.instrument.Metrics;
 
-import static no.nav.foreldrepenger.selvbetjening.tjeneste.virusscan.Result.*;
-import no.nav.foreldrepenger.selvbetjening.tjeneste.AbstractRestConnection;
 import no.nav.foreldrepenger.selvbetjening.tjeneste.mellomlagring.Attachment;
 
 @Component
-public class VirusScanConnection extends AbstractRestConnection {
+public class VirusScanConnection {
 
-    private final VirusScanConfig config;
-
+    private static final Logger LOG = LoggerFactory.getLogger(VirusScanConnection.class);
     private static final Counter INGENVIRUS_COUNTER = counter("virus", "OK");
     private static final Counter VIRUS_COUNTER = counter("virus", "FEIL");
 
+    private final VirusScanConfig config;
+    private final RestOperations operations;
+
     public VirusScanConnection(RestOperations operations, VirusScanConfig config) {
-        super(operations);
+        this.operations = operations;
         this.config = config;
     }
 
-    @Override
     public boolean isEnabled() {
         return config.isEnabled();
     }
@@ -59,9 +62,8 @@ public class VirusScanConnection extends AbstractRestConnection {
         }
     }
 
-    @Override
-    protected URI pingURI() {
-        return config.getPingURI();
+    protected <T> T putForObject(URI uri, Object payload, Class<T> responseType) {
+        return operations.exchange(RequestEntity.put(uri).body(payload), responseType).getBody();
     }
 
     private static Counter counter(String name, String type) {
@@ -70,6 +72,6 @@ public class VirusScanConnection extends AbstractRestConnection {
 
     @Override
     public String toString() {
-        return getClass().getSimpleName() + " [config=" + config + "]";
+        return getClass().getSimpleName() + " [config=" + config + ", operations=" + operations + "]";
     }
 }

@@ -53,10 +53,6 @@ public abstract class AbstractRestConnection {
         return operations.postForObject(uri, payload, responseType);
     }
 
-    protected <T> T putForObject(URI uri, Object payload, Class<T> responseType) {
-        return operations.exchange(RequestEntity.put(uri).body(payload), responseType).getBody();
-    }
-
     @Override
     public String toString() {
         return getClass().getSimpleName() + " [operations=" + operations + "]";
