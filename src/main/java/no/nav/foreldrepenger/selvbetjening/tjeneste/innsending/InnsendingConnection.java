@@ -4,7 +4,6 @@ import static java.time.LocalDateTime.now;
 
 import java.net.URI;
 import java.time.LocalDate;
-import java.time.LocalDateTime;
 
 import javax.inject.Inject;
 import javax.ws.rs.BadRequestException;
