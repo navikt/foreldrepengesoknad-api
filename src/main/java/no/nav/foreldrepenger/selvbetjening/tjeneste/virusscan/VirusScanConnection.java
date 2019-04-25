@@ -62,7 +62,7 @@ public class VirusScanConnection {
         }
     }
 
-    protected <T> T putForObject(URI uri, Object payload, Class<T> responseType) {
+    private <T> T putForObject(URI uri, Object payload, Class<T> responseType) {
         return operations.exchange(RequestEntity.put(uri).body(payload), responseType).getBody();
     }
 
