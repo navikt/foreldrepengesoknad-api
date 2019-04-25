@@ -38,14 +38,14 @@ public class VirusScanConnection extends AbstractRestConnection {
                 return true;
             }
             LOG.info("Scanner {}", attachment);
-            ScanResult[] scanResult = putForObject(config.getUri(), attachment.bytes, ScanResult[].class);
-            if (scanResult.length != 1) {
-                LOG.warn("Uventet respons med lengde {}, forventet lengde er 1", scanResult.length);
+            ScanResult[] scanResults = putForObject(config.getUri(), attachment.bytes, ScanResult[].class);
+            if (scanResults.length != 1) {
+                LOG.warn("Uventet respons med lengde {}, forventet lengde er 1", scanResults.length);
                 return true;
             }
-            ScanResult result = scanResult[0];
-            LOG.info("Fikk scan result {}", result);
-            if (OK.equals(result.getResult())) {
+            ScanResult scanResult = scanResults[0];
+            LOG.info("Fikk scan result {}", scanResult);
+            if (OK.equals(scanResult.getResult())) {
                 LOG.info("Ingen virus i {}", attachment.uri());
                 INGENVIRUS_COUNTER.increment();
                 return true;
