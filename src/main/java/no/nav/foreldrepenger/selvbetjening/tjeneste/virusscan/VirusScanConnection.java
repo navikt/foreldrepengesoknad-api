@@ -1,10 +1,15 @@
 package no.nav.foreldrepenger.selvbetjening.tjeneste.virusscan;
 
 import java.net.URI;
+import static org.springframework.http.MediaType.APPLICATION_PDF;
 
 import org.springframework.stereotype.Component;
 import org.springframework.web.client.RestOperations;
 
+import io.micrometer.core.instrument.Counter;
+import io.micrometer.core.instrument.Metrics;
+
+import static no.nav.foreldrepenger.selvbetjening.tjeneste.virusscan.Result.*;
 import no.nav.foreldrepenger.selvbetjening.tjeneste.AbstractRestConnection;
 import no.nav.foreldrepenger.selvbetjening.tjeneste.mellomlagring.Attachment;
 
@@ -12,6 +17,9 @@ import no.nav.foreldrepenger.selvbetjening.tjeneste.mellomlagring.Attachment;
 public class VirusScanConnection extends AbstractRestConnection {
 
     private final VirusScanConfig config;
+
+    private static final Counter INGENVIRUS_COUNTER = counter("virus", "OK");
+    private static final Counter VIRUS_COUNTER = counter("virus", "FEIL");
 
     public VirusScanConnection(RestOperations operations, VirusScanConfig config) {
         super(operations);
@@ -25,12 +33,28 @@ public class VirusScanConnection extends AbstractRestConnection {
 
     public boolean scan(Attachment attachment) {
         try {
-            LOG.info("Scanner");
+            if (!APPLICATION_PDF.equals(attachment.contentType)) {
+                LOG.info("Scanner ikke vedlegg av tyoe {}", attachment.contentType);
+                return true;
+            }
+            LOG.info("Scanner {}", attachment);
             ScanResult[] scanResult = putForObject(config.getUri(), attachment.bytes, ScanResult[].class);
-            LOG.info("Fikk scan result {}", scanResult[0]);
-            return Result.OK.equals(scanResult[0].getResult());
+            if (scanResult.length != 1) {
+                LOG.warn("Uventet respons med lengde {}, forventet lengde er 1", scanResult.length);
+                return true;
+            }
+            ScanResult result = scanResult[0];
+            LOG.info("Fikk scan result {}", result);
+            if (OK.equals(result.getResult())) {
+                LOG.info("Ingen virus i {}", attachment.uri());
+                INGENVIRUS_COUNTER.increment();
+                return true;
+            }
+            LOG.warn("Fant virus i {}", attachment.uri());
+            VIRUS_COUNTER.increment();
+            return false;
         } catch (Exception e) {
-            LOG.warn("Kunne ikke scanne {}", attachment.uuid, e);
+            LOG.warn("Kunne ikke scanne {}", attachment, e);
             return true;
         }
     }
@@ -38,6 +62,10 @@ public class VirusScanConnection extends AbstractRestConnection {
     @Override
     protected URI pingURI() {
         return config.getPingURI();
+    }
+
+    private static Counter counter(String name, String type) {
+        return Metrics.counter(name, "result", type);
     }
 
     @Override

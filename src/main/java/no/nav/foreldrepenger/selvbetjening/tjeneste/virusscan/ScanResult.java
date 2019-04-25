@@ -25,4 +25,8 @@ public class ScanResult {
         return result;
     }
 
+    @Override
+    public String toString() {
+        return getClass().getSimpleName() + " [filename=" + filename + ", result=" + result + "]";
+    }
 }
