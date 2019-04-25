@@ -1,14 +1,11 @@
 package no.nav.foreldrepenger.selvbetjening.tjeneste.virusscan;
 
-import com.fasterxml.jackson.annotation.JsonAlias;
 import com.fasterxml.jackson.annotation.JsonCreator;
 import com.fasterxml.jackson.annotation.JsonProperty;
 
 class ScanResult {
 
-    @JsonAlias("Filename")
     private final String filename;
-    @JsonAlias("Result")
     private final Result result;
 
     @JsonCreator
