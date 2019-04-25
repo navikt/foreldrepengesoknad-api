@@ -23,6 +23,7 @@ import org.springframework.web.bind.annotation.RequestPart;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.multipart.MultipartFile;
 
+import no.nav.foreldrepenger.selvbetjening.error.AttachmentVirusException;
 import no.nav.foreldrepenger.selvbetjening.tjeneste.virusscan.VirusScanner;
 import no.nav.security.oidc.api.ProtectedWithClaims;
 
@@ -73,12 +74,10 @@ public class StorageController {
     @PostMapping(path = "/vedlegg", consumes = MULTIPART_FORM_DATA_VALUE)
     public ResponseEntity<String> storeAttachment(@RequestPart("vedlegg") MultipartFile attachmentMultipartFile) {
         Attachment attachment = Attachment.of(attachmentMultipartFile);
-        LOG.info("Scanner vedlegg {} ({})", attachment.uuid, attachment.uri());
-        if (virusScanner.scan(attachment)) {
-            LOG.info("Virusscanning av {} er OK", attachment.uuid);
+        if (!virusScanner.scan(attachment)) {
+            throw new AttachmentVirusException(attachment);
         }
         storageService.lagreVedlegg(attachment);
-
         return created(attachment.uri()).body(attachment.uuid);
     }
 
