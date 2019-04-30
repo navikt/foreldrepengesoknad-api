@@ -6,6 +6,8 @@ import static no.nav.foreldrepenger.selvbetjening.tjeneste.virusscan.Result.OK;
 import java.net.URI;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.context.EnvironmentAware;
+import org.springframework.core.env.Environment;
 import org.springframework.http.RequestEntity;
 import org.springframework.stereotype.Component;
 import org.springframework.web.client.RestOperations;
@@ -14,9 +16,10 @@ import io.micrometer.core.instrument.Counter;
 import io.micrometer.core.instrument.Metrics;
 
 import no.nav.foreldrepenger.selvbetjening.tjeneste.mellomlagring.Attachment;
+import static no.nav.foreldrepenger.selvbetjening.util.EnvUtil.isDevOrPreprod;
 
 @Component
-class VirusScanConnection {
+class VirusScanConnection implements EnvironmentAware {
 
     private static final Logger LOG = LoggerFactory.getLogger(VirusScanConnection.class);
     private static final Counter INGENVIRUS_COUNTER = counter("virus", "OK");
@@ -24,10 +27,16 @@ class VirusScanConnection {
 
     private final VirusScanConfig config;
     private final RestOperations operations;
+    private Environment env;
 
     public VirusScanConnection(RestOperations operations, VirusScanConfig config) {
         this.operations = operations;
         this.config = config;
+    }
+
+    @Override
+    public void setEnvironment(Environment env) {
+        this.env = env;
     }
 
     public boolean isEnabled() {
@@ -36,9 +45,8 @@ class VirusScanConnection {
 
     public boolean scan(Attachment attachment) {
         try {
-            if (!APPLICATION_PDF.equals(attachment.contentType)) {
-                LOG.info("Scanner ikke vedlegg av tyoe {}", attachment.contentType);
-                return true;
+            if (isDevOrPreprod(env) && attachment.filename.startsWith("virustest")) {
+                return false;
             }
             LOG.info("Scanner {}", attachment);
             ScanResult[] scanResults = putForObject(config.getUri(), attachment.bytes, ScanResult[].class);
@@ -74,4 +82,5 @@ class VirusScanConnection {
     public String toString() {
         return getClass().getSimpleName() + " [config=" + config + ", operations=" + operations + "]";
     }
+
 }
