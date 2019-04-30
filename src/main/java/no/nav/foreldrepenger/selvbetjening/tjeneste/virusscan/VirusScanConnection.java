@@ -61,7 +61,7 @@ class VirusScanConnection implements EnvironmentAware {
                 INGENVIRUS_COUNTER.increment();
                 return true;
             }
-            LOG.warn("Fant virus i {}", attachment.uri());
+            LOG.warn("Fant virus i {}, status {}", attachment.uri(), scanResult.getResult());
             VIRUS_COUNTER.increment();
             return false;
         } catch (Exception e) {
