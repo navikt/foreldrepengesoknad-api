@@ -21,6 +21,7 @@ public class EttersendingDto {
         vedleggDto.type = "påkrevd";
         vedleggDto.metadata.id = vedlegg.id;
         vedleggDto.metadata.dokumentType = vedlegg.skjemanummer;
+        vedleggDto.metadata.beskrivelse = vedlegg.beskrivelse;
         vedleggDto.vedlegg = vedlegg.content;
         this.vedlegg.add(vedleggDto);
     }
