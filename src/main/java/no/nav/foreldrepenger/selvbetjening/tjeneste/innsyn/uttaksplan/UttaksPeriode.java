@@ -12,7 +12,6 @@ import no.nav.foreldrepenger.selvbetjening.tjeneste.innsyn.LukketPeriode;
 import no.nav.foreldrepenger.selvbetjening.tjeneste.innsyn.PeriodeResultatType;
 
 public class UttaksPeriode {
-
     private final OppholdÅrsak oppholdAarsak;
     private final OverføringÅrsak overfoeringAarsak;
     private final GraderingAvslagÅrsak graderingAvslagAarsak;
@@ -20,6 +19,8 @@ public class UttaksPeriode {
     private final PeriodeResultatType periodeResultatType;
     private final Boolean graderingInnvilget;
     private final Boolean samtidigUttak;
+    private final LocalDate fom;
+    private final LocalDate tom;
     @Valid
     private final LukketPeriode periode;
     private final StønadskontoType stønadskontotype;
@@ -30,6 +31,8 @@ public class UttaksPeriode {
     private final Boolean flerbarnsdager;
     private final Boolean manueltBehandlet;
     private final Integer samtidigUttaksprosent;
+    private final UttakArbeidType uttakArbeidType;
+    private final ArbeidsgiverInfo arbeidsgiverInfo;
 
     public UttaksPeriode(
             @JsonProperty("oppholdAarsak") OppholdÅrsak oppholdAarsak,
@@ -47,13 +50,17 @@ public class UttaksPeriode {
             @JsonProperty("gjelderAnnenPart") Boolean gjelderAnnenPart,
             @JsonProperty("manueltBehandlet") Boolean manueltBehandlet,
             @JsonProperty("samtidigUttaksprosent") Integer samtidigUttaksprosent,
-            @JsonProperty("flerbarnsdager") Boolean flerbarnsdager) {
+            @JsonProperty("flerbarnsdager") Boolean flerbarnsdager,
+            @JsonProperty("uttakArbeidType") UttakArbeidType uttakArbeidType,
+            @JsonProperty("arbeidsgiverInfo") ArbeidsgiverInfo arbeidsgiverInfo) {
         this.oppholdAarsak = oppholdAarsak;
         this.overfoeringAarsak = overfoeringAarsak;
         this.utsettelsePeriodeType = utsettelsePeriodeType;
         this.periodeResultatType = periodeResultatType;
         this.graderingInnvilget = graderingInnvilget;
         this.samtidigUttak = samtidigUttak;
+        this.fom = fom;
+        this.tom = tom;
         this.periode = new LukketPeriode(fom, tom);
         this.stønadskontotype = stønadskontotype;
         this.trekkDager = trekkDager;
@@ -64,6 +71,24 @@ public class UttaksPeriode {
         this.manueltBehandlet = manueltBehandlet;
         this.samtidigUttaksprosent = samtidigUttaksprosent;
         this.flerbarnsdager = flerbarnsdager;
+        this.uttakArbeidType = uttakArbeidType;
+        this.arbeidsgiverInfo = arbeidsgiverInfo;
+    }
+
+    public UttakArbeidType getUttakArbeidType() {
+        return uttakArbeidType;
+    }
+
+    public ArbeidsgiverInfo getArbeidsgiverInfo() {
+        return arbeidsgiverInfo;
+    }
+
+    public LocalDate getFom() {
+        return fom;
+    }
+
+    public LocalDate getTom() {
+        return tom;
     }
 
     public Boolean getFlerbarnsdager() {
@@ -133,7 +158,8 @@ public class UttaksPeriode {
     @Override
     public int hashCode() {
         return Objects.hash(gjelderAnnenPart, utbetalingprosent, arbeidstidProsent, trekkDager, stønadskontotype,
-                periode, samtidigUttak, graderingInnvilget, periodeResultatType, oppholdAarsak, overfoeringAarsak);
+                periode, samtidigUttak, graderingInnvilget, periodeResultatType, oppholdAarsak, overfoeringAarsak, fom,
+                tom, uttakArbeidType, arbeidsgiverInfo);
     }
 
     @Override
@@ -154,6 +180,10 @@ public class UttaksPeriode {
                 && Objects.equals(this.stønadskontotype, that.stønadskontotype)
                 && Objects.equals(this.periode, that.periode)
                 && Objects.equals(this.samtidigUttak, that.samtidigUttak)
+                && Objects.equals(this.tom, that.tom)
+                && Objects.equals(this.fom, that.fom)
+                && Objects.equals(this.uttakArbeidType, that.uttakArbeidType)
+                && Objects.equals(this.arbeidsgiverInfo, that.arbeidsgiverInfo)
                 && Objects.equals(this.graderingInnvilget, that.graderingInnvilget);
     }
 
@@ -165,7 +195,10 @@ public class UttaksPeriode {
                 + ", graderingInnvilget=" + graderingInnvilget + ", samtidigUttak=" + samtidigUttak + ", periode="
                 + periode + ", stønadskontotype=" + stønadskontotype + ", trekkDager=" + trekkDager
                 + ", arbeidstidProsent=" + arbeidstidProsent + ", utbetalingprosent=" + utbetalingprosent
-                + ", gjelderAnnenPart=" + gjelderAnnenPart + "]";
+                + ", gjelderAnnenPart=" + gjelderAnnenPart
+                + ", uttakArbeidType=" + uttakArbeidType
+                + ", arbeidsgiverInfo=" + arbeidsgiverInfo
+                + ", fom=" + fom
+                + ", tom=" + tom + "]";
     }
-
 }

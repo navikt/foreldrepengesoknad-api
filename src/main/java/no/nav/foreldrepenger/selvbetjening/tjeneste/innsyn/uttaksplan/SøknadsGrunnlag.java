@@ -9,17 +9,15 @@ import com.fasterxml.jackson.annotation.JsonProperty;
 public class SøknadsGrunnlag {
     private final FamiliehendelseType familieHendelseType;
     private final LocalDate familieHendelseDato;
-
     private final Integer dekningsgrad;
     private final Integer antallBarn;
-
     private final Boolean søkerErFarEllerMedmor;
     private final Boolean morErAleneOmOmsorg;
     private final Boolean morHarRett;
     private final Boolean morErUfør;
-
     private final Boolean farMedmorErAleneOmOmsorg;
     private final Boolean farMedmorHarRett;
+    private final Boolean annenForelderErInformert;
 
     @JsonCreator
     public SøknadsGrunnlag(@JsonProperty("familieHendelseType") FamiliehendelseType familieHendelseType,
@@ -31,7 +29,8 @@ public class SøknadsGrunnlag {
             @JsonProperty("morHarRett") Boolean morHarRett,
             @JsonProperty("morErUfør") Boolean morErUfør,
             @JsonProperty("farMedmorErAleneOmOmsorg") Boolean farMedmorErAleneOmOmsorg,
-            @JsonProperty("farMedmorHarRett") Boolean farMedmorHarRett) {
+            @JsonProperty("farMedmorHarRett") Boolean farMedmorHarRett,
+            @JsonProperty("annenForelderErInformert") Boolean annenForelderErInformert) {
         this.familieHendelseType = familieHendelseType;
         this.familieHendelseDato = familieHendelseDato;
         this.dekningsgrad = dekningsgrad;
@@ -42,6 +41,11 @@ public class SøknadsGrunnlag {
         this.morErUfør = morErUfør;
         this.farMedmorErAleneOmOmsorg = farMedmorErAleneOmOmsorg;
         this.farMedmorHarRett = farMedmorHarRett;
+        this.annenForelderErInformert = annenForelderErInformert;
+    }
+
+    public Boolean getAnnenForelderErInformert() {
+        return annenForelderErInformert;
     }
 
     public FamiliehendelseType getFamilieHendelseType() {
@@ -87,7 +91,8 @@ public class SøknadsGrunnlag {
     @Override
     public int hashCode() {
         return Objects.hash(farMedmorHarRett, farMedmorErAleneOmOmsorg, morErUfør, morHarRett, morErAleneOmOmsorg,
-                søkerErFarEllerMedmor, antallBarn, dekningsgrad, familieHendelseDato, familieHendelseType);
+                søkerErFarEllerMedmor, antallBarn, dekningsgrad, familieHendelseDato, familieHendelseType,
+                annenForelderErInformert);
     }
 
     @Override
@@ -108,6 +113,7 @@ public class SøknadsGrunnlag {
                 && Objects.equals(this.antallBarn, that.antallBarn)
                 && Objects.equals(this.dekningsgrad, that.dekningsgrad)
                 && Objects.equals(this.familieHendelseDato, that.familieHendelseDato)
+                && Objects.equals(this.annenForelderErInformert, that.annenForelderErInformert)
                 && Objects.equals(this.familieHendelseType, that.familieHendelseType);
     }
 
@@ -117,6 +123,7 @@ public class SøknadsGrunnlag {
                 + familieHendelseDato + ", dekningsgrad=" + dekningsgrad + ", antallBarn=" + antallBarn
                 + ", søkerErFarEllerMedmor=" + søkerErFarEllerMedmor + ", morErAleneOmOmsorg=" + morErAleneOmOmsorg
                 + ", morHarRett=" + morHarRett + ", morErUfør=" + morErUfør + ", farMedmorErAleneOmOmsorg="
-                + farMedmorErAleneOmOmsorg + ", farMedmorHarRett=" + farMedmorHarRett + "]";
+                + farMedmorErAleneOmOmsorg + ", farMedmorHarRett=" + farMedmorHarRett + ", annenForelderErInformert="
+                + annenForelderErInformert + "]";
     }
 }
