@@ -32,6 +32,7 @@ public class RequestFilter implements Filter {
         HttpServletResponse res = (HttpServletResponse) response;
 
         if (Enabled.FNR_HEADER_FILTER && req.getHeader("fnr") != null && !req.getHeader("fnr").equals(tokenHelper.getSubject())) {
+            LOG.info("fnr i header matcher ikke subject i token");
             res.sendError(409);
         }
 
