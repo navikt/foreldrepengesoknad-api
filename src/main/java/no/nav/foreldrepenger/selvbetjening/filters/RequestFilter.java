@@ -1,25 +1,36 @@
 package no.nav.foreldrepenger.selvbetjening.filters;
 
-import no.nav.foreldrepenger.selvbetjening.util.Enabled;
-import no.nav.foreldrepenger.selvbetjening.util.TokenUtil;
+import static no.nav.foreldrepenger.selvbetjening.util.Constants.FNR_HEADER_VALUE;
+
+import java.io.IOException;
+
+import javax.servlet.Filter;
+import javax.servlet.FilterChain;
+import javax.servlet.ServletException;
+import javax.servlet.ServletRequest;
+import javax.servlet.ServletResponse;
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
+
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.boot.autoconfigure.condition.ConditionalOnProperty;
 import org.springframework.core.annotation.Order;
 import org.springframework.stereotype.Component;
 
-import javax.inject.Inject;
-import javax.servlet.*;
-import javax.servlet.http.HttpServletRequest;
-import javax.servlet.http.HttpServletResponse;
-import java.io.IOException;
-
+import no.nav.foreldrepenger.selvbetjening.util.TokenUtil;
 
 @Component
 @Order(1)
+@ConditionalOnProperty("TOGGLES_FNR_HEADER_FILTER")
 public class RequestFilter implements Filter {
 
-    @Inject
-    private TokenUtil tokenHelper;
+    private final TokenUtil tokenHelper;
+
+    public RequestFilter(TokenUtil tokenHelper) {
+        this.tokenHelper = tokenHelper;
+    }
+
     private static final Logger LOG = LoggerFactory.getLogger(RequestFilter.class);
 
     @Override
@@ -31,11 +42,16 @@ public class RequestFilter implements Filter {
         HttpServletRequest req = (HttpServletRequest) request;
         HttpServletResponse res = (HttpServletResponse) response;
 
-        if (Enabled.FNR_HEADER_FILTER && req.getHeader("fnr") != null && !req.getHeader("fnr").equals(tokenHelper.getSubject())) {
-            LOG.info("fnr i header matcher ikke subject i token");
+        String fnr = req.getHeader(FNR_HEADER_VALUE);
+        if (fnr != null && !fnr.equals(tokenHelper.getSubject())) {
+            LOG.warn("FNR {} i header matcher ikke subject {} i token", fnr, tokenHelper.getSubject());
             res.sendError(409);
         }
-
         chain.doFilter(request, response);
+    }
+
+    @Override
+    public String toString() {
+        return getClass().getSimpleName() + " [tokenHelper=" + tokenHelper + "]";
     }
 }
