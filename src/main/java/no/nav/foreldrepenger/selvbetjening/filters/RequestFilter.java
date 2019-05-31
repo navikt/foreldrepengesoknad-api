@@ -26,19 +26,17 @@ import no.nav.foreldrepenger.selvbetjening.util.TokenUtil;
 @ConditionalOnProperty(name = "TOGGLES_FNR_HEADER_FILTER", havingValue = "true", matchIfMissing = true)
 public class RequestFilter implements Filter {
 
+    private static final Logger LOG = LoggerFactory.getLogger(RequestFilter.class);
+
     private final TokenUtil tokenHelper;
 
     public RequestFilter(TokenUtil tokenHelper) {
         this.tokenHelper = tokenHelper;
     }
 
-    private static final Logger LOG = LoggerFactory.getLogger(RequestFilter.class);
-
     @Override
-    public void doFilter(
-            ServletRequest request,
-            ServletResponse response,
-            FilterChain chain) throws IOException, ServletException {
+    public void doFilter(ServletRequest request, ServletResponse response, FilterChain chain)
+            throws IOException, ServletException {
 
         HttpServletResponse res = HttpServletResponse.class.cast(response);
 
