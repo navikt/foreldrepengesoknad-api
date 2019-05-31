@@ -24,30 +24,30 @@ public class InnsynController {
 
     public static final String INNSYN = "/rest/innsyn";
 
-    private final Innsyn innsyn;
+    private final Innsyn innsynTjeneste;
 
     @Inject
     public InnsynController(Innsyn innsyn) {
-        this.innsyn = innsyn;
+        this.innsynTjeneste = innsyn;
     }
 
     @GetMapping("/saker")
     public List<Sak> saker() {
-        return innsyn.hentSaker();
+        return innsynTjeneste.hentSaker();
     }
 
     @GetMapping("/uttaksplan")
     public Uttaksplan uttaksplan(@RequestParam(name = "saksnummer") String saksnummer) {
-        return innsyn.hentUttaksplan(saksnummer);
+        return innsynTjeneste.hentUttaksplan(saksnummer);
     }
 
     @GetMapping("/vedtak")
     public Vedtak vedtak(@RequestParam(name = "saksnummer") String saksnummer) {
-        return innsyn.hentVedtak(saksnummer);
+        return innsynTjeneste.hentVedtak(saksnummer);
     }
 
     @Override
     public String toString() {
-        return getClass().getSimpleName() + " [innsyn=" + innsyn + "]";
+        return getClass().getSimpleName() + " [innsyn=" + innsynTjeneste + "]";
     }
 }
