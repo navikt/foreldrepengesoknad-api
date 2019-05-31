@@ -1,6 +1,7 @@
 package no.nav.foreldrepenger.selvbetjening.filters;
 
 import static no.nav.foreldrepenger.selvbetjening.util.Constants.FNR_HEADER_VALUE;
+import static org.springframework.http.HttpStatus.CONFLICT;
 
 import java.io.IOException;
 
@@ -39,13 +40,12 @@ public class RequestFilter implements Filter {
             ServletResponse response,
             FilterChain chain) throws IOException, ServletException {
 
-        HttpServletRequest req = (HttpServletRequest) request;
-        HttpServletResponse res = (HttpServletResponse) response;
+        HttpServletResponse res = HttpServletResponse.class.cast(response);
 
-        String fnr = req.getHeader(FNR_HEADER_VALUE);
+        String fnr = HttpServletRequest.class.cast(request).getHeader(FNR_HEADER_VALUE);
         if (!tokenHelper.getSubject().equals(fnr)) {
             LOG.warn("FNR {} i header matcher ikke subject {} i token", fnr, tokenHelper.getSubject());
-            res.sendError(409);
+            res.sendError(CONFLICT.value());
         }
         chain.doFilter(request, response);
     }
