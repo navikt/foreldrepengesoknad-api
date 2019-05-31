@@ -22,7 +22,7 @@ import no.nav.foreldrepenger.selvbetjening.util.TokenUtil;
 
 @Component
 @Order(1)
-@ConditionalOnProperty("TOGGLES_FNR_HEADER_FILTER")
+@ConditionalOnProperty(name = "TOGGLES_FNR_HEADER_FILTER", havingValue = "true", matchIfMissing = true)
 public class RequestFilter implements Filter {
 
     private final TokenUtil tokenHelper;
