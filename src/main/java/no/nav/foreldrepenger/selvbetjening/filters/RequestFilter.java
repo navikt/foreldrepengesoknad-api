@@ -43,7 +43,7 @@ public class RequestFilter implements Filter {
         HttpServletResponse res = (HttpServletResponse) response;
 
         String fnr = req.getHeader(FNR_HEADER_VALUE);
-        if (fnr != null && !fnr.equals(tokenHelper.getSubject())) {
+        if (!tokenHelper.getSubject().equals(fnr)) {
             LOG.warn("FNR {} i header matcher ikke subject {} i token", fnr, tokenHelper.getSubject());
             res.sendError(409);
         }
