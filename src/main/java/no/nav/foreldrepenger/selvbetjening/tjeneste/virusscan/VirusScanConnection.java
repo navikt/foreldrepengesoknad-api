@@ -1,9 +1,10 @@
 package no.nav.foreldrepenger.selvbetjening.tjeneste.virusscan;
 
-import static org.springframework.http.MediaType.APPLICATION_PDF;
 import static no.nav.foreldrepenger.selvbetjening.tjeneste.virusscan.Result.OK;
+import static no.nav.foreldrepenger.selvbetjening.util.EnvUtil.isDevOrPreprod;
 
 import java.net.URI;
+
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.context.EnvironmentAware;
@@ -14,9 +15,7 @@ import org.springframework.web.client.RestOperations;
 
 import io.micrometer.core.instrument.Counter;
 import io.micrometer.core.instrument.Metrics;
-
 import no.nav.foreldrepenger.selvbetjening.tjeneste.mellomlagring.Attachment;
-import static no.nav.foreldrepenger.selvbetjening.util.EnvUtil.isDevOrPreprod;
 
 @Component
 class VirusScanConnection implements EnvironmentAware {

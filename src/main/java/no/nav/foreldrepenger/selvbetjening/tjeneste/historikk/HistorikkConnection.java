@@ -32,7 +32,7 @@ public class HistorikkConnection extends AbstractRestConnection {
         List<Melding> meldinger = Optional.ofNullable(getForObject(config.historikkURI(), Melding[].class, false))
                 .map(Arrays::asList)
                 .orElse(emptyList());
-        LOG.info(CONFIDENTIAL, "Fikk meldinger {}", meldinger);
+        LOG.trace(CONFIDENTIAL, "Fikk meldinger {}", meldinger);
         return meldinger;
     }
 
@@ -45,5 +45,4 @@ public class HistorikkConnection extends AbstractRestConnection {
     public String toString() {
         return getClass().getSimpleName() + " [config=" + config + "]";
     }
-
 }

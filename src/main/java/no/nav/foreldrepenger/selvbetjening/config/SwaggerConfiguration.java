@@ -4,6 +4,7 @@ import static com.google.common.base.Predicates.or;
 import static io.swagger.models.Scheme.HTTP;
 import static io.swagger.models.Scheme.HTTPS;
 import static java.util.stream.Collectors.toSet;
+import static no.nav.foreldrepenger.selvbetjening.tjeneste.historikk.HistorikkController.HISTORIKK;
 import static no.nav.foreldrepenger.selvbetjening.tjeneste.innsending.InnsendingController.REST_SOKNAD;
 import static no.nav.foreldrepenger.selvbetjening.tjeneste.innsyn.InnsynController.INNSYN;
 import static no.nav.foreldrepenger.selvbetjening.tjeneste.oppslag.OppslagController.OPPSLAG;
@@ -35,6 +36,7 @@ public class SwaggerConfiguration {
                 .select()
                 .apis(RequestHandlerSelectors.any())
                 .paths(or(
+                        regex(HISTORIKK + ".*"),
                         regex(OPPSLAG + ".*"),
                         regex(INNSYN + ".*"),
                         regex(REST_SOKNAD + ".*")))

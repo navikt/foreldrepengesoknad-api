@@ -31,5 +31,4 @@ public class HistorikkConfig {
     public URI pingURI() {
         return uri(DEFAULT_BASE_URI, DEFAULT_PING_PATH);
     }
-
 }
