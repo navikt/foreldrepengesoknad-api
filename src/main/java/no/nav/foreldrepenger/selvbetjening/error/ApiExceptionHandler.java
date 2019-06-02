@@ -21,7 +21,6 @@ import org.springframework.web.bind.annotation.ControllerAdvice;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.client.HttpStatusCodeException;
-import org.springframework.web.context.request.ServletWebRequest;
 import org.springframework.web.context.request.WebRequest;
 import org.springframework.web.multipart.MaxUploadSizeExceededException;
 import org.springframework.web.multipart.MultipartException;
@@ -107,7 +106,7 @@ public class ApiExceptionHandler extends ResponseEntityExceptionHandler {
 
     private ResponseEntity<Object> logAndHandle(HttpStatus status, Exception e, WebRequest req, HttpHeaders headers,
             Object... messages) {
-        ApiError apiError = apiErrorFra(status, e, req, messages);
+        ApiError apiError = apiErrorFra(status, e, messages);
         LOG.warn("{} {} ({})", status, apiError.getMessages(), status.value(), e);
         return handleExceptionInternal(e, apiError, headers, status, req);
     }
@@ -123,12 +122,8 @@ public class ApiExceptionHandler extends ResponseEntityExceptionHandler {
         return error.getDefaultMessage() + " (" + error.getField() + ")";
     }
 
-    private static ApiError apiErrorFra(HttpStatus status, Exception e, WebRequest req, Object... messages) {
-        return req instanceof ServletWebRequest ? new ApiError(status, e, destFra(req), messages)
-                : new ApiError(status, e, messages);
+    private static ApiError apiErrorFra(HttpStatus status, Exception e, Object... messages) {
+        return new ApiError(status, e, messages);
     }
 
-    private static String destFra(WebRequest req) {
-        return ServletWebRequest.class.cast(req).getRequest().getRequestURI();
-    }
 }
