@@ -2,6 +2,8 @@ no.nav:
    foreldrepenger:
       selvbetjening:
          api:
+            toggles:
+               fnr-header-filter:false
             virus:
                enabled: true 
    security.oidc:
