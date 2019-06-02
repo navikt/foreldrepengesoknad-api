@@ -23,7 +23,7 @@ import no.nav.foreldrepenger.selvbetjening.util.TokenUtil;
 
 @Component
 @Order(1)
-@ConditionalOnProperty(name = "TOGGLES_FNR_HEADER_FILTER", havingValue = "true", matchIfMissing = true)
+@ConditionalOnProperty(name = "no.nav.foreldrepenger.api.toggles.fnr-header-filter", matchIfMissing = true)
 public class RequestFilter implements Filter {
 
     private static final Logger LOG = LoggerFactory.getLogger(RequestFilter.class);

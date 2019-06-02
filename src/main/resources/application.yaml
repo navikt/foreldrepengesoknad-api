@@ -1,26 +1,45 @@
-no.nav.security.oidc:
-  issuers: selvbetjening
-  issuer.selvbetjening:
-    discoveryurl: <Set from Fasit>
-    accepted_audience: <Set from Fasit>
-    cookie_name: selvbetjening-idtoken   
-info.app:
-  version: '@project.version@'
-  build.time: '@timestamp@'
+no.nav:
+   foreldrepenger:
+      selvbetjening:
+         api:
+            virus:
+               enabled: true 
+   security.oidc:
+      issuers: selvbetjening
+      issuer:
+         selvbetjening:
+            discoveryurl: <Set from Fasit>
+            accepted_audience: <Set from Fasit>
+            cookie_name: selvbetjening-idtoken   
+info:
+   app:
+     version: '@project.version@'
+     build:
+        time: '@timestamp@'
 management:
-  metrics.web.server.auto-time-requests : true
+  metrics:
+     web:
+        server:
+           auto-time-requests : true
   endpoints:
-      web.exposure.include:  info, health, metrics, prometheus
-      web.base-path: /internal/actuator
+      web:
+         exposure:
+            include:  info, health, metrics, prometheus
+         base-path: /internal/actuator
 server:
-  servlet.context-path: /
+  servlet:
+     context-path: /
   use-forward-headers: true
-  error.whitelabel.enabled: false
+  error:
+     whitelabel:
+        enabled: false
 spring:
   cache:
      cache-names: aktoer
-     caffeine.spec: maximumSize=100,expireAfterAccess=3600s
-  application.name: foreldrepengesoknad-api
+     caffeine:
+        spec: maximumSize=100,expireAfterAccess=3600s
+  application:
+     name: foreldrepengesoknad-api
   jackson :
       default-property-inclusion :  non-absent
       mapper :
@@ -30,10 +49,15 @@ spring:
          fail-on-unknown-properties: false
       serialization :
          fail-on-empty-beans: false
-  main.banner-mode: 'off'
-  servlet.multipart.max-file-size: 100MB
-  servlet.multipart.max-request-size: 100MB
-  mvc.throw-exception-if-no-handler-found: true
-  resources.add-mappings: false
+  main:
+     banner-mode: 'off'
+  servlet:
+     multipart:
+        max-file-size: 100MB
+        max-request-size: 100MB
+  mvc:
+     throw-exception-if-no-handler-found: true
+  resources:
+     add-mappings: false
   
-virus.enabled : true  
+ 

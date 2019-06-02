@@ -6,5 +6,40 @@
   {
     "name": "no.nav.security.oidc",
     "description": "A description for 'no.nav.security.oidc'"
+  },
+  {
+    "name": "stub.mottak",
+    "type": "java.lang.String",
+    "description": "A description for 'stub.mottak'"
+  },
+  {
+    "name": "stub.historikk",
+    "type": "java.lang.String",
+    "description": "A description for 'stub.historikk'"
+  },
+  {
+    "name": "virus.enabled",
+    "type": "java.lang.String",
+    "description": "A description for 'virus.enabled'"
+  },
+  {
+    "name": "http.proxy",
+    "type": "java.lang.String",
+    "description": "A description for 'http.proxy'"
+  },
+  {
+    "name": "no.nav.foreldrepenger.toggles.fnr-header-filter",
+    "type": "java.lang.String",
+    "description": "A description for 'no.nav.foreldrepenger.toggles.fnr-header-filter'"
+  },
+  {
+    "name": "no.nav.foreldrepenger.selvbetjening.api.virus.enabled",
+    "type": "java.lang.String",
+    "description": "A description for 'no.nav.foreldrepenger.selvbetjening'"
+  },
+  {
+    "name": "stub.oppslag",
+    "type": "java.lang.String",
+    "description": "A description for 'stub.oppslag'"
   }
 ]}

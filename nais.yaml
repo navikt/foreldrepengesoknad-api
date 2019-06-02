@@ -31,11 +31,11 @@ fasitResources:
   - alias: aad_b2c_clientid
     resourceType: credential
     propertyMap:
-      username: no_nav_security_oidc_issuer_selvbetjening_acceptedaudience
+      username: NO_NAV_SECURITY_OIDC_ISSUER_SELVBETJENING_ACCEPTEDAUDIENCE
   - alias: aad_b2c_discovery
     resourceType: baseurl
     propertyMap:
-       url: no_nav_security_oidc_issuer_selvbetjening_discoveryurl
+       url: NO_NAV_SECURITY_OIDC_ISSUER_SELVBETJENING_DISCOVERYURL
   - alias: foreldrepengesoknad-api-fpsoknad-oppslag-api-apiKey
     resourceType: credential
   - alias: fpsoknad-oppslag-api

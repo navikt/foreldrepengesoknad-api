@@ -5,10 +5,11 @@ import java.net.URI;
 import org.springframework.boot.context.properties.ConfigurationProperties;
 import org.springframework.context.annotation.Configuration;
 
-@ConfigurationProperties(prefix = "virus")
+@ConfigurationProperties(prefix = "no.nav.foreldrepenger.selvbetjening.api.virus")
 @Configuration
 class VirusScanConfig {
 
+    private static final URI DEFAULT_CLAM_URI = URI.create("http://clamav.nais.svc.nais.local/scan");
     boolean enabled = true;
 
     public boolean isEnabled() {
@@ -24,7 +25,7 @@ class VirusScanConfig {
     }
 
     public URI getUri() {
-        return URI.create("http://clamav.nais.svc.nais.local/scan"); // hardcode for now
+        return DEFAULT_CLAM_URI;
     }
 
     @Override
