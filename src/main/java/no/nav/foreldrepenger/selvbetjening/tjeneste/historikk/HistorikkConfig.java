@@ -4,6 +4,7 @@ import static no.nav.foreldrepenger.selvbetjening.util.URIUtil.uri;
 
 import java.net.URI;
 
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.boot.context.properties.ConfigurationProperties;
 import org.springframework.context.annotation.Configuration;
 
@@ -12,12 +13,21 @@ import org.springframework.context.annotation.Configuration;
 public class HistorikkConfig {
 
     private static final String HISTORIKK = "historikk";
-    private static final URI DEFAULT_BASE_URI = URI.create("http://fpinfo-historikk/api");
+
+    public URI getURI() {
+        return uri;
+    }
+
     private static final String DEFAULT_PING_PATH = "actuator/info";
     private boolean enabled;
+    private final URI uri;
+
+    public HistorikkConfig(@Value("${FPSOKNAD_HISTORIKK_API_URL}") URI uri) {
+        this.uri = uri;
+    }
 
     public URI historikkURI() {
-        return uri(DEFAULT_BASE_URI, HISTORIKK);
+        return uri(getURI(), HISTORIKK);
     }
 
     public boolean isEnabled() {
@@ -29,6 +39,6 @@ public class HistorikkConfig {
     }
 
     public URI pingURI() {
-        return uri(DEFAULT_BASE_URI, DEFAULT_PING_PATH);
+        return uri(getURI(), DEFAULT_PING_PATH);
     }
 }

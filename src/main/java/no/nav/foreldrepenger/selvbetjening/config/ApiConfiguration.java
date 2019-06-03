@@ -17,6 +17,7 @@ import com.google.common.collect.ImmutableMap;
 
 import no.nav.foreldrepenger.selvbetjening.filters.CorsInterceptor;
 import no.nav.foreldrepenger.selvbetjening.interceptors.client.ApiKeyInjectingClientInterceptor;
+import no.nav.foreldrepenger.selvbetjening.tjeneste.historikk.HistorikkConfig;
 import no.nav.foreldrepenger.selvbetjening.tjeneste.innsending.InnsendingConfig;
 import no.nav.foreldrepenger.selvbetjening.tjeneste.oppslag.OppslagConfig;
 
@@ -26,18 +27,15 @@ public class ApiConfiguration implements WebMvcConfigurer {
     @Value("${apikeys.key:x-nav-apiKey}")
     private String key;
 
-    @Value("${FPSOKNAD_MOTTAK_API_URL}")
-    private URI mottakServiceUri;
-
     @Value("${FORELDREPENGESOKNAD_API_FPSOKNAD_MOTTAK_API_APIKEY_PASSWORD}")
     String innsendingApiKey;
 
     @Value("${FORELDREPENGESOKNAD_API_FPSOKNAD_OPPSLAG_API_APIKEY_PASSWORD}")
     String oppslagApiKey;
-    /*
-     * @Value("${foreldrepengesoknad-api-fpinfo-historikk-api-apiKey}") String
-     * historikkApiKey;
-     */
+
+    @Value("${FORELDREPENGESOKNAD_API_FPSOKNAD_HISTORIKK_API_APIKEY_PASSWORD}")
+    String historikkApiKey;
+
     @Inject
     CorsInterceptor corsInterceptor;
 
@@ -50,11 +48,12 @@ public class ApiConfiguration implements WebMvcConfigurer {
 
     @Bean
     public ClientHttpRequestInterceptor apiKeyInjectingClientInterceptor(OppslagConfig oppslag,
-            InnsendingConfig innsending) {
+            InnsendingConfig innsending, HistorikkConfig historikk) {
         return new ApiKeyInjectingClientInterceptor(key,
                 ImmutableMap.<URI, String>builder()
                         .put(innsending.getURI(), innsendingApiKey)
                         .put(oppslag.getURI(), oppslagApiKey)
+                        .put(historikk.getURI(), historikkApiKey)
                         .build());
 
     }
