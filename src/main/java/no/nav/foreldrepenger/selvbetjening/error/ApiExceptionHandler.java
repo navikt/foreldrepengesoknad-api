@@ -1,6 +1,7 @@
 package no.nav.foreldrepenger.selvbetjening.error;
 
 import static org.springframework.http.HttpStatus.FORBIDDEN;
+import static org.springframework.http.HttpStatus.INTERNAL_SERVER_ERROR;
 import static org.springframework.http.HttpStatus.NOT_FOUND;
 import static org.springframework.http.HttpStatus.PAYLOAD_TOO_LARGE;
 import static org.springframework.http.HttpStatus.UNAUTHORIZED;
@@ -93,13 +94,11 @@ public class ApiExceptionHandler extends ResponseEntityExceptionHandler {
         return logAndHandle(FORBIDDEN, e, req, e.getExpiryDate());
     }
 
-    /*
-     * @ResponseBody
-     * 
-     * @ExceptionHandler(Exception.class) public ResponseEntity<Object>
-     * catchAll(Exception e, WebRequest req) { return
-     * logAndHandle(INTERNAL_SERVER_ERROR, e, req); }
-     */
+    @ResponseBody
+    @ExceptionHandler(Exception.class)
+    public ResponseEntity<Object> catchAll(Exception e, WebRequest req) {
+        return logAndHandle(INTERNAL_SERVER_ERROR, e, req);
+    }
 
     private ResponseEntity<Object> logAndHandle(HttpStatus status, Exception e, WebRequest req, Object... messages) {
         return logAndHandle(status, e, req, new HttpHeaders(), messages);

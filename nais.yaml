@@ -42,6 +42,8 @@ fasitResources:
     resourceType: restservice
   - alias: foreldrepengesoknad-api-fpsoknad-mottak-api-apiKey
     resourceType: credential
+  - alias: foreldrepengesoknad-api-fpinfo-historikk-api-apiKey
+    resourceType: credential
   - alias: fpsoknad-mottak-api
     resourceType: restservice
   - alias: foreldrepengesoknad-api-storage

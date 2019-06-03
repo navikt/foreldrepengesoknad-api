@@ -34,7 +34,10 @@ public class ApiConfiguration implements WebMvcConfigurer {
 
     @Value("${FORELDREPENGESOKNAD_API_FPSOKNAD_OPPSLAG_API_APIKEY_PASSWORD}")
     String oppslagApiKey;
-
+    /*
+     * @Value("${foreldrepengesoknad-api-fpinfo-historikk-api-apiKey}") String
+     * historikkApiKey;
+     */
     @Inject
     CorsInterceptor corsInterceptor;
 
