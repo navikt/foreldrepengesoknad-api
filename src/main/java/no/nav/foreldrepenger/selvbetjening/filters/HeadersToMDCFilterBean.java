@@ -51,6 +51,7 @@ public class HeadersToMDCFilterBean extends GenericFilterBean {
 
     private void putValues(HttpServletRequest request, String uri) {
         try {
+            LOG.info("XXXXXXXXXX " + tokenUtil.erAutentisert());
             toMDC(NAV_CONSUMER_ID, request.getHeader(NAV_CONSUMER_ID), applicationName);
             toMDC(NAV_CALL_ID, request.getHeader(NAV_CALL_ID), generator.create());
         } catch (Exception e) {
