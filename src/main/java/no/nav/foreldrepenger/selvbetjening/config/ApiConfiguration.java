@@ -1,9 +1,12 @@
 package no.nav.foreldrepenger.selvbetjening.config;
 
 import java.net.URI;
+import java.util.Arrays;
 
 import javax.inject.Inject;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.boot.web.client.RestTemplateBuilder;
 import org.springframework.context.annotation.Bean;
@@ -24,6 +27,8 @@ import no.nav.foreldrepenger.selvbetjening.tjeneste.oppslag.OppslagConfig;
 @Configuration
 public class ApiConfiguration implements WebMvcConfigurer {
 
+    private static final Logger LOG = LoggerFactory.getLogger(ApiConfiguration.class);
+
     @Value("${apikeys.key:x-nav-apiKey}")
     private String key;
 
@@ -41,6 +46,7 @@ public class ApiConfiguration implements WebMvcConfigurer {
 
     @Bean
     public RestOperations restTemplate(ClientHttpRequestInterceptor... interceptors) {
+        LOG.info("Registrerer intereptorer {}", Arrays.toString(interceptors));
         return new RestTemplateBuilder()
                 .interceptors(interceptors)
                 .build();
