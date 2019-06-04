@@ -2,6 +2,9 @@ package no.nav.foreldrepenger.selvbetjening.tjeneste.historikk;
 
 import java.time.LocalDate;
 
+import com.fasterxml.jackson.annotation.JsonCreator;
+import com.fasterxml.jackson.annotation.JsonProperty;
+
 import no.nav.foreldrepenger.selvbetjening.tjeneste.oppslag.domain.AktørId;
 
 public class Melding {
@@ -11,7 +14,9 @@ public class Melding {
     private final String saknr;
     private LocalDate dato;
 
-    public Melding(AktørId aktørId, String melding, String saksnr) {
+    @JsonCreator
+    public Melding(@JsonProperty("aktørId") AktørId aktørId, @JsonProperty("melding") String melding,
+            @JsonProperty("saksnr") String saksnr) {
         this.aktørId = aktørId;
         this.melding = melding;
         this.saknr = saksnr;
