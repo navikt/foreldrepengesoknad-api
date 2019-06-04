@@ -100,7 +100,7 @@
         <dependency>
             <groupId>net.logstash.logback</groupId>
             <artifactId>logstash-logback-encoder</artifactId>
-            <version>5.3</version>
+            <version>6.0</version>
         </dependency>
         <dependency>
             <groupId>org.apache.tika</groupId>
@@ -115,7 +115,7 @@
         <dependency>
             <groupId>com.amazonaws</groupId>
             <artifactId>aws-java-sdk-s3</artifactId>
-            <version>1.11.478</version>
+            <version>1.11.564</version>
         </dependency>
         <dependency>
             <groupId>org.assertj</groupId>
