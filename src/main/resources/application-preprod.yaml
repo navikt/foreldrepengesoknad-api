@@ -5,5 +5,4 @@ management:
       
 spring :
     http.log-request-details : true      
-               
-virus.enabled : true         
+                      

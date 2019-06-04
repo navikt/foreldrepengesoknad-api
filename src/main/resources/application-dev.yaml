@@ -13,4 +13,4 @@ no.nav.security.oidc:
 spring :
    http.log-request-details : true      
  
-virus.enabled : false  
+no.nav.foreldrepenger.selvbetjening.api.virus.enabled : false  

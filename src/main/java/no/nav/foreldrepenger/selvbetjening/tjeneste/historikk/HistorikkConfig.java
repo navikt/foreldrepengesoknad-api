@@ -12,7 +12,7 @@ import org.springframework.context.annotation.Configuration;
 @Configuration
 public class HistorikkConfig {
 
-    private static final String HISTORIKK = "historikk";
+    private static final String HISTORIKK = "historikk/find/me";
 
     public URI getURI() {
         return uri;
