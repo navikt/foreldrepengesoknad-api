@@ -1,5 +1,5 @@
 name: foreldrepengesoknad-api
-team: bris
+team: teamforeldrepenger
 image: repo.adeo.no:5443/foreldrepengesoknad-api
 replicas:
   min: 2
