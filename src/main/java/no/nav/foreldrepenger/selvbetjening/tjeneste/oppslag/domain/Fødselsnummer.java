@@ -2,17 +2,14 @@ package no.nav.foreldrepenger.selvbetjening.tjeneste.oppslag.domain;
 
 import java.util.Objects;
 
-import javax.validation.constraints.NotNull;
-
 import com.fasterxml.jackson.annotation.JsonValue;
 
 public class Fødselsnummer {
 
     private final String fnr;
 
-    @NotNull
     public Fødselsnummer(String fnr) {
-        this.fnr = Objects.requireNonNull(fnr);
+        this.fnr = fnr;
     }
 
     @Override
