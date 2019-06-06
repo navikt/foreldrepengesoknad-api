@@ -17,6 +17,7 @@ public class InnsynConfig {
     private static final String FPSAK_SAKER = "innsyn/saker";
     private static final String SAK_SAKER = "sak";
     private static final String SAKSNUMMER = "saksnummer";
+    private static final String ANNENPART = "annenPart";
     private static final String UTTAKSPLAN = "innsyn/uttaksplan";
     private static final String VEDTAK = "innsyn/vedtak";
 
@@ -68,6 +69,10 @@ public class InnsynConfig {
 
     URI getUttakURI(String saksnummer) {
         return uri(getMottakURI(), UTTAKSPLAN, queryParams(SAKSNUMMER, saksnummer));
+    }
+
+    URI getUttakURIForAnnenPart(String annenPart) {
+        return uri(getMottakURI(), UTTAKSPLAN, queryParams(ANNENPART, annenPart));
     }
 
     public URI getVedtakURI(String saksnummer) {
