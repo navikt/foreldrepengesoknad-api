@@ -16,7 +16,6 @@ import no.nav.foreldrepenger.selvbetjening.error.UnexpectedInputException;
 import no.nav.foreldrepenger.selvbetjening.tjeneste.innsyn.saker.Sak;
 import no.nav.foreldrepenger.selvbetjening.tjeneste.innsyn.uttaksplan.Uttaksplan;
 import no.nav.foreldrepenger.selvbetjening.tjeneste.innsyn.vedtak.Vedtak;
-import no.nav.foreldrepenger.selvbetjening.tjeneste.oppslag.domain.Fødselsnummer;
 import no.nav.security.oidc.api.ProtectedWithClaims;
 
 @RestController
@@ -40,13 +39,13 @@ public class InnsynController {
 
     @GetMapping("/uttaksplan")
     public Uttaksplan uttaksplan(@RequestParam(name = "saksnummer") String saksnummer,
-            @RequestParam(name = "annenPart") Fødselsnummer annenPart) {
+            @RequestParam(name = "annenPart") String annenPart) {
 
         if (saksnummer != null) {
             return innsynTjeneste.hentUttaksplan(saksnummer);
         }
         if (annenPart != null) {
-            return innsynTjeneste.hentUttaksplan(annenPart);
+            return innsynTjeneste.hentUttaksplanAnnenPart(annenPart);
         }
         throw new UnexpectedInputException("En av saksnummer og annenPart må være satt (men ikke begge)");
     }

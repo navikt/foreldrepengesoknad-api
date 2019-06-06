@@ -17,7 +17,6 @@ import no.nav.foreldrepenger.selvbetjening.tjeneste.innsyn.saker.Behandling;
 import no.nav.foreldrepenger.selvbetjening.tjeneste.innsyn.saker.Sak;
 import no.nav.foreldrepenger.selvbetjening.tjeneste.innsyn.uttaksplan.Uttaksplan;
 import no.nav.foreldrepenger.selvbetjening.tjeneste.innsyn.vedtak.Vedtak;
-import no.nav.foreldrepenger.selvbetjening.tjeneste.oppslag.domain.Fødselsnummer;
 
 @Service
 @ConditionalOnProperty(name = "stub.oppslag", havingValue = "true")
@@ -56,7 +55,7 @@ public class InnsynTjenesteStub implements Innsyn {
     }
 
     @Override
-    public Uttaksplan hentUttaksplan(Fødselsnummer annenPart) {
+    public Uttaksplan hentUttaksplanAnnenPart(String annenPart) {
         return null;
     }
 }

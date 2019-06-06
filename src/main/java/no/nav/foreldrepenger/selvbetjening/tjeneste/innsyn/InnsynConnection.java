@@ -16,7 +16,6 @@ import no.nav.foreldrepenger.selvbetjening.tjeneste.AbstractRestConnection;
 import no.nav.foreldrepenger.selvbetjening.tjeneste.innsyn.saker.Sak;
 import no.nav.foreldrepenger.selvbetjening.tjeneste.innsyn.uttaksplan.Uttaksplan;
 import no.nav.foreldrepenger.selvbetjening.tjeneste.innsyn.vedtak.Vedtak;
-import no.nav.foreldrepenger.selvbetjening.tjeneste.oppslag.domain.Fødselsnummer;
 
 @Component
 public class InnsynConnection extends AbstractRestConnection {
@@ -43,8 +42,8 @@ public class InnsynConnection extends AbstractRestConnection {
         return getForObject(innsynConfig.getUttakURI(saksnummer), Uttaksplan.class, false);
     }
 
-    public Uttaksplan hentUttaksplan(Fødselsnummer annenPart) {
-        return getForObject(innsynConfig.getUttakURIForAnnenPart(annenPart.getFnr()), Uttaksplan.class, false);
+    public Uttaksplan hentUttaksplanAnnenPart(String annenPart) {
+        return getForObject(innsynConfig.getUttakURIForAnnenPart(annenPart), Uttaksplan.class, false);
     }
 
     public Vedtak hentVedtak(String saksnummer) {
