@@ -9,7 +9,7 @@ import org.springframework.stereotype.Service;
 import no.nav.foreldrepenger.selvbetjening.tjeneste.innsyn.saker.Sak;
 import no.nav.foreldrepenger.selvbetjening.tjeneste.innsyn.uttaksplan.Uttaksplan;
 import no.nav.foreldrepenger.selvbetjening.tjeneste.innsyn.vedtak.Vedtak;
-import no.nav.foreldrepenger.selvbetjening.tjeneste.oppslag.domain.AktørId;
+import no.nav.foreldrepenger.selvbetjening.tjeneste.oppslag.domain.Fødselsnummer;
 
 @Service
 @ConditionalOnProperty(name = "stub.oppslag", havingValue = "false", matchIfMissing = true)
@@ -27,7 +27,7 @@ public class InnsynTjeneste implements Innsyn {
     }
 
     @Override
-    public Uttaksplan hentUttaksplan(AktørId annenPart) {
+    public Uttaksplan hentUttaksplan(Fødselsnummer annenPart) {
         return innsynConnection.hentUttaksplan(annenPart);
     }
 
