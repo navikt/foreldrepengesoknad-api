@@ -10,16 +10,19 @@ import no.nav.foreldrepenger.selvbetjening.tjeneste.innsending.domain.arbeid.Sel
 public class Søker {
 
     public String rolle;
+    public String språkKode;
 
     public Boolean erAleneOmOmsorg;
 
     public FrilansInformasjon frilansInformasjon;
+
     public List<SelvstendigNæringsdrivendeInformasjon> selvstendigNæringsdrivendeInformasjon = new ArrayList<>();
     public List<AnnenInntekt> andreInntekterSiste10Mnd = new ArrayList<>();
 
     @Override
     public String toString() {
-        return getClass().getSimpleName() + " [rolle=" + rolle + ", erAleneOmOmsorg=" + erAleneOmOmsorg
+        return getClass().getSimpleName() + " [rolle=" + rolle + ", språkKode=" + språkKode
+                + ", erAleneOmOmsorg=" + erAleneOmOmsorg
                 + ", frilansInformasjon="
                 + frilansInformasjon + ", selvstendigNæringsdrivendeInformasjon="
                 + selvstendigNæringsdrivendeInformasjon + ", andreInntekterSiste10Mnd=" + andreInntekterSiste10Mnd

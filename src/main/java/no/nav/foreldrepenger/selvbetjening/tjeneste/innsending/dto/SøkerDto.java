@@ -8,8 +8,10 @@ import com.fasterxml.jackson.annotation.JsonInclude;
 public class SøkerDto {
 
     public String søknadsRolle;
+    public String språkKode;
 
-    public SøkerDto(String rolle) {
+    public SøkerDto(String rolle, String språkKode) {
+        this.språkKode = språkKode;
         if (morFarEllerMedmor(rolle)) {
             this.søknadsRolle = rolle;
         } else {

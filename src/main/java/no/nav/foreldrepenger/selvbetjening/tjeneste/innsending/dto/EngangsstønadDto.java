@@ -14,7 +14,7 @@ public class EngangsstønadDto extends SøknadDto {
     public YtelseDto ytelse;
 
     public EngangsstønadDto(Engangsstønad søknad) {
-        this.søker = new SøkerDto("MOR");
+        this.søker = new SøkerDto("MOR", søknad.søker.språkKode);
         this.ytelse = new YtelseDto(søknad);
         this.vedlegg = new ArrayList<>();
     }
