@@ -10,7 +10,7 @@ import no.nav.foreldrepenger.selvbetjening.tjeneste.innsending.domain.arbeid.Sel
 public class Søker {
 
     public String rolle;
-    public String språkKode;
+    public String språkkode;
 
     public Boolean erAleneOmOmsorg;
 
@@ -21,7 +21,7 @@ public class Søker {
 
     @Override
     public String toString() {
-        return getClass().getSimpleName() + " [rolle=" + rolle + ", språkKode=" + språkKode
+        return getClass().getSimpleName() + " [rolle=" + rolle + ", språkkode=" + språkkode
                 + ", erAleneOmOmsorg=" + erAleneOmOmsorg
                 + ", frilansInformasjon="
                 + frilansInformasjon + ", selvstendigNæringsdrivendeInformasjon="

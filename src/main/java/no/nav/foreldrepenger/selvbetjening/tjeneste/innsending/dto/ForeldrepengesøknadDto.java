@@ -11,7 +11,7 @@ public class ForeldrepengesøknadDto extends SøknadDto {
 
     public ForeldrepengesøknadDto(Foreldrepengesøknad søknad) {
         this.saksnr = søknad.saksnummer;
-        this.søker = new SøkerDto(søknad.søker.rolle, søknad.søker.språkKode);
+        this.søker = new SøkerDto(søknad.søker.rolle, søknad.søker.språkkode);
         this.ytelse = new YtelseDto(søknad);
         this.vedlegg = new ArrayList<>();
     }

@@ -14,7 +14,7 @@ public class SvangerskapspengesøknadDto extends SøknadDto {
     public YtelseDto ytelse;
 
     public SvangerskapspengesøknadDto(Svangerskapspengesøknad søknad) {
-        this.søker = new SøkerDto("MOR", søknad.søker.språkKode);
+        this.søker = new SøkerDto("MOR", søknad.søker.språkkode);
         this.ytelse = new YtelseDto(søknad);
         this.vedlegg = new ArrayList<>();
     }
