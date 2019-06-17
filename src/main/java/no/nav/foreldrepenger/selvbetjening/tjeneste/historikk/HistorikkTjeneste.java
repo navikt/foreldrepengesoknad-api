@@ -16,8 +16,8 @@ public class HistorikkTjeneste implements Historikk {
     }
 
     @Override
-    public List<Melding> hentMeldinger() {
-        return connection.hentMeldinger();
+    public List<HistorikkInnslag> hentHistorikk() {
+        return connection.hentHistorikk();
     }
 
     @Override

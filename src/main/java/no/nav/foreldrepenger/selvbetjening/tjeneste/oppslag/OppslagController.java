@@ -16,7 +16,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import no.nav.foreldrepenger.selvbetjening.tjeneste.historikk.Historikk;
-import no.nav.foreldrepenger.selvbetjening.tjeneste.historikk.Melding;
+import no.nav.foreldrepenger.selvbetjening.tjeneste.historikk.HistorikkInnslag;
 import no.nav.foreldrepenger.selvbetjening.tjeneste.oppslag.domain.Person;
 import no.nav.foreldrepenger.selvbetjening.tjeneste.oppslag.domain.Søkerinfo;
 import no.nav.foreldrepenger.selvbetjening.util.EnvUtil;
@@ -52,10 +52,10 @@ public class OppslagController implements EnvironmentAware {
         if (EnvUtil.isPreprod(env)) {
             try {
                 LOG.info("Henter meldinger");
-                List<Melding> meldinger = historikk.hentMeldinger();
-                LOG.info("Henter meldinger {}", meldinger);
+                List<HistorikkInnslag> historikkinnslag = historikk.hentHistorikk();
+                LOG.info("Henter historikkinnslag {}", historikkinnslag);
             } catch (Exception e) {
-                LOG.info("Kunne ikke hente meldinger", e);
+                LOG.info("Kunne ikke hente historikkinnslag", e);
                 return info;
             }
         }

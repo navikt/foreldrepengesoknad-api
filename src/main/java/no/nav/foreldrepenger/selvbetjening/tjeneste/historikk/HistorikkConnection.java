@@ -28,17 +28,18 @@ public class HistorikkConnection extends AbstractRestConnection {
         return config.isEnabled();
     }
 
-    public List<Melding> hentMeldinger() {
-        List<Melding> meldinger = Optional.ofNullable(getForObject(config.historikkURI(), Melding[].class, false))
-                .map(Arrays::asList)
-                .orElse(emptyList());
-        LOG.trace(CONFIDENTIAL, "Fikk meldinger {}", meldinger);
-        return meldinger;
-    }
-
     @Override
     protected URI pingURI() {
         return config.pingURI();
+    }
+
+    public List<HistorikkInnslag> hentHistorikk() {
+        List<HistorikkInnslag> historikk = Optional
+                .ofNullable(getForObject(config.historikkURI(), HistorikkInnslag[].class, false))
+                .map(Arrays::asList)
+                .orElse(emptyList());
+        LOG.trace(CONFIDENTIAL, "Fikk meldinger {}", historikk);
+        return historikk;
     }
 
     @Override

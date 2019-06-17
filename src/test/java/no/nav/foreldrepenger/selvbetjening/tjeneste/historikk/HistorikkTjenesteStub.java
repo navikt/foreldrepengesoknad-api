@@ -22,7 +22,7 @@ public class HistorikkTjenesteStub implements Historikk {
     }
 
     @Override
-    public List<Melding> hentMeldinger() {
+    public List<HistorikkInnslag> hentHistorikk() {
         return Collections.emptyList();
     }
 }

@@ -6,6 +6,6 @@ import no.nav.foreldrepenger.selvbetjening.tjeneste.Pingable;
 
 public interface Historikk extends Pingable {
 
-    List<Melding> hentMeldinger();
+    List<HistorikkInnslag> hentHistorikk();
 
 }

@@ -28,8 +28,8 @@ public class HistorikkController {
     }
 
     @GetMapping("/historikk")
-    public List<Melding> historikk() {
-        return historikk.hentMeldinger();
+    public List<HistorikkInnslag> historikk() {
+        return historikk.hentHistorikk();
     }
 
     @Override
