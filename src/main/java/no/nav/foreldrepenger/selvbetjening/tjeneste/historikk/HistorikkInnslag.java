@@ -3,6 +3,9 @@ package no.nav.foreldrepenger.selvbetjening.tjeneste.historikk;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 
+import com.fasterxml.jackson.annotation.JsonCreator;
+import com.fasterxml.jackson.annotation.JsonProperty;
+
 import no.nav.foreldrepenger.selvbetjening.tjeneste.oppslag.domain.AktørId;
 
 public class HistorikkInnslag {
@@ -15,7 +18,8 @@ public class HistorikkInnslag {
     private boolean aktiv;
     private String saksnr;
 
-    public HistorikkInnslag(AktørId aktørId, String tekst) {
+    @JsonCreator
+    public HistorikkInnslag(@JsonProperty("aktørId") AktørId aktørId, @JsonProperty("tekst") String tekst) {
         this.aktørId = aktørId;
         this.tekst = tekst;
     }

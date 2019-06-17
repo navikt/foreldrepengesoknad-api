@@ -51,7 +51,7 @@ public class OppslagController implements EnvironmentAware {
         Søkerinfo info = oppslag.hentSøkerinfo();
         if (EnvUtil.isPreprod(env)) {
             try {
-                LOG.info("Henter meldinger");
+                LOG.info("Henter historikkinnslag");
                 List<HistorikkInnslag> historikkinnslag = historikk.hentHistorikk();
                 LOG.info("Henter historikkinnslag {}", historikkinnslag);
             } catch (Exception e) {
