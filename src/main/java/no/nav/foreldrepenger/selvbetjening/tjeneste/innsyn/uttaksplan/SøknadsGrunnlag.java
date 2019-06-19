@@ -7,8 +7,9 @@ import com.fasterxml.jackson.annotation.JsonCreator;
 import com.fasterxml.jackson.annotation.JsonProperty;
 
 public class SøknadsGrunnlag {
-    private final FamiliehendelseType familieHendelseType;
-    private final LocalDate familieHendelseDato;
+    private final LocalDate termindato;
+    private final LocalDate fødselsdato;
+    private final LocalDate omsorgsovertakelsesdato;
     private final Integer dekningsgrad;
     private final Integer antallBarn;
     private final Boolean søkerErFarEllerMedmor;
@@ -20,8 +21,10 @@ public class SøknadsGrunnlag {
     private final Boolean annenForelderErInformert;
 
     @JsonCreator
-    public SøknadsGrunnlag(@JsonProperty("familieHendelseType") FamiliehendelseType familieHendelseType,
-            @JsonProperty("familieHendelseDato") LocalDate familieHendelseDato,
+    public SøknadsGrunnlag(
+            @JsonProperty("termindato") LocalDate termindato,
+            @JsonProperty("fødselsdato") LocalDate fødselsdato,
+            @JsonProperty("omsorgsovertakelsesdato") LocalDate omsorgsovertakelsesdato,
             @JsonProperty("dekningsgrad") Integer dekningsgrad,
             @JsonProperty("antallBarn") Integer antallBarn,
             @JsonProperty("søkerErFarEllerMedmor") Boolean søkerErFarEllerMedmor,
@@ -31,8 +34,9 @@ public class SøknadsGrunnlag {
             @JsonProperty("farMedmorErAleneOmOmsorg") Boolean farMedmorErAleneOmOmsorg,
             @JsonProperty("farMedmorHarRett") Boolean farMedmorHarRett,
             @JsonProperty("annenForelderErInformert") Boolean annenForelderErInformert) {
-        this.familieHendelseType = familieHendelseType;
-        this.familieHendelseDato = familieHendelseDato;
+        this.omsorgsovertakelsesdato = omsorgsovertakelsesdato;
+        this.fødselsdato = fødselsdato;
+        this.termindato = termindato;
         this.dekningsgrad = dekningsgrad;
         this.antallBarn = antallBarn;
         this.søkerErFarEllerMedmor = søkerErFarEllerMedmor;
@@ -46,14 +50,6 @@ public class SøknadsGrunnlag {
 
     public Boolean getAnnenForelderErInformert() {
         return annenForelderErInformert;
-    }
-
-    public FamiliehendelseType getFamilieHendelseType() {
-        return familieHendelseType;
-    }
-
-    public LocalDate getFamilieHendelseDato() {
-        return familieHendelseDato;
     }
 
     public Integer getDekningsgrad() {
@@ -88,10 +84,22 @@ public class SøknadsGrunnlag {
         return farMedmorHarRett;
     }
 
+    public LocalDate getTermindato() {
+        return termindato;
+    }
+
+    public LocalDate getFødselsdato() {
+        return fødselsdato;
+    }
+
+    public LocalDate getOmsorgsovertakelsesdato() {
+        return omsorgsovertakelsesdato;
+    }
+
     @Override
     public int hashCode() {
         return Objects.hash(farMedmorHarRett, farMedmorErAleneOmOmsorg, morErUfør, morHarRett, morErAleneOmOmsorg,
-                søkerErFarEllerMedmor, antallBarn, dekningsgrad, familieHendelseDato, familieHendelseType,
+                søkerErFarEllerMedmor, antallBarn, dekningsgrad, omsorgsovertakelsesdato, fødselsdato, termindato,
                 annenForelderErInformert);
     }
 
@@ -112,18 +120,19 @@ public class SøknadsGrunnlag {
                 && Objects.equals(this.søkerErFarEllerMedmor, that.søkerErFarEllerMedmor)
                 && Objects.equals(this.antallBarn, that.antallBarn)
                 && Objects.equals(this.dekningsgrad, that.dekningsgrad)
-                && Objects.equals(this.familieHendelseDato, that.familieHendelseDato)
+                && Objects.equals(this.omsorgsovertakelsesdato, that.omsorgsovertakelsesdato)
+                && Objects.equals(this.termindato, that.termindato)
                 && Objects.equals(this.annenForelderErInformert, that.annenForelderErInformert)
-                && Objects.equals(this.familieHendelseType, that.familieHendelseType);
+                && Objects.equals(this.fødselsdato, that.fødselsdato);
     }
 
     @Override
     public String toString() {
-        return getClass().getSimpleName() + " [familieHendelseType=" + familieHendelseType + ", familieHendelseDato="
-                + familieHendelseDato + ", dekningsgrad=" + dekningsgrad + ", antallBarn=" + antallBarn
-                + ", søkerErFarEllerMedmor=" + søkerErFarEllerMedmor + ", morErAleneOmOmsorg=" + morErAleneOmOmsorg
-                + ", morHarRett=" + morHarRett + ", morErUfør=" + morErUfør + ", farMedmorErAleneOmOmsorg="
-                + farMedmorErAleneOmOmsorg + ", farMedmorHarRett=" + farMedmorHarRett + ", annenForelderErInformert="
-                + annenForelderErInformert + "]";
+        return getClass().getSimpleName() + "[termindato=" + termindato + ", fødselsdato=" + fødselsdato
+                + ", omsorgsovertakelsesdato=" + omsorgsovertakelsesdato + ", dekningsgrad=" + dekningsgrad
+                + ", antallBarn=" + antallBarn + ", søkerErFarEllerMedmor=" + søkerErFarEllerMedmor
+                + ", morErAleneOmOmsorg=" + morErAleneOmOmsorg + ", morHarRett=" + morHarRett + ", morErUfør="
+                + morErUfør + ", farMedmorErAleneOmOmsorg=" + farMedmorErAleneOmOmsorg + ", farMedmorHarRett="
+                + farMedmorHarRett + ", annenForelderErInformert=" + annenForelderErInformert + "]";
     }
 }
