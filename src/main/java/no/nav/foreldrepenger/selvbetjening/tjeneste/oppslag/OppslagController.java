@@ -17,6 +17,8 @@ import org.springframework.web.bind.annotation.RestController;
 
 import no.nav.foreldrepenger.selvbetjening.tjeneste.historikk.Historikk;
 import no.nav.foreldrepenger.selvbetjening.tjeneste.historikk.HistorikkInnslag;
+import no.nav.foreldrepenger.selvbetjening.tjeneste.minidialog.Minidialog;
+import no.nav.foreldrepenger.selvbetjening.tjeneste.minidialog.MinidialogInnslag;
 import no.nav.foreldrepenger.selvbetjening.tjeneste.oppslag.domain.Person;
 import no.nav.foreldrepenger.selvbetjening.tjeneste.oppslag.domain.Søkerinfo;
 import no.nav.foreldrepenger.selvbetjening.util.EnvUtil;
@@ -32,13 +34,15 @@ public class OppslagController implements EnvironmentAware {
 
     private final Oppslag oppslag;
     private final Historikk historikk;
+    private final Minidialog minidialog;
 
     private Environment env;
 
     @Inject
-    public OppslagController(Oppslag oppslag, Historikk historikk) {
+    public OppslagController(Oppslag oppslag, Historikk historikk, Minidialog minidialog) {
         this.oppslag = oppslag;
         this.historikk = historikk;
+        this.minidialog = minidialog;
     }
 
     @GetMapping("/personinfo")
@@ -50,16 +54,30 @@ public class OppslagController implements EnvironmentAware {
     public Søkerinfo søkerinfo() {
         Søkerinfo info = oppslag.hentSøkerinfo();
         if (EnvUtil.isPreprod(env)) {
-            try {
-                LOG.info("Henter historikkinnslag");
-                List<HistorikkInnslag> historikkinnslag = historikk.hentHistorikk();
-                LOG.info("Henter historikkinnslag {}", historikkinnslag);
-            } catch (Exception e) {
-                LOG.info("Kunne ikke hente historikkinnslag", e);
-                return info;
-            }
+            hentHistorikk();
+            hentMinidialoger();
         }
         return info;
+    }
+
+    private void hentHistorikk() {
+        try {
+            LOG.info("Henter noen historikkinnslag");
+            List<HistorikkInnslag> historikkinnslag = historikk.hentHistorikk();
+            LOG.info("Hentet historikkinnslag {}", historikkinnslag);
+        } catch (Exception e) {
+            LOG.info("Kunne ikke hente historikkinnslag", e);
+        }
+    }
+
+    private void hentMinidialoger() {
+        try {
+            LOG.info("Henter noen minidialoger");
+            List<MinidialogInnslag> dialoger = minidialog.hentMinidialoger();
+            LOG.info("Hentet minidialoger {}", dialoger);
+        } catch (Exception e) {
+            LOG.info("Kunne ikke hente dialoger", e);
+        }
     }
 
     @Override
