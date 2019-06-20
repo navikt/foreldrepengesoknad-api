@@ -11,17 +11,13 @@ import com.fasterxml.jackson.annotation.JsonProperty;
 
 public class MinidialogInnslag {
 
-    private long id;
     private final String aktørId;
     private final String melding;
     private final String saksnr;
     private LocalDateTime opprettet;
-    private LocalDateTime endret;
-    private LeveranseKanal kanal;
     @DateTimeFormat(iso = ISO.DATE)
     private LocalDate gyldigTil;
     private SøknadType handling;
-    private boolean aktiv;
 
     @JsonCreator
     public MinidialogInnslag(@JsonProperty("aktørId") String aktørId, @JsonProperty("melding") String melding,
@@ -39,14 +35,6 @@ public class MinidialogInnslag {
         this.gyldigTil = gyldigTil;
     }
 
-    public LeveranseKanal getKanal() {
-        return kanal;
-    }
-
-    public void setKanal(LeveranseKanal kanal) {
-        this.kanal = kanal;
-    }
-
     public String getAktørId() {
         return aktørId;
     }
@@ -57,22 +45,6 @@ public class MinidialogInnslag {
 
     public String getSaksnr() {
         return saksnr;
-    }
-
-    public long getId() {
-        return id;
-    }
-
-    public void setId(long id) {
-        this.id = id;
-    }
-
-    public boolean isAktiv() {
-        return aktiv;
-    }
-
-    public void setAktiv(boolean aktiv) {
-        this.aktiv = aktiv;
     }
 
     public SøknadType getHandling() {
@@ -91,19 +63,10 @@ public class MinidialogInnslag {
         this.opprettet = opprettet;
     }
 
-    public LocalDateTime getEndret() {
-        return endret;
-    }
-
-    public void setEndret(LocalDateTime endret) {
-        this.endret = endret;
-    }
-
     @Override
     public String toString() {
-        return getClass().getSimpleName() + "[id=" + id + ", aktørId=" + aktørId + ", melding=" + melding + ", saknr="
-                + saksnr + ", opprettet=" + opprettet + ", endret=" + endret + ", kanal=" + kanal + ", gyldigTil="
-                + gyldigTil + ", handling=" + handling + ", aktiv=" + aktiv + "]";
+        return getClass().getSimpleName() + "[aktørId=" + aktørId + ", melding=" + melding + ", saksnr=" + saksnr
+                + ", opprettet=" + opprettet + ", gyldigTil=" + gyldigTil + ", handling=" + handling + "]";
     }
 
 }
