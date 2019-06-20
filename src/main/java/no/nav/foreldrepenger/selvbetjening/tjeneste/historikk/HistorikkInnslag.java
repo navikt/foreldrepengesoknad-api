@@ -1,6 +1,5 @@
 package no.nav.foreldrepenger.selvbetjening.tjeneste.historikk;
 
-import java.time.LocalDate;
 import java.time.LocalDateTime;
 
 import com.fasterxml.jackson.annotation.JsonCreator;
@@ -14,8 +13,6 @@ public class HistorikkInnslag {
     private String journalpostId;
     private String tekst;
     private LocalDateTime datoMottatt;
-    private LocalDate gyldigTil;
-    private boolean aktiv;
     private String saksnr;
 
     @JsonCreator
@@ -56,22 +53,6 @@ public class HistorikkInnslag {
         this.datoMottatt = datoMottatt;
     }
 
-    public LocalDate getGyldigTil() {
-        return gyldigTil;
-    }
-
-    public void setGyldigTil(LocalDate gyldig_til) {
-        this.gyldigTil = gyldig_til;
-    }
-
-    public boolean isAktiv() {
-        return aktiv;
-    }
-
-    public void setAktiv(boolean aktiv) {
-        this.aktiv = aktiv;
-    }
-
     public String getSaksnr() {
         return saksnr;
     }
@@ -83,7 +64,7 @@ public class HistorikkInnslag {
     @Override
     public String toString() {
         return getClass().getSimpleName() + "[aktørId=" + aktørId + ", journalpostId=" + journalpostId + ", tekst="
-                + tekst + ", datoMottatt=" + datoMottatt + ", gyldigTil=" + gyldigTil + ", aktiv=" + aktiv
-                + ", saksnr=" + saksnr + "]";
+                + tekst + ", datoMottatt=" + datoMottatt + ", saksnr=" + saksnr + "]";
     }
+
 }

@@ -38,7 +38,7 @@ public class HistorikkConnection extends AbstractRestConnection {
                 .ofNullable(getForObject(config.historikkURI(), HistorikkInnslag[].class, false))
                 .map(Arrays::asList)
                 .orElse(emptyList());
-        LOG.trace(CONFIDENTIAL, "Fikk meldinger {}", historikk);
+        LOG.trace(CONFIDENTIAL, "Fikk historikk {}", historikk);
         return historikk;
     }
 
