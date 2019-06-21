@@ -1,15 +1,9 @@
 package no.nav.foreldrepenger.selvbetjening.config;
 
-import static com.google.common.base.Predicates.or;
 import static io.swagger.models.Scheme.HTTP;
 import static io.swagger.models.Scheme.HTTPS;
 import static java.util.stream.Collectors.toSet;
-import static no.nav.foreldrepenger.selvbetjening.tjeneste.historikk.HistorikkController.HISTORIKK;
-import static no.nav.foreldrepenger.selvbetjening.tjeneste.innsending.InnsendingController.REST_SOKNAD;
-import static no.nav.foreldrepenger.selvbetjening.tjeneste.innsyn.InnsynController.INNSYN;
-import static no.nav.foreldrepenger.selvbetjening.tjeneste.oppslag.OppslagController.OPPSLAG;
 import static no.nav.foreldrepenger.selvbetjening.util.EnvUtil.PREPROD;
-import static springfox.documentation.builders.PathSelectors.regex;
 import static springfox.documentation.spi.DocumentationType.SWAGGER_2;
 
 import java.util.Set;
@@ -20,6 +14,7 @@ import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.Profile;
 
 import io.swagger.models.Scheme;
+import springfox.documentation.builders.PathSelectors;
 import springfox.documentation.builders.RequestHandlerSelectors;
 import springfox.documentation.spring.web.plugins.Docket;
 import springfox.documentation.swagger2.annotations.EnableSwagger2;
@@ -35,11 +30,7 @@ public class SwaggerConfiguration {
                 .protocols(allProtocols())
                 .select()
                 .apis(RequestHandlerSelectors.any())
-                .paths(or(
-                        regex(HISTORIKK + ".*"),
-                        regex(OPPSLAG + ".*"),
-                        regex(INNSYN + ".*"),
-                        regex(REST_SOKNAD + ".*")))
+                .paths(PathSelectors.any())
                 .build();
     }
 
