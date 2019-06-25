@@ -22,7 +22,7 @@ public class HistorikkConfig {
     private boolean enabled;
     private final URI uri;
 
-    public HistorikkConfig(@Value("${FPSOKNAD_HISTORIKK_API_URL:http://www.vg.no}") URI uri) {
+    public HistorikkConfig(@Value("${FPSOKNAD_HISTORIKK_API_URL}") URI uri) {
         this.uri = uri;
     }
 
