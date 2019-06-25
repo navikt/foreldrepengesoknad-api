@@ -10,6 +10,10 @@ public class SøkerDto {
     public String søknadsRolle;
     public String språkKode;
 
+    public SøkerDto(String rolle) {
+        this(rolle, null);
+    }
+
     public SøkerDto(String rolle, String språkKode) {
         this.språkKode = språkKode;
         if (morFarEllerMedmor(rolle)) {
