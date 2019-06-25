@@ -39,8 +39,8 @@ public class ApiConfiguration implements WebMvcConfigurer {
     @Value("${FORELDREPENGESOKNAD_API_FPSOKNAD_OPPSLAG_API_APIKEY_PASSWORD}")
     String oppslagApiKey;
 
-    @Value("${FORELDREPENGESOKNAD_API_FPSOKNAD_HISTORIKK_API_APIKEY_PASSWORD}")
-    String historikkApiKey;
+    //@Value("${FORELDREPENGESOKNAD_API_FPSOKNAD_HISTORIKK_API_APIKEY_PASSWORD}")
+    //String historikkApiKey;
 
     @Inject
     CorsInterceptor corsInterceptor;
@@ -60,7 +60,7 @@ public class ApiConfiguration implements WebMvcConfigurer {
                 ImmutableMap.<URI, String>builder()
                         .put(innsending.getURI(), innsendingApiKey)
                         .put(oppslag.getURI(), oppslagApiKey)
-                        .put(historikk.getURI(), historikkApiKey)
+                        //.put(historikk.getURI(), historikkApiKey)
                         .build());
 
     }
