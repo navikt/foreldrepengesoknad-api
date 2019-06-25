@@ -23,7 +23,7 @@
     </springProfile>
 
     <springProfile name="dev,preprod">
-            <logger name="springfox.documentation" level="trace"/>
+            <logger name="springfox.documentation" level="info"/>
         <logger name="no.nav.foreldrepenger.selvbetjening" level="trace"/>
     </springProfile>
 
