@@ -22,7 +22,7 @@ public class MinidialogConfig {
     private boolean enabled;
     private final URI uri;
 
-    public MinidialogConfig(@Value("${FPSOKNAD_HISTORIKK_API_URL}") URI uri) {
+    public MinidialogConfig(@Value("${FPSOKNAD_HISTORIKK_API_URL:http://www.vg.no}") URI uri) {
         this.uri = uri;
     }
 
