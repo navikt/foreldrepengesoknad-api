@@ -33,8 +33,8 @@ public class MinidialogTjeneste implements Minidialog {
     }
 
     @Override
-    public void besvarDialog(Svar svar) {
-        connection.besvar(svar);
+    public boolean besvarDialog(Svar svar) {
+        return connection.besvar(svar);
     }
 
     @Override
