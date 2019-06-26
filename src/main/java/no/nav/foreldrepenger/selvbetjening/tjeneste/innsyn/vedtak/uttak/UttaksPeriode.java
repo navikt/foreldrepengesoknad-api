@@ -6,6 +6,7 @@ import com.fasterxml.jackson.annotation.JsonCreator;
 import com.fasterxml.jackson.annotation.JsonProperty;
 
 import no.nav.foreldrepenger.selvbetjening.tjeneste.innsyn.LukketPeriode;
+import springfox.documentation.spring.web.json.Json;
 
 public class UttaksPeriode {
 
@@ -18,6 +19,8 @@ public class UttaksPeriode {
     private final Boolean samtidigUttak;
     private final Boolean manueltBehandlet;
     private final ManuellBehandlingsÅrsak manuellBehandlingsårsak;
+    private final MorsAktivitet morsAktivitet;
+
 
     @JsonCreator
     public UttaksPeriode(@JsonProperty("periode") LukketPeriode periode,
@@ -28,7 +31,9 @@ public class UttaksPeriode {
             @JsonProperty("graderingInnvilget") Boolean graderingInnvilget,
             @JsonProperty("samtidigUttak") Boolean samtidigUttak,
             @JsonProperty("manueltBehandlet") Boolean manueltBehandlet,
-            @JsonProperty("manuellBehandlingsårsak") ManuellBehandlingsÅrsak manuellBehandlingsårsak) {
+            @JsonProperty("manuellBehandlingsårsak") ManuellBehandlingsÅrsak manuellBehandlingsårsak,
+            @JsonProperty("morsAktivitet") MorsAktivitet morsAktivitet
+    ) {
         this.periode = periode;
         this.resultatType = resultatType;
         this.årsak = årsak;
@@ -38,6 +43,7 @@ public class UttaksPeriode {
         this.samtidigUttak = samtidigUttak;
         this.manueltBehandlet = manueltBehandlet;
         this.manuellBehandlingsårsak = manuellBehandlingsårsak;
+        this.morsAktivitet = morsAktivitet;
     }
 
     public LukketPeriode getPeriode() {
@@ -76,6 +82,10 @@ public class UttaksPeriode {
         return manuellBehandlingsårsak;
     }
 
+    public MorsAktivitet getMorsAktivitet() {
+        return morsAktivitet;
+    }
+
     @Override
     public String toString() {
         return getClass().getSimpleName() + " [periode=" + periode + ", resultatType=" + resultatType + ", årsak="
@@ -83,7 +93,7 @@ public class UttaksPeriode {
                 + ", begrunnelse=" + begrunnelse + ", periodeAktiviteter=" + periodeAktiviteter
                 + ", graderingInnvilget=" + graderingInnvilget + ", samtidigUttak=" + samtidigUttak
                 + ", manueltBehandlet=" + manueltBehandlet + ", manuellBehandlingsårsak=" + manuellBehandlingsårsak
-                + "]";
+                + ", morsAktivitet=" + morsAktivitet + "]";
     }
 
 }
