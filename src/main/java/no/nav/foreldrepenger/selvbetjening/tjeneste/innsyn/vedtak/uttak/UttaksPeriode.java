@@ -82,6 +82,10 @@ public class UttaksPeriode {
         return manuellBehandlingsårsak;
     }
 
+    public MorsAktivitet getMorsAktivitet() {
+        return morsAktivitet;
+    }
+
     @Override
     public String toString() {
         return getClass().getSimpleName() + " [periode=" + periode + ", resultatType=" + resultatType + ", årsak="
