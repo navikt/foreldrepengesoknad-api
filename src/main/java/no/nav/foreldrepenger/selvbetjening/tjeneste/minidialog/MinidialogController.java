@@ -8,9 +8,11 @@ import java.util.List;
 import javax.inject.Inject;
 
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
+import no.nav.foreldrepenger.selvbetjening.tjeneste.historikk.Svar;
 import no.nav.security.oidc.api.ProtectedWithClaims;
 
 @RestController
@@ -30,6 +32,11 @@ public class MinidialogController {
     @GetMapping("/minidialog")
     public List<MinidialogInnslag> minidialoger() {
         return minidialog.hentMinidialoger();
+    }
+
+    @PostMapping("/svar")
+    public boolean svar(Svar svar) {
+        return minidialog.besvarDialog(svar);
     }
 
     @Override

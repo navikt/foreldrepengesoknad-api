@@ -12,6 +12,7 @@ import org.springframework.stereotype.Component;
 import org.springframework.web.client.RestOperations;
 
 import no.nav.foreldrepenger.selvbetjening.tjeneste.AbstractRestConnection;
+import no.nav.foreldrepenger.selvbetjening.tjeneste.historikk.Svar;
 
 @Component
 public class MinidialogConnection extends AbstractRestConnection {
@@ -40,6 +41,12 @@ public class MinidialogConnection extends AbstractRestConnection {
                 .orElse(emptyList());
         LOG.trace(CONFIDENTIAL, "Fikk minidialoger {}", dialoger);
         return dialoger;
+    }
+
+    public boolean besvar(Svar svar) {
+        return Optional
+                .ofNullable(postForObject(config.svarURI(), svar, Boolean.class))
+                .orElse(false);
     }
 
     @Override

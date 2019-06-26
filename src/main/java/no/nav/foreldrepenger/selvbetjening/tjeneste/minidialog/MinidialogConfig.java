@@ -13,6 +13,7 @@ import org.springframework.context.annotation.Configuration;
 public class MinidialogConfig {
 
     private static final String MINIDIALOG = "minidialog/me";
+    private static final String SVAR = "minidialog/svar";
 
     public URI getURI() {
         return uri;
@@ -40,5 +41,9 @@ public class MinidialogConfig {
 
     public URI pingURI() {
         return uri(getURI(), DEFAULT_PING_PATH);
+    }
+
+    public URI svarURI() {
+        return uri(getURI(), SVAR);
     }
 }
