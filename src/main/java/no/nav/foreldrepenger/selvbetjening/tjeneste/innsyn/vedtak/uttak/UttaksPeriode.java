@@ -19,7 +19,7 @@ public class UttaksPeriode {
     private final Boolean samtidigUttak;
     private final Boolean manueltBehandlet;
     private final ManuellBehandlingsÅrsak manuellBehandlingsårsak;
-    private final String morsAktivitet;
+    private final MorsAktivitet morsAktivitet;
 
 
     @JsonCreator
@@ -32,7 +32,7 @@ public class UttaksPeriode {
             @JsonProperty("samtidigUttak") Boolean samtidigUttak,
             @JsonProperty("manueltBehandlet") Boolean manueltBehandlet,
             @JsonProperty("manuellBehandlingsårsak") ManuellBehandlingsÅrsak manuellBehandlingsårsak,
-            @JsonProperty("morsAktivitet") String morsAktivitet
+            @JsonProperty("morsAktivitet") MorsAktivitet morsAktivitet
     ) {
         this.periode = periode;
         this.resultatType = resultatType;
