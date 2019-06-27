@@ -41,7 +41,7 @@ public class RequestFilter implements Filter {
         HttpServletResponse res = HttpServletResponse.class.cast(response);
 
         String fnr = HttpServletRequest.class.cast(request).getHeader(FNR_HEADER_VALUE);
-        if (fnr != null && !tokenHelper.getSubject().equals(fnr)) {
+        if (fnr != null && tokenHelper.getSubject() != null && !fnr.equals(tokenHelper.getSubject())) {
             LOG.warn("FNR {} i header matcher ikke subject {} i token", fnr, tokenHelper.getSubject());
             res.sendError(CONFLICT.value());
         }
