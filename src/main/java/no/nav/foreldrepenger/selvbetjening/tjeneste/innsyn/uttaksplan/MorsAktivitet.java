@@ -1,4 +1,4 @@
-package no.nav.foreldrepenger.selvbetjening.tjeneste.innsyn.vedtak.uttak;
+package no.nav.foreldrepenger.selvbetjening.tjeneste.innsyn.uttaksplan;
 
 public enum MorsAktivitet {
     ARBEID, UTDANNING, KVALPROG, INTROPROG,

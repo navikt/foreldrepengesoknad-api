@@ -28,6 +28,7 @@ public class UttaksPeriode {
     private final Integer arbeidstidProsent;
     private final Integer utbetalingprosent;
     private final Boolean gjelderAnnenPart;
+    private final MorsAktivitet morsAktivitet;
     private final Boolean flerbarnsdager;
     private final Boolean manueltBehandlet;
     private final Integer samtidigUttaksprosent;
@@ -50,6 +51,7 @@ public class UttaksPeriode {
             @JsonProperty("gjelderAnnenPart") Boolean gjelderAnnenPart,
             @JsonProperty("manueltBehandlet") Boolean manueltBehandlet,
             @JsonProperty("samtidigUttaksprosent") Integer samtidigUttaksprosent,
+            @JsonProperty("morsAktivitet") MorsAktivitet morsAktivitet,
             @JsonProperty("flerbarnsdager") Boolean flerbarnsdager,
             @JsonProperty("uttakArbeidType") UttakArbeidType uttakArbeidType,
             @JsonProperty("arbeidsgiverInfo") ArbeidsgiverInfo arbeidsgiverInfo) {
@@ -70,6 +72,7 @@ public class UttaksPeriode {
         this.graderingAvslagAarsak = graderingAvslagAarsak;
         this.manueltBehandlet = manueltBehandlet;
         this.samtidigUttaksprosent = samtidigUttaksprosent;
+        this.morsAktivitet = morsAktivitet;
         this.flerbarnsdager = flerbarnsdager;
         this.uttakArbeidType = uttakArbeidType;
         this.arbeidsgiverInfo = arbeidsgiverInfo;
@@ -133,6 +136,10 @@ public class UttaksPeriode {
 
     public LukketPeriode getPeriode() {
         return periode;
+    }
+
+    public MorsAktivitet getMorsAktivitet() {
+        return morsAktivitet;
     }
 
     public StønadskontoType getStønadskontotype() {
