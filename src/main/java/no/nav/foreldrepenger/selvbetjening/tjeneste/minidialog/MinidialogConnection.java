@@ -12,7 +12,7 @@ import org.springframework.stereotype.Component;
 import org.springframework.web.client.RestOperations;
 
 import no.nav.foreldrepenger.selvbetjening.tjeneste.AbstractRestConnection;
-import no.nav.foreldrepenger.selvbetjening.tjeneste.historikk.Svar;
+import no.nav.foreldrepenger.selvbetjening.tjeneste.oppslag.domain.Fødselsnummer;
 
 @Component
 public class MinidialogConnection extends AbstractRestConnection {
@@ -43,10 +43,13 @@ public class MinidialogConnection extends AbstractRestConnection {
         return dialoger;
     }
 
-    public boolean besvar(Svar svar) {
-        return Optional
-                .ofNullable(postForObject(config.svarURI(), svar, Boolean.class))
-                .orElse(false);
+    public List<MinidialogInnslag> hentMinidialoger(Fødselsnummer fnr) {
+        List<MinidialogInnslag> dialoger = Optional
+                .ofNullable(getForObject(config.minidialogPreprodURI(fnr.getFnr()), MinidialogInnslag[].class, false))
+                .map(Arrays::asList)
+                .orElse(emptyList());
+        LOG.trace("Fikk minidialoger {}", dialoger);
+        return dialoger;
     }
 
     @Override

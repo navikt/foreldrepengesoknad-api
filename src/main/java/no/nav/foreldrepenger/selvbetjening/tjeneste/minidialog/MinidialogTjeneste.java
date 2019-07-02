@@ -6,7 +6,7 @@ import java.util.List;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnProperty;
 import org.springframework.stereotype.Service;
 
-import no.nav.foreldrepenger.selvbetjening.tjeneste.historikk.Svar;
+import no.nav.foreldrepenger.selvbetjening.tjeneste.oppslag.domain.Fødselsnummer;
 
 @Service
 @ConditionalOnProperty(name = "stub.minidialog", havingValue = "false", matchIfMissing = true)
@@ -23,6 +23,11 @@ public class MinidialogTjeneste implements Minidialog {
     }
 
     @Override
+    public List<MinidialogInnslag> hentMinidialoger(Fødselsnummer fnr) {
+        return connection.hentMinidialoger(fnr);
+    }
+
+    @Override
     public String ping() {
         return connection.ping();
     }
@@ -30,11 +35,6 @@ public class MinidialogTjeneste implements Minidialog {
     @Override
     public URI pingURI() {
         return connection.pingURI();
-    }
-
-    @Override
-    public boolean besvarDialog(Svar svar) {
-        return connection.besvar(svar);
     }
 
     @Override

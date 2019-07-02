@@ -1,5 +1,6 @@
 package no.nav.foreldrepenger.selvbetjening.tjeneste.minidialog;
 
+import static no.nav.foreldrepenger.selvbetjening.util.URIUtil.queryParams;
 import static no.nav.foreldrepenger.selvbetjening.util.URIUtil.uri;
 
 import java.net.URI;
@@ -13,6 +14,8 @@ import org.springframework.context.annotation.Configuration;
 public class MinidialogConfig {
 
     private static final String MINIDIALOG = "minidialog/me";
+    private static final String MINIDIALOG_PREPROD = "minidialog/preprod";
+
     private static final String SVAR = "minidialog/svar";
 
     public URI getURI() {
@@ -29,6 +32,10 @@ public class MinidialogConfig {
 
     public URI minidialogURI() {
         return uri(getURI(), MINIDIALOG);
+    }
+
+    public URI minidialogPreprodURI(String fnr) {
+        return uri(getURI(), MINIDIALOG_PREPROD, queryParams("fnr", fnr));
     }
 
     public boolean isEnabled() {

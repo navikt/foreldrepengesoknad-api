@@ -14,6 +14,8 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
+import no.nav.foreldrepenger.selvbetjening.tjeneste.minidialog.Minidialog;
+import no.nav.foreldrepenger.selvbetjening.tjeneste.minidialog.MinidialogInnslag;
 import no.nav.foreldrepenger.selvbetjening.tjeneste.oppslag.domain.Fødselsnummer;
 import no.nav.security.oidc.api.Unprotected;
 
@@ -23,11 +25,14 @@ import no.nav.security.oidc.api.Unprotected;
 @Unprotected
 public class HistorikkPreprodController {
 
+    private final Minidialog minidialog;
+
     private final Historikk historikk;
 
     @Inject
-    public HistorikkPreprodController(Historikk historikk) {
+    public HistorikkPreprodController(Historikk historikk, Minidialog minidialog) {
         this.historikk = historikk;
+        this.minidialog = minidialog;
     }
 
     @GetMapping("/hent")
@@ -35,9 +40,13 @@ public class HistorikkPreprodController {
         return historikk.hentHistorikkFor(fnr);
     }
 
-    @Override
-    public String toString() {
-        return getClass().getSimpleName() + " [historikk=" + historikk + "]";
+    @GetMapping("/minidialog")
+    public List<MinidialogInnslag> hentMinidialoger(@RequestParam("fnr") Fødselsnummer fnr) {
+        return minidialog.hentMinidialoger(fnr);
     }
 
+    @Override
+    public String toString() {
+        return getClass().getSimpleName() + "[minidialog=" + minidialog + ", historikk=" + historikk + "]";
+    }
 }
