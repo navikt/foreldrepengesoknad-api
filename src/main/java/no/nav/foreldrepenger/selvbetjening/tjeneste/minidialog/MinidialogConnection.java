@@ -1,7 +1,6 @@
 package no.nav.foreldrepenger.selvbetjening.tjeneste.minidialog;
 
 import static java.util.Collections.emptyList;
-import static no.nav.foreldrepenger.selvbetjening.util.EnvUtil.CONFIDENTIAL;
 
 import java.net.URI;
 import java.util.Arrays;
@@ -35,20 +34,20 @@ public class MinidialogConnection extends AbstractRestConnection {
     }
 
     public List<MinidialogInnslag> hentMinidialoger() {
-        List<MinidialogInnslag> dialoger = Optional
-                .ofNullable(getForObject(config.minidialogURI(), MinidialogInnslag[].class, false))
-                .map(Arrays::asList)
-                .orElse(emptyList());
-        LOG.trace(CONFIDENTIAL, "Fikk minidialoger {}", dialoger);
-        return dialoger;
+        return hentFra(config.minidialogURI());
     }
 
     public List<MinidialogInnslag> hentMinidialoger(Fødselsnummer fnr) {
+        return hentFra(config.minidialogPreprodURI(fnr.getFnr()));
+    }
+
+    private List<MinidialogInnslag> hentFra(URI uri) {
+        LOG.trace("Henter  minidialoger fra {}", uri);
         List<MinidialogInnslag> dialoger = Optional
-                .ofNullable(getForObject(config.minidialogPreprodURI(fnr.getFnr()), MinidialogInnslag[].class, false))
+                .ofNullable(getForObject(uri, MinidialogInnslag[].class, false))
                 .map(Arrays::asList)
                 .orElse(emptyList());
-        LOG.trace("Fikk minidialoger {}", dialoger);
+        LOG.trace("Hentet minidialoger {}", dialoger);
         return dialoger;
     }
 
