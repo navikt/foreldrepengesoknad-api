@@ -15,29 +15,27 @@ import no.nav.foreldrepenger.selvbetjening.tjeneste.oppslag.domain.Fødselsnumme
 public class MinidialogInnslag {
 
     private long id;
-    private final AktørId aktørId;
-    private Fødselsnummer fnr;
+    private AktørId aktørId;
+    private final Fødselsnummer fnr;
     private boolean janei;
     private String vedlegg;
-
     private final String tekst;
     private final String saksnr;
     private LocalDateTime opprettet;
     @DateTimeFormat(iso = ISO.DATE)
     private LocalDate gyldigTil;
     private Hendelse handling;
-    private boolean aktiv;
 
     @JsonCreator
-    public MinidialogInnslag(@JsonProperty("aktørId") AktørId aktørId, @JsonProperty("tekst") String tekst,
+    public MinidialogInnslag(@JsonProperty("fnr") Fødselsnummer fnr, @JsonProperty("tekst") String tekst,
             @JsonProperty("saksnr") String saksnr) {
-        this.aktørId = aktørId;
+        this.fnr = fnr;
         this.tekst = tekst;
         this.saksnr = saksnr;
     }
 
-    public void setFnr(Fødselsnummer fnr) {
-        this.fnr = fnr;
+    public void setAktørId(AktørId aktørId) {
+        this.aktørId = aktørId;
     }
 
     public Fødselsnummer getFnr() {
@@ -88,14 +86,6 @@ public class MinidialogInnslag {
         this.id = id;
     }
 
-    public boolean isAktiv() {
-        return aktiv;
-    }
-
-    public void setAktiv(boolean aktiv) {
-        this.aktiv = aktiv;
-    }
-
     public Hendelse getHandling() {
         return handling;
     }
@@ -116,8 +106,7 @@ public class MinidialogInnslag {
     public String toString() {
         return getClass().getSimpleName() + "[id=" + id + ", aktørId=" + aktørId + ", fnr=" + fnr + ", janei=" + janei
                 + ", vedlegg=" + vedlegg + ", tekst=" + tekst + ", saksnr=" + saksnr + ", opprettet=" + opprettet
-                + ", endret=" + gyldigTil + ", handling=" + handling + ", aktiv=" + aktiv
-                + "]";
+                + ", endret=" + gyldigTil + ", handling=" + handling + "]";
     }
 
 }
