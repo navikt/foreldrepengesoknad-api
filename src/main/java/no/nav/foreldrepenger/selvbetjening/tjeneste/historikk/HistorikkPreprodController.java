@@ -40,7 +40,7 @@ public class HistorikkPreprodController {
         return historikk.hentHistorikkFor(fnr);
     }
 
-    @GetMapping("/minidialog")
+    @GetMapping("/minidialog/aktive")
     public List<MinidialogInnslag> hentMinidialoger(@RequestParam("fnr") Fødselsnummer fnr) {
         return minidialog.hentMinidialoger(fnr);
     }
