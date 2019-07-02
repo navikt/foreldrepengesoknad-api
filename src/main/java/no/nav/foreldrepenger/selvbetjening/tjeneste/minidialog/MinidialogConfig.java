@@ -35,7 +35,7 @@ public class MinidialogConfig {
     }
 
     public URI minidialogPreprodURI(String fnr) {
-        return uri(getURI(), MINIDIALOG_PREPROD, queryParams("fnr", fnr));
+        return uri(getURI(), MINIDIALOG_PREPROD + "/aktive", queryParams("fnr", fnr));
     }
 
     public boolean isEnabled() {
