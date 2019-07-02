@@ -6,10 +6,13 @@ import com.fasterxml.jackson.annotation.JsonCreator;
 import com.fasterxml.jackson.annotation.JsonProperty;
 
 import no.nav.foreldrepenger.selvbetjening.tjeneste.oppslag.domain.AktørId;
+import no.nav.foreldrepenger.selvbetjening.tjeneste.oppslag.domain.Fødselsnummer;
 
 public class HistorikkInnslag {
 
     private AktørId aktørId;
+    private Fødselsnummer fnr;
+
     private String journalpostId;
     private String tekst;
     private LocalDateTime opprettet;
@@ -19,6 +22,14 @@ public class HistorikkInnslag {
     public HistorikkInnslag(@JsonProperty("aktørId") AktørId aktørId, @JsonProperty("tekst") String tekst) {
         this.aktørId = aktørId;
         this.tekst = tekst;
+    }
+
+    public Fødselsnummer getFnr() {
+        return fnr;
+    }
+
+    public void setFnr(Fødselsnummer fnr) {
+        this.fnr = fnr;
     }
 
     public AktørId getAktørId() {

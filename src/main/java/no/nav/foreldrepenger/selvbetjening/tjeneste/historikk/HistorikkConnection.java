@@ -12,6 +12,7 @@ import org.springframework.stereotype.Component;
 import org.springframework.web.client.RestOperations;
 
 import no.nav.foreldrepenger.selvbetjening.tjeneste.AbstractRestConnection;
+import no.nav.foreldrepenger.selvbetjening.tjeneste.oppslag.domain.Fødselsnummer;
 
 @Component
 public class HistorikkConnection extends AbstractRestConnection {
@@ -42,8 +43,18 @@ public class HistorikkConnection extends AbstractRestConnection {
         return historikk;
     }
 
+    public List<HistorikkInnslag> hentHistorikk(Fødselsnummer fnr) {
+        List<HistorikkInnslag> historikk = Optional
+                .ofNullable(getForObject(config.historikkPreprodURI(fnr.getFnr()), HistorikkInnslag[].class, false))
+                .map(Arrays::asList)
+                .orElse(emptyList());
+        LOG.trace(CONFIDENTIAL, "Fikk historikk {}", historikk);
+        return historikk;
+    }
+
     @Override
     public String toString() {
         return getClass().getSimpleName() + " [config=" + config + "]";
     }
+
 }

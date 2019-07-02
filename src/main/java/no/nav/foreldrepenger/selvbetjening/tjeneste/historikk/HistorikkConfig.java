@@ -1,5 +1,6 @@
 package no.nav.foreldrepenger.selvbetjening.tjeneste.historikk;
 
+import static no.nav.foreldrepenger.selvbetjening.util.URIUtil.queryParams;
 import static no.nav.foreldrepenger.selvbetjening.util.URIUtil.uri;
 
 import java.net.URI;
@@ -12,7 +13,8 @@ import org.springframework.context.annotation.Configuration;
 @Configuration
 public class HistorikkConfig {
 
-    private static final String HISTORIKK = "historikk/me";
+    private static final String HISTORIKK = "historikk";
+    private static final String HISTORIKK_PREPROD = HISTORIKK + "/preprod";
 
     public URI getURI() {
         return uri;
@@ -27,7 +29,11 @@ public class HistorikkConfig {
     }
 
     public URI historikkURI() {
-        return uri(getURI(), HISTORIKK);
+        return uri(getURI(), HISTORIKK + "/me");
+    }
+
+    public URI historikkPreprodURI(String fnr) {
+        return uri(getURI(), HISTORIKK_PREPROD + "/hent", queryParams("fnr", fnr));
     }
 
     public boolean isEnabled() {

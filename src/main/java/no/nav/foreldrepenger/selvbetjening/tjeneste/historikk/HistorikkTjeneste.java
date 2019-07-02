@@ -6,6 +6,8 @@ import java.util.List;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnProperty;
 import org.springframework.stereotype.Service;
 
+import no.nav.foreldrepenger.selvbetjening.tjeneste.oppslag.domain.Fødselsnummer;
+
 @Service
 @ConditionalOnProperty(name = "stub.historikk", havingValue = "false", matchIfMissing = true)
 public class HistorikkTjeneste implements Historikk {
@@ -18,6 +20,11 @@ public class HistorikkTjeneste implements Historikk {
     @Override
     public List<HistorikkInnslag> hentHistorikk() {
         return connection.hentHistorikk();
+    }
+
+    @Override
+    public List<HistorikkInnslag> hentHistorikkFor(Fødselsnummer fnr) {
+        return connection.hentHistorikk(fnr);
     }
 
     @Override
@@ -34,4 +41,5 @@ public class HistorikkTjeneste implements Historikk {
     public String toString() {
         return getClass().getSimpleName() + " [connection=" + connection + "]";
     }
+
 }
