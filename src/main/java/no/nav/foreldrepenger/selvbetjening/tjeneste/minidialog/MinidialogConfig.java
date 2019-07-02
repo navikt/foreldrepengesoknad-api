@@ -13,10 +13,10 @@ import org.springframework.context.annotation.Configuration;
 @Configuration
 public class MinidialogConfig {
 
-    private static final String MINIDIALOG = "minidialog/me";
-    private static final String MINIDIALOG_PREPROD = "minidialog/preprod";
-
-    private static final String SVAR = "minidialog/svar";
+    private static final String MINIDIALOG = "minidialog";
+    private static final String MINIDIALOG_ME = MINIDIALOG + "/me";
+    private static final String MINIDIALOG_PREPROD = MINIDIALOG + "/preprod";
+    private static final String AKTIVE = MINIDIALOG_PREPROD + "/aktive";
 
     public URI getURI() {
         return uri;
@@ -31,11 +31,11 @@ public class MinidialogConfig {
     }
 
     public URI minidialogURI() {
-        return uri(getURI(), MINIDIALOG);
+        return uri(getURI(), MINIDIALOG_ME);
     }
 
     public URI minidialogPreprodURI(String fnr) {
-        return uri(getURI(), MINIDIALOG_PREPROD + "/aktive", queryParams("fnr", fnr));
+        return uri(getURI(), AKTIVE, queryParams("fnr", fnr));
     }
 
     public boolean isEnabled() {
@@ -50,7 +50,4 @@ public class MinidialogConfig {
         return uri(getURI(), DEFAULT_PING_PATH);
     }
 
-    public URI svarURI() {
-        return uri(getURI(), SVAR);
-    }
 }

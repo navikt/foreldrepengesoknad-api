@@ -9,36 +9,38 @@ import org.springframework.format.annotation.DateTimeFormat.ISO;
 import com.fasterxml.jackson.annotation.JsonCreator;
 import com.fasterxml.jackson.annotation.JsonProperty;
 
+import no.nav.foreldrepenger.selvbetjening.tjeneste.oppslag.domain.AktørId;
+import no.nav.foreldrepenger.selvbetjening.tjeneste.oppslag.domain.Fødselsnummer;
+
 public class MinidialogInnslag {
 
     private long id;
-    private final String aktørId;
-    private String fnr;
+    private final AktørId aktørId;
+    private Fødselsnummer fnr;
     private boolean janei;
     private String vedlegg;
 
     private final String tekst;
     private final String saksnr;
     private LocalDateTime opprettet;
-    private LocalDateTime endret;
     @DateTimeFormat(iso = ISO.DATE)
     private LocalDate gyldigTil;
-    private String handling;
+    private Hendelse handling;
     private boolean aktiv;
 
     @JsonCreator
-    public MinidialogInnslag(@JsonProperty("aktørId") String aktørId, @JsonProperty("tekst") String tekst,
+    public MinidialogInnslag(@JsonProperty("aktørId") AktørId aktørId, @JsonProperty("tekst") String tekst,
             @JsonProperty("saksnr") String saksnr) {
         this.aktørId = aktørId;
         this.tekst = tekst;
         this.saksnr = saksnr;
     }
 
-    public void setFnr(String fnr) {
+    public void setFnr(Fødselsnummer fnr) {
         this.fnr = fnr;
     }
 
-    public String getFnr() {
+    public Fødselsnummer getFnr() {
         return fnr;
     }
 
@@ -50,7 +52,7 @@ public class MinidialogInnslag {
         this.gyldigTil = gyldigTil;
     }
 
-    public String getAktørId() {
+    public AktørId getAktørId() {
         return aktørId;
     }
 
@@ -94,11 +96,11 @@ public class MinidialogInnslag {
         this.aktiv = aktiv;
     }
 
-    public String getHandling() {
+    public Hendelse getHandling() {
         return handling;
     }
 
-    public void setHandling(String handling) {
+    public void setHandling(Hendelse handling) {
         this.handling = handling;
     }
 
@@ -110,19 +112,11 @@ public class MinidialogInnslag {
         this.opprettet = opprettet;
     }
 
-    public LocalDateTime getEndret() {
-        return endret;
-    }
-
-    public void setEndret(LocalDateTime endret) {
-        this.endret = endret;
-    }
-
     @Override
     public String toString() {
         return getClass().getSimpleName() + "[id=" + id + ", aktørId=" + aktørId + ", fnr=" + fnr + ", janei=" + janei
                 + ", vedlegg=" + vedlegg + ", tekst=" + tekst + ", saksnr=" + saksnr + ", opprettet=" + opprettet
-                + ", endret=" + endret + ", gyldigTil=" + gyldigTil + ", handling=" + handling + ", aktiv=" + aktiv
+                + ", endret=" + gyldigTil + ", handling=" + handling + ", aktiv=" + aktiv
                 + "]";
     }
 
