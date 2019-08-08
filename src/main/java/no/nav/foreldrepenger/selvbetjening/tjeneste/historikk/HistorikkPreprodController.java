@@ -1,7 +1,7 @@
 package no.nav.foreldrepenger.selvbetjening.tjeneste.historikk;
 
+import static no.nav.foreldrepenger.selvbetjening.util.EnvUtil.LOCAL;
 import static no.nav.foreldrepenger.selvbetjening.util.EnvUtil.DEV;
-import static no.nav.foreldrepenger.selvbetjening.util.EnvUtil.PREPROD;
 import static org.springframework.http.MediaType.APPLICATION_JSON_VALUE;
 
 import java.util.List;
@@ -19,7 +19,7 @@ import no.nav.foreldrepenger.selvbetjening.tjeneste.minidialog.MinidialogInnslag
 import no.nav.foreldrepenger.selvbetjening.tjeneste.oppslag.domain.Fødselsnummer;
 import no.nav.security.oidc.api.Unprotected;
 
-@Profile({ DEV, PREPROD })
+@Profile({ LOCAL, DEV })
 @RestController
 @RequestMapping(path = HistorikkController.HISTORIKK + "/preprod", produces = APPLICATION_JSON_VALUE)
 @Unprotected

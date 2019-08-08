@@ -1,7 +1,7 @@
 package no.nav.foreldrepenger.selvbetjening.tjeneste.virusscan;
 
 import static no.nav.foreldrepenger.selvbetjening.tjeneste.virusscan.Result.OK;
-import static no.nav.foreldrepenger.selvbetjening.util.EnvUtil.isDevOrPreprod;
+import static no.nav.foreldrepenger.selvbetjening.util.EnvUtil.isDevOrLocal;
 
 import java.net.URI;
 
@@ -44,7 +44,7 @@ class VirusScanConnection implements EnvironmentAware {
 
     public boolean scan(Attachment attachment) {
         try {
-            if (isDevOrPreprod(env) && attachment.filename.startsWith("virustest")) {
+            if (isDevOrLocal(env) && attachment.filename.startsWith("virustest")) {
                 return false;
             }
             LOG.info("Scanner {}", attachment);

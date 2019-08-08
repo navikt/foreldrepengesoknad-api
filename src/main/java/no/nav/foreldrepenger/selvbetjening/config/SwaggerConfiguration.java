@@ -3,7 +3,7 @@ package no.nav.foreldrepenger.selvbetjening.config;
 import static io.swagger.models.Scheme.HTTP;
 import static io.swagger.models.Scheme.HTTPS;
 import static java.util.stream.Collectors.toSet;
-import static no.nav.foreldrepenger.selvbetjening.util.EnvUtil.PREPROD;
+import static no.nav.foreldrepenger.selvbetjening.util.EnvUtil.DEV;
 import static springfox.documentation.spi.DocumentationType.SWAGGER_2;
 
 import java.util.Set;
@@ -20,7 +20,7 @@ import springfox.documentation.spring.web.plugins.Docket;
 import springfox.documentation.swagger2.annotations.EnableSwagger2;
 
 @Configuration
-@Profile(PREPROD)
+@Profile(DEV)
 @EnableSwagger2
 public class SwaggerConfiguration {
 
