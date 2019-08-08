@@ -15,14 +15,12 @@ import org.springframework.boot.test.autoconfigure.web.client.RestClientTest;
 import org.springframework.boot.web.client.RestTemplateBuilder;
 import org.springframework.http.HttpMethod;
 import org.springframework.http.HttpStatus;
-import org.springframework.test.context.ActiveProfiles;
 import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.TestPropertySource;
 import org.springframework.test.context.junit4.SpringRunner;
 import org.springframework.test.web.client.ExpectedCount;
 import org.springframework.test.web.client.MockRestServiceServer;
 
-import no.nav.foreldrepenger.selvbetjening.util.EnvUtil;
 import no.nav.foreldrepenger.selvbetjening.util.TokenUtil;
 import no.nav.security.spring.oidc.SpringOIDCRequestContextHolder;
 
@@ -30,7 +28,6 @@ import no.nav.security.spring.oidc.SpringOIDCRequestContextHolder;
 @TestPropertySource(properties = { "FPSOKNAD_OPPSLAG_API_URL: http://www.oppslag.no" })
 @ContextConfiguration(classes = { NotFoundException.class, OppslagConfig.class, TokenUtil.class,
         SpringOIDCRequestContextHolder.class })
-@ActiveProfiles(EnvUtil.TEST)
 @RestClientTest
 
 public class OppslagTest {

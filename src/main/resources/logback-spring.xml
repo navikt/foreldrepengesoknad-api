@@ -22,7 +22,7 @@
         </turboFilter>
     </springProfile>
 
-    <springProfile name="dev,local">
+    <springProfile name="dev,local,test">
             <logger name="springfox.documentation" level="info"/>
         <logger name="no.nav.foreldrepenger.selvbetjening" level="trace"/>
     </springProfile>

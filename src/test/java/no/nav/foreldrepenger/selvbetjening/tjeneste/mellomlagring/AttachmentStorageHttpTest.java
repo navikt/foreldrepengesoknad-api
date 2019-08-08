@@ -25,6 +25,7 @@ import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.test.context.ActiveProfiles;
 import org.springframework.test.context.TestContext;
+import org.springframework.test.context.TestPropertySource;
 import org.springframework.test.context.junit4.SpringRunner;
 import org.springframework.test.context.support.AbstractTestExecutionListener;
 
@@ -33,8 +34,10 @@ import no.nav.foreldrepenger.selvbetjening.SlowTests;
 import no.nav.foreldrepenger.selvbetjening.stub.StubbedLocalStackContainer;
 
 @RunWith(SpringRunner.class)
-@SpringBootTest(classes = ApiApplicationLocal.class, webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT)
-@ActiveProfiles("dev,localstack")
+@SpringBootTest(classes = { ApiApplicationLocal.class,
+        StubbedLocalStackContainer.class }, webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT)
+@ActiveProfiles("local,localstack")
+@TestPropertySource(properties = { "spring.cloud.vault.enabled=false" })
 @Category(SlowTests.class)
 public class AttachmentStorageHttpTest extends AbstractTestExecutionListener {
 

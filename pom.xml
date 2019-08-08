@@ -195,9 +195,6 @@
             <activation>
                 <activeByDefault>true</activeByDefault>
             </activation>
-            <properties>
-                <spring.profiles.active>test</spring.profiles.active>
-           </properties>
             <build>
                 <plugins>
                     <plugin>
@@ -214,9 +211,6 @@
             <activation>
                 <activeByDefault>false</activeByDefault>
             </activation>
-            <properties>
-                <spring.profiles.active>test</spring.profiles.active>
-           </properties>
         </profile>
     </profiles>
 </project>
