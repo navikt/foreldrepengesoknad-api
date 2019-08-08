@@ -18,7 +18,7 @@ import no.nav.foreldrepenger.selvbetjening.tjeneste.mellomlagring.Storage;
 import no.nav.foreldrepenger.selvbetjening.tjeneste.mellomlagring.StorageCrypto;
 
 @Configuration
-@Profile("!dev")
+@Profile("!local")
 public class StorageConfiguration {
 
     @Value("${FORELDREPENGESOKNAD_API_S3_CREDS_USERNAME}")

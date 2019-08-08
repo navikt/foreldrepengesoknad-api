@@ -12,9 +12,10 @@ import com.amazonaws.services.s3.AmazonS3ClientBuilder;
 import no.nav.foreldrepenger.selvbetjening.tjeneste.mellomlagring.S3Storage;
 import no.nav.foreldrepenger.selvbetjening.tjeneste.mellomlagring.Storage;
 import no.nav.foreldrepenger.selvbetjening.tjeneste.mellomlagring.StorageCrypto;
+import no.nav.foreldrepenger.selvbetjening.util.EnvUtil;
 
 @Configuration
-@Profile("dev")
+@Profile(EnvUtil.TEST)
 public class StubConfiguration {
 
     @Bean
