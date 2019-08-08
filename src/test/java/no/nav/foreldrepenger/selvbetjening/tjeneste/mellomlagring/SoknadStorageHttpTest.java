@@ -40,7 +40,7 @@ import no.nav.foreldrepenger.selvbetjening.stub.StubbedLocalStackContainer;
 
 @RunWith(SpringRunner.class)
 @SpringBootTest(classes = ApiApplicationLocal.class, webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT)
-@ActiveProfiles("dev, localstack")
+@ActiveProfiles("local,localstack,test")
 @FixMethodOrder(MethodSorters.NAME_ASCENDING)
 @Category(SlowTests.class)
 public class SoknadStorageHttpTest extends AbstractTestExecutionListener {
