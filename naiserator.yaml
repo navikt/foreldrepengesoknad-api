@@ -41,3 +41,4 @@ spec:
    - name: {{@key}}
      value: "{{this}}"
   {{/each}}
+  webproxy: true
