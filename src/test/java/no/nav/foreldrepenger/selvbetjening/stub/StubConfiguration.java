@@ -1,5 +1,8 @@
 package no.nav.foreldrepenger.selvbetjening.stub;
 
+import static no.nav.foreldrepenger.selvbetjening.util.EnvUtil.LOCALSTACK;
+import static no.nav.foreldrepenger.selvbetjening.util.EnvUtil.NOTLOCALSTACK;
+import static no.nav.foreldrepenger.selvbetjening.util.EnvUtil.TEST;
 import static org.testcontainers.containers.localstack.LocalStackContainer.Service.S3;
 
 import org.springframework.context.annotation.Bean;
@@ -12,20 +15,19 @@ import com.amazonaws.services.s3.AmazonS3ClientBuilder;
 import no.nav.foreldrepenger.selvbetjening.tjeneste.mellomlagring.S3Storage;
 import no.nav.foreldrepenger.selvbetjening.tjeneste.mellomlagring.Storage;
 import no.nav.foreldrepenger.selvbetjening.tjeneste.mellomlagring.StorageCrypto;
-import no.nav.foreldrepenger.selvbetjening.util.EnvUtil;
 
 @Configuration
-@Profile(EnvUtil.TEST)
+@Profile(TEST)
 public class StubConfiguration {
 
     @Bean
-    @Profile("!localstack")
+    @Profile(NOTLOCALSTACK)
     public Storage storageStub() {
         return new StorageStub();
     }
 
     @Bean
-    @Profile("localstack")
+    @Profile(LOCALSTACK)
     public Storage containerStub(StubbedLocalStackContainer localstack) {
         AmazonS3 s3 = AmazonS3ClientBuilder
                 .standard()

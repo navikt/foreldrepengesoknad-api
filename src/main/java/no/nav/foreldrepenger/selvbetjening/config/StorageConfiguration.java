@@ -1,5 +1,7 @@
 package no.nav.foreldrepenger.selvbetjening.config;
 
+import static no.nav.foreldrepenger.selvbetjening.util.EnvUtil.NOTLOCAL;
+
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -18,7 +20,7 @@ import no.nav.foreldrepenger.selvbetjening.tjeneste.mellomlagring.Storage;
 import no.nav.foreldrepenger.selvbetjening.tjeneste.mellomlagring.StorageCrypto;
 
 @Configuration
-@Profile("!local")
+@Profile(NOTLOCAL)
 public class StorageConfiguration {
 
     @Value("${FORELDREPENGESOKNAD_API_S3_CREDS_USERNAME}")

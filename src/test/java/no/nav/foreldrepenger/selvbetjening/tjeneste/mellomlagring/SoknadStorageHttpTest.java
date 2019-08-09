@@ -2,6 +2,9 @@ package no.nav.foreldrepenger.selvbetjening.tjeneste.mellomlagring;
 
 import static com.fasterxml.jackson.databind.SerializationFeature.FAIL_ON_EMPTY_BEANS;
 import static no.nav.foreldrepenger.selvbetjening.tjeneste.mellomlagring.StorageController.REST_STORAGE;
+import static no.nav.foreldrepenger.selvbetjening.util.EnvUtil.LOCAL;
+import static no.nav.foreldrepenger.selvbetjening.util.EnvUtil.LOCALSTACK;
+import static no.nav.foreldrepenger.selvbetjening.util.EnvUtil.TEST;
 import static no.nav.security.oidc.test.support.JwtTokenGenerator.createSignedJWT;
 import static org.assertj.core.api.AssertionsForClassTypes.assertThat;
 import static org.springframework.http.HttpHeaders.AUTHORIZATION;
@@ -40,7 +43,7 @@ import no.nav.foreldrepenger.selvbetjening.stub.StubbedLocalStackContainer;
 
 @RunWith(SpringRunner.class)
 @SpringBootTest(classes = ApiApplicationLocal.class, webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT)
-@ActiveProfiles("local,localstack,test")
+@ActiveProfiles({ LOCAL, LOCALSTACK, TEST })
 @FixMethodOrder(MethodSorters.NAME_ASCENDING)
 @Category(SlowTests.class)
 public class SoknadStorageHttpTest extends AbstractTestExecutionListener {
