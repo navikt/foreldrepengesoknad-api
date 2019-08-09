@@ -44,8 +44,9 @@ public class RequestFilter implements Filter {
         if (fnr != null && tokenHelper.getSubject() != null && !fnr.equals(tokenHelper.getSubject())) {
             LOG.warn("FNR {} i header matcher ikke subject {} i token", fnr, tokenHelper.getSubject());
             res.sendError(CONFLICT.value());
+        } else {
+            chain.doFilter(request, response);
         }
-        chain.doFilter(request, response);
     }
 
     @Override
