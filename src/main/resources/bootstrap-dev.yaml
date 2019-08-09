@@ -6,7 +6,7 @@ spring:
          authentication: KUBERNETES
          kubernetes:
               role: foreldrepengesoknad-api
-              kubernetes-path: kubernetes/preprod/dbd
+              kubernetes-path: kubernetes/preprod/sbs
               service-account-token-file: /var/run/secrets/kubernetes.io/serviceaccount/token        
          generic:
              enabled: true
