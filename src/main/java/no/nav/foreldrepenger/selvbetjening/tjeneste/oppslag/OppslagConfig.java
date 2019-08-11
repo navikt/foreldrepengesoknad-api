@@ -9,9 +9,11 @@ import org.springframework.beans.factory.annotation.Value;
 import org.springframework.boot.context.properties.ConfigurationProperties;
 import org.springframework.context.annotation.Configuration;
 
+import no.nav.foreldrepenger.selvbetjening.config.AbstractConfig;
+
 @ConfigurationProperties(prefix = "oppslag")
 @Configuration
-public class OppslagConfig {
+public class OppslagConfig extends AbstractConfig {
 
     private static final String FNR = "fnr";
     private static final String PING = "oppslag/ping";
@@ -19,48 +21,24 @@ public class OppslagConfig {
     private static final String SØKERINFO = "oppslag";
     private static final String AKTØRFNR = "oppslag/aktorfnr";
 
-    private boolean enabled;
-    private final URI uri;
-    private String apiKey;
-
     public OppslagConfig(@Value("${FPSOKNAD_OPPSLAG_API_URL}") URI uri) {
-        this.uri = uri;
-    }
-
-    public URI getURI() {
-        return uri;
-    }
-
-    public String getApiKey() {
-        return apiKey;
-    }
-
-    public void setApiKey(String apiKey) {
-        this.apiKey = apiKey;
+        super(uri);
     }
 
     URI getPingURI() {
-        return uri(getURI(), PING);
+        return uri(getUri(), PING);
     }
 
     URI getPersonURI() {
-        return uri(getURI(), PERSON);
+        return uri(getUri(), PERSON);
     }
 
     URI getSøkerinfoURI() {
-        return uri(getURI(), SØKERINFO);
+        return uri(getUri(), SØKERINFO);
     }
 
     URI getAktørIdURI(String fnr) {
-        return uri(getURI(), AKTØRFNR, queryParams(FNR, fnr));
-    }
-
-    public boolean isEnabled() {
-        return enabled;
-    }
-
-    public void setEnabled(boolean enabled) {
-        this.enabled = enabled;
+        return uri(getUri(), AKTØRFNR, queryParams(FNR, fnr));
     }
 
     @Override

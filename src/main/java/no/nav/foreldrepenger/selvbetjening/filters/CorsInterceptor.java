@@ -1,11 +1,11 @@
 package no.nav.foreldrepenger.selvbetjening.filters;
 
-import static com.google.common.net.HttpHeaders.ACCESS_CONTROL_ALLOW_CREDENTIALS;
-import static com.google.common.net.HttpHeaders.ACCESS_CONTROL_ALLOW_HEADERS;
-import static com.google.common.net.HttpHeaders.ACCESS_CONTROL_ALLOW_METHODS;
-import static com.google.common.net.HttpHeaders.ACCESS_CONTROL_ALLOW_ORIGIN;
-import static com.google.common.net.HttpHeaders.ACCESS_CONTROL_EXPOSE_HEADERS;
-import static com.google.common.net.HttpHeaders.ORIGIN;
+import static org.springframework.http.HttpHeaders.ACCESS_CONTROL_ALLOW_CREDENTIALS;
+import static org.springframework.http.HttpHeaders.ACCESS_CONTROL_ALLOW_HEADERS;
+import static org.springframework.http.HttpHeaders.ACCESS_CONTROL_ALLOW_METHODS;
+import static org.springframework.http.HttpHeaders.ACCESS_CONTROL_ALLOW_ORIGIN;
+import static org.springframework.http.HttpHeaders.ACCESS_CONTROL_EXPOSE_HEADERS;
+import static org.springframework.http.HttpHeaders.ORIGIN;
 
 import java.util.Arrays;
 import java.util.List;

@@ -1,5 +1,6 @@
 package no.nav.foreldrepenger.selvbetjening.interceptors.client;
 
+import static no.nav.foreldrepenger.selvbetjening.util.Constants.X_NAV_API_KEY;
 import static org.slf4j.LoggerFactory.getLogger;
 
 import java.io.IOException;
@@ -8,7 +9,6 @@ import java.util.Map;
 import java.util.Optional;
 
 import org.slf4j.Logger;
-import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.HttpRequest;
 import org.springframework.http.client.ClientHttpRequestExecution;
 import org.springframework.http.client.ClientHttpRequestInterceptor;
@@ -19,11 +19,8 @@ public class ApiKeyInjectingClientInterceptor implements ClientHttpRequestInterc
     private static final Logger LOG = getLogger(ApiKeyInjectingClientInterceptor.class);
 
     private final Map<URI, String> apiKeys;
-    private final String headerKey;
 
-    public ApiKeyInjectingClientInterceptor(@Value("${apikeys.key:x-nav-apiKey}") String headerKey,
-            Map<URI, String> apiKeys) {
-        this.headerKey = headerKey;
+    public ApiKeyInjectingClientInterceptor(Map<URI, String> apiKeys) {
         this.apiKeys = apiKeys;
     }
 
@@ -33,8 +30,8 @@ public class ApiKeyInjectingClientInterceptor implements ClientHttpRequestInterc
         URI destination = request.getURI();
         Optional<String> apiKey = apiKeyFor(destination);
         if (apiKey.isPresent()) {
-            LOG.trace("Injisert API-key som header {} for {}", headerKey, destination);
-            request.getHeaders().add(headerKey, apiKey.get());
+            LOG.trace("Injisert API-key som header {} for {}", X_NAV_API_KEY, destination);
+            request.getHeaders().add(X_NAV_API_KEY, apiKey.get());
         } else {
             LOG.trace("Ingen API-key ble funnet for {} (sjekket {} konfigurasjoner)", destination,
                     apiKeys.values().size());
@@ -51,7 +48,7 @@ public class ApiKeyInjectingClientInterceptor implements ClientHttpRequestInterc
 
     @Override
     public String toString() {
-        return getClass().getSimpleName() + " [apiKeys=" + apiKeys.keySet() + ", headerKey=" + headerKey + "]";
+        return getClass().getSimpleName() + " [apiKeys=" + apiKeys.keySet() + "]";
     }
 
 }

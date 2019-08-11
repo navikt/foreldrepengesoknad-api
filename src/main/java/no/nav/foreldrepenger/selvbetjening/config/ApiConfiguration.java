@@ -1,11 +1,9 @@
 package no.nav.foreldrepenger.selvbetjening.config;
 
-import static no.nav.foreldrepenger.selvbetjening.util.Constants.X_NAV_API_KEY;
+import static no.nav.foreldrepenger.selvbetjening.util.EnvUtil.CONFIDENTIAL;
 
 import java.net.URI;
 import java.util.Arrays;
-
-import javax.inject.Inject;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -19,39 +17,37 @@ import org.springframework.web.servlet.config.annotation.ResourceHandlerRegistry
 import org.springframework.web.servlet.config.annotation.WebMvcConfigurer;
 
 import com.google.common.collect.ImmutableMap;
+import com.google.common.collect.ImmutableMap.Builder;
 
 import no.nav.foreldrepenger.selvbetjening.filters.CorsInterceptor;
 import no.nav.foreldrepenger.selvbetjening.interceptors.client.ApiKeyInjectingClientInterceptor;
-import no.nav.foreldrepenger.selvbetjening.tjeneste.historikk.HistorikkConfig;
-import no.nav.foreldrepenger.selvbetjening.tjeneste.innsending.InnsendingConfig;
-import no.nav.foreldrepenger.selvbetjening.tjeneste.oppslag.OppslagConfig;
 
 @Configuration
 public class ApiConfiguration implements WebMvcConfigurer {
 
     private static final Logger LOG = LoggerFactory.getLogger(ApiConfiguration.class);
+    private final CorsInterceptor corsInterceptor;
 
-    @Inject
-    CorsInterceptor corsInterceptor;
+    public ApiConfiguration(CorsInterceptor corsInterceptor) {
+        this.corsInterceptor = corsInterceptor;
+    }
 
     @Bean
     public RestOperations restTemplate(ClientHttpRequestInterceptor... interceptors) {
-        LOG.info("Registrerer intereptorer {}", Arrays.toString(interceptors));
+        LOG.info("Registrerer interceptorer {}", Arrays.toString(interceptors));
         return new RestTemplateBuilder()
                 .interceptors(interceptors)
                 .build();
     }
 
     @Bean
-    public ClientHttpRequestInterceptor apiKeyInjectingClientInterceptor(OppslagConfig oppslag,
-            InnsendingConfig innsending, HistorikkConfig historikk) {
-        return new ApiKeyInjectingClientInterceptor(X_NAV_API_KEY,
-                ImmutableMap.<URI, String>builder()
-                        .put(innsending.getURI(), innsending.getApiKey())
-                        .put(oppslag.getURI(), oppslag.getApiKey())
-                        .put(historikk.getURI(), historikk.getApiKey())
-                        .build());
-
+    public ClientHttpRequestInterceptor apiKeyInjectingClientInterceptor(GatewayAware... configs) {
+        Builder<URI, String> builder = ImmutableMap.<URI, String>builder();
+        for (GatewayAware config : configs) {
+            builder.put(config.getUri(), config.getApiKey());
+            LOG.info(CONFIDENTIAL, "Registrerte {} ({}) ", config.getUri(), config.getApiKey());
+        }
+        return new ApiKeyInjectingClientInterceptor(builder.build());
     }
 
     @Override
