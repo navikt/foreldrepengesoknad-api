@@ -8,11 +8,9 @@ import org.springframework.beans.factory.annotation.Value;
 import org.springframework.boot.context.properties.ConfigurationProperties;
 import org.springframework.context.annotation.Configuration;
 
-import no.nav.foreldrepenger.selvbetjening.config.AbstractConfig;
-
 @ConfigurationProperties(prefix = "innsending")
 @Configuration
-public class InnsendingConfig extends AbstractConfig {
+public class InnsendingConfig {
     private static final String ENDRE = "/mottak/endre";
 
     private static final String ETTERSEND = "/mottak/ettersend";
@@ -21,24 +19,41 @@ public class InnsendingConfig extends AbstractConfig {
 
     private static final String PING = "mottak/ping";
 
+    private boolean enabled = true;
+    private final URI uri;
+    private final String apikey;
+
     public InnsendingConfig(@Value("${FPSOKNAD_MOTTAK_API_URL}") URI uri, @Value("${mottak.apikey}") String key) {
-        super(uri, key);
+        this.uri = uri;
+        this.apikey = key;
     }
 
     URI getPingURI() {
-        return uri(getUri(), PING);
+        return uri(uri, PING);
     }
 
     URI getInnsendingURI() {
-        return uri(getUri(), SEND);
+        return uri(uri, SEND);
     }
 
     URI getEndringURI() {
-        return uri(getUri(), ENDRE);
+        return uri(uri, ENDRE);
     }
 
     URI getEttersendingURI() {
-        return uri(getUri(), ETTERSEND);
+        return uri(uri, ETTERSEND);
+    }
+
+    public boolean isEnabled() {
+        return enabled;
+    }
+
+    public String getApikey() {
+        return apikey;
+    }
+
+    public URI getUri() {
+        return uri;
     }
 
 }

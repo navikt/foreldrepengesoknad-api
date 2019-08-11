@@ -1,7 +1,5 @@
 package no.nav.foreldrepenger.selvbetjening.config;
 
-import static no.nav.foreldrepenger.selvbetjening.util.EnvUtil.CONFIDENTIAL;
-
 import java.net.URI;
 import java.util.Arrays;
 
@@ -21,6 +19,9 @@ import com.google.common.collect.ImmutableMap.Builder;
 
 import no.nav.foreldrepenger.selvbetjening.filters.CorsInterceptor;
 import no.nav.foreldrepenger.selvbetjening.interceptors.client.ApiKeyInjectingClientInterceptor;
+import no.nav.foreldrepenger.selvbetjening.tjeneste.historikk.HistorikkConfig;
+import no.nav.foreldrepenger.selvbetjening.tjeneste.innsending.InnsendingConfig;
+import no.nav.foreldrepenger.selvbetjening.tjeneste.oppslag.OppslagConfig;
 
 @Configuration
 public class ApiConfiguration implements WebMvcConfigurer {
@@ -41,13 +42,15 @@ public class ApiConfiguration implements WebMvcConfigurer {
     }
 
     @Bean
-    public ClientHttpRequestInterceptor apiKeyInjectingClientInterceptor(GatewayAware... configs) {
+    public ClientHttpRequestInterceptor apiKeyInjectingClientInterceptor(OppslagConfig oppslag, InnsendingConfig mottak,
+            HistorikkConfig historikk) {
         Builder<URI, String> builder = ImmutableMap.<URI, String>builder();
-        for (GatewayAware config : configs) {
-            builder.put(config.getUri(), config.getApikey());
-            LOG.info(CONFIDENTIAL, "Registrerte {} ({}) ", config.getUri(), config.getApikey());
-        }
+        builder.put(oppslag.getUri(), oppslag.getApikey());
+        builder.put(mottak.getUri(), mottak.getApikey());
+        builder.put(historikk.getUri(), historikk.getApikey());
+
         return new ApiKeyInjectingClientInterceptor(builder.build());
+
     }
 
     @Override
