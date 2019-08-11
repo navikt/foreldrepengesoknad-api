@@ -24,7 +24,7 @@ public class HistorikkConfig {
         this.uri = uri;
     }
 
-    private URI getURI() {
+    public URI getURI() {
         return uri;
     }
 

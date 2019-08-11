@@ -26,7 +26,7 @@ public class OppslagConfig {
         this.uri = uri;
     }
 
-    private URI getURI() {
+    public URI getURI() {
         return uri;
     }
 
