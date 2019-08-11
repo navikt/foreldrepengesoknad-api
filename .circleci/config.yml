@@ -47,7 +47,7 @@ jobs:
           
 workflows:
    version: 2
-   deploy-nais-dev:
+   deploy-nais:
      jobs:
       - build:
           context: NAIS deployment 
@@ -101,7 +101,5 @@ workflows:
             branches:
               only: master
           requires:
-            - hold      
-            
-     
+            - hold       
               

@@ -2,14 +2,13 @@ package no.nav.foreldrepenger.selvbetjening.tjeneste.innsending;
 
 import static java.lang.String.format;
 import static no.nav.foreldrepenger.selvbetjening.tjeneste.innsending.InnsendingController.REST_SOKNAD;
+import static no.nav.foreldrepenger.selvbetjening.tjeneste.mellomlagring.Attachment.MAX_TOTAL_VEDLEGG_SIZE;
 import static no.nav.foreldrepenger.selvbetjening.util.Constants.ISSUER;
 import static no.nav.foreldrepenger.selvbetjening.util.EnvUtil.CONFIDENTIAL;
 import static org.apache.commons.io.FileUtils.byteCountToDisplaySize;
 import static org.springframework.http.MediaType.APPLICATION_JSON_VALUE;
-import static no.nav.foreldrepenger.selvbetjening.tjeneste.mellomlagring.Attachment.MAX_TOTAL_VEDLEGG_SIZE;
-import java.util.List;
 
-import javax.ws.rs.BadRequestException;
+import java.util.List;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -24,7 +23,6 @@ import no.nav.foreldrepenger.selvbetjening.tjeneste.innsending.domain.Kvittering
 import no.nav.foreldrepenger.selvbetjening.tjeneste.innsending.domain.Søknad;
 import no.nav.foreldrepenger.selvbetjening.tjeneste.innsending.domain.Vedlegg;
 import no.nav.foreldrepenger.selvbetjening.tjeneste.mellomlagring.StorageService;
-import no.nav.foreldrepenger.selvbetjening.util.Enabled;
 import no.nav.security.oidc.api.ProtectedWithClaims;
 
 @RestController
@@ -46,10 +44,6 @@ public class InnsendingController {
 
     @PostMapping
     public Kvittering sendInn(@RequestBody Søknad søknad) {
-        if (!Enabled.SVANGERSKAPSPENGER && søknad.type.equals("svangerskapspenger")) {
-            LOG.info("Støtter ikke svangerskapspenger foreløpig");
-            throw new BadRequestException("Svangerskapspenger er ikke støttet");
-        }
         LOG.info("Mottok søknad");
         LOG.info(CONFIDENTIAL, "{}", søknad);
         søknad.vedlegg.forEach(this::hentVedlegg);
