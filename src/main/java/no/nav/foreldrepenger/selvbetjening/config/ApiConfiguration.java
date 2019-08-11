@@ -44,8 +44,8 @@ public class ApiConfiguration implements WebMvcConfigurer {
     public ClientHttpRequestInterceptor apiKeyInjectingClientInterceptor(GatewayAware... configs) {
         Builder<URI, String> builder = ImmutableMap.<URI, String>builder();
         for (GatewayAware config : configs) {
-            builder.put(config.getUri(), config.getApiKey());
-            LOG.info(CONFIDENTIAL, "Registrerte {} ({}) ", config.getUri(), config.getApiKey());
+            builder.put(config.getUri(), config.getApikey());
+            LOG.info(CONFIDENTIAL, "Registrerte {} ({}) ", config.getUri(), config.getApikey());
         }
         return new ApiKeyInjectingClientInterceptor(builder.build());
     }

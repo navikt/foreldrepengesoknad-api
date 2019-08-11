@@ -6,10 +6,11 @@ public class AbstractConfig implements GatewayAware {
     private boolean enabled;
     private final URI uri;
 
-    private String apiKey;
+    private final String apikey;
 
-    public AbstractConfig(URI uri) {
+    public AbstractConfig(URI uri, String apikey) {
         this.uri = uri;
+        this.apikey = apikey;
     }
 
     public URI getUri() {
@@ -17,12 +18,8 @@ public class AbstractConfig implements GatewayAware {
     }
 
     @Override
-    public String getApiKey() {
-        return apiKey;
-    }
-
-    protected void setApiKey(String apiKey) {
-        this.apiKey = apiKey;
+    public String getApikey() {
+        return apikey;
     }
 
     public boolean isEnabled() {

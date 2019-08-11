@@ -20,8 +20,8 @@ public class HistorikkConfig extends AbstractConfig {
 
     private static final String DEFAULT_PING_PATH = "actuator/info";
 
-    public HistorikkConfig(@Value("${FPSOKNAD_HISTORIKK_API_URL}") URI uri) {
-        super(uri);
+    public HistorikkConfig(@Value("${FPSOKNAD_HISTORIKK_API_URL}") URI uri, @Value("${historikk.apikey}") String key) {
+        super(uri, key);
     }
 
     public URI historikkURI() {

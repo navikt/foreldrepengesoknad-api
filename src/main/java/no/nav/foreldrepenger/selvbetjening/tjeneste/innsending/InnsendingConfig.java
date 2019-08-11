@@ -21,8 +21,8 @@ public class InnsendingConfig extends AbstractConfig {
 
     private static final String PING = "mottak/ping";
 
-    public InnsendingConfig(@Value("${FPSOKNAD_MOTTAK_API_URL}") URI uri) {
-        super(uri);
+    public InnsendingConfig(@Value("${FPSOKNAD_MOTTAK_API_URL}") URI uri, @Value("${historikk.apikey}") String key) {
+        super(uri, key);
     }
 
     URI getPingURI() {

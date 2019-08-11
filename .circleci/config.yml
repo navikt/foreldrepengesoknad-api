@@ -22,12 +22,12 @@ jobs:
       
        - save_cache:
           paths:
-            - ~/.m2
+            - ~/foreldrepengesoknad-api/.m2
           key: foreldrepengesoknad-api-{{ checksum "pom.xml" }}
           
        - run: 
            name: Bygge 
-           command: mvn clean package 
+           command: mvn -P all-tests clean package 
       
        - run:
            name: Flytte testresultater

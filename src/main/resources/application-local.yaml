@@ -14,9 +14,9 @@ spring :
    http.log-request-details : true      
  
 no.nav.foreldrepenger.selvbetjening.api.virus.enabled : false  
-FORELDREPENGESOKNAD_API_FPSOKNAD_HISTORIKK_API_APIKEY_PASSWORD: foreldrepengesoknad-api+generertKey
-FORELDREPENGESOKNAD_API_FPSOKNAD_MOTTAK_API_APIKEY_PASSWORD: foreldrepengesoknad-api+generertKey
-FORELDREPENGESOKNAD_API_FPSOKNAD_OPPSLAG_API_APIKEY_PASSWORD: foreldrepengesoknad-api+generertKey
+historikk.apikey: foreldrepengesoknad-api+generertKey
+mottak.apikey: foreldrepengesoknad-api+generertKey
+oppslag.apikey: foreldrepengesoknad-api+generertKey
 FORELDREPENGESOKNAD_API_S3_CREDS_PASSWORD: tøys
 FORELDREPENGESOKNAD_API_S3_CREDS_USERNAME: tull
 FORELDREPENGESOKNAD_API_S3_ENDPOINT_URL: some.host.somewhere
