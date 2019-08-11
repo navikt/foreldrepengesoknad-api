@@ -3,15 +3,9 @@
   "application_name": "foreldrepengesoknad-api",
   "env": {
     "no_nav_security_oidc_issuer_selvbetjening_discoveryurl": "https://login.microsoftonline.com/NAVtestB2C.onmicrosoft.com/v2.0/.well-known/openid-configuration?p=B2C_1A_idporten_ver1",
-    "spring_profiles_active": "dev,onprem",
+    "spring_profiles_active": "dev",
     "FPSOKNAD_OPPSLAG_API_URL": "https://api-gw-q1.oera.no/fpsoknad-oppslag/api/",
     "FPSOKNAD_HISTORIKK_API_URL": "https://api-gw-q1.oera.no/fpinfo-historikk/api/",
-    "FPSOKNAD_MOTTAK_API_URL": "https://api-gw-q1.oera.no/fpsoknad-mottak/api/",
-    "FORELDREPENGESOKNAD_API_S3_ENDPOINT_URL" : "http://s3.nais-rook.svc.nais.local",
-    "TOGGLES_ENABLE_ENDRINGSSOKNAD": "true",
-    "TOGGLES_ENABLE_FPSAKSAKER": "true",
-    "TOGGLES_ENABLE_TPSBARN": "true",
-    "TOGGLES_ENABLE_SVANGERSKAPSPENGER": "true",
-    "TOGGLES_FNR_HEADER_FILTER": "true" 
+    "FPSOKNAD_MOTTAK_API_URL": "https://api-gw-q1.oera.no/fpsoknad-mottak/api/"
   }
 }

@@ -29,7 +29,7 @@ public class StorageConfiguration {
     @Value("${FORELDREPENGESOKNAD_API_S3_CREDS_PASSWORD}")
     private String secretKey;
 
-    @Value("${FORELDREPENGESOKNAD_API_S3_ENDPOINT_URL}")
+    @Value("${FORELDREPENGESOKNAD_API_S3_ENDPOINT_URL:http://s3.nais-rook.svc.nais.local/}")
     private String s3Endpoint;
 
     @Value("${FORELDREPENGESOKNAD_API_S3_REGION:us-east-1}")

@@ -7,12 +7,9 @@ import org.springframework.stereotype.Component;
 public class Enabled {
 
     public static boolean TPSBARN;
-    public static boolean SVANGERSKAPSPENGER;
 
     public Enabled(
-            @Value("${TOGGLES_ENABLE_TPSBARN:false}") boolean tpsBarn,
-            @Value("${TOGGLES_ENABLE_SVANGERSKAPSPENGER:false}") boolean svangerskapspenger) {
+            @Value("${TOGGLES_ENABLE_TPSBARN:true}") boolean tpsBarn) {
         Enabled.TPSBARN = tpsBarn;
-        Enabled.SVANGERSKAPSPENGER = svangerskapspenger;
     }
 }
