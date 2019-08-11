@@ -20,6 +20,16 @@ public class HistorikkConfig {
     private boolean enabled;
     private final URI uri;
 
+    private String apiKey;
+
+    public String getApiKey() {
+        return apiKey;
+    }
+
+    public void setApiKey(String apiKey) {
+        this.apiKey = apiKey;
+    }
+
     public HistorikkConfig(@Value("${FPSOKNAD_HISTORIKK_API_URL}") URI uri) {
         this.uri = uri;
     }

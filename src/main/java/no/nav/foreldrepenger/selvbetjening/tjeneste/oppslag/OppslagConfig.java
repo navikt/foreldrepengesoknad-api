@@ -21,6 +21,7 @@ public class OppslagConfig {
 
     private boolean enabled;
     private final URI uri;
+    private String apiKey;
 
     public OppslagConfig(@Value("${FPSOKNAD_OPPSLAG_API_URL}") URI uri) {
         this.uri = uri;
@@ -28,6 +29,14 @@ public class OppslagConfig {
 
     public URI getURI() {
         return uri;
+    }
+
+    public String getApiKey() {
+        return apiKey;
+    }
+
+    public void setApiKey(String apiKey) {
+        this.apiKey = apiKey;
     }
 
     URI getPingURI() {

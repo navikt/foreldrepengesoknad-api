@@ -20,6 +20,16 @@ public class InnsendingConfig {
     private static final String PING = "mottak/ping";
 
     private boolean enabled;
+    private String apiKey;
+
+    public String getApiKey() {
+        return apiKey;
+    }
+
+    public void setApiKey(String apiKey) {
+        this.apiKey = apiKey;
+    }
+
     private final URI uri;
 
     public InnsendingConfig(@Value("${FPSOKNAD_MOTTAK_API_URL}") URI uri) {
