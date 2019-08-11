@@ -25,7 +25,7 @@ public class AbstractConfig implements GatewayAware {
         this.apiKey = apiKey;
     }
 
-    protected boolean isEnabled() {
+    public boolean isEnabled() {
         return enabled;
     }
 
