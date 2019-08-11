@@ -19,8 +19,8 @@ public class InnsendingConfig {
 
     private static final String PING = "mottak/ping";
 
-    boolean enabled;
-    URI uri;
+    private boolean enabled;
+    private final URI uri;
 
     public InnsendingConfig(@Value("${FPSOKNAD_MOTTAK_API_URL}") URI uri) {
         this.uri = uri;
@@ -28,10 +28,6 @@ public class InnsendingConfig {
 
     public URI getURI() {
         return uri;
-    }
-
-    public void setUri(URI uri) {
-        this.uri = uri;
     }
 
     URI getPingURI() {

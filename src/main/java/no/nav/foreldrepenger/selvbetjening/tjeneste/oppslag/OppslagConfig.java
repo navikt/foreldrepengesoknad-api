@@ -19,19 +19,15 @@ public class OppslagConfig {
     private static final String SØKERINFO = "oppslag";
     private static final String AKTØRFNR = "oppslag/aktorfnr";
 
-    boolean enabled;
-    URI uri;
+    private boolean enabled;
+    private final URI uri;
 
     public OppslagConfig(@Value("${FPSOKNAD_OPPSLAG_API_URL}") URI uri) {
         this.uri = uri;
     }
 
-    public URI getURI() {
+    private URI getURI() {
         return uri;
-    }
-
-    public void setURI(URI uri) {
-        this.uri = uri;
     }
 
     URI getPingURI() {

@@ -16,16 +16,16 @@ public class HistorikkConfig {
     private static final String HISTORIKK = "historikk";
     private static final String HISTORIKK_PREPROD = HISTORIKK + "/preprod";
 
-    public URI getURI() {
-        return uri;
-    }
-
     private static final String DEFAULT_PING_PATH = "actuator/info";
     private boolean enabled;
     private final URI uri;
 
     public HistorikkConfig(@Value("${FPSOKNAD_HISTORIKK_API_URL}") URI uri) {
         this.uri = uri;
+    }
+
+    private URI getURI() {
+        return uri;
     }
 
     public URI historikkURI() {
