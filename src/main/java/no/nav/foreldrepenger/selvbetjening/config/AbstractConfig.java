@@ -3,9 +3,8 @@ package no.nav.foreldrepenger.selvbetjening.config;
 import java.net.URI;
 
 public class AbstractConfig implements GatewayAware {
-    private boolean enabled;
+    private boolean enabled = true;
     private final URI uri;
-
     private final String apikey;
 
     public AbstractConfig(URI uri, String apikey) {

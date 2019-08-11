@@ -5,8 +5,6 @@ import static org.springframework.http.MediaType.APPLICATION_JSON_VALUE;
 
 import javax.inject.Inject;
 
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
@@ -20,7 +18,6 @@ import no.nav.security.oidc.api.ProtectedWithClaims;
 @ProtectedWithClaims(issuer = ISSUER, claimMap = { "acr=Level4" })
 public class OppslagController {
 
-    private static final Logger LOG = LoggerFactory.getLogger(OppslagController.class);
     public static final String OPPSLAG = "/rest";
 
     private final Oppslag oppslag;

@@ -21,7 +21,7 @@ public class OppslagConfig extends AbstractConfig {
     private static final String SØKERINFO = "oppslag";
     private static final String AKTØRFNR = "oppslag/aktorfnr";
 
-    public OppslagConfig(@Value("${FPSOKNAD_OPPSLAG_API_URL}") URI uri, @Value("${historikk.apikey}") String key) {
+    public OppslagConfig(@Value("${FPSOKNAD_OPPSLAG_API_URL}") URI uri, @Value("${oppslag.apikey}") String key) {
         super(uri, key);
     }
 
