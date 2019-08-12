@@ -1,5 +1,6 @@
 package no.nav.foreldrepenger.selvbetjening.stub;
 
+import static no.nav.foreldrepenger.selvbetjening.util.EnvUtil.LOCAL;
 import static no.nav.foreldrepenger.selvbetjening.util.EnvUtil.LOCALSTACK;
 import static no.nav.foreldrepenger.selvbetjening.util.EnvUtil.NOTLOCALSTACK;
 import static no.nav.foreldrepenger.selvbetjening.util.EnvUtil.TEST;
@@ -17,7 +18,7 @@ import no.nav.foreldrepenger.selvbetjening.tjeneste.mellomlagring.Storage;
 import no.nav.foreldrepenger.selvbetjening.tjeneste.mellomlagring.StorageCrypto;
 
 @Configuration
-@Profile(TEST)
+@Profile({ TEST, LOCAL })
 public class StubConfiguration {
 
     @Bean

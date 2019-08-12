@@ -5,28 +5,31 @@ import static no.nav.foreldrepenger.selvbetjening.util.URIUtil.uri;
 
 import java.net.URI;
 
-import org.springframework.beans.factory.annotation.Value;
 import org.springframework.boot.context.properties.ConfigurationProperties;
-import org.springframework.context.annotation.Configuration;
+import org.springframework.stereotype.Component;
 
 @ConfigurationProperties(prefix = "historikk", ignoreUnknownFields = false)
-@Configuration
+@Component
 public class HistorikkConfig {
 
     private static final String HISTORIKK = "historikk";
     private static final String HISTORIKK_PREPROD = HISTORIKK + "/preprod";
     private boolean enabled = true;
-    private final URI uri;
-    private final String apikey;
-    private static final String DEFAULT_PING_PATH = "actuator/info";
+    private URI uri;
+    private String key;
 
-    public HistorikkConfig(@Value("${FPSOKNAD_HISTORIKK_API_URL}") URI uri, @Value("${apikey.historikk}") String key) {
-        this.uri = uri;
-        this.apikey = key;
+    public void setKey(String key) {
+        this.key = key;
     }
+
+    private static final String DEFAULT_PING_PATH = "actuator/info";
 
     public URI historikkURI() {
         return uri(uri, HISTORIKK + "/me");
+    }
+
+    public void setUri(URI uri) {
+        this.uri = uri;
     }
 
     public URI historikkPreprodURI(String fnr) {
@@ -41,8 +44,8 @@ public class HistorikkConfig {
         return enabled;
     }
 
-    public String getApikey() {
-        return apikey;
+    public String getKey() {
+        return key;
     }
 
     public URI getUri() {

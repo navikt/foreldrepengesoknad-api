@@ -5,12 +5,11 @@ import static no.nav.foreldrepenger.selvbetjening.util.URIUtils.uri;
 
 import java.net.URI;
 
-import org.springframework.beans.factory.annotation.Value;
 import org.springframework.boot.context.properties.ConfigurationProperties;
-import org.springframework.context.annotation.Configuration;
+import org.springframework.stereotype.Component;
 
-@ConfigurationProperties(prefix = "oppslag", ignoreUnknownFields = false)
-@Configuration
+@ConfigurationProperties(prefix = "oppslag")
+@Component
 public class OppslagConfig {
 
     private static final String FNR = "fnr";
@@ -20,20 +19,27 @@ public class OppslagConfig {
     private static final String AKTØRFNR = "oppslag/aktorfnr";
 
     private boolean enabled = true;
-    private final URI uri;
-    private final String apikey;
-
-    public OppslagConfig(@Value("${FPSOKNAD_OPPSLAG_API_URL}") URI uri, @Value("${oppslag.apikey}") String key) {
-        this.uri = uri;
-        this.apikey = key;
-    }
+    private URI uri;
+    private String key;
 
     public boolean isEnabled() {
         return enabled;
     }
 
-    public String getApikey() {
-        return apikey;
+    public void setUri(URI uri) {
+        this.uri = uri;
+    }
+
+    public URI getUri() {
+        return uri;
+    }
+
+    public String getKey() {
+        return key;
+    }
+
+    public void setKey(String key) {
+        this.key = key;
     }
 
     URI getPingURI() {
@@ -58,7 +64,4 @@ public class OppslagConfig {
                 + ", søkerinfoURI=" + getSøkerinfoURI() + ", aktørIdURI=" + getAktørIdURI("42") + "]";
     }
 
-    public URI getUri() {
-        return uri;
-    }
 }

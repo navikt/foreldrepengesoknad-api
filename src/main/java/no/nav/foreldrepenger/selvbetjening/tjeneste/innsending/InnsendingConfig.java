@@ -4,12 +4,11 @@ import static no.nav.foreldrepenger.selvbetjening.util.URIUtils.uri;
 
 import java.net.URI;
 
-import org.springframework.beans.factory.annotation.Value;
 import org.springframework.boot.context.properties.ConfigurationProperties;
-import org.springframework.context.annotation.Configuration;
+import org.springframework.stereotype.Component;
 
-@ConfigurationProperties(prefix = "innsending")
-@Configuration
+@ConfigurationProperties(prefix = "mottak")
+@Component
 public class InnsendingConfig {
     private static final String ENDRE = "/mottak/endre";
 
@@ -20,12 +19,15 @@ public class InnsendingConfig {
     private static final String PING = "mottak/ping";
 
     private boolean enabled = true;
-    private final URI uri;
-    private final String apikey;
+    private URI uri;
+    private String key;
 
-    public InnsendingConfig(@Value("${FPSOKNAD_MOTTAK_API_URL}") URI uri, @Value("${mottak.apikey}") String key) {
+    public void setUri(URI uri) {
         this.uri = uri;
-        this.apikey = key;
+    }
+
+    public void setKey(String key) {
+        this.key = key;
     }
 
     URI getPingURI() {
@@ -48,8 +50,8 @@ public class InnsendingConfig {
         return enabled;
     }
 
-    public String getApikey() {
-        return apikey;
+    public String getKey() {
+        return key;
     }
 
     public URI getUri() {

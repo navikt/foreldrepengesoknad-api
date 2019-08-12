@@ -26,8 +26,7 @@ public class InnsynConfig {
     URI mottakURI;
     URI oppslagURI;
 
-    public InnsynConfig(@Value("${FPSOKNAD_MOTTAK_API_URL}") URI mottakURI,
-            @Value("${FPSOKNAD_OPPSLAG_API_URL}") URI oppslagURI) {
+    public InnsynConfig(@Value("${mottak.uri}") URI mottakURI, @Value("${oppslag.uri}") URI oppslagURI) {
         this.mottakURI = mottakURI;
         this.oppslagURI = oppslagURI;
     }

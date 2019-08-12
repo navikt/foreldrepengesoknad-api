@@ -13,15 +13,22 @@ no.nav.security.oidc:
 spring :
    http.log-request-details : true      
  
-no.nav.foreldrepenger.selvbetjening.api.virus.enabled : false  
-historikk.apikey : foreldrepengesoknad-api+generertKey
-mottak.apikey : foreldrepengesoknad-api+generertKey
-oppslag.apikey : foreldrepengesoknad-api+generertKey
+no.nav.foreldrepenger.selvbetjening.api.virus.enabled : false 
+ 
+historikk :
+  key: foreldrepengesoknad-api-historikk
+  uri: http://localhost:9000/api/historikk
+   
+mottak:
+  key: foreldrepengesoknad-api-mottak
+  uri: http://localhost:9000/api/mottak
+     
+oppslag:
+  key: foreldrepengesoknad-ap-oppslag
+  uri: http://localhost:9000/api/oppslag
+   
 FORELDREPENGESOKNAD_API_S3_CREDS_PASSWORD: tøys
 FORELDREPENGESOKNAD_API_S3_CREDS_USERNAME: tull
 FORELDREPENGESOKNAD_API_S3_ENDPOINT_URL: some.host.somewhere
 FORELDREPENGESOKNAD_API_STORAGE_PASSWORD: tullogtøys
-FPSOKNAD_HISTORIKK_API_URL: http://localhost:9002/api
-FPSOKNAD_MOTTAK_API_URL: http://localhost:9001/api
-FPSOKNAD_OPPSLAG_API_URL: http://localhost:9000/api
 TOGGLES_ENABLE_TPSBARN: true

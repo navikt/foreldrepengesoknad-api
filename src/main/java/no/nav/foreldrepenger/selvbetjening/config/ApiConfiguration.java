@@ -45,10 +45,9 @@ public class ApiConfiguration implements WebMvcConfigurer {
     public ClientHttpRequestInterceptor apiKeyInjectingClientInterceptor(OppslagConfig oppslag, InnsendingConfig mottak,
             HistorikkConfig historikk) {
         Builder<URI, String> builder = ImmutableMap.<URI, String>builder();
-        builder.put(oppslag.getUri(), oppslag.getApikey());
-        builder.put(mottak.getUri(), mottak.getApikey());
-        builder.put(historikk.getUri(), historikk.getApikey());
-
+        builder.put(oppslag.getUri(), oppslag.getKey());
+        builder.put(mottak.getUri(), mottak.getKey());
+        builder.put(historikk.getUri(), historikk.getKey());
         return new ApiKeyInjectingClientInterceptor(builder.build());
 
     }
