@@ -50,8 +50,7 @@ public class OppslagTest {
 
     @Before
     public void restOperations() {
-        oppslagConnection = new OppslagConnection(builder
-                .build(), oppslagConfig);
+        oppslagConnection = new OppslagConnection(builder.build(), oppslagConfig);
         oppslag = new OppslagTjeneste(oppslagConnection);
     }
 

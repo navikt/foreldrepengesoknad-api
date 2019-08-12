@@ -30,7 +30,7 @@ import no.nav.foreldrepenger.selvbetjening.vedlegg.Image2PDFConverter;
 import no.nav.security.spring.oidc.SpringOIDCRequestContextHolder;
 
 @RunWith(SpringRunner.class)
-@TestPropertySource(properties = { "FPSOKNAD_MOTTAK_API_URL: http://www.mottak.no",
+@TestPropertySource(properties = { "mottak.uri: http://www.mottak.no",
         "spring.cloud.vault.enabled=false" })
 @ContextConfiguration(classes = { NotFoundException.class, InnsendingConfig.class, Image2PDFConverter.class,
         TokenUtil.class, SpringOIDCRequestContextHolder.class })

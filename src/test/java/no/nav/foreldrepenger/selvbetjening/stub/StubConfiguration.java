@@ -40,7 +40,7 @@ public class StubConfiguration {
     }
 
     @Bean(name = "stubbedLocalStackContainer")
-    @Profile("localstack")
+    @Profile(LOCALSTACK)
     public StubbedLocalStackContainer stubbedLocalStackContainer() {
         return new StubbedLocalStackContainer().withServices(S3);
     }
