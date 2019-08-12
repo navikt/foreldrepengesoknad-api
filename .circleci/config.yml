@@ -5,10 +5,9 @@ orbs:
   
 jobs:
    build:
-     machine:
-       enabled: true
+    
      working_directory: ~/foreldrepengesoknad-api
-     docker:
+     machine:
        - image: circleci/openjdk:11-jdk
      steps:
      
