@@ -11,10 +11,7 @@ jobs:
      steps:
      
        - checkout  
-       
-       - setup_remote_docker:
-            docker_layer_caching: true     
-      
+        
        - restore_cache: 
           name: Hente cache 
           key: foreldrepengesoknad-api-{{ checksum "pom.xml" }}
