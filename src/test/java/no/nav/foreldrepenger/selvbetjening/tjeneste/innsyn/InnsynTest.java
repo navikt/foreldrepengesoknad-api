@@ -27,7 +27,7 @@ import no.nav.foreldrepenger.selvbetjening.util.TokenUtil;
 import no.nav.security.spring.oidc.SpringOIDCRequestContextHolder;
 
 @RunWith(SpringRunner.class)
-@TestPropertySource(properties = { "FPSOKNAD_MOTTAK_API_URL = http://www.mottak.no/api",
+@TestPropertySource(properties = { "mottak.uri = http://www.mottak.no/api",
         "FPSOKNAD_OPPSLAG_API_URL: http://www.oppslag.no/api", "spring.cloud.vault.enabled=false" })
 @ContextConfiguration(classes = { NotFoundException.class, InnsynConfig.class, TokenUtil.class,
         SpringOIDCRequestContextHolder.class })
