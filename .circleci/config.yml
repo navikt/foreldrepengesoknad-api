@@ -1,11 +1,12 @@
 version: 2.1
-executorType: machine
 orbs:
   nais: navikt/nais-deployment@1.4.1
   slack: circleci/slack@3.3.0
   
 jobs:
    build:
+      machine:
+        enabled: true
      working_directory: ~/foreldrepengesoknad-api
      docker:
        - image: circleci/openjdk:11-jdk
