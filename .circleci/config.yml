@@ -5,13 +5,15 @@ orbs:
   
 jobs:
    build:
-     machine: true
      working_directory: ~/foreldrepengesoknad-api
      docker:
        - image: circleci/openjdk:11-jdk
      steps:
      
-       - checkout       
+       - checkout  
+       
+       - setup_remote_docker:
+            docker_layer_caching: true     
       
        - restore_cache: 
           name: Hente cache 
@@ -27,8 +29,9 @@ jobs:
           key: foreldrepengesoknad-api-{{ checksum "pom.xml" }}
           
        - run: 
+           machine: true
            name: Bygge 
-           command: mvn -P all-tests clean package 
+           command: mvn clean package 
       
        - run:
            name: Flytte testresultater
