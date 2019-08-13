@@ -27,18 +27,14 @@ public class CorsInterceptor extends HandlerInterceptorAdapter {
     @Inject
     public CorsInterceptor(@Value("${no.nav.foreldrepenger.api.allowed.origins:" +
             "https://engangsstonad.nais.oera-q.local," +
-            "https://engangsstonad-t10.nav.no," +
             "https://engangsstonad-q.nav.no," +
             "https://engangsstonad.nav.no," +
             "https://foreldrepengesoknad.nais.oera-q.local, " +
-            "https://foreldrepengesoknad-t10.nav.no," +
             "https://foreldrepengesoknad-q.nav.no," +
             "https://foreldrepengesoknad.nav.no," +
             "https://foreldrepengeoversikt.nais.oera-q.local," +
-            "https://foreldrepenger-t10.nav.no," +
             "https://foreldrepenger-q.nav.no," +
             "https://foreldrepenger.nav.no," +
-            "https://svangerskapspengesoknad-t10.nav.no," +
             "https://svangerskapspengesoknad-q.nav.no," +
             "https://svangerskapspengesoknad.nav.no," +
             "}") String... allowedOrigins) {

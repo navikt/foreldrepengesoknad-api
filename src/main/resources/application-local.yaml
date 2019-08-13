@@ -27,8 +27,9 @@ oppslag:
   key: foreldrepengesoknad-ap-oppslag
   uri: http://localhost:9000/api/oppslag
    
-FORELDREPENGESOKNAD_API_S3_CREDS_PASSWORD: tøys
-FORELDREPENGESOKNAD_API_S3_CREDS_USERNAME: tull
-FORELDREPENGESOKNAD_API_S3_ENDPOINT_URL: some.host.somewhere
-FORELDREPENGESOKNAD_API_STORAGE_PASSWORD: tullogtøys
-TOGGLES_ENABLE_TPSBARN: true
+s3 : 
+  username : user
+  password : pwd
+  url : some.host.somewhere
+storage :
+  passphrase: tullogtøys
