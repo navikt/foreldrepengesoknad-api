@@ -36,5 +36,4 @@ public class HistorikkController {
     public String toString() {
         return getClass().getSimpleName() + " [historikk=" + historikk + "]";
     }
-
 }
