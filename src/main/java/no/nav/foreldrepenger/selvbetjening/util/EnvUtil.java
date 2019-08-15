@@ -14,6 +14,7 @@ public final class EnvUtil {
     public static final String LOCALSTACK = "localstack";
     public static final String NOTLOCALSTACK = NOT + LOCALSTACK;
     public static final String NOTLOCAL = NOT + LOCAL;
+    public static final String DEFAULT = "default";
 
     public static final Marker CONFIDENTIAL = MarkerFactory.getMarker("CONFIDENTIAL");
 

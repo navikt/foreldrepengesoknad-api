@@ -1,8 +1,8 @@
 package no.nav.foreldrepenger.selvbetjening.config;
 
-import static no.nav.foreldrepenger.historikk.util.EnvUtil.DEFAULT;
-import static no.nav.foreldrepenger.historikk.util.EnvUtil.DEV;
-import static no.nav.foreldrepenger.historikk.util.EnvUtil.LOCAL;
+import static no.nav.foreldrepenger.selvbetjening.util.EnvUtil.DEFAULT;
+import static no.nav.foreldrepenger.selvbetjening.util.EnvUtil.DEV;
+import static no.nav.foreldrepenger.selvbetjening.util.EnvUtil.LOCAL;
 
 public class ClusterAwareSpringProfileResolver {
 
