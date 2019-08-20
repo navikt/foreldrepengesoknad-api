@@ -81,10 +81,10 @@ workflows:
               
       - slack/approval-notification:
            webhook: $SLACK
-           message: "Godkjenn deploy til prod av $CIRCLE_PROJECT_REPONAME"
+           message: "Godkjenn deploy til prod-sbs av $CIRCLE_PROJECT_REPONAME"
            url: https://circleci.com/workflow-run/$CIRCLE_WORKFLOW_WORKSPACE_ID
            requires:
-            - dev_deploy 
+            - dev-sbs-deploy 
                    
       - nais/deploy:
           name: prod-sbs-deploy
