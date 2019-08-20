@@ -13,8 +13,8 @@ jobs:
        - checkout 
        
        - run
-         name : sonar analysis
-         command : mvn sonar:sonar -Dsonar.projectKey=navikt_foreldrepengesoknad-api  -Dsonar.organization=navit \
+          name : sonar analysis
+          command : mvn sonar:sonar -Dsonar.projectKey=navikt_foreldrepengesoknad-api  -Dsonar.organization=navit \
                    -Dsonar.host.url=https://sonarcloud.io \
                    -Dsonar.login=$SONAR 
         
