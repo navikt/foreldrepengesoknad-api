@@ -13,8 +13,7 @@ jobs:
        - checkout 
        
        - run
-           name : sonar analysis
-           command : mvn sonar:sonar -Dsonar.projectKey=navikt_foreldrepengesoknad-api  -Dsonar.organization=navit \
+          command : mvn sonar:sonar -Dsonar.projectKey=navikt_foreldrepengesoknad-api  -Dsonar.organization=navit \
                    -Dsonar.host.url=https://sonarcloud.io \
                    -Dsonar.login=$SONAR 
         
@@ -32,7 +31,6 @@ jobs:
           key: foreldrepengesoknad-api-{{ checksum "pom.xml" }}
           
        - run: 
-           machine: true
            name: Bygge 
            command: mvn clean package 
       
