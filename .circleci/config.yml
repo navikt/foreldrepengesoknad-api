@@ -10,9 +10,9 @@ jobs:
        - image: circleci/openjdk:11-jdk
      steps:
      
-       - checkout 
-       
-       - run
+       - checkout
+        
+       - run:
           command : mvn sonar:sonar -Dsonar.projectKey=navikt_foreldrepengesoknad-api  -Dsonar.organization=navit \
                    -Dsonar.host.url=https://sonarcloud.io \
                    -Dsonar.login=$SONAR 
