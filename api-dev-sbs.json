@@ -1,6 +1,6 @@
 {
   "ingress": "https://foreldrepengesoknad-api-q.nav.no",
-  "ingress-internal" : "https://foreldrepengesoknad.nais.oera-q.local",
+  "ingress_internal" : "https://foreldrepengesoknad.nais.oera-q.local",
   "application_name": "foreldrepengesoknad-api",
   "env": {
     "no_nav_security_oidc_issuer_selvbetjening_discoveryurl": "https://login.microsoftonline.com/NAVtestB2C.onmicrosoft.com/v2.0/.well-known/openid-configuration?p=B2C_1A_idporten_ver1",
