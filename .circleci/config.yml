@@ -56,7 +56,7 @@ workflows:
       - nais/deploy:
           name: dev_deploy
           enable-vars: true
-          template-vars: dev.json
+          template-vars: api-prod-sbs.json
           build-and-push-docker-image: false
           context: NAIS deployment
           repo: navikt/$CIRCLE_PROJECT_REPONAME
@@ -89,11 +89,11 @@ workflows:
       - nais/deploy:
           name: prod_deploy
           enable-vars: true
-          template-vars: prod.json
+          template-vars: api-prod-sbs.json
           build-and-push-docker-image: false
           context: NAIS deployment
-          repo: navikt/$CIRCLE_PROJECT_REPONAME
-          image: navikt/$CIRCLE_PROJECT_REPONAME
+          repo: $CIRCLE_PROJECT_USERNAME/$CIRCLE_PROJECT_REPONAME
+          image: $CIRCLE_PROJECT_USERNAME/$CIRCLE_PROJECT_REPONAME
           github-app-id: 20250
           nais-template: naiserator.yaml
           environment: prod-sbs
