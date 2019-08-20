@@ -2,17 +2,13 @@ no.nav:
    foreldrepenger:
       selvbetjening:
          api:
-            toggles:
-               fnr-header-filter:false
-            virus:
-               enabled: true 
+           virus:
+             enabled: true 
    security.oidc:
       issuers: selvbetjening
       issuer:
          selvbetjening:
-            discoveryurl: <Set from Fasit>
-            accepted_audience: <Set from Fasit>
-            cookie_name: selvbetjening-idtoken   
+           cookie_name: selvbetjening-idtoken   
 info:
    app:
      version: '@project.version@'
