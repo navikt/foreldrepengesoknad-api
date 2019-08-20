@@ -13,9 +13,7 @@ jobs:
        - checkout
         
        - run:
-          command : mvn sonar:sonar -Dsonar.projectKey=navikt_foreldrepengesoknad-api  -Dsonar.organization=navit \
-                   -Dsonar.host.url="https://sonarcloud.io" \
-                   -Dsonar.login=$SONAR 
+          command : mvn sonar:sonar -Dsonar.projectKey=navikt_foreldrepengesoknad-api  -Dsonar.organization=navit -Dsonar.host.url=https://sonarcloud.io -Dsonar.login=$SONAR 
         
        - restore_cache: 
           name: Hente cache 
