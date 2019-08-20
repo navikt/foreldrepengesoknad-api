@@ -12,9 +12,7 @@ jobs:
      
        - checkout
         
-       - run:
-          command : mvn sonar:sonar -Dsonar.projectKey=navikt_foreldrepengesoknad-api  -Dsonar.organization=navit -Dsonar.host.url=https://sonarcloud.io -Dsonar.login=$SONAR 
-        
+       
        - restore_cache: 
           name: Hente cache 
           key: foreldrepengesoknad-api-{{ checksum "pom.xml" }}
@@ -31,6 +29,9 @@ jobs:
        - run: 
            name: Bygge 
            command: mvn clean package 
+           
+       - run:
+          command : mvn sonar:sonar -Dsonar.projectKey=navikt_foreldrepengesoknad-api  -Dsonar.organization=navit -Dsonar.host.url=https://sonarcloud.io -Dsonar.login=$SONAR    
       
        - run:
            name: Flytte testresultater
