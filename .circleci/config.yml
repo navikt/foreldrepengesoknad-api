@@ -44,7 +44,7 @@ jobs:
           path: ~/test-results/junit  
           
        - nais/docker-deploy:
-          image: navikt/$CIRCLE_PROJECT_REPONAME	
+          image: $CIRCLE_PROJECT_USERNAME/$CIRCLE_PROJECT_REPONAME	
           
 workflows:
    version: 2
@@ -54,13 +54,13 @@ workflows:
           context: NAIS deployment 
                             
       - nais/deploy:
-          name: dev_deploy
+          name: dev-sbs-deploy
           enable-vars: true
           template-vars: api-prod-sbs.json
           build-and-push-docker-image: false
           context: NAIS deployment
-          repo: navikt/$CIRCLE_PROJECT_REPONAME
-          image: navikt/$CIRCLE_PROJECT_REPONAME
+          repo: $CIRCLE_PROJECT_USERNAME/$CIRCLE_PROJECT_REPONAME
+          image: $CIRCLE_PROJECT_USERNAME/$CIRCLE_PROJECT_REPONAME
           github-app-id: 20250
           nais-template: naiserator.yaml
           environment: dev-sbs
@@ -77,7 +77,7 @@ workflows:
             branches:
               only: master
           requires:
-            - dev_deploy 
+            - dev-sbs-deploy 
               
       - slack/approval-notification:
            webhook: $SLACK
@@ -87,7 +87,7 @@ workflows:
             - dev_deploy 
                    
       - nais/deploy:
-          name: prod_deploy
+          name: prod-sbs-deploy
           enable-vars: true
           template-vars: api-prod-sbs.json
           build-and-push-docker-image: false
