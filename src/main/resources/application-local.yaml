@@ -4,7 +4,6 @@ management :
      health.show-details : always
                    
 no.nav.security.oidc:
-  issuers: selvbetjening
   issuer.selvbetjening : 
      discoveryurl: http://metadata
      accepted_audience: aud-localhost
@@ -13,7 +12,8 @@ no.nav.security.oidc:
 spring :
    http.log-request-details : true      
  
-no.nav.foreldrepenger.selvbetjening.api.virus.enabled : false 
+no.nav:
+  foreldrepenger.selvbetjening.api.virus.enabled : false 
  
 historikk :
   key: foreldrepengesoknad-api-historikk

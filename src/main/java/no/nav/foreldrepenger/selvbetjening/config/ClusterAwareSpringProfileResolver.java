@@ -8,7 +8,11 @@ public class ClusterAwareSpringProfileResolver {
 
     private static final String NAIS_CLUSTER_NAME = "NAIS_CLUSTER_NAME";
 
-    public String getProfile() {
+    private ClusterAwareSpringProfileResolver() {
+
+    }
+
+    public static String getProfile() {
         return clusterFra(System.getenv(NAIS_CLUSTER_NAME));
     }
 
