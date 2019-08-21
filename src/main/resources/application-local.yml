@@ -1,7 +1,11 @@
 management :
-   endpoints.web.exposure.include:  '*'
+   endpoints:
+     web:
+       exposure:
+         include:  '*'
    endpoint: 
-     health.show-details : always
+     health:
+       show-details : always
                    
 no.nav.security.oidc:
   issuer.selvbetjening : 
@@ -10,10 +14,15 @@ no.nav.security.oidc:
      cookie_name: localhost-idtoken
      
 spring :
-   http.log-request-details : true      
+   http:
+     log-request-details : true      
  
 no.nav:
-  foreldrepenger.selvbetjening.api.virus.enabled : false 
+  foreldrepenger:
+    selvbetjening:
+      api:
+        virus:
+          enabled : false 
  
 historikk :
   key: foreldrepengesoknad-api-historikk

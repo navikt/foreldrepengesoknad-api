@@ -25,18 +25,14 @@ public final class EnvUtil {
     }
 
     public static boolean isDevOrLocal(Environment env) {
-        return env == null || isLocal(env) || isDev(env);
+        return isLocal(env) || isDev(env);
     }
 
-    public static boolean isDev(Environment env) {
+    private static boolean isDev(Environment env) {
         return env.acceptsProfiles(Profiles.of(DEV, DEV_GCP));
     }
 
-    public static boolean isLocal(Environment env) {
-        return env.acceptsProfiles(Profiles.of(LOCAL));
-    }
-
-    public static boolean isProd(Environment env) {
-        return !isDevOrLocal(env);
+    private static boolean isLocal(Environment env) {
+        return env == null || env.acceptsProfiles(Profiles.of(LOCAL));
     }
 }
