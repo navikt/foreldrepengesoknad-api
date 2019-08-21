@@ -10,6 +10,8 @@ public final class EnvUtil {
     private static final String NOT = "!";
     public static final String TEST = "test";
     public static final String DEV = "dev";
+    public static final String DEV_GCP = "dev-gcp";
+
     public static final String LOCAL = "local";
     public static final String LOCALSTACK = "localstack";
     public static final String NOTLOCALSTACK = NOT + LOCALSTACK;
@@ -27,7 +29,7 @@ public final class EnvUtil {
     }
 
     public static boolean isDev(Environment env) {
-        return env.acceptsProfiles(Profiles.of(DEV));
+        return env.acceptsProfiles(Profiles.of(DEV, DEV_GCP));
     }
 
     public static boolean isLocal(Environment env) {

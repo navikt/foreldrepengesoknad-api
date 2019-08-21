@@ -4,6 +4,7 @@ import static io.swagger.models.Scheme.HTTP;
 import static io.swagger.models.Scheme.HTTPS;
 import static java.util.stream.Collectors.toSet;
 import static no.nav.foreldrepenger.selvbetjening.util.EnvUtil.DEV;
+import static no.nav.foreldrepenger.selvbetjening.util.EnvUtil.DEV_GCP;
 import static springfox.documentation.spi.DocumentationType.SWAGGER_2;
 
 import java.util.Set;
@@ -20,7 +21,7 @@ import springfox.documentation.spring.web.plugins.Docket;
 import springfox.documentation.swagger2.annotations.EnableSwagger2;
 
 @Configuration
-@Profile(DEV)
+@Profile({ DEV, DEV_GCP })
 @EnableSwagger2
 public class SwaggerConfiguration {
 
