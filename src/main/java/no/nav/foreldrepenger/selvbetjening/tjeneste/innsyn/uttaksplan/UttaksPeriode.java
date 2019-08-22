@@ -24,7 +24,7 @@ public class UttaksPeriode {
     @Valid
     private final LukketPeriode periode;
     private final StønadskontoType stønadskontotype;
-    private final Integer trekkDager;
+    private final Double trekkDager;
     private final Integer arbeidstidProsent;
     private final Integer utbetalingprosent;
     private final Boolean gjelderAnnenPart;
@@ -45,7 +45,7 @@ public class UttaksPeriode {
             @JsonProperty("samtidigUttak") Boolean samtidigUttak,
             @JsonProperty("fom") LocalDate fom, @JsonProperty("tom") LocalDate tom,
             @JsonProperty("stønadskontotype") @JsonAlias("trekkonto") StønadskontoType stønadskontotype,
-            @JsonProperty("trekkDager") Integer trekkDager,
+            @JsonProperty("trekkDager") Double trekkDager,
             @JsonProperty("arbeidstidprosent") Integer arbeidstidProsent,
             @JsonProperty("utbetalingprosent") Integer utbetalingprosent,
             @JsonProperty("gjelderAnnenPart") Boolean gjelderAnnenPart,
@@ -146,7 +146,7 @@ public class UttaksPeriode {
         return stønadskontotype;
     }
 
-    public Integer getTrekkDager() {
+    public Double getTrekkDager() {
         return trekkDager;
     }
 
