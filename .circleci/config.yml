@@ -17,7 +17,8 @@ jobs:
        - restore_cache: 
           name: Hente cache 
           key: foreldrepengesoknad-api-{{ checksum "pom.xml" }}
-      
+       
+       
        - run:
           name: Lagre avhengigheter  
           command : mvn dependency:go-offline
