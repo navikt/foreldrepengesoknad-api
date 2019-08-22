@@ -11,7 +11,6 @@ import com.fasterxml.jackson.annotation.JsonInclude;
 import com.neovisionaries.i18n.CountryCode;
 
 import no.nav.foreldrepenger.selvbetjening.tjeneste.oppslag.dto.PersonDto;
-import no.nav.foreldrepenger.selvbetjening.util.Enabled;
 
 @JsonInclude(NON_EMPTY)
 public class Person {
@@ -38,9 +37,8 @@ public class Person {
         this.ikkeNordiskEøsLand = ikkeNordiskEøsLand(dto.landKode);
         this.bankkonto = dto.bankkonto;
 
-        if (Enabled.TPSBARN && dto.barn != null) {
-            this.barn = new ArrayList<>();
-            this.barn.addAll(dto.barn);
+        if (dto.barn != null) {
+            this.barn = new ArrayList<>(dto.barn);
         }
 
     }
