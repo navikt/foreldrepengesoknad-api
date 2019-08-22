@@ -31,8 +31,7 @@ jobs:
            command: mvn clean package 
            
        - run:
-          command : mvn sonar:sonar -Dsonar.projectKey=navikt_foreldrepengesoknad-api  -Dsonar.organization=navit -Dsonar.host.url=https://sonarcloud.io -Dsonar.login=$SONAR    
-      
+          command: mvn -Dsonar.projectKey=$CIRCLE_PROJECT_USERNAME_$CIRCLE_PROJECT_REPONAME -Dsonar.organization=navit -Dsonar.host.url=https://sonarcloud.io -Dsonar.login=$SONAR clean package sonar:sonar       
        - run:
            name: Flytte testresultater
            command: |
