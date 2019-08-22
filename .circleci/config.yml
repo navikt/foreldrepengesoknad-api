@@ -28,7 +28,7 @@ jobs:
           key: foreldrepengesoknad-api-{{ checksum "pom.xml" }}
           
           
-        - run :
+       - run :
           name : Set maven versjon
           command : mvn versions:set -B -DnewVersion=$RELEASE_VERSION 
        - run: 
