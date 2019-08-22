@@ -11,7 +11,10 @@ jobs:
      steps:
      
        - checkout
-        
+       
+       - run : 
+          name : Set environment variables
+          command : echo "export RELEASE_VERSION=\"$MAJOR_VERSION-$CIRCLE_BUILD_NUM-$(git rev-parse --short HEAD)\"" >> $BASH_ENV
        
        - restore_cache: 
           name: Hente cache 
@@ -25,13 +28,19 @@ jobs:
           paths:
             - ~/foreldrepengesoknad-api/.m2
           key: foreldrepengesoknad-api-{{ checksum "pom.xml" }}
+             
+       - run :
+          name : Set maven versjon
+          command : mvn versions:set -B -DnewVersion=$RELEASE_VERSION 
           
        - run: 
-           name: Bygge 
-           command: mvn clean package 
-           
-       - run:
-          command: mvn -Dsonar.projectKey=navikt_$CIRCLE_PROJECT_REPONAME -Dsonar.organization=navit -Dsonar.host.url=https://sonarcloud.io -Dsonar.login=$SONAR clean package sonar:sonar       
+          name: Bygge 
+          command: mvn -Dsonar.projectKey=navikt_$CIRCLE_PROJECT_REPONAME -Dsonar.organization=navit -Dsonar.host.url=https://sonarcloud.io -Dsonar.login=$SONAR clean package sonar:sonar 
+          
+       - run :
+          name : Revert maven versjon
+          command :  mvn versions:revert    
+          
        - run:
            name: Flytte testresultater
            command: |
