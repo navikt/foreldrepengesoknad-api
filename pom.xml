@@ -18,6 +18,7 @@
     </parent>
 
     <properties>
+        <httpclient.version>4.5.8</httpclient.version>
         <timestamp>${maven.build.timestamp}</timestamp>
         <maven.build.timestamp.format>yyyy-MM-dd HH:mm</maven.build.timestamp.format>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
