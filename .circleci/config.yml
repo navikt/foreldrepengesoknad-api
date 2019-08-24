@@ -16,7 +16,8 @@ executors:
       - image: navikt/deployment-cli:v0.2.0  
 jobs:
    build:
-     executor: openjdk
+     machine: true
+#     executor: openjdk
      steps:
        - checkout   
        - env/set-env-var:
