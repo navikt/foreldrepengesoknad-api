@@ -7,7 +7,7 @@ orbs:
 executors:
   openjdk:
     working_directory: ~/foreldrepengesoknad-api
-    docker:
+    machine:
       - image: circleci/openjdk:11-jdk
     environment:
       MAJOR_VERSION: 2   
@@ -16,8 +16,7 @@ executors:
       - image: navikt/deployment-cli:v0.2.0  
 jobs:
    build:
-     machine: true
-#     executor: openjdk
+     executor: openjdk
      steps:
        - checkout   
        - env/set-env-var:
