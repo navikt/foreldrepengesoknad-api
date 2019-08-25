@@ -94,8 +94,17 @@ jobs:
       - nais-deploy:
           template-vars: api-prod-sbs.json
           environment: prod-sbs
+          
+   docker-deploy:
+    executor: go
+    steps:
+     - env/attach-env
+     - nais/docker-deploy:
+         registry: docker.pkg.github.com
+         image: $IMAGE
+         tag: $RELEASE_VERSION       
 
-commands:
+commands: 
   nais-deploy:
     parameters:
       template-vars:
@@ -121,7 +130,9 @@ workflows:
    deploy-nais:
      jobs:
       - build:
-          context: familie-ci    
+          context: familie-ci
+      - docker-deploy:
+          context: NAIS deployment    
       - dev-deploy:
           context: NAIS deployment
           filters:
