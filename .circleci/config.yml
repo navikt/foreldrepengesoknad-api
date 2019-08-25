@@ -7,18 +7,29 @@ orbs:
 executors:
   openjdk:
     working_directory: ~/foreldrepengesoknad-api
-    docker:
-      - image: circleci/openjdk:11-jdk
-    environment:
-      MAJOR_VERSION: 2   
+#    docker:
+#      - image: circleci/openjdk:11-jdk
+#    environment:
+#      MAJOR_VERSION: 2   
   go:
     docker:
       - image: navikt/deployment-cli:v0.2.0  
 jobs:
    build:
-     executor: openjdk
+     environment:
+       MAJOR_VERSION: 2 
+       JAVA_HOME: /tmp/java
+        
+     machine:
+      enabled: true
+#     executor: openjdk
      steps:
        - checkout   
+       - restore_cache:
+          key: java11-{{ checksum ".circleci/install_java.sh" }}
+       - run:
+          name: Install java11
+          command: cat ${JAVA_HOME}/release || bash .circleci/install_java.sh
        - env/set-env-var:
           var-name: RELEASE_VERSION
           var-value: $MAJOR_VERSION-$CIRCLE_BUILD_NUM-$(git rev-parse --short HEAD)
