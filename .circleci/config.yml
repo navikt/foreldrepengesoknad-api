@@ -5,8 +5,8 @@ orbs:
   env: christeredvartsen/persist-env@0.0.4
   
 executors:
-  openjdk:
-    working_directory: ~/foreldrepengesoknad-api
+#  openjdk:
+#    working_directory: ~/foreldrepengesoknad-api
 #    docker:
 #      - image: circleci/openjdk:11-jdk
 #    environment:
@@ -77,11 +77,7 @@ jobs:
 
        - store_artifacts:
           path: ~/test-results/junit  
-          
-       - nais/docker-deploy:
-          registry: docker.pkg.github.com
-          image: $IMAGE
-          tag: $RELEASE_VERSION
+        
 
        - env/persist-env 
         
@@ -125,7 +121,7 @@ workflows:
    deploy-nais:
      jobs:
       - build:
-          context: familie-ci 
+          context: familie-ci    
       - dev-deploy:
           context: NAIS deployment
           filters:
