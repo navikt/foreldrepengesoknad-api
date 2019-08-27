@@ -6,7 +6,6 @@ import com.fasterxml.jackson.annotation.JsonCreator;
 import com.fasterxml.jackson.annotation.JsonProperty;
 
 import no.nav.foreldrepenger.selvbetjening.tjeneste.innsyn.LukketPeriode;
-import no.nav.foreldrepenger.selvbetjening.tjeneste.innsyn.uttaksplan.MorsAktivitet;
 
 public class UttaksPeriode {
 
@@ -29,8 +28,7 @@ public class UttaksPeriode {
             @JsonProperty("graderingInnvilget") Boolean graderingInnvilget,
             @JsonProperty("samtidigUttak") Boolean samtidigUttak,
             @JsonProperty("manueltBehandlet") Boolean manueltBehandlet,
-            @JsonProperty("manuellBehandlingsårsak") ManuellBehandlingsÅrsak manuellBehandlingsårsak
-    ) {
+            @JsonProperty("manuellBehandlingsårsak") ManuellBehandlingsÅrsak manuellBehandlingsårsak) {
         this.periode = periode;
         this.resultatType = resultatType;
         this.årsak = årsak;

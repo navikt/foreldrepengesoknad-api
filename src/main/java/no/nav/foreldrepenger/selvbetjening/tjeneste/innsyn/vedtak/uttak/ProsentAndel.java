@@ -12,8 +12,8 @@ public class ProsentAndel {
     @Prosent
     private final Double prosent;
 
-    public static ProsentAndel of(int prosent) {
-        return new ProsentAndel(new Double(prosent));
+    public static ProsentAndel of(Integer prosent) {
+        return new ProsentAndel(prosent.doubleValue());
     }
 
     public ProsentAndel(Double prosent) {

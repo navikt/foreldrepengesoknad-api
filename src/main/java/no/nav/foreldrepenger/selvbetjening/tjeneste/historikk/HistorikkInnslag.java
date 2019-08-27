@@ -5,6 +5,7 @@ import java.time.LocalDateTime;
 import com.fasterxml.jackson.annotation.JsonCreator;
 import com.fasterxml.jackson.annotation.JsonProperty;
 
+import no.nav.foreldrepenger.selvbetjening.tjeneste.minidialog.Hendelse;
 import no.nav.foreldrepenger.selvbetjening.tjeneste.oppslag.domain.AktørId;
 import no.nav.foreldrepenger.selvbetjening.tjeneste.oppslag.domain.Fødselsnummer;
 
@@ -13,14 +14,14 @@ public class HistorikkInnslag {
     private AktørId aktørId;
     private Fødselsnummer fnr;
     private String journalpostId;
-    private String tekst;
+    private Hendelse hendelse;
     private LocalDateTime opprettet;
     private String saksnr;
 
     @JsonCreator
-    public HistorikkInnslag(@JsonProperty("aktørId") AktørId aktørId, @JsonProperty("tekst") String tekst) {
+    public HistorikkInnslag(@JsonProperty("aktørId") AktørId aktørId, @JsonProperty("tekst") Hendelse hendelse) {
         this.aktørId = aktørId;
-        this.tekst = tekst;
+        this.hendelse = hendelse;
     }
 
     public Fødselsnummer getFnr() {
@@ -47,12 +48,12 @@ public class HistorikkInnslag {
         this.journalpostId = journalpostId;
     }
 
-    public String getTekst() {
-        return tekst;
+    public Hendelse getHendelse() {
+        return hendelse;
     }
 
-    public void setTekst(String tekst) {
-        this.tekst = tekst;
+    public void setHendelse(Hendelse hendelse) {
+        this.hendelse = hendelse;
     }
 
     public LocalDateTime getOpprettet() {
@@ -73,8 +74,8 @@ public class HistorikkInnslag {
 
     @Override
     public String toString() {
-        return getClass().getSimpleName() + "[aktørId=" + aktørId + ", journalpostId=" + journalpostId + ", tekst="
-                + tekst + ", opprettet=" + opprettet + ", saksnr=" + saksnr + "]";
+        return getClass().getSimpleName() + "[aktørId=" + aktørId + ", journalpostId=" + journalpostId + ", hendelse="
+                + hendelse + ", opprettet=" + opprettet + ", saksnr=" + saksnr + "]";
     }
 
 }
