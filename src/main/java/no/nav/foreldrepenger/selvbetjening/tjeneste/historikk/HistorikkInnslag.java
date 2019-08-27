@@ -19,7 +19,7 @@ public class HistorikkInnslag {
     private String saksnr;
 
     @JsonCreator
-    public HistorikkInnslag(@JsonProperty("aktørId") AktørId aktørId, @JsonProperty("tekst") Hendelse hendelse) {
+    public HistorikkInnslag(@JsonProperty("aktørId") AktørId aktørId, @JsonProperty("hendelse") Hendelse hendelse) {
         this.aktørId = aktørId;
         this.hendelse = hendelse;
     }
