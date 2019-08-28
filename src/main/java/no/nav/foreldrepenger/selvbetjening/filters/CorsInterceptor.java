@@ -16,9 +16,10 @@ import javax.servlet.http.HttpServletResponse;
 import javax.ws.rs.HttpMethod;
 
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.stereotype.Component;
 import org.springframework.web.servlet.handler.HandlerInterceptorAdapter;
 
-//@Component
+@Component
 public class CorsInterceptor extends HandlerInterceptorAdapter {
 
     private final List<String> allowedOrigins;

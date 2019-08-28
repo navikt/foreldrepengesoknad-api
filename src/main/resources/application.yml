@@ -21,12 +21,6 @@ management:
             auto-time-requests: true
    endpoints:
       web:
-         cors:
-            allow-credentials: true
-            allowed-headers: Content-Type, fnr
-            allowed-methods: POST, GET, OPTIONS, DELETE
-            allowed-origins: https://engangsstonad.nais.oera-q.local,https://engangsstonad-q.nav.no,https://engangsstonad.nav.no,https://engangsstonad.dev-nav.no,https://foreldrepengesoknad.nais.oera-q.local,https://foreldrepengesoknad-q.nav.no,https://foreldrepengesoknad.nav.no,https://foreldrepengeoversikt.nais.oera-q.local,https://foreldrepenger-q.nav.no,https://foreldrepenger.nav.no,https://svangerskapspengesoknad-q.nav.no,https://svangerskapspengesoknad.nav.no
-            exposed-headers: location
          exposure:
             include: info, health, metrics, prometheus
          base-path: /internal/actuator
