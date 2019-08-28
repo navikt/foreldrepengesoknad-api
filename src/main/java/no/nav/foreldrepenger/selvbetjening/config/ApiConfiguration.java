@@ -10,14 +10,12 @@ import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.http.client.ClientHttpRequestInterceptor;
 import org.springframework.web.client.RestOperations;
-import org.springframework.web.servlet.config.annotation.InterceptorRegistry;
 import org.springframework.web.servlet.config.annotation.ResourceHandlerRegistry;
 import org.springframework.web.servlet.config.annotation.WebMvcConfigurer;
 
 import com.google.common.collect.ImmutableMap;
 import com.google.common.collect.ImmutableMap.Builder;
 
-import no.nav.foreldrepenger.selvbetjening.filters.CorsInterceptor;
 import no.nav.foreldrepenger.selvbetjening.interceptors.client.ApiKeyInjectingClientInterceptor;
 import no.nav.foreldrepenger.selvbetjening.tjeneste.historikk.HistorikkConfig;
 import no.nav.foreldrepenger.selvbetjening.tjeneste.innsending.InnsendingConfig;
@@ -27,11 +25,12 @@ import no.nav.foreldrepenger.selvbetjening.tjeneste.oppslag.OppslagConfig;
 public class ApiConfiguration implements WebMvcConfigurer {
 
     private static final Logger LOG = LoggerFactory.getLogger(ApiConfiguration.class);
-    private final CorsInterceptor corsInterceptor;
+    // private final CorsInterceptor corsInterceptor;
 
-    public ApiConfiguration(CorsInterceptor corsInterceptor) {
-        this.corsInterceptor = corsInterceptor;
-    }
+    /*
+     * public ApiConfiguration(CorsInterceptor corsInterceptor) {
+     * this.corsInterceptor = corsInterceptor; }
+     */
 
     @Bean
     public RestOperations restTemplate(ClientHttpRequestInterceptor... interceptors) {
@@ -63,8 +62,8 @@ public class ApiConfiguration implements WebMvcConfigurer {
 
     }
 
-    @Override
-    public void addInterceptors(InterceptorRegistry registry) {
-        registry.addInterceptor(corsInterceptor);
-    }
+    /*
+     * @Override public void addInterceptors(InterceptorRegistry registry) {
+     * registry.addInterceptor(corsInterceptor); }
+     */
 }
