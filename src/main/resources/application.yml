@@ -2,60 +2,64 @@ no.nav:
    foreldrepenger:
       selvbetjening:
          api:
-           virus:
-             enabled: true 
+            virus:
+               enabled: true
    security.oidc:
       issuers: selvbetjening
       issuer:
          selvbetjening:
-           cookie_name: selvbetjening-idtoken   
+            cookie_name: selvbetjening-idtoken
 info:
    app:
-     version: '@project.version@'
-     build:
-        time: '@timestamp@'
+      version: '@project.version@'
+      build:
+         time: '@timestamp@'
 management:
-  metrics:
-     web:
-        server:
-           auto-time-requests : true
-  endpoints:
+   metrics:
       web:
+         server:
+            auto-time-requests: true
+   endpoints:
+      web:
+         cors:
+            allow-credentials: true
+            allowed-headers: Content-Type, fnr
+            allowed-methods: POST, GET, OPTIONS, DELETE
+            allowed-origins: https://engangsstonad.nais.oera-q.local,https://engangsstonad-q.nav.no,https://engangsstonad.nav.no,https://engangsstonad.dev-nav.no,https://foreldrepengesoknad.nais.oera-q.local,https://foreldrepengesoknad-q.nav.no,https://foreldrepengesoknad.nav.no,https://foreldrepengeoversikt.nais.oera-q.local,https://foreldrepenger-q.nav.no,https://foreldrepenger.nav.no,https://svangerskapspengesoknad-q.nav.no,https://svangerskapspengesoknad.nav.no
+            exposed-headers: location
          exposure:
-            include:  info, health, metrics, prometheus
+            include: info, health, metrics, prometheus
          base-path: /internal/actuator
 server:
-  servlet:
-     context-path: /
-  use-forward-headers: true
-  error:
-     whitelabel:
-        enabled: false
+   servlet:
+      context-path: /
+   use-forward-headers: true
+   error:
+      whitelabel:
+         enabled: false
 spring:
-  cache:
-     cache-names: aktoer
-     caffeine:
-        spec: maximumSize=100,expireAfterAccess=3600s
-  application:
-     name: foreldrepengesoknad-api
-  jackson :
-      default-property-inclusion :  non-absent
-      mapper :
+   cache:
+      cache-names: aktoer
+      caffeine:
+         spec: maximumSize=100,expireAfterAccess=3600s
+   application:
+      name: foreldrepengesoknad-api
+   jackson:
+      default-property-inclusion: non-absent
+      mapper:
          accept-case-insensitive-properties: true
-      deserialization :
+      deserialization:
          accept-single-value-as-array: true
          fail-on-unknown-properties: false
-      serialization :
+      serialization:
          fail-on-empty-beans: false
-  main:
-     banner-mode: 'off'
-  servlet:
-     multipart:
-        max-file-size: 100MB
-        max-request-size: 100MB
-  mvc:
-     throw-exception-if-no-handler-found: true
-  resources:
-     add-mappings: false
-  
- 
+   main:
+      banner-mode: 'off'
+   servlet:
+      multipart:
+         max-file-size: 100MB
+         max-request-size: 100MB
+   mvc:
+      throw-exception-if-no-handler-found: true
+   resources:
+      add-mappings: false
