@@ -29,6 +29,7 @@ public class CorsInterceptor extends HandlerInterceptorAdapter {
             "https://engangsstonad.nais.oera-q.local," +
             "https://engangsstonad-q.nav.no," +
             "https://engangsstonad.nav.no," +
+            "https://engangsstonad.dev-nav.no," +
             "https://foreldrepengesoknad.nais.oera-q.local, " +
             "https://foreldrepengesoknad-q.nav.no," +
             "https://foreldrepengesoknad.nav.no," +
