@@ -1,6 +1,7 @@
 package no.nav.foreldrepenger.selvbetjening.tjeneste.historikk;
 
 import java.time.LocalDateTime;
+import java.util.List;
 
 import com.fasterxml.jackson.annotation.JsonCreator;
 import com.fasterxml.jackson.annotation.JsonProperty;
@@ -17,6 +18,7 @@ public class HistorikkInnslag {
     private Hendelse hendelse;
     private LocalDateTime opprettet;
     private String saksnr;
+    List<String> vedlegg;
 
     @JsonCreator
     public HistorikkInnslag(@JsonProperty("aktørId") AktørId aktørId, @JsonProperty("hendelse") Hendelse hendelse) {
@@ -70,6 +72,14 @@ public class HistorikkInnslag {
 
     public void setSaksnr(String saksnr) {
         this.saksnr = saksnr;
+    }
+
+    public List<String> getVedlegg() {
+        return vedlegg;
+    }
+
+    public void setVedlegg(List<String> vedlegg) {
+        this.vedlegg = vedlegg;
     }
 
     @Override
