@@ -1,9 +1,11 @@
 package no.nav.foreldrepenger.selvbetjening.tjeneste.mellomlagring;
 
+import static no.nav.foreldrepenger.selvbetjening.vedlegg.VedleggUtil.isPdfEncrypted;
 import static org.slf4j.LoggerFactory.getLogger;
 
 import java.util.Optional;
 
+import no.nav.foreldrepenger.selvbetjening.error.AttachmentPasswordProtectedException;
 import org.slf4j.Logger;
 import org.springframework.stereotype.Service;
 
@@ -65,6 +67,11 @@ public class StorageService {
         if (!virusScanner.scan(attachment)) {
             throw new AttachmentVirusException(attachment);
         }
+
+        if (isPdfEncrypted(attachment.bytes)) {
+            throw new AttachmentPasswordProtectedException(attachment);
+        }
+
         String fnr = tokenHelper.autentisertBruker();
         String directory = crypto.encryptDirectoryName(fnr);
         LOG.info("Skriver vedlegg {} til katalog {}", attachment, directory);

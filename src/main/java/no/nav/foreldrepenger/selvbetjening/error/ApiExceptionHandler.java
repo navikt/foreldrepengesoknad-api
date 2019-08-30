@@ -61,7 +61,7 @@ public class ApiExceptionHandler extends ResponseEntityExceptionHandler {
 
     @ResponseBody
     @ExceptionHandler({ AttachmentTypeUnsupportedException.class, AttachmentVirusException.class,
-            AttachmentConversionException.class })
+            AttachmentConversionException.class, AttachmentPasswordProtectedException.class })
     protected ResponseEntity<Object> handleAttachmentException(AttachmentException e, WebRequest req) {
         return logAndHandle(UNPROCESSABLE_ENTITY, e, req);
     }

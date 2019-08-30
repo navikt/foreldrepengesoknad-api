@@ -62,6 +62,20 @@ public class AttachmentStorageHttpTest extends AbstractTestExecutionListener {
     }
 
     @Test
+    public void storing_encrypted_pdfs_should_throw_error() {
+        ByteArrayResource encryptedPdf = getByteArrayResource("pdf", "pdf-with-user-password.pdf");
+        ResponseEntity<String> postResponse = http.postMultipart("vedlegg", MediaType.APPLICATION_PDF,
+            encryptedPdf);
+        assertThat(postResponse.getStatusCode()).isEqualTo(HttpStatus.UNPROCESSABLE_ENTITY);
+        assertThat(postResponse.getBody()).contains("er en kryptert PDF");
+
+        ByteArrayResource nonEncryptedPdf = getByteArrayResource("pdf", "pdf-with-empty-user-password.pdf");
+        ResponseEntity<String> nonEncryptedPostResponse = http.postMultipart("vedlegg", MediaType.APPLICATION_PDF,
+            nonEncryptedPdf);
+        assertThat(nonEncryptedPostResponse.getStatusCode()).isEqualTo(HttpStatus.CREATED);
+    }
+
+    @Test
     public void store_and_retrieve_pdf_over_http() {
         ByteArrayResource byteArrayResource = getByteArrayResource("pdf", "test.pdf");
 

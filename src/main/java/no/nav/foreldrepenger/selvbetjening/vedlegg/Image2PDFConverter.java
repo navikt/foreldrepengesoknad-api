@@ -1,6 +1,7 @@
 package no.nav.foreldrepenger.selvbetjening.vedlegg;
 
 import static java.util.Arrays.asList;
+import static no.nav.foreldrepenger.selvbetjening.vedlegg.VedleggUtil.mediaType;
 import static org.springframework.http.MediaType.APPLICATION_PDF;
 import static org.springframework.http.MediaType.IMAGE_JPEG;
 import static org.springframework.http.MediaType.IMAGE_PNG;
@@ -94,10 +95,6 @@ public class Image2PDFConverter {
         boolean validImageTypes = supportedMediaTypes.contains(mediaType);
         LOG.info("{} konvertere bytes av type {} til PDF", validImageTypes ? "Vil" : "Vil ikke", mediaType);
         return validImageTypes;
-    }
-
-    private static MediaType mediaType(byte[] bytes) {
-        return MediaType.valueOf(new Tika().detect(bytes));
     }
 
     private static void addPDFPageFromImage(PDDocument doc, byte[] origImg, String imgFormat) {
