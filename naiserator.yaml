@@ -27,7 +27,6 @@ spec:
       cpuThresholdPercentage: 50
   ingresses:
     - {{ingress}}
-    - {{ingress_internal}}
   resources:
       limits:
         cpu: 1500m
