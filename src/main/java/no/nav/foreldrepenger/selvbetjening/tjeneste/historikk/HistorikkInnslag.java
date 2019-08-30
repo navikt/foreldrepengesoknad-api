@@ -1,5 +1,6 @@
 package no.nav.foreldrepenger.selvbetjening.tjeneste.historikk;
 
+import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.util.List;
 
@@ -19,6 +20,15 @@ public class HistorikkInnslag {
     private LocalDateTime opprettet;
     private String saksnr;
     List<String> vedlegg;
+    private LocalDate behandlingsdato;
+
+    public LocalDate getBehandlingsdato() {
+        return behandlingsdato;
+    }
+
+    public void setBehandlingsdato(LocalDate behandlingsdato) {
+        this.behandlingsdato = behandlingsdato;
+    }
 
     @JsonCreator
     public HistorikkInnslag(@JsonProperty("aktørId") AktørId aktørId, @JsonProperty("hendelse") Hendelse hendelse) {
@@ -84,8 +94,9 @@ public class HistorikkInnslag {
 
     @Override
     public String toString() {
-        return getClass().getSimpleName() + "[aktørId=" + aktørId + ", journalpostId=" + journalpostId + ", hendelse="
-                + hendelse + ", opprettet=" + opprettet + ", saksnr=" + saksnr + "]";
+        return getClass().getSimpleName() + "[aktørId=" + aktørId + ", fnr=" + fnr + ", journalpostId="
+                + journalpostId + ", hendelse=" + hendelse + ", opprettet=" + opprettet + ", saksnr=" + saksnr
+                + ", vedlegg=" + vedlegg + ", behandlingsdato=" + behandlingsdato + "]";
     }
 
 }
