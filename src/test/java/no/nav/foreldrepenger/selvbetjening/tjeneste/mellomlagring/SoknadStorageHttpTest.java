@@ -19,6 +19,7 @@ import java.net.URI;
 import org.junit.Before;
 import org.junit.FixMethodOrder;
 import org.junit.Test;
+import org.junit.jupiter.api.Tag;
 import org.junit.runner.RunWith;
 import org.junit.runners.MethodSorters;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -42,6 +43,7 @@ import no.nav.foreldrepenger.selvbetjening.stub.StubbedLocalStackContainer;
 @RunWith(SpringRunner.class)
 @SpringBootTest(classes = ApiApplicationLocal.class, webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT)
 @ActiveProfiles({ LOCAL, LOCALSTACK, TEST })
+@Tag("IntegrationTest")
 @FixMethodOrder(MethodSorters.NAME_ASCENDING)
 public class SoknadStorageHttpTest extends AbstractTestExecutionListener {
 

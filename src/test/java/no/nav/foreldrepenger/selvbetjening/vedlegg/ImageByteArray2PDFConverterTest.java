@@ -1,8 +1,8 @@
 package no.nav.foreldrepenger.selvbetjening.vedlegg;
 
-import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertTrue;
+import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertThrows;
+import static org.junit.jupiter.api.Assertions.assertTrue;
 import static org.springframework.http.MediaType.IMAGE_GIF;
 
 import java.util.Arrays;

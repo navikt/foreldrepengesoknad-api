@@ -9,6 +9,7 @@ import java.nio.file.Paths;
 import java.util.Arrays;
 
 import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Tag;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
@@ -30,6 +31,7 @@ import no.nav.foreldrepenger.selvbetjening.stub.StubbedLocalStackContainer;
 
 @SpringBootTest(classes = ApiApplicationLocal.class, webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT)
 @ActiveProfiles("local,localstack,test")
+@Tag("IntegrationTest")
 public class AttachmentStorageHttpTest extends AbstractTestExecutionListener {
 
     private static final String FNR = "12345678910";
