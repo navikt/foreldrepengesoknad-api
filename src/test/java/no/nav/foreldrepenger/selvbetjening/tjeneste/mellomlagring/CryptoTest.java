@@ -1,11 +1,12 @@
 package no.nav.foreldrepenger.selvbetjening.tjeneste.mellomlagring;
 
-import org.junit.Test;
+import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertNotEquals;
+import static org.junit.jupiter.api.Assertions.assertThrows;
 
 import java.util.Base64;
 
-import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertNotEquals;
+import org.junit.jupiter.api.Test;
 
 public class CryptoTest {
 
@@ -28,14 +29,14 @@ public class CryptoTest {
         assertNotEquals(plainText, decoded);
     }
 
-    @Test(expected = IllegalArgumentException.class)
+    @Test
     public void passphraseMustBeProvided() {
-        new Crypto("", "12345678910");
+        assertThrows(IllegalArgumentException.class, () -> new Crypto("", "12345678910"));
     }
 
-    @Test(expected = IllegalArgumentException.class)
+    @Test
     public void fnrMustBeProvided() {
-        new Crypto("tjobing", "");
+        assertThrows(IllegalArgumentException.class, () -> new Crypto("tjobing", ""));
     }
 
 }

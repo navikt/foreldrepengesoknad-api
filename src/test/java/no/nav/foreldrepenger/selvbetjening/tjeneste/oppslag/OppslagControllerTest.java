@@ -1,17 +1,18 @@
 package no.nav.foreldrepenger.selvbetjening.tjeneste.oppslag;
 
-import no.nav.foreldrepenger.selvbetjening.tjeneste.oppslag.domain.Person;
-import no.nav.foreldrepenger.selvbetjening.tjeneste.oppslag.dto.PersonDto;
-import org.junit.Test;
-import org.junit.runner.RunWith;
-import org.mockito.InjectMocks;
-import org.mockito.Mock;
-import org.mockito.junit.MockitoJUnitRunner;
-
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.mockito.Mockito.when;
 
-@RunWith(MockitoJUnitRunner.class)
+import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.extension.ExtendWith;
+import org.mockito.InjectMocks;
+import org.mockito.Mock;
+import org.mockito.junit.jupiter.MockitoExtension;
+
+import no.nav.foreldrepenger.selvbetjening.tjeneste.oppslag.domain.Person;
+import no.nav.foreldrepenger.selvbetjening.tjeneste.oppslag.dto.PersonDto;
+
+@ExtendWith(MockitoExtension.class)
 public class OppslagControllerTest {
 
     @Mock

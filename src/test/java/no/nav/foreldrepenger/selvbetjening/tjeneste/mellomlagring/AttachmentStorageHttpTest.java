@@ -8,10 +8,8 @@ import java.nio.file.Files;
 import java.nio.file.Paths;
 import java.util.Arrays;
 
-import org.junit.Before;
-import org.junit.Test;
-import org.junit.experimental.categories.Category;
-import org.junit.runner.RunWith;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.boot.test.web.client.TestRestTemplate;
@@ -25,17 +23,13 @@ import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.test.context.ActiveProfiles;
 import org.springframework.test.context.TestContext;
-import org.springframework.test.context.junit4.SpringRunner;
 import org.springframework.test.context.support.AbstractTestExecutionListener;
 
 import no.nav.foreldrepenger.selvbetjening.ApiApplicationLocal;
-import no.nav.foreldrepenger.selvbetjening.SlowTests;
 import no.nav.foreldrepenger.selvbetjening.stub.StubbedLocalStackContainer;
 
-@RunWith(SpringRunner.class)
 @SpringBootTest(classes = ApiApplicationLocal.class, webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT)
 @ActiveProfiles("local,localstack,test")
-@Category(SlowTests.class)
 public class AttachmentStorageHttpTest extends AbstractTestExecutionListener {
 
     private static final String FNR = "12345678910";
@@ -56,7 +50,7 @@ public class AttachmentStorageHttpTest extends AbstractTestExecutionListener {
         stubbedLocalStackContainer.stopContainer();
     }
 
-    @Before
+    @BeforeEach
     public void setup() {
         http = new AttachmentTestHttpHandler(testRestTemplate, port, FNR);
     }
@@ -65,13 +59,13 @@ public class AttachmentStorageHttpTest extends AbstractTestExecutionListener {
     public void storing_encrypted_pdfs_should_throw_error() {
         ByteArrayResource encryptedPdf = getByteArrayResource("pdf", "pdf-with-user-password.pdf");
         ResponseEntity<String> postResponse = http.postMultipart("vedlegg", MediaType.APPLICATION_PDF,
-            encryptedPdf);
+                encryptedPdf);
         assertThat(postResponse.getStatusCode()).isEqualTo(HttpStatus.UNPROCESSABLE_ENTITY);
         assertThat(postResponse.getBody()).contains("er en kryptert PDF");
 
         ByteArrayResource nonEncryptedPdf = getByteArrayResource("pdf", "pdf-with-empty-user-password.pdf");
         ResponseEntity<String> nonEncryptedPostResponse = http.postMultipart("vedlegg", MediaType.APPLICATION_PDF,
-            nonEncryptedPdf);
+                nonEncryptedPdf);
         assertThat(nonEncryptedPostResponse.getStatusCode()).isEqualTo(HttpStatus.CREATED);
     }
 

@@ -1,5 +1,6 @@
 package no.nav.foreldrepenger.selvbetjening.tjeneste.innsending;
 
+import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.springframework.test.web.client.match.MockRestRequestMatchers.method;
 import static org.springframework.test.web.client.match.MockRestRequestMatchers.requestTo;
 import static org.springframework.test.web.client.response.MockRestResponseCreators.withStatus;
@@ -7,9 +8,9 @@ import static org.springframework.test.web.client.response.MockRestResponseCreat
 import javax.ws.rs.BadRequestException;
 import javax.ws.rs.NotFoundException;
 
-import org.junit.Before;
-import org.junit.Test;
-import org.junit.runner.RunWith;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.Mock;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.client.RestClientTest;
@@ -19,7 +20,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.test.context.ActiveProfiles;
 import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.TestPropertySource;
-import org.springframework.test.context.junit4.SpringRunner;
+import org.springframework.test.context.junit.jupiter.SpringExtension;
 import org.springframework.test.web.client.ExpectedCount;
 import org.springframework.test.web.client.MockRestServiceServer;
 
@@ -29,7 +30,7 @@ import no.nav.foreldrepenger.selvbetjening.util.TokenUtil;
 import no.nav.foreldrepenger.selvbetjening.vedlegg.Image2PDFConverter;
 import no.nav.security.spring.oidc.SpringOIDCRequestContextHolder;
 
-@RunWith(SpringRunner.class)
+@ExtendWith(SpringExtension.class)
 @TestPropertySource(properties = { "mottak.uri: http://www.mottak.no",
         "spring.cloud.vault.enabled=false" })
 @ContextConfiguration(classes = { NotFoundException.class, InnsendingConfig.class, Image2PDFConverter.class,
@@ -54,7 +55,7 @@ public class InnsendingTest {
     @Autowired
     private Image2PDFConverter converter;
 
-    @Before
+    @BeforeEach
     public void init() {
         if (innsending == null) {
             innsending = new InnsendingTjeneste(new InnsendingConnection(builder
@@ -62,21 +63,12 @@ public class InnsendingTest {
         }
     }
 
-    // @Test
-    public void ping() {
-        server.expect(ExpectedCount.once(), requestTo(innsendingConfig.getPingURI()))
-                .andExpect(method(HttpMethod.GET))
-                .andRespond(withStatus(HttpStatus.OK));
-        innsending.ping();
-        server.verify();
-    }
-
-    @Test(expected = BadRequestException.class)
+    @Test
     public void unknownType() {
         server.expect(ExpectedCount.once(), requestTo(innsendingConfig.getInnsendingURI()))
                 .andExpect(method(HttpMethod.GET))
                 .andRespond(withStatus(HttpStatus.OK));
-        innsending.sendInn(new Søknad());
+        assertThrows(BadRequestException.class, () -> innsending.sendInn(new Søknad()));
 
     }
 }

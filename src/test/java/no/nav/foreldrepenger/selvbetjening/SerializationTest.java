@@ -1,22 +1,25 @@
 package no.nav.foreldrepenger.selvbetjening;
 
-import com.fasterxml.jackson.core.JsonProcessingException;
-import com.fasterxml.jackson.databind.ObjectMapper;
-import no.nav.foreldrepenger.selvbetjening.tjeneste.innsending.domain.Barn;
-import no.nav.foreldrepenger.selvbetjening.tjeneste.innsending.domain.Engangsstønad;
-import org.junit.Test;
-import org.junit.runner.RunWith;
-import org.springframework.boot.test.autoconfigure.json.AutoConfigureJsonTesters;
-import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
-
-import javax.inject.Inject;
-import java.io.IOException;
-
 import static java.time.LocalDateTime.now;
 import static no.nav.foreldrepenger.selvbetjening.tjeneste.oppslag.OppslagTjenesteStub.person;
 import static org.assertj.core.api.Assertions.assertThat;
 
-@RunWith(SpringJUnit4ClassRunner.class)
+import java.io.IOException;
+
+import javax.inject.Inject;
+
+import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.extension.ExtendWith;
+import org.springframework.boot.test.autoconfigure.json.AutoConfigureJsonTesters;
+import org.springframework.test.context.junit.jupiter.SpringExtension;
+
+import com.fasterxml.jackson.core.JsonProcessingException;
+import com.fasterxml.jackson.databind.ObjectMapper;
+
+import no.nav.foreldrepenger.selvbetjening.tjeneste.innsending.domain.Barn;
+import no.nav.foreldrepenger.selvbetjening.tjeneste.innsending.domain.Engangsstønad;
+
+@ExtendWith(SpringExtension.class)
 @AutoConfigureJsonTesters
 public class SerializationTest {
 

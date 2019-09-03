@@ -7,15 +7,13 @@ import java.util.Optional;
 
 import org.junit.Rule;
 import org.junit.Test;
-import org.junit.experimental.categories.Category;
+import org.springframework.test.context.ActiveProfiles;
 import org.testcontainers.containers.localstack.LocalStackContainer;
 
 import com.amazonaws.services.s3.AmazonS3;
 import com.amazonaws.services.s3.AmazonS3ClientBuilder;
 
-import no.nav.foreldrepenger.selvbetjening.SlowTests;
-
-@Category(SlowTests.class)
+@ActiveProfiles("local,localstack,test")
 public class StorageTest {
 
     @Rule

@@ -6,9 +6,9 @@ import static org.springframework.test.web.client.response.MockRestResponseCreat
 
 import javax.ws.rs.NotFoundException;
 
-import org.junit.Before;
-import org.junit.Test;
-import org.junit.runner.RunWith;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.Mock;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.client.RestClientTest;
@@ -18,7 +18,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.test.context.ActiveProfiles;
 import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.TestPropertySource;
-import org.springframework.test.context.junit4.SpringRunner;
+import org.springframework.test.context.junit.jupiter.SpringExtension;
 import org.springframework.test.web.client.ExpectedCount;
 import org.springframework.test.web.client.MockRestServiceServer;
 
@@ -26,7 +26,7 @@ import no.nav.foreldrepenger.selvbetjening.util.EnvUtil;
 import no.nav.foreldrepenger.selvbetjening.util.TokenUtil;
 import no.nav.security.spring.oidc.SpringOIDCRequestContextHolder;
 
-@RunWith(SpringRunner.class)
+@ExtendWith(SpringExtension.class)
 @TestPropertySource(properties = { "mottak.uri = http://www.mottak.no/api",
         "oppslag.uri: http://www.oppslag.no/api", "spring.cloud.vault.enabled=false" })
 @ContextConfiguration(classes = { NotFoundException.class, InnsynConfig.class, TokenUtil.class,
@@ -48,7 +48,7 @@ public class InnsynTest {
 
     private InnsynTjeneste innsyn;
 
-    @Before
+    @BeforeEach
     public void init() {
         innsyn = new InnsynTjeneste(new InnsynConnection(builder
                 .build(), innsynConfig));

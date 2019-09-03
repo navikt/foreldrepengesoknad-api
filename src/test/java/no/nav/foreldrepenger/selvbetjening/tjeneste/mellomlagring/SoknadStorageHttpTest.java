@@ -19,7 +19,6 @@ import java.net.URI;
 import org.junit.Before;
 import org.junit.FixMethodOrder;
 import org.junit.Test;
-import org.junit.experimental.categories.Category;
 import org.junit.runner.RunWith;
 import org.junit.runners.MethodSorters;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -38,14 +37,12 @@ import org.springframework.web.util.UriComponentsBuilder;
 import com.fasterxml.jackson.databind.ObjectMapper;
 
 import no.nav.foreldrepenger.selvbetjening.ApiApplicationLocal;
-import no.nav.foreldrepenger.selvbetjening.SlowTests;
 import no.nav.foreldrepenger.selvbetjening.stub.StubbedLocalStackContainer;
 
 @RunWith(SpringRunner.class)
 @SpringBootTest(classes = ApiApplicationLocal.class, webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT)
 @ActiveProfiles({ LOCAL, LOCALSTACK, TEST })
 @FixMethodOrder(MethodSorters.NAME_ASCENDING)
-@Category(SlowTests.class)
 public class SoknadStorageHttpTest extends AbstractTestExecutionListener {
 
     private static final String FNR = "12345678901";

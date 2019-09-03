@@ -1,25 +1,25 @@
 package no.nav.foreldrepenger.selvbetjening.vedlegg;
 
-import no.nav.foreldrepenger.selvbetjening.error.AttachmentTypeUnsupportedException;
-import no.nav.foreldrepenger.selvbetjening.vedlegg.Image2PDFConverter;
-
-import org.apache.tika.Tika;
-import org.junit.BeforeClass;
-import org.junit.Test;
-import org.springframework.http.MediaType;
+import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertTrue;
+import static org.junit.jupiter.api.Assertions.assertThrows;
+import static org.springframework.http.MediaType.IMAGE_GIF;
 
 import java.util.Arrays;
 
-import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertTrue;
-import static org.springframework.http.MediaType.IMAGE_GIF;
+import org.apache.tika.Tika;
+import org.junit.jupiter.api.BeforeAll;
+import org.junit.jupiter.api.Test;
+import org.springframework.http.MediaType;
+
+import no.nav.foreldrepenger.selvbetjening.error.AttachmentTypeUnsupportedException;
 
 public class ImageByteArray2PDFConverterTest {
     private static final byte[] PDFSIGNATURE = { 0x25, 0x50, 0x44, 0x46 };
 
     private static Image2PDFConverter converter;
 
-    @BeforeClass
+    @BeforeAll
     public static void before() {
         converter = new Image2PDFConverter();
     }
@@ -34,9 +34,9 @@ public class ImageByteArray2PDFConverterTest {
         assertTrue(isPdf(converter.convert("pdf/nav-logo.png")));
     }
 
-    @Test(expected = AttachmentTypeUnsupportedException.class)
+    @Test
     public void gifFailsfWhenNotConfigured() {
-        converter.convert("pdf/loading.gif");
+        assertThrows(AttachmentTypeUnsupportedException.class, () -> converter.convert("pdf/loading.gif"));
     }
 
     @Test
@@ -50,9 +50,9 @@ public class ImageByteArray2PDFConverterTest {
                 MediaType.valueOf(new Tika().detect(converter.convert("pdf/test123.pdf"))));
     }
 
-    @Test(expected = AttachmentTypeUnsupportedException.class)
+    @Test
     public void whateverElseIsNotAllowed() {
-        converter.convert(new byte[] { 1, 2, 3, 4 });
+        assertThrows(AttachmentTypeUnsupportedException.class, () -> converter.convert(new byte[] { 1, 2, 3, 4 }));
     }
 
     static boolean isPdf(byte[] fileContents) {

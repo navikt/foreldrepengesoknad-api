@@ -6,9 +6,9 @@ import static org.springframework.test.web.client.response.MockRestResponseCreat
 
 import javax.ws.rs.NotFoundException;
 
-import org.junit.Before;
-import org.junit.Test;
-import org.junit.runner.RunWith;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.Mock;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.client.RestClientTest;
@@ -17,14 +17,14 @@ import org.springframework.http.HttpMethod;
 import org.springframework.http.HttpStatus;
 import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.TestPropertySource;
-import org.springframework.test.context.junit4.SpringRunner;
+import org.springframework.test.context.junit.jupiter.SpringExtension;
 import org.springframework.test.web.client.ExpectedCount;
 import org.springframework.test.web.client.MockRestServiceServer;
 
 import no.nav.foreldrepenger.selvbetjening.util.TokenUtil;
 import no.nav.security.spring.oidc.SpringOIDCRequestContextHolder;
 
-@RunWith(SpringRunner.class)
+@ExtendWith(SpringExtension.class)
 @TestPropertySource(properties = { "oppslag.uri: http://www.oppslag.no",
         "spring.cloud.vault.enabled=false" })
 @ContextConfiguration(classes = { NotFoundException.class, OppslagConfig.class, TokenUtil.class,
@@ -48,7 +48,7 @@ public class OppslagTest {
 
     private OppslagTjeneste oppslag;
 
-    @Before
+    @BeforeEach
     public void restOperations() {
         oppslagConnection = new OppslagConnection(builder.build(), oppslagConfig);
         oppslag = new OppslagTjeneste(oppslagConnection);
