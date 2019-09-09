@@ -10,7 +10,14 @@ public enum Hendelse {
     ETTERSENDING_ENGANGSSTØNAD,
     ETTERSENDING_SVANGERSKAPSPENGER,
     ENDRING_FORELDREPENGER,
-    UKJENT,
-    ENDRING_SVANGERSKAPSPENGER;
+    ENDRING_SVANGERSKAPSPENGER,
+    UKJENT;
 
+    public static Hendelse tilHendelse(String hendelse) {
+        try {
+            return valueOf(hendelse);
+        } catch (Exception e) {
+            return UKJENT;
+        }
+    }
 }

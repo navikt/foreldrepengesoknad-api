@@ -25,7 +25,7 @@ public class HistorikkConfig {
     private static final String DEFAULT_PING_PATH = "actuator/info";
 
     public URI historikkURI() {
-        return uri(uri, HISTORIKK + "/me");
+        return uri(uri, HISTORIKK + "/me/all");
     }
 
     public void setUri(URI uri) {

@@ -1,79 +1,32 @@
 package no.nav.foreldrepenger.selvbetjening.tjeneste.historikk;
 
-import java.time.LocalDate;
+import static com.fasterxml.jackson.annotation.JsonTypeInfo.As.PROPERTY;
+import static com.fasterxml.jackson.annotation.JsonTypeInfo.Id.NAME;
+
 import java.time.LocalDateTime;
-import java.util.List;
 
-import com.fasterxml.jackson.annotation.JsonCreator;
-import com.fasterxml.jackson.annotation.JsonProperty;
+import com.fasterxml.jackson.annotation.JsonSubTypes;
+import com.fasterxml.jackson.annotation.JsonSubTypes.Type;
+import com.fasterxml.jackson.annotation.JsonTypeInfo;
 
-import no.nav.foreldrepenger.selvbetjening.tjeneste.minidialog.Hendelse;
 import no.nav.foreldrepenger.selvbetjening.tjeneste.oppslag.domain.AktørId;
 import no.nav.foreldrepenger.selvbetjening.tjeneste.oppslag.domain.Fødselsnummer;
 
-public class HistorikkInnslag {
+@JsonTypeInfo(use = NAME, include = PROPERTY, property = "type")
+@JsonSubTypes({
+        @Type(value = SøknadsHistorikkInnslag.class, name = "søknad"),
+        @Type(value = InntektsmeldingHistorikkInnslag.class, name = "inntekt")
+})
+public abstract class HistorikkInnslag implements Comparable<HistorikkInnslag> {
 
+    private final Fødselsnummer fnr;
     private AktørId aktørId;
-    private Fødselsnummer fnr;
     private String journalpostId;
-    private Hendelse hendelse;
-    private LocalDateTime opprettet;
     private String saksnr;
-    List<String> vedlegg;
-    private LocalDate behandlingsdato;
+    protected LocalDateTime opprettet;
 
-    public LocalDate getBehandlingsdato() {
-        return behandlingsdato;
-    }
-
-    public void setBehandlingsdato(LocalDate behandlingsdato) {
-        this.behandlingsdato = behandlingsdato;
-    }
-
-    @JsonCreator
-    public HistorikkInnslag(@JsonProperty("aktørId") AktørId aktørId, @JsonProperty("hendelse") Hendelse hendelse) {
-        this.aktørId = aktørId;
-        this.hendelse = hendelse;
-    }
-
-    public Fødselsnummer getFnr() {
-        return fnr;
-    }
-
-    public void setFnr(Fødselsnummer fnr) {
+    public HistorikkInnslag(Fødselsnummer fnr) {
         this.fnr = fnr;
-    }
-
-    public AktørId getAktørId() {
-        return aktørId;
-    }
-
-    public void setAktørId(AktørId aktørId) {
-        this.aktørId = aktørId;
-    }
-
-    public String getJournalpostId() {
-        return journalpostId;
-    }
-
-    public void setJournalpostId(String journalpostId) {
-        this.journalpostId = journalpostId;
-    }
-
-    public Hendelse getHendelse() {
-        return hendelse;
-    }
-
-    public void setHendelse(Hendelse hendelse) {
-        this.hendelse = hendelse;
-    }
-
-    public LocalDateTime getOpprettet() {
-        return opprettet;
-    }
-
-    public void setOpprettet(LocalDateTime opprettet) {
-        this.opprettet = opprettet;
     }
 
     public String getSaksnr() {
@@ -84,19 +37,37 @@ public class HistorikkInnslag {
         this.saksnr = saksnr;
     }
 
-    public List<String> getVedlegg() {
-        return vedlegg;
+    public LocalDateTime getOpprettet() {
+        return opprettet;
     }
 
-    public void setVedlegg(List<String> vedlegg) {
-        this.vedlegg = vedlegg;
+    public void setOpprettet(LocalDateTime opprettet) {
+        this.opprettet = opprettet;
+    }
+
+    public void setAktørId(AktørId aktørId) {
+        this.aktørId = aktørId;
+    }
+
+    public AktørId getAktørId() {
+        return aktørId;
+    }
+
+    public Fødselsnummer getFnr() {
+        return fnr;
+    }
+
+    public String getJournalpostId() {
+        return journalpostId;
+    }
+
+    public void setJournalpostId(String journalpostId) {
+        this.journalpostId = journalpostId;
     }
 
     @Override
-    public String toString() {
-        return getClass().getSimpleName() + "[aktørId=" + aktørId + ", fnr=" + fnr + ", journalpostId="
-                + journalpostId + ", hendelse=" + hendelse + ", opprettet=" + opprettet + ", saksnr=" + saksnr
-                + ", vedlegg=" + vedlegg + ", behandlingsdato=" + behandlingsdato + "]";
+    public int compareTo(HistorikkInnslag o) {
+        return opprettet.compareTo(o.getOpprettet());
     }
 
 }

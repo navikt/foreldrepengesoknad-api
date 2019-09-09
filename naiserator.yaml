@@ -26,6 +26,9 @@ spec:
       max: 2
       cpuThresholdPercentage: 50
   ingresses:
+   {{#if ingress-internal}}
+    - {{ingress-internal}}
+   {{/if}}
     - {{ingress}}
   resources:
       limits:
