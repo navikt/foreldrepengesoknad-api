@@ -11,4 +11,6 @@ public interface Historikk extends Pingable {
 
     List<SøknadInnslag> hentHistorikkFor(Fødselsnummer fnr);
 
+    List<MinidialogInnslag> minidialoger();
+
 }

@@ -32,6 +32,11 @@ public class HistorikkController {
         return historikk.hentHistorikk();
     }
 
+    @GetMapping("/minidialoger")
+    public List<MinidialogInnslag> minidialoger() {
+        return historikk.minidialoger();
+    }
+
     @Override
     public String toString() {
         return getClass().getSimpleName() + " [historikk=" + historikk + "]";

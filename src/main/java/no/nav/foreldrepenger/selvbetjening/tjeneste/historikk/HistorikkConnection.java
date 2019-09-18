@@ -52,6 +52,15 @@ public class HistorikkConnection extends AbstractRestConnection {
         return historikk;
     }
 
+    public List<MinidialogInnslag> hentMinidialoger() {
+        List<MinidialogInnslag> minidialoger = Optional
+                .ofNullable(getForObject(config.minidialogURI(), MinidialogInnslag[].class, false))
+                .map(Arrays::asList)
+                .orElse(emptyList());
+        LOG.trace(CONFIDENTIAL, "Fikk minidialoger {}", minidialoger);
+        return minidialoger;
+    }
+
     @Override
     public String toString() {
         return getClass().getSimpleName() + " [config=" + config + "]";

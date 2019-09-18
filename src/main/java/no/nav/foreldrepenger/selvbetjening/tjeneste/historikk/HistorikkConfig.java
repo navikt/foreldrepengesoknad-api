@@ -51,4 +51,9 @@ public class HistorikkConfig {
     public URI getUri() {
         return uri;
     }
+
+    public URI minidialogURI() {
+        return uri(uri, HISTORIKK + "/me/minidialoger/spm");
+
+    }
 }

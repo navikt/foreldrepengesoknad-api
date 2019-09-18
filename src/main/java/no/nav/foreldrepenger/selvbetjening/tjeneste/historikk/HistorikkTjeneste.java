@@ -28,6 +28,11 @@ public class HistorikkTjeneste implements Historikk {
     }
 
     @Override
+    public List<MinidialogInnslag> minidialoger() {
+        return connection.hentMinidialoger();
+    }
+
+    @Override
     public String ping() {
         return connection.ping();
     }
