@@ -15,8 +15,8 @@ public class MinidialogConfig {
 
     private static final String MINIDIALOG = "minidialog";
     private static final String MINIDIALOG_ME = MINIDIALOG + "/me";
-    private static final String MINIDIALOG_PREPROD = MINIDIALOG + "/preprod";
-    private static final String AKTIVE = MINIDIALOG_PREPROD + "/aktive";
+    private static final String MINIDIALOG_PREPROD = MINIDIALOG + "/dev";
+    private static final String AKTIVE = MINIDIALOG_PREPROD + "/minidialoger";
 
     public URI getURI() {
         return uri;
