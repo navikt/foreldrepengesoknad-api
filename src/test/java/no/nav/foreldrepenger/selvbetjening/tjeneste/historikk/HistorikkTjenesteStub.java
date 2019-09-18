@@ -32,4 +32,9 @@ public class HistorikkTjenesteStub implements Historikk {
     public List<SøknadInnslag> hentHistorikkFor(Fødselsnummer fnr) {
         return Collections.emptyList();
     }
+
+    @Override
+    public List<MinidialogInnslag> minidialoger() {
+        return Collections.emptyList();
+    }
 }
