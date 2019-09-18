@@ -33,7 +33,7 @@ public class HistorikkConfig {
     }
 
     public URI historikkPreprodURI(String fnr) {
-        return uri(uri, HISTORIKK_DEV + "/hent", queryParams("fnr", fnr));
+        return uri(uri, HISTORIKK_DEV + "/all", queryParams("fnr", fnr));
     }
 
     public URI pingURI() {
