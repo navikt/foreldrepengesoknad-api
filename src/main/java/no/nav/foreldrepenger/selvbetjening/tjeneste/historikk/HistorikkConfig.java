@@ -13,7 +13,7 @@ import org.springframework.stereotype.Component;
 public class HistorikkConfig {
 
     private static final String HISTORIKK = "historikk";
-    private static final String HISTORIKK_PREPROD = HISTORIKK + "/preprod";
+    private static final String HISTORIKK_PREPROD = HISTORIKK + "/dev";
     private boolean enabled = true;
     private URI uri;
     private String key;
