@@ -34,18 +34,18 @@ public class HistorikkConnection extends AbstractRestConnection {
         return config.pingURI();
     }
 
-    public List<HistorikkInnslag> hentHistorikk() {
-        List<HistorikkInnslag> historikk = Optional
-                .ofNullable(getForObject(config.historikkURI(), HistorikkInnslag[].class, false))
+    public List<SøknadInnslag> hentHistorikk() {
+        List<SøknadInnslag> historikk = Optional
+                .ofNullable(getForObject(config.historikkURI(), SøknadInnslag[].class, false))
                 .map(Arrays::asList)
                 .orElse(emptyList());
         LOG.trace(CONFIDENTIAL, "Fikk historikk {}", historikk);
         return historikk;
     }
 
-    public List<HistorikkInnslag> hentHistorikk(Fødselsnummer fnr) {
-        List<HistorikkInnslag> historikk = Optional
-                .ofNullable(getForObject(config.historikkPreprodURI(fnr.getFnr()), HistorikkInnslag[].class, false))
+    public List<SøknadInnslag> hentHistorikk(Fødselsnummer fnr) {
+        List<SøknadInnslag> historikk = Optional
+                .ofNullable(getForObject(config.historikkPreprodURI(fnr.getFnr()), SøknadInnslag[].class, false))
                 .map(Arrays::asList)
                 .orElse(emptyList());
         LOG.trace(CONFIDENTIAL, "Fikk historikk {}", historikk);

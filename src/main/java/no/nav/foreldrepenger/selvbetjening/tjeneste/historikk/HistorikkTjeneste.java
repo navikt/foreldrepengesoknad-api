@@ -18,12 +18,12 @@ public class HistorikkTjeneste implements Historikk {
     }
 
     @Override
-    public List<HistorikkInnslag> hentHistorikk() {
+    public List<SøknadInnslag> hentHistorikk() {
         return connection.hentHistorikk();
     }
 
     @Override
-    public List<HistorikkInnslag> hentHistorikkFor(Fødselsnummer fnr) {
+    public List<SøknadInnslag> hentHistorikkFor(Fødselsnummer fnr) {
         return connection.hentHistorikk(fnr);
     }
 

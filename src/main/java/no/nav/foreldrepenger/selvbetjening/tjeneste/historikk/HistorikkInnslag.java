@@ -2,8 +2,10 @@ package no.nav.foreldrepenger.selvbetjening.tjeneste.historikk;
 
 import static com.fasterxml.jackson.annotation.JsonTypeInfo.As.PROPERTY;
 import static com.fasterxml.jackson.annotation.JsonTypeInfo.Id.NAME;
+import static no.nav.foreldrepenger.selvbetjening.tjeneste.historikk.HendelseType.UKJENT;
 
 import java.time.LocalDateTime;
+import java.util.Optional;
 
 import com.fasterxml.jackson.annotation.JsonSubTypes;
 import com.fasterxml.jackson.annotation.JsonSubTypes.Type;
@@ -14,10 +16,12 @@ import no.nav.foreldrepenger.selvbetjening.tjeneste.oppslag.domain.Fødselsnumme
 
 @JsonTypeInfo(use = NAME, include = PROPERTY, property = "type")
 @JsonSubTypes({
-        @Type(value = SøknadsHistorikkInnslag.class, name = "søknad"),
-        @Type(value = InntektsmeldingHistorikkInnslag.class, name = "inntekt")
+        @Type(value = SøknadInnslag.class, name = "søknad"),
+        @Type(value = InntektsmeldingInnslag.class, name = "inntekt"),
+        @Type(value = MinidialogInnslag.class, name = "minidialog")
+
 })
-public abstract class HistorikkInnslag implements Comparable<HistorikkInnslag> {
+public abstract class HistorikkInnslag {
 
     private final Fødselsnummer fnr;
     private AktørId aktørId;
@@ -27,6 +31,12 @@ public abstract class HistorikkInnslag implements Comparable<HistorikkInnslag> {
 
     public HistorikkInnslag(Fødselsnummer fnr) {
         this.fnr = fnr;
+    }
+
+    protected HendelseType hendelseFra(String hendelse) {
+        return Optional.ofNullable(hendelse)
+                .map(HendelseType::tilHendelse)
+                .orElse(UKJENT);
     }
 
     public String getSaksnr() {
@@ -64,10 +74,4 @@ public abstract class HistorikkInnslag implements Comparable<HistorikkInnslag> {
     public void setJournalpostId(String journalpostId) {
         this.journalpostId = journalpostId;
     }
-
-    @Override
-    public int compareTo(HistorikkInnslag o) {
-        return opprettet.compareTo(o.getOpprettet());
-    }
-
 }

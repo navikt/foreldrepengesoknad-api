@@ -1,34 +1,23 @@
 package no.nav.foreldrepenger.selvbetjening.tjeneste.historikk;
 
-import static no.nav.foreldrepenger.selvbetjening.tjeneste.minidialog.Hendelse.UKJENT;
-
 import java.time.LocalDate;
-import java.time.LocalDateTime;
 import java.util.List;
-import java.util.Optional;
 
 import com.fasterxml.jackson.annotation.JsonCreator;
 import com.fasterxml.jackson.annotation.JsonProperty;
 
-import no.nav.foreldrepenger.selvbetjening.tjeneste.minidialog.Hendelse;
 import no.nav.foreldrepenger.selvbetjening.tjeneste.oppslag.domain.Fødselsnummer;
 
-public class SøknadsHistorikkInnslag extends HistorikkInnslag {
+public class SøknadInnslag extends HistorikkInnslag {
 
-    private final Hendelse hendelse;
+    private final HendelseType hendelse;
     private List<String> vedlegg;
     private LocalDate behandlingsdato;
 
     @JsonCreator
-    public SøknadsHistorikkInnslag(@JsonProperty("fnr") Fødselsnummer fnr, @JsonProperty("hendelse") String hendelse) {
+    public SøknadInnslag(@JsonProperty("fnr") Fødselsnummer fnr, @JsonProperty("hendelse") String hendelse) {
         super(fnr);
         this.hendelse = hendelseFra(hendelse);
-    }
-
-    private Hendelse hendelseFra(String hendelse) {
-        return Optional.ofNullable(hendelse)
-                .map(Hendelse::tilHendelse)
-                .orElse(UKJENT);
     }
 
     public LocalDate getBehandlingsdato() {
@@ -47,16 +36,8 @@ public class SøknadsHistorikkInnslag extends HistorikkInnslag {
         this.vedlegg = vedlegg;
     }
 
-    public Hendelse getHendelse() {
+    public HendelseType getHendelse() {
         return hendelse;
-    }
-
-    public LocalDateTime getOpprettet() {
-        return opprettet;
-    }
-
-    public void setOpprettet(LocalDateTime opprettet) {
-        this.opprettet = opprettet;
     }
 
     @Override

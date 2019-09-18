@@ -28,7 +28,7 @@ public class HistorikkController {
     }
 
     @GetMapping("/historikk")
-    public List<HistorikkInnslag> historikk() {
+    public List<SøknadInnslag> historikk() {
         return historikk.hentHistorikk();
     }
 

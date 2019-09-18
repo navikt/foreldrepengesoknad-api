@@ -7,8 +7,8 @@ import no.nav.foreldrepenger.selvbetjening.tjeneste.oppslag.domain.Fødselsnumme
 
 public interface Historikk extends Pingable {
 
-    List<HistorikkInnslag> hentHistorikk();
+    List<SøknadInnslag> hentHistorikk();
 
-    List<HistorikkInnslag> hentHistorikkFor(Fødselsnummer fnr);
+    List<SøknadInnslag> hentHistorikkFor(Fødselsnummer fnr);
 
 }

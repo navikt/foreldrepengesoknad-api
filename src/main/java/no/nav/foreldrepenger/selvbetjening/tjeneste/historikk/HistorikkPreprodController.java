@@ -16,7 +16,6 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import no.nav.foreldrepenger.selvbetjening.tjeneste.minidialog.Minidialog;
-import no.nav.foreldrepenger.selvbetjening.tjeneste.minidialog.MinidialogInnslag;
 import no.nav.foreldrepenger.selvbetjening.tjeneste.oppslag.domain.Fødselsnummer;
 import no.nav.security.oidc.api.Unprotected;
 
@@ -37,7 +36,7 @@ public class HistorikkPreprodController {
     }
 
     @GetMapping("/hent")
-    public List<HistorikkInnslag> hentHistorikk(@RequestParam("fnr") Fødselsnummer fnr) {
+    public List<SøknadInnslag> hentHistorikk(@RequestParam("fnr") Fødselsnummer fnr) {
         return historikk.hentHistorikkFor(fnr);
     }
 

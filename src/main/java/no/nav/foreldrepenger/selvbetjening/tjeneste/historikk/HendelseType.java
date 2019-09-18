@@ -1,6 +1,6 @@
-package no.nav.foreldrepenger.selvbetjening.tjeneste.minidialog;
+package no.nav.foreldrepenger.selvbetjening.tjeneste.historikk;
 
-public enum Hendelse {
+public enum HendelseType {
     VEDTAK,
     INNTEKTSMELDING,
     INITIELL_ENGANGSSTØNAD,
@@ -13,7 +13,7 @@ public enum Hendelse {
     ENDRING_SVANGERSKAPSPENGER,
     UKJENT;
 
-    public static Hendelse tilHendelse(String hendelse) {
+    public static HendelseType tilHendelse(String hendelse) {
         try {
             return valueOf(hendelse);
         } catch (Exception e) {
