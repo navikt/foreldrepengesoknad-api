@@ -13,7 +13,7 @@ import org.springframework.stereotype.Component;
 public class HistorikkConfig {
 
     private static final String HISTORIKK = "historikk";
-    private static final String HISTORIKK_PREPROD = HISTORIKK + "/dev";
+    private static final String HISTORIKK_DEV = HISTORIKK + "/dev";
     private boolean enabled = true;
     private URI uri;
     private String key;
@@ -33,7 +33,7 @@ public class HistorikkConfig {
     }
 
     public URI historikkPreprodURI(String fnr) {
-        return uri(uri, HISTORIKK_PREPROD + "/hent", queryParams("fnr", fnr));
+        return uri(uri, HISTORIKK_DEV + "/hent", queryParams("fnr", fnr));
     }
 
     public URI pingURI() {
