@@ -10,6 +10,7 @@ import org.springframework.util.unit.DataSize;
 import no.nav.foreldrepenger.selvbetjening.error.AttachmentTooLargeException;
 import no.nav.foreldrepenger.selvbetjening.error.AttachmentsTooLargeException;
 import no.nav.foreldrepenger.selvbetjening.tjeneste.innsending.domain.Vedlegg;
+import no.nav.foreldrepenger.selvbetjening.tjeneste.mellomlagring.Attachment;
 import no.nav.foreldrepenger.selvbetjening.tjeneste.virusscan.VirusScanner;
 
 @Component
@@ -34,6 +35,17 @@ public class VedleggSjekker {
         sjekk(Arrays.asList(vedlegg));
     }
 
+    public void sjekkAttachments(Attachment... vedlegg) {
+        sjekkAttachments(Arrays.asList(vedlegg));
+    }
+
+    public void sjekkAttachments(List<Attachment> vedlegg) {
+        sjekkAttachmentEnkeltStørrelser(vedlegg);
+        sjekkAttachmentTotalStørrelse(vedlegg);
+        sjekkAttachmentVirus(vedlegg);
+        sjekkAttachmentKryptert(vedlegg);
+    }
+
     public void sjekk(List<Vedlegg> vedlegg) {
         sjekkTotalStørrelse(vedlegg);
         sjekkEnkeltStørrelser(vedlegg);
@@ -45,11 +57,23 @@ public class VedleggSjekker {
         vedlegg.stream().forEach(this::sjekkStørrelse);
     }
 
+    private void sjekkAttachmentEnkeltStørrelser(List<Attachment> vedlegg) {
+        vedlegg.stream().forEach(this::sjekkAttachmentEnkeltStørrelse);
+    }
+
     private void sjekkKryptert(List<Vedlegg> vedlegg) {
         vedlegg.stream().forEach(encryptionChecker::checkEncrypted);
     }
 
+    private void sjekkAttachmentKryptert(List<Attachment> vedlegg) {
+        vedlegg.stream().forEach(encryptionChecker::checkEncrypted);
+    }
+
     private void sjekkVirus(List<Vedlegg> vedlegg) {
+        vedlegg.stream().forEach(virusScanner::scan);
+    }
+
+    private void sjekkAttachmentVirus(List<Attachment> vedlegg) {
         vedlegg.stream().forEach(virusScanner::scan);
     }
 
@@ -59,10 +83,26 @@ public class VedleggSjekker {
         }
     }
 
+    private void sjekkAttachmentEnkeltStørrelse(Attachment vedlegg) {
+        if (vedlegg.size > maxEnkelSize.toBytes()) {
+            throw new AttachmentTooLargeException(vedlegg.size, maxEnkelSize);
+        }
+    }
+
     private void sjekkTotalStørrelse(List<Vedlegg> vedlegg) {
         long total = vedlegg.stream()
                 .filter(v -> v.getContent() != null)
                 .mapToLong(v -> v.getContent().length)
+                .sum();
+        if (total > maxTotalSize.toBytes()) {
+            throw new AttachmentsTooLargeException(total, maxTotalSize);
+        }
+    }
+
+    private void sjekkAttachmentTotalStørrelse(List<Attachment> vedlegg) {
+        long total = vedlegg.stream()
+                .filter(v -> v.bytes != null)
+                .mapToLong(v -> v.bytes.length)
                 .sum();
         if (total > maxTotalSize.toBytes()) {
             throw new AttachmentsTooLargeException(total, maxTotalSize);

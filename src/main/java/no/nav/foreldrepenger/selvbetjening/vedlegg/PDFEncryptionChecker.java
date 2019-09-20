@@ -11,19 +11,28 @@ import org.springframework.stereotype.Component;
 
 import no.nav.foreldrepenger.selvbetjening.error.AttachmentPasswordProtectedException;
 import no.nav.foreldrepenger.selvbetjening.tjeneste.innsending.domain.Vedlegg;
+import no.nav.foreldrepenger.selvbetjening.tjeneste.mellomlagring.Attachment;
 
 @Component
 public class PDFEncryptionChecker {
 
     private static final Logger LOG = LoggerFactory.getLogger(VedleggSjekker.class);
 
+    public void checkEncrypted(Attachment v) {
+        check(v.bytes, v.filename);
+    }
+
     public void checkEncrypted(Vedlegg v) {
-        if (APPLICATION_PDF.equals(mediaType(v.getContent()))) {
-            try (PDDocument doc = PDDocument.load(v.getContent())) {
+        check(v.getContent(), v.getBeskrivelse());
+    }
+
+    private void check(byte[] bytes, String name) {
+        if (APPLICATION_PDF.equals(mediaType(bytes))) {
+            try (PDDocument doc = PDDocument.load(bytes)) {
             } catch (InvalidPasswordException e) {
-                throw new AttachmentPasswordProtectedException(v, e);
+                throw new AttachmentPasswordProtectedException(name, e);
             } catch (Exception e) {
-                LOG.warn("Kunne ikke sjekke {}", v, e);
+                LOG.warn("Kunne ikke sjekke {}", bytes, e);
             }
         }
     }

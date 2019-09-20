@@ -9,6 +9,7 @@ import org.springframework.stereotype.Service;
 
 import no.nav.foreldrepenger.selvbetjening.tjeneste.innsending.domain.Vedlegg;
 import no.nav.foreldrepenger.selvbetjening.util.TokenUtil;
+import no.nav.foreldrepenger.selvbetjening.vedlegg.VedleggSjekker;
 
 @Service
 public class MellomlagringTjeneste {
@@ -19,11 +20,13 @@ public class MellomlagringTjeneste {
     private final TokenUtil tokenHelper;
     private final Storage storage;
     private final StorageCrypto crypto;
+    private final VedleggSjekker sjekker;
 
-    public MellomlagringTjeneste(TokenUtil tokenHelper, Storage storage, StorageCrypto crypto) {
+    public MellomlagringTjeneste(TokenUtil tokenHelper, Storage storage, StorageCrypto crypto, VedleggSjekker sjekker) {
         this.tokenHelper = tokenHelper;
         this.storage = storage;
         this.crypto = crypto;
+        this.sjekker = sjekker;
     }
 
     public Optional<String> hentSøknad() {
@@ -59,7 +62,7 @@ public class MellomlagringTjeneste {
     }
 
     public void lagreVedlegg(Attachment attachment) {
-
+        sjekker.sjekkAttachments(attachment);
         String fnr = tokenHelper.autentisertBruker();
         String directory = crypto.encryptDirectoryName(fnr);
         LOG.info("Skriver vedlegg {} til katalog {}", attachment, directory);
