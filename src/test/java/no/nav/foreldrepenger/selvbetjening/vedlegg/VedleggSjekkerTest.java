@@ -45,9 +45,7 @@ public class VedleggSjekkerTest {
 
     @Test
     public void testSjekkEncrypted() {
-        Vedlegg v = new Vedlegg();
-        v.setContent(bytesFra("pdf/pdf-with-user-password.pdf"));
-        v.setUrl(URI.create("pdf/pdf-with-user-password.pdf"));
+        Vedlegg v = vedleggFra("pdf/pdf-with-user-password.pdf");
         doThrow(AttachmentPasswordProtectedException.class).when(encryptionSjekker).checkEncrypted(eq(v));
         assertThrows(AttachmentPasswordProtectedException.class, () -> sjekker.sjekk(v));
         verify(scanner).scan(eq(v));
@@ -55,30 +53,31 @@ public class VedleggSjekkerTest {
 
     @Test
     public void testSjekkUnencrypted() {
-        Vedlegg v = new Vedlegg();
-        v.setContent(bytesFra("pdf/pdf-with-empty-user-password.pdf"));
-        v.setUrl(URI.create("pdf/pdf-with-empty-user-password.pdf"));
+        Vedlegg v = vedleggFra("pdf/pdf-with-empty-user-password.pdf");
         sjekker.sjekk(v);
         verify(scanner).scan(eq(v));
     }
 
     @Test
     public void testImage() {
-        Vedlegg v = new Vedlegg();
-        v.setContent(bytesFra("pdf/nav-logo.png"));
-        v.setUrl(URI.create("pdf/nav-logo.png"));
+        Vedlegg v = vedleggFra("pdf/nav-logo.png");
         sjekker.sjekk(v);
         verify(scanner).scan(eq(v));
     }
 
     @Test
     public void testVirus() {
-        Vedlegg v = new Vedlegg();
-        v.setContent(bytesFra("pdf/pdf-with-empty-user-password.pdf"));
-        v.setUrl(URI.create("pdf/pdf-with-empty-user-password.pdf"));
+        Vedlegg v = vedleggFra("pdf/pdf-with-empty-user-password.pdf");
         doThrow(AttachmentVirusException.class).when(scanner).scan(eq(v));
         assertThrows(AttachmentVirusException.class, () -> sjekker.sjekk(v));
         verify(scanner).scan(eq(v));
+    }
+
+    private static Vedlegg vedleggFra(String navn) {
+        Vedlegg v = new Vedlegg();
+        v.setContent(bytesFra(navn));
+        v.setUrl(URI.create(navn));
+        return v;
     }
 
     private static byte[] bytesFra(String filename) {
