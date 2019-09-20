@@ -17,12 +17,15 @@ import no.nav.foreldrepenger.selvbetjening.tjeneste.virusscan.VirusScanner;
 public class VedleggSjekker {
 
     private final DataSize maxTotalSize;
+    private final DataSize maxEnkelSize;
     private final VirusScanner virusScanner;
     private final PDFEncryptionChecker encryptionChecker;
 
-    public VedleggSjekker(@Value("${vedlegg.maxtotal:32MB}") DataSize max, VirusScanner virusScanner,
+    public VedleggSjekker(@Value("${vedlegg.maxtotal:32MB}") DataSize maxTotal,
+            @Value("${vedlegg.maxenkel:8MB}") DataSize maxEnkel, VirusScanner virusScanner,
             PDFEncryptionChecker encryptionChecker) {
-        this.maxTotalSize = max;
+        this.maxTotalSize = maxTotal;
+        this.maxEnkelSize = maxEnkel;
         this.virusScanner = virusScanner;
         this.encryptionChecker = encryptionChecker;
 
@@ -34,8 +37,13 @@ public class VedleggSjekker {
 
     public void sjekk(List<Vedlegg> vedlegg) {
         sjekkTotalStørrelse(vedlegg);
+        sjekkEnkeltStørrelser(vedlegg);
         sjekkVirus(vedlegg);
         sjekkKryptert(vedlegg);
+    }
+
+    private void sjekkEnkeltStørrelser(List<Vedlegg> vedlegg) {
+        vedlegg.stream().forEach(this::sjekkStørrelse);
     }
 
     private void sjekkKryptert(List<Vedlegg> vedlegg) {
@@ -44,6 +52,12 @@ public class VedleggSjekker {
 
     private void sjekkVirus(List<Vedlegg> vedlegg) {
         vedlegg.stream().forEach(virusScanner::scan);
+    }
+
+    private void sjekkStørrelse(Vedlegg vedlegg) {
+        if (vedlegg.getContent().length > maxEnkelSize.toBytes()) {
+            throw new AttachmentsTooLargeException(vedlegg.getContent().length, maxEnkelSize);
+        }
     }
 
     private void sjekkTotalStørrelse(List<Vedlegg> vedlegg) {

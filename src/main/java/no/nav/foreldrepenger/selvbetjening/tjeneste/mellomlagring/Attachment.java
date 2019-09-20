@@ -14,8 +14,6 @@ import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 
 import com.google.gson.Gson;
 
-import no.nav.foreldrepenger.selvbetjening.error.AttachmentsTooLargeException;
-
 public class Attachment {
 
     public static final DataSize MAX_VEDLEGG_SIZE = DataSize.of(8, DataUnit.MEGABYTES);
@@ -26,21 +24,16 @@ public class Attachment {
     public final long size;
     public final String uuid;
 
-    private Attachment(String filename, byte[] bytes, MediaType contentType, long size) {
+    private Attachment(String filename, byte[] bytes, MediaType contentType) {
         this.filename = filename;
         this.bytes = bytes;
         this.contentType = contentType;
-        this.size = size;
+        this.size = bytes.length;
         this.uuid = UUID.randomUUID().toString();
     }
 
     public static Attachment of(MultipartFile file) {
-        long fileSize = file.getSize();
-        if (fileSize > MAX_VEDLEGG_SIZE.toBytes()) {
-            throw new AttachmentsTooLargeException(fileSize, MAX_VEDLEGG_SIZE.toBytes());
-        }
-        return new Attachment(file.getOriginalFilename(), getBytes(file), MediaType.valueOf(file.getContentType()),
-                fileSize);
+        return new Attachment(file.getOriginalFilename(), getBytes(file), MediaType.valueOf(file.getContentType()));
     }
 
     private static byte[] getBytes(MultipartFile file) {
