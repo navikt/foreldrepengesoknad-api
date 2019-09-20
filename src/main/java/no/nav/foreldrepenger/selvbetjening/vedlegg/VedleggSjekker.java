@@ -33,6 +33,20 @@ public class VedleggSjekker {
     }
 
     public void sjekk(List<Vedlegg> vedlegg) {
+        sjekkTotalStørrelse(vedlegg);
+        sjekkVirus(vedlegg);
+        sjekkKryptert(vedlegg);
+    }
+
+    private void sjekkKryptert(List<Vedlegg> vedlegg) {
+        vedlegg.stream().forEach(encryptionChecker::checkEncrypted);
+    }
+
+    private void sjekkVirus(List<Vedlegg> vedlegg) {
+        vedlegg.stream().forEach(virusScanner::scan);
+    }
+
+    private void sjekkTotalStørrelse(List<Vedlegg> vedlegg) {
         long total = vedlegg.stream()
                 .filter(v -> v.getContent() != null)
                 .mapToLong(v -> v.getContent().length)
@@ -43,8 +57,6 @@ public class VedleggSjekker {
                             DataSize.ofBytes(total),
                             maxTotalSize));
         }
-        vedlegg.stream().forEach(virusScanner::scan);
-        vedlegg.stream().forEach(encryptionChecker::checkEncrypted);
     }
 
     @Override
