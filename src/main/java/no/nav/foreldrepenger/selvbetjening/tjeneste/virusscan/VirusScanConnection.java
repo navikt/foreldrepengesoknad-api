@@ -14,7 +14,7 @@ import org.springframework.web.client.RestOperations;
 
 import io.micrometer.core.instrument.Counter;
 import io.micrometer.core.instrument.Metrics;
-import no.nav.foreldrepenger.selvbetjening.tjeneste.innsending.domain.Vedlegg;
+import no.nav.foreldrepenger.selvbetjening.error.AttachmentVirusException;
 
 @Component
 class VirusScanConnection implements EnvironmentAware {
@@ -41,36 +41,31 @@ class VirusScanConnection implements EnvironmentAware {
         return config.isEnabled();
     }
 
-    public boolean scan(Vedlegg vedlegg) {
-        return scan(vedlegg.getContent(), vedlegg.getUrl());
-    }
-
-    private boolean scan(byte[] bytes, URI uri) {
+    public void scan(byte[] bytes, URI uri) {
         if (isEnabled()) {
             try {
                 LOG.info("Scanner {}", uri);
                 ScanResult[] scanResults = putForObject(config.getUri(), bytes, ScanResult[].class);
                 if (scanResults.length != 1) {
                     LOG.warn("Uventet respons med lengde {}, forventet lengde er 1", scanResults.length);
-                    return true;
+                    return;
                 }
                 ScanResult scanResult = scanResults[0];
                 LOG.info("Fikk scan result {}", scanResult);
                 if (OK.equals(scanResult.getResult())) {
                     LOG.info("Ingen virus i {}", uri);
                     INGENVIRUS_COUNTER.increment();
-                    return true;
+                    return;
                 }
                 LOG.warn("Fant virus i {}, status {}", uri, scanResult.getResult());
                 VIRUS_COUNTER.increment();
-                return false;
+                throw new AttachmentVirusException(uri);
             } catch (Exception e) {
                 LOG.warn("Kunne ikke scanne {}", uri, e);
-                return true;
+                return;
             }
         }
         LOG.info("Virusscanning er ikke aktivert");
-        return true;
     }
 
     private <T> T putForObject(URI uri, Object payload, Class<T> responseType) {

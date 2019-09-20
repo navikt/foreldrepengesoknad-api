@@ -2,7 +2,6 @@ package no.nav.foreldrepenger.selvbetjening.tjeneste.virusscan;
 
 import org.springframework.stereotype.Service;
 
-import no.nav.foreldrepenger.selvbetjening.error.AttachmentVirusException;
 import no.nav.foreldrepenger.selvbetjening.tjeneste.innsending.domain.Vedlegg;
 
 @Service
@@ -16,9 +15,7 @@ public class ClamAvVirusScanner implements VirusScanner {
 
     @Override
     public void scan(Vedlegg vedlegg) {
-        if (connection.scan(vedlegg)) {
-            throw new AttachmentVirusException(vedlegg);
-        }
+        connection.scan(vedlegg.getContent(), vedlegg.getUrl());
     }
 
     @Override
