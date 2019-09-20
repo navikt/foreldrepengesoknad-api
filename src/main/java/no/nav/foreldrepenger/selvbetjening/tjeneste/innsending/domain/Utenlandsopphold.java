@@ -3,14 +3,28 @@ package no.nav.foreldrepenger.selvbetjening.tjeneste.innsending.domain;
 import java.util.List;
 
 public class Utenlandsopphold {
-    public List<UtenlandsoppholdPeriode> tidligereOpphold;
-    public List<UtenlandsoppholdPeriode> senereOpphold;
+    private List<UtenlandsoppholdPeriode> tidligereOpphold;
+    private List<UtenlandsoppholdPeriode> senereOpphold;
+
+    public List<UtenlandsoppholdPeriode> getTidligereOpphold() {
+        return tidligereOpphold;
+    }
+
+    public void setTidligereOpphold(List<UtenlandsoppholdPeriode> tidligereOpphold) {
+        this.tidligereOpphold = tidligereOpphold;
+    }
+
+    public List<UtenlandsoppholdPeriode> getSenereOpphold() {
+        return senereOpphold;
+    }
+
+    public void setSenereOpphold(List<UtenlandsoppholdPeriode> senereOpphold) {
+        this.senereOpphold = senereOpphold;
+    }
 
     @Override
     public String toString() {
-        return "Utenlandsopphold{" +
-                "tidligereOpphold=" + tidligereOpphold +
-                ", senereOpphold=" + senereOpphold +
-                '}';
+        return getClass().getSimpleName() + "[tidligereOpphold=" + tidligereOpphold + ", senereOpphold="
+                + senereOpphold + "]";
     }
 }

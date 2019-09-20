@@ -12,6 +12,7 @@ import org.springframework.stereotype.Component;
 @ConfigurationProperties(prefix = "historikk", ignoreUnknownFields = false)
 @Component
 public class HistorikkConfig {
+    private static final String DEFAULT_PING_PATH = "actuator/info";
 
     private boolean enabled = true;
     private URI uri;
@@ -20,8 +21,6 @@ public class HistorikkConfig {
     public void setKey(String key) {
         this.key = key;
     }
-
-    private static final String DEFAULT_PING_PATH = "actuator/info";
 
     public URI historikkURI() {
         return uri(uri, "historikk" + "/me/all");

@@ -103,6 +103,6 @@ public class MellomlagringTjeneste {
     @Override
     public String toString() {
         return getClass().getSimpleName() + "[tokenHelper=" + tokenHelper + ", storage=" + storage + ", crypto="
-                + crypto + "]";
+                + crypto + ", sjekker=" + sjekker + "]";
     }
 }

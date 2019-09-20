@@ -44,26 +44,26 @@ public class FordelingDto {
         public Boolean ønskerFlerbarnsdager;
 
         public FordelingPeriodeDto(UttaksplanPeriode u) {
-            if (isTrue(u.gradert)) {
+            if (isTrue(u.getGradert())) {
                 this.type = "gradert";
                 this.arbeidsForholdSomskalGraderes = true;
             } else {
-                this.type = u.type;
+                this.type = u.getType();
             }
             this.ønskerFlerbarnsdager = u.ønskerFlerbarnsdager;
-            this.uttaksperiodeType = u.konto;
-            this.fom = u.tidsperiode.fom;
-            this.tom = u.tidsperiode.tom;
-            this.samtidigUttakProsent = u.samtidigUttakProsent;
-            this.årsak = u.årsak;
-            this.virksomhetsnummer = u.orgnumre;
-            this.arbeidstidProsent = u.stillingsprosent;
-            this.ønskerSamtidigUttak = u.ønskerSamtidigUttak;
-            this.erArbeidstaker = u.erArbeidstaker;
-            this.frilans = u.erFrilanser;
-            this.selvstendig = u.erSelvstendig;
-            this.morsAktivitetsType = u.morsAktivitetIPerioden;
-            this.vedlegg = u.vedlegg;
+            this.uttaksperiodeType = u.getKonto();
+            this.fom = u.getTidsperiode().getFom();
+            this.tom = u.getTidsperiode().getTom();
+            this.samtidigUttakProsent = u.getSamtidigUttakProsent();
+            this.årsak = u.getÅrsak();
+            this.virksomhetsnummer = u.getOrgnumre();
+            this.arbeidstidProsent = u.getStillingsprosent();
+            this.ønskerSamtidigUttak = u.getØnskerSamtidigUttak();
+            this.erArbeidstaker = u.getErArbeidstaker();
+            this.frilans = u.getErFrilanser();
+            this.selvstendig = u.getErSelvstendig();
+            this.morsAktivitetsType = u.getMorsAktivitetIPerioden();
+            this.vedlegg = u.getVedlegg();
         }
     }
 }

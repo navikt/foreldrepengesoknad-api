@@ -1,34 +1,38 @@
 package no.nav.foreldrepenger.selvbetjening.tjeneste.innsending.domain;
 
 import static com.fasterxml.jackson.annotation.JsonInclude.Include.NON_EMPTY;
-import static java.time.LocalDateTime.now;
 
 import java.time.LocalDate;
 import java.time.LocalDateTime;
+import java.util.Arrays;
 
+import com.fasterxml.jackson.annotation.JsonCreator;
 import com.fasterxml.jackson.annotation.JsonInclude;
+import com.fasterxml.jackson.annotation.JsonProperty;
 
 @JsonInclude(NON_EMPTY)
 public class Kvittering {
-    public static final Kvittering STUB = new Kvittering(now(), "deadbeef-69-cafebabe-42", "PÅGÅR", "12345", "67890",
-            new byte[0], new byte[0], LocalDate.now(), LocalDate.now());
 
-    public LocalDateTime mottattDato;
-    public LocalDate førsteDag;
-    public String referanseId;
-    public String leveranseStatus;
-    public String journalId;
-    public String saksNr;
-    public byte[] pdf;
-    public LocalDate førsteInntektsmeldingDag;
-    public byte[] infoskrivPdf;
+    private final LocalDateTime mottattDato;
+    private final LocalDate førsteDag;
+    private final String referanseId;
+    private final String leveranseStatus;
+    private final String journalId;
+    private final String saksNr;
+    private final byte[] pdf;
+    private final LocalDate førsteInntektsmeldingDag;
+    private final byte[] infoskrivPdf;
 
-    @SuppressWarnings("unused")
-    public Kvittering() {
-    }
-
-    public Kvittering(LocalDateTime mottattDato, String referanseId, String leveranseStatus, String journalId,
-            String saksNr, byte[] pdf, byte[] infoskrivPdf, LocalDate førsteInntektsmeldingDag, LocalDate førsteDag) {
+    @JsonCreator
+    public Kvittering(@JsonProperty("mottattDato") LocalDateTime mottattDato,
+            @JsonProperty("referanseId") String referanseId,
+            @JsonProperty("leveranseStatus") String leveranseStatus,
+            @JsonProperty("journalId") String journalId,
+            @JsonProperty("saksNr") String saksNr,
+            @JsonProperty("pdf") byte[] pdf,
+            @JsonProperty("infoskrivPdf") byte[] infoskrivPdf,
+            @JsonProperty("førsteInntektsmeldingDag") LocalDate førsteInntektsmeldingDag,
+            @JsonProperty("førsteDag") LocalDate førsteDag) {
         this.mottattDato = mottattDato;
         this.referanseId = referanseId;
         this.leveranseStatus = leveranseStatus;
@@ -39,4 +43,49 @@ public class Kvittering {
         this.førsteInntektsmeldingDag = førsteInntektsmeldingDag;
         this.førsteDag = førsteDag;
     }
+
+    public LocalDateTime getMottattDato() {
+        return mottattDato;
+    }
+
+    public LocalDate getFørsteDag() {
+        return førsteDag;
+    }
+
+    public String getReferanseId() {
+        return referanseId;
+    }
+
+    public String getLeveranseStatus() {
+        return leveranseStatus;
+    }
+
+    public String getJournalId() {
+        return journalId;
+    }
+
+    public String getSaksNr() {
+        return saksNr;
+    }
+
+    public byte[] getPdf() {
+        return pdf;
+    }
+
+    public LocalDate getFørsteInntektsmeldingDag() {
+        return førsteInntektsmeldingDag;
+    }
+
+    public byte[] getInfoskrivPdf() {
+        return infoskrivPdf;
+    }
+
+    @Override
+    public String toString() {
+        return getClass().getSimpleName() + "[mottattDato=" + mottattDato + ", førsteDag=" + førsteDag
+                + ", referanseId=" + referanseId + ", leveranseStatus=" + leveranseStatus + ", journalId=" + journalId
+                + ", saksNr=" + saksNr + ", pdf=" + Arrays.toString(pdf) + ", førsteInntektsmeldingDag="
+                + førsteInntektsmeldingDag + ", infoskrivPdf=" + Arrays.toString(infoskrivPdf) + "]";
+    }
+
 }

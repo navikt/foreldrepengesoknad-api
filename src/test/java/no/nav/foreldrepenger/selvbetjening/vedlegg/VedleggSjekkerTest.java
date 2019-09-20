@@ -5,6 +5,7 @@ import static org.mockito.ArgumentMatchers.eq;
 import static org.mockito.Mockito.doThrow;
 import static org.mockito.Mockito.verify;
 import static org.springframework.util.StreamUtils.copyToByteArray;
+import static org.springframework.util.unit.DataUnit.MEGABYTES;
 
 import java.io.IOException;
 import java.io.InputStream;
@@ -17,7 +18,6 @@ import org.mockito.Mock;
 import org.springframework.core.io.ClassPathResource;
 import org.springframework.test.context.junit.jupiter.SpringExtension;
 import org.springframework.util.unit.DataSize;
-import org.springframework.util.unit.DataUnit;
 
 import no.nav.foreldrepenger.selvbetjening.error.AttachmentPasswordProtectedException;
 import no.nav.foreldrepenger.selvbetjening.error.AttachmentVirusException;
@@ -27,8 +27,8 @@ import no.nav.foreldrepenger.selvbetjening.tjeneste.virusscan.VirusScanner;
 @ExtendWith(SpringExtension.class)
 public class VedleggSjekkerTest {
 
-    private static final DataSize max = DataSize.of(32, DataUnit.MEGABYTES);
-    private static final DataSize maxEnkelt = DataSize.of(8, DataUnit.MEGABYTES);
+    private static final DataSize MAX_SAMLET = DataSize.of(32, MEGABYTES);
+    private static final DataSize MAX_ENKELT = DataSize.of(8, MEGABYTES);
 
     @Mock
     VirusScanner scanner;
@@ -40,7 +40,7 @@ public class VedleggSjekkerTest {
 
     @BeforeEach
     public void beforeAll() {
-        sjekker = new VedleggSjekker(max, maxEnkelt, scanner, encryptionSjekker);
+        sjekker = new VedleggSjekker(MAX_SAMLET, MAX_ENKELT, scanner, encryptionSjekker);
     }
 
     @Test

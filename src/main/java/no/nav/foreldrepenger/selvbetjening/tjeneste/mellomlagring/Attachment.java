@@ -32,13 +32,17 @@ public class Attachment {
         this.contentType = contentType;
         this.size = bytes.length;
         this.uuid = UUID.randomUUID().toString();
+        if (size > MAX_VEDLEGG_SIZE.toBytes()) {
+            throw new AttachmentTooLargeException(size, MAX_VEDLEGG_SIZE);
+        }
     }
 
     public static Attachment of(MultipartFile file) {
-        if (file.getSize() > MAX_VEDLEGG_SIZE.toBytes()) {
-            throw new AttachmentTooLargeException(file.getSize(), MAX_VEDLEGG_SIZE);
-        }
         return new Attachment(file.getOriginalFilename(), getBytes(file), MediaType.valueOf(file.getContentType()));
+    }
+
+    static Attachment of(String fileName, byte[] bytes, MediaType mediaType) {
+        return new Attachment(fileName, bytes, mediaType);
     }
 
     private static byte[] getBytes(MultipartFile file) {
@@ -73,7 +77,7 @@ public class Attachment {
     private String bytes() {
         String vedleggAsString = Arrays.toString(bytes);
         if (vedleggAsString.length() >= 50) {
-            return vedleggAsString.substring(0, 49) + ".... " + (vedleggAsString.length() - 50) + " more bytes";
+            return vedleggAsString.substring(0, 49) + ".... " + (bytes.length - 50) + " more bytes";
         }
         return vedleggAsString;
     }

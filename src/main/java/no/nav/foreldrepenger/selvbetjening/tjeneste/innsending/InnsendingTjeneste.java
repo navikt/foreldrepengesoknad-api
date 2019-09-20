@@ -61,7 +61,7 @@ public class InnsendingTjeneste implements Innsending {
     }
 
     private void hentOgSjekk(List<Vedlegg> vedlegg) {
-        vedlegg.forEach(this::hentVedlegg);
+        vedlegg.forEach(this::hentVedleggBytes);
         vedleggSjekker.sjekk(vedlegg);
     }
 
@@ -71,7 +71,7 @@ public class InnsendingTjeneste implements Innsending {
         mellomlagring.slettSøknad();
     }
 
-    private void hentVedlegg(Vedlegg vedlegg) {
+    private void hentVedleggBytes(Vedlegg vedlegg) {
         if (vedlegg.getUrl() != null) {
             vedlegg.setContent(mellomlagring.hentVedlegg(vedlegg.getUuid())
                     .map(a -> a.bytes)

@@ -6,8 +6,6 @@ import java.net.URI;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.springframework.context.EnvironmentAware;
-import org.springframework.core.env.Environment;
 import org.springframework.http.RequestEntity;
 import org.springframework.stereotype.Component;
 import org.springframework.web.client.RestOperations;
@@ -17,7 +15,7 @@ import io.micrometer.core.instrument.Metrics;
 import no.nav.foreldrepenger.selvbetjening.error.AttachmentVirusException;
 
 @Component
-class VirusScanConnection implements EnvironmentAware {
+class VirusScanConnection {
 
     private static final Logger LOG = LoggerFactory.getLogger(VirusScanConnection.class);
     private static final Counter INGENVIRUS_COUNTER = counter("virus", "OK");
@@ -25,16 +23,10 @@ class VirusScanConnection implements EnvironmentAware {
 
     private final VirusScanConfig config;
     private final RestOperations operations;
-    private Environment env;
 
     public VirusScanConnection(RestOperations operations, VirusScanConfig config) {
         this.operations = operations;
         this.config = config;
-    }
-
-    @Override
-    public void setEnvironment(Environment env) {
-        this.env = env;
     }
 
     public boolean isEnabled() {

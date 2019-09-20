@@ -46,8 +46,8 @@ public class YtelseDto {
         if (søknad instanceof Foreldrepengesøknad) {
             Foreldrepengesøknad foreldrepengesøknad = (Foreldrepengesøknad) søknad;
             this.relasjonTilBarn = new RelasjonTilBarnDto(søknad.getBarn(), søknad.getSituasjon());
-            this.dekningsgrad = "GRAD" + foreldrepengesøknad.dekningsgrad;
-            this.fordeling = new FordelingDto(foreldrepengesøknad.uttaksplan,
+            this.dekningsgrad = "GRAD" + foreldrepengesøknad.getDekningsgrad();
+            this.fordeling = new FordelingDto(foreldrepengesøknad.getUttaksplan(),
                     foreldrepengesøknad.getAnnenForelder().erInformertOmSøknaden);
             this.rettigheter = new RettigheterDto(foreldrepengesøknad);
         }
@@ -62,7 +62,7 @@ public class YtelseDto {
             if (isNotEmpty(svangerskapspengesøknad.getBarn().fødselsdatoer)) {
                 this.fødselsdato = svangerskapspengesøknad.getBarn().fødselsdatoer.get(0);
             }
-            this.tilrettelegging = svangerskapspengesøknad.tilrettelegging.stream().map(TilretteleggingDto::new)
+            this.tilrettelegging = svangerskapspengesøknad.getTilrettelegging().stream().map(TilretteleggingDto::new)
                     .collect(toList());
         }
 
@@ -115,10 +115,10 @@ public class YtelseDto {
         public MedlemsskapDto(Utenlandsopphold opphold) {
             this.arbeidSiste12 = "IKKE_ARBEIDET";
 
-            for (UtenlandsoppholdPeriode tidligere : opphold.tidligereOpphold) {
+            for (UtenlandsoppholdPeriode tidligere : opphold.getTidligereOpphold()) {
                 utenlandsopphold.add(new UtenlandsoppholdPeriodeDto(tidligere));
             }
-            for (UtenlandsoppholdPeriode senere : opphold.senereOpphold) {
+            for (UtenlandsoppholdPeriode senere : opphold.getSenereOpphold()) {
                 framtidigUtenlandsopphold.add(new UtenlandsoppholdPeriodeDto(senere));
             }
         }
@@ -130,9 +130,9 @@ public class YtelseDto {
         public PeriodeDto varighet = new PeriodeDto();
 
         public UtenlandsoppholdPeriodeDto(UtenlandsoppholdPeriode periode) {
-            this.land = periode.land;
-            this.varighet.fom = periode.tidsperiode.fom;
-            this.varighet.tom = periode.tidsperiode.tom;
+            this.land = periode.getLand();
+            this.varighet.fom = periode.getTidsperiode().getFom();
+            this.varighet.tom = periode.getTidsperiode().getTom();
         }
     }
 
@@ -187,7 +187,7 @@ public class YtelseDto {
         public LocalDate datoForAleneomsorg;
 
         public RettigheterDto(Foreldrepengesøknad foreldrepengesøknad) {
-            this.harAleneOmsorgForBarnet = foreldrepengesøknad.getSøker().erAleneOmOmsorg;
+            this.harAleneOmsorgForBarnet = foreldrepengesøknad.getSøker().getErAleneOmOmsorg();
             this.harAnnenForelderRett = foreldrepengesøknad.getAnnenForelder().harRettPåForeldrepenger;
             this.datoForAleneomsorg = foreldrepengesøknad.getAnnenForelder().datoForAleneomsorg;
         }
@@ -204,13 +204,13 @@ public class YtelseDto {
         public List<String> vedlegg;
 
         public TilretteleggingDto(Tilrettelegging tilrettelegging) {
-            this.type = tilrettelegging.type;
-            this.arbeidsforhold = new ArbeidsforholdDto(tilrettelegging.arbeidsforhold);
-            this.behovForTilretteleggingFom = tilrettelegging.behovForTilretteleggingFom;
-            this.tilrettelagtArbeidFom = tilrettelegging.tilrettelagtArbeidFom;
-            this.stillingsprosent = tilrettelegging.stillingsprosent;
-            this.slutteArbeidFom = tilrettelegging.slutteArbeidFom;
-            this.vedlegg = tilrettelegging.vedlegg;
+            this.type = tilrettelegging.getType();
+            this.arbeidsforhold = new ArbeidsforholdDto(tilrettelegging.getArbeidsforhold());
+            this.behovForTilretteleggingFom = tilrettelegging.getBehovForTilretteleggingFom();
+            this.tilrettelagtArbeidFom = tilrettelegging.getTilrettelagtArbeidFom();
+            this.stillingsprosent = tilrettelegging.getStillingsprosent();
+            this.slutteArbeidFom = tilrettelegging.getSlutteArbeidFom();
+            this.vedlegg = tilrettelegging.getVedlegg();
         }
     }
 
@@ -223,14 +223,14 @@ public class YtelseDto {
         public String tilretteleggingstiltak;
 
         public ArbeidsforholdDto(Arbeidsforhold arbeidsforhold) {
-            this.type = arbeidsforhold.type;
-            this.risikoFaktorer = arbeidsforhold.risikofaktorer;
-            this.tilretteleggingstiltak = arbeidsforhold.tilretteleggingstiltak;
+            this.type = arbeidsforhold.getType();
+            this.risikoFaktorer = arbeidsforhold.getRisikofaktorer();
+            this.tilretteleggingstiltak = arbeidsforhold.getTilretteleggingstiltak();
 
-            if (arbeidsforhold.type.equals("virksomhet")) {
-                this.orgnr = arbeidsforhold.id;
+            if (arbeidsforhold.getType().equals("virksomhet")) {
+                this.orgnr = arbeidsforhold.getId();
             } else {
-                this.fnr = arbeidsforhold.id;
+                this.fnr = arbeidsforhold.getId();
             }
 
         }

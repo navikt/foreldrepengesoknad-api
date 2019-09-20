@@ -9,24 +9,73 @@ import no.nav.foreldrepenger.selvbetjening.tjeneste.innsending.domain.arbeid.Sel
 
 public class Søker {
 
-    public String rolle;
-    public String språkkode;
+    private String rolle;
+    private String språkkode;
 
-    public Boolean erAleneOmOmsorg;
+    private Boolean erAleneOmOmsorg;
 
-    public FrilansInformasjon frilansInformasjon;
+    private FrilansInformasjon frilansInformasjon;
 
-    public List<SelvstendigNæringsdrivendeInformasjon> selvstendigNæringsdrivendeInformasjon = new ArrayList<>();
-    public List<AnnenInntekt> andreInntekterSiste10Mnd = new ArrayList<>();
+    private List<SelvstendigNæringsdrivendeInformasjon> selvstendigNæringsdrivendeInformasjon = new ArrayList<>();
+    private List<AnnenInntekt> andreInntekterSiste10Mnd = new ArrayList<>();
+
+    public String getRolle() {
+        return rolle;
+    }
+
+    public void setRolle(String rolle) {
+        this.rolle = rolle;
+    }
+
+    public String getSpråkkode() {
+        return språkkode;
+    }
+
+    public void setSpråkkode(String språkkode) {
+        this.språkkode = språkkode;
+    }
+
+    public Boolean getErAleneOmOmsorg() {
+        return erAleneOmOmsorg;
+    }
+
+    public void setErAleneOmOmsorg(Boolean erAleneOmOmsorg) {
+        this.erAleneOmOmsorg = erAleneOmOmsorg;
+    }
+
+    public FrilansInformasjon getFrilansInformasjon() {
+        return frilansInformasjon;
+    }
+
+    public void setFrilansInformasjon(FrilansInformasjon frilansInformasjon) {
+        this.frilansInformasjon = frilansInformasjon;
+    }
+
+    public List<SelvstendigNæringsdrivendeInformasjon> getSelvstendigNæringsdrivendeInformasjon() {
+        return selvstendigNæringsdrivendeInformasjon;
+    }
+
+    public void setSelvstendigNæringsdrivendeInformasjon(
+            List<SelvstendigNæringsdrivendeInformasjon> selvstendigNæringsdrivendeInformasjon) {
+        this.selvstendigNæringsdrivendeInformasjon = selvstendigNæringsdrivendeInformasjon;
+    }
+
+    public List<AnnenInntekt> getAndreInntekterSiste10Mnd() {
+        return andreInntekterSiste10Mnd;
+    }
+
+    public void setAndreInntekterSiste10Mnd(List<AnnenInntekt> andreInntekterSiste10Mnd) {
+        this.andreInntekterSiste10Mnd = andreInntekterSiste10Mnd;
+    }
 
     @Override
     public String toString() {
-        return getClass().getSimpleName() + " [rolle=" + rolle + ", språkkode=" + språkkode
-                + ", erAleneOmOmsorg=" + erAleneOmOmsorg
+        return getClass().getSimpleName() + " [rolle=" + getRolle() + ", språkkode=" + getSpråkkode()
+                + ", erAleneOmOmsorg=" + getErAleneOmOmsorg()
                 + ", frilansInformasjon="
-                + frilansInformasjon + ", selvstendigNæringsdrivendeInformasjon="
-                + selvstendigNæringsdrivendeInformasjon + ", andreInntekterSiste10Mnd=" + andreInntekterSiste10Mnd
+                + getFrilansInformasjon() + ", selvstendigNæringsdrivendeInformasjon="
+                + getSelvstendigNæringsdrivendeInformasjon() + ", andreInntekterSiste10Mnd="
+                + getAndreInntekterSiste10Mnd()
                 + "]";
     }
-
 }
