@@ -46,6 +46,9 @@ import no.nav.security.spring.oidc.SpringOIDCRequestContextHolder;
 @ActiveProfiles(EnvUtil.TEST)
 public class InnsendingTest {
 
+    private static final DataSize MAX_TOTAL = DataSize.of(32, DataUnit.MEGABYTES);
+    private static final DataSize MAX_ENKEL = DataSize.of(8, DataUnit.MEGABYTES);
+
     @Mock
     TokenUtil tokenHandler;
 
@@ -74,7 +77,7 @@ public class InnsendingTest {
         if (innsending == null) {
             innsending = new InnsendingTjeneste(new InnsendingConnection(builder
                     .build(), innsendingConfig, converter), storage,
-                    new VedleggSjekker(DataSize.of(32, DataUnit.MEGABYTES), scanner, encryptionChecker));
+                    new VedleggSjekker(MAX_TOTAL, MAX_ENKEL, scanner, encryptionChecker));
         }
     }
 
