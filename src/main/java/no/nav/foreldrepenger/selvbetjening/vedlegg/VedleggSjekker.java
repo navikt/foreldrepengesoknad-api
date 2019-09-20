@@ -1,7 +1,5 @@
 package no.nav.foreldrepenger.selvbetjening.vedlegg;
 
-import static java.lang.String.format;
-
 import java.util.Arrays;
 import java.util.List;
 
@@ -9,6 +7,7 @@ import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Component;
 import org.springframework.util.unit.DataSize;
 
+import no.nav.foreldrepenger.selvbetjening.error.AttachmentTooLargeException;
 import no.nav.foreldrepenger.selvbetjening.error.AttachmentsTooLargeException;
 import no.nav.foreldrepenger.selvbetjening.tjeneste.innsending.domain.Vedlegg;
 import no.nav.foreldrepenger.selvbetjening.tjeneste.virusscan.VirusScanner;
@@ -56,7 +55,7 @@ public class VedleggSjekker {
 
     private void sjekkStørrelse(Vedlegg vedlegg) {
         if (vedlegg.getContent().length > maxEnkelSize.toBytes()) {
-            throw new AttachmentsTooLargeException(vedlegg.getContent().length, maxEnkelSize);
+            throw new AttachmentTooLargeException(vedlegg, maxEnkelSize);
         }
     }
 
@@ -66,10 +65,7 @@ public class VedleggSjekker {
                 .mapToLong(v -> v.getContent().length)
                 .sum();
         if (total > maxTotalSize.toBytes()) {
-            throw new AttachmentsTooLargeException(
-                    format("Samlet filstørrelse for alle vedlegg er %s, men må være mindre enn %s",
-                            DataSize.ofBytes(total),
-                            maxTotalSize));
+            throw new AttachmentsTooLargeException(total, maxTotalSize);
         }
     }
 

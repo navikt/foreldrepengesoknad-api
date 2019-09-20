@@ -75,7 +75,7 @@ public class ApiExceptionHandler extends ResponseEntityExceptionHandler {
 
     @ResponseBody
     @ExceptionHandler({ MultipartException.class, MaxUploadSizeExceededException.class,
-            AttachmentsTooLargeException.class })
+            AttachmentsTooLargeException.class, AttachmentTooLargeException.class })
     public ResponseEntity<Object> handleTooLargeAttchment(Exception e, WebRequest req) {
         return logAndHandle(PAYLOAD_TOO_LARGE, e, req);
     }
