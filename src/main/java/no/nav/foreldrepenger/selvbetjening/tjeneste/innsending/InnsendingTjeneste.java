@@ -13,8 +13,8 @@ import no.nav.foreldrepenger.selvbetjening.tjeneste.innsending.domain.Ettersendi
 import no.nav.foreldrepenger.selvbetjening.tjeneste.innsending.domain.Kvittering;
 import no.nav.foreldrepenger.selvbetjening.tjeneste.innsending.domain.Søknad;
 import no.nav.foreldrepenger.selvbetjening.tjeneste.innsending.domain.Vedlegg;
-import no.nav.foreldrepenger.selvbetjening.tjeneste.innsending.domain.VedleggSjekker;
 import no.nav.foreldrepenger.selvbetjening.tjeneste.mellomlagring.MellomlagringTjeneste;
+import no.nav.foreldrepenger.selvbetjening.vedlegg.VedleggSjekker;
 
 @Service
 @ConditionalOnProperty(name = "stub.mottak", havingValue = "false", matchIfMissing = true)

@@ -27,13 +27,13 @@ import org.springframework.util.unit.DataSize;
 import org.springframework.util.unit.DataUnit;
 
 import no.nav.foreldrepenger.selvbetjening.tjeneste.innsending.domain.Søknad;
-import no.nav.foreldrepenger.selvbetjening.tjeneste.innsending.domain.VedleggSjekker;
 import no.nav.foreldrepenger.selvbetjening.tjeneste.mellomlagring.MellomlagringTjeneste;
 import no.nav.foreldrepenger.selvbetjening.tjeneste.virusscan.VirusScanner;
 import no.nav.foreldrepenger.selvbetjening.util.EnvUtil;
 import no.nav.foreldrepenger.selvbetjening.util.TokenUtil;
 import no.nav.foreldrepenger.selvbetjening.vedlegg.Image2PDFConverter;
 import no.nav.foreldrepenger.selvbetjening.vedlegg.PDFEncryptionChecker;
+import no.nav.foreldrepenger.selvbetjening.vedlegg.VedleggSjekker;
 import no.nav.security.spring.oidc.SpringOIDCRequestContextHolder;
 
 @ExtendWith(SpringExtension.class)

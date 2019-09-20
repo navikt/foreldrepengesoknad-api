@@ -7,6 +7,8 @@ import java.util.UUID;
 
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
+import org.springframework.util.unit.DataSize;
+import org.springframework.util.unit.DataUnit;
 import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 
@@ -16,9 +18,7 @@ import no.nav.foreldrepenger.selvbetjening.error.AttachmentsTooLargeException;
 
 public class Attachment {
 
-    private static final long MB = 1024L * 1024L;
-    public static final long MAX_TOTAL_VEDLEGG_SIZE = 32 * MB;
-    public static final long MAX_VEDLEGG_SIZE = 8 * MB;
+    public static final DataSize MAX_VEDLEGG_SIZE = DataSize.of(8, DataUnit.MEGABYTES);
 
     public final String filename;
     public final byte[] bytes;
@@ -36,8 +36,8 @@ public class Attachment {
 
     public static Attachment of(MultipartFile file) {
         long fileSize = file.getSize();
-        if (fileSize > MAX_VEDLEGG_SIZE) {
-            throw new AttachmentsTooLargeException(fileSize, MAX_VEDLEGG_SIZE);
+        if (fileSize > MAX_VEDLEGG_SIZE.toBytes()) {
+            throw new AttachmentsTooLargeException(fileSize, MAX_VEDLEGG_SIZE.toBytes());
         }
         return new Attachment(file.getOriginalFilename(), getBytes(file), MediaType.valueOf(file.getContentType()),
                 fileSize);

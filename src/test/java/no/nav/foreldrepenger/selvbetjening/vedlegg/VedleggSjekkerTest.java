@@ -22,7 +22,6 @@ import org.springframework.util.unit.DataUnit;
 import no.nav.foreldrepenger.selvbetjening.error.AttachmentPasswordProtectedException;
 import no.nav.foreldrepenger.selvbetjening.error.AttachmentVirusException;
 import no.nav.foreldrepenger.selvbetjening.tjeneste.innsending.domain.Vedlegg;
-import no.nav.foreldrepenger.selvbetjening.tjeneste.innsending.domain.VedleggSjekker;
 import no.nav.foreldrepenger.selvbetjening.tjeneste.virusscan.VirusScanner;
 
 @ExtendWith(SpringExtension.class)

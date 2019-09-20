@@ -1,4 +1,4 @@
-package no.nav.foreldrepenger.selvbetjening.tjeneste.innsending.domain;
+package no.nav.foreldrepenger.selvbetjening.vedlegg;
 
 import static java.lang.String.format;
 
@@ -10,8 +10,8 @@ import org.springframework.stereotype.Component;
 import org.springframework.util.unit.DataSize;
 
 import no.nav.foreldrepenger.selvbetjening.error.AttachmentsTooLargeException;
+import no.nav.foreldrepenger.selvbetjening.tjeneste.innsending.domain.Vedlegg;
 import no.nav.foreldrepenger.selvbetjening.tjeneste.virusscan.VirusScanner;
-import no.nav.foreldrepenger.selvbetjening.vedlegg.PDFEncryptionChecker;
 
 @Component
 public class VedleggSjekker {
