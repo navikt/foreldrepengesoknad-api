@@ -6,7 +6,6 @@ import java.io.IOException;
 import java.net.URI;
 import java.nio.file.Files;
 import java.nio.file.Paths;
-import java.util.Arrays;
 
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Tag;
@@ -55,37 +54,6 @@ public class AttachmentStorageHttpTest extends AbstractTestExecutionListener {
     @BeforeEach
     public void setup() {
         http = new AttachmentTestHttpHandler(testRestTemplate, port, FNR);
-    }
-
-    @Test
-    public void storing_encrypted_pdfs_should_throw_error() {
-        ByteArrayResource encryptedPdf = getByteArrayResource("pdf", "pdf-with-user-password.pdf");
-        ResponseEntity<String> postResponse = http.postMultipart("vedlegg", MediaType.APPLICATION_PDF,
-                encryptedPdf);
-        assertThat(postResponse.getStatusCode()).isEqualTo(HttpStatus.UNPROCESSABLE_ENTITY);
-        assertThat(postResponse.getBody()).contains("er en kryptert PDF");
-
-        ByteArrayResource nonEncryptedPdf = getByteArrayResource("pdf", "pdf-with-empty-user-password.pdf");
-        ResponseEntity<String> nonEncryptedPostResponse = http.postMultipart("vedlegg", MediaType.APPLICATION_PDF,
-                nonEncryptedPdf);
-        assertThat(nonEncryptedPostResponse.getStatusCode()).isEqualTo(HttpStatus.CREATED);
-    }
-
-    @Test
-    public void store_and_retrieve_pdf_over_http() {
-        ByteArrayResource byteArrayResource = getByteArrayResource("pdf", "test.pdf");
-
-        ResponseEntity<String> postResponse = http.postMultipart("vedlegg", MediaType.APPLICATION_PDF,
-                byteArrayResource);
-        URI location = postResponse.getHeaders().getLocation();
-        assertThat(location).isNotNull();
-        assertThat(postResponse.getStatusCode()).isEqualTo(HttpStatus.CREATED);
-
-        ResponseEntity<byte[]> getResponse = http.getAttachment(location);
-        assertThat(getResponse.getStatusCode()).isEqualTo(HttpStatus.OK);
-        assertThat(getResponse.getBody()).isEqualTo(byteArrayResource.getByteArray());
-        assertThat(getResponse.getHeaders().getContentType()).isEqualTo(MediaType.APPLICATION_PDF);
-        assertThat(Arrays.copyOfRange(getResponse.getBody(), 0, PDFSIGNATURE.length)).isEqualTo(PDFSIGNATURE);
     }
 
     @Test

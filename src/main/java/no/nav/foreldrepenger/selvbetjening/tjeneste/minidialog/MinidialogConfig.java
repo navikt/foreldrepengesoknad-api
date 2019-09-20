@@ -1,5 +1,6 @@
 package no.nav.foreldrepenger.selvbetjening.tjeneste.minidialog;
 
+import static no.nav.foreldrepenger.selvbetjening.util.EnvUtil.DEV;
 import static no.nav.foreldrepenger.selvbetjening.util.URIUtil.queryParams;
 import static no.nav.foreldrepenger.selvbetjening.util.URIUtil.uri;
 
@@ -9,18 +10,14 @@ import org.springframework.beans.factory.annotation.Value;
 import org.springframework.boot.context.properties.ConfigurationProperties;
 import org.springframework.context.annotation.Configuration;
 
-@ConfigurationProperties(prefix = "minidialog")
+@ConfigurationProperties(prefix = MinidialogConfig.MINIDIALOG)
 @Configuration
 public class MinidialogConfig {
 
-    private static final String MINIDIALOG = "minidialog";
+    static final String MINIDIALOG = "minidialog";
     private static final String MINIDIALOG_ME = MINIDIALOG + "/me";
-    private static final String MINIDIALOG_PREPROD = MINIDIALOG + "/dev";
-    private static final String AKTIVE = MINIDIALOG_PREPROD + "/minidialoger";
-
-    public URI getURI() {
-        return uri;
-    }
+    private static final String MINIDIALOG_DEV = MINIDIALOG + "/" + DEV;
+    private static final String AKTIVE = MINIDIALOG_DEV + "/spm";
 
     private static final String DEFAULT_PING_PATH = "actuator/info";
     private boolean enabled;
@@ -28,6 +25,10 @@ public class MinidialogConfig {
 
     public MinidialogConfig(@Value("${historikk.uri}") URI uri) {
         this.uri = uri;
+    }
+
+    public URI getURI() {
+        return uri;
     }
 
     public URI minidialogURI() {
@@ -49,5 +50,4 @@ public class MinidialogConfig {
     public URI pingURI() {
         return uri(getURI(), DEFAULT_PING_PATH);
     }
-
 }

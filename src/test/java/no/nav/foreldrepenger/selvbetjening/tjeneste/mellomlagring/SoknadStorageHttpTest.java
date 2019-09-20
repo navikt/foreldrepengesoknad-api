@@ -1,7 +1,7 @@
 package no.nav.foreldrepenger.selvbetjening.tjeneste.mellomlagring;
 
 import static com.fasterxml.jackson.databind.SerializationFeature.FAIL_ON_EMPTY_BEANS;
-import static no.nav.foreldrepenger.selvbetjening.tjeneste.mellomlagring.StorageController.REST_STORAGE;
+import static no.nav.foreldrepenger.selvbetjening.tjeneste.mellomlagring.MellomlagringController.REST_STORAGE;
 import static no.nav.foreldrepenger.selvbetjening.util.EnvUtil.LOCAL;
 import static no.nav.foreldrepenger.selvbetjening.util.EnvUtil.LOCALSTACK;
 import static no.nav.foreldrepenger.selvbetjening.util.EnvUtil.TEST;

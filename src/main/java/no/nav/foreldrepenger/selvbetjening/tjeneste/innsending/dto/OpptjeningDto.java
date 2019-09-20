@@ -62,14 +62,14 @@ public class OpptjeningDto {
         public List<FrilansoppdragDto> frilansOppdrag = new ArrayList<>();
 
         public FrilansDto(FrilansInformasjon frilansInformasjon) {
-            this.periode.fom = frilansInformasjon.oppstart;
-            this.harInntektFraFosterhjem = frilansInformasjon.driverFosterhjem;
+            this.periode.fom = frilansInformasjon.getOppstart();
+            this.harInntektFraFosterhjem = frilansInformasjon.getDriverFosterhjem();
 
             LocalDate treMånederFørFom = now().minus(Period.ofDays(90));
             this.nyOppstartet = this.periode.fom.isAfter(treMånederFørFom);
 
             for (Frilansoppdrag o : frilansInformasjon.oppdragForNæreVennerEllerFamilieSiste10Mnd) {
-                frilansOppdrag.add(new FrilansoppdragDto(o.navnPåArbeidsgiver, o.tidsperiode.fom, o.tidsperiode.tom));
+                frilansOppdrag.add(new FrilansoppdragDto(o.getNavnPåArbeidsgiver(), o.getTidsperiode().fom, o.getTidsperiode().tom));
             }
         }
     }
@@ -144,9 +144,9 @@ public class OpptjeningDto {
             this.oppstartsDato = selvstendig.oppstartsdato;
 
             if (næringsInfo != null) {
-                this.endringsDato = næringsInfo.dato;
-                this.næringsinntektBrutto = næringsInfo.næringsinntektEtterEndring;
-                this.beskrivelseEndring = næringsInfo.forklaring;
+                this.endringsDato = næringsInfo.getDato();
+                this.næringsinntektBrutto = næringsInfo.getNæringsinntektEtterEndring();
+                this.beskrivelseEndring = næringsInfo.getForklaring();
             } else {
                 this.næringsinntektBrutto = selvstendig.næringsinntekt;
             }

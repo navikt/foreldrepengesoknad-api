@@ -1,15 +1,13 @@
 package no.nav.foreldrepenger.selvbetjening.tjeneste.virusscan;
 
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Service;
 
-import no.nav.foreldrepenger.selvbetjening.tjeneste.mellomlagring.Attachment;
+import no.nav.foreldrepenger.selvbetjening.error.AttachmentVirusException;
+import no.nav.foreldrepenger.selvbetjening.tjeneste.innsending.domain.Vedlegg;
 
 @Service
 public class ClamAvVirusScanner implements VirusScanner {
 
-    private static final Logger LOG = LoggerFactory.getLogger(ClamAvVirusScanner.class);
     private final VirusScanConnection connection;
 
     public ClamAvVirusScanner(VirusScanConnection connection) {
@@ -17,16 +15,15 @@ public class ClamAvVirusScanner implements VirusScanner {
     }
 
     @Override
-    public boolean scan(Attachment attachment) {
-        if (connection.isEnabled()) {
-            return connection.scan(attachment);
+    public void scan(Vedlegg vedlegg) {
+        if (connection.scan(vedlegg)) {
+            throw new AttachmentVirusException(vedlegg);
         }
-        LOG.info("Virusscanning er ikke aktivert");
-        return true;
     }
 
     @Override
     public String toString() {
         return getClass().getSimpleName() + " [connection=" + connection + "]";
     }
+
 }

@@ -21,11 +21,11 @@ public class SøknadDto {
     public void addVedlegg(Vedlegg vedlegg) {
         VedleggDto vedleggDto = new VedleggDto();
         vedleggDto.type = "påkrevd";
-        vedleggDto.metadata.id = vedlegg.id;
-        vedleggDto.metadata.dokumentType = vedlegg.skjemanummer;
-        vedleggDto.metadata.innsendingsType = vedlegg.innsendingsType;
-        vedleggDto.metadata.beskrivelse = vedlegg.beskrivelse;
-        vedleggDto.vedlegg = vedlegg.content;
+        vedleggDto.metadata.id = vedlegg.getId();
+        vedleggDto.metadata.dokumentType = vedlegg.getSkjemanummer();
+        vedleggDto.metadata.innsendingsType = vedlegg.getInnsendingsType();
+        vedleggDto.metadata.beskrivelse = vedlegg.getBeskrivelse();
+        vedleggDto.vedlegg = vedlegg.getContent();
         this.vedlegg.add(vedleggDto);
     }
 }

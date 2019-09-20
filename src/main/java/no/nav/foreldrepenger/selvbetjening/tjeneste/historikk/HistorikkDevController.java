@@ -21,26 +21,30 @@ import no.nav.security.oidc.api.Unprotected;
 
 @Profile({ LOCAL, DEV, DEV_GCP })
 @RestController
-@RequestMapping(path = HistorikkController.HISTORIKK + "/preprod", produces = APPLICATION_JSON_VALUE)
+@RequestMapping(produces = APPLICATION_JSON_VALUE)
 @Unprotected
-public class HistorikkPreprodController {
+public class HistorikkDevController {
+
+    private static final String DEVPART = "/" + DEV;
+
+    private static final String HISTORIKKPATH = "historikk" + DEVPART;
+    private static final String MINIDIALOGPATH = "minidialog" + DEVPART;
 
     private final Minidialog minidialog;
-
     private final Historikk historikk;
 
     @Inject
-    public HistorikkPreprodController(Historikk historikk, Minidialog minidialog) {
+    public HistorikkDevController(Historikk historikk, Minidialog minidialog) {
         this.historikk = historikk;
         this.minidialog = minidialog;
     }
 
-    @GetMapping("/hent")
+    @GetMapping(HISTORIKKPATH + "/hent")
     public List<SøknadInnslag> hentHistorikk(@RequestParam("fnr") Fødselsnummer fnr) {
         return historikk.hentHistorikkFor(fnr);
     }
 
-    @GetMapping("/minidialog/aktive")
+    @GetMapping(MINIDIALOGPATH + "/hent")
     public List<MinidialogInnslag> hentMinidialoger(@RequestParam("fnr") Fødselsnummer fnr) {
         return minidialog.hentMinidialoger(fnr);
     }

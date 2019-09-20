@@ -28,7 +28,7 @@ public class InnsendingTjenesteStub implements Innsending {
 
     @Override
     public Kvittering sendInn(Søknad søknad) {
-        søknad.opprettet = now();
+        søknad.setOpprettet(now());
         return postStub(søknad);
     }
 
@@ -57,9 +57,9 @@ public class InnsendingTjenesteStub implements Innsending {
             throw new BadRequestException("Unknown application type");
         }
 
-        dto.tilleggsopplysninger = søknad.tilleggsopplysninger;
-        søknad.vedlegg.forEach(v -> {
-            v.content = new byte[] {};
+        dto.tilleggsopplysninger = søknad.getTilleggsopplysninger();
+        søknad.getVedlegg().forEach(v -> {
+            v.setContent(new byte[] {});
             dto.addVedlegg(v);
         });
 
@@ -73,7 +73,7 @@ public class InnsendingTjenesteStub implements Innsending {
 
     private Kvittering postStub(Ettersending ettersending) {
         EttersendingDto dto = new EttersendingDto(ettersending);
-        ettersending.vedlegg.forEach(v -> v.content = new byte[] {});
+        ettersending.getVedlegg().forEach(v -> v.setContent(new byte[] {}));
 
         try {
             LOG.info("Posting JSON (stub): {}", mapper.writeValueAsString(dto));

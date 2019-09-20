@@ -11,7 +11,11 @@ public abstract class AttachmentException extends RuntimeException {
     }
 
     public AttachmentException(String msg) {
-        this(msg, null, null);
+        this(msg, null);
+    }
+
+    public AttachmentException(String msg, Exception cause) {
+        this(msg, null, cause);
     }
 
     public AttachmentException(MediaType mediaType, Throwable e) {

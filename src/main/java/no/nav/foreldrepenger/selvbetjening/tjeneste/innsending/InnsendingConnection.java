@@ -59,7 +59,7 @@ public class InnsendingConnection extends AbstractRestConnection {
     }
 
     public Kvittering sendInn(Søknad søknad) {
-        søknad.opprettet = now();
+        søknad.setOpprettet(now());
         return postForObject(config.getInnsendingURI(), body(søknad), Kvittering.class);
     }
 
@@ -87,21 +87,21 @@ public class InnsendingConnection extends AbstractRestConnection {
             throw new BadRequestException("Unknown application type " + søknad.getClass().getSimpleName());
         }
         dto.mottattdato = LocalDate.now();
-        dto.tilleggsopplysninger = søknad.tilleggsopplysninger;
-        søknad.vedlegg.forEach(v -> dto.addVedlegg(convert(v)));
+        dto.tilleggsopplysninger = søknad.getTilleggsopplysninger();
+        søknad.getVedlegg().forEach(v -> dto.addVedlegg(convert(v)));
         return dto;
     }
 
     private EttersendingDto body(Ettersending ettersending) {
         EttersendingDto dto = new EttersendingDto(ettersending);
-        ettersending.vedlegg.forEach(v -> dto.addVedlegg(convert(v)));
+        ettersending.getVedlegg().forEach(v -> dto.addVedlegg(convert(v)));
         return dto;
     }
 
     private Vedlegg convert(Vedlegg v) {
         Vedlegg vedlegg = v.kopi();
-        if (v.content != null && v.content.length > 0) {
-            vedlegg.content = converter.convert(v.content);
+        if (v.getContent() != null && v.getContent().length > 0) {
+            vedlegg.setContent(converter.convert(v.getContent()));
         }
         return vedlegg;
     }

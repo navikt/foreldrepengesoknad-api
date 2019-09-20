@@ -25,20 +25,20 @@ import no.nav.security.oidc.api.ProtectedWithClaims;
 
 @RestController
 @ProtectedWithClaims(issuer = ISSUER, claimMap = { "acr=Level4" })
-@RequestMapping(StorageController.REST_STORAGE)
-public class StorageController {
+@RequestMapping(MellomlagringController.REST_STORAGE)
+public class MellomlagringController {
 
     public static final String REST_STORAGE = "/rest/storage";
 
-    private final StorageService storageService;
+    private final MellomlagringTjeneste mellomlagringTjeneste;
 
-    public StorageController(StorageService storageService) {
-        this.storageService = storageService;
+    public MellomlagringController(MellomlagringTjeneste mellomlagringTjeneste) {
+        this.mellomlagringTjeneste = mellomlagringTjeneste;
     }
 
     @GetMapping
     public ResponseEntity<String> getSoknad() {
-        Optional<String> muligSøknad = storageService.hentSøknad();
+        Optional<String> muligSøknad = mellomlagringTjeneste.hentSøknad();
         return muligSøknad
                 .map(s -> ok().body(s))
                 .orElse(noContent().build());
@@ -46,19 +46,19 @@ public class StorageController {
 
     @PostMapping(consumes = APPLICATION_JSON_VALUE)
     public ResponseEntity<String> storeSoknad(@RequestBody String soknad) {
-        storageService.lagreSøknad(soknad);
+        mellomlagringTjeneste.lagreSøknad(soknad);
         return noContent().build();
     }
 
     @DeleteMapping
     public ResponseEntity<String> deleteSoknad() {
-        storageService.slettSøknad();
+        mellomlagringTjeneste.slettSøknad();
         return noContent().build();
     }
 
     @GetMapping("vedlegg/{key}")
     public ResponseEntity<byte[]> getAttachment(@PathVariable("key") String key) {
-        Optional<Attachment> muligVedlegg = storageService.hentVedlegg(key);
+        Optional<Attachment> muligVedlegg = mellomlagringTjeneste.hentVedlegg(key);
         return muligVedlegg
                 .map(Attachment::asOKHTTPEntity)
                 .orElse(notFound().build());
@@ -67,19 +67,19 @@ public class StorageController {
     @PostMapping(path = "/vedlegg", consumes = MULTIPART_FORM_DATA_VALUE)
     public ResponseEntity<String> storeAttachment(@RequestPart("vedlegg") MultipartFile attachmentMultipartFile) {
         Attachment attachment = Attachment.of(attachmentMultipartFile);
-        storageService.lagreVedlegg(attachment);
+        mellomlagringTjeneste.lagreVedlegg(attachment);
         return created(attachment.uri()).body(attachment.uuid);
     }
 
     @DeleteMapping("vedlegg/{key}")
     public ResponseEntity<String> deleteAttachment(@PathVariable("key") String key) {
-        storageService.slettVedlegg(key);
+        mellomlagringTjeneste.slettVedlegg(key);
         return noContent().build();
     }
 
     @GetMapping("kvittering/{type}")
     public ResponseEntity<String> getKvittering(@PathVariable("type") String type) {
-        Optional<String> muligKvittering = storageService.hentKvittering(type);
+        Optional<String> muligKvittering = mellomlagringTjeneste.hentKvittering(type);
         return muligKvittering
                 .map(kvittering -> ok().body(kvittering))
                 .orElse(noContent().build());
@@ -87,13 +87,13 @@ public class StorageController {
 
     @PostMapping(value = "kvittering/{type}", consumes = APPLICATION_JSON_VALUE)
     public ResponseEntity<String> storeKvittering(@PathVariable("type") String type, @RequestBody String kvittering) {
-        storageService.lagreKvittering(type, kvittering);
+        mellomlagringTjeneste.lagreKvittering(type, kvittering);
         return noContent().build();
     }
 
     @Override
     public String toString() {
-        return getClass().getSimpleName() + " [storageService=" + storageService + "]";
+        return getClass().getSimpleName() + " [mellomlagringTjeneste=" + mellomlagringTjeneste + "]";
     }
 
 }

@@ -1,14 +1,14 @@
 package no.nav.foreldrepenger.selvbetjening.tjeneste.historikk;
 
+import com.fasterxml.jackson.annotation.JsonCreator;
+import com.fasterxml.jackson.annotation.JsonProperty;
+
 public class Arbeidsgiver {
-    private String navn;
-    private String orgnr;
+    private final String navn;
+    private final String orgnr;
 
-    private Arbeidsgiver() {
-
-    }
-
-    public Arbeidsgiver(String navn, String orgnr) {
+    @JsonCreator
+    public Arbeidsgiver(@JsonProperty("navn") String navn, @JsonProperty("orgnr") String orgnr) {
         this.navn = navn;
         this.orgnr = orgnr;
     }

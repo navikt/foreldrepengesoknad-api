@@ -4,12 +4,28 @@ import no.nav.foreldrepenger.selvbetjening.tjeneste.innsending.domain.Tidsperiod
 
 public class Frilansoppdrag {
 
-    public String navnPåArbeidsgiver;
-    public Tidsperiode tidsperiode;
+    private String navnPåArbeidsgiver;
+    private Tidsperiode tidsperiode;
+
+    public String getNavnPåArbeidsgiver() {
+        return navnPåArbeidsgiver;
+    }
+
+    public void setNavnPåArbeidsgiver(String navnPåArbeidsgiver) {
+        this.navnPåArbeidsgiver = navnPåArbeidsgiver;
+    }
+
+    public Tidsperiode getTidsperiode() {
+        return tidsperiode;
+    }
+
+    public void setTidsperiode(Tidsperiode tidsperiode) {
+        this.tidsperiode = tidsperiode;
+    }
 
     @Override
     public String toString() {
-        return getClass().getSimpleName() + " [navnPåArbeidsgiver=" + navnPåArbeidsgiver + ", tidsperiode="
-                + tidsperiode + "]";
+        return getClass().getSimpleName() + " [navnPåArbeidsgiver=" + getNavnPåArbeidsgiver() + ", tidsperiode="
+                + getTidsperiode() + "]";
     }
 }

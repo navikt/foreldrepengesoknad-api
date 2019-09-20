@@ -3,7 +3,7 @@ package no.nav.foreldrepenger.selvbetjening.filters;
 import static no.nav.foreldrepenger.selvbetjening.filters.FilterRegistrationUtil.urlPatternsFor;
 import static no.nav.foreldrepenger.selvbetjening.tjeneste.innsending.InnsendingController.REST_SOKNAD;
 import static no.nav.foreldrepenger.selvbetjening.tjeneste.innsyn.InnsynController.INNSYN;
-import static no.nav.foreldrepenger.selvbetjening.tjeneste.mellomlagring.StorageController.REST_STORAGE;
+import static no.nav.foreldrepenger.selvbetjening.tjeneste.mellomlagring.MellomlagringController.REST_STORAGE;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;

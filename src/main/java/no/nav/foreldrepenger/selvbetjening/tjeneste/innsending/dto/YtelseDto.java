@@ -41,39 +41,39 @@ public class YtelseDto {
     public LocalDate fødselsdato;
 
     public YtelseDto(Søknad søknad) {
-        this.type = søknad.type;
+        this.type = søknad.getType();
 
         if (søknad instanceof Foreldrepengesøknad) {
             Foreldrepengesøknad foreldrepengesøknad = (Foreldrepengesøknad) søknad;
-            this.relasjonTilBarn = new RelasjonTilBarnDto(søknad.barn, søknad.situasjon);
+            this.relasjonTilBarn = new RelasjonTilBarnDto(søknad.getBarn(), søknad.getSituasjon());
             this.dekningsgrad = "GRAD" + foreldrepengesøknad.dekningsgrad;
             this.fordeling = new FordelingDto(foreldrepengesøknad.uttaksplan,
-                    foreldrepengesøknad.annenForelder.erInformertOmSøknaden);
+                    foreldrepengesøknad.getAnnenForelder().erInformertOmSøknaden);
             this.rettigheter = new RettigheterDto(foreldrepengesøknad);
         }
 
         if (søknad instanceof Engangsstønad) {
-            this.relasjonTilBarn = new RelasjonTilBarnDto(søknad.barn, søknad.situasjon);
+            this.relasjonTilBarn = new RelasjonTilBarnDto(søknad.getBarn(), søknad.getSituasjon());
         }
 
         if (søknad instanceof Svangerskapspengesøknad) {
             Svangerskapspengesøknad svangerskapspengesøknad = (Svangerskapspengesøknad) søknad;
-            this.termindato = svangerskapspengesøknad.barn.termindato;
-            if (isNotEmpty(svangerskapspengesøknad.barn.fødselsdatoer)) {
-                this.fødselsdato = svangerskapspengesøknad.barn.fødselsdatoer.get(0);
+            this.termindato = svangerskapspengesøknad.getBarn().termindato;
+            if (isNotEmpty(svangerskapspengesøknad.getBarn().fødselsdatoer)) {
+                this.fødselsdato = svangerskapspengesøknad.getBarn().fødselsdatoer.get(0);
             }
             this.tilrettelegging = svangerskapspengesøknad.tilrettelegging.stream().map(TilretteleggingDto::new)
                     .collect(toList());
         }
 
-        if (søknad.annenForelder != null) {
-            this.annenForelder = new AnnenForelderDto(søknad.annenForelder);
+        if (søknad.getAnnenForelder() != null) {
+            this.annenForelder = new AnnenForelderDto(søknad.getAnnenForelder());
         }
 
-        if (!søknad.erEndringssøknad) {
-            this.medlemsskap = new MedlemsskapDto(søknad.informasjonOmUtenlandsopphold);
+        if (!søknad.getErEndringssøknad()) {
+            this.medlemsskap = new MedlemsskapDto(søknad.getInformasjonOmUtenlandsopphold());
             if (søknad instanceof Foreldrepengesøknad || søknad instanceof Svangerskapspengesøknad) {
-                this.opptjening = new OpptjeningDto(søknad.søker);
+                this.opptjening = new OpptjeningDto(søknad.getSøker());
             }
         }
     }
@@ -187,9 +187,9 @@ public class YtelseDto {
         public LocalDate datoForAleneomsorg;
 
         public RettigheterDto(Foreldrepengesøknad foreldrepengesøknad) {
-            this.harAleneOmsorgForBarnet = foreldrepengesøknad.søker.erAleneOmOmsorg;
-            this.harAnnenForelderRett = foreldrepengesøknad.annenForelder.harRettPåForeldrepenger;
-            this.datoForAleneomsorg = foreldrepengesøknad.annenForelder.datoForAleneomsorg;
+            this.harAleneOmsorgForBarnet = foreldrepengesøknad.getSøker().erAleneOmOmsorg;
+            this.harAnnenForelderRett = foreldrepengesøknad.getAnnenForelder().harRettPåForeldrepenger;
+            this.datoForAleneomsorg = foreldrepengesøknad.getAnnenForelder().datoForAleneomsorg;
         }
     }
 

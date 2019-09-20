@@ -1,5 +1,6 @@
 package no.nav.foreldrepenger.selvbetjening.config;
 
+import static java.lang.System.getenv;
 import static no.nav.foreldrepenger.selvbetjening.util.EnvUtil.DEFAULT;
 import static no.nav.foreldrepenger.selvbetjening.util.EnvUtil.DEV;
 import static no.nav.foreldrepenger.selvbetjening.util.EnvUtil.LOCAL;
@@ -12,8 +13,8 @@ public class ClusterAwareSpringProfileResolver {
 
     }
 
-    public static String getProfile() {
-        return clusterFra(System.getenv(NAIS_CLUSTER_NAME));
+    public static String[] getProfiles() {
+        return new String[] { clusterFra(getenv(NAIS_CLUSTER_NAME)) };
     }
 
     private static String clusterFra(String cluster) {

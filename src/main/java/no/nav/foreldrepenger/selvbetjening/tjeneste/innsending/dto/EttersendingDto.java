@@ -12,17 +12,17 @@ public class EttersendingDto {
     public List<VedleggDto> vedlegg = new ArrayList<>();
 
     public EttersendingDto(Ettersending ettersending) {
-        this.type = ettersending.type;
-        this.saksnr = ettersending.saksnummer;
+        this.type = ettersending.getType();
+        this.saksnr = ettersending.getSaksnummer();
     }
 
     public void addVedlegg(Vedlegg vedlegg) {
         VedleggDto vedleggDto = new VedleggDto();
         vedleggDto.type = "påkrevd";
-        vedleggDto.metadata.id = vedlegg.id;
-        vedleggDto.metadata.dokumentType = vedlegg.skjemanummer;
-        vedleggDto.metadata.beskrivelse = vedlegg.beskrivelse;
-        vedleggDto.vedlegg = vedlegg.content;
+        vedleggDto.metadata.id = vedlegg.getId();
+        vedleggDto.metadata.dokumentType = vedlegg.getSkjemanummer();
+        vedleggDto.metadata.beskrivelse = vedlegg.getBeskrivelse();
+        vedleggDto.vedlegg = vedlegg.getContent();
         this.vedlegg.add(vedleggDto);
     }
 }

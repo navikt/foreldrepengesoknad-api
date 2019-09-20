@@ -5,6 +5,7 @@ import static io.swagger.models.Scheme.HTTPS;
 import static java.util.stream.Collectors.toSet;
 import static no.nav.foreldrepenger.selvbetjening.util.EnvUtil.DEV;
 import static no.nav.foreldrepenger.selvbetjening.util.EnvUtil.DEV_GCP;
+import static springfox.documentation.builders.RequestHandlerSelectors.basePackage;
 import static springfox.documentation.spi.DocumentationType.SWAGGER_2;
 
 import java.util.Set;
@@ -16,7 +17,6 @@ import org.springframework.context.annotation.Profile;
 
 import io.swagger.models.Scheme;
 import springfox.documentation.builders.PathSelectors;
-import springfox.documentation.builders.RequestHandlerSelectors;
 import springfox.documentation.spring.web.plugins.Docket;
 import springfox.documentation.swagger2.annotations.EnableSwagger2;
 
@@ -30,13 +30,13 @@ public class SwaggerConfiguration {
         return new Docket(SWAGGER_2)
                 .protocols(allProtocols())
                 .select()
-                .apis(RequestHandlerSelectors.any())
+                .apis(basePackage("no.nav.foreldrepenger.selvbetjening.tjeneste"))
                 .paths(PathSelectors.any())
                 .build();
     }
 
     private static Set<String> allProtocols() {
-        return Stream.of(new Scheme[] { HTTPS, HTTP })
+        return Stream.of(HTTPS, HTTP)
                 .map(Scheme::toValue)
                 .collect(toSet());
     }

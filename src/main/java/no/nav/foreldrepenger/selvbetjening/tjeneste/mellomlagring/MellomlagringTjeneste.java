@@ -1,34 +1,29 @@
 package no.nav.foreldrepenger.selvbetjening.tjeneste.mellomlagring;
 
-import static no.nav.foreldrepenger.selvbetjening.vedlegg.VedleggUtil.isPdfEncrypted;
 import static org.slf4j.LoggerFactory.getLogger;
 
 import java.util.Optional;
 
-import no.nav.foreldrepenger.selvbetjening.error.AttachmentPasswordProtectedException;
 import org.slf4j.Logger;
 import org.springframework.stereotype.Service;
 
-import no.nav.foreldrepenger.selvbetjening.error.AttachmentVirusException;
-import no.nav.foreldrepenger.selvbetjening.tjeneste.virusscan.VirusScanner;
+import no.nav.foreldrepenger.selvbetjening.tjeneste.innsending.domain.Vedlegg;
 import no.nav.foreldrepenger.selvbetjening.util.TokenUtil;
 
 @Service
-public class StorageService {
-    private static final Logger LOG = getLogger(StorageService.class);
+public class MellomlagringTjeneste {
+    private static final Logger LOG = getLogger(MellomlagringTjeneste.class);
 
     private static final String SØKNAD = "soknad";
 
     private final TokenUtil tokenHelper;
     private final Storage storage;
     private final StorageCrypto crypto;
-    private final VirusScanner virusScanner;
 
-    public StorageService(TokenUtil tokenHelper, Storage storage, VirusScanner virusScanner, StorageCrypto crypto) {
+    public MellomlagringTjeneste(TokenUtil tokenHelper, Storage storage, StorageCrypto crypto) {
         this.tokenHelper = tokenHelper;
         this.storage = storage;
         this.crypto = crypto;
-        this.virusScanner = virusScanner;
     }
 
     public Optional<String> hentSøknad() {
@@ -64,13 +59,6 @@ public class StorageService {
     }
 
     public void lagreVedlegg(Attachment attachment) {
-        if (!virusScanner.scan(attachment)) {
-            throw new AttachmentVirusException(attachment);
-        }
-
-        if (isPdfEncrypted(attachment.bytes)) {
-            throw new AttachmentPasswordProtectedException(attachment);
-        }
 
         String fnr = tokenHelper.autentisertBruker();
         String directory = crypto.encryptDirectoryName(fnr);
@@ -79,10 +67,18 @@ public class StorageService {
         storage.putTmp(directory, attachment.uuid, encryptedValue);
     }
 
-    public void slettVedlegg(String key) {
-        String directory = crypto.encryptDirectoryName(tokenHelper.autentisertBruker());
-        LOG.info("Fjerner vedlegg med nøkkel {} fra katalog {}", key, directory);
-        storage.deleteTmp(directory, key);
+    public void slettVedlegg(Vedlegg vedlegg) {
+        if (vedlegg.getUrl() != null) {
+            slettVedlegg(vedlegg.getUuid());
+        }
+    }
+
+    public void slettVedlegg(String uuid) {
+        if (uuid != null) {
+            String directory = crypto.encryptDirectoryName(tokenHelper.autentisertBruker());
+            LOG.info("Fjerner vedlegg med nøkkel {} fra katalog {}", uuid, directory);
+            storage.deleteTmp(directory, uuid);
+        }
     }
 
     public Optional<String> hentKvittering(String type) {
@@ -99,5 +95,11 @@ public class StorageService {
         LOG.trace("Skriver kvittering til katalog {}", directory);
         String encryptedValue = crypto.encrypt(kvittering, fnr);
         storage.put(directory, type, encryptedValue);
+    }
+
+    @Override
+    public String toString() {
+        return getClass().getSimpleName() + "[tokenHelper=" + tokenHelper + ", storage=" + storage + ", crypto="
+                + crypto + "]";
     }
 }

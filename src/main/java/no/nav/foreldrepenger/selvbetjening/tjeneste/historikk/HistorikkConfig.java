@@ -1,5 +1,6 @@
 package no.nav.foreldrepenger.selvbetjening.tjeneste.historikk;
 
+import static no.nav.foreldrepenger.selvbetjening.util.EnvUtil.DEV;
 import static no.nav.foreldrepenger.selvbetjening.util.URIUtil.queryParams;
 import static no.nav.foreldrepenger.selvbetjening.util.URIUtil.uri;
 
@@ -12,8 +13,6 @@ import org.springframework.stereotype.Component;
 @Component
 public class HistorikkConfig {
 
-    private static final String HISTORIKK = "historikk";
-    private static final String HISTORIKK_DEV = HISTORIKK + "/dev";
     private boolean enabled = true;
     private URI uri;
     private String key;
@@ -25,7 +24,7 @@ public class HistorikkConfig {
     private static final String DEFAULT_PING_PATH = "actuator/info";
 
     public URI historikkURI() {
-        return uri(uri, HISTORIKK + "/me/all");
+        return uri(uri, "historikk" + "/me/all");
     }
 
     public void setUri(URI uri) {
@@ -33,7 +32,7 @@ public class HistorikkConfig {
     }
 
     public URI historikkPreprodURI(String fnr) {
-        return uri(uri, HISTORIKK_DEV + "/all", queryParams("fnr", fnr));
+        return uri(uri, "historikk" + "/" + DEV + "/all", queryParams("fnr", fnr));
     }
 
     public URI pingURI() {
@@ -53,7 +52,7 @@ public class HistorikkConfig {
     }
 
     public URI minidialogURI() {
-        return uri(uri, HISTORIKK + "/me/minidialoger/spm");
+        return uri(uri, "/me/minidialoger/spm");
 
     }
 }

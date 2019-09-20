@@ -9,10 +9,10 @@ public class Svangerskapspengesøknad extends Søknad {
 
     @Override
     public String toString() {
-        return getClass().getSimpleName() + " [tilrettelegging=" + tilrettelegging + ", type=" + type + ", saksnummer="
-                + saksnummer + ", søker=" + søker + ", opprettet=" + opprettet + ", barn=" + barn + ", annenForelder="
-                + annenForelder + ", informasjonOmUtenlandsopphold=" + informasjonOmUtenlandsopphold + ", situasjon="
-                + situasjon + ", erEndringssøknad=" + erEndringssøknad + ", tilleggsopplysninger="
-                + tilleggsopplysninger + ", vedlegg=" + vedlegg + "]";
+        return getClass().getSimpleName() + " [tilrettelegging=" + tilrettelegging + ", type=" + getType() + ", saksnummer="
+                + getSaksnummer() + ", søker=" + getSøker() + ", opprettet=" + getOpprettet() + ", barn=" + getBarn() + ", annenForelder="
+                + getAnnenForelder() + ", informasjonOmUtenlandsopphold=" + getInformasjonOmUtenlandsopphold() + ", situasjon="
+                + getSituasjon() + ", erEndringssøknad=" + getErEndringssøknad() + ", tilleggsopplysninger="
+                + getTilleggsopplysninger() + ", vedlegg=" + getVedlegg() + "]";
     }
 }

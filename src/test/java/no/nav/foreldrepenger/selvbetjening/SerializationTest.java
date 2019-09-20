@@ -34,11 +34,11 @@ public class SerializationTest {
     @Test
     public void engangstonad_deserialisation() throws IOException {
         Engangsstønad engangsstønad = new Engangsstønad();
-        engangsstønad.opprettet = now();
+        engangsstønad.setOpprettet(now());
 
         Barn barn = new Barn();
         barn.erBarnetFødt = false;
-        engangsstønad.barn = barn;
+        engangsstønad.setBarn(barn);
 
         test(engangsstønad);
     }

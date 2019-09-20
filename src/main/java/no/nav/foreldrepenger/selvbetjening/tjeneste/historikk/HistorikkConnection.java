@@ -35,21 +35,21 @@ public class HistorikkConnection extends AbstractRestConnection {
     }
 
     public List<SøknadInnslag> hentHistorikk() {
-        List<SøknadInnslag> historikk = Optional
-                .ofNullable(getForObject(config.historikkURI(), SøknadInnslag[].class, false))
-                .map(Arrays::asList)
-                .orElse(emptyList());
-        LOG.trace(CONFIDENTIAL, "Fikk historikk {}", historikk);
-        return historikk;
+        return hentHistorikk(config.historikkURI());
     }
 
     public List<SøknadInnslag> hentHistorikk(Fødselsnummer fnr) {
+        return hentHistorikk(config.historikkPreprodURI(fnr.getFnr()));
+    }
+
+    private List<SøknadInnslag> hentHistorikk(URI uri) {
         List<SøknadInnslag> historikk = Optional
-                .ofNullable(getForObject(config.historikkPreprodURI(fnr.getFnr()), SøknadInnslag[].class, false))
+                .ofNullable(getForObject(uri, SøknadInnslag[].class, false))
                 .map(Arrays::asList)
                 .orElse(emptyList());
-        LOG.trace(CONFIDENTIAL, "Fikk historikk {}", historikk);
+        LOG.trace("Hentet historikk {} fra {}", historikk, uri);
         return historikk;
+
     }
 
     public List<MinidialogInnslag> hentMinidialoger() {

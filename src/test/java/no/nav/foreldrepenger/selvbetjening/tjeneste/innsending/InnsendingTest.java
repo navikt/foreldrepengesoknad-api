@@ -23,11 +23,17 @@ import org.springframework.test.context.TestPropertySource;
 import org.springframework.test.context.junit.jupiter.SpringExtension;
 import org.springframework.test.web.client.ExpectedCount;
 import org.springframework.test.web.client.MockRestServiceServer;
+import org.springframework.util.unit.DataSize;
+import org.springframework.util.unit.DataUnit;
 
 import no.nav.foreldrepenger.selvbetjening.tjeneste.innsending.domain.Søknad;
+import no.nav.foreldrepenger.selvbetjening.tjeneste.innsending.domain.VedleggSjekker;
+import no.nav.foreldrepenger.selvbetjening.tjeneste.mellomlagring.MellomlagringTjeneste;
+import no.nav.foreldrepenger.selvbetjening.tjeneste.virusscan.VirusScanner;
 import no.nav.foreldrepenger.selvbetjening.util.EnvUtil;
 import no.nav.foreldrepenger.selvbetjening.util.TokenUtil;
 import no.nav.foreldrepenger.selvbetjening.vedlegg.Image2PDFConverter;
+import no.nav.foreldrepenger.selvbetjening.vedlegg.PDFEncryptionChecker;
 import no.nav.security.spring.oidc.SpringOIDCRequestContextHolder;
 
 @ExtendWith(SpringExtension.class)
@@ -42,6 +48,14 @@ public class InnsendingTest {
 
     @Mock
     TokenUtil tokenHandler;
+
+    @Mock
+    MellomlagringTjeneste storage;
+    @Mock
+    VirusScanner scanner;
+
+    @Mock
+    PDFEncryptionChecker encryptionChecker;
     @Autowired
     private InnsendingConfig innsendingConfig;
 
@@ -59,7 +73,8 @@ public class InnsendingTest {
     public void init() {
         if (innsending == null) {
             innsending = new InnsendingTjeneste(new InnsendingConnection(builder
-                    .build(), innsendingConfig, converter));
+                    .build(), innsendingConfig, converter), storage,
+                    new VedleggSjekker(DataSize.of(32, DataUnit.MEGABYTES), scanner, encryptionChecker));
         }
     }
 

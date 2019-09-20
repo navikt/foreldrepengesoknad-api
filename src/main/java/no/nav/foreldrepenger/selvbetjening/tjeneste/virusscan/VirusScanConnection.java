@@ -1,7 +1,6 @@
 package no.nav.foreldrepenger.selvbetjening.tjeneste.virusscan;
 
 import static no.nav.foreldrepenger.selvbetjening.tjeneste.virusscan.Result.OK;
-import static no.nav.foreldrepenger.selvbetjening.util.EnvUtil.isDevOrLocal;
 
 import java.net.URI;
 
@@ -15,7 +14,7 @@ import org.springframework.web.client.RestOperations;
 
 import io.micrometer.core.instrument.Counter;
 import io.micrometer.core.instrument.Metrics;
-import no.nav.foreldrepenger.selvbetjening.tjeneste.mellomlagring.Attachment;
+import no.nav.foreldrepenger.selvbetjening.tjeneste.innsending.domain.Vedlegg;
 
 @Component
 class VirusScanConnection implements EnvironmentAware {
@@ -42,31 +41,36 @@ class VirusScanConnection implements EnvironmentAware {
         return config.isEnabled();
     }
 
-    public boolean scan(Attachment attachment) {
-        try {
-            if (isDevOrLocal(env) && attachment.filename.startsWith("virustest")) {
+    public boolean scan(Vedlegg vedlegg) {
+        return scan(vedlegg.getContent(), vedlegg.getUrl());
+    }
+
+    private boolean scan(byte[] bytes, URI uri) {
+        if (isEnabled()) {
+            try {
+                LOG.info("Scanner {}", uri);
+                ScanResult[] scanResults = putForObject(config.getUri(), bytes, ScanResult[].class);
+                if (scanResults.length != 1) {
+                    LOG.warn("Uventet respons med lengde {}, forventet lengde er 1", scanResults.length);
+                    return true;
+                }
+                ScanResult scanResult = scanResults[0];
+                LOG.info("Fikk scan result {}", scanResult);
+                if (OK.equals(scanResult.getResult())) {
+                    LOG.info("Ingen virus i {}", uri);
+                    INGENVIRUS_COUNTER.increment();
+                    return true;
+                }
+                LOG.warn("Fant virus i {}, status {}", uri, scanResult.getResult());
+                VIRUS_COUNTER.increment();
                 return false;
-            }
-            LOG.info("Scanner {}", attachment);
-            ScanResult[] scanResults = putForObject(config.getUri(), attachment.bytes, ScanResult[].class);
-            if (scanResults.length != 1) {
-                LOG.warn("Uventet respons med lengde {}, forventet lengde er 1", scanResults.length);
+            } catch (Exception e) {
+                LOG.warn("Kunne ikke scanne {}", uri, e);
                 return true;
             }
-            ScanResult scanResult = scanResults[0];
-            LOG.info("Fikk scan result {}", scanResult);
-            if (OK.equals(scanResult.getResult())) {
-                LOG.info("Ingen virus i {}", attachment.uri());
-                INGENVIRUS_COUNTER.increment();
-                return true;
-            }
-            LOG.warn("Fant virus i {}, status {}", attachment.uri(), scanResult.getResult());
-            VIRUS_COUNTER.increment();
-            return false;
-        } catch (Exception e) {
-            LOG.warn("Kunne ikke scanne {}", attachment, e);
-            return true;
         }
+        LOG.info("Virusscanning er ikke aktivert");
+        return true;
     }
 
     private <T> T putForObject(URI uri, Object payload, Class<T> responseType) {

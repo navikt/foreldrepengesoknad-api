@@ -4,11 +4,11 @@ public class Engangsstønad extends Søknad {
 
     @Override
     public String toString() {
-        return getClass().getSimpleName() + " [type=" + type + ", saksnummer=" + saksnummer + ", søker=" + søker
+        return getClass().getSimpleName() + " [type=" + getType() + ", saksnummer=" + getSaksnummer() + ", søker=" + getSøker()
                 + ", opprettet="
-                + opprettet + ", barn=" + barn + ", annenForelder=" + annenForelder + ", informasjonOmUtenlandsopphold="
-                + informasjonOmUtenlandsopphold + ", situasjon=" + situasjon + ", erEndringssøknad=" + erEndringssøknad
-                + ", tilleggsopplysninger=" + tilleggsopplysninger + ", vedlegg=" + vedlegg + "]";
+                + getOpprettet() + ", barn=" + getBarn() + ", annenForelder=" + getAnnenForelder() + ", informasjonOmUtenlandsopphold="
+                + getInformasjonOmUtenlandsopphold() + ", situasjon=" + getSituasjon() + ", erEndringssøknad=" + getErEndringssøknad()
+                + ", tilleggsopplysninger=" + getTilleggsopplysninger() + ", vedlegg=" + getVedlegg() + "]";
     }
 
 }

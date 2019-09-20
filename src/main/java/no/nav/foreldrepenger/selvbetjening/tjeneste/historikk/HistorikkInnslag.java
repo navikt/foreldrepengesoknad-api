@@ -21,7 +21,7 @@ import no.nav.foreldrepenger.selvbetjening.tjeneste.oppslag.domain.Fødselsnumme
         @Type(value = MinidialogInnslag.class, name = "minidialog")
 
 })
-public abstract class HistorikkInnslag {
+abstract class HistorikkInnslag {
 
     private final Fødselsnummer fnr;
     private AktørId aktørId;
