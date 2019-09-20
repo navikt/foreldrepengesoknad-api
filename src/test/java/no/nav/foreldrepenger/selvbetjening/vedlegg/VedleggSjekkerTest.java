@@ -28,6 +28,7 @@ import no.nav.foreldrepenger.selvbetjening.tjeneste.virusscan.VirusScanner;
 public class VedleggSjekkerTest {
 
     private static final DataSize max = DataSize.of(32, DataUnit.MEGABYTES);
+    private static final DataSize maxEnkelt = DataSize.of(8, DataUnit.MEGABYTES);
 
     @Mock
     VirusScanner scanner;
@@ -39,7 +40,7 @@ public class VedleggSjekkerTest {
 
     @BeforeEach
     public void beforeAll() {
-        sjekker = new VedleggSjekker(max, scanner, encryptionSjekker);
+        sjekker = new VedleggSjekker(max, maxEnkelt, scanner, encryptionSjekker);
     }
 
     @Test
