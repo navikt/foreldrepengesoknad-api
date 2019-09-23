@@ -8,15 +8,12 @@ import static org.springframework.http.MediaType.APPLICATION_JSON_VALUE;
 
 import java.util.List;
 
-import javax.inject.Inject;
-
 import org.springframework.context.annotation.Profile;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
-import no.nav.foreldrepenger.selvbetjening.tjeneste.minidialog.Minidialog;
 import no.nav.foreldrepenger.selvbetjening.tjeneste.oppslag.domain.Fødselsnummer;
 import no.nav.security.oidc.api.Unprotected;
 
@@ -30,8 +27,7 @@ public class HistorikkDevController {
 
     private final Historikk historikk;
 
-    @Inject
-    public HistorikkDevController(Historikk historikk, Minidialog minidialog) {
+    public HistorikkDevController(Historikk historikk) {
         this.historikk = historikk;
     }
 

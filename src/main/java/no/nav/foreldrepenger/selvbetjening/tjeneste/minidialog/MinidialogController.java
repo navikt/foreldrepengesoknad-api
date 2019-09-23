@@ -19,7 +19,7 @@ import no.nav.security.oidc.api.ProtectedWithClaims;
 @ProtectedWithClaims(issuer = ISSUER, claimMap = { "acr=Level4" })
 public class MinidialogController {
 
-    public static final String MINIDIALOG = "/rest/minidialog";
+    static final String MINIDIALOG = "/rest/minidialog";
 
     private final Minidialog minidialog;
 

@@ -8,8 +8,6 @@ import static org.springframework.http.MediaType.APPLICATION_JSON_VALUE;
 
 import java.util.List;
 
-import javax.inject.Inject;
-
 import org.springframework.context.annotation.Profile;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -30,7 +28,6 @@ public class MinidialogDevController {
 
     private final Minidialog minidialog;
 
-    @Inject
     public MinidialogDevController(Minidialog minidialog) {
         this.minidialog = minidialog;
     }

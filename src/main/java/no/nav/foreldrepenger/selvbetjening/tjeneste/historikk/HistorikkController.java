@@ -5,8 +5,6 @@ import static org.springframework.http.MediaType.APPLICATION_JSON_VALUE;
 
 import java.util.List;
 
-import javax.inject.Inject;
-
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
@@ -18,11 +16,10 @@ import no.nav.security.oidc.api.ProtectedWithClaims;
 @ProtectedWithClaims(issuer = ISSUER, claimMap = { "acr=Level4" })
 public class HistorikkController {
 
-    public static final String HISTORIKK = "/rest/historikk";
+    static final String HISTORIKK = "/rest/historikk";
 
     private final Historikk historikk;
 
-    @Inject
     public HistorikkController(Historikk historikk) {
         this.historikk = historikk;
     }
