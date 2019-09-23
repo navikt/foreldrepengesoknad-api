@@ -43,12 +43,11 @@ public class HistorikkConnection extends AbstractRestConnection {
 
     private List<HistorikkInnslag> hentHistorikk(URI uri) {
         List<HistorikkInnslag> historikk = Optional
-                .ofNullable(getForObject(uri, HistorikkInnslag[].class, false))
+                .ofNullable(getForObject(uri, HistorikkInnslag[].class))
                 .map(Arrays::asList)
                 .orElse(emptyList());
         LOG.trace("Hentet historikk {} fra {}", historikk, uri);
         return historikk;
-
     }
 
     @Override

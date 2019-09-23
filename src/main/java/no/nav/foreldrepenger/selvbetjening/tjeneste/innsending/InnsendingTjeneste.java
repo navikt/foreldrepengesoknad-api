@@ -43,8 +43,8 @@ public class InnsendingTjeneste implements Innsending {
     }
 
     @Override
-    public Kvittering sendInn(Ettersending ettersending) {
-        LOG.info("Sender inn ettersending på sak {}", ettersending.getSaksnummer());
+    public Kvittering ettersend(Ettersending ettersending) {
+        LOG.info("Ettersender for sak {}", ettersending.getSaksnummer());
         hentOgSjekk(ettersending.getVedlegg());
         Kvittering kvittering = connection.ettersend(ettersending);
         ettersending.getVedlegg().forEach(v -> mellomlagring.slettVedlegg(v));
@@ -52,12 +52,22 @@ public class InnsendingTjeneste implements Innsending {
     }
 
     @Override
-    public Kvittering endre(Søknad søknad) {
-        LOG.info("Sender inn endringssøknad av type {}", søknad.getType());
-        hentOgSjekk(søknad.getVedlegg());
-        Kvittering kvittering = connection.endre(søknad);
-        slettMellomlagringOgSøknad(søknad);
+    public Kvittering endre(Søknad endringssøknad) {
+        LOG.info("Endrer søknad av type {}", endringssøknad.getType());
+        hentOgSjekk(endringssøknad.getVedlegg());
+        Kvittering kvittering = connection.endre(endringssøknad);
+        slettMellomlagringOgSøknad(endringssøknad);
         return kvittering;
+    }
+
+    @Override
+    public String ping() {
+        return connection.ping();
+    }
+
+    @Override
+    public URI pingURI() {
+        return connection.pingURI();
     }
 
     private void hentOgSjekk(List<Vedlegg> vedlegg) {
@@ -77,16 +87,6 @@ public class InnsendingTjeneste implements Innsending {
                     .map(a -> a.bytes)
                     .orElse(new byte[] {}));
         }
-    }
-
-    @Override
-    public String ping() {
-        return connection.ping();
-    }
-
-    @Override
-    public URI pingURI() {
-        return connection.pingURI();
     }
 
     @Override

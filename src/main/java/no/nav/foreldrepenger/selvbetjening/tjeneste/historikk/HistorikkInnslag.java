@@ -20,7 +20,6 @@ import no.nav.foreldrepenger.selvbetjening.tjeneste.oppslag.domain.Fødselsnumme
         @Type(value = InnsendingInnslag.class, name = "søknad"),
         @Type(value = InntektsmeldingInnslag.class, name = "inntekt"),
         @Type(value = MinidialogInnslag.class, name = "minidialog")
-
 })
 public abstract class HistorikkInnslag {
 

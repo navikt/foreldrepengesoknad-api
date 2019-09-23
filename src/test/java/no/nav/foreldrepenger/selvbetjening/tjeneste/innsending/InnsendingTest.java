@@ -86,7 +86,7 @@ public class InnsendingTest {
         server.expect(ExpectedCount.once(), requestTo(innsendingConfig.getInnsendingURI()))
                 .andExpect(method(HttpMethod.GET))
                 .andRespond(withStatus(HttpStatus.OK));
-        assertThrows(BadRequestException.class, () -> innsending.sendInn(new Søknad()));
+        assertThrows(BadRequestException.class, () -> innsending.ettersend(new Søknad()));
 
     }
 }

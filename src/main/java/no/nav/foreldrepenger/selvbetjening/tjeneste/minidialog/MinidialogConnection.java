@@ -34,8 +34,8 @@ public class MinidialogConnection extends AbstractRestConnection {
         return config.pingURI();
     }
 
-    public List<MinidialogInnslag> hentMinidialoger(Fødselsnummer fnr, boolean activeOnly) {
-        return hentFra(config.minidialogPreprodURI(fnr.getFnr(), activeOnly));
+    public List<MinidialogInnslag> hentMinidialoger(Fødselsnummer fnr, boolean kunAktive) {
+        return hentFra(config.minidialogPreprodURI(fnr.getFnr(), kunAktive));
     }
 
     public List<MinidialogInnslag> hentAktiveSpørsmål() {
@@ -49,10 +49,10 @@ public class MinidialogConnection extends AbstractRestConnection {
     private List<MinidialogInnslag> hentFra(URI uri) {
         LOG.trace("Henter  minidialoger fra {}", uri);
         List<MinidialogInnslag> dialoger = Optional
-                .ofNullable(getForObject(uri, MinidialogInnslag[].class, false))
+                .ofNullable(getForObject(uri, MinidialogInnslag[].class))
                 .map(Arrays::asList)
                 .orElse(emptyList());
-        LOG.trace("Hentet minidialoger {}", dialoger);
+        LOG.trace("Hentet minidialoger {} fra {}", dialoger, uri);
         return dialoger;
     }
 

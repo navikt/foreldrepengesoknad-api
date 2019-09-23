@@ -100,7 +100,7 @@ public class InnsendingConnection extends AbstractRestConnection {
 
     private Vedlegg convert(Vedlegg v) {
         Vedlegg vedlegg = v.kopi();
-        if (v.getContent() != null && v.getContent().length > 0) {
+        if ((v.getContent() != null) && (v.getContent().length > 0)) {
             vedlegg.setContent(converter.convert(v.getContent()));
         }
         return vedlegg;

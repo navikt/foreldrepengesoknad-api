@@ -72,7 +72,7 @@ public class YtelseDto {
 
         if (!søknad.getErEndringssøknad()) {
             this.medlemsskap = new MedlemsskapDto(søknad.getInformasjonOmUtenlandsopphold());
-            if (søknad instanceof Foreldrepengesøknad || søknad instanceof Svangerskapspengesøknad) {
+            if ((søknad instanceof Foreldrepengesøknad) || (søknad instanceof Svangerskapspengesøknad)) {
                 this.opptjening = new OpptjeningDto(søknad.getSøker());
             }
         }

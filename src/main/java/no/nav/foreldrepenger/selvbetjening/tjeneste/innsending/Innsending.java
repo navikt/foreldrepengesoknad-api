@@ -9,7 +9,7 @@ public interface Innsending extends Pingable {
 
     Kvittering sendInn(Søknad søknad);
 
-    Kvittering sendInn(Ettersending søknad);
+    Kvittering ettersend(Ettersending søknad);
 
     Kvittering endre(Søknad søknad);
 

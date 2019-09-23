@@ -5,6 +5,7 @@ import org.slf4j.LoggerFactory;
 
 public enum AvslagsÅrsak {
     AVSLAG;
+
     private static final Logger LOG = LoggerFactory.getLogger(AvslagsÅrsak.class);
 
     public static AvslagsÅrsak valueSafelyOf(String name) {

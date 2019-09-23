@@ -28,12 +28,14 @@ public class SelvstendigNæringsdrivendeInformasjon {
         return getClass().getSimpleName() + " [næringstyper=" + getNæringstyper() + ", tidsperiode=" + getTidsperiode()
                 + ", navnPåNæringen=" + getNavnPåNæringen() + ", organisasjonsnummer=" + getOrganisasjonsnummer()
                 + ", registrertINorge=" + getRegistrertINorge() + ", registrertILand=" + getRegistrertILand()
-                + ", stillingsprosent=" + getStillingsprosent() + ", harBlittYrkesaktivILøpetAvDeTreSisteFerdigliknedeÅrene="
+                + ", stillingsprosent=" + getStillingsprosent()
+                + ", harBlittYrkesaktivILøpetAvDeTreSisteFerdigliknedeÅrene="
                 + getHarBlittYrkesaktivILøpetAvDeTreSisteFerdigliknedeÅrene() + ", oppstartsdato=" + getOppstartsdato()
                 + ", regnskapsfører=" + getRegnskapsfører() + ", revisor=" + getRevisor()
                 + ", hattVarigEndringAvNæringsinntektSiste4Kalenderår="
                 + getHattVarigEndringAvNæringsinntektSiste4Kalenderår() + ", endringAvNæringsinntektInformasjon="
-                + getEndringAvNæringsinntektInformasjon() + ", vedlegg=" + getVedlegg() + ", næringsinntekt=" + getNæringsinntekt()
+                + getEndringAvNæringsinntektInformasjon() + ", vedlegg=" + getVedlegg() + ", næringsinntekt="
+                + getNæringsinntekt()
                 + "]";
     }
 

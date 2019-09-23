@@ -108,7 +108,7 @@ public class SøknadsGrunnlag {
         if (this == o) {
             return true;
         }
-        if (o == null || getClass() != o.getClass()) {
+        if ((o == null) || (getClass() != o.getClass())) {
             return false;
         }
         SøknadsGrunnlag that = (SøknadsGrunnlag) o;

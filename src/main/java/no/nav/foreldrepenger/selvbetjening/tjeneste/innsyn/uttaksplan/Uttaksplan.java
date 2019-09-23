@@ -35,7 +35,7 @@ public class Uttaksplan {
         if (this == o) {
             return true;
         }
-        if (o == null || getClass() != o.getClass()) {
+        if ((o == null) || (getClass() != o.getClass())) {
             return false;
         }
         Uttaksplan that = (Uttaksplan) o;

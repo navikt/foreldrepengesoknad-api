@@ -33,6 +33,6 @@ public final class EnvUtil {
     }
 
     private static boolean isLocal(Environment env) {
-        return env == null || env.acceptsProfiles(Profiles.of(LOCAL));
+        return (env == null) || env.acceptsProfiles(Profiles.of(LOCAL));
     }
 }

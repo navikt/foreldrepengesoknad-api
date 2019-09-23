@@ -80,12 +80,12 @@ public class ImageScaler {
 
         if (originalWidth > a4Width) {
             newWidth = a4Width;
-            newHeight = newWidth * originalHeight / originalWidth;
+            newHeight = (newWidth * originalHeight) / originalWidth;
         }
 
         if (newHeight > a4Height) {
             newHeight = a4Height;
-            newWidth = newHeight * originalWidth / originalHeight;
+            newWidth = (newHeight * originalWidth) / originalHeight;
         }
 
         return new Dimension(newWidth, newHeight);

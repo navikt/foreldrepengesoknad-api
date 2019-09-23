@@ -30,14 +30,16 @@ public class FrilansInformasjon {
     public String toString() {
         return getClass().getSimpleName() + " [oppstart=" + getOppstart() + ", driverFosterhjem="
                 + getDriverFosterhjem()
-                + ", oppdragForNæreVennerEllerFamilieSiste10Mnd=" + getOppdragForNæreVennerEllerFamilieSiste10Mnd() + "]";
+                + ", oppdragForNæreVennerEllerFamilieSiste10Mnd=" + getOppdragForNæreVennerEllerFamilieSiste10Mnd()
+                + "]";
     }
 
     public List<Frilansoppdrag> getOppdragForNæreVennerEllerFamilieSiste10Mnd() {
         return oppdragForNæreVennerEllerFamilieSiste10Mnd;
     }
 
-    public void setOppdragForNæreVennerEllerFamilieSiste10Mnd(List<Frilansoppdrag> oppdragForNæreVennerEllerFamilieSiste10Mnd) {
+    public void setOppdragForNæreVennerEllerFamilieSiste10Mnd(
+            List<Frilansoppdrag> oppdragForNæreVennerEllerFamilieSiste10Mnd) {
         this.oppdragForNæreVennerEllerFamilieSiste10Mnd = oppdragForNæreVennerEllerFamilieSiste10Mnd;
     }
 }

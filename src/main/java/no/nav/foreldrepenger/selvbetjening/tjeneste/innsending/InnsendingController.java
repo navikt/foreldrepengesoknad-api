@@ -43,8 +43,7 @@ public class InnsendingController {
     public Kvittering sendInn(@RequestBody Ettersending ettersending) {
         LOG.info("Mottok ettersending");
         LOG.info(CONFIDENTIAL, "{}", ettersending);
-        Kvittering kvittering = innsending.sendInn(ettersending);
-        return kvittering;
+        return innsending.ettersend(ettersending);
     }
 
     @PostMapping("/endre")

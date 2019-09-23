@@ -47,7 +47,7 @@ public class InnsendingTjenesteStub implements Innsending {
     }
 
     @Override
-    public Kvittering sendInn(Ettersending ettersending) {
+    public Kvittering ettersend(Ettersending ettersending) {
         return postStub(ettersending);
     }
 

@@ -17,7 +17,6 @@ import no.nav.foreldrepenger.selvbetjening.util.Pair;
 public class MinidialogConfig {
 
     static final String MINIDIALOG = "minidialog";
-    private static final String MINIDIALOG_ME = MINIDIALOG + "/me";
     private static final String MINIDIALOG_DEV = MINIDIALOG + "/" + DEV;
     private static final String MINIDIALOGER = MINIDIALOG_DEV + "/minidialoger";
     private static final String AKTIVE = MINIDIALOG_DEV + "/spm";

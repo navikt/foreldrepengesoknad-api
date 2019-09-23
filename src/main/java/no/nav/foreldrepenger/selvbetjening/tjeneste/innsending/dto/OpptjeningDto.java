@@ -69,7 +69,8 @@ public class OpptjeningDto {
             this.nyOppstartet = this.periode.fom.isAfter(treMånederFørFom);
 
             for (Frilansoppdrag o : frilansInformasjon.getOppdragForNæreVennerEllerFamilieSiste10Mnd()) {
-                frilansOppdrag.add(new FrilansoppdragDto(o.getNavnPåArbeidsgiver(), o.getTidsperiode().getFom(), o.getTidsperiode().getTom()));
+                frilansOppdrag.add(new FrilansoppdragDto(o.getNavnPåArbeidsgiver(), o.getTidsperiode().getFom(),
+                        o.getTidsperiode().getTom()));
             }
         }
     }
