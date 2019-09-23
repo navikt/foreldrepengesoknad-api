@@ -19,6 +19,7 @@ public class MinidialogConfig {
     static final String MINIDIALOG = "minidialog";
     private static final String MINIDIALOG_ME = MINIDIALOG + "/me";
     private static final String MINIDIALOG_DEV = MINIDIALOG + "/" + DEV;
+    private static final String MINIDIALOGER = MINIDIALOG_DEV + "/minidialoger";
     private static final String AKTIVE = MINIDIALOG_DEV + "/spm";
 
     private static final String DEFAULT_PING_PATH = "actuator/info";
@@ -38,7 +39,15 @@ public class MinidialogConfig {
     }
 
     public URI minidialogPreprodURI(String fnr, boolean activeOnly) {
-        return uri(getURI(), AKTIVE, queryParams(Pair.of("fnr", fnr), Pair.of("activeOnly", activeOnly)));
+        return uri(getURI(), MINIDIALOGER, queryParams(Pair.of("fnr", fnr), Pair.of("activeOnly", activeOnly)));
+    }
+
+    public URI getAktiveSpmURI() {
+        return uri(getURI(), AKTIVE);
+    }
+
+    public URI getAktiveSpmURI(String fnr) {
+        return uri(getURI(), AKTIVE, queryParams(Pair.of("fnr", fnr)));
     }
 
     public boolean isEnabled() {
@@ -52,4 +61,5 @@ public class MinidialogConfig {
     public URI pingURI() {
         return uri(getURI(), DEFAULT_PING_PATH);
     }
+
 }

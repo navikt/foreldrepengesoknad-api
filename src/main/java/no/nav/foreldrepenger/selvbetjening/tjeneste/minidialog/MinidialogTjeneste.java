@@ -29,6 +29,17 @@ public class MinidialogTjeneste implements Minidialog {
     }
 
     @Override
+    public List<MinidialogInnslag> hentAktiveMinidialogSpørsmål() {
+        return connection.hentAktiveSpørsmål();
+    }
+
+    @Override
+    public List<MinidialogInnslag> hentAktiveMinidialogSpørsmål(Fødselsnummer fnr) {
+        return connection.hentAktiveSpørsmål(fnr);
+
+    }
+
+    @Override
     public String ping() {
         return connection.ping();
     }
@@ -42,4 +53,5 @@ public class MinidialogTjeneste implements Minidialog {
     public String toString() {
         return getClass().getSimpleName() + " [connection=" + connection + "]";
     }
+
 }

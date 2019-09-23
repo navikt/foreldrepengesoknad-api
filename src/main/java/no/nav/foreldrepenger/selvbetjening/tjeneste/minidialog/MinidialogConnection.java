@@ -42,6 +42,14 @@ public class MinidialogConnection extends AbstractRestConnection {
         return hentFra(config.minidialogPreprodURI(fnr.getFnr(), activeOnly));
     }
 
+    public List<MinidialogInnslag> hentAktiveSpørsmål() {
+        return hentFra(config.getAktiveSpmURI());
+    }
+
+    public List<MinidialogInnslag> hentAktiveSpørsmål(Fødselsnummer fnr) {
+        return hentFra(config.getAktiveSpmURI(fnr.getFnr()));
+    }
+
     private List<MinidialogInnslag> hentFra(URI uri) {
         LOG.trace("Henter  minidialoger fra {}", uri);
         List<MinidialogInnslag> dialoger = Optional
@@ -56,4 +64,5 @@ public class MinidialogConnection extends AbstractRestConnection {
     public String toString() {
         return getClass().getSimpleName() + " [config=" + config + "]";
     }
+
 }

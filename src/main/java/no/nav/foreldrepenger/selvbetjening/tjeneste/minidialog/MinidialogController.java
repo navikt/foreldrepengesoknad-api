@@ -34,6 +34,11 @@ public class MinidialogController {
         return minidialog.hentMinidialoger(activeOnly);
     }
 
+    @GetMapping("/aktive")
+    public List<MinidialogInnslag> aktiveSpørsmål() {
+        return minidialog.hentAktiveMinidialogSpørsmål();
+    }
+
     @Override
     public String toString() {
         return getClass().getSimpleName() + " [minidialog=" + minidialog + "]";
