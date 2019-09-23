@@ -34,10 +34,6 @@ public class MinidialogConfig {
         return uri;
     }
 
-    public URI minidialogURI(boolean activeOnly) {
-        return uri(getURI(), MINIDIALOG_ME);
-    }
-
     public URI minidialogPreprodURI(String fnr, boolean activeOnly) {
         return uri(getURI(), MINIDIALOGER, queryParams(Pair.of("fnr", fnr), Pair.of("activeOnly", activeOnly)));
     }

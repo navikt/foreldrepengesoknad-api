@@ -19,11 +19,6 @@ public class MinidialogTjeneste implements Minidialog {
     }
 
     @Override
-    public List<MinidialogInnslag> hentMinidialoger(boolean activeOnly) {
-        return connection.hentMinidialoger(activeOnly);
-    }
-
-    @Override
     public List<MinidialogInnslag> hentMinidialoger(Fødselsnummer fnr, boolean activeOnly) {
         return connection.hentMinidialoger(fnr, activeOnly);
     }

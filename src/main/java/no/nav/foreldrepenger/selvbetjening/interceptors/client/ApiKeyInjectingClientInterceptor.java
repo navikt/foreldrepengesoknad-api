@@ -27,13 +27,12 @@ public class ApiKeyInjectingClientInterceptor implements ClientHttpRequestInterc
     @Override
     public ClientHttpResponse intercept(HttpRequest request, byte[] body, ClientHttpRequestExecution execution)
             throws IOException {
-        URI destination = request.getURI();
-        Optional<String> apiKey = apiKeyFor(destination);
+        Optional<String> apiKey = apiKeyFor(request.getURI());
         if (apiKey.isPresent()) {
-            LOG.trace("Injisert API-key som header {} for {}", X_NAV_API_KEY, destination);
+            LOG.trace("Injisert API-key som header {} for {}", X_NAV_API_KEY, request.getURI());
             request.getHeaders().add(X_NAV_API_KEY, apiKey.get());
         } else {
-            LOG.trace("Ingen API-key ble funnet for {} (sjekket {} konfigurasjoner)", destination,
+            LOG.trace("Ingen API-key ble funnet for {} (sjekket {} konfigurasjoner)", request.getURI(),
                     apiKeys.values().size());
         }
         return execution.execute(request, body);
