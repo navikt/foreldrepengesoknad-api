@@ -7,27 +7,23 @@ import no.nav.foreldrepenger.selvbetjening.tjeneste.oppslag.domain.Fødselsnumme
 
 public class InntektsmeldingInnslag extends HistorikkInnslag {
 
-    private Arbeidsgiver arbeidsgiver;
+    private final Arbeidsgiver arbeidsgiver;
 
     @JsonCreator
-    public InntektsmeldingInnslag(@JsonProperty("fnr") Fødselsnummer fnr) {
+    public InntektsmeldingInnslag(@JsonProperty("fnr") Fødselsnummer fnr,
+            @JsonProperty("arbeidsgiver") Arbeidsgiver arbeidsgiver) {
         super(fnr);
+        this.arbeidsgiver = arbeidsgiver;
     }
 
     public Arbeidsgiver getArbeidsgiver() {
         return arbeidsgiver;
     }
 
-    public void setArbeidsgiver(Arbeidsgiver arbeidsgiver) {
-        this.arbeidsgiver = arbeidsgiver;
-    }
-
     @Override
     public String toString() {
         return getClass().getSimpleName() + "[fnr=" + getFnr() + ", aktørId=" + getAktørId() + ", journalpostId="
                 + getJournalpostId() + ", saksnr=" + getSaksnr() + ", opprettet=" + opprettet + ", arbeidsgiver="
-                + arbeidsgiver
-                + "]";
+                + arbeidsgiver + "]";
     }
-
 }
