@@ -37,5 +37,4 @@ public class MinidialogController {
     public String toString() {
         return getClass().getSimpleName() + " [minidialog=" + minidialog + "]";
     }
-
 }

@@ -1,5 +1,6 @@
 package no.nav.foreldrepenger.selvbetjening.tjeneste.historikk;
 
+import static no.nav.foreldrepenger.selvbetjening.tjeneste.historikk.HistorikkController.HISTORIKK;
 import static no.nav.foreldrepenger.selvbetjening.util.EnvUtil.DEV;
 import static no.nav.foreldrepenger.selvbetjening.util.EnvUtil.DEV_GCP;
 import static no.nav.foreldrepenger.selvbetjening.util.EnvUtil.LOCAL;
@@ -21,13 +22,11 @@ import no.nav.security.oidc.api.Unprotected;
 
 @Profile({ LOCAL, DEV, DEV_GCP })
 @RestController
-@RequestMapping(produces = APPLICATION_JSON_VALUE)
+@RequestMapping(path = HistorikkDevController.DEVPATH, produces = APPLICATION_JSON_VALUE)
 @Unprotected
 public class HistorikkDevController {
 
-    private static final String DEVPART = "/" + DEV;
-
-    private static final String HISTORIKKPATH = "historikk" + DEVPART;
+    static final String DEVPATH = HISTORIKK + "/" + DEV;
 
     private final Historikk historikk;
 
@@ -36,7 +35,7 @@ public class HistorikkDevController {
         this.historikk = historikk;
     }
 
-    @GetMapping(HISTORIKKPATH + "/hent")
+    @GetMapping
     public List<HistorikkInnslag> hentHistorikk(@RequestParam("fnr") Fødselsnummer fnr) {
         return historikk.hentHistorikkFor(fnr);
     }

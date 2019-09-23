@@ -1,5 +1,6 @@
 package no.nav.foreldrepenger.selvbetjening.tjeneste.minidialog;
 
+import static no.nav.foreldrepenger.selvbetjening.tjeneste.minidialog.MinidialogController.MINIDIALOG;
 import static no.nav.foreldrepenger.selvbetjening.util.EnvUtil.DEV;
 import static no.nav.foreldrepenger.selvbetjening.util.EnvUtil.DEV_GCP;
 import static no.nav.foreldrepenger.selvbetjening.util.EnvUtil.LOCAL;
@@ -21,11 +22,11 @@ import no.nav.security.oidc.api.Unprotected;
 
 @Profile({ LOCAL, DEV, DEV_GCP })
 @RestController
-@RequestMapping(produces = APPLICATION_JSON_VALUE)
+@RequestMapping(path = MinidialogDevController.DEVPATH, produces = APPLICATION_JSON_VALUE)
 @Unprotected
 public class MinidialogDevController {
 
-    private static final String MINIDIALOGPATH = "/rest/minidialog" + "/" + DEV;
+    static final String DEVPATH = MINIDIALOG + "/" + DEV;
 
     private final Minidialog minidialog;
 
@@ -34,13 +35,13 @@ public class MinidialogDevController {
         this.minidialog = minidialog;
     }
 
-    @GetMapping(MINIDIALOGPATH)
+    @GetMapping
     public List<MinidialogInnslag> minidialoger(@RequestParam("fnr") Fødselsnummer fnr,
             @RequestParam(defaultValue = "true") boolean activeOnly) {
         return minidialog.hentMinidialoger(fnr, activeOnly);
     }
 
-    @GetMapping(MINIDIALOGPATH + "/aktive")
+    @GetMapping("/aktive")
     public List<MinidialogInnslag> aktiveSpørsmål(@RequestParam("fnr") Fødselsnummer fnr) {
         return minidialog.hentAktiveMinidialogSpørsmål(fnr);
     }
