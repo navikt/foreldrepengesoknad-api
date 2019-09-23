@@ -9,6 +9,7 @@ import javax.inject.Inject;
 
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import no.nav.foreldrepenger.selvbetjening.tjeneste.historikk.MinidialogInnslag;
@@ -29,8 +30,8 @@ public class MinidialogController {
     }
 
     @GetMapping
-    public List<MinidialogInnslag> minidialoger() {
-        return minidialog.hentMinidialoger(true);
+    public List<MinidialogInnslag> minidialoger(@RequestParam(defaultValue = "true") boolean activeOnly) {
+        return minidialog.hentMinidialoger(activeOnly);
     }
 
     @Override
