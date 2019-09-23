@@ -7,7 +7,6 @@ import java.util.List;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnProperty;
 import org.springframework.stereotype.Service;
 
-import no.nav.foreldrepenger.selvbetjening.tjeneste.innsending.InnsendingInnslag;
 import no.nav.foreldrepenger.selvbetjening.tjeneste.oppslag.domain.Fødselsnummer;
 
 @Service
@@ -25,17 +24,13 @@ public class HistorikkTjenesteStub implements Historikk {
     }
 
     @Override
-    public List<InnsendingInnslag> hentHistorikk() {
+    public List<HistorikkInnslag> hentHistorikk() {
         return Collections.emptyList();
     }
 
     @Override
-    public List<InnsendingInnslag> hentHistorikkFor(Fødselsnummer fnr) {
+    public List<HistorikkInnslag> hentHistorikkFor(Fødselsnummer fnr) {
         return Collections.emptyList();
     }
 
-    @Override
-    public List<MinidialogInnslag> minidialoger() {
-        return Collections.emptyList();
-    }
 }
