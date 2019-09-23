@@ -27,8 +27,14 @@ public final class URIUtil {
     }
 
     public static HttpHeaders queryParams(String key, String value) {
+        return queryParams(Pair.of(key, value));
+    }
+
+    public static HttpHeaders queryParams(Pair<String, Object>... pairs) {
         HttpHeaders queryParams = new HttpHeaders();
-        queryParams.add(key, value);
+        for (Pair<String, Object> pair : pairs) {
+            queryParams.add(pair.getFirst(), pair.getSecond().toString());
+        }
         return queryParams;
     }
 }

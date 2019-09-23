@@ -8,8 +8,8 @@ import no.nav.foreldrepenger.selvbetjening.tjeneste.oppslag.domain.Fødselsnumme
 
 public interface Minidialog extends Pingable {
 
-    List<MinidialogInnslag> hentMinidialoger();
+    List<MinidialogInnslag> hentMinidialoger(Fødselsnummer fnr, boolean activeOnly);
 
-    List<MinidialogInnslag> hentMinidialoger(Fødselsnummer fnr);
+    List<MinidialogInnslag> hentMinidialoger(boolean activeOnly);
 
 }

@@ -28,9 +28,9 @@ public class MinidialogController {
         this.minidialog = minidialog;
     }
 
-    @GetMapping("/minidialog")
+    @GetMapping
     public List<MinidialogInnslag> minidialoger() {
-        return minidialog.hentMinidialoger();
+        return minidialog.hentMinidialoger(true);
     }
 
     @Override

@@ -10,6 +10,8 @@ import org.springframework.beans.factory.annotation.Value;
 import org.springframework.boot.context.properties.ConfigurationProperties;
 import org.springframework.context.annotation.Configuration;
 
+import no.nav.foreldrepenger.selvbetjening.util.Pair;
+
 @ConfigurationProperties(prefix = MinidialogConfig.MINIDIALOG)
 @Configuration
 public class MinidialogConfig {
@@ -31,12 +33,12 @@ public class MinidialogConfig {
         return uri;
     }
 
-    public URI minidialogURI() {
+    public URI minidialogURI(boolean activeOnly) {
         return uri(getURI(), MINIDIALOG_ME);
     }
 
-    public URI minidialogPreprodURI(String fnr) {
-        return uri(getURI(), AKTIVE, queryParams("fnr", fnr));
+    public URI minidialogPreprodURI(String fnr, boolean activeOnly) {
+        return uri(getURI(), AKTIVE, queryParams(Pair.of("fnr", fnr), Pair.of("activeOnly", activeOnly)));
     }
 
     public boolean isEnabled() {

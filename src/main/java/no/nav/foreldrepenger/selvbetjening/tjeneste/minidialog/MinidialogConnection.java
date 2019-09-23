@@ -34,12 +34,12 @@ public class MinidialogConnection extends AbstractRestConnection {
         return config.pingURI();
     }
 
-    public List<MinidialogInnslag> hentMinidialoger() {
-        return hentFra(config.minidialogURI());
+    public List<MinidialogInnslag> hentMinidialoger(boolean activeOnly) {
+        return hentFra(config.minidialogURI(activeOnly));
     }
 
-    public List<MinidialogInnslag> hentMinidialoger(Fødselsnummer fnr) {
-        return hentFra(config.minidialogPreprodURI(fnr.getFnr()));
+    public List<MinidialogInnslag> hentMinidialoger(Fødselsnummer fnr, boolean activeOnly) {
+        return hentFra(config.minidialogPreprodURI(fnr.getFnr(), activeOnly));
     }
 
     private List<MinidialogInnslag> hentFra(URI uri) {
