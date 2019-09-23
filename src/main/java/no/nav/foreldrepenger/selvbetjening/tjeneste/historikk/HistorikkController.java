@@ -27,14 +27,9 @@ public class HistorikkController {
         this.historikk = historikk;
     }
 
-    @GetMapping("/historikk")
-    public List<SøknadInnslag> historikk() {
+    @GetMapping
+    public List<HistorikkInnslag> historikk() {
         return historikk.hentHistorikk();
-    }
-
-    @GetMapping("/minidialoger")
-    public List<MinidialogInnslag> minidialoger() {
-        return historikk.minidialoger();
     }
 
     @Override

@@ -18,18 +18,13 @@ public class HistorikkTjeneste implements Historikk {
     }
 
     @Override
-    public List<SøknadInnslag> hentHistorikk() {
+    public List<HistorikkInnslag> hentHistorikk() {
         return connection.hentHistorikk();
     }
 
     @Override
-    public List<SøknadInnslag> hentHistorikkFor(Fødselsnummer fnr) {
+    public List<HistorikkInnslag> hentHistorikkFor(Fødselsnummer fnr) {
         return connection.hentHistorikk(fnr);
-    }
-
-    @Override
-    public List<MinidialogInnslag> minidialoger() {
-        return connection.hentMinidialoger();
     }
 
     @Override

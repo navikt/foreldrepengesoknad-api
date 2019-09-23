@@ -11,17 +11,18 @@ import com.fasterxml.jackson.annotation.JsonSubTypes;
 import com.fasterxml.jackson.annotation.JsonSubTypes.Type;
 import com.fasterxml.jackson.annotation.JsonTypeInfo;
 
+import no.nav.foreldrepenger.selvbetjening.tjeneste.innsending.InnsendingInnslag;
 import no.nav.foreldrepenger.selvbetjening.tjeneste.oppslag.domain.AktørId;
 import no.nav.foreldrepenger.selvbetjening.tjeneste.oppslag.domain.Fødselsnummer;
 
 @JsonTypeInfo(use = NAME, include = PROPERTY, property = "type")
 @JsonSubTypes({
-        @Type(value = SøknadInnslag.class, name = "søknad"),
+        @Type(value = InnsendingInnslag.class, name = "søknad"),
         @Type(value = InntektsmeldingInnslag.class, name = "inntekt"),
         @Type(value = MinidialogInnslag.class, name = "minidialog")
 
 })
-abstract class HistorikkInnslag {
+public abstract class HistorikkInnslag {
 
     private final Fødselsnummer fnr;
     private AktørId aktørId;

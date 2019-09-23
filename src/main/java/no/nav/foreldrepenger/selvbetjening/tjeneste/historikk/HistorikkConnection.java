@@ -1,7 +1,6 @@
 package no.nav.foreldrepenger.selvbetjening.tjeneste.historikk;
 
 import static java.util.Collections.emptyList;
-import static no.nav.foreldrepenger.selvbetjening.util.EnvUtil.CONFIDENTIAL;
 
 import java.net.URI;
 import java.util.Arrays;
@@ -34,31 +33,22 @@ public class HistorikkConnection extends AbstractRestConnection {
         return config.pingURI();
     }
 
-    public List<SøknadInnslag> hentHistorikk() {
+    public List<HistorikkInnslag> hentHistorikk() {
         return hentHistorikk(config.historikkURI());
     }
 
-    public List<SøknadInnslag> hentHistorikk(Fødselsnummer fnr) {
+    public List<HistorikkInnslag> hentHistorikk(Fødselsnummer fnr) {
         return hentHistorikk(config.historikkPreprodURI(fnr.getFnr()));
     }
 
-    private List<SøknadInnslag> hentHistorikk(URI uri) {
-        List<SøknadInnslag> historikk = Optional
-                .ofNullable(getForObject(uri, SøknadInnslag[].class, false))
+    private List<HistorikkInnslag> hentHistorikk(URI uri) {
+        List<HistorikkInnslag> historikk = Optional
+                .ofNullable(getForObject(uri, HistorikkInnslag[].class, false))
                 .map(Arrays::asList)
                 .orElse(emptyList());
         LOG.trace("Hentet historikk {} fra {}", historikk, uri);
         return historikk;
 
-    }
-
-    public List<MinidialogInnslag> hentMinidialoger() {
-        List<MinidialogInnslag> minidialoger = Optional
-                .ofNullable(getForObject(config.minidialogURI(), MinidialogInnslag[].class, false))
-                .map(Arrays::asList)
-                .orElse(emptyList());
-        LOG.trace(CONFIDENTIAL, "Fikk minidialoger {}", minidialoger);
-        return minidialoger;
     }
 
     @Override

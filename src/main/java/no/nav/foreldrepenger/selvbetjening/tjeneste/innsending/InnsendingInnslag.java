@@ -1,4 +1,4 @@
-package no.nav.foreldrepenger.selvbetjening.tjeneste.historikk;
+package no.nav.foreldrepenger.selvbetjening.tjeneste.innsending;
 
 import java.time.LocalDate;
 import java.util.List;
@@ -6,16 +6,18 @@ import java.util.List;
 import com.fasterxml.jackson.annotation.JsonCreator;
 import com.fasterxml.jackson.annotation.JsonProperty;
 
+import no.nav.foreldrepenger.selvbetjening.tjeneste.historikk.HendelseType;
+import no.nav.foreldrepenger.selvbetjening.tjeneste.historikk.HistorikkInnslag;
 import no.nav.foreldrepenger.selvbetjening.tjeneste.oppslag.domain.Fødselsnummer;
 
-public class SøknadInnslag extends HistorikkInnslag {
+public class InnsendingInnslag extends HistorikkInnslag {
 
     private final HendelseType hendelse;
     private List<String> vedlegg;
     private LocalDate behandlingsdato;
 
     @JsonCreator
-    public SøknadInnslag(@JsonProperty("fnr") Fødselsnummer fnr, @JsonProperty("hendelse") String hendelse) {
+    public InnsendingInnslag(@JsonProperty("fnr") Fødselsnummer fnr, @JsonProperty("hendelse") String hendelse) {
         super(fnr);
         this.hendelse = hendelseFra(hendelse);
     }

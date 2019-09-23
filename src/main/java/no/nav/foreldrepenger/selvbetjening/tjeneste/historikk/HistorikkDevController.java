@@ -28,29 +28,21 @@ public class HistorikkDevController {
     private static final String DEVPART = "/" + DEV;
 
     private static final String HISTORIKKPATH = "historikk" + DEVPART;
-    private static final String MINIDIALOGPATH = "minidialog" + DEVPART;
 
-    private final Minidialog minidialog;
     private final Historikk historikk;
 
     @Inject
     public HistorikkDevController(Historikk historikk, Minidialog minidialog) {
         this.historikk = historikk;
-        this.minidialog = minidialog;
     }
 
     @GetMapping(HISTORIKKPATH + "/hent")
-    public List<SøknadInnslag> hentHistorikk(@RequestParam("fnr") Fødselsnummer fnr) {
+    public List<HistorikkInnslag> hentHistorikk(@RequestParam("fnr") Fødselsnummer fnr) {
         return historikk.hentHistorikkFor(fnr);
-    }
-
-    @GetMapping(MINIDIALOGPATH + "/hent")
-    public List<MinidialogInnslag> hentMinidialoger(@RequestParam("fnr") Fødselsnummer fnr) {
-        return minidialog.hentMinidialoger(fnr);
     }
 
     @Override
     public String toString() {
-        return getClass().getSimpleName() + "[minidialog=" + minidialog + ", historikk=" + historikk + "]";
+        return getClass().getSimpleName() + "[historikk=" + historikk + "]";
     }
 }
