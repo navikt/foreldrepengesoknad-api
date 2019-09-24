@@ -28,7 +28,6 @@ public class VedleggSjekker {
         this.maxEnkelSize = maxEnkel;
         this.virusScanner = virusScanner;
         this.encryptionChecker = encryptionChecker;
-
     }
 
     public void sjekk(Vedlegg... vedlegg) {
@@ -111,6 +110,8 @@ public class VedleggSjekker {
 
     @Override
     public String toString() {
-        return getClass().getSimpleName() + "[max=" + maxTotalSize + "]";
+        return getClass().getSimpleName() + "[maxTotalSize=" + maxTotalSize + ", maxEnkelSize=" + maxEnkelSize
+                + ", virusScanner=" + virusScanner + ", encryptionChecker=" + encryptionChecker + "]";
     }
+
 }

@@ -34,13 +34,13 @@ import no.nav.foreldrepenger.selvbetjening.util.TokenUtil;
 import no.nav.foreldrepenger.selvbetjening.vedlegg.Image2PDFConverter;
 import no.nav.foreldrepenger.selvbetjening.vedlegg.PDFEncryptionChecker;
 import no.nav.foreldrepenger.selvbetjening.vedlegg.VedleggSjekker;
-import no.nav.security.spring.oidc.SpringOIDCRequestContextHolder;
+import no.nav.security.token.support.spring.SpringTokenValidationContextHolder;
 
 @ExtendWith(SpringExtension.class)
 @TestPropertySource(properties = { "mottak.uri: http://www.mottak.no",
         "spring.cloud.vault.enabled=false" })
 @ContextConfiguration(classes = { NotFoundException.class, InnsendingConfig.class, Image2PDFConverter.class,
-        TokenUtil.class, SpringOIDCRequestContextHolder.class })
+        TokenUtil.class, SpringTokenValidationContextHolder.class })
 @RestClientTest
 
 @ActiveProfiles(EnvUtil.TEST)

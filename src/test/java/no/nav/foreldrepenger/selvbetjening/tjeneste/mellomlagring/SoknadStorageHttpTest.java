@@ -5,7 +5,7 @@ import static no.nav.foreldrepenger.selvbetjening.tjeneste.mellomlagring.Melloml
 import static no.nav.foreldrepenger.selvbetjening.util.EnvUtil.LOCAL;
 import static no.nav.foreldrepenger.selvbetjening.util.EnvUtil.LOCALSTACK;
 import static no.nav.foreldrepenger.selvbetjening.util.EnvUtil.TEST;
-import static no.nav.security.oidc.test.support.JwtTokenGenerator.createSignedJWT;
+import static no.nav.security.token.support.test.JwtTokenGenerator.createSignedJWT;
 import static org.assertj.core.api.AssertionsForClassTypes.assertThat;
 import static org.springframework.http.HttpHeaders.AUTHORIZATION;
 import static org.springframework.http.HttpHeaders.CONTENT_TYPE;
@@ -26,7 +26,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.boot.test.web.client.TestRestTemplate;
 import org.springframework.boot.web.server.LocalServerPort;
-import org.springframework.context.annotation.Profile;
 import org.springframework.http.HttpEntity;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.ResponseEntity;

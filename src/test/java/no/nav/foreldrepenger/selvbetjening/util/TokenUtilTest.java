@@ -21,42 +21,36 @@ import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 
-import com.nimbusds.jwt.JWTClaimsSet;
-
-import no.nav.security.oidc.context.OIDCClaims;
-import no.nav.security.oidc.context.OIDCRequestContextHolder;
-import no.nav.security.oidc.context.OIDCValidationContext;
-import no.nav.security.oidc.context.TokenContext;
-import no.nav.security.oidc.exceptions.OIDCTokenValidatorException;
+import no.nav.security.token.support.core.context.TokenValidationContext;
+import no.nav.security.token.support.core.context.TokenValidationContextHolder;
+import no.nav.security.token.support.core.exceptions.JwtTokenValidatorException;
+import no.nav.security.token.support.core.jwt.JwtTokenClaims;
 
 @ExtendWith(MockitoExtension.class)
 public class TokenUtilTest {
 
     private static final String FNR = "42";
     @Mock
-    private OIDCRequestContextHolder holder;
+    private TokenValidationContextHolder holder;
     @Mock
-    private OIDCValidationContext context;
+    private TokenValidationContext context;
     @Mock
-    private OIDCClaims claims;
-    @Mock
-    private TokenContext tokenContext;
+    private JwtTokenClaims claims;
 
     private TokenUtil tokenHandler;
 
     @BeforeEach
     public void before() {
-        lenient().when(holder.getOIDCValidationContext()).thenReturn(context);
+        lenient().when(holder.getTokenValidationContext()).thenReturn(context);
         lenient().when(context.getClaims(eq(ISSUER))).thenReturn(claims);
         tokenHandler = new TokenUtil(holder);
     }
 
     @Test
     public void testTokenExpiry() {
-        when(claims.getClaimSet()).thenReturn(new JWTClaimsSet.Builder()
-                .subject(FNR)
-                .expirationTime(toDate(LocalDateTime.now().plusHours(1)))
-                .build());
+
+        when(claims.get(eq("exp")))
+                .thenReturn(toDate(LocalDateTime.now().plusHours(1)).toInstant().getEpochSecond());
         assertNotNull(tokenHandler.getExpiryDate());
 
     }
@@ -66,42 +60,42 @@ public class TokenUtilTest {
     }
 
     @Test
-    public void testOK() throws OIDCTokenValidatorException {
-        when(claims.getClaimSet()).thenReturn(new JWTClaimsSet.Builder().subject(FNR).build());
+    public void testOK() {
+        when(claims.getSubject()).thenReturn(FNR);
         assertEquals(FNR, tokenHandler.autentisertBruker());
         assertEquals(FNR, tokenHandler.getSubject());
         assertTrue(tokenHandler.erAutentisert());
     }
 
     @Test
-    public void testNoContext() throws OIDCTokenValidatorException {
-        when(holder.getOIDCValidationContext()).thenReturn(null);
+    public void testNoContext() {
+        when(holder.getTokenValidationContext()).thenReturn(null);
         assertFalse(tokenHandler.erAutentisert());
         assertNull(tokenHandler.getSubject());
         assertNull(tokenHandler.getExpiryDate());
-        assertThrows(OIDCTokenValidatorException.class, () -> tokenHandler.autentisertBruker());
+        assertThrows(JwtTokenValidatorException.class, () -> tokenHandler.autentisertBruker());
     }
 
     @Test
-    public void testNoClaims() throws OIDCTokenValidatorException {
+    public void testNoClaims() {
         when(context.getClaims(eq(ISSUER))).thenReturn(null);
         assertFalse(tokenHandler.erAutentisert());
         assertNull(tokenHandler.getSubject());
-        assertThrows(OIDCTokenValidatorException.class, () -> tokenHandler.autentisertBruker());
+        assertThrows(JwtTokenValidatorException.class, () -> tokenHandler.autentisertBruker());
     }
 
     @Test
-    public void testNoClaimset() throws OIDCTokenValidatorException {
+    public void testNoClaimset() {
         assertNull(tokenHandler.getSubject());
         assertFalse(tokenHandler.erAutentisert());
-        assertThrows(OIDCTokenValidatorException.class, () -> tokenHandler.autentisertBruker());
+        assertThrows(JwtTokenValidatorException.class, () -> tokenHandler.autentisertBruker());
     }
 
     @Test
-    public void testNoSubject() throws OIDCTokenValidatorException {
-        when(claims.getClaimSet()).thenReturn(new JWTClaimsSet.Builder().build());
+    public void testNoSubject() {
+        when(claims.getSubject()).thenReturn(null);
         assertNull(tokenHandler.getSubject());
         assertFalse(tokenHandler.erAutentisert());
-        assertThrows(OIDCTokenValidatorException.class, () -> tokenHandler.autentisertBruker());
+        assertThrows(JwtTokenValidatorException.class, () -> tokenHandler.autentisertBruker());
     }
 }

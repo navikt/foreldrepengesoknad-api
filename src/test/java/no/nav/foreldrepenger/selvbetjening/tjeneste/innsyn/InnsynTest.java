@@ -24,13 +24,13 @@ import org.springframework.test.web.client.MockRestServiceServer;
 
 import no.nav.foreldrepenger.selvbetjening.util.EnvUtil;
 import no.nav.foreldrepenger.selvbetjening.util.TokenUtil;
-import no.nav.security.spring.oidc.SpringOIDCRequestContextHolder;
+import no.nav.security.token.support.spring.SpringTokenValidationContextHolder;
 
 @ExtendWith(SpringExtension.class)
 @TestPropertySource(properties = { "mottak.uri = http://www.mottak.no/api",
         "oppslag.uri: http://www.oppslag.no/api", "spring.cloud.vault.enabled=false" })
 @ContextConfiguration(classes = { NotFoundException.class, InnsynConfig.class, TokenUtil.class,
-        SpringOIDCRequestContextHolder.class })
+        SpringTokenValidationContextHolder.class })
 @RestClientTest
 @ActiveProfiles(EnvUtil.TEST)
 public class InnsynTest {

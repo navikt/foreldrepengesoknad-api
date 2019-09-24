@@ -22,13 +22,13 @@ import org.springframework.test.web.client.ExpectedCount;
 import org.springframework.test.web.client.MockRestServiceServer;
 
 import no.nav.foreldrepenger.selvbetjening.util.TokenUtil;
-import no.nav.security.spring.oidc.SpringOIDCRequestContextHolder;
+import no.nav.security.token.support.spring.SpringTokenValidationContextHolder;
 
 @ExtendWith(SpringExtension.class)
 @TestPropertySource(properties = { "oppslag.uri: http://www.oppslag.no",
         "spring.cloud.vault.enabled=false" })
 @ContextConfiguration(classes = { NotFoundException.class, OppslagConfig.class, TokenUtil.class,
-        SpringOIDCRequestContextHolder.class })
+        SpringTokenValidationContextHolder.class })
 @RestClientTest
 
 public class OppslagTest {

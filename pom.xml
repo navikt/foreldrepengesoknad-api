@@ -25,7 +25,7 @@
         <project.reporting.outputEncoding>UTF-8</project.reporting.outputEncoding>
         <localstack.version>1.7.2</localstack.version>
         <springfox.version>2.9.2</springfox.version>
-        <oidc-spring-support.version>0.2.18</oidc-spring-support.version>
+        <token-validation-spring.version>1.0.1</token-validation-spring.version>
         <tika.version>1.22</tika.version>
         <logback.logstash.version>6.2</logback.logstash.version>
         <nv.version>1.26</nv.version>
@@ -181,13 +181,13 @@
         </dependency>
         <dependency>
             <groupId>no.nav.security</groupId>
-            <artifactId>oidc-spring-support</artifactId>
-            <version>${oidc-spring-support.version}</version>
+            <artifactId>token-validation-spring</artifactId>
+            <version>${token-validation-spring.version}</version>
         </dependency>
         <dependency>
             <groupId>no.nav.security</groupId>
-            <artifactId>oidc-test-support</artifactId>
-            <version>${oidc-spring-support.version}</version>
+            <artifactId>token-validation-test-support</artifactId>
+            <version>${token-validation-spring.version}</version>
             <scope>test</scope>
         </dependency>
         <dependency>
