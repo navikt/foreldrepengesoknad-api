@@ -7,7 +7,7 @@ management :
      health:
        show-details : always
                    
-no.nav.security.oidc:
+no.nav.security.jwt:
   issuer.selvbetjening : 
      discoveryurl: http://metadata
      accepted_audience: aud-localhost
