@@ -3,7 +3,6 @@
   "ingress": "https://foreldrepengesoknad-api-q.nav.no",
   "application_name": "foreldrepengesoknad-api",
   "env": {
-    "no_nav_security_jwt_issuer_selvbetjening_discoveryurl": "https://login.microsoftonline.com/NAVtestB2C.onmicrosoft.com/v2.0/.well-known/openid-configuration?p=B2C_1A_idporten_ver1",
     "oppslag_uri": "https://api-gw-q1.oera.no/fpsoknad-oppslag/api/",
     "historikk_uri": "https://api-gw-q1.oera.no/fpinfo-historikk/api/",
     "mottak_uri": "https://api-gw-q1.oera.no/fpsoknad-mottak/api/"
