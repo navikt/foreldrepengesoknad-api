@@ -48,11 +48,10 @@ public class TokenUtilTest {
 
     @Test
     public void testTokenExpiry() {
-
         when(claims.get(eq("exp")))
                 .thenReturn(toDate(LocalDateTime.now().plusHours(1)).toInstant().getEpochSecond());
         assertNotNull(tokenHandler.getExpiryDate());
-
+        assertTrue(tokenHandler.erUtløpt());
     }
 
     private static Date toDate(LocalDateTime date) {
@@ -61,10 +60,13 @@ public class TokenUtilTest {
 
     @Test
     public void testOK() {
+        when(claims.get(eq("exp"))).thenReturn(toDate(LocalDateTime.now().minusHours(1)).toInstant().getEpochSecond());
         when(claims.getSubject()).thenReturn(FNR);
         assertEquals(FNR, tokenHandler.autentisertBruker());
         assertEquals(FNR, tokenHandler.getSubject());
         assertTrue(tokenHandler.erAutentisert());
+        assertFalse(tokenHandler.erUtløpt());
+
     }
 
     @Test

@@ -1,5 +1,6 @@
 package no.nav.foreldrepenger.selvbetjening.util;
 
+import static java.time.Instant.now;
 import static no.nav.foreldrepenger.selvbetjening.util.Constants.ISSUER;
 
 import java.util.Date;
@@ -21,6 +22,12 @@ public class TokenUtil {
 
     public TokenUtil(TokenValidationContextHolder ctxHolder) {
         this.ctxHolder = ctxHolder;
+    }
+
+    public boolean erUtløpt() {
+        return Optional.ofNullable(getExpiryDate())
+                .filter(d -> d.after(Date.from(now())))
+                .isPresent();
     }
 
     public boolean erAutentisert() {
@@ -57,7 +64,6 @@ public class TokenUtil {
     }
 
     public Date getDateClaim(Object value) {
-
         if (value == null) {
             return null;
         }
