@@ -105,4 +105,5 @@ public class MellomlagringTjeneste {
         return getClass().getSimpleName() + "[tokenHelper=" + tokenHelper + ", storage=" + storage + ", crypto="
                 + crypto + ", sjekker=" + sjekker + "]";
     }
+
 }

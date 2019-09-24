@@ -4,6 +4,7 @@ import static java.util.stream.Collectors.joining;
 
 import java.io.BufferedReader;
 import java.io.InputStreamReader;
+import java.net.URI;
 import java.util.Optional;
 
 import javax.inject.Inject;
@@ -125,5 +126,16 @@ public class S3Storage implements Storage {
     @Override
     public String toString() {
         return getClass().getSimpleName() + " [s3=" + s3 + "]";
+    }
+
+    @Override
+    public String ping() {
+        ensureBucketExists(BUCKET_FORELDREPENGER_MELLOMLAGRING);
+        return "OK";
+    }
+
+    @Override
+    public URI pingURI() {
+        return URI.create(s3.getUrl(BUCKET_FORELDREPENGER_MELLOMLAGRING, "42").toString());
     }
 }

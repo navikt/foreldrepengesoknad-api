@@ -1,5 +1,6 @@
 package no.nav.foreldrepenger.selvbetjening.stub;
 
+import java.net.URI;
 import java.util.Optional;
 
 import org.slf4j.Logger;
@@ -30,7 +31,7 @@ public class StorageStub implements Storage {
 
     @Override
     public Optional<String> getTmp(String directory, String key) {
-        return get(directory,key);
+        return get(directory, key);
     }
 
     @Override
@@ -42,5 +43,15 @@ public class StorageStub implements Storage {
     public void deleteTmp(String directory, String key) {
         log.info("Would have deleted from tmp: " + key + " from directory " + directory);
 
+    }
+
+    @Override
+    public String ping() {
+        return "OK";
+    }
+
+    @Override
+    public URI pingURI() {
+        return URI.create("http://localhost/stub");
     }
 }

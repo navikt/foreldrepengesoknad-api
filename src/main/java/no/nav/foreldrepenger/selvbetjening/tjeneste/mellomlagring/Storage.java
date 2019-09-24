@@ -2,7 +2,9 @@ package no.nav.foreldrepenger.selvbetjening.tjeneste.mellomlagring;
 
 import java.util.Optional;
 
-public interface Storage {
+import no.nav.foreldrepenger.selvbetjening.tjeneste.Pingable;
+
+public interface Storage extends Pingable {
 
     void put(String directory, String key, String value);
 
