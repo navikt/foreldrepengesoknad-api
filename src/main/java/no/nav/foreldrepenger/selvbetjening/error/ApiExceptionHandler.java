@@ -7,8 +7,6 @@ import static org.springframework.http.HttpStatus.PAYLOAD_TOO_LARGE;
 import static org.springframework.http.HttpStatus.UNAUTHORIZED;
 import static org.springframework.http.HttpStatus.UNPROCESSABLE_ENTITY;
 
-import javax.inject.Inject;
-
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.http.HttpHeaders;
@@ -34,8 +32,11 @@ import no.nav.security.token.support.spring.validation.interceptor.JwtTokenUnaut
 @ControllerAdvice
 public class ApiExceptionHandler extends ResponseEntityExceptionHandler {
 
-    @Inject
-    TokenUtil tokenHelper;
+    private final TokenUtil tokenUtil;
+
+    public ApiExceptionHandler(TokenUtil tokenUtil) {
+        this.tokenUtil = tokenUtil;
+    }
 
     private static final Logger LOG = LoggerFactory.getLogger(ApiExceptionHandler.class);
 
@@ -54,7 +55,7 @@ public class ApiExceptionHandler extends ResponseEntityExceptionHandler {
     @ExceptionHandler(HttpStatusCodeException.class)
     public ResponseEntity<Object> handleHttpStatusCodeException(HttpStatusCodeException e, WebRequest request) {
         if (e.getStatusCode().equals(UNAUTHORIZED) || e.getStatusCode().equals(FORBIDDEN)) {
-            return logAndHandle(e.getStatusCode(), e, request, tokenHelper.getExpiryDate());
+            return logAndHandle(e.getStatusCode(), e, request, tokenUtil.getExpiryDate());
         }
         return logAndHandle(e.getStatusCode(), e, request);
     }
@@ -131,4 +132,8 @@ public class ApiExceptionHandler extends ResponseEntityExceptionHandler {
         return new ApiError(status, e, messages);
     }
 
+    @Override
+    public String toString() {
+        return getClass().getSimpleName() + "[tokenUtil=" + tokenUtil + "]";
+    }
 }

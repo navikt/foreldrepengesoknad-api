@@ -3,7 +3,6 @@ package no.nav.foreldrepenger.selvbetjening.util;
 import static no.nav.foreldrepenger.selvbetjening.util.Constants.ISSUER;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertFalse;
-import static org.junit.Assert.assertNotNull;
 import static org.junit.Assert.assertNull;
 import static org.junit.Assert.assertTrue;
 import static org.junit.jupiter.api.Assertions.assertThrows;
@@ -49,8 +48,8 @@ public class TokenUtilTest {
     @Test
     public void testTokenExpiry() {
         when(claims.get(eq("exp")))
-                .thenReturn(toDate(LocalDateTime.now().plusHours(1)).toInstant().getEpochSecond());
-        assertNotNull(tokenHandler.getExpiryDate());
+                .thenReturn(
+                        toDate(LocalDateTime.now().plusSeconds(3)).toInstant().getEpochSecond());
         assertTrue(tokenHandler.erUtløpt());
     }
 

@@ -8,8 +8,6 @@ import java.util.Optional;
 
 import org.springframework.stereotype.Component;
 
-import com.nimbusds.jwt.util.DateUtils;
-
 import no.nav.security.token.support.core.context.TokenValidationContext;
 import no.nav.security.token.support.core.context.TokenValidationContextHolder;
 import no.nav.security.token.support.core.exceptions.JwtTokenValidatorException;
@@ -64,17 +62,13 @@ public class TokenUtil {
     }
 
     public Date getDateClaim(Object value) {
-        if (value == null) {
-            return null;
-        }
         if (value instanceof Date) {
-            return (Date) value;
+            return Date.class.cast(value);
         }
         if (value instanceof Number) {
-            return DateUtils.fromSecondsSinceEpoch(((Number) value).longValue());
+            return new Date(Number.class.cast(value).longValue() * 1000L);
         }
         return null;
-
     }
 
     @Override
