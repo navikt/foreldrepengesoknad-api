@@ -5,7 +5,6 @@ no.nav:
             virus:
                enabled: true
    security.jwt:
-      issuers: selvbetjening
       issuer:
          selvbetjening:
             cookie_name: selvbetjening-idtoken
