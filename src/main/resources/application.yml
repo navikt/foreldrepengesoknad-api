@@ -4,7 +4,7 @@ no.nav:
          api:
             virus:
                enabled: true
-   security.oidc:
+   security.jwt:
       issuers: selvbetjening
       issuer:
          selvbetjening:
