@@ -1,7 +1,8 @@
 package no.nav.foreldrepenger.selvbetjening.tjeneste.innsending.domain;
 
 import java.net.URI;
-import java.util.Arrays;
+
+import no.nav.foreldrepenger.selvbetjening.util.StringUtil;
 
 public class Vedlegg {
 
@@ -84,7 +85,7 @@ public class Vedlegg {
     @Override
     public String toString() {
         return getClass().getSimpleName() + "[id=" + id + ", skjemanummer=" + skjemanummer + ", uuid=" + uuid
-                + ", url=" + url + ", content=" + Arrays.toString(content) + ", innsendingsType=" + innsendingsType
+                + ", url=" + url + ", content=" + StringUtil.limit(content) + ", innsendingsType=" + innsendingsType
                 + ", beskrivelse=" + beskrivelse + "]";
     }
 }

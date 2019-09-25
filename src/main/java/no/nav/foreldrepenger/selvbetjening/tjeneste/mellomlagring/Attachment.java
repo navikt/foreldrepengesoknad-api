@@ -2,7 +2,6 @@ package no.nav.foreldrepenger.selvbetjening.tjeneste.mellomlagring;
 
 import java.io.IOException;
 import java.net.URI;
-import java.util.Arrays;
 import java.util.UUID;
 
 import org.springframework.http.MediaType;
@@ -15,6 +14,7 @@ import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 import com.google.gson.Gson;
 
 import no.nav.foreldrepenger.selvbetjening.error.AttachmentTooLargeException;
+import no.nav.foreldrepenger.selvbetjening.util.StringUtil;
 
 public class Attachment {
 
@@ -74,17 +74,9 @@ public class Attachment {
                 .body(bytes);
     }
 
-    private String bytes() {
-        String vedleggAsString = Arrays.toString(bytes);
-        if (vedleggAsString.length() >= 50) {
-            return vedleggAsString.substring(0, 49) + ".... " + (bytes.length - 50) + " more bytes";
-        }
-        return vedleggAsString;
-    }
-
     @Override
     public String toString() {
-        return getClass().getSimpleName() + " [filename=" + filename + ", bytes=" + bytes()
+        return getClass().getSimpleName() + " [filename=" + filename + ", bytes=" + StringUtil.limit(bytes)
                 + ", contentType=" + contentType
                 + ", size=" + size + ", uuid=" + uuid + "]";
     }

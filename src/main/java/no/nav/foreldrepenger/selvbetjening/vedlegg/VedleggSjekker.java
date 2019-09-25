@@ -3,6 +3,8 @@ package no.nav.foreldrepenger.selvbetjening.vedlegg;
 import java.util.Arrays;
 import java.util.List;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Component;
 import org.springframework.util.unit.DataSize;
@@ -15,6 +17,8 @@ import no.nav.foreldrepenger.selvbetjening.tjeneste.virusscan.VirusScanner;
 
 @Component
 public class VedleggSjekker {
+
+    private static final Logger LOG = LoggerFactory.getLogger(VedleggSjekker.class);
 
     private final DataSize maxTotalSize;
     private final DataSize maxEnkelSize;
@@ -39,17 +43,21 @@ public class VedleggSjekker {
     }
 
     public void sjekkAttachments(List<Attachment> vedlegg) {
+        LOG.info("Sjekker vedlegg {}", vedlegg);
         sjekkAttachmentEnkeltStørrelser(vedlegg);
         sjekkAttachmentTotalStørrelse(vedlegg);
         sjekkAttachmentVirus(vedlegg);
         sjekkAttachmentKryptert(vedlegg);
+        LOG.info("Sjekket vedlegg OK");
     }
 
     public void sjekk(List<Vedlegg> vedlegg) {
+        LOG.info("Sjekker vedlegg {}", vedlegg);
         sjekkTotalStørrelse(vedlegg);
         sjekkEnkeltStørrelser(vedlegg);
         sjekkVirus(vedlegg);
         sjekkKryptert(vedlegg);
+        LOG.info("Sjekket vedlegg OK");
     }
 
     private void sjekkEnkeltStørrelser(List<Vedlegg> vedlegg) {
@@ -61,34 +69,41 @@ public class VedleggSjekker {
     }
 
     private void sjekkKryptert(List<Vedlegg> vedlegg) {
+        LOG.info("Sjekker kryptering for {}", vedlegg);
         vedlegg.stream().forEach(encryptionChecker::checkEncrypted);
     }
 
     private void sjekkAttachmentKryptert(List<Attachment> vedlegg) {
+        LOG.info("Sjekker kryptering for {}", vedlegg);
         vedlegg.stream().forEach(encryptionChecker::checkEncrypted);
     }
 
     private void sjekkVirus(List<Vedlegg> vedlegg) {
+        LOG.info("Sjekker virus for {}", vedlegg);
         vedlegg.stream().forEach(virusScanner::scan);
     }
 
     private void sjekkAttachmentVirus(List<Attachment> vedlegg) {
+        LOG.info("Sjekker virus for {}", vedlegg);
         vedlegg.stream().forEach(virusScanner::scan);
     }
 
     private void sjekkStørrelse(Vedlegg vedlegg) {
+        LOG.info("Sjekker størrelse for {}", vedlegg);
         if ((vedlegg.getContent() != null) && (vedlegg.getContent().length > maxEnkelSize.toBytes())) {
             throw new AttachmentTooLargeException(vedlegg, maxEnkelSize);
         }
     }
 
     private void sjekkAttachmentEnkeltStørrelse(Attachment vedlegg) {
+        LOG.info("Sjekker størrelse for {}", vedlegg);
         if (vedlegg.size > maxEnkelSize.toBytes()) {
             throw new AttachmentTooLargeException(vedlegg.size, maxEnkelSize);
         }
     }
 
     private void sjekkTotalStørrelse(List<Vedlegg> vedlegg) {
+        LOG.info("Sjekker total størrelse for {}", vedlegg);
         long total = vedlegg.stream()
                 .filter(v -> v.getContent() != null)
                 .mapToLong(v -> v.getContent().length)
@@ -99,6 +114,7 @@ public class VedleggSjekker {
     }
 
     private void sjekkAttachmentTotalStørrelse(List<Attachment> vedlegg) {
+        LOG.info("Sjekker total størrelse for {}", vedlegg);
         long total = vedlegg.stream()
                 .filter(v -> v.bytes != null)
                 .mapToLong(v -> v.bytes.length)
