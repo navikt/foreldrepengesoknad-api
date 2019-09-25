@@ -32,17 +32,21 @@ public class MellomlagringTjeneste {
     public Optional<String> hentSøknad() {
         String fnr = tokenHelper.autentisertBruker();
         String directory = crypto.encryptDirectoryName(fnr);
-        LOG.trace("Henter søknad fra katalog {}", directory);
-        return storage.getTmp(directory, SØKNAD)
-                .map(søknad -> crypto.decrypt(søknad, fnr));
+        LOG.info("Henter søknad fra katalog {}", directory);
+        Optional<String> søknad = storage.getTmp(directory, SØKNAD)
+                .map(s -> crypto.decrypt(s, fnr));
+        LOG.info("Hentet søknad fra katalog {}", directory);
+        return søknad;
+
     }
 
     public void lagreSøknad(String søknad) {
         String fnr = tokenHelper.autentisertBruker();
         String directory = crypto.encryptDirectoryName(fnr);
-        LOG.trace("Skriver søknad til katalog {}", directory);
+        LOG.info("Skriver søknad til katalog {}", directory);
         String encryptedValue = crypto.encrypt(søknad, fnr);
         storage.putTmp(directory, SØKNAD, encryptedValue);
+        LOG.info("Skrev søknad til katalog {}", directory);
     }
 
     public void slettSøknad() {
@@ -50,15 +54,18 @@ public class MellomlagringTjeneste {
         String directory = crypto.encryptDirectoryName(fnr);
         LOG.info("Fjerner søknad fra katalog {}", directory);
         storage.deleteTmp(directory, SØKNAD);
+        LOG.info("Fjernet søknad fra katalog {}", directory);
     }
 
     public Optional<Attachment> hentVedlegg(String key) {
         String fnr = tokenHelper.autentisertBruker();
         String directory = crypto.encryptDirectoryName(fnr);
         LOG.info("Henter vedlegg med nøkkel {} fra katalog {}", key, directory);
-        return storage.getTmp(directory, key)
+        Optional<Attachment> v = storage.getTmp(directory, key)
                 .map(vedlegg -> crypto.decrypt(vedlegg, fnr))
                 .map(Attachment::fromJson);
+        LOG.info("Hentet vedlegg med nøkkel {} fra katalog {}", key, directory);
+        return v;
     }
 
     public void lagreVedlegg(Attachment attachment) {
@@ -68,6 +75,7 @@ public class MellomlagringTjeneste {
         LOG.info("Skriver vedlegg {} til katalog {}", attachment, directory);
         String encryptedValue = crypto.encrypt(attachment.toJson(), fnr);
         storage.putTmp(directory, attachment.uuid, encryptedValue);
+        LOG.info("Skrev vedlegg {} til katalog {}", attachment, directory);
     }
 
     public void slettVedlegg(Vedlegg vedlegg) {
@@ -81,23 +89,27 @@ public class MellomlagringTjeneste {
             String directory = crypto.encryptDirectoryName(tokenHelper.autentisertBruker());
             LOG.info("Fjerner vedlegg med nøkkel {} fra katalog {}", uuid, directory);
             storage.deleteTmp(directory, uuid);
+            LOG.info("Fjernet vedlegg med nøkkel {} fra katalog {}", uuid, directory);
         }
     }
 
     public Optional<String> hentKvittering(String type) {
         String fnr = tokenHelper.autentisertBruker();
         String directory = crypto.encryptDirectoryName(fnr);
-        LOG.trace("Henter kvittering fra katalog {}", directory);
-        return storage.get(directory, type)
-                .map(kvittering -> crypto.decrypt(kvittering, fnr));
+        LOG.info("Henter kvittering fra katalog {}", directory);
+        Optional<String> kvittering = storage.get(directory, type)
+                .map(k -> crypto.decrypt(k, fnr));
+        LOG.info("Hentet kvittering fra katalog {}", directory);
+        return kvittering;
     }
 
     public void lagreKvittering(String type, String kvittering) {
         String fnr = tokenHelper.autentisertBruker();
         String directory = crypto.encryptDirectoryName(fnr);
-        LOG.trace("Skriver kvittering til katalog {}", directory);
+        LOG.info("Skriver kvittering til katalog {}", directory);
         String encryptedValue = crypto.encrypt(kvittering, fnr);
         storage.put(directory, type, encryptedValue);
+        LOG.info("Skrev kvittering til katalog {}", directory);
     }
 
     @Override
@@ -105,5 +117,4 @@ public class MellomlagringTjeneste {
         return getClass().getSimpleName() + "[tokenHelper=" + tokenHelper + ", storage=" + storage + ", crypto="
                 + crypto + ", sjekker=" + sjekker + "]";
     }
-
 }
