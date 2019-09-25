@@ -14,7 +14,7 @@ import org.springframework.stereotype.Component;
 @Component
 @ConditionalOnBean(RequestFilter.class)
 public class RequestFilterRegistrationBean extends FilterRegistrationBean<RequestFilter> {
-    private static final Logger LOG = LoggerFactory.getLogger(IDFilterRegistrationBean.class);
+    private static final Logger LOG = LoggerFactory.getLogger(RequestFilterRegistrationBean.class);
 
     public RequestFilterRegistrationBean(RequestFilter requestFilter) {
         setFilter(requestFilter);

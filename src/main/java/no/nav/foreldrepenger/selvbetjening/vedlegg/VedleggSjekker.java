@@ -77,7 +77,7 @@ public class VedleggSjekker {
     }
 
     private void sjekkStørrelse(Vedlegg vedlegg) {
-        if (vedlegg.getContent() != null && vedlegg.getContent().length > maxEnkelSize.toBytes()) {
+        if ((vedlegg.getContent() != null) && (vedlegg.getContent().length > maxEnkelSize.toBytes())) {
             throw new AttachmentTooLargeException(vedlegg, maxEnkelSize);
         }
     }

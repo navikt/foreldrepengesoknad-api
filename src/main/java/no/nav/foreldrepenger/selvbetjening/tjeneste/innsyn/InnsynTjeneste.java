@@ -18,7 +18,7 @@ public class InnsynTjeneste implements Innsyn {
 
     private final InnsynConnection innsynConnection;
 
-    private static final Logger LOG = LoggerFactory.getLogger(InnsynConnection.class);
+    private static final Logger LOG = LoggerFactory.getLogger(InnsynTjeneste.class);
 
     public InnsynTjeneste(InnsynConnection innsynConnection) {
         this.innsynConnection = innsynConnection;
