@@ -39,6 +39,7 @@ public class InnsendingTjeneste implements Innsending {
         hentOgSjekk(søknad.getVedlegg());
         Kvittering kvittering = connection.sendInn(søknad);
         slettMellomlagringOgSøknad(søknad);
+        LOG.info("Returnerer kvittering {}", kvittering);
         return kvittering;
     }
 
@@ -48,6 +49,7 @@ public class InnsendingTjeneste implements Innsending {
         hentOgSjekk(ettersending.getVedlegg());
         Kvittering kvittering = connection.ettersend(ettersending);
         ettersending.getVedlegg().forEach(v -> mellomlagring.slettVedlegg(v));
+        LOG.info("Returnerer kvittering {}", kvittering);
         return kvittering;
     }
 
@@ -57,6 +59,7 @@ public class InnsendingTjeneste implements Innsending {
         hentOgSjekk(endringssøknad.getVedlegg());
         Kvittering kvittering = connection.endre(endringssøknad);
         slettMellomlagringOgSøknad(endringssøknad);
+        LOG.info("Returnerer kvittering {}", kvittering);
         return kvittering;
     }
 

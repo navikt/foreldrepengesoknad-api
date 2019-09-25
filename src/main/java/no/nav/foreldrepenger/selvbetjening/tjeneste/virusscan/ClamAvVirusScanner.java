@@ -16,7 +16,7 @@ public class ClamAvVirusScanner implements VirusScanner {
 
     @Override
     public void scan(Vedlegg vedlegg) {
-        connection.scan(vedlegg.getContent(), vedlegg.getBeskrivelse());
+        connection.scan(vedlegg.getContent(), vedlegg.getUuid());
     }
 
     @Override
