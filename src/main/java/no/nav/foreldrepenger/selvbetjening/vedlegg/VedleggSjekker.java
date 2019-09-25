@@ -43,21 +43,21 @@ public class VedleggSjekker {
     }
 
     public void sjekkAttachments(List<Attachment> vedlegg) {
-        LOG.info("Sjekker vedlegg {}", vedlegg);
+        LOG.info("Sjekker {} vedlegg {}", vedlegg.size(), vedlegg);
         sjekkAttachmentEnkeltStørrelser(vedlegg);
         sjekkAttachmentTotalStørrelse(vedlegg);
         sjekkAttachmentVirus(vedlegg);
         sjekkAttachmentKryptert(vedlegg);
-        LOG.info("Sjekket vedlegg OK");
+        LOG.info("Sjekket {} vedlegg OK", vedlegg.size());
     }
 
     public void sjekk(List<Vedlegg> vedlegg) {
-        LOG.info("Sjekker vedlegg {}", vedlegg);
+        LOG.info("Sjekker {} vedlegg {}", vedlegg.size(), vedlegg);
         sjekkTotalStørrelse(vedlegg);
         sjekkEnkeltStørrelser(vedlegg);
         sjekkVirus(vedlegg);
         sjekkKryptert(vedlegg);
-        LOG.info("Sjekket vedlegg OK");
+        LOG.info("Sjekket {} vedlegg OK", vedlegg.size());
     }
 
     private void sjekkEnkeltStørrelser(List<Vedlegg> vedlegg) {
