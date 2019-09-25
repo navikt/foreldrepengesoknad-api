@@ -34,7 +34,11 @@ class VirusScanConnection {
     }
 
     public void scan(byte[] bytes, String name) {
-        if (isEnabled()) {
+        if (!isEnabled()) {
+            LOG.info("Scanning er ikke aktivert");
+            return;
+        }
+        if (bytes != null) {
             try {
                 LOG.info("Scanner {}", name);
                 ScanResult[] scanResults = putForObject(config.getUri(), bytes, ScanResult[].class);
@@ -57,7 +61,7 @@ class VirusScanConnection {
                 return;
             }
         }
-        LOG.info("Virusscanning er ikke aktivert");
+        LOG.info("Ingen scanning av null bytes", bytes);
     }
 
     private <T> T putForObject(URI uri, Object payload, Class<T> responseType) {
