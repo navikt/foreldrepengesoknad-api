@@ -34,21 +34,21 @@ public class InnsendingController {
 
     @PostMapping
     public Kvittering sendInn(@RequestBody Søknad søknad) {
-        LOG.info("Mottok søknad");
+        LOG.info("Mottok søknad med {} vedlegg", søknad.getVedlegg().size());
         LOG.info(CONFIDENTIAL, "{}", søknad);
         return innsending.sendInn(søknad);
     }
 
     @PostMapping("/ettersend")
     public Kvittering sendInn(@RequestBody Ettersending ettersending) {
-        LOG.info("Mottok ettersending");
+        LOG.info("Mottok ettersending av {} vedlegg", ettersending.getVedlegg().size());
         LOG.info(CONFIDENTIAL, "{}", ettersending);
         return innsending.ettersend(ettersending);
     }
 
     @PostMapping("/endre")
     public Kvittering endre(@RequestBody Søknad søknad) {
-        LOG.info(CONFIDENTIAL, "Mottok endringssøknad");
+        LOG.info("Mottok endringssøknad med {} vedlegg", søknad.getVedlegg().size());
         LOG.info(CONFIDENTIAL, "{}", søknad);
         return innsending.endre(søknad);
     }
