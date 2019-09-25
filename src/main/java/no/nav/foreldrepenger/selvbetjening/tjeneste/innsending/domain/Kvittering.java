@@ -4,7 +4,6 @@ import static com.fasterxml.jackson.annotation.JsonInclude.Include.NON_EMPTY;
 
 import java.time.LocalDate;
 import java.time.LocalDateTime;
-import java.util.Arrays;
 
 import com.fasterxml.jackson.annotation.JsonCreator;
 import com.fasterxml.jackson.annotation.JsonInclude;
@@ -84,8 +83,8 @@ public class Kvittering {
     public String toString() {
         return getClass().getSimpleName() + "[mottattDato=" + mottattDato + ", førsteDag=" + førsteDag
                 + ", referanseId=" + referanseId + ", leveranseStatus=" + leveranseStatus + ", journalId=" + journalId
-                + ", saksNr=" + saksNr + ", pdf=" + Arrays.toString(pdf) + ", førsteInntektsmeldingDag="
-                + førsteInntektsmeldingDag + ", infoskrivPdf=" + Arrays.toString(infoskrivPdf) + "]";
+                + ", saksNr=" + saksNr + ", førsteInntektsmeldingDag="
+                + førsteInntektsmeldingDag + "]";
     }
 
 }
