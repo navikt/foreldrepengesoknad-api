@@ -5,6 +5,8 @@ import static no.nav.foreldrepenger.selvbetjening.util.EnvUtil.DEFAULT;
 import static no.nav.foreldrepenger.selvbetjening.util.EnvUtil.DEV;
 import static no.nav.foreldrepenger.selvbetjening.util.EnvUtil.LOCAL;
 
+import java.util.Optional;
+
 public class ClusterAwareSpringProfileResolver {
 
     private static final String NAIS_CLUSTER_NAME = "NAIS_CLUSTER_NAME";
@@ -13,8 +15,10 @@ public class ClusterAwareSpringProfileResolver {
 
     }
 
-    public static String[] getProfiles() {
-        return new String[] { clusterFra(getenv(NAIS_CLUSTER_NAME)) };
+    public static String[] profiles() {
+        return Optional.ofNullable(clusterFra(getenv(NAIS_CLUSTER_NAME)))
+                .map(c -> new String[] { c })
+                .orElse(new String[0]);
     }
 
     private static String clusterFra(String cluster) {
