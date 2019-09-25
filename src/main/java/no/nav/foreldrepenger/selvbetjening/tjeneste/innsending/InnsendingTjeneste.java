@@ -74,11 +74,12 @@ public class InnsendingTjeneste implements Innsending {
     }
 
     private void hentOgSjekk(List<Vedlegg> vedlegg) {
-        LOG.info("Henter og sjekker mellomlagring for {} vedlegg", vedlegg.size());
-        vedlegg.forEach(this::hentVedleggBytes);
-        vedleggSjekker.sjekk(vedlegg);
-        LOG.info("Hentet og sjekket mellomlagring OK for {} vedlegg", vedlegg.size());
-
+        if (!vedlegg.isEmpty()) {
+            LOG.info("Henter og sjekker mellomlagring for {} vedlegg", vedlegg.size());
+            vedlegg.forEach(this::hentVedleggBytes);
+            vedleggSjekker.sjekk(vedlegg);
+            LOG.info("Hentet og sjekket mellomlagring OK for {} vedlegg", vedlegg.size());
+        }
     }
 
     private void slettMellomlagringOgSøknad(Søknad søknad) {
