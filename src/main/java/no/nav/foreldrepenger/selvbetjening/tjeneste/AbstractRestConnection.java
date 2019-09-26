@@ -7,6 +7,7 @@ import java.net.URI;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.http.RequestEntity;
 import org.springframework.web.client.HttpClientErrorException;
 import org.springframework.web.client.RestOperations;
 
@@ -50,6 +51,14 @@ public abstract class AbstractRestConnection {
 
     protected <T> T postForObject(URI uri, Object payload, Class<T> responseType) {
         return operations.postForObject(uri, payload, responseType);
+    }
+
+    protected <T> T putForObject(URI uri, Object payload, Class<T> responseType) {
+        if (!isEnabled()) {
+            LOG.info("Service er ikke aktiv, PUTer ikke til {}", uri);
+            return null;
+        }
+        return operations.exchange(RequestEntity.put(uri).body(payload), responseType).getBody();
     }
 
     @Override

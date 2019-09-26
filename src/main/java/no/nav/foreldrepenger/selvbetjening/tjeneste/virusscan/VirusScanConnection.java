@@ -6,29 +6,30 @@ import java.net.URI;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.springframework.http.RequestEntity;
 import org.springframework.stereotype.Component;
 import org.springframework.web.client.RestOperations;
 
-import io.micrometer.core.instrument.Counter;
-import io.micrometer.core.instrument.Metrics;
 import no.nav.foreldrepenger.selvbetjening.error.AttachmentVirusException;
+import no.nav.foreldrepenger.selvbetjening.tjeneste.AbstractRestConnection;
 
 @Component
-class VirusScanConnection {
+class VirusScanConnection extends AbstractRestConnection {
 
     private static final Logger LOG = LoggerFactory.getLogger(VirusScanConnection.class);
-    private static final Counter INGENVIRUS_COUNTER = counter("virus", "OK");
-    private static final Counter VIRUS_COUNTER = counter("virus", "FEIL");
 
     private final VirusScanConfig config;
-    private final RestOperations operations;
 
     public VirusScanConnection(RestOperations operations, VirusScanConfig config) {
-        this.operations = operations;
+        super(operations);
         this.config = config;
     }
 
+    @Override
+    protected URI pingURI() {
+        return config.getPingURI();
+    }
+
+    @Override
     public boolean isEnabled() {
         return config.isEnabled();
     }
@@ -50,11 +51,9 @@ class VirusScanConnection {
                 LOG.info("Fikk scan result {}", scanResult);
                 if (OK.equals(scanResult.getResult())) {
                     LOG.info("Ingen virus i {}", name);
-                    INGENVIRUS_COUNTER.increment();
                     return;
                 }
                 LOG.warn("Fant virus i {}, status {}", name, scanResult.getResult());
-                VIRUS_COUNTER.increment();
                 throw new AttachmentVirusException(name);
             } catch (Exception e) {
                 LOG.warn("Kunne ikke scanne {}", name, e);
@@ -64,17 +63,9 @@ class VirusScanConnection {
         LOG.info("Ingen scanning av null bytes", bytes);
     }
 
-    private <T> T putForObject(URI uri, Object payload, Class<T> responseType) {
-        return operations.exchange(RequestEntity.put(uri).body(payload), responseType).getBody();
-    }
-
-    private static Counter counter(String name, String type) {
-        return Metrics.counter(name, "result", type);
-    }
-
     @Override
     public String toString() {
-        return getClass().getSimpleName() + " [config=" + config + ", operations=" + operations + "]";
+        return getClass().getSimpleName() + " [config=" + config + "]";
     }
 
 }
