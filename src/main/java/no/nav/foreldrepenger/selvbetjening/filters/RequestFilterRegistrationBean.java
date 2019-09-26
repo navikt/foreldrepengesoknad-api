@@ -7,16 +7,14 @@ import static no.nav.foreldrepenger.selvbetjening.tjeneste.mellomlagring.Melloml
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.springframework.boot.autoconfigure.condition.ConditionalOnBean;
 import org.springframework.boot.web.servlet.FilterRegistrationBean;
 import org.springframework.stereotype.Component;
 
 @Component
-@ConditionalOnBean(RequestFilter.class)
-public class RequestFilterRegistrationBean extends FilterRegistrationBean<RequestFilter> {
+public class RequestFilterRegistrationBean extends FilterRegistrationBean<RequestFilterBean> {
     private static final Logger LOG = LoggerFactory.getLogger(RequestFilterRegistrationBean.class);
 
-    public RequestFilterRegistrationBean(RequestFilter requestFilter) {
+    public RequestFilterRegistrationBean(RequestFilterBean requestFilter) {
         setFilter(requestFilter);
         setUrlPatterns(urlPatternsFor(REST_SOKNAD, REST_STORAGE, INNSYN));
         LOG.info("Registrert filter {}", this);

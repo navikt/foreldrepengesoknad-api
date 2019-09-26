@@ -5,7 +5,6 @@ import static org.springframework.http.HttpStatus.CONFLICT;
 
 import java.io.IOException;
 
-import javax.servlet.Filter;
 import javax.servlet.FilterChain;
 import javax.servlet.ServletException;
 import javax.servlet.ServletRequest;
@@ -15,22 +14,21 @@ import javax.servlet.http.HttpServletResponse;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.springframework.boot.autoconfigure.condition.ConditionalOnProperty;
 import org.springframework.core.annotation.Order;
 import org.springframework.stereotype.Component;
+import org.springframework.web.filter.GenericFilterBean;
 
 import no.nav.foreldrepenger.selvbetjening.util.TokenUtil;
 
 @Component
 @Order(1)
-@ConditionalOnProperty(name = "no.nav.foreldrepenger.selvbetjening.api.toggles.fnr-header-filter", matchIfMissing = true)
-public class RequestFilter implements Filter {
+public class RequestFilterBean extends GenericFilterBean {
 
-    private static final Logger LOG = LoggerFactory.getLogger(RequestFilter.class);
+    private static final Logger LOG = LoggerFactory.getLogger(RequestFilterBean.class);
 
     private final TokenUtil tokenHelper;
 
-    public RequestFilter(TokenUtil tokenHelper) {
+    public RequestFilterBean(TokenUtil tokenHelper) {
         this.tokenHelper = tokenHelper;
     }
 
@@ -49,6 +47,7 @@ public class RequestFilter implements Filter {
                 chain.doFilter(request, response);
             }
         } catch (Exception e) {
+            LOG.warn("Feil i filter, ignorerer", e);
             chain.doFilter(request, response);
         }
     }
