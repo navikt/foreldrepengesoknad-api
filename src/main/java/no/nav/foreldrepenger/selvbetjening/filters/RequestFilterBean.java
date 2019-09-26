@@ -41,8 +41,8 @@ public class RequestFilterBean extends GenericFilterBean {
         try {
             String fnr = HttpServletRequest.class.cast(request).getHeader(FNR_HEADER_VALUE);
             if ((fnr != null) && (tokenHelper.getSubject() != null) && !fnr.equals(tokenHelper.getSubject())) {
-                LOG.warn("FNR {} i header matcher ikke subject {} i token", fnr, tokenHelper.getSubject());
-                res.sendError(CONFLICT.value());
+                res.sendError(CONFLICT.value(),
+                        "FNR " + fnr + " i header matcher ikke subject " + tokenHelper.getSubject());
             } else {
                 chain.doFilter(request, response);
             }
