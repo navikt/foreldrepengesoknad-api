@@ -15,7 +15,7 @@ public class EttersendingDto {
     public EttersendingDto(Ettersending ettersending) {
         this.type = ettersending.getType();
         this.saksnr = ettersending.getSaksnummer();
-        this.referanseId = ettersending.getReferanseId());
+        this.referanseId = ettersending.getReferanseId();
     }
 
     public void addVedlegg(Vedlegg vedlegg) {
