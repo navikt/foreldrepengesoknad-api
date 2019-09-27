@@ -26,10 +26,10 @@ public class RequestFilterBean extends GenericFilterBean {
 
     private static final Logger LOG = LoggerFactory.getLogger(RequestFilterBean.class);
 
-    private final TokenUtil tokenHelper;
+    private final TokenUtil tokenUtil;
 
-    public RequestFilterBean(TokenUtil tokenHelper) {
-        this.tokenHelper = tokenHelper;
+    public RequestFilterBean(TokenUtil tokenUtil) {
+        this.tokenUtil = tokenUtil;
     }
 
     @Override
@@ -40,9 +40,9 @@ public class RequestFilterBean extends GenericFilterBean {
 
         try {
             String fnr = HttpServletRequest.class.cast(request).getHeader(FNR_HEADER_VALUE);
-            if ((fnr != null) && (tokenHelper.getSubject() != null) && !fnr.equals(tokenHelper.getSubject())) {
+            if ((fnr != null) && (tokenUtil.getSubject() != null) && !fnr.equals(tokenUtil.getSubject())) {
                 res.sendError(CONFLICT.value(),
-                        "FNR " + fnr + " i header matcher ikke subject " + tokenHelper.getSubject());
+                        "FNR " + fnr + " i header matcher ikke subject " + tokenUtil.getSubject());
             } else {
                 chain.doFilter(request, response);
             }
@@ -54,6 +54,6 @@ public class RequestFilterBean extends GenericFilterBean {
 
     @Override
     public String toString() {
-        return getClass().getSimpleName() + " [tokenHelper=" + tokenHelper + "]";
+        return getClass().getSimpleName() + " [tokenUtil=" + tokenUtil + "]";
     }
 }
