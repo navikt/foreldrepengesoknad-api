@@ -4,6 +4,16 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class Ettersending {
+    private String referanseId;
+
+    public String getReferanseId() {
+        return referanseId;
+    }
+
+    public void setReferanseId(String referanseId) {
+        this.referanseId = referanseId;
+    }
+
     private String type;
     private String saksnummer;
     private List<Vedlegg> vedlegg;
@@ -38,7 +48,8 @@ public class Ettersending {
 
     @Override
     public String toString() {
-        return getClass().getSimpleName() + "[type=" + type + ", saksnummer=" + saksnummer + ", vedlegg=" + vedlegg
-                + "]";
+        return getClass().getSimpleName() + "[referanseId=" + referanseId + ", type=" + type + ", saksnummer="
+                + saksnummer + ", vedlegg=" + vedlegg + "]";
     }
+
 }

@@ -7,6 +7,7 @@ import no.nav.foreldrepenger.selvbetjening.tjeneste.innsending.domain.Ettersendi
 import no.nav.foreldrepenger.selvbetjening.tjeneste.innsending.domain.Vedlegg;
 
 public class EttersendingDto {
+    public String referanseId;
     public String type;
     public String saksnr;
     public List<VedleggDto> vedlegg = new ArrayList<>();
@@ -14,6 +15,7 @@ public class EttersendingDto {
     public EttersendingDto(Ettersending ettersending) {
         this.type = ettersending.getType();
         this.saksnr = ettersending.getSaksnummer();
+        this.referanseId = ettersending.getReferanseId());
     }
 
     public void addVedlegg(Vedlegg vedlegg) {
