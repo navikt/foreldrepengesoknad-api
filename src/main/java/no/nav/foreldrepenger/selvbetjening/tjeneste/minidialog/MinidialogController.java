@@ -29,8 +29,8 @@ public class MinidialogController {
     }
 
     @GetMapping
-    public List<MinidialogInnslag> aktiveSpørsmål() {
-        return minidialog.hentAktiveMinidialogSpørsmål();
+    public List<MinidialogInnslag> aktive() {
+        return minidialog.aktive();
     }
 
     @Override

@@ -32,7 +32,7 @@ public class MinidialogTjeneste implements Minidialog, EnvironmentAware {
     }
 
     @Override
-    public List<MinidialogInnslag> hentAktiveMinidialogSpørsmål() {
+    public List<MinidialogInnslag> aktive() {
         return connection.hentAktiveSpørsmål();
     }
 

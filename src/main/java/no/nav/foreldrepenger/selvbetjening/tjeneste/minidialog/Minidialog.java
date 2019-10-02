@@ -10,7 +10,7 @@ public interface Minidialog extends Pingable {
 
     List<MinidialogInnslag> hentMinidialoger(Fødselsnummer fnr, boolean activeOnly);
 
-    List<MinidialogInnslag> hentAktiveMinidialogSpørsmål();
+    List<MinidialogInnslag> aktive();
 
     List<MinidialogInnslag> hentAktiveMinidialogSpørsmål(Fødselsnummer fnr);
 
