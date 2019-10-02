@@ -26,7 +26,7 @@ public class UttaksPeriode {
     private final StønadskontoType stønadskontotype;
     private final Double trekkDager;
     private final Integer arbeidstidProsent;
-    private final Integer utbetalingprosent;
+    private final Integer utbetalingsprosent;
     private final Boolean gjelderAnnenPart;
     private final MorsAktivitet morsAktivitet;
     private final Boolean flerbarnsdager;
@@ -35,19 +35,17 @@ public class UttaksPeriode {
     private final UttakArbeidType uttakArbeidType;
     private final ArbeidsgiverInfo arbeidsgiverInfo;
 
-    public UttaksPeriode(
-            @JsonProperty("oppholdAarsak") OppholdÅrsak oppholdAarsak,
+    public UttaksPeriode(@JsonProperty("oppholdAarsak") OppholdÅrsak oppholdAarsak,
             @JsonProperty("overfoeringAarsak") OverføringÅrsak overfoeringAarsak,
             @JsonProperty("graderingAvslagAarsak") GraderingAvslagÅrsak graderingAvslagAarsak,
             @JsonProperty("utsettelsePeriodeType") UtsettelsePeriodeType utsettelsePeriodeType,
             @JsonProperty("periodeResultatType") PeriodeResultatType periodeResultatType,
             @JsonProperty("graderingInnvilget") Boolean graderingInnvilget,
-            @JsonProperty("samtidigUttak") Boolean samtidigUttak,
-            @JsonProperty("fom") LocalDate fom, @JsonProperty("tom") LocalDate tom,
+            @JsonProperty("samtidigUttak") Boolean samtidigUttak, @JsonProperty("fom") LocalDate fom,
+            @JsonProperty("tom") LocalDate tom,
             @JsonProperty("stønadskontotype") @JsonAlias("trekkonto") StønadskontoType stønadskontotype,
-            @JsonProperty("trekkDager") Double trekkDager,
-            @JsonProperty("arbeidstidprosent") Integer arbeidstidProsent,
-            @JsonProperty("utbetalingprosent") Integer utbetalingprosent,
+            @JsonProperty("trekkDager") Double trekkDager, @JsonProperty("arbeidstidprosent") Integer arbeidstidProsent,
+            @JsonProperty("utbetalingsprosent") Integer utbetalingsprosent,
             @JsonProperty("gjelderAnnenPart") Boolean gjelderAnnenPart,
             @JsonProperty("manueltBehandlet") Boolean manueltBehandlet,
             @JsonProperty("samtidigUttaksprosent") Integer samtidigUttaksprosent,
@@ -67,7 +65,7 @@ public class UttaksPeriode {
         this.stønadskontotype = stønadskontotype;
         this.trekkDager = trekkDager;
         this.arbeidstidProsent = arbeidstidProsent;
-        this.utbetalingprosent = utbetalingprosent;
+        this.utbetalingsprosent = utbetalingsprosent;
         this.gjelderAnnenPart = gjelderAnnenPart;
         this.graderingAvslagAarsak = graderingAvslagAarsak;
         this.manueltBehandlet = manueltBehandlet;
@@ -154,8 +152,8 @@ public class UttaksPeriode {
         return arbeidstidProsent;
     }
 
-    public Integer getUtbetalingprosent() {
-        return utbetalingprosent;
+    public Integer getUtbetalingsprosent() {
+        return utbetalingsprosent;
     }
 
     public Boolean getGjelderAnnenPart() {
@@ -164,7 +162,7 @@ public class UttaksPeriode {
 
     @Override
     public int hashCode() {
-        return Objects.hash(gjelderAnnenPart, utbetalingprosent, arbeidstidProsent, trekkDager, stønadskontotype,
+        return Objects.hash(gjelderAnnenPart, utbetalingsprosent, arbeidstidProsent, trekkDager, stønadskontotype,
                 periode, samtidigUttak, graderingInnvilget, periodeResultatType, oppholdAarsak, overfoeringAarsak, fom,
                 tom, uttakArbeidType, arbeidsgiverInfo);
     }
@@ -179,16 +177,14 @@ public class UttaksPeriode {
         }
         UttaksPeriode that = (UttaksPeriode) o;
         return Objects.equals(gjelderAnnenPart, that.gjelderAnnenPart)
-                && Objects.equals(this.utbetalingprosent, that.utbetalingprosent)
+                && Objects.equals(this.utbetalingsprosent, that.utbetalingsprosent)
                 && Objects.equals(this.overfoeringAarsak, that.overfoeringAarsak)
                 && Objects.equals(this.oppholdAarsak, that.oppholdAarsak)
                 && Objects.equals(this.arbeidstidProsent, that.arbeidstidProsent)
                 && Objects.equals(this.trekkDager, that.trekkDager)
                 && Objects.equals(this.stønadskontotype, that.stønadskontotype)
-                && Objects.equals(this.periode, that.periode)
-                && Objects.equals(this.samtidigUttak, that.samtidigUttak)
-                && Objects.equals(this.tom, that.tom)
-                && Objects.equals(this.fom, that.fom)
+                && Objects.equals(this.periode, that.periode) && Objects.equals(this.samtidigUttak, that.samtidigUttak)
+                && Objects.equals(this.tom, that.tom) && Objects.equals(this.fom, that.fom)
                 && Objects.equals(this.uttakArbeidType, that.uttakArbeidType)
                 && Objects.equals(this.arbeidsgiverInfo, that.arbeidsgiverInfo)
                 && Objects.equals(this.graderingInnvilget, that.graderingInnvilget);
@@ -197,15 +193,11 @@ public class UttaksPeriode {
     @Override
     public String toString() {
         return getClass().getSimpleName() + " [oppholdAarsak=" + oppholdAarsak + ", overfoeringAarsak="
-                + overfoeringAarsak
-                + ", utsettelsePeriodeType=" + utsettelsePeriodeType + ", periodeResultatType=" + periodeResultatType
-                + ", graderingInnvilget=" + graderingInnvilget + ", samtidigUttak=" + samtidigUttak + ", periode="
-                + periode + ", stønadskontotype=" + stønadskontotype + ", trekkDager=" + trekkDager
-                + ", arbeidstidProsent=" + arbeidstidProsent + ", utbetalingprosent=" + utbetalingprosent
-                + ", gjelderAnnenPart=" + gjelderAnnenPart
-                + ", uttakArbeidType=" + uttakArbeidType
-                + ", arbeidsgiverInfo=" + arbeidsgiverInfo
-                + ", fom=" + fom
-                + ", tom=" + tom + "]";
+                + overfoeringAarsak + ", utsettelsePeriodeType=" + utsettelsePeriodeType + ", periodeResultatType="
+                + periodeResultatType + ", graderingInnvilget=" + graderingInnvilget + ", samtidigUttak="
+                + samtidigUttak + ", periode=" + periode + ", stønadskontotype=" + stønadskontotype + ", trekkDager="
+                + trekkDager + ", arbeidstidProsent=" + arbeidstidProsent + ", utbetalingsprosent=" + utbetalingsprosent
+                + ", gjelderAnnenPart=" + gjelderAnnenPart + ", uttakArbeidType=" + uttakArbeidType
+                + ", arbeidsgiverInfo=" + arbeidsgiverInfo + ", fom=" + fom + ", tom=" + tom + "]";
     }
 }

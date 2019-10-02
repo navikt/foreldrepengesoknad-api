@@ -13,27 +13,24 @@ public class PeriodeAktivitet {
     private final Boolean gradering;
     private final Integer trekkDager;
     private final StønadskontoType trekkonto;
-    private final ProsentAndel utbetalingProsent;
+    private final ProsentAndel utbetalingsProsent;
     private final ArbeidType arbeidType;
     private final String virksomhet;
 
     @JsonCreator
     public PeriodeAktivitet(@JsonProperty("arbeidsforholdId") String arbeidsforholdId,
             @JsonProperty("arbeidstidProsent") ProsentAndel arbeidstidProsent,
-            @JsonProperty("avslagsÅrsak") AvslagsÅrsak avslagsÅrsak,
-            @JsonProperty("gradering") Boolean gradering,
-            @JsonProperty("trekkDager") Integer trekkDager,
-            @JsonProperty("trekkonto") StønadskontoType trekkonto,
-            @JsonProperty("utbetalingProsent") ProsentAndel utbetalingProsent,
-            @JsonProperty("arbeidType") ArbeidType arbeidType,
-            @JsonProperty("virksomhet") String virksomhet) {
+            @JsonProperty("avslagsÅrsak") AvslagsÅrsak avslagsÅrsak, @JsonProperty("gradering") Boolean gradering,
+            @JsonProperty("trekkDager") Integer trekkDager, @JsonProperty("trekkonto") StønadskontoType trekkonto,
+            @JsonProperty("utbetalingsProsent") ProsentAndel utbetalingsProsent,
+            @JsonProperty("arbeidType") ArbeidType arbeidType, @JsonProperty("virksomhet") String virksomhet) {
         this.arbeidsforholdId = arbeidsforholdId;
         this.arbeidstidProsent = arbeidstidProsent;
         this.avslagsÅrsak = avslagsÅrsak;
         this.gradering = gradering;
         this.trekkDager = trekkDager;
         this.trekkonto = trekkonto;
-        this.utbetalingProsent = utbetalingProsent;
+        this.utbetalingsProsent = utbetalingsProsent;
         this.arbeidType = arbeidType;
         this.virksomhet = virksomhet;
     }
@@ -62,8 +59,8 @@ public class PeriodeAktivitet {
         return trekkonto;
     }
 
-    public ProsentAndel getUtbetalingProsent() {
-        return utbetalingProsent;
+    public ProsentAndel getUtbetalingsProsent() {
+        return utbetalingsProsent;
     }
 
     public ArbeidType getArbeidType() {
@@ -77,10 +74,9 @@ public class PeriodeAktivitet {
     @Override
     public String toString() {
         return getClass().getSimpleName() + " [arbeidsforholdId=" + arbeidsforholdId + ", arbeidstidProsent="
-                + arbeidstidProsent
-                + ", avslagsÅrsak=" + avslagsÅrsak + ", gradering=" + gradering + ", trekkDager=" + trekkDager
-                + ", trekkonto=" + trekkonto + ", utbetalingProsent=" + utbetalingProsent + ", arbeidType=" + arbeidType
-                + ", virksomhet=" + virksomhet + "]";
+                + arbeidstidProsent + ", avslagsÅrsak=" + avslagsÅrsak + ", gradering=" + gradering + ", trekkDager="
+                + trekkDager + ", trekkonto=" + trekkonto + ", utbetalingsProsent=" + utbetalingsProsent
+                + ", arbeidType=" + arbeidType + ", virksomhet=" + virksomhet + "]";
     }
 
 }
