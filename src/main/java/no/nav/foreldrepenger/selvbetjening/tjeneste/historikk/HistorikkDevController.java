@@ -32,7 +32,7 @@ public class HistorikkDevController {
     }
 
     @GetMapping
-    public List<HistorikkInnslag> hentHistorikk(@RequestParam("fnr") Fødselsnummer fnr) {
+    public List<HistorikkInnslag> historikk(@RequestParam("fnr") Fødselsnummer fnr) {
         return historikk.hentHistorikkFor(fnr);
     }
 
