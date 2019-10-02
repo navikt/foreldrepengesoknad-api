@@ -3,16 +3,20 @@ package no.nav.foreldrepenger.selvbetjening.tjeneste.innsending;
 import static org.slf4j.LoggerFactory.getLogger;
 
 import java.net.URI;
+import java.security.SecureRandom;
 import java.util.List;
+import java.util.Random;
 
 import org.slf4j.Logger;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnProperty;
 import org.springframework.stereotype.Service;
 
+import no.nav.foreldrepenger.selvbetjening.tjeneste.innsending.domain.BrukerTekst;
 import no.nav.foreldrepenger.selvbetjening.tjeneste.innsending.domain.Ettersending;
 import no.nav.foreldrepenger.selvbetjening.tjeneste.innsending.domain.Kvittering;
 import no.nav.foreldrepenger.selvbetjening.tjeneste.innsending.domain.Søknad;
 import no.nav.foreldrepenger.selvbetjening.tjeneste.innsending.domain.Vedlegg;
+import no.nav.foreldrepenger.selvbetjening.tjeneste.innsending.pdf.PDFGenerator;
 import no.nav.foreldrepenger.selvbetjening.tjeneste.mellomlagring.MellomlagringTjeneste;
 import no.nav.foreldrepenger.selvbetjening.vedlegg.VedleggSjekker;
 
@@ -21,16 +25,18 @@ import no.nav.foreldrepenger.selvbetjening.vedlegg.VedleggSjekker;
 public class InnsendingTjeneste implements Innsending {
 
     private static final Logger LOG = getLogger(InnsendingTjeneste.class);
-
+    private static final Random IDGENERATOR = new SecureRandom();
     private final InnsendingConnection connection;
     private final MellomlagringTjeneste mellomlagring;
     private final VedleggSjekker vedleggSjekker;
+    private final PDFGenerator pdfGenerator;
 
     public InnsendingTjeneste(InnsendingConnection connection, MellomlagringTjeneste mellomlagring,
-            VedleggSjekker vedleggSjekker) {
+            VedleggSjekker vedleggSjekker, PDFGenerator pdfGenerator) {
         this.connection = connection;
         this.mellomlagring = mellomlagring;
         this.vedleggSjekker = vedleggSjekker;
+        this.pdfGenerator = pdfGenerator;
     }
 
     @Override
@@ -47,10 +53,27 @@ public class InnsendingTjeneste implements Innsending {
     public Kvittering ettersend(Ettersending ettersending) {
         LOG.info("Ettersender for sak {}", ettersending.getSaksnummer());
         hentOgSjekk(ettersending.getVedlegg());
+        if (ettersending.getBrukerTekst() != null) {
+            LOG.info("Konverterer tekst til vedleggs-pdf {}", ettersending.getBrukerTekst().getDokumentType());
+            ettersending.getVedlegg().add(vedleggFra(ettersending.getBrukerTekst()));
+        }
         Kvittering kvittering = connection.ettersend(ettersending);
         ettersending.getVedlegg().forEach(v -> mellomlagring.slettVedlegg(v));
         LOG.info("Returnerer kvittering {}", kvittering);
         return kvittering;
+    }
+
+    private Vedlegg vedleggFra(BrukerTekst brukerTekst) {
+        Vedlegg vedlegg = new Vedlegg();
+        vedlegg.setBeskrivelse("Tekst fra bruker");
+        vedlegg.setId(id());
+        vedlegg.setContent(pdfGenerator.generate(brukerTekst.getOverskrift(), brukerTekst.getTekst()));
+        vedlegg.setSkjemanummer(brukerTekst.getDokumentType());
+        return vedlegg;
+    }
+
+    private static String id() {
+        return "V" + IDGENERATOR.nextLong();
     }
 
     @Override

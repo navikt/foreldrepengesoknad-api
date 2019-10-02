@@ -77,7 +77,7 @@ public class InnsendingTest {
         if (innsending == null) {
             innsending = new InnsendingTjeneste(new InnsendingConnection(builder
                     .build(), innsendingConfig, converter), storage,
-                    new VedleggSjekker(MAX_TOTAL, MAX_ENKEL, scanner, encryptionChecker));
+                    new VedleggSjekker(MAX_TOTAL, MAX_ENKEL, scanner, encryptionChecker), null);
         }
     }
 
