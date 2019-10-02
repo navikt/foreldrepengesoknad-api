@@ -38,7 +38,7 @@ public class MinidialogConfig {
     }
 
     public URI getAktiveSpmURI() {
-        return uri(getURI(), AKTIVE);
+        return getURI();
     }
 
     public URI getAktiveSpmURI(String fnr) {
