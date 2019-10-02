@@ -6,20 +6,20 @@ import java.util.List;
 public class Ettersending {
     private String referanseId;
 
-    public String getReferanseId() {
-        return referanseId;
-    }
-
-    public void setReferanseId(String referanseId) {
-        this.referanseId = referanseId;
-    }
-
     private String type;
     private String saksnummer;
     private List<Vedlegg> vedlegg;
 
     public Ettersending() {
         setVedlegg(new ArrayList<>());
+    }
+
+    public String getReferanseId() {
+        return referanseId;
+    }
+
+    public void setReferanseId(String referanseId) {
+        this.referanseId = referanseId;
     }
 
     public String getType() {

@@ -34,7 +34,7 @@ public class OppslagTjeneste implements Oppslag {
     }
 
     @Override
-    @Cacheable(cacheNames = "aktoer")
+    @Cacheable(cacheNames = "aktør")
     public AktørId hentAktørId(String fnr) {
         return connection.HentAktørId(fnr);
     }

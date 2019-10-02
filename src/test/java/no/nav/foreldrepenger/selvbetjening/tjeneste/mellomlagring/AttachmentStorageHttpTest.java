@@ -34,7 +34,6 @@ import no.nav.foreldrepenger.selvbetjening.stub.StubbedLocalStackContainer;
 public class AttachmentStorageHttpTest extends AbstractTestExecutionListener {
 
     private static final String FNR = "12345678910";
-    private static final byte[] PDFSIGNATURE = { 0x25, 0x50, 0x44, 0x46 };
 
     @LocalServerPort
     private int port;

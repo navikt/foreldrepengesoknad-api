@@ -2,9 +2,6 @@ package no.nav.foreldrepenger.selvbetjening.tjeneste.historikk;
 
 import java.time.LocalDate;
 
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
-
 import com.fasterxml.jackson.annotation.JsonCreator;
 import com.fasterxml.jackson.annotation.JsonProperty;
 
@@ -12,7 +9,6 @@ import no.nav.foreldrepenger.selvbetjening.tjeneste.oppslag.domain.Fødselsnumme
 
 public class MinidialogInnslag extends HistorikkInnslag {
 
-    private static final Logger LOG = LoggerFactory.getLogger(MinidialogInnslag.class);
     private final HendelseType hendelse;
     private final LocalDate gyldigTil;
     private final String tekst;
