@@ -7,6 +7,8 @@ import static org.springframework.http.HttpStatus.PAYLOAD_TOO_LARGE;
 import static org.springframework.http.HttpStatus.UNAUTHORIZED;
 import static org.springframework.http.HttpStatus.UNPROCESSABLE_ENTITY;
 
+import java.util.Optional;
+
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.http.HttpHeaders;
@@ -113,7 +115,7 @@ public class ApiExceptionHandler extends ResponseEntityExceptionHandler {
     private ResponseEntity<Object> logAndHandle(HttpStatus status, Exception e, WebRequest req, HttpHeaders headers,
             Object... messages) {
         ApiError apiError = apiErrorFra(status, e, messages);
-        LOG.warn("({}) {} {} ({})", tokenUtil.getSubject(), status, apiError.getMessages(), status.value(), e);
+        LOG.warn("({}) {} {} ({})", subject(), status, apiError.getMessages(), status.value(), e);
         return handleExceptionInternal(e, apiError, headers, status, req);
     }
 
@@ -122,6 +124,11 @@ public class ApiExceptionHandler extends ResponseEntityExceptionHandler {
                 .stream()
                 .map(ApiExceptionHandler::errorMessage)
                 .toArray();
+    }
+
+    private String subject() {
+        return Optional.ofNullable(tokenUtil.getSubject())
+                .orElse("Uautentisert");
     }
 
     private static String errorMessage(FieldError error) {
