@@ -40,7 +40,7 @@ server:
          enabled: false
 spring:
    cache:
-      cache-names: aktoer
+      cache-names: aktør
       caffeine:
          spec: maximumSize=100,expireAfterAccess=3600s
    application:

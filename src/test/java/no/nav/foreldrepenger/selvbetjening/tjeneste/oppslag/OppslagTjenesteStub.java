@@ -10,7 +10,6 @@ import java.util.ArrayList;
 
 import org.slf4j.Logger;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnProperty;
-import org.springframework.cache.annotation.Cacheable;
 import org.springframework.stereotype.Service;
 
 import no.nav.foreldrepenger.selvbetjening.tjeneste.oppslag.domain.AktørId;
@@ -83,7 +82,6 @@ public class OppslagTjenesteStub implements Oppslag {
     }
 
     @Override
-    @Cacheable(cacheNames = "aktoer")
     public AktørId hentAktørId(String fnr) {
         return new AktørId("1234567890");
     }
