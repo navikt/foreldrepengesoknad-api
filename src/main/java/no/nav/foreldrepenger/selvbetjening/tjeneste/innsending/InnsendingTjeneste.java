@@ -24,6 +24,7 @@ import no.nav.foreldrepenger.selvbetjening.vedlegg.VedleggSjekker;
 @ConditionalOnProperty(name = "stub.mottak", havingValue = "false", matchIfMissing = true)
 public class InnsendingTjeneste implements Innsending {
 
+    private static final String RETURNERER_KVITTERING = "Returnerer kvittering {}";
     private static final Logger LOG = getLogger(InnsendingTjeneste.class);
     private static final Random IDGENERATOR = new SecureRandom();
     private final InnsendingConnection connection;
@@ -45,7 +46,7 @@ public class InnsendingTjeneste implements Innsending {
         hentOgSjekk(søknad.getVedlegg());
         Kvittering kvittering = connection.sendInn(søknad);
         slettMellomlagringOgSøknad(søknad);
-        LOG.info("Returnerer kvittering {}", kvittering);
+        LOG.info(RETURNERER_KVITTERING, kvittering);
         return kvittering;
     }
 
@@ -58,8 +59,8 @@ public class InnsendingTjeneste implements Innsending {
             ettersending.getVedlegg().add(vedleggFra(ettersending.getBrukerTekst()));
         }
         Kvittering kvittering = connection.ettersend(ettersending);
-        ettersending.getVedlegg().forEach(v -> mellomlagring.slettVedlegg(v));
-        LOG.info("Returnerer kvittering {}", kvittering);
+        ettersending.getVedlegg().forEach(mellomlagring::slettVedlegg);
+        LOG.info(RETURNERER_KVITTERING, kvittering);
         return kvittering;
     }
 
@@ -82,7 +83,7 @@ public class InnsendingTjeneste implements Innsending {
         hentOgSjekk(endringssøknad.getVedlegg());
         Kvittering kvittering = connection.endre(endringssøknad);
         slettMellomlagringOgSøknad(endringssøknad);
-        LOG.info("Returnerer kvittering {}", kvittering);
+        LOG.info(RETURNERER_KVITTERING, kvittering);
         return kvittering;
     }
 
@@ -107,7 +108,7 @@ public class InnsendingTjeneste implements Innsending {
 
     private void slettMellomlagringOgSøknad(Søknad søknad) {
         LOG.info("Sletter mellomlagret søknad og vedlegg");
-        søknad.getVedlegg().forEach(v -> mellomlagring.slettVedlegg(v));
+        søknad.getVedlegg().forEach(mellomlagring::slettVedlegg);
         mellomlagring.slettSøknad();
         LOG.info("Slettet mellomlagret søknad og vedlegg OK");
     }
