@@ -11,6 +11,7 @@ public final class EnvUtil {
     public static final String TEST = "test";
     public static final String DEV = "dev";
     public static final String DEV_GCP = "dev-gcp";
+    public static final String PROD_GCP = "prod-gcp";
 
     public static final String LOCAL = "local";
     public static final String LOCALSTACK = "localstack";
@@ -19,6 +20,7 @@ public final class EnvUtil {
     public static final String DEFAULT = "default";
 
     public static final Marker CONFIDENTIAL = MarkerFactory.getMarker("CONFIDENTIAL");
+    public static final String PROD = "prod";
 
     private EnvUtil() {
 
