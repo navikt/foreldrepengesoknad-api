@@ -28,6 +28,7 @@ public abstract class HistorikkInnslag {
     private String journalpostId;
     private String saksnr;
     protected LocalDateTime opprettet;
+    private String referanseId;
 
     public HistorikkInnslag(Fødselsnummer fnr) {
         this.fnr = fnr;
@@ -73,5 +74,13 @@ public abstract class HistorikkInnslag {
 
     public void setJournalpostId(String journalpostId) {
         this.journalpostId = journalpostId;
+    }
+
+    public String getReferanseId() {
+        return referanseId;
+    }
+
+    public void setReferanseId(String referanseId) {
+        this.referanseId = referanseId;
     }
 }

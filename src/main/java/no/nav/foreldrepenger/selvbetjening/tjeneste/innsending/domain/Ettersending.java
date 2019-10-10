@@ -9,6 +9,7 @@ public class Ettersending {
     private String saksnummer;
     private List<Vedlegg> vedlegg;
     private BrukerTekst brukerTekst;
+    private String referanseId;
 
     public Ettersending() {
         setVedlegg(new ArrayList<>());
@@ -46,10 +47,15 @@ public class Ettersending {
         this.vedlegg = vedlegg;
     }
 
+    public String getReferanseId() {
+        return referanseId;
+    }
+
     @Override
     public String toString() {
         return getClass().getSimpleName() + "[type=" + type + ", saksnummer="
-                + saksnummer + ", vedlegg=" + vedlegg + ", brukerTekst=" + brukerTekst + "]";
+                + saksnummer + ", vedlegg=" + vedlegg + ", brukerTekst=" + brukerTekst
+                + ", referanseId=" + referanseId + "]";
     }
 
 }

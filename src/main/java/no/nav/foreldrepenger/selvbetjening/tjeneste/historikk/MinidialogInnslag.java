@@ -24,13 +24,16 @@ public class MinidialogInnslag extends HistorikkInnslag {
 
     @JsonCreator
     public MinidialogInnslag(@JsonProperty("fnr") Fødselsnummer fnr,
-            @JsonProperty("hendelse") String hendelse, @JsonProperty("gyldigTil") LocalDate gyldigTil,
-            @JsonProperty("journalpostId") String journalpostId, @JsonProperty("tekst") String tekst) {
+                             @JsonProperty("hendelse") String hendelse, @JsonProperty("gyldigTil") LocalDate gyldigTil,
+                             @JsonProperty("journalpostId") String journalpostId, @JsonProperty("tekst") String tekst,
+                             @JsonProperty("referanseId") String referanseId) {
+
         super(fnr);
         this.hendelse = hendelseFra(hendelse);
         this.gyldigTil = gyldigTil;
         this.tekst = tekst;
         super.setJournalpostId(journalpostId);
+        super.setReferanseId(referanseId);
     }
 
     public String getTekst() {
@@ -49,6 +52,6 @@ public class MinidialogInnslag extends HistorikkInnslag {
     public String toString() {
         return getClass().getSimpleName() + "[hendelse=" + hendelse + ", gyldigTil=" + gyldigTil + ", journalpostId="
                 + getJournalpostId() + ", saksnr=" + getSaksnr() + ", opprettet=" + getOpprettet()
-                + ",aktørId=" + getAktørId() + ", fnr=" + getFnr() + "]";
+                + ",aktørId=" + getAktørId() + ", fnr=" + getFnr() + ", referanseId=" + getReferanseId() + "]";
     }
 }
