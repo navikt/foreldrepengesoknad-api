@@ -10,12 +10,12 @@ public class EttersendingDto {
     public String type;
     public String saksnr;
     public List<VedleggDto> vedlegg = new ArrayList<>();
-    public String referanseId;
+    public String dialogId;
 
     public EttersendingDto(Ettersending ettersending) {
         this.type = ettersending.getType();
         this.saksnr = ettersending.getSaksnummer();
-        this.referanseId = ettersending.getReferanseId();
+        this.dialogId = ettersending.getDialogId();
     }
 
     public void addVedlegg(Vedlegg vedlegg) {
