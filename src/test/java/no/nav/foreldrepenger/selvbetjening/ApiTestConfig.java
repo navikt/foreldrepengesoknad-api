@@ -14,5 +14,4 @@ public class ApiTestConfig {
     MeterRegistry meterRegistry() {
         return new PrometheusMeterRegistry(PrometheusConfig.DEFAULT);
     }
-
 }

@@ -20,6 +20,9 @@ import com.amazonaws.services.s3.model.CreateBucketRequest;
 import com.amazonaws.services.s3.model.S3Object;
 import com.amazonaws.services.s3.model.lifecycle.LifecycleFilter;
 
+import no.nav.foreldrepenger.selvbetjening.util.ConditionalOnOnPremise;
+
+@ConditionalOnOnPremise
 public class S3Storage implements Storage {
 
     private static final Logger LOG = LoggerFactory.getLogger(S3Storage.class);

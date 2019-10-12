@@ -12,7 +12,7 @@ import org.springframework.context.annotation.Conditional;
 @Retention(RetentionPolicy.RUNTIME)
 @Documented
 @Conditional(OnClusterCondition.class)
-public @interface ConditionalOnCluster {
-    Cluster cluster();
+public @interface ConditionalOnClusters {
+    Cluster[] clusters();
 
 }
