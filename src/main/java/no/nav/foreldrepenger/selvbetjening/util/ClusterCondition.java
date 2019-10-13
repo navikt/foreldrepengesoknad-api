@@ -3,8 +3,10 @@ package no.nav.foreldrepenger.selvbetjening.util;
 import static no.nav.foreldrepenger.selvbetjening.util.StreamUtil.safeStream;
 import static org.springframework.boot.autoconfigure.condition.ConditionMessage.forCondition;
 import static org.springframework.boot.autoconfigure.condition.ConditionOutcome.match;
+import static org.springframework.boot.autoconfigure.condition.ConditionOutcome.noMatch;
 
 import java.util.Arrays;
+import java.util.List;
 import java.util.Map;
 
 import org.slf4j.Logger;
@@ -19,9 +21,9 @@ public class ClusterCondition extends SpringBootCondition {
 
     @Override
     public ConditionOutcome getMatchOutcome(ConditionContext context, AnnotatedTypeMetadata metadata) {
-        Map<String, Object> attributes = metadata.getAnnotationAttributes(ConditionalOnPremise.class.getName());
+        Map<String, List<Object>> attributes = metadata
+                .getAllAnnotationAttributes(ConditionalOnClusters.class.getName());
         LOG.info("attributes XXX " + attributes);
-
         var message = forCondition(ConditionalOnClusters.class);
         var clusters = Cluster[].class
                 .cast(metadata.getAnnotationAttributes(ConditionalOnClusters.class.getName()).get("clusters"));
