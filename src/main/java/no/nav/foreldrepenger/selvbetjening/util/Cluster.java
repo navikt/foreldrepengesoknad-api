@@ -19,7 +19,7 @@ public enum Cluster {
         this.name = name;
     }
 
-    public String getName() {
+    public String clusterName() {
         return name;
     }
 

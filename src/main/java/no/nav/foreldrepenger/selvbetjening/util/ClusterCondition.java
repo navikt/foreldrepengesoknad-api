@@ -12,7 +12,7 @@ import org.springframework.boot.autoconfigure.condition.SpringBootCondition;
 import org.springframework.context.annotation.ConditionContext;
 import org.springframework.core.type.AnnotatedTypeMetadata;
 
-public class OnClusterCondition extends SpringBootCondition {
+public class ClusterCondition extends SpringBootCondition {
 
     @Override
     public ConditionOutcome getMatchOutcome(ConditionContext context, AnnotatedTypeMetadata metadata) {
@@ -22,7 +22,7 @@ public class OnClusterCondition extends SpringBootCondition {
 
         return safeStream(clusters)
                 .filter(cluster -> cluster.isActive(context.getEnvironment()))
-                .map(cluster -> match(message.foundExactly(cluster.getName())))
+                .map(cluster -> match(message.foundExactly(cluster.clusterName())))
                 .findFirst()
                 .orElseGet(() -> noMatch(message.because(Arrays.toString(clusters))));
     }
