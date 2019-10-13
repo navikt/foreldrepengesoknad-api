@@ -22,8 +22,6 @@ import no.nav.foreldrepenger.selvbetjening.interceptors.client.ApiKeyInjectingCl
 import no.nav.foreldrepenger.selvbetjening.tjeneste.historikk.HistorikkConfig;
 import no.nav.foreldrepenger.selvbetjening.tjeneste.innsending.InnsendingConfig;
 import no.nav.foreldrepenger.selvbetjening.tjeneste.oppslag.OppslagConfig;
-import no.nav.foreldrepenger.selvbetjening.util.ConditionalOnGCP;
-import no.nav.foreldrepenger.selvbetjening.util.ConditionalOnSBS;
 
 @Configuration
 public class ApiConfiguration implements WebMvcConfigurer {
@@ -63,18 +61,6 @@ public class ApiConfiguration implements WebMvcConfigurer {
         registry.addResourceHandler("/webjars/**")
                 .addResourceLocations("classpath:/META-INF/resources/webjars/");
 
-    }
-
-    @Bean
-    @ConditionalOnGCP
-    public String testGCP() {
-        return "42";
-    }
-
-    @Bean
-    @ConditionalOnSBS
-    public String testOnPrem() {
-        return "422";
     }
 
     @Override
