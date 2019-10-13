@@ -6,16 +6,22 @@ import static org.springframework.boot.autoconfigure.condition.ConditionOutcome.
 import static org.springframework.boot.autoconfigure.condition.ConditionOutcome.noMatch;
 
 import java.util.Arrays;
+import java.util.Map;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.boot.autoconfigure.condition.ConditionOutcome;
 import org.springframework.boot.autoconfigure.condition.SpringBootCondition;
 import org.springframework.context.annotation.ConditionContext;
 import org.springframework.core.type.AnnotatedTypeMetadata;
 
 public class ClusterCondition extends SpringBootCondition {
+    private static final Logger LOG = LoggerFactory.getLogger(ClusterCondition.class);
 
     @Override
     public ConditionOutcome getMatchOutcome(ConditionContext context, AnnotatedTypeMetadata metadata) {
+        Map<String, Object> attributes = metadata.getAnnotationAttributes(ConditionalOnClusters.class.getName());
+        LOG.info("attributes XXX " + attributes);
         var message = forCondition(ConditionalOnClusters.class);
         var clusters = Cluster[].class
                 .cast(metadata.getAnnotationAttributes(ConditionalOnClusters.class.getName()).get("clusters"));
