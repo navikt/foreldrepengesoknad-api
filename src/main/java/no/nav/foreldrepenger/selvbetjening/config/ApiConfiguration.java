@@ -23,7 +23,7 @@ import no.nav.foreldrepenger.selvbetjening.tjeneste.historikk.HistorikkConfig;
 import no.nav.foreldrepenger.selvbetjening.tjeneste.innsending.InnsendingConfig;
 import no.nav.foreldrepenger.selvbetjening.tjeneste.oppslag.OppslagConfig;
 import no.nav.foreldrepenger.selvbetjening.util.ConditionalOnGCP;
-import no.nav.foreldrepenger.selvbetjening.util.ConditionalOnPremise;
+import no.nav.foreldrepenger.selvbetjening.util.ConditionalOnSBS;
 
 @Configuration
 public class ApiConfiguration implements WebMvcConfigurer {
@@ -72,7 +72,7 @@ public class ApiConfiguration implements WebMvcConfigurer {
     }
 
     @Bean
-    @ConditionalOnPremise
+    @ConditionalOnSBS
     public String testOnPrem() {
         return "422";
     }
