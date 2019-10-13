@@ -28,7 +28,9 @@ public enum Cluster {
 
     public boolean isActive(Environment env) {
         LOG.info("Checking if {} is active", this);
-        boolean active = Optional.ofNullable(env.getProperty(NAIS_CLUSTER_NAME))
+        String clusterName = env.getProperty(NAIS_CLUSTER_NAME);
+        LOG.info("Cluster name for active cluster is {}", clusterName);
+        boolean active = Optional.ofNullable(clusterName)
                 .filter(name::equals)
                 .isPresent();
         LOG.info("{} is " + (active ? "" : "not ") + "active", this);
