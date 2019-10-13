@@ -10,10 +10,10 @@ import org.springframework.core.env.Environment;
 
 public enum Cluster {
     LOCAL(EnvUtil.LOCAL),
-    DEV(EnvUtil.DEV),
+    DEV_SBS(EnvUtil.DEV_SBS),
     DEV_GCP(EnvUtil.DEV_GCP),
     PROD_GCP(EnvUtil.PROD_GCP),
-    PROD(EnvUtil.PROD);
+    PROD_SBS(EnvUtil.PROD_SBS);
 
     private final String name;
     private static final Logger LOG = LoggerFactory.getLogger(Cluster.class);
@@ -27,13 +27,13 @@ public enum Cluster {
     }
 
     public boolean isActive(Environment env) {
-        LOG.info("Checking if {} is active", this);
+        LOG.info("Checking if {} cluster is active", this);
         String clusterName = env.getProperty(NAIS_CLUSTER_NAME);
         LOG.info("Cluster name for active cluster is {}", clusterName);
         boolean active = Optional.ofNullable(clusterName)
                 .filter(name::equals)
                 .isPresent();
-        LOG.info("{} is " + (active ? "" : "not ") + "active", this);
+        LOG.info("Cluster {} is " + (active ? "" : "not ") + "active", this);
         return active;
     }
 }

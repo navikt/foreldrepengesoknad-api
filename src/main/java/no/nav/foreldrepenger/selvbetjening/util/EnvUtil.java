@@ -20,7 +20,8 @@ public final class EnvUtil {
     public static final String DEFAULT = "default";
 
     public static final Marker CONFIDENTIAL = MarkerFactory.getMarker("CONFIDENTIAL");
-    public static final String PROD = "prod";
+    public static final String PROD_SBS = "prod-sbs";
+    public static final String DEV_SBS = "dev-sbs";
 
     private EnvUtil() {
 
