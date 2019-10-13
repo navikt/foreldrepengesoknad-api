@@ -12,6 +12,6 @@ import org.springframework.context.annotation.Conditional;
 @Retention(RetentionPolicy.RUNTIME)
 @Documented
 @Conditional(ClusterCondition.class)
-@interface ConditionalOnClusters {
+public @interface ConditionalOnClusters {
     Cluster[] clusters();
 }

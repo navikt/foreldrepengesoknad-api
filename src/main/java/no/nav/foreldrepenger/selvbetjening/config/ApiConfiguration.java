@@ -1,5 +1,8 @@
 package no.nav.foreldrepenger.selvbetjening.config;
 
+import static no.nav.foreldrepenger.selvbetjening.util.Cluster.DEV;
+import static no.nav.foreldrepenger.selvbetjening.util.Cluster.PROD;
+
 import java.net.URI;
 import java.util.Arrays;
 
@@ -22,7 +25,7 @@ import no.nav.foreldrepenger.selvbetjening.interceptors.client.ApiKeyInjectingCl
 import no.nav.foreldrepenger.selvbetjening.tjeneste.historikk.HistorikkConfig;
 import no.nav.foreldrepenger.selvbetjening.tjeneste.innsending.InnsendingConfig;
 import no.nav.foreldrepenger.selvbetjening.tjeneste.oppslag.OppslagConfig;
-import no.nav.foreldrepenger.selvbetjening.util.ConditionalOnPremise;
+import no.nav.foreldrepenger.selvbetjening.util.ConditionalOnClusters;
 
 @Configuration
 public class ApiConfiguration implements WebMvcConfigurer {
@@ -65,7 +68,7 @@ public class ApiConfiguration implements WebMvcConfigurer {
     }
 
     @Bean
-    @ConditionalOnPremise
+    @ConditionalOnClusters(clusters = { DEV, PROD })
     public String testBean() {
         return "42";
     }

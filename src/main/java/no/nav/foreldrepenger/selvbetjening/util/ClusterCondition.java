@@ -6,8 +6,6 @@ import static org.springframework.boot.autoconfigure.condition.ConditionOutcome.
 import static org.springframework.boot.autoconfigure.condition.ConditionOutcome.noMatch;
 
 import java.util.Arrays;
-import java.util.List;
-import java.util.Map;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -21,9 +19,6 @@ public class ClusterCondition extends SpringBootCondition {
 
     @Override
     public ConditionOutcome getMatchOutcome(ConditionContext context, AnnotatedTypeMetadata metadata) {
-        Map<String, List<Object>> attributes = metadata
-                .getAllAnnotationAttributes(ConditionalOnClusters.class.getName());
-        LOG.info("attributes XXX " + attributes);
         var message = forCondition(ConditionalOnClusters.class);
         var clusters = Cluster[].class
                 .cast(metadata.getAnnotationAttributes(ConditionalOnClusters.class.getName()).get("clusters"));
