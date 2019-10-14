@@ -11,12 +11,12 @@ metadata:
     team: {{team}}
 spec:
   secrets:
-    - name: accesskey
-    - name: secretkey
-    - name: oppslagkey
-    - name: mottakkey
-    - name: historikkey
-    - name: storagepassphrase
+    - name: gcp.accesskey
+    - name: gcp.secretkey
+    - name: oppslag.key
+    - name: mottak.key
+    - name: historikk.key
+    - name: storage.passphrase
   image: {{version}}
   port: 8080
   replicas:
