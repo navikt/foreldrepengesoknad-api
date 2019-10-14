@@ -22,6 +22,7 @@ import no.nav.foreldrepenger.selvbetjening.interceptors.client.ApiKeyInjectingCl
 import no.nav.foreldrepenger.selvbetjening.tjeneste.historikk.HistorikkConfig;
 import no.nav.foreldrepenger.selvbetjening.tjeneste.innsending.InnsendingConfig;
 import no.nav.foreldrepenger.selvbetjening.tjeneste.oppslag.OppslagConfig;
+import no.nav.foreldrepenger.selvbetjening.util.ConditionalOnSBS;
 
 @Configuration
 public class ApiConfiguration implements WebMvcConfigurer {
@@ -42,6 +43,7 @@ public class ApiConfiguration implements WebMvcConfigurer {
     }
 
     @Bean
+    @ConditionalOnSBS
     public ClientHttpRequestInterceptor apiKeyInjectingClientInterceptor(OppslagConfig oppslag, InnsendingConfig mottak,
             HistorikkConfig historikk) {
         Builder<URI, String> builder = ImmutableMap.<URI, String>builder();
