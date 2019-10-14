@@ -2,7 +2,7 @@ package no.nav.foreldrepenger.selvbetjening.config;
 
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;
-import org.springframework.context.annotation.Lazy;
+import org.springframework.context.annotation.Configuration;
 
 import com.amazonaws.auth.AWSCredentials;
 import com.amazonaws.auth.AWSStaticCredentialsProvider;
@@ -15,9 +15,10 @@ import com.amazonaws.services.s3.AmazonS3ClientBuilder;
 import no.nav.foreldrepenger.selvbetjening.tjeneste.mellomlagring.S3Storage;
 import no.nav.foreldrepenger.selvbetjening.tjeneste.mellomlagring.Storage;
 import no.nav.foreldrepenger.selvbetjening.tjeneste.mellomlagring.StorageCrypto;
+import no.nav.foreldrepenger.selvbetjening.util.ConditionalOnGCP;
 
-//@Configuration
-//@ConditionalOnGCP
+@Configuration
+@ConditionalOnGCP
 public class S3GCPStorageConfiguration {
 
     @Bean
@@ -26,7 +27,6 @@ public class S3GCPStorageConfiguration {
     }
 
     @Bean
-    @Lazy
     public AmazonS3 s3(AWSCredentials s3Credentials, EndpointConfiguration endpointConfig) {
         return AmazonS3ClientBuilder.standard()
                 .withEndpointConfiguration(
