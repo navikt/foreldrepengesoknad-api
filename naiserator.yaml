@@ -2,7 +2,11 @@ apiVersion: "nais.io/v1alpha1"
 kind: "Application"
 metadata:
   name: {{application_name}}
+{{#if namespace}}
+  namespace: {{namespace}}
+{{else}}
   namespace: default
+{{/if}} 
   labels:
     team: {{team}}
 spec:
