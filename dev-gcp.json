@@ -1,0 +1,10 @@
+{
+  "ingress": "https://foreldrepengesoknad-api.dev-nav.no",
+  "application_name": "foreldrepengesoknad-api",
+  "namespace": "foreldrepenger",
+  "env": {
+    "oppslag_uri": "https://api-gw-q1.oera.no/fpsoknad-oppslag/api/",
+    "historikk_uri": "https://api-gw-q1.oera.no/fpinfo-historikk/api/",
+    "mottak_uri": "https://api-gw-q1.oera.no/fpsoknad-mottak/api/"
+  }
+}

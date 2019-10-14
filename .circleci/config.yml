@@ -78,14 +78,21 @@ jobs:
      executor: go
      steps:
       - nais-deploy:
-          template-vars: api-dev-sbs.json
+          template-vars: dev-sbs.json
           environment: dev-sbs
+   
+   dev-gcp-deploy:
+     executor: go
+     steps:
+      - nais-deploy:
+          template-vars: dev-gcp.json
+          environment: dev-gcp        
 
    prod-deploy:
      executor: go
      steps:
       - nais-deploy:
-          template-vars: api-prod-sbs.json
+          template-vars: prod-sbs.json
           environment: prod-sbs
 
 commands:
@@ -130,6 +137,14 @@ workflows:
               only: master
           requires:
             - dev-deploy
+            
+      - hold-dev-gcp:
+          type: approval
+          filters:
+            branches:
+              only: master
+          requires:
+            - dev-deploy       
 
       - slack/approval-notification:
           webhook: $SLACK
@@ -137,7 +152,13 @@ workflows:
           url: https://circleci.com/workflow-run/$CIRCLE_WORKFLOW_WORKSPACE_ID
           requires:
             - dev-deploy
-
+      - dev-gcp-deploy:
+          context: NAIS deployment
+          filters:
+            branches:
+              only: master
+          requires:
+            - hold-dev-gcp
       - prod-deploy:
           context: NAIS deployment
           filters:

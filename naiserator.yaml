@@ -2,10 +2,17 @@ apiVersion: "nais.io/v1alpha1"
 kind: "Application"
 metadata:
   name: {{application_name}}
+{{#if namespace}}
+  namespace: {{namespace}}
+{{else}}
   namespace: default
+{{/if}} 
   labels:
     team: {{team}}
 spec:
+  secrets:
+    - name: accesskey
+    - name: secretkey
   image: {{version}}
   port: 8080
   replicas:
@@ -26,9 +33,6 @@ spec:
       max: 2
       cpuThresholdPercentage: 50
   ingresses:
-   {{#if ingress-internal}}
-    - {{ingress-internal}}
-   {{/if}}
     - {{ingress}}
   resources:
       limits:

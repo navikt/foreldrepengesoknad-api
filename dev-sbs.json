@@ -1,5 +1,4 @@
 {
-  "ingress_internal" : "https://foreldrepengesoknad.nais.oera-q.local",
   "ingress": "https://foreldrepengesoknad-api-q.nav.no",
   "application_name": "foreldrepengesoknad-api",
   "env": {
