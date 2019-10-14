@@ -10,6 +10,9 @@ metadata:
   labels:
     team: {{team}}
 spec:
+  secrets:
+    - name: accesskey
+    - name: secretkey
   image: {{version}}
   port: 8080
   replicas:
