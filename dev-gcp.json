@@ -1,4 +1,5 @@
 {
+  "no.nav.security.jwt.issuer.selvbetjening.acceptedaudience": "0090b6e1-ffcc-4c37-bc21-049f7d1f0fe5",
   "ingress": "https://foreldrepengesoknad-api.dev-nav.no",
   "application_name": "foreldrepengesoknad-api",
   "namespace": "foreldrepenger",
