@@ -137,14 +137,7 @@ workflows:
               only: master
           requires:
             - dev-deploy
-            
-      - hold-dev-gcp:
-          type: approval
-          filters:
-            branches:
-              only: master
-          requires:
-            - dev-deploy       
+               
 
       - slack/approval-notification:
           webhook: $SLACK
@@ -158,7 +151,7 @@ workflows:
             branches:
               only: master
           requires:
-            - hold-dev-gcp
+            - build
       - prod-deploy:
           context: NAIS deployment
           filters:
