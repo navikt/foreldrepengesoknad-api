@@ -29,7 +29,7 @@
         <logback.logstash.version>6.2</logback.logstash.version>
         <nv.version>1.26</nv.version>
         <pdfbox.version>2.0.17</pdfbox.version>
-        <aws.version>1.11.650</aws.version>
+        <aws.version>1.11.651</aws.version>
         <simpleclient.version>0.7.0</simpleclient.version>
     </properties>
     <dependencyManagement>
