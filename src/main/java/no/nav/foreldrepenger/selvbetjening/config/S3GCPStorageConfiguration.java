@@ -8,7 +8,6 @@ import com.amazonaws.auth.AWSCredentials;
 import com.amazonaws.auth.AWSStaticCredentialsProvider;
 import com.amazonaws.auth.BasicAWSCredentials;
 import com.amazonaws.client.builder.AwsClientBuilder;
-import com.amazonaws.client.builder.AwsClientBuilder.EndpointConfiguration;
 import com.amazonaws.services.s3.AmazonS3;
 import com.amazonaws.services.s3.AmazonS3ClientBuilder;
 
@@ -27,7 +26,7 @@ public class S3GCPStorageConfiguration {
     }
 
     @Bean
-    public AmazonS3 s3(AWSCredentials s3Credentials, EndpointConfiguration endpointConfig) {
+    public AmazonS3 s3(AWSCredentials s3Credentials) {
         return AmazonS3ClientBuilder.standard()
                 .withEndpointConfiguration(
                         new AwsClientBuilder.EndpointConfiguration(
