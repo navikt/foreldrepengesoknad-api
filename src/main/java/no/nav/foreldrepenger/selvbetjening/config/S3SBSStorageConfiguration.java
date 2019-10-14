@@ -8,7 +8,6 @@ import org.springframework.context.annotation.Lazy;
 import com.amazonaws.auth.AWSCredentials;
 import com.amazonaws.auth.AWSStaticCredentialsProvider;
 import com.amazonaws.auth.BasicAWSCredentials;
-import com.amazonaws.client.builder.AwsClientBuilder;
 import com.amazonaws.client.builder.AwsClientBuilder.EndpointConfiguration;
 import com.amazonaws.services.s3.AmazonS3;
 import com.amazonaws.services.s3.AmazonS3ClientBuilder;
@@ -20,7 +19,7 @@ import no.nav.foreldrepenger.selvbetjening.util.ConditionalOnSBS;
 
 @Configuration
 @ConditionalOnSBS
-public class S3StorageConfiguration {
+public class S3SBSStorageConfiguration {
 
     @Bean
     public Storage s3Storage(AmazonS3 s3) {
@@ -40,7 +39,7 @@ public class S3StorageConfiguration {
     @Bean
     public EndpointConfiguration s3EndpointConfig(@Value("${s3.region:us-east-1}") String region,
             @Value("${s3.url:http://s3.nais-rook.svc.nais.local/}") String url) {
-        return new AwsClientBuilder.EndpointConfiguration(url, region);
+        return new EndpointConfiguration(url, region);
     }
 
     @Bean
