@@ -16,6 +16,7 @@ spec:
     - name: oppslagkey
     - name: mottakkey
     - name: historikkey
+    - name: storagepassphrase
   image: {{version}}
   port: 8080
   replicas:
