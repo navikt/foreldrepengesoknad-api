@@ -10,6 +10,11 @@ metadata:
   labels:
     team: {{team}}
 spec:
+  accessPolicy:
+    outbound:
+      external: 
+        - host: storage.googleapis.com
+      rules : []  
   secrets:
     - name: gcp.accesskey
     - name: gcp.secretkey
