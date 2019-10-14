@@ -78,14 +78,14 @@ jobs:
      executor: go
      steps:
       - nais-deploy:
-          template-vars: api-dev-sbs.json
+          template-vars: dev-sbs.json
           environment: dev-sbs
 
    prod-deploy:
      executor: go
      steps:
       - nais-deploy:
-          template-vars: api-prod-sbs.json
+          template-vars: prod-sbs.json
           environment: prod-sbs
 
 commands:
