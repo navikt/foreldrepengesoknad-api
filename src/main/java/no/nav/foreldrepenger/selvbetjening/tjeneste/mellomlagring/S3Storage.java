@@ -9,7 +9,6 @@ import java.util.Optional;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.springframework.stereotype.Service;
 
 import com.amazonaws.services.s3.AmazonS3;
 import com.amazonaws.services.s3.model.AmazonS3Exception;
@@ -19,10 +18,6 @@ import com.amazonaws.services.s3.model.CreateBucketRequest;
 import com.amazonaws.services.s3.model.S3Object;
 import com.amazonaws.services.s3.model.lifecycle.LifecycleFilter;
 
-import no.nav.foreldrepenger.selvbetjening.util.ConditionalOnSBS;
-
-@ConditionalOnSBS
-@Service
 public class S3Storage implements Storage {
 
     private static final Logger LOG = LoggerFactory.getLogger(S3Storage.class);
