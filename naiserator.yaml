@@ -46,10 +46,18 @@ spec:
         cpu: 250m
         memory: 1536Mi 
   vault:
-      enabled: true      
+{{#if namespace}}
+      enabled: false   
+{{else}} 
+     enabled: true   
+{{/if}} 
   env: 
   {{#each env}}
    - name: {{@key}}
      value: "{{this}}"
   {{/each}}
+  {{#if namespace}}
+  webproxy: false
+{{else}}
   webproxy: true
+{{/if}} 
