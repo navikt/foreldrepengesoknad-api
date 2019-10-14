@@ -13,6 +13,9 @@ spec:
   secrets:
     - name: accesskey
     - name: secretkey
+    - name: oppslagkey
+    - name: mottakkey
+    - name: historikkey
   image: {{version}}
   port: 8080
   replicas:
