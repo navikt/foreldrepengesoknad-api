@@ -37,8 +37,8 @@ public class S3GCPStorageConfiguration {
     }
 
     @Bean
-    public AWSCredentials s3Credentials(@Value("${gcp.accessKey}") String accessKey,
-            @Value("${gcp.secretKey}") String secretKey) {
+    public AWSCredentials s3Credentials(@Value("${gcp.accesskey}") String accessKey,
+            @Value("${gcp.secretkey}") String secretKey) {
         return new BasicAWSCredentials(accessKey, secretKey);
     }
 
