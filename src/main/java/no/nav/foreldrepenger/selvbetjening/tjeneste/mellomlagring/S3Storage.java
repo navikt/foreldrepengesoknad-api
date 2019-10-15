@@ -32,8 +32,8 @@ public class S3Storage implements Storage {
         try {
             ensureBucketExists(BUCKET_FORELDREPENGER, 365);
             ensureBucketExists(BUCKET_FORELDREPENGER_MELLOMLAGRING, 1);
-        } catch (Exception ex) {
-            LOG.error("Could not create S3 bucket", ex);
+        } catch (Exception e) {
+            LOG.error("Kunne ikke sette opp bøtter", e);
         }
     }
 
@@ -68,6 +68,7 @@ public class S3Storage implements Storage {
     }
 
     private void ensureBucketExists(String bucketName) {
+        LOG.info("Sjekker om bøtta {} eksisterer", bucketName);
         boolean bucketExists = s3.listBuckets().stream()
                 .anyMatch(b -> b.getName().equals(bucketName));
         if (!bucketExists) {
@@ -77,10 +78,12 @@ public class S3Storage implements Storage {
 
     private void ensureBucketExists(String bucketName, Integer expirationInDays) {
         ensureBucketExists(bucketName);
+        LOG.info("Setter lifecycle config for bøtta {}", bucketName);
         s3.setBucketLifecycleConfiguration(bucketName, objectExpiresInDays(expirationInDays));
     }
 
     private void createBucket(String bucketName) {
+        LOG.info("Lager bøtte {}", bucketName);
         s3.createBucket(new CreateBucketRequest(bucketName)
                 .withCannedAcl(CannedAccessControlList.Private));
     }
