@@ -88,7 +88,7 @@ public class S3Storage implements Storage {
             LOG.info("Setter lifecycle config for bøtta {}", bucketName);
             s3.setBucketLifecycleConfiguration(bucketName, expiry);
         } catch (Exception e) {
-            LOG.info("Kunne ikke setter lifecycle config for bøtta {}", bucketName);
+            LOG.info("Kunne ikke setter lifecycle config for bøtta {}", bucketName, e);
         }
     }
 
@@ -109,8 +109,8 @@ public class S3Storage implements Storage {
             return new BufferedReader(new InputStreamReader(object.getObjectContent()))
                     .lines()
                     .collect(joining("\n"));
-        } catch (AmazonS3Exception ex) {
-            LOG.trace("Kunne ikke hente {}, finnes sannsynligvis ikke", path);
+        } catch (AmazonS3Exception e) {
+            LOG.trace("Kunne ikke hente {}, finnes sannsynligvis ikke", path, e);
             return null;
         }
 
