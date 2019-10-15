@@ -15,7 +15,6 @@ import org.springframework.web.servlet.config.annotation.ResourceHandlerRegistry
 import org.springframework.web.servlet.config.annotation.WebMvcConfigurer;
 
 import com.google.common.collect.ImmutableMap;
-import com.google.common.collect.ImmutableMap.Builder;
 
 import no.nav.foreldrepenger.selvbetjening.filters.CorsInterceptor;
 import no.nav.foreldrepenger.selvbetjening.interceptors.client.ApiKeyInjectingClientInterceptor;
@@ -42,10 +41,9 @@ public class ApiConfiguration implements WebMvcConfigurer {
     }
 
     @Bean
-    // @ConditionalOnSBS
     public ClientHttpRequestInterceptor apiKeyInjectingClientInterceptor(OppslagConfig oppslag, InnsendingConfig mottak,
             HistorikkConfig historikk) {
-        Builder<URI, String> builder = ImmutableMap.<URI, String>builder();
+        var builder = ImmutableMap.<URI, String>builder();
         builder.put(oppslag.getUri(), oppslag.getKey());
         builder.put(mottak.getUri(), mottak.getKey());
         builder.put(historikk.getUri(), historikk.getKey());
