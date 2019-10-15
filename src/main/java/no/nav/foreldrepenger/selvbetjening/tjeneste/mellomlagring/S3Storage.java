@@ -68,11 +68,13 @@ public class S3Storage implements Storage {
     }
 
     private void ensureBucketExists(String bucketName) {
-        LOG.info("Sjekker om bøtta {} eksisterer", bucketName);
+        LOG.info("Sjekker om bøtte {} eksisterer", bucketName);
         boolean bucketExists = s3.listBuckets().stream()
                 .anyMatch(b -> b.getName().equals(bucketName));
         if (!bucketExists) {
             createBucket(bucketName);
+        } else {
+            LOG.info("Bøtte {} eksisterer", bucketName);
         }
     }
 
