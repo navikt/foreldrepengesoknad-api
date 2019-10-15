@@ -80,8 +80,16 @@ public class S3Storage implements Storage {
 
     private void ensureBucketExists(String bucketName, Integer expirationInDays) {
         ensureBucketExists(bucketName);
-        LOG.info("Setter lifecycle config for bøtta {}", bucketName);
-        s3.setBucketLifecycleConfiguration(bucketName, objectExpiresInDays(expirationInDays));
+        setLifeCycleConfig(bucketName, objectExpiresInDays(expirationInDays));
+    }
+
+    private void setLifeCycleConfig(String bucketName, BucketLifecycleConfiguration expiry) {
+        try {
+            LOG.info("Setter lifecycle config for bøtta {}", bucketName);
+            s3.setBucketLifecycleConfiguration(bucketName, expiry);
+        } catch (Exception e) {
+            LOG.info("Kunne ikke setter lifecycle config for bøtta {}", bucketName);
+        }
     }
 
     private void createBucket(String bucketName) {
