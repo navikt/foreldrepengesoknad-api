@@ -5,9 +5,11 @@ import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 
 import com.amazonaws.auth.AWSCredentials;
+import com.amazonaws.auth.AWSCredentialsProvider;
 import com.amazonaws.auth.AWSStaticCredentialsProvider;
 import com.amazonaws.auth.BasicAWSCredentials;
 import com.amazonaws.client.builder.AwsClientBuilder;
+import com.amazonaws.client.builder.AwsClientBuilder.EndpointConfiguration;
 import com.amazonaws.services.s3.AmazonS3;
 import com.amazonaws.services.s3.AmazonS3ClientBuilder;
 
@@ -26,13 +28,22 @@ public class S3GCPStorageConfiguration {
     }
 
     @Bean
-    public AmazonS3 s3(AWSCredentials s3Credentials) {
+    public AmazonS3 s3(AWSCredentialsProvider credentialsProvider, EndpointConfiguration endpointConfiguration) {
         return AmazonS3ClientBuilder.standard()
-                .withEndpointConfiguration(
-                        new AwsClientBuilder.EndpointConfiguration(
-                                "https://storage.googleapis.com", "auto"))
-                .withCredentials(new AWSStaticCredentialsProvider(s3Credentials))
+                .withEndpointConfiguration(endpointConfiguration)
+                .withCredentials(credentialsProvider)
                 .build();
+    }
+
+    @Bean
+    public EndpointConfiguration endpointConfiguration(
+            @Value("${gcp.endpoint:https://storage.googleapis.com}") String serviceEndpoint) {
+        return new AwsClientBuilder.EndpointConfiguration(serviceEndpoint, "auto");
+    }
+
+    @Bean
+    AWSCredentialsProvider credentialsProvider(AWSCredentials s3Credentials) {
+        return new AWSStaticCredentialsProvider(s3Credentials);
     }
 
     @Bean
