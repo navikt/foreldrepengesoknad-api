@@ -32,7 +32,7 @@ public final class EnvUtil {
     }
 
     private static boolean isDev(Environment env) {
-        return env.acceptsProfiles(Profiles.of(DEV, DEV_GCP));
+        return env.acceptsProfiles(Profiles.of(DEV_SBS, DEV_GCP));
     }
 
     private static boolean isLocal(Environment env) {
