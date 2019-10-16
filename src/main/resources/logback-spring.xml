@@ -23,7 +23,7 @@
     </springProfile>
 
     <springProfile name="dev,local,test">
-        <logger name="no.nav.security" level="info"/>
+        <logger name="com.amazonaws" level="trace"/>
         <logger name="no.nav.foreldrepenger.selvbetjening" level="trace"/>
     </springProfile>
 
