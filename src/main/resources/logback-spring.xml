@@ -22,7 +22,7 @@
         </turboFilter>
     </springProfile>
 
-    <springProfile name="dev,local,test">
+    <springProfile name="dev-gcp, dev-sbs,local,test">
         <logger name="com.amazonaws" level="trace"/>
         <logger name="no.nav.foreldrepenger.selvbetjening" level="trace"/>
     </springProfile>
