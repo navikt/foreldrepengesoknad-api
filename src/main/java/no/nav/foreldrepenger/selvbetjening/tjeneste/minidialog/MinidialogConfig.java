@@ -1,6 +1,5 @@
 package no.nav.foreldrepenger.selvbetjening.tjeneste.minidialog;
 
-import static no.nav.foreldrepenger.selvbetjening.util.EnvUtil.DEV;
 import static no.nav.foreldrepenger.selvbetjening.util.URIUtil.queryParams;
 import static no.nav.foreldrepenger.selvbetjening.util.URIUtil.uri;
 
@@ -17,7 +16,7 @@ import no.nav.foreldrepenger.selvbetjening.util.Pair;
 public class MinidialogConfig {
 
     static final String MINIDIALOG = "minidialog";
-    private static final String MINIDIALOG_DEV = MINIDIALOG + "/" + DEV;
+    private static final String MINIDIALOG_DEV = MINIDIALOG + "/dev";
     private static final String MINIDIALOGER = MINIDIALOG_DEV + "/minidialoger";
     private static final String AKTIVE = MINIDIALOG_DEV + "/spm";
 

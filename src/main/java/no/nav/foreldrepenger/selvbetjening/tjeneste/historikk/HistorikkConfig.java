@@ -1,6 +1,5 @@
 package no.nav.foreldrepenger.selvbetjening.tjeneste.historikk;
 
-import static no.nav.foreldrepenger.selvbetjening.util.EnvUtil.DEV;
 import static no.nav.foreldrepenger.selvbetjening.util.URIUtil.queryParams;
 import static no.nav.foreldrepenger.selvbetjening.util.URIUtil.uri;
 
@@ -31,7 +30,7 @@ public class HistorikkConfig {
     }
 
     public URI historikkPreprodURI(String fnr) {
-        return uri(uri, "historikk" + "/" + DEV + "/all", queryParams("fnr", fnr));
+        return uri(uri, "historikk" + "/dev/all", queryParams("fnr", fnr));
     }
 
     public URI pingURI() {

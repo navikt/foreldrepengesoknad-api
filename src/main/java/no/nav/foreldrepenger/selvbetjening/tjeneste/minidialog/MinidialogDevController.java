@@ -1,14 +1,10 @@
 package no.nav.foreldrepenger.selvbetjening.tjeneste.minidialog;
 
 import static no.nav.foreldrepenger.selvbetjening.tjeneste.minidialog.MinidialogController.MINIDIALOG;
-import static no.nav.foreldrepenger.selvbetjening.util.EnvUtil.DEV;
-import static no.nav.foreldrepenger.selvbetjening.util.EnvUtil.DEV_GCP;
-import static no.nav.foreldrepenger.selvbetjening.util.EnvUtil.LOCAL;
 import static org.springframework.http.MediaType.APPLICATION_JSON_VALUE;
 
 import java.util.List;
 
-import org.springframework.context.annotation.Profile;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
@@ -16,15 +12,16 @@ import org.springframework.web.bind.annotation.RestController;
 
 import no.nav.foreldrepenger.selvbetjening.tjeneste.historikk.MinidialogInnslag;
 import no.nav.foreldrepenger.selvbetjening.tjeneste.oppslag.domain.Fødselsnummer;
+import no.nav.foreldrepenger.selvbetjening.util.ConditionalOnDev;
 import no.nav.security.token.support.core.api.Unprotected;
 
-@Profile({ LOCAL, DEV, DEV_GCP })
+@ConditionalOnDev
 @RestController
 @RequestMapping(path = MinidialogDevController.DEVPATH, produces = APPLICATION_JSON_VALUE)
 @Unprotected
 public class MinidialogDevController {
 
-    static final String DEVPATH = MINIDIALOG + "/" + DEV;
+    static final String DEVPATH = MINIDIALOG + "/dev";
 
     private final Minidialog minidialog;
 
