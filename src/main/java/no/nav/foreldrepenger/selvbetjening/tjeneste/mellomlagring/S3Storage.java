@@ -11,7 +11,6 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import com.amazonaws.services.s3.AmazonS3;
-import com.amazonaws.services.s3.model.AmazonS3Exception;
 import com.amazonaws.services.s3.model.BucketLifecycleConfiguration;
 import com.amazonaws.services.s3.model.CannedAccessControlList;
 import com.amazonaws.services.s3.model.CreateBucketRequest;
@@ -99,17 +98,19 @@ public class S3Storage implements Storage {
     }
 
     private void writeString(String bucketName, String directory, String key, String value) {
+        LOG.info("Lagrer object i bøtte {}, katalog {}", bucketName, directory);
         s3.putObject(bucketName, fileName(directory, key), value);
     }
 
     private String readString(String bucketName, String directory, String key) {
         String path = fileName(directory, key);
         try {
+            LOG.info("Henter object fra bøtte {}, katalog {}", bucketName, directory);
             S3Object object = s3.getObject(bucketName, path);
             return new BufferedReader(new InputStreamReader(object.getObjectContent()))
                     .lines()
                     .collect(joining("\n"));
-        } catch (AmazonS3Exception e) {
+        } catch (Exception e) {
             LOG.trace("Kunne ikke hente {}, finnes sannsynligvis ikke", path, e);
             return null;
         }
@@ -126,6 +127,7 @@ public class S3Storage implements Storage {
     }
 
     private void deleteString(String bucketName, String directory, String key) {
+        LOG.info("Fjerner object fra bøtte {}, katalog {}", bucketName, directory);
         s3.deleteObject(bucketName, fileName(directory, key));
     }
 
