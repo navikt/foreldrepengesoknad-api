@@ -10,12 +10,14 @@ metadata:
   labels:
     team: {{team}}
 spec:
+{{#if namespace}}
   accessPolicy:
     outbound:
       external: 
         - host: storage.googleapis.com
         - host: login.microsoftonline.com
         - host: api-gw-q1.oera.no
+        - host: {{appres}}
       rules :
         - application: fp-uttak-service 
   secrets:
@@ -25,6 +27,7 @@ spec:
     - name: mottak.key
     - name: historikk.key
     - name: storage.passphrase
+{{/if}}  
   image: {{version}}
   port: 8080
   replicas:
