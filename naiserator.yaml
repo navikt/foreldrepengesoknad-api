@@ -16,7 +16,8 @@ spec:
         - host: storage.googleapis.com
         - host: login.microsoftonline.com
         - host: api-gw-q1.oera.no
-      rules : []  
+      rules :
+        - application: fp-uttak-service 
   secrets:
     - name: gcp.accesskey
     - name: gcp.secretkey
