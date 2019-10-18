@@ -9,49 +9,41 @@ public class VoidStorage implements Storage {
 
     @Override
     public String ping() {
-        // TODO Auto-generated method stub
-        return null;
+        return "OK";
     }
 
     @Override
     public URI pingURI() {
-        // TODO Auto-generated method stub
-        return null;
+        return URI.create("http://localhost");
     }
 
     @Override
     public void put(String directory, String key, String value) {
-        // TODO Auto-generated method stub
 
     }
 
     @Override
     public void putTmp(String directory, String key, String value) {
-        // TODO Auto-generated method stub
 
     }
 
     @Override
     public Optional<String> get(String directory, String key) {
-        // TODO Auto-generated method stub
-        return null;
+        return Optional.empty();
     }
 
     @Override
     public Optional<String> getTmp(String directory, String key) {
-        // TODO Auto-generated method stub
-        return null;
+        return Optional.empty();
     }
 
     @Override
     public void delete(String directory, String key) {
-        // TODO Auto-generated method stub
 
     }
 
     @Override
     public void deleteTmp(String directory, String key) {
-        // TODO Auto-generated method stub
 
     }
 
