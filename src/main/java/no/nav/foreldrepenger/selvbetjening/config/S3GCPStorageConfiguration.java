@@ -12,6 +12,7 @@ import no.nav.foreldrepenger.selvbetjening.util.ConditionalOnGCP;
 @ConditionalOnGCP
 public class S3GCPStorageConfiguration {
 
+    @Bean
     public Storage voidStorage() {
         return new VoidStorage();
     }
