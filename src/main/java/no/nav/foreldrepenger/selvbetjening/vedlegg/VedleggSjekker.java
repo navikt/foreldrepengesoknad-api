@@ -14,6 +14,7 @@ import no.nav.foreldrepenger.selvbetjening.error.AttachmentsTooLargeException;
 import no.nav.foreldrepenger.selvbetjening.tjeneste.innsending.domain.Vedlegg;
 import no.nav.foreldrepenger.selvbetjening.tjeneste.mellomlagring.Attachment;
 import no.nav.foreldrepenger.selvbetjening.tjeneste.virusscan.VirusScanner;
+import no.nav.foreldrepenger.selvbetjening.util.StreamUtil;
 
 @Component
 public class VedleggSjekker {
@@ -63,20 +64,18 @@ public class VedleggSjekker {
     }
 
     private void sjekkEnkeltStørrelser(List<Vedlegg> vedlegg) {
-        vedlegg.stream()
-                .filter(v -> v.getInnsendingsType().equals(LASTET_OPP))
+        StreamUtil.safeStream(vedlegg)
                 .forEach(this::sjekkStørrelse);
     }
 
     private void sjekkAttachmentEnkeltStørrelser(List<Attachment> vedlegg) {
-        vedlegg.stream()
+        StreamUtil.safeStream(vedlegg)
                 .forEach(this::sjekkAttachmentEnkeltStørrelse);
     }
 
     private void sjekkKryptert(List<Vedlegg> vedlegg) {
         LOG.info("Sjekker kryptering for {}", vedlegg);
         vedlegg.stream()
-                .filter(v -> v.getInnsendingsType().equals(LASTET_OPP))
                 .forEach(encryptionChecker::checkEncrypted);
     }
 
@@ -88,8 +87,7 @@ public class VedleggSjekker {
 
     private void sjekkVirus(List<Vedlegg> vedlegg) {
         LOG.info("Sjekker virus for {}", vedlegg);
-        vedlegg.stream()
-                .filter(v -> v.getInnsendingsType().equals(LASTET_OPP))
+        StreamUtil.safeStream(vedlegg)
                 .forEach(virusScanner::scan);
     }
 
