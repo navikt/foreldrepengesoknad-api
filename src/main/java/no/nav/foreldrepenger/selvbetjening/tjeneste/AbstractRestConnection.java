@@ -65,15 +65,6 @@ public abstract class AbstractRestConnection {
         return operations.exchange(RequestEntity.put(uri).body(payload), responseType).getBody();
     }
 
-    /*
-     * private <T> T postForObjectWithRetry(Retry retryCfg, URI uri, Object payload,
-     * Class<T> responseType) { return decorateSupplier(retryCfg, () ->
-     * postForObject(uri, payload, responseType)).get(); }
-     * 
-     * private static Retry defaultRetryConfig() { return RetryUtil.retry(3, "post",
-     * NoHttpResponseException.class, LOG); }
-     */
-
     @Override
     public String toString() {
         return getClass().getSimpleName() + " [operations=" + operations + "]";

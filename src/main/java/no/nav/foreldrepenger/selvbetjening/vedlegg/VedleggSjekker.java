@@ -18,6 +18,8 @@ import no.nav.foreldrepenger.selvbetjening.tjeneste.virusscan.VirusScanner;
 @Component
 public class VedleggSjekker {
 
+    private static final String LASTET_OPP = "LASTET_OPP";
+
     private static final Logger LOG = LoggerFactory.getLogger(VedleggSjekker.class);
 
     private final DataSize maxTotalSize;
@@ -61,31 +63,40 @@ public class VedleggSjekker {
     }
 
     private void sjekkEnkeltStørrelser(List<Vedlegg> vedlegg) {
-        vedlegg.stream().forEach(this::sjekkStørrelse);
+        vedlegg.stream()
+                .filter(v -> v.getInnsendingsType().equals(LASTET_OPP))
+                .forEach(this::sjekkStørrelse);
     }
 
     private void sjekkAttachmentEnkeltStørrelser(List<Attachment> vedlegg) {
-        vedlegg.stream().forEach(this::sjekkAttachmentEnkeltStørrelse);
+        vedlegg.stream()
+                .forEach(this::sjekkAttachmentEnkeltStørrelse);
     }
 
     private void sjekkKryptert(List<Vedlegg> vedlegg) {
         LOG.info("Sjekker kryptering for {}", vedlegg);
-        vedlegg.stream().forEach(encryptionChecker::checkEncrypted);
+        vedlegg.stream()
+                .filter(v -> v.getInnsendingsType().equals(LASTET_OPP))
+                .forEach(encryptionChecker::checkEncrypted);
     }
 
     private void sjekkAttachmentKryptert(List<Attachment> vedlegg) {
         LOG.info("Sjekker kryptering for {}", vedlegg);
-        vedlegg.stream().forEach(encryptionChecker::checkEncrypted);
+        vedlegg.stream()
+                .forEach(encryptionChecker::checkEncrypted);
     }
 
     private void sjekkVirus(List<Vedlegg> vedlegg) {
         LOG.info("Sjekker virus for {}", vedlegg);
-        vedlegg.stream().forEach(virusScanner::scan);
+        vedlegg.stream()
+                .filter(v -> v.getInnsendingsType().equals(LASTET_OPP))
+                .forEach(virusScanner::scan);
     }
 
     private void sjekkAttachmentVirus(List<Attachment> vedlegg) {
         LOG.info("Sjekker virus for {}", vedlegg);
-        vedlegg.stream().forEach(virusScanner::scan);
+        vedlegg.stream()
+                .forEach(virusScanner::scan);
     }
 
     private void sjekkStørrelse(Vedlegg vedlegg) {
