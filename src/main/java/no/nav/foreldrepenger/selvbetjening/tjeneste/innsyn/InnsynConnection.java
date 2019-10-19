@@ -34,7 +34,7 @@ public class InnsynConnection extends AbstractRestConnection {
     }
 
     @Override
-    protected URI pingURI() {
+    public URI pingURI() {
         return innsynConfig.getPingURI();
     }
 

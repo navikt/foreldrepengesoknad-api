@@ -29,7 +29,7 @@ public class HistorikkConnection extends AbstractRestConnection {
     }
 
     @Override
-    protected URI pingURI() {
+    public URI pingURI() {
         return config.pingURI();
     }
 

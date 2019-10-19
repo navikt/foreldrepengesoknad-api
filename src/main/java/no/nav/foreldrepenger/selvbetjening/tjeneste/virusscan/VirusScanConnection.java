@@ -25,7 +25,7 @@ class VirusScanConnection extends AbstractRestConnection {
     }
 
     @Override
-    protected URI pingURI() {
+    public URI pingURI() {
         return config.getPingURI();
     }
 
