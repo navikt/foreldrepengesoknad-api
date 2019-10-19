@@ -23,7 +23,7 @@
     </springProfile>
 
     <springProfile name="dev-gcp, dev-sbs,local,test">
-        <logger name="com.amazonaws" level="trace"/>
+        <logger name="org.springframework.retry" level="trace"/>
         <logger name="no.nav.foreldrepenger.selvbetjening" level="trace"/>
     </springProfile>
 

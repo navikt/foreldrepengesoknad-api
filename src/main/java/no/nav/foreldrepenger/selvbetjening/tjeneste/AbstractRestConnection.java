@@ -5,9 +5,12 @@ import static org.springframework.http.HttpStatus.NOT_FOUND;
 
 import java.net.URI;
 
+import org.apache.http.NoHttpResponseException;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.http.RequestEntity;
+import org.springframework.retry.annotation.Backoff;
+import org.springframework.retry.annotation.Retryable;
 import org.springframework.web.client.HttpClientErrorException;
 import org.springframework.web.client.RestOperations;
 
@@ -49,6 +52,7 @@ public abstract class AbstractRestConnection {
         }
     }
 
+    @Retryable(value = { NoHttpResponseException.class }, maxAttempts = 3, backoff = @Backoff(delay = 1000))
     protected <T> T postForObject(URI uri, Object payload, Class<T> responseType) {
         return operations.postForObject(uri, payload, responseType);
     }
@@ -60,6 +64,15 @@ public abstract class AbstractRestConnection {
         }
         return operations.exchange(RequestEntity.put(uri).body(payload), responseType).getBody();
     }
+
+    /*
+     * private <T> T postForObjectWithRetry(Retry retryCfg, URI uri, Object payload,
+     * Class<T> responseType) { return decorateSupplier(retryCfg, () ->
+     * postForObject(uri, payload, responseType)).get(); }
+     * 
+     * private static Retry defaultRetryConfig() { return RetryUtil.retry(3, "post",
+     * NoHttpResponseException.class, LOG); }
+     */
 
     @Override
     public String toString() {

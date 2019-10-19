@@ -5,11 +5,13 @@ import static no.nav.foreldrepenger.selvbetjening.config.ClusterAwareSpringProfi
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.boot.builder.SpringApplicationBuilder;
 import org.springframework.cache.annotation.EnableCaching;
+import org.springframework.retry.annotation.EnableRetry;
 
 import no.nav.security.token.support.spring.api.EnableJwtTokenValidation;
 
 @SpringBootApplication
 @EnableCaching
+@EnableRetry
 @EnableJwtTokenValidation(ignore = { "org.springframework", "springfox.documentation" })
 public class ApiApplication {
 
