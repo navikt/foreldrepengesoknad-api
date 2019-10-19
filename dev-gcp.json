@@ -1,5 +1,4 @@
 {
-  "appres": "appres-q1.nav.no",
   "ingress": "https://foreldrepengesoknad-api.dev-nav.no",
   "application_name": "foreldrepengesoknad-api",
   "namespace": "foreldrepenger",

@@ -15,11 +15,8 @@ spec:
     outbound:
       external: 
         - host: storage.googleapis.com
-        - host: login.microsoftonline.com
         - host: api-gw-q1.oera.no
-        - host: {{appres}}
-      rules :
-        - application: fp-uttak-service 
+      rules: []
   secrets:
     - name: gcp.accesskey
     - name: gcp.secretkey
