@@ -15,7 +15,9 @@ spec:
     outbound:
       external: 
         - host: storage.googleapis.com
-        - host: api-gw-q1.oera.no
+ {{#if gw}}       
+        - host: {{gw}}
+ {{/if}}       
       rules: []
   secrets:
     - name: gcp.accesskey
@@ -64,7 +66,7 @@ spec:
    - name: {{@key}}
      value: "{{this}}"
   {{/each}}
-  {{#if namespace}}
+ {{#if namespace}}
   webproxy: false
 {{else}}
   webproxy: true

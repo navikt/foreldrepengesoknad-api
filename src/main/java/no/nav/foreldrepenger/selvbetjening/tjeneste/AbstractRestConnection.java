@@ -8,13 +8,10 @@ import java.net.URI;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.http.RequestEntity;
-import org.springframework.retry.annotation.Backoff;
-import org.springframework.retry.annotation.Retryable;
 import org.springframework.web.client.HttpClientErrorException;
-import org.springframework.web.client.HttpServerErrorException;
 import org.springframework.web.client.RestOperations;
 
-public abstract class AbstractRestConnection implements Pingable {
+public abstract class AbstractRestConnection implements RestConnection {
 
     protected static final Logger LOG = LoggerFactory.getLogger(AbstractRestConnection.class);
 
@@ -30,12 +27,13 @@ public abstract class AbstractRestConnection implements Pingable {
         return getForObject(pingURI(), String.class);
     }
 
-    protected <T> T getForObject(URI uri, Class<T> responseType) {
+    @Override
+    public <T> T getForObject(URI uri, Class<T> responseType) {
         return getForObject(uri, responseType, true);
     }
 
-    @Retryable(value = { HttpServerErrorException.class }, maxAttempts = 3, backoff = @Backoff(delay = 1000))
-    protected <T> T getForObject(URI uri, Class<T> responseType, boolean throwOnNotFound) {
+    @Override
+    public <T> T getForObject(URI uri, Class<T> responseType, boolean throwOnNotFound) {
         try {
             T respons = operations.getForObject(uri, responseType);
             if (respons != null) {
@@ -51,13 +49,13 @@ public abstract class AbstractRestConnection implements Pingable {
         }
     }
 
-    @Retryable(value = { HttpServerErrorException.class }, maxAttempts = 3, backoff = @Backoff(delay = 1000))
-    protected <T> T postForObject(URI uri, Object payload, Class<T> responseType) {
+    @Override
+    public <T> T postForObject(URI uri, Object payload, Class<T> responseType) {
         return operations.postForObject(uri, payload, responseType);
     }
 
-    @Retryable(value = { HttpServerErrorException.class }, maxAttempts = 3, backoff = @Backoff(delay = 1000))
-    protected <T> T putForObject(URI uri, Object payload, Class<T> responseType) {
+    @Override
+    public <T> T putForObject(URI uri, Object payload, Class<T> responseType) {
         if (!isEnabled()) {
             LOG.info("Service er ikke aktiv, PUTer ikke til {}", uri);
             return null;
