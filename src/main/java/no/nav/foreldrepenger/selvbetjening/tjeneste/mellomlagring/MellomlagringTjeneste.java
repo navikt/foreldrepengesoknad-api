@@ -27,6 +27,7 @@ public class MellomlagringTjeneste {
         this.storage = storage;
         this.crypto = crypto;
         this.sjekker = sjekker;
+        LOG.info("Bruker storage " + storage.getClass().getSimpleName());
     }
 
     public Optional<String> hentSøknad() {
