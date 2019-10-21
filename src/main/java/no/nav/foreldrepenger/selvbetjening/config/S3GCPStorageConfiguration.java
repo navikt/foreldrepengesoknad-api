@@ -4,9 +4,9 @@ import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 
+import no.nav.foreldrepenger.selvbetjening.tjeneste.mellomlagring.GCPCloudStorage;
 import no.nav.foreldrepenger.selvbetjening.tjeneste.mellomlagring.Storage;
 import no.nav.foreldrepenger.selvbetjening.tjeneste.mellomlagring.StorageCrypto;
-import no.nav.foreldrepenger.selvbetjening.tjeneste.mellomlagring.VoidStorage;
 import no.nav.foreldrepenger.selvbetjening.util.ConditionalOnGCP;
 
 @Configuration
@@ -15,7 +15,7 @@ public class S3GCPStorageConfiguration {
 
     @Bean
     public Storage voidStorage() {
-        return new VoidStorage();
+        return new GCPCloudStorage();
     }
 
     /*
