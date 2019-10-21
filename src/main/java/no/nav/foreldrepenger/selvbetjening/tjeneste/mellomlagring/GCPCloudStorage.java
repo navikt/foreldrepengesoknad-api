@@ -1,13 +1,13 @@
 package no.nav.foreldrepenger.selvbetjening.tjeneste.mellomlagring;
 
 import java.net.URI;
+import java.nio.charset.StandardCharsets;
 import java.util.Optional;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.http.MediaType;
 
-import com.drew.lang.Charsets;
 import com.google.cloud.storage.Blob;
 import com.google.cloud.storage.BlobId;
 import com.google.cloud.storage.BlobInfo;
@@ -43,7 +43,7 @@ public class GCPCloudStorage implements Storage {
 
     @Override
     public void putTmp(String directory, String key, String value) {
-
+        writeString(BUCKET_FORELDREPENGER_MELLOMLAGRING, directory, key, value);
     }
 
     @Override
@@ -53,7 +53,7 @@ public class GCPCloudStorage implements Storage {
 
     @Override
     public Optional<String> getTmp(String directory, String key) {
-        return Optional.empty();
+        return Optional.ofNullable(readString(BUCKET_FORELDREPENGER_MELLOMLAGRING, directory, key));
     }
 
     @Override
@@ -67,10 +67,26 @@ public class GCPCloudStorage implements Storage {
     }
 
     private void writeString(String bucketName, String directory, String key, String value) {
-        LOG.info("Lagrer object i bøtte {}, katalog {}", bucketName, directory);
+        LOG.info("Lagrer objekt i bøtte {}, katalog {}", bucketName, directory);
         BlobId blobId = BlobId.of(bucketName, fileName(directory, key));
         BlobInfo blobInfo = BlobInfo.newBuilder(blobId).setContentType(MediaType.APPLICATION_JSON_UTF8_VALUE).build();
-        Blob blob = storage.create(blobInfo, value.getBytes(Charsets.UTF_8));
+        Blob blob = storage.create(blobInfo, value.getBytes(StandardCharsets.UTF_8));
+        LOG.info("Lagret objekt {} i bøtte {}", blob, bucketName);
+    }
+
+    private String readString(String bucketName, String directory, String key) {
+        String path = fileName(directory, key);
+        try {
+            LOG.info("Henter objekt fra bøtte {}, katalog {}", bucketName, directory);
+            Blob blob = storage.get(bucketName, path);
+            byte[] content = blob.getContent();
+            String value = new String(content, StandardCharsets.UTF_8);
+            LOG.info("Hentet objekt {} fra bøtte {}", value, bucketName);
+            return value;
+        } catch (Exception e) {
+            LOG.trace("Kunne ikke hente {}, finnes sannsynligvis ikke", path, e);
+            return null;
+        }
     }
 
     private static String fileName(String directory, String key) {
