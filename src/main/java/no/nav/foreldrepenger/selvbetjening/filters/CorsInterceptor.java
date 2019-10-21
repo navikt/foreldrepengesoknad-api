@@ -36,6 +36,7 @@ public class CorsInterceptor extends HandlerInterceptorAdapter {
             "https://foreldrepengesoknad-q.nav.no," +
             "https://foreldrepengesoknad.nav.no," +
             "https://foreldrepengeoversikt.nais.oera-q.local," +
+            "https://foreldrepengeoversikt.nais.oera-q.local," +
             "https://foreldrepenger-q.nav.no," +
             "https://foreldrepenger.nav.no," +
             "https://svangerskapspengesoknad-q.nav.no," +

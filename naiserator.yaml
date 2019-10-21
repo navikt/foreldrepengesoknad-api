@@ -26,6 +26,8 @@ spec:
     - name: mottak.key
     - name: historikk.key
     - name: storage.passphrase
+    - name: buckets
+      type: files
 {{/if}}  
   image: {{version}}
   port: 8080
