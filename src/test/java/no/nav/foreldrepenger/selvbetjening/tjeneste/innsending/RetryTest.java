@@ -47,7 +47,7 @@ public class RetryTest {
         lenient().when(cfg.getUri()).thenReturn(uri);
         InnsendingConnection conn = new InnsendingConnection(restTemplate, cfg, converter);
         InnsendingTjeneste tjeneste = new InnsendingTjeneste(conn, ml, sjekker, gen);
-        System.out.println("XXXX " + tjeneste.ping());
+        // System.out.println("XXXX " + tjeneste.ping());
     }
 
 }
