@@ -6,6 +6,7 @@ import org.springframework.context.annotation.Configuration;
 
 import no.nav.foreldrepenger.selvbetjening.tjeneste.mellomlagring.Storage;
 import no.nav.foreldrepenger.selvbetjening.tjeneste.mellomlagring.StorageCrypto;
+import no.nav.foreldrepenger.selvbetjening.tjeneste.mellomlagring.VoidStorage;
 import no.nav.foreldrepenger.selvbetjening.util.ConditionalOnGCP;
 
 @Configuration

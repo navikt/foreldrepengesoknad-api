@@ -1,9 +1,7 @@
-package no.nav.foreldrepenger.selvbetjening.config;
+package no.nav.foreldrepenger.selvbetjening.tjeneste.mellomlagring;
 
 import java.net.URI;
 import java.util.Optional;
-
-import no.nav.foreldrepenger.selvbetjening.tjeneste.mellomlagring.Storage;
 
 public class VoidStorage implements Storage {
 
