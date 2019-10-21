@@ -48,7 +48,7 @@ public class GCPCloudStorage implements Storage {
 
     @Override
     public Optional<String> get(String directory, String key) {
-        return Optional.empty();
+        return Optional.ofNullable(readString(BUCKET_FORELDREPENGER, directory, key));
     }
 
     @Override
@@ -58,19 +58,26 @@ public class GCPCloudStorage implements Storage {
 
     @Override
     public void delete(String directory, String key) {
+        deleteString(BUCKET_FORELDREPENGER, directory, key);
+    }
 
+    private void deleteString(String bucketName, String directory, String key) {
+        LOG.info("Fjerner object fra bøtte {}, katalog {}", bucketName, directory);
+        storage.delete(BlobId.of(bucketName, fileName(directory, key)));
+        LOG.info("Fjernet objekt {} fra bøtte {}", directory, bucketName);
     }
 
     @Override
     public void deleteTmp(String directory, String key) {
-
+        deleteString(BUCKET_FORELDREPENGER_MELLOMLAGRING, directory, key);
     }
 
     private void writeString(String bucketName, String directory, String key, String value) {
         LOG.info("Lagrer objekt i bøtte {}, katalog {}", bucketName, directory);
-        BlobId blobId = BlobId.of(bucketName, fileName(directory, key));
-        BlobInfo blobInfo = BlobInfo.newBuilder(blobId).setContentType(MediaType.APPLICATION_JSON_UTF8_VALUE).build();
-        Blob blob = storage.create(blobInfo, value.getBytes(StandardCharsets.UTF_8));
+        Blob blob = storage.create(
+                BlobInfo.newBuilder(BlobId.of(bucketName, fileName(directory, key)))
+                        .setContentType(MediaType.APPLICATION_JSON_UTF8_VALUE).build(),
+                value.getBytes(StandardCharsets.UTF_8));
         LOG.info("Lagret objekt {} i bøtte {}", blob, bucketName);
     }
 
@@ -78,9 +85,7 @@ public class GCPCloudStorage implements Storage {
         String path = fileName(directory, key);
         try {
             LOG.info("Henter objekt fra bøtte {}, katalog {}", bucketName, directory);
-            Blob blob = storage.get(bucketName, path);
-            byte[] content = blob.getContent();
-            String value = new String(content, StandardCharsets.UTF_8);
+            String value = new String(storage.get(bucketName, path).getContent(), StandardCharsets.UTF_8);
             LOG.info("Hentet objekt {} fra bøtte {}", value, bucketName);
             return value;
         } catch (Exception e) {
