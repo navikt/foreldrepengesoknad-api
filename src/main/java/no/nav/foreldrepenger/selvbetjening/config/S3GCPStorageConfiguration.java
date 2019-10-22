@@ -14,14 +14,13 @@ import no.nav.foreldrepenger.selvbetjening.util.ConditionalOnGCP;
 public class S3GCPStorageConfiguration {
 
     @Bean
-    public Storage voidStorage(@Value("${bucket.søknad:foreldrepengesoknad}") String søknadBucket,
-            @Value("${bucket.mellomlagring:mellomlagring}") String mellomlagringBucket) {
+    public Storage voidStorage(@Value("${storage.søknad:foreldrepengesoknad}") String søknadBucket,
+            @Value("${storage.mellomlagring:mellomlagring}") String mellomlagringBucket) {
         return new GCPCloudStorage(søknadBucket, mellomlagringBucket);
     }
 
     @Bean
-    public StorageCrypto storageCrypto(@Value("${storage.passphrase}") String encryptionPassphrase) {
-        return new StorageCrypto(encryptionPassphrase);
+    public StorageCrypto storageCrypto(@Value("${storage.passphrase}") String passphrase) {
+        return new StorageCrypto(passphrase);
     }
-
 }
