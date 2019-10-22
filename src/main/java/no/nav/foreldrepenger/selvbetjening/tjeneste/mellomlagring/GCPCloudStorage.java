@@ -24,7 +24,7 @@ public class GCPCloudStorage implements Storage {
     private final String mellomlagringBucket;
 
     public GCPCloudStorage(String søknadBucket, String mellomlagringBucket) {
-        storage = StorageOptions.getDefaultInstance().getService();
+        this.storage = StorageOptions.getDefaultInstance().getService();
         this.søknadBucket = søknadBucket;
         this.mellomlagringBucket = mellomlagringBucket;
     }
@@ -83,7 +83,7 @@ public class GCPCloudStorage implements Storage {
                 BlobInfo.newBuilder(BlobId.of(bucketName, fileName(directory, key)))
                         .setContentType(APPLICATION_JSON_UTF8_VALUE).build(),
                 value.getBytes(UTF_8));
-        LOG.info("Lagret objekt {} i bøtte {}", blob, bucketName);
+        LOG.trace("Lagret objekt {} i bøtte {}", blob, bucketName);
     }
 
     private String readString(String bucketName, String directory, String key) {
@@ -91,7 +91,7 @@ public class GCPCloudStorage implements Storage {
         try {
             LOG.info("Henter objekt fra bøtte {}, katalog {}", bucketName, directory);
             String value = new String(storage.get(bucketName, path).getContent(), StandardCharsets.UTF_8);
-            LOG.info("Hentet objekt {} fra bøtte {}", value, bucketName);
+            LOG.trace("Hentet objekt {} fra bøtte {}", value, bucketName);
             return value;
         } catch (Exception e) {
             LOG.trace("Kunne ikke hente {}, finnes sannsynligvis ikke", path, e);
