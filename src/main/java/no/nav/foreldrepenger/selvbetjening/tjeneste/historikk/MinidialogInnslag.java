@@ -12,8 +12,8 @@ public class MinidialogInnslag extends HistorikkInnslag {
     private final HendelseType hendelse;
     private final LocalDate gyldigTil;
     private final String tekst;
+    private final String dialogId;
     private Boolean aktiv;
-    private String dialogId;
 
     public boolean isAktiv() {
         return aktiv;
@@ -48,6 +48,10 @@ public class MinidialogInnslag extends HistorikkInnslag {
 
     public HendelseType getHendelse() {
         return hendelse;
+    }
+
+    public String getDialogId() {
+        return dialogId;
     }
 
     @Override
