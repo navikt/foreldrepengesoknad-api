@@ -94,7 +94,8 @@ public class ApiConfiguration implements WebMvcConfigurer {
             @Override
             public <T, E extends Throwable> void close(RetryContext context, RetryCallback<T, E> callback,
                     Throwable throwable) {
-                log.trace("Finished retryable method {}", context.getAttribute("context.name"));
+                log.trace("Finished retryable method {} {}", context.getRetryCount(),
+                        context.getAttribute("context.name"));
             }
         });
     }

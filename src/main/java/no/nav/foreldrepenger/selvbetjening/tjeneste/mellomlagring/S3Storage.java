@@ -107,9 +107,11 @@ public class S3Storage implements Storage {
         try {
             LOG.info("Henter object fra bøtte {}, katalog {}", bucketName, directory);
             S3Object object = s3.getObject(bucketName, path);
-            return new BufferedReader(new InputStreamReader(object.getObjectContent()))
+            String value = new BufferedReader(new InputStreamReader(object.getObjectContent()))
                     .lines()
                     .collect(joining("\n"));
+            LOG.info("Hentet objekt {} fra bøtte {}", value, bucketName);
+            return value;
         } catch (Exception e) {
             LOG.trace("Kunne ikke hente {}, finnes sannsynligvis ikke", path, e);
             return null;

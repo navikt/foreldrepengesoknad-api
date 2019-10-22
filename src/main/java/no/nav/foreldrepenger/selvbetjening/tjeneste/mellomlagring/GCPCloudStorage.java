@@ -62,7 +62,7 @@ public class GCPCloudStorage implements Storage {
     }
 
     private void deleteString(String bucketName, String directory, String key) {
-        LOG.info("Fjerner object fra bøtte {}, katalog {}", bucketName, directory);
+        LOG.info("Fjerner objekt fra bøtte {}, katalog {}", bucketName, directory);
         storage.delete(BlobId.of(bucketName, fileName(directory, key)));
         LOG.info("Fjernet objekt {} fra bøtte {}", directory, bucketName);
     }
@@ -96,6 +96,11 @@ public class GCPCloudStorage implements Storage {
 
     private static String fileName(String directory, String key) {
         return directory + "_" + key;
+    }
+
+    @Override
+    public String toString() {
+        return getClass().getSimpleName() + "[storage=" + storage + "]";
     }
 
 }
