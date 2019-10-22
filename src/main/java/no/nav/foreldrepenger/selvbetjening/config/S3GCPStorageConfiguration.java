@@ -14,8 +14,9 @@ import no.nav.foreldrepenger.selvbetjening.util.ConditionalOnGCP;
 public class S3GCPStorageConfiguration {
 
     @Bean
-    public Storage voidStorage() {
-        return new GCPCloudStorage();
+    public Storage voidStorage(@Value("${bucket.søknad:foreldrepengesoknad}") String søknadBucket,
+            @Value("${bucket.mellomlagring:mellomlagring}") String mellomlagringBucket) {
+        return new GCPCloudStorage(søknadBucket, mellomlagringBucket);
     }
 
     @Bean

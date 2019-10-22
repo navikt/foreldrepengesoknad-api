@@ -9,7 +9,6 @@ import java.util.Optional;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.springframework.beans.factory.annotation.Value;
 
 import com.google.cloud.storage.Blob;
 import com.google.cloud.storage.BlobId;
@@ -24,8 +23,7 @@ public class GCPCloudStorage implements Storage {
     private final String søknadBucket;
     private final String mellomlagringBucket;
 
-    public GCPCloudStorage(@Value("${bucket.søknad:foreldrepengesoknad}") String søknadBucket,
-            @Value("${bucket.mellomlagring:mellomlagring}") String mellomlagringBucket) {
+    public GCPCloudStorage(String søknadBucket, String mellomlagringBucket) {
         storage = StorageOptions.getDefaultInstance().getService();
         this.søknadBucket = søknadBucket;
         this.mellomlagringBucket = mellomlagringBucket;
