@@ -13,6 +13,7 @@ public class MinidialogInnslag extends HistorikkInnslag {
     private final LocalDate gyldigTil;
     private final String tekst;
     private Boolean aktiv;
+    private String dialogId;
 
     public boolean isAktiv() {
         return aktiv;
@@ -26,12 +27,13 @@ public class MinidialogInnslag extends HistorikkInnslag {
     public MinidialogInnslag(@JsonProperty("fnr") Fødselsnummer fnr,
                              @JsonProperty("hendelse") String hendelse, @JsonProperty("gyldigTil") LocalDate gyldigTil,
                              @JsonProperty("journalpostId") String journalpostId, @JsonProperty("tekst") String tekst,
-                             @JsonProperty("referanseId") String referanseId) {
+                             @JsonProperty("referanseId") String referanseId, @JsonProperty("dialogId") String dialogId) {
 
         super(fnr);
         this.hendelse = hendelseFra(hendelse);
         this.gyldigTil = gyldigTil;
         this.tekst = tekst;
+        this.dialogId = dialogId;
         super.setJournalpostId(journalpostId);
         super.setReferanseId(referanseId);
     }
@@ -52,6 +54,6 @@ public class MinidialogInnslag extends HistorikkInnslag {
     public String toString() {
         return getClass().getSimpleName() + "[hendelse=" + hendelse + ", gyldigTil=" + gyldigTil + ", journalpostId="
                 + getJournalpostId() + ", saksnr=" + getSaksnr() + ", opprettet=" + getOpprettet()
-                + ",aktørId=" + getAktørId() + ", fnr=" + getFnr() + ", referanseId=" + getReferanseId() + "]";
+                + ",aktørId=" + getAktørId() + ", fnr=" + getFnr() + ", referanseId=" + getReferanseId() + ", dialogId=" + dialogId + "]";
     }
 }
