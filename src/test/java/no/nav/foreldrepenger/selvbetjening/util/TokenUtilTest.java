@@ -64,7 +64,7 @@ public class TokenUtilTest {
         assertEquals(FNR, tokenHandler.autentisertBruker());
         assertEquals(FNR, tokenHandler.getSubject());
         assertTrue(tokenHandler.erAutentisert());
-        assertFalse(tokenHandler.erUtløpt());
+        assertTrue(tokenHandler.erUtløpt());
 
     }
 
