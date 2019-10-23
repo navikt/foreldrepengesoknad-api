@@ -12,6 +12,7 @@ public class MinidialogInnslag extends HistorikkInnslag {
     private final HendelseType hendelse;
     private final LocalDate gyldigTil;
     private final String tekst;
+    private final String dialogId;
     private Boolean aktiv;
 
     public boolean isAktiv() {
@@ -24,9 +25,10 @@ public class MinidialogInnslag extends HistorikkInnslag {
 
     @JsonCreator
     public MinidialogInnslag(@JsonProperty("fnr") Fødselsnummer fnr,
-                             @JsonProperty("hendelse") String hendelse, @JsonProperty("gyldigTil") LocalDate gyldigTil,
-                             @JsonProperty("journalpostId") String journalpostId, @JsonProperty("tekst") String tekst,
-                             @JsonProperty("referanseId") String referanseId) {
+            @JsonProperty("hendelse") String hendelse, @JsonProperty("gyldigTil") LocalDate gyldigTil,
+            @JsonProperty("journalpostId") String journalpostId, @JsonProperty("tekst") String tekst,
+            @JsonProperty("referanseId") String referanseId,
+            @JsonProperty("dialogId") String dialogId) {
 
         super(fnr);
         this.hendelse = hendelseFra(hendelse);
@@ -34,6 +36,11 @@ public class MinidialogInnslag extends HistorikkInnslag {
         this.tekst = tekst;
         super.setJournalpostId(journalpostId);
         super.setReferanseId(referanseId);
+        this.dialogId = dialogId;
+    }
+
+    public String getDialogId() {
+        return dialogId;
     }
 
     public String getTekst() {
@@ -50,8 +57,8 @@ public class MinidialogInnslag extends HistorikkInnslag {
 
     @Override
     public String toString() {
-        return getClass().getSimpleName() + "[hendelse=" + hendelse + ", gyldigTil=" + gyldigTil + ", journalpostId="
-                + getJournalpostId() + ", saksnr=" + getSaksnr() + ", opprettet=" + getOpprettet()
-                + ",aktørId=" + getAktørId() + ", fnr=" + getFnr() + ", referanseId=" + getReferanseId() + "]";
+        return getClass().getSimpleName() + "[hendelse=" + hendelse + ", gyldigTil=" + gyldigTil + ", tekst=" + tekst
+                + ", dialogId=" + dialogId + ", aktiv=" + aktiv + "]";
     }
+
 }

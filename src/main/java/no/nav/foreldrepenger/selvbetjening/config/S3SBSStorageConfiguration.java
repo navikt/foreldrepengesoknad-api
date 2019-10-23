@@ -14,7 +14,6 @@ import com.amazonaws.services.s3.AmazonS3ClientBuilder;
 
 import no.nav.foreldrepenger.selvbetjening.tjeneste.mellomlagring.S3Storage;
 import no.nav.foreldrepenger.selvbetjening.tjeneste.mellomlagring.Storage;
-import no.nav.foreldrepenger.selvbetjening.tjeneste.mellomlagring.StorageCrypto;
 import no.nav.foreldrepenger.selvbetjening.util.ConditionalOnSBS;
 
 @Configuration
@@ -47,10 +46,4 @@ public class S3SBSStorageConfiguration {
             @Value("${s3.password}") String secretKey) {
         return new BasicAWSCredentials(accessKey, secretKey);
     }
-
-    @Bean
-    public StorageCrypto storageCrypto(@Value("${storage.passphrase}") String encryptionPassphrase) {
-        return new StorageCrypto(encryptionPassphrase);
-    }
-
 }
