@@ -49,7 +49,7 @@ public class TokenUtilTest {
     public void testTokenExpiry() {
         when(claims.get(eq("exp")))
                 .thenReturn(
-                        toDate(LocalDateTime.now().plusSeconds(3)).toInstant().getEpochSecond());
+                        toDate(LocalDateTime.now().minusSeconds(3)).toInstant().getEpochSecond());
         assertTrue(tokenHandler.erUtløpt());
     }
 
