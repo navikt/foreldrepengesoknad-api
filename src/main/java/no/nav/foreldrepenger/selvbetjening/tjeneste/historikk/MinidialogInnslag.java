@@ -25,8 +25,10 @@ public class MinidialogInnslag extends HistorikkInnslag {
 
     @JsonCreator
     public MinidialogInnslag(@JsonProperty("fnr") Fødselsnummer fnr,
-            @JsonProperty("hendelse") String hendelse, @JsonProperty("gyldigTil") LocalDate gyldigTil,
-            @JsonProperty("journalpostId") String journalpostId, @JsonProperty("tekst") String tekst,
+            @JsonProperty("hendelse") String hendelse,
+            @JsonProperty("gyldigTil") LocalDate gyldigTil,
+            @JsonProperty("journalpostId") String journalpostId,
+            @JsonProperty("tekst") String tekst,
             @JsonProperty("referanseId") String referanseId,
             @JsonProperty("dialogId") String dialogId) {
 
@@ -34,13 +36,9 @@ public class MinidialogInnslag extends HistorikkInnslag {
         this.hendelse = hendelseFra(hendelse);
         this.gyldigTil = gyldigTil;
         this.tekst = tekst;
+        this.dialogId = dialogId;
         super.setJournalpostId(journalpostId);
         super.setReferanseId(referanseId);
-        this.dialogId = dialogId;
-    }
-
-    public String getDialogId() {
-        return dialogId;
     }
 
     public String getTekst() {
@@ -55,10 +53,16 @@ public class MinidialogInnslag extends HistorikkInnslag {
         return hendelse;
     }
 
+    public String getDialogId() {
+        return dialogId;
+    }
+
     @Override
     public String toString() {
-        return getClass().getSimpleName() + "[hendelse=" + hendelse + ", gyldigTil=" + gyldigTil + ", tekst=" + tekst
-                + ", dialogId=" + dialogId + ", aktiv=" + aktiv + "]";
+        return getClass().getSimpleName() + "[hendelse=" + hendelse + ", gyldigTil=" + gyldigTil + ", journalpostId="
+                + getJournalpostId() + ", saksnr=" + getSaksnr() + ", opprettet=" + getOpprettet()
+                + ",aktørId=" + getAktørId() + ", fnr=" + getFnr() + ", referanseId=" + getReferanseId() + ", dialogId="
+                + dialogId + "]";
     }
 
 }
