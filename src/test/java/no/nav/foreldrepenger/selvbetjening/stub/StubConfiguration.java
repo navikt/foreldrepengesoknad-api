@@ -15,7 +15,6 @@ import com.amazonaws.services.s3.AmazonS3ClientBuilder;
 
 import no.nav.foreldrepenger.selvbetjening.tjeneste.mellomlagring.S3Storage;
 import no.nav.foreldrepenger.selvbetjening.tjeneste.mellomlagring.Storage;
-import no.nav.foreldrepenger.selvbetjening.tjeneste.mellomlagring.StorageCrypto;
 
 @Configuration
 @Profile({ TEST, LOCAL })
@@ -45,8 +44,4 @@ public class StubConfiguration {
         return new StubbedLocalStackContainer().withServices(S3);
     }
 
-    @Bean
-    public StorageCrypto storageCrypto() {
-        return new StorageCrypto("whatever");
-    }
 }

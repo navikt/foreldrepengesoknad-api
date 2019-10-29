@@ -31,6 +31,7 @@ import no.nav.security.token.support.spring.SpringTokenValidationContextHolder;
         SpringTokenValidationContextHolder.class })
 @RestClientTest
 
+@Ignore
 public class OppslagTest {
 
     @Mock

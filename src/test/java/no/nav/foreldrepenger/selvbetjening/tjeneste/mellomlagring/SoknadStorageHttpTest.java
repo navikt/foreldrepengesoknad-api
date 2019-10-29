@@ -18,6 +18,7 @@ import java.net.URI;
 
 import org.junit.Before;
 import org.junit.FixMethodOrder;
+import org.junit.Ignore;
 import org.junit.Test;
 import org.junit.jupiter.api.Tag;
 import org.junit.runner.RunWith;
@@ -45,6 +46,7 @@ import no.nav.foreldrepenger.selvbetjening.stub.StubbedLocalStackContainer;
 @ActiveProfiles({ LOCAL, LOCALSTACK, TEST })
 @Tag("IntegrationTest")
 @FixMethodOrder(MethodSorters.NAME_ASCENDING)
+@Ignore
 public class SoknadStorageHttpTest extends AbstractTestExecutionListener {
 
     private static final String FNR = "12345678901";
