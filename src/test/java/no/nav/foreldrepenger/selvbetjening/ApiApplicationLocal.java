@@ -1,6 +1,8 @@
 package no.nav.foreldrepenger.selvbetjening;
 
 import static no.nav.foreldrepenger.selvbetjening.config.ClusterAwareSpringProfileResolver.profiles;
+import static no.nav.foreldrepenger.selvbetjening.util.Constants.NAIS_CLUSTER_NAME;
+import static no.nav.foreldrepenger.selvbetjening.util.EnvUtil.LOCAL;
 import static org.springframework.context.annotation.FilterType.ASSIGNABLE_TYPE;
 
 import org.springframework.boot.autoconfigure.SpringBootApplication;
@@ -10,6 +12,8 @@ import org.springframework.context.annotation.ComponentScan;
 import org.springframework.context.annotation.ComponentScan.Filter;
 import org.springframework.context.annotation.Import;
 import org.springframework.retry.annotation.EnableRetry;
+
+import com.google.common.base.Joiner;
 
 import no.nav.security.token.support.spring.api.EnableJwtTokenValidation;
 import no.nav.security.token.support.test.spring.TokenGeneratorConfiguration;
@@ -27,7 +31,12 @@ public class ApiApplicationLocal {
     public static void main(String[] args) {
         new SpringApplicationBuilder(ApiApplicationLocal.class)
                 .profiles(profiles())
+                .properties(localCluster())
                 .main(ApiApplicationLocal.class)
                 .run(args);
+    }
+
+    private static String localCluster() {
+        return Joiner.on(':').join(NAIS_CLUSTER_NAME, LOCAL);
     }
 }

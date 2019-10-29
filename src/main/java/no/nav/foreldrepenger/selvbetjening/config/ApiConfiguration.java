@@ -103,8 +103,8 @@ public class ApiConfiguration implements WebMvcConfigurer {
     }
 
     @Bean
-    public StorageCrypto storageCrypto(@Value("${storage.passphrase}") String encryptionPassphrase) {
-        return new StorageCrypto(encryptionPassphrase);
+    public StorageCrypto storageCrypto(@Value("${storage.passphrase}") String passPhrase) {
+        return new StorageCrypto(passPhrase);
     }
 
     @Override

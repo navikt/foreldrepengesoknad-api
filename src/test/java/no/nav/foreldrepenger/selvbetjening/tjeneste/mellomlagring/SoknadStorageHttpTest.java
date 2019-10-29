@@ -3,7 +3,6 @@ package no.nav.foreldrepenger.selvbetjening.tjeneste.mellomlagring;
 import static com.fasterxml.jackson.databind.SerializationFeature.FAIL_ON_EMPTY_BEANS;
 import static no.nav.foreldrepenger.selvbetjening.tjeneste.mellomlagring.MellomlagringController.REST_STORAGE;
 import static no.nav.foreldrepenger.selvbetjening.util.EnvUtil.LOCAL;
-import static no.nav.foreldrepenger.selvbetjening.util.EnvUtil.LOCALSTACK;
 import static no.nav.foreldrepenger.selvbetjening.util.EnvUtil.TEST;
 import static no.nav.security.token.support.test.JwtTokenGenerator.createSignedJWT;
 import static org.assertj.core.api.AssertionsForClassTypes.assertThat;
@@ -31,7 +30,6 @@ import org.springframework.http.HttpEntity;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.ResponseEntity;
 import org.springframework.test.context.ActiveProfiles;
-import org.springframework.test.context.TestContext;
 import org.springframework.test.context.junit4.SpringRunner;
 import org.springframework.test.context.support.AbstractTestExecutionListener;
 import org.springframework.web.util.UriComponentsBuilder;
@@ -39,13 +37,13 @@ import org.springframework.web.util.UriComponentsBuilder;
 import com.fasterxml.jackson.databind.ObjectMapper;
 
 import no.nav.foreldrepenger.selvbetjening.ApiApplicationLocal;
-import no.nav.foreldrepenger.selvbetjening.stub.StubbedLocalStackContainer;
 
 @RunWith(SpringRunner.class)
 @SpringBootTest(classes = ApiApplicationLocal.class, webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT)
-@ActiveProfiles({ LOCAL, LOCALSTACK, TEST })
+@ActiveProfiles({ LOCAL, TEST })
 @Tag("IntegrationTest")
 @FixMethodOrder(MethodSorters.NAME_ASCENDING)
+
 @Ignore
 public class SoknadStorageHttpTest extends AbstractTestExecutionListener {
 
@@ -56,14 +54,7 @@ public class SoknadStorageHttpTest extends AbstractTestExecutionListener {
     private TestRestTemplate http;
     @Autowired
     private ObjectMapper mapper;
-    @Autowired
-    private StubbedLocalStackContainer stubbedLocalStackContainer;
     private URI endpoint;
-
-    @Override
-    public void afterTestClass(TestContext testContext) throws Exception {
-        stubbedLocalStackContainer.stopContainer();
-    }
 
     @Before
     public void setup() {

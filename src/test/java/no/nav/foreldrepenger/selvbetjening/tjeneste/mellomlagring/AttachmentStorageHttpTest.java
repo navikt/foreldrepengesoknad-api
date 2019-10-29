@@ -22,11 +22,9 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.test.context.ActiveProfiles;
-import org.springframework.test.context.TestContext;
 import org.springframework.test.context.support.AbstractTestExecutionListener;
 
 import no.nav.foreldrepenger.selvbetjening.ApiApplicationLocal;
-import no.nav.foreldrepenger.selvbetjening.stub.StubbedLocalStackContainer;
 
 @SpringBootTest(classes = ApiApplicationLocal.class, webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT)
 @ActiveProfiles("local,localstack,test")
@@ -39,16 +37,8 @@ public class AttachmentStorageHttpTest extends AbstractTestExecutionListener {
     private int port;
 
     @Autowired
-    private StubbedLocalStackContainer stubbedLocalStackContainer;
-
-    @Autowired
     private TestRestTemplate testRestTemplate;
     public AttachmentTestHttpHandler http;
-
-    @Override
-    public void afterTestClass(TestContext testContext) throws Exception {
-        stubbedLocalStackContainer.stopContainer();
-    }
 
     @BeforeEach
     public void setup() {

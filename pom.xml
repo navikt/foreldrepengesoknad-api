@@ -22,7 +22,7 @@
         <maven.build.timestamp.format>yyyy-MM-dd HH:mm</maven.build.timestamp.format>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
         <project.reporting.outputEncoding>UTF-8</project.reporting.outputEncoding>
-        <localstack.version>1.7.2</localstack.version>
+        <localstack.version>1.12.3</localstack.version>
         <springfox.version>2.9.2</springfox.version>
         <token-validation-version>1.1.1</token-validation-version>
         <tika.version>1.22</tika.version>
@@ -44,7 +44,12 @@
         </dependencies>
     </dependencyManagement>
     <dependencies>
-    <dependency>
+        <dependency>
+            <groupId>cloud.localstack</groupId>
+            <artifactId>localstack-utils</artifactId>
+            <version>0.1.22</version>
+        </dependency>
+        <dependency>
             <groupId>com.google.cloud</groupId>
             <artifactId>google-cloud-storage</artifactId>
             <version>1.98.0</version>
