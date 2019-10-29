@@ -9,7 +9,6 @@ public final class EnvUtil {
 
     private static final String NOT = "!";
     public static final String TEST = "test";
-    private static final String DEV = "dev";
     public static final String DEV_GCP = "dev-gcp";
     public static final String PROD_GCP = "prod-gcp";
 
