@@ -5,6 +5,7 @@ import static org.testcontainers.containers.localstack.LocalStackContainer.Servi
 
 import java.util.Optional;
 
+import org.junit.Ignore;
 import org.junit.Rule;
 import org.junit.Test;
 import org.springframework.context.annotation.Profile;
@@ -16,6 +17,7 @@ import com.amazonaws.services.s3.AmazonS3ClientBuilder;
 
 @ActiveProfiles("local,localstack,test")
 @Profile("localstack")
+@Ignore
 public class StorageTest {
 
     @Rule
