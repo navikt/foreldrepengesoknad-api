@@ -31,7 +31,7 @@ public enum Cluster {
         var aktiv = Optional.ofNullable(env.getProperty(NAIS_CLUSTER_NAME))
                 .filter(clusterName::equals)
                 .isPresent();
-        LOG.info("Cluster {} er {} aktivt", clusterName(), aktiv ? "" : "IKKE");
+        LOG.info("Cluster {} er {} aktivt", clusterName(), aktiv ? "" : "ikke");
         return aktiv;
     }
 }

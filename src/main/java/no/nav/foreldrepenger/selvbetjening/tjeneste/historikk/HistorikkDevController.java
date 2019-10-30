@@ -1,6 +1,9 @@
 package no.nav.foreldrepenger.selvbetjening.tjeneste.historikk;
 
 import static no.nav.foreldrepenger.selvbetjening.tjeneste.historikk.HistorikkController.HISTORIKK;
+import static no.nav.foreldrepenger.selvbetjening.util.Cluster.DEV_GCP;
+import static no.nav.foreldrepenger.selvbetjening.util.Cluster.DEV_SBS;
+import static no.nav.foreldrepenger.selvbetjening.util.Cluster.LOCAL;
 import static org.springframework.http.MediaType.APPLICATION_JSON_VALUE;
 
 import java.util.List;
@@ -11,11 +14,10 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import no.nav.foreldrepenger.selvbetjening.tjeneste.oppslag.domain.Fødselsnummer;
-import no.nav.foreldrepenger.selvbetjening.util.Cluster;
 import no.nav.foreldrepenger.selvbetjening.util.ConditionalOnClusters;
 import no.nav.security.token.support.core.api.Unprotected;
 
-@ConditionalOnClusters(clusters = { Cluster.DEV_GCP, Cluster.DEV_SBS, Cluster.LOCAL })
+@ConditionalOnClusters(clusters = { DEV_GCP, DEV_SBS, LOCAL })
 @RestController
 @RequestMapping(path = HistorikkDevController.DEVPATH, produces = APPLICATION_JSON_VALUE)
 @Unprotected

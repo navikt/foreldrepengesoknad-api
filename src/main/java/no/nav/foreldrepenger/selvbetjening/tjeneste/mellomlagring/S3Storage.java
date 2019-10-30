@@ -21,16 +21,17 @@ public class S3Storage implements Storage {
 
     private static final Logger LOG = LoggerFactory.getLogger(S3Storage.class);
 
-    private static final String BUCKET_FORELDREPENGER = "foreldrepengesoknad";
-    private static final String BUCKET_FORELDREPENGER_MELLOMLAGRING = "mellomlagring";
-
+    private final String søknadBucket;
+    private final String mellomlagringBucket;
     private final AmazonS3 s3;
 
-    public S3Storage(AmazonS3 s3) {
+    public S3Storage(AmazonS3 s3, String søknadBucket, String mellomlagringBucket) {
         this.s3 = s3;
+        this.søknadBucket = søknadBucket;
+        this.mellomlagringBucket = mellomlagringBucket;
         try {
-            ensureBucketExists(BUCKET_FORELDREPENGER, 365);
-            ensureBucketExists(BUCKET_FORELDREPENGER_MELLOMLAGRING, 1);
+            ensureBucketExists(søknadBucket, 365);
+            ensureBucketExists(mellomlagringBucket, 1);
         } catch (Exception e) {
             LOG.error("Kunne ikke sette opp bøtter", e);
         }
@@ -38,32 +39,32 @@ public class S3Storage implements Storage {
 
     @Override
     public void put(String directory, String key, String value) {
-        writeString(BUCKET_FORELDREPENGER, directory, key, value);
+        writeString(søknadBucket, directory, key, value);
     }
 
     @Override
     public void putTmp(String directory, String key, String value) {
-        writeString(BUCKET_FORELDREPENGER_MELLOMLAGRING, directory, key, value);
+        writeString(mellomlagringBucket, directory, key, value);
     }
 
     @Override
     public Optional<String> get(String directory, String key) {
-        return Optional.ofNullable(readString(BUCKET_FORELDREPENGER, directory, key));
+        return Optional.ofNullable(readString(søknadBucket, directory, key));
     }
 
     @Override
     public Optional<String> getTmp(String directory, String key) {
-        return Optional.ofNullable(readString(BUCKET_FORELDREPENGER_MELLOMLAGRING, directory, key));
+        return Optional.ofNullable(readString(mellomlagringBucket, directory, key));
     }
 
     @Override
     public void delete(String directory, String key) {
-        deleteString(BUCKET_FORELDREPENGER, directory, key);
+        deleteString(søknadBucket, directory, key);
     }
 
     @Override
     public void deleteTmp(String directory, String key) {
-        deleteString(BUCKET_FORELDREPENGER_MELLOMLAGRING, directory, key);
+        deleteString(mellomlagringBucket, directory, key);
     }
 
     private void ensureBucketExists(String bucketName) {
@@ -138,18 +139,20 @@ public class S3Storage implements Storage {
     }
 
     @Override
-    public String toString() {
-        return getClass().getSimpleName() + " [s3=" + s3 + "]";
-    }
-
-    @Override
     public String ping() {
-        ensureBucketExists(BUCKET_FORELDREPENGER_MELLOMLAGRING);
+        ensureBucketExists(mellomlagringBucket);
         return "OK";
     }
 
     @Override
     public URI pingURI() {
-        return URI.create(s3.getUrl(BUCKET_FORELDREPENGER_MELLOMLAGRING, "42").toString());
+        return URI.create(s3.getUrl(mellomlagringBucket, "42").toString());
     }
+
+    @Override
+    public String toString() {
+        return getClass().getSimpleName() + "[søknadBucket=" + søknadBucket + ", mellomlagringBucket="
+                + mellomlagringBucket + ", s3=" + s3 + "]";
+    }
+
 }
