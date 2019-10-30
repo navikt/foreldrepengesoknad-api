@@ -14,10 +14,11 @@ import com.amazonaws.services.s3.AmazonS3ClientBuilder;
 
 import no.nav.foreldrepenger.selvbetjening.tjeneste.mellomlagring.S3Storage;
 import no.nav.foreldrepenger.selvbetjening.tjeneste.mellomlagring.Storage;
-import no.nav.foreldrepenger.selvbetjening.util.ConditionalOnSBS;
+import no.nav.foreldrepenger.selvbetjening.util.Cluster;
+import no.nav.foreldrepenger.selvbetjening.util.ConditionalOnClusters;
 
 @Configuration
-@ConditionalOnSBS
+@ConditionalOnClusters(clusters = { Cluster.DEV_SBS, Cluster.PROD_SBS })
 public class S3SBSStorageConfiguration {
 
     @Bean

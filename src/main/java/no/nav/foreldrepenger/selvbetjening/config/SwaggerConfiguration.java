@@ -13,13 +13,14 @@ import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 
 import io.swagger.models.Scheme;
-import no.nav.foreldrepenger.selvbetjening.util.ConditionalOnDev;
+import no.nav.foreldrepenger.selvbetjening.util.Cluster;
+import no.nav.foreldrepenger.selvbetjening.util.ConditionalOnClusters;
 import springfox.documentation.builders.PathSelectors;
 import springfox.documentation.spring.web.plugins.Docket;
 import springfox.documentation.swagger2.annotations.EnableSwagger2;
 
 @Configuration
-@ConditionalOnDev
+@ConditionalOnClusters(clusters = { Cluster.DEV_GCP, Cluster.DEV_SBS, Cluster.LOCAL })
 @EnableSwagger2
 public class SwaggerConfiguration {
 

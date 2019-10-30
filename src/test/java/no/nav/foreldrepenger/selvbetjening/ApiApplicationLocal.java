@@ -13,7 +13,6 @@ import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.ComponentScan;
 import org.springframework.context.annotation.ComponentScan.Filter;
 import org.springframework.context.annotation.Import;
-import org.springframework.context.annotation.Primary;
 import org.springframework.retry.annotation.EnableRetry;
 
 import com.google.common.base.Joiner;
@@ -47,7 +46,7 @@ public class ApiApplicationLocal {
     }
 
     @Bean
-    @Primary
+    // @Primary
     public Storage storageStub() {
         return new StorageStub();
     }

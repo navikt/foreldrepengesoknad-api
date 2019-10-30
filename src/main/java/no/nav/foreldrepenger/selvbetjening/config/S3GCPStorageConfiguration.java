@@ -6,10 +6,11 @@ import org.springframework.context.annotation.Configuration;
 
 import no.nav.foreldrepenger.selvbetjening.tjeneste.mellomlagring.GCPCloudStorage;
 import no.nav.foreldrepenger.selvbetjening.tjeneste.mellomlagring.Storage;
-import no.nav.foreldrepenger.selvbetjening.util.ConditionalOnGCP;
+import no.nav.foreldrepenger.selvbetjening.util.Cluster;
+import no.nav.foreldrepenger.selvbetjening.util.ConditionalOnClusters;
 
 @Configuration
-@ConditionalOnGCP
+@ConditionalOnClusters(clusters = { Cluster.DEV_GCP, Cluster.PROD_GCP })
 public class S3GCPStorageConfiguration {
 
     @Bean

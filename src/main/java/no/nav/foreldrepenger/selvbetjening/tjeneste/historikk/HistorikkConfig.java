@@ -26,7 +26,7 @@ public class HistorikkConfig extends AbstractConfig {
     public URI historikkURI() {
         return uri(uri, "historikk" + "/me/all");
     }
-
+ 
     public URI historikkPreprodURI(String fnr) {
         return uri(uri, "historikk" + "/dev/all", queryParams("fnr", fnr));
     }

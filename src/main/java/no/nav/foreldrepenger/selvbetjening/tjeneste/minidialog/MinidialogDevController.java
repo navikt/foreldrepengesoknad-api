@@ -12,10 +12,11 @@ import org.springframework.web.bind.annotation.RestController;
 
 import no.nav.foreldrepenger.selvbetjening.tjeneste.historikk.MinidialogInnslag;
 import no.nav.foreldrepenger.selvbetjening.tjeneste.oppslag.domain.Fødselsnummer;
-import no.nav.foreldrepenger.selvbetjening.util.ConditionalOnDev;
+import no.nav.foreldrepenger.selvbetjening.util.Cluster;
+import no.nav.foreldrepenger.selvbetjening.util.ConditionalOnClusters;
 import no.nav.security.token.support.core.api.Unprotected;
 
-@ConditionalOnDev
+@ConditionalOnClusters(clusters = { Cluster.DEV_GCP, Cluster.DEV_SBS, Cluster.LOCAL })
 @RestController
 @RequestMapping(path = MinidialogDevController.DEVPATH, produces = APPLICATION_JSON_VALUE)
 @Unprotected
