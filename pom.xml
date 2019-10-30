@@ -29,11 +29,18 @@
         <logback.logstash.version>6.2</logback.logstash.version>
         <nv.version>1.26</nv.version>
         <pdfbox.version>2.0.17</pdfbox.version>
-        <aws.version>1.11.557</aws.version>
+        <aws.version>1.11.662</aws.version>
         <simpleclient.version>0.7.0</simpleclient.version>
     </properties>
     <dependencyManagement>
         <dependencies>
+            <dependency>
+                <groupId>com.amazonaws</groupId>
+                <artifactId>aws-java-sdk-bom</artifactId>
+                <version>${aws.version}</version>
+                <type>pom</type>
+                <scope>import</scope>
+            </dependency>
             <dependency>
                 <groupId>org.springframework.cloud</groupId>
                 <artifactId>spring-cloud-vault-dependencies</artifactId>
@@ -44,11 +51,6 @@
         </dependencies>
     </dependencyManagement>
     <dependencies>
-        <dependency>
-            <groupId>cloud.localstack</groupId>
-            <artifactId>localstack-utils</artifactId>
-            <version>0.1.22</version>
-        </dependency>
         <dependency>
             <groupId>com.google.cloud</groupId>
             <artifactId>google-cloud-storage</artifactId>
@@ -145,7 +147,6 @@
         <dependency>
             <groupId>com.amazonaws</groupId>
             <artifactId>aws-java-sdk-s3</artifactId>
-            <version>${aws.version}</version>
         </dependency>
         <dependency>
             <groupId>org.assertj</groupId>
