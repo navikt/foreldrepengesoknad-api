@@ -1,17 +1,16 @@
 package no.nav.foreldrepenger.selvbetjening.tjeneste.innsyn;
 
-import static no.nav.foreldrepenger.selvbetjening.util.URIUtils.queryParams;
-import static no.nav.foreldrepenger.selvbetjening.util.URIUtils.uri;
-
 import java.net.URI;
 
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.boot.context.properties.ConfigurationProperties;
 import org.springframework.context.annotation.Configuration;
 
+import no.nav.foreldrepenger.selvbetjening.tjeneste.AbstractConfig;
+
 @ConfigurationProperties(prefix = "innsyn", ignoreUnknownFields = false)
 @Configuration
-public class InnsynConfig {
+public class InnsynConfig extends AbstractConfig {
 
     private static final String PING = "mottak/ping";
     private static final String FPSAK_SAKER = "innsyn/saker";
@@ -55,7 +54,7 @@ public class InnsynConfig {
         this.enabled = enabled;
     }
 
-    URI getPingURI() {
+    public URI pingURI() {
         return uri(getMottakURI(), PING);
     }
 

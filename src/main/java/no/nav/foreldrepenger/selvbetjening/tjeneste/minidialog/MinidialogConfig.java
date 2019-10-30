@@ -1,19 +1,17 @@
 package no.nav.foreldrepenger.selvbetjening.tjeneste.minidialog;
 
-import static no.nav.foreldrepenger.selvbetjening.util.URIUtil.queryParams;
-import static no.nav.foreldrepenger.selvbetjening.util.URIUtil.uri;
-
 import java.net.URI;
 
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.boot.context.properties.ConfigurationProperties;
 import org.springframework.context.annotation.Configuration;
 
+import no.nav.foreldrepenger.selvbetjening.tjeneste.AbstractConfig;
 import no.nav.foreldrepenger.selvbetjening.util.Pair;
 
 @ConfigurationProperties(prefix = MinidialogConfig.MINIDIALOG)
 @Configuration
-public class MinidialogConfig {
+public class MinidialogConfig extends AbstractConfig {
 
     static final String MINIDIALOG = "minidialog";
     private static final String MINIDIALOG_DEV = MINIDIALOG + "/dev";

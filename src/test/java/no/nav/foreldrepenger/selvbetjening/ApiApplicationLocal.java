@@ -8,6 +8,7 @@ import static org.springframework.context.annotation.FilterType.ASSIGNABLE_TYPE;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.boot.builder.SpringApplicationBuilder;
 import org.springframework.cache.annotation.EnableCaching;
+import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.ComponentScan;
 import org.springframework.context.annotation.ComponentScan.Filter;
 import org.springframework.context.annotation.Import;
@@ -15,6 +16,8 @@ import org.springframework.retry.annotation.EnableRetry;
 
 import com.google.common.base.Joiner;
 
+import no.nav.foreldrepenger.selvbetjening.stub.StorageStub;
+import no.nav.foreldrepenger.selvbetjening.tjeneste.mellomlagring.Storage;
 import no.nav.security.token.support.spring.api.EnableJwtTokenValidation;
 import no.nav.security.token.support.test.spring.TokenGeneratorConfiguration;
 import springfox.documentation.swagger2.annotations.EnableSwagger2;
@@ -38,5 +41,10 @@ public class ApiApplicationLocal {
 
     private static String localCluster() {
         return Joiner.on(':').join(NAIS_CLUSTER_NAME, LOCAL);
+    }
+
+    @Bean
+    public Storage storageStub() {
+        return new StorageStub();
     }
 }

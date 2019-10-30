@@ -35,7 +35,7 @@ public class InnsynConnection extends AbstractRestConnection {
 
     @Override
     public URI pingURI() {
-        return innsynConfig.getPingURI();
+        return innsynConfig.pingURI();
     }
 
     public Uttaksplan hentUttaksplan(String saksnummer) {

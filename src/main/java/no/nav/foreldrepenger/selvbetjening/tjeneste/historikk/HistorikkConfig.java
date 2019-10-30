@@ -1,16 +1,15 @@
 package no.nav.foreldrepenger.selvbetjening.tjeneste.historikk;
 
-import static no.nav.foreldrepenger.selvbetjening.util.URIUtil.queryParams;
-import static no.nav.foreldrepenger.selvbetjening.util.URIUtil.uri;
-
 import java.net.URI;
 
 import org.springframework.boot.context.properties.ConfigurationProperties;
 import org.springframework.stereotype.Component;
 
+import no.nav.foreldrepenger.selvbetjening.tjeneste.AbstractConfig;
+
 @ConfigurationProperties(prefix = "historikk", ignoreUnknownFields = false)
 @Component
-public class HistorikkConfig {
+public class HistorikkConfig extends AbstractConfig {
     private static final String DEFAULT_PING_PATH = "actuator/info";
 
     private boolean enabled = true;

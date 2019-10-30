@@ -1,15 +1,15 @@
 package no.nav.foreldrepenger.selvbetjening.tjeneste.innsending;
 
-import static no.nav.foreldrepenger.selvbetjening.util.URIUtils.uri;
-
 import java.net.URI;
 
 import org.springframework.boot.context.properties.ConfigurationProperties;
 import org.springframework.stereotype.Component;
 
+import no.nav.foreldrepenger.selvbetjening.tjeneste.AbstractConfig;
+
 @ConfigurationProperties(prefix = "mottak")
 @Component
-public class InnsendingConfig {
+public class InnsendingConfig extends AbstractConfig {
     private static final String ENDRE = "/mottak/endre";
 
     private static final String ETTERSEND = "/mottak/ettersend";
@@ -30,8 +30,10 @@ public class InnsendingConfig {
         this.key = key;
     }
 
-    URI getPingURI() {
-        return uri(uri, PING);
+    @Override
+    protected URI pingURI() {
+        // TODO Auto-generated method stub
+        return null;
     }
 
     URI getInnsendingURI() {

@@ -1,16 +1,15 @@
 package no.nav.foreldrepenger.selvbetjening.tjeneste.oppslag;
 
-import static no.nav.foreldrepenger.selvbetjening.util.URIUtils.queryParams;
-import static no.nav.foreldrepenger.selvbetjening.util.URIUtils.uri;
-
 import java.net.URI;
 
 import org.springframework.boot.context.properties.ConfigurationProperties;
 import org.springframework.stereotype.Component;
 
+import no.nav.foreldrepenger.selvbetjening.tjeneste.AbstractConfig;
+
 @ConfigurationProperties(prefix = "oppslag")
 @Component
-public class OppslagConfig {
+public class OppslagConfig extends AbstractConfig {
 
     private static final String FNR = "fnr";
     private static final String PING = "oppslag/ping";
@@ -42,7 +41,7 @@ public class OppslagConfig {
         this.key = key;
     }
 
-    URI getPingURI() {
+    public URI pingURI() {
         return uri(uri, PING);
     }
 
@@ -60,7 +59,7 @@ public class OppslagConfig {
 
     @Override
     public String toString() {
-        return getClass().getSimpleName() + " [pingURI=" + getPingURI() + ", personURI=" + getPersonURI()
+        return getClass().getSimpleName() + " [pingURI=" + pingURI() + ", personURI=" + getPersonURI()
                 + ", søkerinfoURI=" + getSøkerinfoURI() + ", aktørIdURI=" + getAktørIdURI("42") + "]";
     }
 

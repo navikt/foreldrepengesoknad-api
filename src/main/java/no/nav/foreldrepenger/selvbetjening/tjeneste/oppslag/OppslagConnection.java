@@ -47,7 +47,7 @@ public class OppslagConnection extends AbstractRestConnection {
 
     @Override
     public URI pingURI() {
-        return config.getPingURI();
+        return config.pingURI();
     }
 
     @Override

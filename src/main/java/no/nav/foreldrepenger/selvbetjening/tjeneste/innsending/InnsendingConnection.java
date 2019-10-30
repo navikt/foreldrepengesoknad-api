@@ -55,7 +55,7 @@ public class InnsendingConnection extends AbstractRestConnection {
 
     @Override
     public URI pingURI() {
-        return config.getPingURI();
+        return config.pingURI();
     }
 
     public Kvittering sendInn(Søknad søknad) {
