@@ -4,6 +4,8 @@ import static no.nav.foreldrepenger.selvbetjening.util.Constants.NAIS_CLUSTER_NA
 
 import java.util.Optional;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.core.env.Environment;
 
 public enum Cluster {
@@ -12,6 +14,8 @@ public enum Cluster {
     DEV_GCP(EnvUtil.DEV_GCP),
     PROD_GCP(EnvUtil.PROD_GCP),
     PROD_SBS(EnvUtil.PROD_SBS);
+
+    private static final Logger LOG = LoggerFactory.getLogger(Cluster.class);
 
     private final String clusterName;
 
@@ -24,8 +28,10 @@ public enum Cluster {
     }
 
     public boolean isActive(Environment env) {
-        return Optional.ofNullable(env.getProperty(NAIS_CLUSTER_NAME))
+        var aktiv = Optional.ofNullable(env.getProperty(NAIS_CLUSTER_NAME))
                 .filter(clusterName::equals)
                 .isPresent();
+        LOG.info("Cluster {} er {} aktivt", clusterName(), aktiv ? "" : "IKKE");
+        return aktiv;
     }
 }
