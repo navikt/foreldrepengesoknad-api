@@ -3,12 +3,13 @@ package no.nav.foreldrepenger.selvbetjening.tjeneste.innsending;
 import java.net.URI;
 
 import org.springframework.boot.context.properties.ConfigurationProperties;
-import org.springframework.stereotype.Component;
+import org.springframework.boot.context.properties.ConstructorBinding;
+import org.springframework.boot.context.properties.bind.DefaultValue;
 
 import no.nav.foreldrepenger.selvbetjening.tjeneste.AbstractConfig;
 
 @ConfigurationProperties(prefix = "mottak")
-@Component
+@ConstructorBinding
 public class InnsendingConfig extends AbstractConfig {
     private static final String ENDRE = "/mottak/endre";
 
@@ -18,33 +19,31 @@ public class InnsendingConfig extends AbstractConfig {
 
     private static final String PING = "mottak/ping";
 
-    private boolean enabled = true;
-    private URI uri;
-    private String key;
+    private final boolean enabled;
+    private final URI uri;
+    private final String key;
 
-    public void setUri(URI uri) {
+    public InnsendingConfig(URI uri, String key, @DefaultValue("true") boolean enabled) {
         this.uri = uri;
-    }
-
-    public void setKey(String key) {
         this.key = key;
+        this.enabled = enabled;
     }
 
     @Override
     protected URI pingURI() {
-        // TODO Auto-generated method stub
-        return null;
+        return uri(uri, PING);
+
     }
 
-    URI getInnsendingURI() {
+    URI innsendingURI() {
         return uri(uri, SEND);
     }
 
-    URI getEndringURI() {
+    URI endringURI() {
         return uri(uri, ENDRE);
     }
 
-    URI getEttersendingURI() {
+    URI ettersendingURI() {
         return uri(uri, ETTERSEND);
     }
 

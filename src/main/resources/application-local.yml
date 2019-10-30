@@ -36,6 +36,12 @@ mottak:
 oppslag:
   key: foreldrepengesoknad-ap-oppslag
   uri: http://localhost:9000/api/oppslag
+  
+minidialog:
+  uri: http://localhost:9000/api
+innsyn:
+  oppslag:  http://localhost:9000/api/oppslag
+  mottak:  http://localhost:9000/api/mottak
    
 s3 : 
   username : user

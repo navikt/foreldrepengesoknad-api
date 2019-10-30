@@ -2,14 +2,14 @@ package no.nav.foreldrepenger.selvbetjening.tjeneste.innsyn;
 
 import java.net.URI;
 
-import org.springframework.beans.factory.annotation.Value;
 import org.springframework.boot.context.properties.ConfigurationProperties;
-import org.springframework.context.annotation.Configuration;
+import org.springframework.boot.context.properties.ConstructorBinding;
+import org.springframework.boot.context.properties.bind.DefaultValue;
 
 import no.nav.foreldrepenger.selvbetjening.tjeneste.AbstractConfig;
 
-@ConfigurationProperties(prefix = "innsyn", ignoreUnknownFields = false)
-@Configuration
+@ConfigurationProperties("innsyn")
+@ConstructorBinding
 public class InnsynConfig extends AbstractConfig {
 
     private static final String PING = "mottak/ping";
@@ -21,60 +21,49 @@ public class InnsynConfig extends AbstractConfig {
     private static final String UTTAKSPLANANNEN = "innsyn/uttaksplanannen";
     private static final String VEDTAK = "innsyn/vedtak";
 
-    boolean enabled;
-    URI mottakURI;
-    URI oppslagURI;
+    private final boolean enabled;
+    private final URI mottak;
+    private final URI oppslag;
 
-    public InnsynConfig(@Value("${mottak.uri}") URI mottakURI, @Value("${oppslag.uri}") URI oppslagURI) {
-        this.mottakURI = mottakURI;
-        this.oppslagURI = oppslagURI;
+    public InnsynConfig(URI mottak, URI oppslag, @DefaultValue("true") boolean enabled) {
+        this.mottak = mottak;
+        this.oppslag = oppslag;
+        this.enabled = enabled;
     }
 
     public URI getOppslagURI() {
-        return oppslagURI;
-    }
-
-    public void setOppslagURI(URI oppslagURI) {
-        this.oppslagURI = oppslagURI;
+        return oppslag;
     }
 
     private URI getMottakURI() {
-        return mottakURI;
-    }
-
-    public void setMottakURI(URI mottakURI) {
-        this.mottakURI = mottakURI;
+        return mottak;
     }
 
     public boolean isEnabled() {
         return enabled;
     }
 
-    public void setEnabled(boolean enabled) {
-        this.enabled = enabled;
-    }
-
     public URI pingURI() {
         return uri(getMottakURI(), PING);
     }
 
-    URI getFpsakURI() {
+    URI fpsakURI() {
         return uri(getMottakURI(), FPSAK_SAKER);
     }
 
-    URI getSakURI() {
+    URI sakURI() {
         return uri(getOppslagURI(), SAK_SAKER);
     }
 
-    URI getUttakURI(String saksnummer) {
+    URI uttakURI(String saksnummer) {
         return uri(getMottakURI(), UTTAKSPLAN, queryParams(SAKSNUMMER, saksnummer));
     }
 
-    URI getUttakURIForAnnenPart(String annenPart) {
+    URI uttakURIForAnnenPart(String annenPart) {
         return uri(getMottakURI(), UTTAKSPLANANNEN, queryParams(ANNENPART, annenPart));
     }
 
-    public URI getVedtakURI(String saksnummer) {
+    public URI vedtakURI(String saksnummer) {
         return uri(getMottakURI(), VEDTAK, queryParams(SAKSNUMMER, saksnummer));
     }
 

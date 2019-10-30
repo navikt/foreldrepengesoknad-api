@@ -2,15 +2,15 @@ package no.nav.foreldrepenger.selvbetjening.tjeneste.minidialog;
 
 import java.net.URI;
 
-import org.springframework.beans.factory.annotation.Value;
 import org.springframework.boot.context.properties.ConfigurationProperties;
-import org.springframework.context.annotation.Configuration;
+import org.springframework.boot.context.properties.ConstructorBinding;
+import org.springframework.boot.context.properties.bind.DefaultValue;
 
 import no.nav.foreldrepenger.selvbetjening.tjeneste.AbstractConfig;
 import no.nav.foreldrepenger.selvbetjening.util.Pair;
 
-@ConfigurationProperties(prefix = MinidialogConfig.MINIDIALOG)
-@Configuration
+@ConfigurationProperties(MinidialogConfig.MINIDIALOG)
+@ConstructorBinding
 public class MinidialogConfig extends AbstractConfig {
 
     static final String MINIDIALOG = "minidialog";
@@ -19,11 +19,12 @@ public class MinidialogConfig extends AbstractConfig {
     private static final String AKTIVE = MINIDIALOG_DEV + "/spm";
 
     private static final String DEFAULT_PING_PATH = "actuator/info";
-    private boolean enabled;
+    private final boolean enabled;
     private final URI uri;
 
-    public MinidialogConfig(@Value("${historikk.uri}") URI uri) {
+    public MinidialogConfig(URI uri, @DefaultValue("true") boolean enabled) {
         this.uri = uri;
+        this.enabled = enabled;
     }
 
     public URI getURI() {
@@ -34,20 +35,16 @@ public class MinidialogConfig extends AbstractConfig {
         return uri(getURI(), MINIDIALOGER, queryParams(Pair.of("fnr", fnr), Pair.of("activeOnly", activeOnly)));
     }
 
-    public URI getAktiveSpmURI() {
+    public URI aktiveSpmURI() {
         return uri(getURI(), MINIDIALOG + "/me");
     }
 
-    public URI getAktiveSpmURI(String fnr) {
+    public URI aktiveSpmURI(String fnr) {
         return uri(getURI(), AKTIVE, queryParams(Pair.of("fnr", fnr)));
     }
 
     public boolean isEnabled() {
         return enabled;
-    }
-
-    public void setEnabled(boolean enabled) {
-        this.enabled = enabled;
     }
 
     public URI pingURI() {

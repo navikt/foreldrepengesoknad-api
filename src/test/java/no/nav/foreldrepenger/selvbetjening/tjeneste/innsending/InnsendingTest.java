@@ -5,6 +5,8 @@ import static org.springframework.test.web.client.match.MockRestRequestMatchers.
 import static org.springframework.test.web.client.match.MockRestRequestMatchers.requestTo;
 import static org.springframework.test.web.client.response.MockRestResponseCreators.withStatus;
 
+import java.net.URI;
+
 import javax.ws.rs.BadRequestException;
 import javax.ws.rs.NotFoundException;
 
@@ -37,9 +39,8 @@ import no.nav.foreldrepenger.selvbetjening.vedlegg.VedleggSjekker;
 import no.nav.security.token.support.spring.SpringTokenValidationContextHolder;
 
 @ExtendWith(SpringExtension.class)
-@TestPropertySource(properties = { "mottak.uri: http://www.mottak.no",
-        "spring.cloud.vault.enabled=false" })
-@ContextConfiguration(classes = { NotFoundException.class, InnsendingConfig.class, Image2PDFConverter.class,
+@TestPropertySource(properties = { "spring.cloud.vault.enabled=false" })
+@ContextConfiguration(classes = { NotFoundException.class, Image2PDFConverter.class,
         TokenUtil.class, SpringTokenValidationContextHolder.class })
 @RestClientTest
 
@@ -59,8 +60,8 @@ public class InnsendingTest {
 
     @Mock
     PDFEncryptionChecker encryptionChecker;
-    @Autowired
-    private InnsendingConfig innsendingConfig;
+    private static final InnsendingConfig CFG = new InnsendingConfig(URI.create("http://www.innsending.no"), "key",
+            true);
 
     @Autowired
     private MockRestServiceServer server;
@@ -76,14 +77,14 @@ public class InnsendingTest {
     public void init() {
         if (innsending == null) {
             innsending = new InnsendingTjeneste(new InnsendingConnection(builder
-                    .build(), innsendingConfig, converter), storage,
+                    .build(), CFG, converter), storage,
                     new VedleggSjekker(MAX_TOTAL, MAX_ENKEL, scanner, encryptionChecker), null);
         }
     }
 
     @Test
     public void unknownType() {
-        server.expect(ExpectedCount.once(), requestTo(innsendingConfig.getInnsendingURI()))
+        server.expect(ExpectedCount.once(), requestTo(CFG.innsendingURI()))
                 .andExpect(method(HttpMethod.GET))
                 .andRespond(withStatus(HttpStatus.OK));
         assertThrows(BadRequestException.class, () -> innsending.sendInn(new Søknad()));

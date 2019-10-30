@@ -39,11 +39,11 @@ public class MinidialogConnection extends AbstractRestConnection {
     }
 
     public List<MinidialogInnslag> hentAktiveSpørsmål() {
-        return hentFra(config.getAktiveSpmURI());
+        return hentFra(config.aktiveSpmURI());
     }
 
     public List<MinidialogInnslag> hentAktiveSpørsmål(Fødselsnummer fnr) {
-        return hentFra(config.getAktiveSpmURI(fnr.getFnr()));
+        return hentFra(config.aktiveSpmURI(fnr.getFnr()));
     }
 
     private List<MinidialogInnslag> hentFra(URI uri) {

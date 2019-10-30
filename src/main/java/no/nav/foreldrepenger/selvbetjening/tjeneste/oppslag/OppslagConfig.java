@@ -3,12 +3,13 @@ package no.nav.foreldrepenger.selvbetjening.tjeneste.oppslag;
 import java.net.URI;
 
 import org.springframework.boot.context.properties.ConfigurationProperties;
-import org.springframework.stereotype.Component;
+import org.springframework.boot.context.properties.ConstructorBinding;
+import org.springframework.boot.context.properties.bind.DefaultValue;
 
 import no.nav.foreldrepenger.selvbetjening.tjeneste.AbstractConfig;
 
-@ConfigurationProperties(prefix = "oppslag")
-@Component
+@ConfigurationProperties("oppslag")
+@ConstructorBinding
 public class OppslagConfig extends AbstractConfig {
 
     private static final String FNR = "fnr";
@@ -17,16 +18,18 @@ public class OppslagConfig extends AbstractConfig {
     private static final String SØKERINFO = "oppslag";
     private static final String AKTØRFNR = "oppslag/aktorfnr";
 
-    private boolean enabled = true;
-    private URI uri;
-    private String key;
+    private final boolean enabled;
+    private final URI uri;
+    private final String key;
+
+    public OppslagConfig(URI uri, String key, @DefaultValue("true") boolean enabled) {
+        this.enabled = enabled;
+        this.uri = uri;
+        this.key = key;
+    }
 
     public boolean isEnabled() {
         return enabled;
-    }
-
-    public void setUri(URI uri) {
-        this.uri = uri;
     }
 
     public URI getUri() {
@@ -37,30 +40,26 @@ public class OppslagConfig extends AbstractConfig {
         return key;
     }
 
-    public void setKey(String key) {
-        this.key = key;
-    }
-
     public URI pingURI() {
         return uri(uri, PING);
     }
 
-    URI getPersonURI() {
+    URI personURI() {
         return uri(uri, PERSON);
     }
 
-    URI getSøkerinfoURI() {
+    URI søkerInfoURI() {
         return uri(uri, SØKERINFO);
     }
 
-    URI getAktørIdURI(String fnr) {
+    URI aktørIdURI(String fnr) {
         return uri(uri, AKTØRFNR, queryParams(FNR, fnr));
     }
 
     @Override
     public String toString() {
-        return getClass().getSimpleName() + " [pingURI=" + pingURI() + ", personURI=" + getPersonURI()
-                + ", søkerinfoURI=" + getSøkerinfoURI() + ", aktørIdURI=" + getAktørIdURI("42") + "]";
+        return getClass().getSimpleName() + " [pingURI=" + pingURI() + ", personURI=" + personURI()
+                + ", søkerinfoURI=" + søkerInfoURI() + ", aktørIdURI=" + aktørIdURI("42") + "]";
     }
 
 }

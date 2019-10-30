@@ -4,6 +4,8 @@ import static org.springframework.test.web.client.match.MockRestRequestMatchers.
 import static org.springframework.test.web.client.match.MockRestRequestMatchers.requestTo;
 import static org.springframework.test.web.client.response.MockRestResponseCreators.withStatus;
 
+import java.net.URI;
+
 import javax.ws.rs.NotFoundException;
 
 import org.junit.jupiter.api.BeforeEach;
@@ -11,6 +13,7 @@ import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.Mock;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.boot.context.properties.ConfigurationPropertiesScan;
 import org.springframework.boot.test.autoconfigure.web.client.RestClientTest;
 import org.springframework.boot.web.client.RestTemplateBuilder;
 import org.springframework.http.HttpMethod;
@@ -27,18 +30,18 @@ import no.nav.foreldrepenger.selvbetjening.util.TokenUtil;
 import no.nav.security.token.support.spring.SpringTokenValidationContextHolder;
 
 @ExtendWith(SpringExtension.class)
-@TestPropertySource(properties = { "mottak.uri = http://www.mottak.no/api",
-        "oppslag.uri: http://www.oppslag.no/api", "spring.cloud.vault.enabled=false" })
-@ContextConfiguration(classes = { NotFoundException.class, InnsynConfig.class, TokenUtil.class,
+@TestPropertySource(properties = { "spring.cloud.vault.enabled=false" })
+@ContextConfiguration(classes = { NotFoundException.class, TokenUtil.class,
         SpringTokenValidationContextHolder.class })
 @RestClientTest
+@ConfigurationPropertiesScan
 @ActiveProfiles(EnvUtil.TEST)
 public class InnsynTest {
 
     @Mock
     TokenUtil tokenHandler;
-    @Autowired
-    private InnsynConfig innsynConfig;
+    private static final InnsynConfig CFG = new InnsynConfig(URI.create("http://www.mottak.no"),
+            URI.create("http://www.oppslag.no"), true);
 
     @Autowired
     private MockRestServiceServer server;
@@ -51,13 +54,13 @@ public class InnsynTest {
     @BeforeEach
     public void init() {
         innsyn = new InnsynTjeneste(new InnsynConnection(builder
-                .build(), innsynConfig));
+                .build(), CFG));
     }
 
     @Test
     public void uttaksplan() {
         server
-                .expect(ExpectedCount.once(), requestTo(innsynConfig.getUttakURI("42")))
+                .expect(ExpectedCount.once(), requestTo(CFG.uttakURI("42")))
                 .andExpect(method(HttpMethod.GET))
                 .andRespond(withStatus(HttpStatus.OK));
         innsyn.hentUttaksplan("42");

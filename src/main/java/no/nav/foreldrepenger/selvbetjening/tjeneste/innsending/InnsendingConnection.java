@@ -60,15 +60,15 @@ public class InnsendingConnection extends AbstractRestConnection {
 
     public Kvittering sendInn(Søknad søknad) {
         søknad.setOpprettet(now());
-        return postForObject(config.getInnsendingURI(), body(søknad), Kvittering.class);
+        return postForObject(config.innsendingURI(), body(søknad), Kvittering.class);
     }
 
     public Kvittering ettersend(Ettersending ettersending) {
-        return postForObject(config.getEttersendingURI(), body(ettersending), Kvittering.class);
+        return postForObject(config.ettersendingURI(), body(ettersending), Kvittering.class);
     }
 
     public Kvittering endre(Søknad søknad) {
-        return postForObject(config.getEndringURI(), body(søknad), Kvittering.class);
+        return postForObject(config.endringURI(), body(søknad), Kvittering.class);
     }
 
     private SøknadDto body(Søknad søknad) {

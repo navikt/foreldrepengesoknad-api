@@ -39,21 +39,21 @@ public class InnsynConnection extends AbstractRestConnection {
     }
 
     public Uttaksplan hentUttaksplan(String saksnummer) {
-        return getForObject(innsynConfig.getUttakURI(saksnummer), Uttaksplan.class, false);
+        return getForObject(innsynConfig.uttakURI(saksnummer), Uttaksplan.class, false);
     }
 
     public Uttaksplan hentUttaksplanAnnenPart(String annenPart) {
-        return getForObject(innsynConfig.getUttakURIForAnnenPart(annenPart), Uttaksplan.class, false);
+        return getForObject(innsynConfig.uttakURIForAnnenPart(annenPart), Uttaksplan.class, false);
     }
 
     public Vedtak hentVedtak(String saksnummer) {
-        return getForObject(innsynConfig.getVedtakURI(saksnummer), Vedtak.class, false);
+        return getForObject(innsynConfig.vedtakURI(saksnummer), Vedtak.class, false);
     }
 
     public List<Sak> hentSaker() {
-        List<Sak> saker = saker(innsynConfig.getFpsakURI(), "FPSAK");
+        List<Sak> saker = saker(innsynConfig.fpsakURI(), "FPSAK");
         if (saker.isEmpty()) {
-            saker = saker(innsynConfig.getSakURI(), "SAK");
+            saker = saker(innsynConfig.sakURI(), "SAK");
         }
 
         return saker;

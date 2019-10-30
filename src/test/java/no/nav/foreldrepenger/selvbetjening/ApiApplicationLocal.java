@@ -7,11 +7,13 @@ import static org.springframework.context.annotation.FilterType.ASSIGNABLE_TYPE;
 
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.boot.builder.SpringApplicationBuilder;
+import org.springframework.boot.context.properties.EnableConfigurationProperties;
 import org.springframework.cache.annotation.EnableCaching;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.ComponentScan;
 import org.springframework.context.annotation.ComponentScan.Filter;
 import org.springframework.context.annotation.Import;
+import org.springframework.context.annotation.Primary;
 import org.springframework.retry.annotation.EnableRetry;
 
 import com.google.common.base.Joiner;
@@ -23,6 +25,7 @@ import no.nav.security.token.support.test.spring.TokenGeneratorConfiguration;
 import springfox.documentation.swagger2.annotations.EnableSwagger2;
 
 @SpringBootApplication
+@EnableConfigurationProperties
 @EnableCaching
 @EnableRetry
 @EnableSwagger2
@@ -44,6 +47,7 @@ public class ApiApplicationLocal {
     }
 
     @Bean
+    @Primary
     public Storage storageStub() {
         return new StorageStub();
     }
