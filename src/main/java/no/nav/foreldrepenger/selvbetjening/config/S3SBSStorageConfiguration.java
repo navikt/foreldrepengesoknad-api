@@ -8,6 +8,7 @@ import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.Lazy;
 
+import com.amazonaws.ClientConfiguration;
 import com.amazonaws.auth.AWSCredentials;
 import com.amazonaws.auth.AWSStaticCredentialsProvider;
 import com.amazonaws.auth.BasicAWSCredentials;
@@ -31,12 +32,22 @@ public class S3SBSStorageConfiguration {
 
     @Bean
     @Lazy
-    public AmazonS3 s3(AWSCredentials s3Credentials, EndpointConfiguration endpointConfig) {
+    public AmazonS3 s3(AWSCredentials s3Credentials, EndpointConfiguration endpointConfig,
+            ClientConfiguration clientConfig) {
         return AmazonS3ClientBuilder.standard()
                 .withEndpointConfiguration(endpointConfig)
                 .enablePathStyleAccess()
+                .withClientConfiguration(clientConfig)
                 .withCredentials(new AWSStaticCredentialsProvider(s3Credentials))
                 .build();
+    }
+
+    @Bean
+    public ClientConfiguration s3ClientConfig(@Value("${s3.timeout:3}") int requestTimeout,
+            @Value("${s3.retries:3}") int retries) {
+        return new ClientConfiguration()
+                .withRequestTimeout(requestTimeout)
+                .withMaxErrorRetry(retries);
     }
 
     @Bean
