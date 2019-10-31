@@ -27,10 +27,8 @@ import com.google.common.collect.ImmutableMap;
 
 import no.nav.foreldrepenger.selvbetjening.filters.CorsInterceptor;
 import no.nav.foreldrepenger.selvbetjening.interceptors.client.ApiKeyInjectingClientInterceptor;
-import no.nav.foreldrepenger.selvbetjening.tjeneste.historikk.HistorikkConfig;
-import no.nav.foreldrepenger.selvbetjening.tjeneste.innsending.InnsendingConfig;
+import no.nav.foreldrepenger.selvbetjening.tjeneste.ZoneCrossingAware;
 import no.nav.foreldrepenger.selvbetjening.tjeneste.mellomlagring.StorageCrypto;
-import no.nav.foreldrepenger.selvbetjening.tjeneste.oppslag.OppslagConfig;
 
 @Configuration
 public class ApiConfiguration implements WebMvcConfigurer {
@@ -51,12 +49,10 @@ public class ApiConfiguration implements WebMvcConfigurer {
     }
 
     @Bean
-    public ClientHttpRequestInterceptor apiKeyInjectingClientInterceptor(OppslagConfig oppslag, InnsendingConfig mottak,
-            HistorikkConfig historikk) {
+    public ClientHttpRequestInterceptor apiKeyInjectingClientInterceptor(ZoneCrossingAware... configs) {
         var builder = ImmutableMap.<URI, String>builder();
-        builder.put(oppslag.getUri(), oppslag.getKey());
-        builder.put(mottak.getUri(), mottak.getKey());
-        builder.put(historikk.getUri(), historikk.getKey());
+        Arrays.stream(configs)
+                .forEach(c -> builder.put(c.zoneCrossingUri(), c.getKey()));
         return new ApiKeyInjectingClientInterceptor(builder.build());
 
     }

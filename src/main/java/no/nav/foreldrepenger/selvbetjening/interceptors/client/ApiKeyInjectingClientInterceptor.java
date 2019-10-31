@@ -14,6 +14,8 @@ import org.springframework.http.client.ClientHttpRequestExecution;
 import org.springframework.http.client.ClientHttpRequestInterceptor;
 import org.springframework.http.client.ClientHttpResponse;
 
+import no.nav.foreldrepenger.selvbetjening.util.EnvUtil;
+
 public class ApiKeyInjectingClientInterceptor implements ClientHttpRequestInterceptor {
 
     private static final Logger LOG = getLogger(ApiKeyInjectingClientInterceptor.class);
@@ -22,6 +24,7 @@ public class ApiKeyInjectingClientInterceptor implements ClientHttpRequestInterc
 
     public ApiKeyInjectingClientInterceptor(Map<URI, String> apiKeys) {
         this.apiKeys = apiKeys;
+        LOG.info(EnvUtil.CONFIDENTIAL, "apiKeys {}", apiKeys);
     }
 
     @Override

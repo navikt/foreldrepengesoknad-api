@@ -7,10 +7,11 @@ import org.springframework.boot.context.properties.ConstructorBinding;
 import org.springframework.boot.context.properties.bind.DefaultValue;
 
 import no.nav.foreldrepenger.selvbetjening.tjeneste.AbstractConfig;
+import no.nav.foreldrepenger.selvbetjening.tjeneste.ZoneCrossingAware;
 
 @ConfigurationProperties("oppslag")
 @ConstructorBinding
-public class OppslagConfig extends AbstractConfig {
+public class OppslagConfig extends AbstractConfig implements ZoneCrossingAware {
 
     private static final String FNR = "fnr";
     private static final String PING = "oppslag/ping";
@@ -25,8 +26,14 @@ public class OppslagConfig extends AbstractConfig {
         this.key = key;
     }
 
+    @Override
     public String getKey() {
         return key;
+    }
+
+    @Override
+    public URI zoneCrossingUri() {
+        return getUri();
     }
 
     public URI pingURI() {

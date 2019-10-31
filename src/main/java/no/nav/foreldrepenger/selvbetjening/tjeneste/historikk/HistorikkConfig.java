@@ -7,10 +7,11 @@ import org.springframework.boot.context.properties.ConstructorBinding;
 import org.springframework.boot.context.properties.bind.DefaultValue;
 
 import no.nav.foreldrepenger.selvbetjening.tjeneste.AbstractConfig;
+import no.nav.foreldrepenger.selvbetjening.tjeneste.ZoneCrossingAware;
 
 @ConfigurationProperties("historikk")
 @ConstructorBinding
-public class HistorikkConfig extends AbstractConfig {
+public class HistorikkConfig extends AbstractConfig implements ZoneCrossingAware {
     private static final String DEFAULT_PING_PATH = "actuator/info";
 
     private final String key;
@@ -32,6 +33,7 @@ public class HistorikkConfig extends AbstractConfig {
         return uri(getUri(), DEFAULT_PING_PATH);
     }
 
+    @Override
     public String getKey() {
         return key;
     }
@@ -39,5 +41,10 @@ public class HistorikkConfig extends AbstractConfig {
     public URI minidialogURI() {
         return uri(getUri(), "/me/minidialoger/spm");
 
+    }
+
+    @Override
+    public URI zoneCrossingUri() {
+        return getUri();
     }
 }

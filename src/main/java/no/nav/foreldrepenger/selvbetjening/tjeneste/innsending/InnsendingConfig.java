@@ -7,10 +7,11 @@ import org.springframework.boot.context.properties.ConstructorBinding;
 import org.springframework.boot.context.properties.bind.DefaultValue;
 
 import no.nav.foreldrepenger.selvbetjening.tjeneste.AbstractConfig;
+import no.nav.foreldrepenger.selvbetjening.tjeneste.ZoneCrossingAware;
 
 @ConfigurationProperties(prefix = "mottak")
 @ConstructorBinding
-public class InnsendingConfig extends AbstractConfig {
+public class InnsendingConfig extends AbstractConfig implements ZoneCrossingAware {
     private static final String ENDRE = "/mottak/endre";
 
     private static final String ETTERSEND = "/mottak/ettersend";
@@ -43,7 +44,13 @@ public class InnsendingConfig extends AbstractConfig {
         return uri(getUri(), ETTERSEND);
     }
 
+    @Override
     public String getKey() {
         return key;
+    }
+
+    @Override
+    public URI zoneCrossingUri() {
+        return getUri();
     }
 }
