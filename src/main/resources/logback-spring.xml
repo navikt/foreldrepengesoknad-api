@@ -23,7 +23,6 @@
     </springProfile>
 
     <springProfile name="dev-gcp, dev-sbs,local,test">
-        <logger name="org.springframework.retry" level="trace"/>
         <logger name="no.nav.foreldrepenger.selvbetjening" level="trace"/>
     </springProfile>
 
