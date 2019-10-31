@@ -1,7 +1,6 @@
 package no.nav.foreldrepenger.selvbetjening.config;
 
 import static java.util.Collections.singletonList;
-import static org.springframework.http.HttpHeaders.ACCESS_CONTROL_ALLOW_ORIGIN;
 import static org.springframework.retry.RetryContext.NAME;
 
 import java.net.URI;
@@ -113,8 +112,8 @@ public class ApiConfiguration implements WebMvcConfigurer {
                 "https://svangerskapspengesoknad-q.nav.no",
                 "https://svangerskapspengesoknad.nav.no" };
         registry.addMapping("/**")
+                .allowedMethods("*")
                 .allowCredentials(true)
-                .allowedHeaders(ACCESS_CONTROL_ALLOW_ORIGIN)
                 .allowedOrigins(defaultOrigins);
     }
 }
