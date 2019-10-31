@@ -7,4 +7,9 @@ import no.nav.foreldrepenger.selvbetjening.tjeneste.oppslag.domain.Arbeidsforhol
 public class SøkerinfoDto {
     public PersonDto person;
     public List<Arbeidsforhold> arbeidsforhold;
+
+    @Override
+    public String toString() {
+        return getClass().getSimpleName() + "[person=" + person + ", arbeidsforhold=" + arbeidsforhold + "]";
+    }
 }
