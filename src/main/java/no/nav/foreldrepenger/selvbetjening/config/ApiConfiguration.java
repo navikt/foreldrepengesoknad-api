@@ -1,6 +1,7 @@
 package no.nav.foreldrepenger.selvbetjening.config;
 
 import static java.util.Collections.singletonList;
+import static org.springframework.http.HttpHeaders.ACCESS_CONTROL_ALLOW_ORIGIN;
 import static org.springframework.retry.RetryContext.NAME;
 
 import java.net.URI;
@@ -19,7 +20,7 @@ import org.springframework.retry.RetryContext;
 import org.springframework.retry.RetryListener;
 import org.springframework.retry.listener.RetryListenerSupport;
 import org.springframework.web.client.RestOperations;
-import org.springframework.web.servlet.config.annotation.InterceptorRegistry;
+import org.springframework.web.servlet.config.annotation.CorsRegistry;
 import org.springframework.web.servlet.config.annotation.ResourceHandlerRegistry;
 import org.springframework.web.servlet.config.annotation.WebMvcConfigurer;
 
@@ -88,8 +89,32 @@ public class ApiConfiguration implements WebMvcConfigurer {
         return new StorageCrypto(passPhrase);
     }
 
+    /*
+     * @Override public void addInterceptors(InterceptorRegistry registry) {
+     * registry.addInterceptor(corsInterceptor); }
+     */
+
     @Override
-    public void addInterceptors(InterceptorRegistry registry) {
-        registry.addInterceptor(corsInterceptor);
+    public void addCorsMappings(CorsRegistry registry) {
+        String[] defaultOrigins = new String[] {
+                "https://engangsstonad.nais.oera-q.local",
+                "https://engangsstonad-q.nav.no",
+                "https://engangsstonad.nav.no",
+                "https://engangsstonad.dev-nav.no",
+                "https://foreldrepengesoknad.dev-nav.no",
+                "https://svangerskapspengesoknad.dev-nav.no",
+                "https://foreldrepengesoknad.nais.oera-q.local",
+                "https://foreldrepengesoknad-q.nav.no",
+                "https://foreldrepengesoknad.nav.no",
+                "https://foreldrepengeoversikt.nais.oera-q.local",
+                "https://foreldrepengeoversikt.nais.oera-q.local",
+                "https://foreldrepenger-q.nav.no",
+                "https://foreldrepenger.nav.no",
+                "https://svangerskapspengesoknad-q.nav.no",
+                "https://svangerskapspengesoknad.nav.no" };
+        registry.addMapping("/**")
+                .allowCredentials(true)
+                .allowedHeaders(ACCESS_CONTROL_ALLOW_ORIGIN)
+                .allowedOrigins(defaultOrigins);
     }
 }
