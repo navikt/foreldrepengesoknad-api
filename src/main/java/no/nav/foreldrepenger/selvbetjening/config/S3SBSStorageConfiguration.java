@@ -43,7 +43,7 @@ public class S3SBSStorageConfiguration {
     }
 
     @Bean
-    public ClientConfiguration s3ClientConfig(@Value("${s3.timeout:3}") int requestTimeout,
+    public ClientConfiguration s3ClientConfig(@Value("${s3.timeout:3000}") int requestTimeout,
             @Value("${s3.retries:3}") int retries) {
         return new ClientConfiguration()
                 .withRequestTimeout(requestTimeout)
