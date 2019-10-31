@@ -13,42 +13,31 @@ import no.nav.foreldrepenger.selvbetjening.tjeneste.AbstractConfig;
 public class HistorikkConfig extends AbstractConfig {
     private static final String DEFAULT_PING_PATH = "actuator/info";
 
-    private final boolean enabled;
-    private final URI uri;
     private final String key;
 
     public HistorikkConfig(URI uri, String key, @DefaultValue("true") boolean enabled) {
-        this.uri = uri;
+        super(uri, enabled);
         this.key = key;
-        this.enabled = enabled;
     }
 
     public URI historikkURI() {
-        return uri(uri, "historikk" + "/me/all");
+        return uri(getUri(), "historikk" + "/me/all");
     }
 
     public URI historikkPreprodURI(String fnr) {
-        return uri(uri, "historikk" + "/dev/all", queryParams("fnr", fnr));
+        return uri(getUri(), "historikk" + "/dev/all", queryParams("fnr", fnr));
     }
 
     public URI pingURI() {
-        return uri(uri, DEFAULT_PING_PATH);
-    }
-
-    public boolean isEnabled() {
-        return enabled;
+        return uri(getUri(), DEFAULT_PING_PATH);
     }
 
     public String getKey() {
         return key;
     }
 
-    public URI getUri() {
-        return uri;
-    }
-
     public URI minidialogURI() {
-        return uri(uri, "/me/minidialoger/spm");
+        return uri(getUri(), "/me/minidialoger/spm");
 
     }
 }

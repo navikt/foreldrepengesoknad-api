@@ -19,36 +19,25 @@ public class MinidialogConfig extends AbstractConfig {
     private static final String AKTIVE = MINIDIALOG_DEV + "/spm";
 
     private static final String DEFAULT_PING_PATH = "actuator/info";
-    private final boolean enabled;
-    private final URI uri;
 
     public MinidialogConfig(URI uri, @DefaultValue("true") boolean enabled) {
-        this.uri = uri;
-        this.enabled = enabled;
-    }
-
-    public URI getURI() {
-        return uri;
+        super(uri, enabled);
     }
 
     public URI minidialogPreprodURI(String fnr, boolean activeOnly) {
-        return uri(getURI(), MINIDIALOGER, queryParams(Pair.of("fnr", fnr), Pair.of("activeOnly", activeOnly)));
+        return uri(getUri(), MINIDIALOGER, queryParams(Pair.of("fnr", fnr), Pair.of("activeOnly", activeOnly)));
     }
 
     public URI aktiveSpmURI() {
-        return uri(getURI(), MINIDIALOG + "/me");
+        return uri(getUri(), MINIDIALOG + "/me");
     }
 
     public URI aktiveSpmURI(String fnr) {
-        return uri(getURI(), AKTIVE, queryParams(Pair.of("fnr", fnr)));
-    }
-
-    public boolean isEnabled() {
-        return enabled;
+        return uri(getUri(), AKTIVE, queryParams(Pair.of("fnr", fnr)));
     }
 
     public URI pingURI() {
-        return uri(getURI(), DEFAULT_PING_PATH);
+        return uri(getUri(), DEFAULT_PING_PATH);
     }
 
 }

@@ -19,44 +19,31 @@ public class InnsendingConfig extends AbstractConfig {
 
     private static final String PING = "mottak/ping";
 
-    private final boolean enabled;
-    private final URI uri;
     private final String key;
 
     public InnsendingConfig(URI uri, String key, @DefaultValue("true") boolean enabled) {
-        this.uri = uri;
+        super(uri, enabled);
         this.key = key;
-        this.enabled = enabled;
     }
 
     @Override
     protected URI pingURI() {
-        return uri(uri, PING);
-
+        return uri(getUri(), PING);
     }
 
     URI innsendingURI() {
-        return uri(uri, SEND);
+        return uri(getUri(), SEND);
     }
 
     URI endringURI() {
-        return uri(uri, ENDRE);
+        return uri(getUri(), ENDRE);
     }
 
     URI ettersendingURI() {
-        return uri(uri, ETTERSEND);
-    }
-
-    public boolean isEnabled() {
-        return enabled;
+        return uri(getUri(), ETTERSEND);
     }
 
     public String getKey() {
         return key;
     }
-
-    public URI getUri() {
-        return uri;
-    }
-
 }

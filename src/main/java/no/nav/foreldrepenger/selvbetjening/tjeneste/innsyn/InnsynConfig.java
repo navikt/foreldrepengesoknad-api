@@ -22,11 +22,10 @@ public class InnsynConfig extends AbstractConfig {
     private static final String VEDTAK = "innsyn/vedtak";
 
     private final boolean enabled;
-    private final URI mottak;
     private final URI oppslag;
 
     public InnsynConfig(URI mottak, URI oppslag, @DefaultValue("true") boolean enabled) {
-        this.mottak = mottak;
+        super(mottak, enabled);
         this.oppslag = oppslag;
         this.enabled = enabled;
     }
@@ -36,7 +35,7 @@ public class InnsynConfig extends AbstractConfig {
     }
 
     private URI getMottakURI() {
-        return mottak;
+        return getUri();
     }
 
     public boolean isEnabled() {

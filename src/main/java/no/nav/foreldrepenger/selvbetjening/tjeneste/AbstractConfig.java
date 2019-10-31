@@ -11,14 +11,20 @@ public abstract class AbstractConfig {
 
     protected abstract URI pingURI();
 
-    private boolean enabled = true;
+    private final URI uri;
+    private final boolean enabled;
+
+    public AbstractConfig(URI uri, boolean enabled) {
+        this.enabled = enabled;
+        this.uri = uri;
+    }
+
+    public URI getUri() {
+        return uri;
+    }
 
     public boolean isEnabled() {
         return enabled;
-    }
-
-    public void setEnabled(boolean enabled) {
-        this.enabled = enabled;
     }
 
     protected URI uri(String base, String path) {

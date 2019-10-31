@@ -18,22 +18,11 @@ public class OppslagConfig extends AbstractConfig {
     private static final String SØKERINFO = "oppslag";
     private static final String AKTØRFNR = "oppslag/aktorfnr";
 
-    private final boolean enabled;
-    private final URI uri;
     private final String key;
 
     public OppslagConfig(URI uri, String key, @DefaultValue("true") boolean enabled) {
-        this.enabled = enabled;
-        this.uri = uri;
+        super(uri, enabled);
         this.key = key;
-    }
-
-    public boolean isEnabled() {
-        return enabled;
-    }
-
-    public URI getUri() {
-        return uri;
     }
 
     public String getKey() {
@@ -41,19 +30,19 @@ public class OppslagConfig extends AbstractConfig {
     }
 
     public URI pingURI() {
-        return uri(uri, PING);
+        return uri(getUri(), PING);
     }
 
     URI personURI() {
-        return uri(uri, PERSON);
+        return uri(getUri(), PERSON);
     }
 
     URI søkerInfoURI() {
-        return uri(uri, SØKERINFO);
+        return uri(getUri(), SØKERINFO);
     }
 
     URI aktørIdURI(String fnr) {
-        return uri(uri, AKTØRFNR, queryParams(FNR, fnr));
+        return uri(getUri(), AKTØRFNR, queryParams(FNR, fnr));
     }
 
     @Override
