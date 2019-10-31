@@ -79,7 +79,7 @@ public class InnsynConfig /* extends AbstractConfig */ {
     }
 
     URI uttakURI(String saksnummer) {
-        return uri(oppslag, UTTAKSPLAN, queryParams(SAKSNUMMER, saksnummer));
+        return uri(mottak, UTTAKSPLAN, queryParams(SAKSNUMMER, saksnummer));
     }
 
     URI uttakURIForAnnenPart(String annenPart) {
