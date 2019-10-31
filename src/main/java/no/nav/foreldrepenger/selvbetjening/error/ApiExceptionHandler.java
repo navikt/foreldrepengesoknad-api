@@ -44,67 +44,68 @@ public class ApiExceptionHandler extends ResponseEntityExceptionHandler {
     private static final Logger LOG = LoggerFactory.getLogger(ApiExceptionHandler.class);
 
     @Override
+    protected ResponseEntity<Object> handleMethodArgumentNotValid(MethodArgumentNotValidException e,
+            HttpHeaders headers, HttpStatus status, WebRequest req) {
+        return logAndHandle(UNPROCESSABLE_ENTITY, e, req, headers, validationErrors(e));
+    }
+
+    @Override
     protected ResponseEntity<Object> handleHttpMessageNotReadable(HttpMessageNotReadableException e,
             HttpHeaders headers, HttpStatus status, WebRequest req) {
-        return logAndHandle(UNPROCESSABLE_ENTITY, e, req);
+        return logAndHandle(UNPROCESSABLE_ENTITY, e, req, headers);
     }
 
     @Override
     protected ResponseEntity<Object> handleNoHandlerFoundException(NoHandlerFoundException e, HttpHeaders headers,
             HttpStatus status, WebRequest req) {
-        return logAndHandle(NOT_FOUND, e, req);
+        return logAndHandle(NOT_FOUND, e, req, headers);
     }
 
     @ExceptionHandler
-    public ResponseEntity<Object> handleIncompleteException(UnexpectedInputException e, WebRequest req) {
-        return logAndHandle(UNPROCESSABLE_ENTITY, e, req);
+    public ResponseEntity<Object> handleIncompleteException(UnexpectedInputException e, HttpHeaders headers,
+            WebRequest req) {
+        return logAndHandle(UNPROCESSABLE_ENTITY, e, req, headers);
     }
 
     @ExceptionHandler
-    public ResponseEntity<Object> handleHttpStatusCodeException(HttpStatusCodeException e, WebRequest request) {
-        return logAndHandle(e.getStatusCode(), e, request);
+    public ResponseEntity<Object> handleHttpStatusCodeException(HttpStatusCodeException e, WebRequest request,
+            HttpHeaders headers) {
+        return logAndHandle(e.getStatusCode(), e, request, headers);
     }
 
     @ExceptionHandler
-    protected ResponseEntity<Object> handleAttachmentException(AttachmentException e, WebRequest req) {
-        return logAndHandle(UNPROCESSABLE_ENTITY, e, req);
-    }
-
-    @Override
-    protected ResponseEntity<Object> handleMethodArgumentNotValid(MethodArgumentNotValidException e,
-            HttpHeaders headers, HttpStatus status, WebRequest req) {
-        return logAndHandle(UNPROCESSABLE_ENTITY, e, req, validationErrors(e));
+    protected ResponseEntity<Object> handleAttachmentException(AttachmentException e, WebRequest req,
+            HttpHeaders headers) {
+        return logAndHandle(UNPROCESSABLE_ENTITY, e, req, headers);
     }
 
     @ExceptionHandler({ MultipartException.class, MaxUploadSizeExceededException.class,
             AttachmentsTooLargeException.class, AttachmentTooLargeException.class })
-    public ResponseEntity<Object> handleTooLargeAttchment(Exception e, WebRequest req) {
-        return logAndHandle(PAYLOAD_TOO_LARGE, e, req);
+    public ResponseEntity<Object> handleTooLargeAttchment(Exception e, WebRequest req, HttpHeaders headers) {
+        return logAndHandle(PAYLOAD_TOO_LARGE, e, req, headers);
     }
 
     @ExceptionHandler
-    public ResponseEntity<Object> handleUnauthorizedJwt(JwtTokenUnauthorizedException e, WebRequest req) {
-        return logAndHandle(UNAUTHORIZED, e, req);
+    public ResponseEntity<Object> handleUnauthorizedJwt(JwtTokenUnauthorizedException e, WebRequest req,
+            HttpHeaders headers) {
+        return logAndHandle(UNAUTHORIZED, e, req, headers);
     }
 
     @ExceptionHandler
-    public ResponseEntity<Object> handleForbiddenJwt(JwtTokenValidatorException e, WebRequest req) {
-        return logAndHandle(FORBIDDEN, e, req, e.getExpiryDate());
+    public ResponseEntity<Object> handleForbiddenJwt(JwtTokenValidatorException e, WebRequest req,
+            HttpHeaders headers) {
+        return logAndHandle(FORBIDDEN, e, req, headers);
     }
 
     @ExceptionHandler
-    public ResponseEntity<Object> catchAll(Exception e, WebRequest req) {
-        return logAndHandle(INTERNAL_SERVER_ERROR, e, req);
-    }
-
-    private ResponseEntity<Object> logAndHandle(HttpStatus status, Exception e, WebRequest req, Object... messages) {
-        return logAndHandle(status, e, req, new HttpHeaders(), messages);
+    public ResponseEntity<Object> catchAll(Exception e, WebRequest req, HttpHeaders headers) {
+        return logAndHandle(INTERNAL_SERVER_ERROR, e, req, headers);
     }
 
     private ResponseEntity<Object> logAndHandle(HttpStatus status, Exception e, WebRequest req, HttpHeaders headers,
             Object... messages) {
         ApiError apiError = apiErrorFra(status, e, messages);
-        LOG.warn("({}) {} {} ({})", subject(), status, apiError.getMessages(), status.value(), e);
+        LOG.warn("({}) {}  {} {} ({})", subject(), headers, status, apiError.getMessages(), status.value(), e);
         return handleExceptionInternal(e, apiError, headers, status, req);
     }
 
