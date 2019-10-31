@@ -42,6 +42,7 @@ minidialog:
 innsyn:
   oppslag:  http://localhost:9000/api/oppslag
   mottak:  http://localhost:9000/api/mottak
+  enabled: true
    
 s3 : 
   username : user
