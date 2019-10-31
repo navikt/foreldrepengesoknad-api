@@ -9,7 +9,7 @@ import org.springframework.boot.context.properties.ConfigurationProperties;
 import org.springframework.stereotype.Component;
 
 //@ConstructorBinding
-@ConfigurationProperties("innsyn")
+@ConfigurationProperties(prefix = "innsyn", ignoreInvalidFields = false)
 @Component
 public class InnsynConfig /* extends AbstractConfig */ {
 
@@ -88,6 +88,12 @@ public class InnsynConfig /* extends AbstractConfig */ {
 
     public URI vedtakURI(String saksnummer) {
         return uri(getMottakUri(), VEDTAK, queryParams(SAKSNUMMER, saksnummer));
+    }
+
+    @Override
+    public String toString() {
+        return getClass().getSimpleName() + "[key=" + key + ", oppslagUri=" + oppslagUri + ", mottakUri=" + mottakUri
+                + ", enabled=" + enabled + "]";
     }
 
 }

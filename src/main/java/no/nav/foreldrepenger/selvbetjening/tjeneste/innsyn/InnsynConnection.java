@@ -21,39 +21,40 @@ import no.nav.foreldrepenger.selvbetjening.tjeneste.innsyn.vedtak.Vedtak;
 public class InnsynConnection extends AbstractRestConnection {
     private static final Logger LOG = LoggerFactory.getLogger(InnsynConnection.class);
 
-    private final InnsynConfig innsynConfig;
+    private final InnsynConfig cfg;
 
-    public InnsynConnection(RestOperations operations, InnsynConfig innsynConfig) {
+    public InnsynConnection(RestOperations operations, InnsynConfig cfg) {
         super(operations);
-        this.innsynConfig = innsynConfig;
+        this.cfg = cfg;
+        LOG.info("Config is " + cfg);
     }
 
     @Override
     public boolean isEnabled() {
-        return innsynConfig.isEnabled();
+        return cfg.isEnabled();
     }
 
     @Override
     public URI pingURI() {
-        return innsynConfig.pingURI();
+        return cfg.pingURI();
     }
 
     public Uttaksplan hentUttaksplan(String saksnummer) {
-        return getForObject(innsynConfig.uttakURI(saksnummer), Uttaksplan.class, false);
+        return getForObject(cfg.uttakURI(saksnummer), Uttaksplan.class, false);
     }
 
     public Uttaksplan hentUttaksplanAnnenPart(String annenPart) {
-        return getForObject(innsynConfig.uttakURIForAnnenPart(annenPart), Uttaksplan.class, false);
+        return getForObject(cfg.uttakURIForAnnenPart(annenPart), Uttaksplan.class, false);
     }
 
     public Vedtak hentVedtak(String saksnummer) {
-        return getForObject(innsynConfig.vedtakURI(saksnummer), Vedtak.class, false);
+        return getForObject(cfg.vedtakURI(saksnummer), Vedtak.class, false);
     }
 
     public List<Sak> hentSaker() {
-        List<Sak> saker = saker(innsynConfig.fpsakURI(), "FPSAK");
+        List<Sak> saker = saker(cfg.fpsakURI(), "FPSAK");
         if (saker.isEmpty()) {
-            saker = saker(innsynConfig.sakURI(), "SAK");
+            saker = saker(cfg.sakURI(), "SAK");
         }
 
         return saker;
