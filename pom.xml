@@ -24,7 +24,7 @@
         <project.reporting.outputEncoding>UTF-8</project.reporting.outputEncoding>
         <localstack.version>1.12.3</localstack.version>
         <springfox.version>2.9.2</springfox.version>
-        <token-validation-version>1.1.1</token-validation-version>
+        <token-validation-version>1.1.0</token-validation-version>
         <tika.version>1.22</tika.version>
         <logback.logstash.version>6.2</logback.logstash.version>
         <nv.version>1.26</nv.version>
