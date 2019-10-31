@@ -13,6 +13,22 @@ import org.springframework.stereotype.Component;
 @Component
 public class InnsynConfig /* extends AbstractConfig */ {
 
+    public URI getOppslagUri() {
+        return oppslagUri;
+    }
+
+    public void setOppslagUri(URI oppslagUri) {
+        this.oppslagUri = oppslagUri;
+    }
+
+    public URI getMottakUri() {
+        return mottakUri;
+    }
+
+    public void setMottakUri(URI mottakUri) {
+        this.mottakUri = mottakUri;
+    }
+
     private static final String PING = "mottak/ping";
     private static final String FPSAK_SAKER = "innsyn/saker";
     private static final String SAK_SAKER = "sak";
@@ -23,8 +39,8 @@ public class InnsynConfig /* extends AbstractConfig */ {
     private static final String VEDTAK = "innsyn/vedtak";
 
     private /* final */ String key;
-    private /* final */ URI oppslag;
-    private /* final */ URI mottak;
+    private /* final */ URI oppslagUri;
+    private /* final */ URI mottakUri;
 
     private /* final */ boolean enabled;
 
@@ -46,40 +62,32 @@ public class InnsynConfig /* extends AbstractConfig */ {
         this.enabled = enabled;
     }
 
-    public URI getOppslagURI() {
-        return oppslag;
-    }
-
-    private URI getMottakURI() {
-        return mottak;
-    }
-
     public boolean isEnabled() {
         return enabled;
     }
 
     public URI pingURI() {
-        return uri(getMottakURI(), PING);
+        return uri(getMottakUri(), PING);
     }
 
     URI fpsakURI() {
-        return uri(getMottakURI(), FPSAK_SAKER);
+        return uri(getMottakUri(), FPSAK_SAKER);
     }
 
     URI sakURI() {
-        return uri(getOppslagURI(), SAK_SAKER);
+        return uri(getOppslagUri(), SAK_SAKER);
     }
 
     URI uttakURI(String saksnummer) {
-        return uri(getMottakURI(), UTTAKSPLAN, queryParams(SAKSNUMMER, saksnummer));
+        return uri(getOppslagUri(), UTTAKSPLAN, queryParams(SAKSNUMMER, saksnummer));
     }
 
     URI uttakURIForAnnenPart(String annenPart) {
-        return uri(getMottakURI(), UTTAKSPLANANNEN, queryParams(ANNENPART, annenPart));
+        return uri(getMottakUri(), UTTAKSPLANANNEN, queryParams(ANNENPART, annenPart));
     }
 
     public URI vedtakURI(String saksnummer) {
-        return uri(getMottakURI(), VEDTAK, queryParams(SAKSNUMMER, saksnummer));
+        return uri(getMottakUri(), VEDTAK, queryParams(SAKSNUMMER, saksnummer));
     }
 
 }
