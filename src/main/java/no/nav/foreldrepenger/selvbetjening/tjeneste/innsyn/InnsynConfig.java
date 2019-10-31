@@ -1,16 +1,17 @@
 package no.nav.foreldrepenger.selvbetjening.tjeneste.innsyn;
 
+import static no.nav.foreldrepenger.selvbetjening.tjeneste.UriUtil.queryParams;
+import static no.nav.foreldrepenger.selvbetjening.tjeneste.UriUtil.uri;
+
 import java.net.URI;
 
 import org.springframework.boot.context.properties.ConfigurationProperties;
-import org.springframework.boot.context.properties.ConstructorBinding;
-import org.springframework.boot.context.properties.bind.DefaultValue;
+import org.springframework.stereotype.Component;
 
-import no.nav.foreldrepenger.selvbetjening.tjeneste.AbstractConfig;
-
+//@ConstructorBinding
 @ConfigurationProperties("innsyn")
-@ConstructorBinding
-public class InnsynConfig extends AbstractConfig {
+@Component
+public class InnsynConfig /* extends AbstractConfig */ {
 
     private static final String PING = "mottak/ping";
     private static final String FPSAK_SAKER = "innsyn/saker";
@@ -21,12 +22,27 @@ public class InnsynConfig extends AbstractConfig {
     private static final String UTTAKSPLANANNEN = "innsyn/uttaksplanannen";
     private static final String VEDTAK = "innsyn/vedtak";
 
-    private final boolean enabled;
-    private final URI oppslag;
+    private /* final */ String key;
+    private /* final */ URI oppslag;
+    private /* final */ URI mottak;
 
-    public InnsynConfig(URI mottak, URI oppslag, @DefaultValue("true") boolean enabled) {
-        super(mottak, enabled);
-        this.oppslag = oppslag;
+    private /* final */ boolean enabled;
+
+    /*
+     * public InnsynConfig(URI mottak, URI oppslag, @DefaultValue("true") boolean
+     * enabled) { super(mottak, enabled); this.oppslag = oppslag; this.enabled =
+     * enabled; }
+     */
+
+    public String getKey() {
+        return key;
+    }
+
+    public void setKey(String key) {
+        this.key = key;
+    }
+
+    public void setEnabled(boolean enabled) {
         this.enabled = enabled;
     }
 
@@ -35,7 +51,7 @@ public class InnsynConfig extends AbstractConfig {
     }
 
     private URI getMottakURI() {
-        return getUri();
+        return mottak;
     }
 
     public boolean isEnabled() {

@@ -1,23 +1,47 @@
 package no.nav.foreldrepenger.selvbetjening.tjeneste.historikk;
 
+import static no.nav.foreldrepenger.selvbetjening.tjeneste.UriUtil.queryParams;
+import static no.nav.foreldrepenger.selvbetjening.tjeneste.UriUtil.uri;
+
 import java.net.URI;
 
 import org.springframework.boot.context.properties.ConfigurationProperties;
-import org.springframework.boot.context.properties.ConstructorBinding;
-import org.springframework.boot.context.properties.bind.DefaultValue;
+import org.springframework.stereotype.Component;
 
-import no.nav.foreldrepenger.selvbetjening.tjeneste.AbstractConfig;
 import no.nav.foreldrepenger.selvbetjening.tjeneste.ZoneCrossingAware;
 
 @ConfigurationProperties("historikk")
-@ConstructorBinding
-public class HistorikkConfig extends AbstractConfig implements ZoneCrossingAware {
+//@ConstructorBinding
+@Component
+public class HistorikkConfig /* extends AbstractConfig */ implements ZoneCrossingAware {
     private static final String DEFAULT_PING_PATH = "actuator/info";
 
-    private final String key;
+    private /* final */ String key;
+    private /* final */ URI uri;
+    private /* final */ boolean enabled;
 
-    public HistorikkConfig(URI uri, String key, @DefaultValue("true") boolean enabled) {
-        super(uri, enabled);
+    /*
+     * public HistorikkConfig(URI uri, String key, @DefaultValue("true") boolean
+     * enabled) { super(uri, enabled); this.key = key; }
+     */
+
+    public URI getUri() {
+        return uri;
+    }
+
+    public void setUri(URI uri) {
+        this.uri = uri;
+    }
+
+    public boolean isEnabled() {
+        return enabled;
+    }
+
+    public void setEnabled(boolean enabled) {
+        this.enabled = enabled;
+    }
+
+    public void setKey(String key) {
         this.key = key;
     }
 
