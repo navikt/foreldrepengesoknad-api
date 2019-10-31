@@ -1,21 +1,17 @@
 package no.nav.foreldrepenger.selvbetjening.tjeneste.innsending;
 
-import static no.nav.foreldrepenger.selvbetjening.tjeneste.UriUtil.uri;
-
 import java.net.URI;
 
 import org.springframework.boot.context.properties.ConfigurationProperties;
-import org.springframework.stereotype.Component;
+import org.springframework.boot.context.properties.ConstructorBinding;
+import org.springframework.boot.context.properties.bind.DefaultValue;
 
+import no.nav.foreldrepenger.selvbetjening.tjeneste.AbstractConfig;
 import no.nav.foreldrepenger.selvbetjening.tjeneste.ZoneCrossingAware;
 
 @ConfigurationProperties(prefix = "mottak")
-//@ConstructorBinding
-@Component
-public class InnsendingConfig /* extends AbstractConfig */ implements ZoneCrossingAware {
-    public void setKey(String key) {
-        this.key = key;
-    }
+@ConstructorBinding
+public class InnsendingConfig extends AbstractConfig implements ZoneCrossingAware {
 
     private static final String ENDRE = "/mottak/endre";
 
@@ -25,32 +21,14 @@ public class InnsendingConfig /* extends AbstractConfig */ implements ZoneCrossi
 
     private static final String PING = "mottak/ping";
 
-    private /* final */ String key;
-    private /* final */ URI uri;
-    private /* final */ boolean enabled;
+    private final String key;
 
-    /*
-     * public InnsendingConfig(URI uri, String key, @DefaultValue("true") boolean
-     * enabled) { super(uri, enabled); this.key = key; }
-     */
-
-    public URI getUri() {
-        return uri;
+    public InnsendingConfig(URI uri, String key, @DefaultValue("true") boolean enabled) {
+        super(uri, enabled);
+        this.key = key;
     }
 
-    public void setUri(URI uri) {
-        this.uri = uri;
-    }
-
-    public boolean isEnabled() {
-        return enabled;
-    }
-
-    public void setEnabled(boolean enabled) {
-        this.enabled = enabled;
-    }
-
-    // @Override
+    @Override
     protected URI pingURI() {
         return uri(getUri(), PING);
     }
