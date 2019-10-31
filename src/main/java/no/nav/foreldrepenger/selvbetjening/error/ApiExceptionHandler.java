@@ -105,7 +105,8 @@ public class ApiExceptionHandler extends ResponseEntityExceptionHandler {
     private ResponseEntity<Object> logAndHandle(HttpStatus status, Exception e, WebRequest req, HttpHeaders headers,
             Object... messages) {
         ApiError apiError = apiErrorFra(status, e, messages);
-        LOG.warn("({}) {}  {} {} ({})", subject(), headers, status, apiError.getMessages(), status.value(), e);
+        LOG.warn("[{} ({})] {}  {} {} ({})", req.getContextPath(), subject(), headers, status, apiError.getMessages(),
+                status.value(), e);
         return handleExceptionInternal(e, apiError, headers, status, req);
     }
 
