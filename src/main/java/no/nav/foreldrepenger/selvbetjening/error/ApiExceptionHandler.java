@@ -32,6 +32,7 @@ import no.nav.security.token.support.core.exceptions.JwtTokenValidatorException;
 import no.nav.security.token.support.spring.validation.interceptor.JwtTokenUnauthorizedException;
 
 @ControllerAdvice
+@ResponseBody
 public class ApiExceptionHandler extends ResponseEntityExceptionHandler {
 
     private final TokenUtil tokenUtil;
@@ -42,68 +43,56 @@ public class ApiExceptionHandler extends ResponseEntityExceptionHandler {
 
     private static final Logger LOG = LoggerFactory.getLogger(ApiExceptionHandler.class);
 
-    @ExceptionHandler({ UnexpectedInputException.class })
-    public ResponseEntity<Object> handleIncompleteException(UnexpectedInputException e, WebRequest req) {
-        return logAndHandle(UNPROCESSABLE_ENTITY, e, req);
-    }
-
     @Override
     protected ResponseEntity<Object> handleHttpMessageNotReadable(HttpMessageNotReadableException e,
             HttpHeaders headers, HttpStatus status, WebRequest req) {
         return logAndHandle(UNPROCESSABLE_ENTITY, e, req);
     }
 
-    @ResponseBody
-    @ExceptionHandler(HttpStatusCodeException.class)
+    @Override
+    protected ResponseEntity<Object> handleNoHandlerFoundException(NoHandlerFoundException e, HttpHeaders headers,
+            HttpStatus status, WebRequest req) {
+        return logAndHandle(NOT_FOUND, e, req);
+    }
+
+    @ExceptionHandler
+    public ResponseEntity<Object> handleIncompleteException(UnexpectedInputException e, WebRequest req) {
+        return logAndHandle(UNPROCESSABLE_ENTITY, e, req);
+    }
+
+    @ExceptionHandler
     public ResponseEntity<Object> handleHttpStatusCodeException(HttpStatusCodeException e, WebRequest request) {
-        if (e.getStatusCode().equals(UNAUTHORIZED) || e.getStatusCode().equals(FORBIDDEN)) {
-            return logAndHandle(e.getStatusCode(), e, request, tokenUtil.getExpiryDate());
-        }
         return logAndHandle(e.getStatusCode(), e, request);
     }
 
-    @ResponseBody
-    @ExceptionHandler({ AttachmentTypeUnsupportedException.class, AttachmentVirusException.class,
-            AttachmentConversionException.class, AttachmentPasswordProtectedException.class })
+    @ExceptionHandler
     protected ResponseEntity<Object> handleAttachmentException(AttachmentException e, WebRequest req) {
         return logAndHandle(UNPROCESSABLE_ENTITY, e, req);
     }
 
     @Override
-    @ResponseBody
     protected ResponseEntity<Object> handleMethodArgumentNotValid(MethodArgumentNotValidException e,
             HttpHeaders headers, HttpStatus status, WebRequest req) {
         return logAndHandle(UNPROCESSABLE_ENTITY, e, req, validationErrors(e));
     }
 
-    @ResponseBody
     @ExceptionHandler({ MultipartException.class, MaxUploadSizeExceededException.class,
             AttachmentsTooLargeException.class, AttachmentTooLargeException.class })
     public ResponseEntity<Object> handleTooLargeAttchment(Exception e, WebRequest req) {
         return logAndHandle(PAYLOAD_TOO_LARGE, e, req);
     }
 
-    @Override
-    @ResponseBody
-    protected ResponseEntity<Object> handleNoHandlerFoundException(NoHandlerFoundException e, HttpHeaders headers,
-            HttpStatus status, WebRequest req) {
-        return logAndHandle(NOT_FOUND, e, req);
-    }
-
-    @ResponseBody
-    @ExceptionHandler(JwtTokenUnauthorizedException.class)
+    @ExceptionHandler
     public ResponseEntity<Object> handleUnauthorizedJwt(JwtTokenUnauthorizedException e, WebRequest req) {
         return logAndHandle(UNAUTHORIZED, e, req);
     }
 
-    @ResponseBody
-    @ExceptionHandler(JwtTokenValidatorException.class)
+    @ExceptionHandler
     public ResponseEntity<Object> handleForbiddenJwt(JwtTokenValidatorException e, WebRequest req) {
         return logAndHandle(FORBIDDEN, e, req, e.getExpiryDate());
     }
 
-    @ResponseBody
-    @ExceptionHandler(Exception.class)
+    @ExceptionHandler
     public ResponseEntity<Object> catchAll(Exception e, WebRequest req) {
         return logAndHandle(INTERNAL_SERVER_ERROR, e, req);
     }
