@@ -78,7 +78,7 @@ public class ApiConfiguration implements WebMvcConfigurer {
             public <T, E extends Throwable> void onError(RetryContext context, RetryCallback<T, E> callback,
                     Throwable t) {
                 log.warn("Retry methode {} kastet {}. exception {}",
-                        context.getAttribute(NAME), context.getRetryCount(), t.toString());
+                        context.getAttribute(NAME), context.getRetryCount(), t.toString(), t);
             }
         });
     }
