@@ -1,3 +1,4 @@
+allowed.origins: '*'
 debug: false
 management :
    endpoints:

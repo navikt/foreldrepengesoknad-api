@@ -1,6 +1,13 @@
 package no.nav.foreldrepenger.selvbetjening.config;
 
 import static java.util.Collections.singletonList;
+import static no.nav.foreldrepenger.selvbetjening.util.Constants.FNR;
+import static org.springframework.http.HttpHeaders.CONTENT_TYPE;
+import static org.springframework.http.HttpHeaders.LOCATION;
+import static org.springframework.http.HttpMethod.DELETE;
+import static org.springframework.http.HttpMethod.GET;
+import static org.springframework.http.HttpMethod.OPTIONS;
+import static org.springframework.http.HttpMethod.POST;
 import static org.springframework.retry.RetryContext.NAME;
 
 import java.net.URI;
@@ -25,20 +32,16 @@ import org.springframework.web.servlet.config.annotation.WebMvcConfigurer;
 
 import com.google.common.collect.ImmutableMap;
 
-import no.nav.foreldrepenger.selvbetjening.filters.CorsInterceptor;
 import no.nav.foreldrepenger.selvbetjening.interceptors.client.ApiKeyInjectingClientInterceptor;
 import no.nav.foreldrepenger.selvbetjening.tjeneste.ZoneCrossingAware;
 import no.nav.foreldrepenger.selvbetjening.tjeneste.mellomlagring.StorageCrypto;
 
 @Configuration
 public class ApiConfiguration implements WebMvcConfigurer {
+    @Value("${allowed.origins}")
+    private String[] allowedOrigins;
 
     private static final Logger LOG = LoggerFactory.getLogger(ApiConfiguration.class);
-    private final CorsInterceptor corsInterceptor;
-
-    public ApiConfiguration(CorsInterceptor corsInterceptor) {
-        this.corsInterceptor = corsInterceptor;
-    }
 
     @Bean
     public RestOperations restTemplate(ClientHttpRequestInterceptor... interceptors) {
@@ -88,32 +91,13 @@ public class ApiConfiguration implements WebMvcConfigurer {
         return new StorageCrypto(passPhrase);
     }
 
-    /*
-     * @Override public void addInterceptors(InterceptorRegistry registry) {
-     * registry.addInterceptor(corsInterceptor); }
-     */
-
     @Override
     public void addCorsMappings(CorsRegistry registry) {
-        String[] defaultOrigins = new String[] {
-                "https://engangsstonad.nais.oera-q.local",
-                "https://engangsstonad-q.nav.no",
-                "https://engangsstonad.nav.no",
-                "https://engangsstonad.dev-nav.no",
-                "https://foreldrepengesoknad.dev-nav.no",
-                "https://svangerskapspengesoknad.dev-nav.no",
-                "https://foreldrepengesoknad.nais.oera-q.local",
-                "https://foreldrepengesoknad-q.nav.no",
-                "https://foreldrepengesoknad.nav.no",
-                "https://foreldrepengeoversikt.nais.oera-q.local",
-                "https://foreldrepengeoversikt.nais.oera-q.local",
-                "https://foreldrepenger-q.nav.no",
-                "https://foreldrepenger.nav.no",
-                "https://svangerskapspengesoknad-q.nav.no",
-                "https://svangerskapspengesoknad.nav.no" };
         registry.addMapping("/**")
-                .allowedMethods("*")
+                .allowedMethods(POST.name(), GET.name(), OPTIONS.name(), DELETE.name())
                 .allowCredentials(true)
-                .allowedOrigins(defaultOrigins);
+                .exposedHeaders(LOCATION)
+                .allowedHeaders(FNR, CONTENT_TYPE)
+                .allowedOrigins(allowedOrigins);
     }
 }

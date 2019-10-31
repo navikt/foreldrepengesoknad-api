@@ -10,6 +10,7 @@ public final class Constants {
     public static final String ISSUER = "selvbetjening";
     public static final String NAV_TOKEN_EXPIRY_ID = "Nav-Token-Expiry";
     public static final String X_NAV_API_KEY = "x-nav-apiKey";
+    public static final String FNR = "fnr";
 
     private Constants() {
 
