@@ -13,34 +13,34 @@ public class StorageStub implements MellomlagringTjeneste {
     private static final Logger log = LoggerFactory.getLogger(StorageStub.class);
 
     @Override
-    public void put(String directory, String key, String value) {
+    public void lagre(String directory, String key, String value) {
         log.info("Would have stored: " + key + " -> " + value + " in directory " + directory);
     }
 
     @Override
-    public void putTmp(String directory, String key, String value) {
+    public void lagreTmp(String directory, String key, String value) {
         log.info("Would have stored in tmp: " + key + " -> " + value + " in directory " + directory);
     }
 
     @Override
-    public Optional<String> get(String directory, String key) {
+    public Optional<String> les(String directory, String key) {
         // Attachment JSON encrypted with key/fnr: 12345678910
         return Optional.of("cbA7LYNQFEbOkXmsv9ORXXXgNcx/Tf8iBsiPVeVofuaYRxesQz8tg/" +
                 "lZRDtVWVGQHiRrFY/9LryCtkhdAWigaMuTPPw8ljzlmsV+pDOfaxsgbM/d0jPEqoo2y3bCQzLKBxOxTZZuhVlDCIb91Bx7BbiTd58hjkXytkoH0Jdt7m4=");
     }
 
     @Override
-    public Optional<String> getTmp(String directory, String key) {
-        return get(directory, key);
+    public Optional<String> lesTmp(String directory, String key) {
+        return les(directory, key);
     }
 
     @Override
-    public void delete(String directory, String key) {
+    public void slett(String directory, String key) {
         log.info("Would have deleted: " + key + " from directory " + directory);
     }
 
     @Override
-    public void deleteTmp(String directory, String key) {
+    public void slettTmp(String directory, String key) {
         log.info("Would have deleted from tmp: " + key + " from directory " + directory);
 
     }

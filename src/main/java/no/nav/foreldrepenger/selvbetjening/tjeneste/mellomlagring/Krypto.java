@@ -65,6 +65,6 @@ public class Krypto {
     }
 
     private boolean isEmpty(String str) {
-        return (str == null) || (str.trim().isEmpty());
+        return str == null || str.trim().isEmpty();
     }
 }

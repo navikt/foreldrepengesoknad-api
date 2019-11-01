@@ -17,7 +17,7 @@ import com.amazonaws.services.s3.model.CreateBucketRequest;
 import com.amazonaws.services.s3.model.S3Object;
 import com.amazonaws.services.s3.model.lifecycle.LifecycleFilter;
 
-public class S3Mellomlagring extends AbstractStorage {
+public class S3Mellomlagring extends AbstractMellomlagringTjeneste {
 
     private static final Logger LOG = LoggerFactory.getLogger(S3Mellomlagring.class);
 
@@ -42,7 +42,7 @@ public class S3Mellomlagring extends AbstractStorage {
     }
 
     @Override
-    protected boolean deleteString(String bucketName, String directory, String key) {
+    protected boolean slett(String bucketName, String directory, String key) {
         try {
             s3.deleteObject(bucketName, fileName(directory, key));
             return true;
@@ -52,7 +52,7 @@ public class S3Mellomlagring extends AbstractStorage {
         }
     }
 
-    protected boolean writeString(String bucketName, String directory, String key, String value) {
+    protected boolean lagre(String bucketName, String directory, String key, String value) {
         try {
             s3.putObject(bucketName, fileName(directory, key), value);
             return true;
@@ -63,7 +63,7 @@ public class S3Mellomlagring extends AbstractStorage {
     }
 
     @Override
-    protected String readString(String bucketName, String directory, String key) {
+    protected String les(String bucketName, String directory, String key) {
         String path = fileName(directory, key);
         try {
             S3Object object = s3.getObject(bucketName, path);

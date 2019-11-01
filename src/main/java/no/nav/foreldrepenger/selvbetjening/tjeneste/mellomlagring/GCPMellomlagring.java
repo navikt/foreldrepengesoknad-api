@@ -14,7 +14,7 @@ import com.google.cloud.storage.Storage;
 import com.google.cloud.storage.StorageException;
 import com.google.cloud.storage.StorageOptions;
 
-public class GCPMellomlagring extends AbstractStorage {
+public class GCPMellomlagring extends AbstractMellomlagringTjeneste {
 
     private static final Logger LOG = LoggerFactory.getLogger(GCPMellomlagring.class);
 
@@ -31,7 +31,7 @@ public class GCPMellomlagring extends AbstractStorage {
     }
 
     @Override
-    protected boolean writeString(String bøtte, String katalog, String key, String value) {
+    protected boolean lagre(String bøtte, String katalog, String key, String value) {
         try {
             storage.create(BlobInfo.newBuilder(BlobId.of(bøtte, fileName(katalog, key)))
                     .setContentType(APPLICATION_JSON_VALUE).build(), value.getBytes(UTF_8));
@@ -43,7 +43,7 @@ public class GCPMellomlagring extends AbstractStorage {
     }
 
     @Override
-    protected String readString(String bøtte, String katalog, String key) {
+    protected String les(String bøtte, String katalog, String key) {
         try {
             return new String(storage.get(bøtte, fileName(katalog, key)).getContent(), UTF_8);
         } catch (StorageException e) {
@@ -53,7 +53,7 @@ public class GCPMellomlagring extends AbstractStorage {
     }
 
     @Override
-    protected boolean deleteString(String bøtte, String katalog, String key) {
+    protected boolean slett(String bøtte, String katalog, String key) {
         try {
             storage.delete(BlobId.of(bøtte, fileName(katalog, key)));
             return true;

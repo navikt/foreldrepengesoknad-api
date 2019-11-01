@@ -5,34 +5,34 @@ import java.util.Optional;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-public abstract class AbstractStorage implements MellomlagringTjeneste {
-    private static final Logger LOG = LoggerFactory.getLogger(AbstractStorage.class);
+public abstract class AbstractMellomlagringTjeneste implements MellomlagringTjeneste {
+    private static final Logger LOG = LoggerFactory.getLogger(AbstractMellomlagringTjeneste.class);
 
-    protected abstract boolean writeString(String bøtte, String katalog, String key, String value);
+    protected abstract boolean lagre(String bøtte, String katalog, String key, String value);
 
-    protected abstract String readString(String bøtte, String katalog, String key);
+    protected abstract String les(String bøtte, String katalog, String key);
 
-    protected abstract boolean deleteString(String bøtte, String katalog, String key);
-
-    public AbstractStorage(String søknadBøtte, String mellomlagringBøtte) {
-        this.søknadBøtte = søknadBøtte;
-        this.mellomlagringBøtte = mellomlagringBøtte;
-    }
+    protected abstract boolean slett(String bøtte, String katalog, String key);
 
     private final String søknadBøtte;
     private final String mellomlagringBøtte;
 
+    public AbstractMellomlagringTjeneste(String søknadBøtte, String mellomlagringBøtte) {
+        this.søknadBøtte = søknadBøtte;
+        this.mellomlagringBøtte = mellomlagringBøtte;
+    }
+
     @Override
     public String ping() {
-        put("ping", "pingKey", "42");
-        delete("ping", "pingKey");
+        lagre("ping", "pingKey", "42");
+        slett("ping", "pingKey");
         return "OK";
     }
 
     @Override
-    public void put(String katalog, String key, String value) {
+    public void lagre(String katalog, String key, String value) {
         LOG.info("Lagrer søknad i bøtte {}, katalog {}", søknadBøtte, katalog);
-        if (writeString(søknadBøtte, katalog, key, value)) {
+        if (lagre(søknadBøtte, katalog, key, value)) {
             LOG.info("Lagret søknad OK i bøtte {}, katalog {}", søknadBøtte, katalog);
         } else {
             LOG.warn("Lagret ikke søknad i bøtte {}, katalog {}", søknadBøtte, katalog);
@@ -40,9 +40,9 @@ public abstract class AbstractStorage implements MellomlagringTjeneste {
     }
 
     @Override
-    public void putTmp(String katalog, String key, String value) {
+    public void lagreTmp(String katalog, String key, String value) {
         LOG.info("Mellomlagrer søknad i bøtte {}, katalog {}", mellomlagringBøtte, katalog);
-        if (writeString(mellomlagringBøtte, katalog, key, value)) {
+        if (lagre(mellomlagringBøtte, katalog, key, value)) {
             LOG.info("Mellomlagret søknad OK i bøtte {}, katalog {}", mellomlagringBøtte, katalog);
         } else {
             LOG.warn("Mellomlagret ikke søknad i bøtte {}, katalog {}", mellomlagringBøtte, katalog);
@@ -50,9 +50,9 @@ public abstract class AbstractStorage implements MellomlagringTjeneste {
     }
 
     @Override
-    public Optional<String> get(String katalog, String key) {
+    public Optional<String> les(String katalog, String key) {
         LOG.info("Henter søknad fra bøtte {}, katalog {}", søknadBøtte, katalog);
-        var søknad = Optional.ofNullable(readString(søknadBøtte, katalog, key));
+        var søknad = Optional.ofNullable(les(søknadBøtte, katalog, key));
         if (søknad.isPresent()) {
             LOG.info("Hentet søknad OK fra bøtte {}, katalog {}", søknadBøtte, katalog);
         } else {
@@ -62,9 +62,9 @@ public abstract class AbstractStorage implements MellomlagringTjeneste {
     }
 
     @Override
-    public Optional<String> getTmp(String katalog, String key) {
+    public Optional<String> lesTmp(String katalog, String key) {
         LOG.info("Henter mellomlagret søknad fra bøtte {}, katalog {}", mellomlagringBøtte, katalog);
-        var søknad = Optional.ofNullable(readString(mellomlagringBøtte, katalog, key));
+        var søknad = Optional.ofNullable(les(mellomlagringBøtte, katalog, key));
         if (søknad.isPresent()) {
             LOG.info("Hentet mellomlagret søknad OK fra bøtte {}, katalog {}", mellomlagringBøtte, katalog);
         } else {
@@ -74,9 +74,9 @@ public abstract class AbstractStorage implements MellomlagringTjeneste {
     }
 
     @Override
-    public void delete(String katalog, String key) {
+    public void slett(String katalog, String key) {
         LOG.info("Fjerner søknad fra bøtte {}, katalog {}", søknadBøtte, katalog);
-        if (deleteString(søknadBøtte, katalog, key)) {
+        if (slett(søknadBøtte, katalog, key)) {
             LOG.info("Fjernet søknad OK fra bøtte {}, katalog {}", søknadBøtte, katalog);
         } else {
             LOG.warn("Fjernet ikke søknad fra bøtte {}, katalog {}", søknadBøtte, katalog);
@@ -84,9 +84,9 @@ public abstract class AbstractStorage implements MellomlagringTjeneste {
     }
 
     @Override
-    public void deleteTmp(String katalog, String key) {
+    public void slettTmp(String katalog, String key) {
         LOG.info("Fjerner mellomlagret søknad fra bøtte {}, katalog {}", mellomlagringBøtte, katalog);
-        deleteString(mellomlagringBøtte, katalog, key);
+        slett(mellomlagringBøtte, katalog, key);
         LOG.info("Fjerner mellomlagret søknad OK fra bøtte {}, katalog {}", mellomlagringBøtte, katalog);
     }
 

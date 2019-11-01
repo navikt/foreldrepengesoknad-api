@@ -32,22 +32,22 @@ public class KryptertMellomlagringTjeneste {
 
     public Optional<String> hentSøknad() {
         String fnr = tokenHelper.autentisertBruker();
-        return mellomlagring.getTmp(krypto.katalognavn(fnr), SØKNAD)
+        return mellomlagring.lesTmp(krypto.katalognavn(fnr), SØKNAD)
                 .map(s -> krypto.decrypt(s, fnr));
     }
 
     public void lagreSøknad(String søknad) {
         String fnr = tokenHelper.autentisertBruker();
-        mellomlagring.putTmp(krypto.katalognavn(fnr), SØKNAD, krypto.encrypt(søknad, fnr));
+        mellomlagring.lagreTmp(krypto.katalognavn(fnr), SØKNAD, krypto.encrypt(søknad, fnr));
     }
 
     public void slettSøknad() {
-        mellomlagring.deleteTmp(krypto.katalognavn(tokenHelper.autentisertBruker()), SØKNAD);
+        mellomlagring.slettTmp(krypto.katalognavn(tokenHelper.autentisertBruker()), SØKNAD);
     }
 
     public Optional<Attachment> hentVedlegg(String key) {
         String fnr = tokenHelper.autentisertBruker();
-        return mellomlagring.getTmp(krypto.katalognavn(fnr), key)
+        return mellomlagring.lesTmp(krypto.katalognavn(fnr), key)
                 .map(vedlegg -> krypto.decrypt(vedlegg, fnr))
                 .map(Attachment::fromJson);
     }
@@ -55,7 +55,7 @@ public class KryptertMellomlagringTjeneste {
     public void lagreVedlegg(Attachment attachment) {
         sjekker.sjekkAttachments(attachment);
         String fnr = tokenHelper.autentisertBruker();
-        mellomlagring.putTmp(krypto.katalognavn(fnr), attachment.uuid,
+        mellomlagring.lagreTmp(krypto.katalognavn(fnr), attachment.uuid,
                 krypto.encrypt(attachment.toJson(), fnr));
     }
 
@@ -67,19 +67,19 @@ public class KryptertMellomlagringTjeneste {
 
     public void slettVedlegg(String uuid) {
         if (uuid != null) {
-            mellomlagring.deleteTmp(krypto.katalognavn(tokenHelper.autentisertBruker()), uuid);
+            mellomlagring.slettTmp(krypto.katalognavn(tokenHelper.autentisertBruker()), uuid);
         }
     }
 
     public Optional<String> hentKvittering(String type) {
         String fnr = tokenHelper.autentisertBruker();
-        return mellomlagring.get(krypto.katalognavn(fnr), type)
+        return mellomlagring.les(krypto.katalognavn(fnr), type)
                 .map(k -> krypto.decrypt(k, fnr));
     }
 
     public void lagreKvittering(String type, String kvittering) {
         String fnr = tokenHelper.autentisertBruker();
-        mellomlagring.put(krypto.katalognavn(fnr), type, krypto.encrypt(kvittering, fnr));
+        mellomlagring.lagre(krypto.katalognavn(fnr), type, krypto.encrypt(kvittering, fnr));
     }
 
     @Override
