@@ -48,7 +48,7 @@ public class YtelseDto {
             this.relasjonTilBarn = new RelasjonTilBarnDto(søknad.getBarn(), søknad.getSituasjon());
             this.dekningsgrad = "GRAD" + foreldrepengesøknad.getDekningsgrad();
             this.fordeling = new FordelingDto(foreldrepengesøknad.getUttaksplan(),
-                    foreldrepengesøknad.getAnnenForelder().erInformertOmSøknaden);
+                    foreldrepengesøknad.getAnnenForelder().getErInformertOmSøknaden());
             this.rettigheter = new RettigheterDto(foreldrepengesøknad);
         }
 
@@ -90,12 +90,12 @@ public class YtelseDto {
         public AnnenForelderDto(AnnenForelder annenForelder) {
             this.type = annenForelder.type();
             this.navn = type.equals("ukjent") ? null : navn(annenForelder);
-            this.land = annenForelder.bostedsland;
+            this.land = annenForelder.getBostedsland();
 
             if (annenForelder.type().equals("norsk")) {
-                this.fnr = annenForelder.fnr;
+                this.fnr = annenForelder.getFnr();
             } else if (annenForelder.type().equals("utenlandsk")) {
-                this.id = annenForelder.fnr;
+                this.id = annenForelder.getFnr();
             }
         }
 
@@ -188,8 +188,8 @@ public class YtelseDto {
 
         public RettigheterDto(Foreldrepengesøknad foreldrepengesøknad) {
             this.harAleneOmsorgForBarnet = foreldrepengesøknad.getSøker().getErAleneOmOmsorg();
-            this.harAnnenForelderRett = foreldrepengesøknad.getAnnenForelder().harRettPåForeldrepenger;
-            this.datoForAleneomsorg = foreldrepengesøknad.getAnnenForelder().datoForAleneomsorg;
+            this.harAnnenForelderRett = foreldrepengesøknad.getAnnenForelder().getHarRettPåForeldrepenger();
+            this.datoForAleneomsorg = foreldrepengesøknad.getAnnenForelder().getDatoForAleneomsorg();
         }
     }
 
