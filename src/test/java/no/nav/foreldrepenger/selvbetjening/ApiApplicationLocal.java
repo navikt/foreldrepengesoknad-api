@@ -18,7 +18,7 @@ import org.springframework.retry.annotation.EnableRetry;
 import com.google.common.base.Joiner;
 
 import no.nav.foreldrepenger.selvbetjening.stub.StorageStub;
-import no.nav.foreldrepenger.selvbetjening.tjeneste.mellomlagring.Storage;
+import no.nav.foreldrepenger.selvbetjening.tjeneste.mellomlagring.MellomlagringTjeneste;
 import no.nav.foreldrepenger.selvbetjening.util.Cluster;
 import no.nav.foreldrepenger.selvbetjening.util.ConditionalOnClusters;
 import no.nav.security.token.support.spring.api.EnableJwtTokenValidation;
@@ -49,7 +49,7 @@ public class ApiApplicationLocal {
 
     @Bean
     @ConditionalOnClusters(clusters = Cluster.LOCAL)
-    public Storage storageStub() {
+    public MellomlagringTjeneste storageStub() {
         return new StorageStub();
     }
 }

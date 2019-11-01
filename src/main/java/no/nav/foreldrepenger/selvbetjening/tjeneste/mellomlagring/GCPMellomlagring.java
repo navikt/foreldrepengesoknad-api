@@ -10,16 +10,17 @@ import org.slf4j.LoggerFactory;
 
 import com.google.cloud.storage.BlobId;
 import com.google.cloud.storage.BlobInfo;
+import com.google.cloud.storage.Storage;
 import com.google.cloud.storage.StorageException;
 import com.google.cloud.storage.StorageOptions;
 
-public class GCPCloudStorage extends AbstractStorage {
+public class GCPMellomlagring extends AbstractStorage {
 
-    private static final Logger LOG = LoggerFactory.getLogger(GCPCloudStorage.class);
+    private static final Logger LOG = LoggerFactory.getLogger(GCPMellomlagring.class);
 
-    private final com.google.cloud.storage.Storage storage;
+    private final Storage storage;
 
-    public GCPCloudStorage(String søknadBøtte, String mellomlagringBøtte) {
+    public GCPMellomlagring(String søknadBøtte, String mellomlagringBøtte) {
         super(søknadBøtte, mellomlagringBøtte);
         this.storage = StorageOptions.getDefaultInstance().getService();
     }

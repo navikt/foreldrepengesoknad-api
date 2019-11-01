@@ -14,7 +14,7 @@ import no.nav.foreldrepenger.selvbetjening.util.ConditionalOnClusters;
 @ConditionalOnClusters(clusters = { DEV_GCP, PROD_GCP, DEV_SBS, PROD_SBS })
 public class MellomlagringHealthIndicator extends AbstractPingableHealthIndicator {
 
-    public MellomlagringHealthIndicator(Storage pingable) {
+    public MellomlagringHealthIndicator(MellomlagringTjeneste pingable) {
         super(pingable);
     }
 }

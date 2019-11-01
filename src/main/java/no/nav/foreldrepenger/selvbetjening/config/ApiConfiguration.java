@@ -34,7 +34,7 @@ import com.google.common.collect.ImmutableMap;
 
 import no.nav.foreldrepenger.selvbetjening.interceptors.client.ApiKeyInjectingClientInterceptor;
 import no.nav.foreldrepenger.selvbetjening.tjeneste.ZoneCrossingAware;
-import no.nav.foreldrepenger.selvbetjening.tjeneste.mellomlagring.StorageCrypto;
+import no.nav.foreldrepenger.selvbetjening.tjeneste.mellomlagring.MellomlagringKrypto;
 
 @Configuration
 public class ApiConfiguration implements WebMvcConfigurer {
@@ -90,8 +90,8 @@ public class ApiConfiguration implements WebMvcConfigurer {
     }
 
     @Bean
-    public StorageCrypto storageCrypto(@Value("${storage.passphrase}") String passPhrase) {
-        return new StorageCrypto(passPhrase);
+    public MellomlagringKrypto krypto(@Value("${storage.passphrase}") String passPhrase) {
+        return new MellomlagringKrypto(passPhrase);
     }
 
     @Override

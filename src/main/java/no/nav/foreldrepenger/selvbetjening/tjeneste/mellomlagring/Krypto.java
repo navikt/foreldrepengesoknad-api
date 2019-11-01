@@ -1,23 +1,29 @@
 package no.nav.foreldrepenger.selvbetjening.tjeneste.mellomlagring;
 
-import java.security.spec.KeySpec;
+import static javax.crypto.Cipher.DECRYPT_MODE;
+import static javax.crypto.Cipher.ENCRYPT_MODE;
+
+import java.security.InvalidAlgorithmParameterException;
+import java.security.InvalidKeyException;
+import java.security.NoSuchAlgorithmException;
 import java.util.Base64;
 
 import javax.crypto.Cipher;
+import javax.crypto.NoSuchPaddingException;
 import javax.crypto.SecretKey;
 import javax.crypto.SecretKeyFactory;
 import javax.crypto.spec.GCMParameterSpec;
 import javax.crypto.spec.PBEKeySpec;
 import javax.crypto.spec.SecretKeySpec;
 
-public class Crypto {
+public class Krypto {
 
     private final SecretKey key;
-    private String iv;
+    private final String iv;
 
     private static final String ALGO = "AES/GCM/NoPadding";
 
-    public Crypto(String passphrase, String fnr) {
+    public Krypto(String passphrase, String fnr) {
         if (isEmpty(passphrase) || isEmpty(fnr)) {
             throw new IllegalArgumentException("Both passphrase and fnr must be provided");
         }
@@ -27,9 +33,7 @@ public class Crypto {
 
     public String encrypt(String plainText) {
         try {
-            Cipher cipher = Cipher.getInstance(ALGO);
-            cipher.init(Cipher.ENCRYPT_MODE, key, new GCMParameterSpec(128, iv.getBytes()));
-            return Base64.getEncoder().encodeToString(cipher.doFinal(plainText.getBytes()));
+            return Base64.getEncoder().encodeToString(cipher(ENCRYPT_MODE).doFinal(plainText.getBytes()));
         } catch (Exception ex) {
             throw new RuntimeException("Error while encrypting text", ex);
         }
@@ -37,28 +41,30 @@ public class Crypto {
 
     public String decrypt(String encrypted) {
         try {
-            Cipher cipher = Cipher.getInstance(ALGO);
-            cipher.init(Cipher.DECRYPT_MODE, key, new GCMParameterSpec(128, iv.getBytes()));
-            return new String(cipher.doFinal(Base64.getDecoder().decode(encrypted)));
+            return new String(cipher(DECRYPT_MODE).doFinal(Base64.getDecoder().decode(encrypted)));
         } catch (Exception ex) {
             throw new RuntimeException("Error while decrypting text", ex);
         }
     }
 
+    private Cipher cipher(int mode) throws NoSuchAlgorithmException, NoSuchPaddingException, InvalidKeyException,
+            InvalidAlgorithmParameterException {
+        Cipher cipher = Cipher.getInstance(ALGO);
+        cipher.init(mode, key, new GCMParameterSpec(128, iv.getBytes()));
+        return cipher;
+    }
+
     private SecretKey key(String passphrase, String salt) {
         try {
-            SecretKeyFactory factory = SecretKeyFactory.getInstance("PBKDF2WithHmacSHA256");
-            char[] passwordChars = passphrase.toCharArray();
-            KeySpec spec = new PBEKeySpec(passwordChars, salt.getBytes(), 10000, 256);
-            SecretKey key = factory.generateSecret(spec);
-            return new SecretKeySpec(key.getEncoded(), "AES");
+            return new SecretKeySpec(SecretKeyFactory.getInstance("PBKDF2WithHmacSHA256")
+                    .generateSecret(new PBEKeySpec(passphrase.toCharArray(), salt.getBytes(), 10000, 256)).getEncoded(),
+                    "AES");
         } catch (Exception ex) {
             throw new RuntimeException("Error while generating key", ex);
         }
     }
 
     private boolean isEmpty(String str) {
-        return (str == null) || (str.trim().length() == 0);
+        return (str == null) || (str.trim().isEmpty());
     }
-
 }

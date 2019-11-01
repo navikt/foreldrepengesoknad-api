@@ -41,7 +41,7 @@ public final class StringUtil {
         return limit(Arrays.toString(bytes), max);
     }
 
-    public static String mask(String value) {
+    public static String maskFnr(String value) {
         return (value != null) && (value.length() == 11) ? Strings.padEnd(value.substring(0, 6), 11, '*') : value;
     }
 

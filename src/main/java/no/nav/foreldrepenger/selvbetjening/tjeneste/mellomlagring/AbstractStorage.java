@@ -5,7 +5,7 @@ import java.util.Optional;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-public abstract class AbstractStorage implements Storage {
+public abstract class AbstractStorage implements MellomlagringTjeneste {
     private static final Logger LOG = LoggerFactory.getLogger(AbstractStorage.class);
 
     protected abstract boolean writeString(String bøtte, String katalog, String key, String value);

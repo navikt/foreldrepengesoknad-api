@@ -17,13 +17,13 @@ import com.amazonaws.services.s3.model.CreateBucketRequest;
 import com.amazonaws.services.s3.model.S3Object;
 import com.amazonaws.services.s3.model.lifecycle.LifecycleFilter;
 
-public class S3Storage extends AbstractStorage {
+public class S3Mellomlagring extends AbstractStorage {
 
-    private static final Logger LOG = LoggerFactory.getLogger(S3Storage.class);
+    private static final Logger LOG = LoggerFactory.getLogger(S3Mellomlagring.class);
 
     private final AmazonS3 s3;
 
-    public S3Storage(AmazonS3 s3, String søknadBucket, String mellomlagringBucket) {
+    public S3Mellomlagring(AmazonS3 s3, String søknadBucket, String mellomlagringBucket) {
         super(søknadBucket, mellomlagringBucket);
         this.s3 = s3;
         ensureBucketExists(søknadBucket, 365);
