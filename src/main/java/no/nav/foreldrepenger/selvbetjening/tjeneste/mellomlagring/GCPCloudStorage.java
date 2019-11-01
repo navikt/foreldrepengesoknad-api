@@ -1,39 +1,28 @@
 package no.nav.foreldrepenger.selvbetjening.tjeneste.mellomlagring;
 
 import static java.nio.charset.StandardCharsets.UTF_8;
-import static org.springframework.http.MediaType.APPLICATION_JSON_UTF8_VALUE;
+import static org.springframework.http.MediaType.APPLICATION_JSON_VALUE;
 
 import java.net.URI;
 import java.nio.charset.StandardCharsets;
-import java.util.Optional;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import com.google.cloud.storage.Blob;
 import com.google.cloud.storage.BlobId;
 import com.google.cloud.storage.BlobInfo;
+import com.google.cloud.storage.StorageException;
 import com.google.cloud.storage.StorageOptions;
 
-public class GCPCloudStorage implements Storage {
+public class GCPCloudStorage extends AbstractStorage {
 
     private static final Logger LOG = LoggerFactory.getLogger(GCPCloudStorage.class);
 
     private final com.google.cloud.storage.Storage storage;
-    private final String søknadBucket;
-    private final String mellomlagringBucket;
 
-    public GCPCloudStorage(String søknadBucket, String mellomlagringBucket) {
+    public GCPCloudStorage(String søknadBøtte, String mellomlagringBøtte) {
+        super(søknadBøtte, mellomlagringBøtte);
         this.storage = StorageOptions.getDefaultInstance().getService();
-        this.søknadBucket = søknadBucket;
-        this.mellomlagringBucket = mellomlagringBucket;
-    }
-
-    @Override
-    public String ping() {
-        put("ping", "pingKey", "42");
-        delete("ping", "pingKey");
-        return "OK";
     }
 
     @Override
@@ -42,70 +31,42 @@ public class GCPCloudStorage implements Storage {
     }
 
     @Override
-    public void put(String directory, String key, String value) {
-        writeString(søknadBucket, directory, key, value);
-    }
-
-    @Override
-    public void putTmp(String directory, String key, String value) {
-        writeString(mellomlagringBucket, directory, key, value);
-    }
-
-    @Override
-    public Optional<String> get(String directory, String key) {
-        return Optional.ofNullable(readString(søknadBucket, directory, key));
-    }
-
-    @Override
-    public Optional<String> getTmp(String directory, String key) {
-        return Optional.ofNullable(readString(mellomlagringBucket, directory, key));
-    }
-
-    @Override
-    public void delete(String directory, String key) {
-        deleteString(søknadBucket, directory, key);
-    }
-
-    private void deleteString(String bucketName, String directory, String key) {
-        LOG.info("Fjerner objekt fra bøtte {}, katalog {}", bucketName, directory);
-        storage.delete(BlobId.of(bucketName, fileName(directory, key)));
-        LOG.info("Fjernet objekt {} fra bøtte {}", directory, bucketName);
-    }
-
-    @Override
-    public void deleteTmp(String directory, String key) {
-        deleteString(mellomlagringBucket, directory, key);
-    }
-
-    private void writeString(String bucketName, String directory, String key, String value) {
-        LOG.info("Lagrer objekt i bøtte {}, katalog {}", bucketName, directory);
-        Blob blob = storage.create(
-                BlobInfo.newBuilder(BlobId.of(bucketName, fileName(directory, key)))
-                        .setContentType(APPLICATION_JSON_UTF8_VALUE).build(),
-                value.getBytes(UTF_8));
-        LOG.trace("Lagret objekt {} i bøtte {}", blob, bucketName);
-    }
-
-    private String readString(String bucketName, String directory, String key) {
-        String path = fileName(directory, key);
+    protected boolean writeString(String bøtte, String katalog, String key, String value) {
         try {
-            LOG.info("Henter objekt fra bøtte {}, katalog {}", bucketName, directory);
-            String value = new String(storage.get(bucketName, path).getContent(), StandardCharsets.UTF_8);
-            LOG.trace("Hentet objekt {} fra bøtte {}", value, bucketName);
-            return value;
-        } catch (Exception e) {
-            LOG.trace("Kunne ikke hente {}, finnes sannsynligvis ikke", path, e);
+            storage.create(BlobInfo.newBuilder(BlobId.of(bøtte, fileName(katalog, key)))
+                    .setContentType(APPLICATION_JSON_VALUE).build(), value.getBytes(UTF_8));
+            return true;
+        } catch (StorageException e) {
+            LOG.warn("Feil ved lagring", e);
+            return false;
+        }
+    }
+
+    @Override
+    protected String readString(String bøtte, String katalog, String key) {
+        String path = fileName(katalog, key);
+        try {
+            return new String(storage.get(bøtte, path).getContent(), StandardCharsets.UTF_8);
+        } catch (StorageException e) {
+            LOG.warn("Feil ved henting", e);
             return null;
         }
     }
 
-    private static String fileName(String directory, String key) {
-        return directory + "_" + key;
+    @Override
+    protected boolean deleteString(String bøtte, String katalog, String key) {
+        try {
+            storage.delete(BlobId.of(bøtte, fileName(katalog, key)));
+            return true;
+        } catch (StorageException e) {
+            LOG.warn("Feil ved fjerning", e);
+            return false;
+        }
     }
 
     @Override
     public String toString() {
-        return getClass().getSimpleName() + "[storage=" + storage + ", søknadBucket=" + søknadBucket
-                + ", mellomlagringBucket=" + mellomlagringBucket + "]";
+        return getClass().getSimpleName() + "[storage=" + storage + ", søknadBøtte=" + getSøknadBøtte()
+                + ", mellomlagringBøtte=" + getMellomlagringBøtte() + "]";
     }
 }

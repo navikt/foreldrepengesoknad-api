@@ -38,8 +38,11 @@ import no.nav.foreldrepenger.selvbetjening.tjeneste.mellomlagring.StorageCrypto;
 
 @Configuration
 public class ApiConfiguration implements WebMvcConfigurer {
-    @Value("${allowed.origins}")
-    private String[] allowedOrigins;
+    private final String[] allowedOrigins;
+
+    public ApiConfiguration(@Value("${allowed.origins}") String[] allowedOrigins) {
+        this.allowedOrigins = allowedOrigins;
+    }
 
     private static final Logger LOG = LoggerFactory.getLogger(ApiConfiguration.class);
 
@@ -80,8 +83,8 @@ public class ApiConfiguration implements WebMvcConfigurer {
             @Override
             public <T, E extends Throwable> void onError(RetryContext context, RetryCallback<T, E> callback,
                     Throwable t) {
-                log.warn("Retry methode {} kastet {}. exception {}",
-                        context.getAttribute(NAME), context.getRetryCount(), t.toString(), t);
+                log.warn("Retry-methode {} kastet {}. exception {}",
+                        context.getAttribute(NAME), context.getRetryCount(), t.getClass().getSimpleName(), t);
             }
         });
     }
