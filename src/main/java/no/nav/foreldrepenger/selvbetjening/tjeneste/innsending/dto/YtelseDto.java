@@ -100,8 +100,8 @@ public class YtelseDto {
         }
 
         private String navn(AnnenForelder annenForelder) {
-            return isNotBlank(annenForelder.navn) ? annenForelder.navn
-                    : annenForelder.fornavn + " " + annenForelder.etternavn;
+            return isNotBlank(annenForelder.getNavn()) ? annenForelder.getNavn()
+                    : annenForelder.getFornavn() + " " + annenForelder.getEtternavn();
         }
     }
 
