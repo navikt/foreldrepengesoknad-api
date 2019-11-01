@@ -16,4 +16,9 @@ public class Bankkonto {
         this.kontonummer = kontonummer;
         this.banknavn = banknavn;
     }
+
+    @Override
+    public String toString() {
+        return getClass().getSimpleName() + "[kontonummer=" + kontonummer + ", banknavn=" + banknavn + "]";
+    }
 }
