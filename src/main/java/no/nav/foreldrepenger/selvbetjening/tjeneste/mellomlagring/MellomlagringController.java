@@ -1,14 +1,13 @@
 package no.nav.foreldrepenger.selvbetjening.tjeneste.mellomlagring;
 
 import static no.nav.foreldrepenger.selvbetjening.util.Constants.ISSUER;
+import static org.springframework.http.HttpStatus.NO_CONTENT;
 import static org.springframework.http.MediaType.APPLICATION_JSON_VALUE;
 import static org.springframework.http.MediaType.MULTIPART_FORM_DATA_VALUE;
 import static org.springframework.http.ResponseEntity.created;
 import static org.springframework.http.ResponseEntity.noContent;
 import static org.springframework.http.ResponseEntity.notFound;
 import static org.springframework.http.ResponseEntity.ok;
-
-import java.util.Optional;
 
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.DeleteMapping;
@@ -18,6 +17,7 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestPart;
+import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.multipart.MultipartFile;
 
@@ -37,58 +37,55 @@ public class MellomlagringController {
     }
 
     @GetMapping
-    public ResponseEntity<String> getSoknad() {
-        Optional<String> muligSøknad = mellomlagring.lesKryptertSøknad();
-        return muligSøknad
+    public ResponseEntity<String> lesSøknad() {
+        return mellomlagring.lesKryptertSøknad()
                 .map(s -> ok().body(s))
                 .orElse(noContent().build());
     }
 
     @PostMapping(consumes = APPLICATION_JSON_VALUE)
-    public ResponseEntity<String> storeSoknad(@RequestBody String soknad) {
+    @ResponseStatus(NO_CONTENT)
+    public void lagreSøknad(@RequestBody String soknad) {
         mellomlagring.lagreKryptertSøknad(soknad);
-        return noContent().build();
     }
 
     @DeleteMapping
-    public ResponseEntity<String> deleteSoknad() {
+    @ResponseStatus(NO_CONTENT)
+    public void slettSøknad() {
         mellomlagring.slettKryptertSøknad();
-        return noContent().build();
     }
 
     @GetMapping("vedlegg/{key}")
-    public ResponseEntity<byte[]> getAttachment(@PathVariable("key") String key) {
-        Optional<Attachment> muligVedlegg = mellomlagring.lesKryptertVedlegg(key);
-        return muligVedlegg
+    public ResponseEntity<byte[]> lesVedlegg(@PathVariable("key") String key) {
+        return mellomlagring.lesKryptertVedlegg(key)
                 .map(Attachment::asOKHTTPEntity)
                 .orElse(notFound().build());
     }
 
     @PostMapping(path = "/vedlegg", consumes = MULTIPART_FORM_DATA_VALUE)
-    public ResponseEntity<String> storeAttachment(@RequestPart("vedlegg") MultipartFile attachmentMultipartFile) {
+    public ResponseEntity<String> lagreVedlegg(@RequestPart("vedlegg") MultipartFile attachmentMultipartFile) {
         Attachment attachment = Attachment.of(attachmentMultipartFile);
         mellomlagring.lagreKryptertVedlegg(attachment);
         return created(attachment.uri()).body(attachment.uuid);
     }
 
     @DeleteMapping("vedlegg/{key}")
-    public ResponseEntity<String> deleteAttachment(@PathVariable("key") String key) {
+    @ResponseStatus(NO_CONTENT)
+    public void slettVedlegg(@PathVariable("key") String key) {
         mellomlagring.slettKryptertVedlegg(key);
-        return noContent().build();
     }
 
     @GetMapping("kvittering/{type}")
-    public ResponseEntity<String> getKvittering(@PathVariable("type") String type) {
-        Optional<String> muligKvittering = mellomlagring.lesKryptertKvittering(type);
-        return muligKvittering
+    public ResponseEntity<String> lesKvittering(@PathVariable("type") String type) {
+        return mellomlagring.lesKryptertKvittering(type)
                 .map(kvittering -> ok().body(kvittering))
                 .orElse(noContent().build());
     }
 
     @PostMapping(value = "kvittering/{type}", consumes = APPLICATION_JSON_VALUE)
-    public ResponseEntity<String> storeKvittering(@PathVariable("type") String type, @RequestBody String kvittering) {
+    @ResponseStatus(NO_CONTENT)
+    public void lagreKvittering(@PathVariable("type") String type, @RequestBody String kvittering) {
         mellomlagring.lagreKryptertKvittering(type, kvittering);
-        return noContent().build();
     }
 
     @Override
