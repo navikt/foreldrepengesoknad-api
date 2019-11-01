@@ -1,33 +1,16 @@
 package no.nav.foreldrepenger.selvbetjening.tjeneste.innsyn;
 
-import static no.nav.foreldrepenger.selvbetjening.tjeneste.UriUtil.queryParams;
-import static no.nav.foreldrepenger.selvbetjening.tjeneste.UriUtil.uri;
-
 import java.net.URI;
 
 import org.springframework.boot.context.properties.ConfigurationProperties;
-import org.springframework.stereotype.Component;
+import org.springframework.boot.context.properties.ConstructorBinding;
+import org.springframework.boot.context.properties.bind.DefaultValue;
 
-//@ConstructorBinding
+import no.nav.foreldrepenger.selvbetjening.tjeneste.AbstractConfig;
+
+@ConstructorBinding
 @ConfigurationProperties(prefix = "innsyn", ignoreInvalidFields = false)
-@Component
-public class InnsynConfig /* extends AbstractConfig */ {
-
-    public URI getOppslag() {
-        return oppslag;
-    }
-
-    public void setOppslag(URI oppslag) {
-        this.oppslag = oppslag;
-    }
-
-    public URI getMottak() {
-        return mottak;
-    }
-
-    public void setMottak(URI mottak) {
-        this.mottak = mottak;
-    }
+public class InnsynConfig extends AbstractConfig {
 
     private static final String PING = "mottak/ping";
     private static final String FPSAK_SAKER = "innsyn/saker";
@@ -38,62 +21,43 @@ public class InnsynConfig /* extends AbstractConfig */ {
     private static final String UTTAKSPLANANNEN = "innsyn/uttaksplanannen";
     private static final String VEDTAK = "innsyn/vedtak";
 
-    private /* final */ String key;
-    private /* final */ URI oppslag;
-    private /* final */ URI mottak;
+    private final URI oppslag;
 
-    private /* final */ boolean enabled;
-
-    /*
-     * public InnsynConfig(URI mottak, URI oppslag, @DefaultValue("true") boolean
-     * enabled) { super(mottak, enabled); this.oppslag = oppslag; this.enabled =
-     * enabled; }
-     */
-
-    public String getKey() {
-        return key;
+    public InnsynConfig(URI mottak, URI oppslag, @DefaultValue("true") boolean enabled) {
+        super(mottak, enabled);
+        this.oppslag = oppslag;
     }
 
-    public void setKey(String key) {
-        this.key = key;
+    public URI getOppslag() {
+        return oppslag;
     }
 
-    public void setEnabled(boolean enabled) {
-        this.enabled = enabled;
-    }
-
-    public boolean isEnabled() {
-        return enabled;
+    public URI getMottak() {
+        return getUri();
     }
 
     public URI pingURI() {
-        return uri(mottak, PING);
+        return uri(getMottak(), PING);
     }
 
     URI fpsakURI() {
-        return uri(mottak, FPSAK_SAKER);
+        return uri(getMottak(), FPSAK_SAKER);
     }
 
     URI sakURI() {
-        return uri(oppslag, SAK_SAKER);
+        return uri(getOppslag(), SAK_SAKER);
     }
 
     URI uttakURI(String saksnummer) {
-        return uri(mottak, UTTAKSPLAN, queryParams(SAKSNUMMER, saksnummer));
+        return uri(getMottak(), UTTAKSPLAN, queryParams(SAKSNUMMER, saksnummer));
     }
 
     URI uttakURIForAnnenPart(String annenPart) {
-        return uri(mottak, UTTAKSPLANANNEN, queryParams(ANNENPART, annenPart));
+        return uri(getMottak(), UTTAKSPLANANNEN, queryParams(ANNENPART, annenPart));
     }
 
     public URI vedtakURI(String saksnummer) {
-        return uri(mottak, VEDTAK, queryParams(SAKSNUMMER, saksnummer));
-    }
-
-    @Override
-    public String toString() {
-        return getClass().getSimpleName() + "[key=" + key + ", oppslag=" + oppslag + ", mottak=" + mottak
-                + ", enabled=" + enabled + "]";
+        return uri(getMottak(), VEDTAK, queryParams(SAKSNUMMER, saksnummer));
     }
 
 }

@@ -33,7 +33,6 @@ import no.nav.security.token.support.spring.SpringTokenValidationContextHolder;
 @ContextConfiguration(classes = { NotFoundException.class, TokenUtil.class,
         SpringTokenValidationContextHolder.class })
 @RestClientTest
-//@ConfigurationPropertiesScan
 @ActiveProfiles(EnvUtil.TEST)
 public class InnsynTest {
 
@@ -42,11 +41,7 @@ public class InnsynTest {
     private static final InnsynConfig CFG = innsynCfg();
 
     private static InnsynConfig innsynCfg() {
-        var cfg = new InnsynConfig();
-        cfg.setMottak(URI.create("http://www.mottak.no"));
-        cfg.setOppslag(URI.create("http://www.oppslag.no"));
-        cfg.setEnabled(true);
-        return cfg;
+        return new InnsynConfig(URI.create("http://www.mottak.no"), URI.create("http://www.oppslag.no"), true);
     }
 
     @Autowired

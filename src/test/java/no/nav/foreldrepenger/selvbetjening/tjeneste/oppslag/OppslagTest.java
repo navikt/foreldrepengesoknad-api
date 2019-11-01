@@ -4,6 +4,8 @@ import static org.springframework.test.web.client.match.MockRestRequestMatchers.
 import static org.springframework.test.web.client.match.MockRestRequestMatchers.requestTo;
 import static org.springframework.test.web.client.response.MockRestResponseCreators.withStatus;
 
+import java.net.URI;
+
 import javax.ws.rs.NotFoundException;
 
 import org.junit.jupiter.api.BeforeEach;
@@ -27,7 +29,7 @@ import no.nav.security.token.support.spring.SpringTokenValidationContextHolder;
 @ExtendWith(SpringExtension.class)
 @TestPropertySource(properties = { "oppslag.uri: http://www.oppslag.no",
         "spring.cloud.vault.enabled=false" })
-@ContextConfiguration(classes = { NotFoundException.class, OppslagConfig.class, TokenUtil.class,
+@ContextConfiguration(classes = { NotFoundException.class, TokenUtil.class,
         SpringTokenValidationContextHolder.class })
 @RestClientTest
 
@@ -35,8 +37,8 @@ public class OppslagTest {
 
     @Mock
     TokenUtil tokenHandler;
-    @Autowired
-    private OppslagConfig oppslagConfig;
+
+    private OppslagConfig oppslagConfig = new OppslagConfig(URI.create("http://www.vg.no"), "key", true);
 
     @Autowired
     private MockRestServiceServer server;
