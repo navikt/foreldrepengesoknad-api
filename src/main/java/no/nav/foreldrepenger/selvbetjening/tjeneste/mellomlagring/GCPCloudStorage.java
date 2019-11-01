@@ -4,7 +4,6 @@ import static java.nio.charset.StandardCharsets.UTF_8;
 import static org.springframework.http.MediaType.APPLICATION_JSON_VALUE;
 
 import java.net.URI;
-import java.nio.charset.StandardCharsets;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -44,9 +43,8 @@ public class GCPCloudStorage extends AbstractStorage {
 
     @Override
     protected String readString(String bøtte, String katalog, String key) {
-        String path = fileName(katalog, key);
         try {
-            return new String(storage.get(bøtte, path).getContent(), StandardCharsets.UTF_8);
+            return new String(storage.get(bøtte, fileName(katalog, key)).getContent(), UTF_8);
         } catch (StorageException e) {
             LOG.warn("Feil ved henting", e);
             return null;

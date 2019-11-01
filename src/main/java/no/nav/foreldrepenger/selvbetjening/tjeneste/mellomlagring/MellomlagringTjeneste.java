@@ -27,56 +27,35 @@ public class MellomlagringTjeneste {
         this.storage = storage;
         this.crypto = crypto;
         this.sjekker = sjekker;
-        LOG.info("Bruker storage " + storage.getClass().getSimpleName());
     }
 
     public Optional<String> hentSøknad() {
         String fnr = tokenHelper.autentisertBruker();
-        String directory = crypto.encryptDirectoryName(fnr);
-        LOG.info("Henter søknad fra katalog {}", directory);
-        Optional<String> søknad = storage.getTmp(directory, SØKNAD)
+        return storage.getTmp(crypto.encryptDirectoryName(fnr), SØKNAD)
                 .map(s -> crypto.decrypt(s, fnr));
-        LOG.info("Hentet søknad fra katalog {}", directory);
-        return søknad;
 
     }
 
     public void lagreSøknad(String søknad) {
         String fnr = tokenHelper.autentisertBruker();
-        String directory = crypto.encryptDirectoryName(fnr);
-        LOG.info("Skriver søknad til katalog {}", directory);
-        String encryptedValue = crypto.encrypt(søknad, fnr);
-        storage.putTmp(directory, SØKNAD, encryptedValue);
-        LOG.info("Skrev søknad til katalog {}", directory);
+        storage.putTmp(crypto.encryptDirectoryName(fnr), SØKNAD, crypto.encrypt(søknad, fnr));
     }
 
     public void slettSøknad() {
-        String fnr = tokenHelper.autentisertBruker();
-        String directory = crypto.encryptDirectoryName(fnr);
-        LOG.info("Fjerner søknad fra katalog {}", directory);
-        storage.deleteTmp(directory, SØKNAD);
-        LOG.info("Fjernet søknad fra katalog {}", directory);
+        storage.deleteTmp(crypto.encryptDirectoryName(tokenHelper.autentisertBruker()), SØKNAD);
     }
 
     public Optional<Attachment> hentVedlegg(String key) {
         String fnr = tokenHelper.autentisertBruker();
-        String directory = crypto.encryptDirectoryName(fnr);
-        LOG.info("Henter vedlegg med nøkkel {} fra katalog {}", key, directory);
-        Optional<Attachment> v = storage.getTmp(directory, key)
+        return storage.getTmp(crypto.encryptDirectoryName(fnr), key)
                 .map(vedlegg -> crypto.decrypt(vedlegg, fnr))
                 .map(Attachment::fromJson);
-        LOG.info("Hentet vedlegg med nøkkel {} fra katalog {}", key, directory);
-        return v;
     }
 
     public void lagreVedlegg(Attachment attachment) {
         sjekker.sjekkAttachments(attachment);
         String fnr = tokenHelper.autentisertBruker();
-        String directory = crypto.encryptDirectoryName(fnr);
-        LOG.info("Skriver vedlegg {} til katalog {}", attachment, directory);
-        String encryptedValue = crypto.encrypt(attachment.toJson(), fnr);
-        storage.putTmp(directory, attachment.uuid, encryptedValue);
-        LOG.info("Skrev vedlegg {} til katalog {}", attachment, directory);
+        storage.putTmp(crypto.encryptDirectoryName(fnr), attachment.uuid, crypto.encrypt(attachment.toJson(), fnr));
     }
 
     public void slettVedlegg(Vedlegg vedlegg) {
@@ -87,30 +66,19 @@ public class MellomlagringTjeneste {
 
     public void slettVedlegg(String uuid) {
         if (uuid != null) {
-            String directory = crypto.encryptDirectoryName(tokenHelper.autentisertBruker());
-            LOG.info("Fjerner vedlegg med nøkkel {} fra katalog {}", uuid, directory);
-            storage.deleteTmp(directory, uuid);
-            LOG.info("Fjernet vedlegg med nøkkel {} fra katalog {}", uuid, directory);
+            storage.deleteTmp(crypto.encryptDirectoryName(tokenHelper.autentisertBruker()), uuid);
         }
     }
 
     public Optional<String> hentKvittering(String type) {
         String fnr = tokenHelper.autentisertBruker();
-        String directory = crypto.encryptDirectoryName(fnr);
-        LOG.info("Henter kvittering fra katalog {}", directory);
-        Optional<String> kvittering = storage.get(directory, type)
+        return storage.get(crypto.encryptDirectoryName(fnr), type)
                 .map(k -> crypto.decrypt(k, fnr));
-        LOG.info("Hentet kvittering fra katalog {}", directory);
-        return kvittering;
     }
 
     public void lagreKvittering(String type, String kvittering) {
         String fnr = tokenHelper.autentisertBruker();
-        String directory = crypto.encryptDirectoryName(fnr);
-        LOG.info("Skriver kvittering til katalog {}", directory);
-        String encryptedValue = crypto.encrypt(kvittering, fnr);
-        storage.put(directory, type, encryptedValue);
-        LOG.info("Skrev kvittering til katalog {}", directory);
+        storage.put(crypto.encryptDirectoryName(fnr), type, crypto.encrypt(kvittering, fnr));
     }
 
     @Override
