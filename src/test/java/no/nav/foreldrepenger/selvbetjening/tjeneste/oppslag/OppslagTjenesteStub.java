@@ -68,9 +68,7 @@ public class OppslagTjenesteStub implements Oppslag {
         dto.fødselsdato = now().minusYears(21);
         dto.kjønn = "K";
         dto.landKode = NO;
-        dto.bankkonto = new Bankkonto();
-        dto.bankkonto.kontonummer = "1234567890";
-        dto.bankkonto.banknavn = "Stub NOR";
+        dto.bankkonto = new Bankkonto("1234567890", "Stub NOR");
 
         AnnenForelder annenForelder = new AnnenForelder("01017098765", "Steve", "Grønland", "Nichols",
                 now().minusYears(45));
