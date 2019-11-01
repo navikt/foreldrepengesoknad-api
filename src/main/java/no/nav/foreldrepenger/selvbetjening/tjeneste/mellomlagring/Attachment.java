@@ -5,13 +5,10 @@ import java.net.URI;
 import java.util.UUID;
 
 import org.springframework.http.MediaType;
-import org.springframework.http.ResponseEntity;
 import org.springframework.util.unit.DataSize;
 import org.springframework.util.unit.DataUnit;
 import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
-
-import com.google.gson.Gson;
 
 import no.nav.foreldrepenger.selvbetjening.error.AttachmentTooLargeException;
 import no.nav.foreldrepenger.selvbetjening.util.StringUtil;
@@ -53,25 +50,30 @@ public class Attachment {
         }
     }
 
-    public static Attachment fromJson(String json) {
-        return new Gson().fromJson(json, Attachment.class);
-    }
-
-    public String toJson() {
-        return new Gson().toJson(this);
-    }
-
     public URI uri() {
         return ServletUriComponentsBuilder
                 .fromCurrentRequest().path("/{uuid}")
                 .buildAndExpand(this.uuid).toUri();
     }
 
-    public ResponseEntity<byte[]> asOKHTTPEntity() {
-        return ResponseEntity.ok()
-                .contentType(contentType)
-                .contentLength(size)
-                .body(bytes);
+    public String getFilename() {
+        return filename;
+    }
+
+    public byte[] getBytes() {
+        return bytes;
+    }
+
+    public MediaType getContentType() {
+        return contentType;
+    }
+
+    public long getSize() {
+        return size;
+    }
+
+    public String getUuid() {
+        return uuid;
     }
 
     @Override

@@ -58,7 +58,7 @@ public class MellomlagringController {
     @GetMapping("vedlegg/{key}")
     public ResponseEntity<byte[]> lesVedlegg(@PathVariable("key") String key) {
         return mellomlagring.lesKryptertVedlegg(key)
-                .map(Attachment::asOKHTTPEntity)
+                .map(this::found)
                 .orElse(notFound().build());
     }
 
@@ -86,6 +86,13 @@ public class MellomlagringController {
     @ResponseStatus(NO_CONTENT)
     public void lagreKvittering(@PathVariable("type") String type, @RequestBody String kvittering) {
         mellomlagring.lagreKryptertKvittering(type, kvittering);
+    }
+
+    private ResponseEntity<byte[]> found(Attachment att) {
+        return ResponseEntity.ok()
+                .contentType(att.getContentType())
+                .contentLength(att.getSize())
+                .body(att.getBytes());
     }
 
     @Override

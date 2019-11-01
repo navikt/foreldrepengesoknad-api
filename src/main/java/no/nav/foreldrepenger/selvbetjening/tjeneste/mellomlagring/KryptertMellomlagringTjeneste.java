@@ -1,11 +1,10 @@
 package no.nav.foreldrepenger.selvbetjening.tjeneste.mellomlagring;
 
-import static org.slf4j.LoggerFactory.getLogger;
-
 import java.util.Optional;
 
-import org.slf4j.Logger;
 import org.springframework.stereotype.Service;
+
+import com.google.gson.Gson;
 
 import no.nav.foreldrepenger.selvbetjening.tjeneste.innsending.domain.Vedlegg;
 import no.nav.foreldrepenger.selvbetjening.util.TokenUtil;
@@ -13,10 +12,9 @@ import no.nav.foreldrepenger.selvbetjening.vedlegg.VedleggSjekker;
 
 @Service
 public class KryptertMellomlagringTjeneste {
-    private static final Logger LOG = getLogger(KryptertMellomlagringTjeneste.class);
 
     private static final String SØKNAD = "soknad";
-
+    private static final Gson GSON = new Gson();
     private final TokenUtil tokenUtil;
     private final MellomlagringTjeneste mellomlagring;
     private final MellomlagringKrypto krypto;
@@ -49,14 +47,14 @@ public class KryptertMellomlagringTjeneste {
         String fnr = tokenUtil.autentisertBruker();
         return mellomlagring.lesTmp(krypto.katalognavn(fnr), key)
                 .map(vedlegg -> krypto.decrypt(vedlegg, fnr))
-                .map(Attachment::fromJson);
+                .map(v -> GSON.fromJson(v, Attachment.class));
     }
 
     public void lagreKryptertVedlegg(Attachment attachment) {
         sjekker.sjekkAttachments(attachment);
         String fnr = tokenUtil.autentisertBruker();
         mellomlagring.lagreTmp(krypto.katalognavn(fnr), attachment.uuid,
-                krypto.encrypt(attachment.toJson(), fnr));
+                krypto.encrypt(GSON.toJson(attachment), fnr));
     }
 
     public void slettKryptertVedlegg(Vedlegg vedlegg) {
