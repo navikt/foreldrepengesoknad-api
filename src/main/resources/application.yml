@@ -1,7 +1,8 @@
 allowed.origins:
    https://engangsstonad.nav.no,
    https://foreldrepengesoknad.nav.no,
-   https://svangerskapspengesoknad.nav.no
+   https://svangerskapspengesoknad.nav.no,
+   https://foreldrepenger.nav.no
 no.nav:
    foreldrepenger:
       selvbetjening:
