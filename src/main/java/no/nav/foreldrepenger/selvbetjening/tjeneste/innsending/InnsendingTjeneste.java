@@ -59,7 +59,7 @@ public class InnsendingTjeneste implements Innsending {
             ettersending.getVedlegg().add(vedleggFra(ettersending.getBrukerTekst()));
         }
         Kvittering kvittering = connection.ettersend(ettersending);
-        ettersending.getVedlegg().forEach(mellomlagring::slettVedlegg);
+        ettersending.getVedlegg().forEach(mellomlagring::slettKryptertVedlegg);
         LOG.info(RETURNERER_KVITTERING, kvittering);
         return kvittering;
     }
@@ -108,14 +108,14 @@ public class InnsendingTjeneste implements Innsending {
 
     private void slettMellomlagringOgSøknad(Søknad søknad) {
         LOG.info("Sletter mellomlagret søknad og vedlegg");
-        søknad.getVedlegg().forEach(mellomlagring::slettVedlegg);
-        mellomlagring.slettSøknad();
+        søknad.getVedlegg().forEach(mellomlagring::slettKryptertVedlegg);
+        mellomlagring.slettKryptertSøknad();
         LOG.info("Slettet mellomlagret søknad og vedlegg OK");
     }
 
     private void hentVedleggBytes(Vedlegg vedlegg) {
         if (vedlegg.getUrl() != null) {
-            vedlegg.setContent(mellomlagring.hentVedlegg(vedlegg.getUuid())
+            vedlegg.setContent(mellomlagring.lesKryptertVedlegg(vedlegg.getUuid())
                     .map(a -> a.bytes)
                     .orElse(new byte[] {}));
         }

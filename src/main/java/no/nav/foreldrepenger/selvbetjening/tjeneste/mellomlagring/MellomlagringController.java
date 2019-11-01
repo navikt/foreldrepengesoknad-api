@@ -38,7 +38,7 @@ public class MellomlagringController {
 
     @GetMapping
     public ResponseEntity<String> getSoknad() {
-        Optional<String> muligSøknad = mellomlagring.hentSøknad();
+        Optional<String> muligSøknad = mellomlagring.lesKryptertSøknad();
         return muligSøknad
                 .map(s -> ok().body(s))
                 .orElse(noContent().build());
@@ -46,19 +46,19 @@ public class MellomlagringController {
 
     @PostMapping(consumes = APPLICATION_JSON_VALUE)
     public ResponseEntity<String> storeSoknad(@RequestBody String soknad) {
-        mellomlagring.lagreSøknad(soknad);
+        mellomlagring.lagreKryptertSøknad(soknad);
         return noContent().build();
     }
 
     @DeleteMapping
     public ResponseEntity<String> deleteSoknad() {
-        mellomlagring.slettSøknad();
+        mellomlagring.slettKryptertSøknad();
         return noContent().build();
     }
 
     @GetMapping("vedlegg/{key}")
     public ResponseEntity<byte[]> getAttachment(@PathVariable("key") String key) {
-        Optional<Attachment> muligVedlegg = mellomlagring.hentVedlegg(key);
+        Optional<Attachment> muligVedlegg = mellomlagring.lesKryptertVedlegg(key);
         return muligVedlegg
                 .map(Attachment::asOKHTTPEntity)
                 .orElse(notFound().build());
@@ -67,19 +67,19 @@ public class MellomlagringController {
     @PostMapping(path = "/vedlegg", consumes = MULTIPART_FORM_DATA_VALUE)
     public ResponseEntity<String> storeAttachment(@RequestPart("vedlegg") MultipartFile attachmentMultipartFile) {
         Attachment attachment = Attachment.of(attachmentMultipartFile);
-        mellomlagring.lagreVedlegg(attachment);
+        mellomlagring.lagreKryptertVedlegg(attachment);
         return created(attachment.uri()).body(attachment.uuid);
     }
 
     @DeleteMapping("vedlegg/{key}")
     public ResponseEntity<String> deleteAttachment(@PathVariable("key") String key) {
-        mellomlagring.slettVedlegg(key);
+        mellomlagring.slettKryptertVedlegg(key);
         return noContent().build();
     }
 
     @GetMapping("kvittering/{type}")
     public ResponseEntity<String> getKvittering(@PathVariable("type") String type) {
-        Optional<String> muligKvittering = mellomlagring.hentKvittering(type);
+        Optional<String> muligKvittering = mellomlagring.lesKryptertKvittering(type);
         return muligKvittering
                 .map(kvittering -> ok().body(kvittering))
                 .orElse(noContent().build());
@@ -87,7 +87,7 @@ public class MellomlagringController {
 
     @PostMapping(value = "kvittering/{type}", consumes = APPLICATION_JSON_VALUE)
     public ResponseEntity<String> storeKvittering(@PathVariable("type") String type, @RequestBody String kvittering) {
-        mellomlagring.lagreKvittering(type, kvittering);
+        mellomlagring.lagreKryptertKvittering(type, kvittering);
         return noContent().build();
     }
 

@@ -17,74 +17,74 @@ public class KryptertMellomlagringTjeneste {
 
     private static final String SØKNAD = "soknad";
 
-    private final TokenUtil tokenHelper;
+    private final TokenUtil tokenUtil;
     private final MellomlagringTjeneste mellomlagring;
     private final MellomlagringKrypto krypto;
     private final VedleggSjekker sjekker;
 
-    public KryptertMellomlagringTjeneste(TokenUtil tokenHelper, MellomlagringTjeneste mellomlagring,
+    public KryptertMellomlagringTjeneste(TokenUtil tokenUtil, MellomlagringTjeneste mellomlagring,
             MellomlagringKrypto krypto, VedleggSjekker sjekker) {
-        this.tokenHelper = tokenHelper;
+        this.tokenUtil = tokenUtil;
         this.mellomlagring = mellomlagring;
         this.krypto = krypto;
         this.sjekker = sjekker;
     }
 
-    public Optional<String> hentSøknad() {
-        String fnr = tokenHelper.autentisertBruker();
+    public Optional<String> lesKryptertSøknad() {
+        String fnr = tokenUtil.autentisertBruker();
         return mellomlagring.lesTmp(krypto.katalognavn(fnr), SØKNAD)
                 .map(s -> krypto.decrypt(s, fnr));
     }
 
-    public void lagreSøknad(String søknad) {
-        String fnr = tokenHelper.autentisertBruker();
+    public void lagreKryptertSøknad(String søknad) {
+        String fnr = tokenUtil.autentisertBruker();
         mellomlagring.lagreTmp(krypto.katalognavn(fnr), SØKNAD, krypto.encrypt(søknad, fnr));
     }
 
-    public void slettSøknad() {
-        mellomlagring.slettTmp(krypto.katalognavn(tokenHelper.autentisertBruker()), SØKNAD);
+    public void slettKryptertSøknad() {
+        mellomlagring.slettTmp(krypto.katalognavn(tokenUtil.autentisertBruker()), SØKNAD);
     }
 
-    public Optional<Attachment> hentVedlegg(String key) {
-        String fnr = tokenHelper.autentisertBruker();
+    public Optional<Attachment> lesKryptertVedlegg(String key) {
+        String fnr = tokenUtil.autentisertBruker();
         return mellomlagring.lesTmp(krypto.katalognavn(fnr), key)
                 .map(vedlegg -> krypto.decrypt(vedlegg, fnr))
                 .map(Attachment::fromJson);
     }
 
-    public void lagreVedlegg(Attachment attachment) {
+    public void lagreKryptertVedlegg(Attachment attachment) {
         sjekker.sjekkAttachments(attachment);
-        String fnr = tokenHelper.autentisertBruker();
+        String fnr = tokenUtil.autentisertBruker();
         mellomlagring.lagreTmp(krypto.katalognavn(fnr), attachment.uuid,
                 krypto.encrypt(attachment.toJson(), fnr));
     }
 
-    public void slettVedlegg(Vedlegg vedlegg) {
+    public void slettKryptertVedlegg(Vedlegg vedlegg) {
         if (vedlegg.getUrl() != null) {
-            slettVedlegg(vedlegg.getUuid());
+            slettKryptertVedlegg(vedlegg.getUuid());
         }
     }
 
-    public void slettVedlegg(String uuid) {
+    public void slettKryptertVedlegg(String uuid) {
         if (uuid != null) {
-            mellomlagring.slettTmp(krypto.katalognavn(tokenHelper.autentisertBruker()), uuid);
+            mellomlagring.slettTmp(krypto.katalognavn(tokenUtil.autentisertBruker()), uuid);
         }
     }
 
-    public Optional<String> hentKvittering(String type) {
-        String fnr = tokenHelper.autentisertBruker();
+    public Optional<String> lesKryptertKvittering(String type) {
+        String fnr = tokenUtil.autentisertBruker();
         return mellomlagring.les(krypto.katalognavn(fnr), type)
                 .map(k -> krypto.decrypt(k, fnr));
     }
 
-    public void lagreKvittering(String type, String kvittering) {
-        String fnr = tokenHelper.autentisertBruker();
+    public void lagreKryptertKvittering(String type, String kvittering) {
+        String fnr = tokenUtil.autentisertBruker();
         mellomlagring.lagre(krypto.katalognavn(fnr), type, krypto.encrypt(kvittering, fnr));
     }
 
     @Override
     public String toString() {
-        return getClass().getSimpleName() + "[tokenHelper=" + tokenHelper + ", storage=" + mellomlagring + ", crypto="
+        return getClass().getSimpleName() + "[tokenUtil=" + tokenUtil + ", storage=" + mellomlagring + ", crypto="
                 + krypto + ", sjekker=" + sjekker + "]";
     }
 }
