@@ -3,6 +3,9 @@ package no.nav.foreldrepenger.selvbetjening.config;
 import static io.swagger.models.Scheme.HTTP;
 import static io.swagger.models.Scheme.HTTPS;
 import static java.util.stream.Collectors.toSet;
+import static no.nav.foreldrepenger.selvbetjening.util.Cluster.DEV_GCP;
+import static no.nav.foreldrepenger.selvbetjening.util.Cluster.DEV_SBS;
+import static no.nav.foreldrepenger.selvbetjening.util.Cluster.LOCAL;
 import static springfox.documentation.builders.RequestHandlerSelectors.basePackage;
 import static springfox.documentation.spi.DocumentationType.SWAGGER_2;
 
@@ -13,14 +16,13 @@ import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 
 import io.swagger.models.Scheme;
-import no.nav.foreldrepenger.selvbetjening.util.Cluster;
 import no.nav.foreldrepenger.selvbetjening.util.ConditionalOnClusters;
 import springfox.documentation.builders.PathSelectors;
 import springfox.documentation.spring.web.plugins.Docket;
 import springfox.documentation.swagger2.annotations.EnableSwagger2;
 
 @Configuration
-@ConditionalOnClusters(clusters = { Cluster.DEV_GCP, Cluster.DEV_SBS, Cluster.LOCAL })
+@ConditionalOnClusters(clusters = { DEV_GCP, DEV_SBS, LOCAL })
 @EnableSwagger2
 public class SwaggerConfiguration {
 

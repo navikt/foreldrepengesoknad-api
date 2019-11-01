@@ -4,21 +4,27 @@ import static com.fasterxml.jackson.annotation.JsonInclude.Include.NON_NULL;
 
 import java.time.LocalDate;
 
+import com.fasterxml.jackson.annotation.JsonCreator;
 import com.fasterxml.jackson.annotation.JsonInclude;
+import com.fasterxml.jackson.annotation.JsonProperty;
 
 @JsonInclude(NON_NULL)
 public class Barn {
 
-    public final String fornavn;
-    public final String mellomnavn;
-    public final String etternavn;
-    public final String fnr;
-    public final String kjønn;
-    public final LocalDate fødselsdato;
-    public final AnnenForelder annenForelder;
+    private final String fornavn;
+    private final String mellomnavn;
+    private final String etternavn;
+    private final String fnr;
+    private final String kjønn;
+    private final LocalDate fødselsdato;
+    private final AnnenForelder annenForelder;
 
-    public Barn(String fnr, String fornavn, String mellomnavn, String etternavn, String kjønn, LocalDate fødselsdato,
-            AnnenForelder annenForelder) {
+    @JsonCreator
+    public Barn(@JsonProperty("fnr") String fnr, @JsonProperty("fornavn") String fornavn,
+            @JsonProperty("mellomnavn") String mellomnavn,
+            @JsonProperty("etternavn") String etternavn, @JsonProperty("kjønn") String kjønn,
+            @JsonProperty("fødselsdato") LocalDate fødselsdato,
+            @JsonProperty("annenForelder") AnnenForelder annenForelder) {
         this.fnr = fnr;
         this.fornavn = fornavn;
         this.mellomnavn = mellomnavn;
@@ -26,6 +32,34 @@ public class Barn {
         this.kjønn = kjønn;
         this.fødselsdato = fødselsdato;
         this.annenForelder = annenForelder;
+    }
+
+    public String getFornavn() {
+        return fornavn;
+    }
+
+    public String getMellomnavn() {
+        return mellomnavn;
+    }
+
+    public String getEtternavn() {
+        return etternavn;
+    }
+
+    public String getFnr() {
+        return fnr;
+    }
+
+    public String getKjønn() {
+        return kjønn;
+    }
+
+    public LocalDate getFødselsdato() {
+        return fødselsdato;
+    }
+
+    public AnnenForelder getAnnenForelder() {
+        return annenForelder;
     }
 
     @Override

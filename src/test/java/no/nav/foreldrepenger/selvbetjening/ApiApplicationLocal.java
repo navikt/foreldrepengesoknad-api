@@ -48,7 +48,7 @@ public class ApiApplicationLocal {
     }
 
     @Bean
-    @ConditionalOnClusters(clusters = { Cluster.LOCAL })
+    @ConditionalOnClusters(clusters = Cluster.LOCAL)
     public Storage storageStub() {
         return new StorageStub();
     }
