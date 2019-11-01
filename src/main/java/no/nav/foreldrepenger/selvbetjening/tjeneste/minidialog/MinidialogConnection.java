@@ -4,6 +4,7 @@ import static java.util.Collections.emptyList;
 
 import java.net.URI;
 import java.util.Arrays;
+import java.util.Collections;
 import java.util.List;
 import java.util.Optional;
 
@@ -35,25 +36,29 @@ public class MinidialogConnection extends AbstractRestConnection {
     }
 
     public List<MinidialogInnslag> hentMinidialoger(Fødselsnummer fnr, boolean kunAktive) {
-        return hentFra(config.minidialogPreprodURI(fnr.getFnr(), kunAktive));
+        return getIfEnabled(config.minidialogPreprodURI(fnr.getFnr(), kunAktive));
     }
 
     public List<MinidialogInnslag> hentAktiveSpørsmål() {
-        return hentFra(config.aktiveSpmURI());
+        return getIfEnabled(config.aktiveSpmURI());
     }
 
     public List<MinidialogInnslag> hentAktiveSpørsmål(Fødselsnummer fnr) {
-        return hentFra(config.aktiveSpmURI(fnr.getFnr()));
+        return getIfEnabled(config.aktiveSpmURI(fnr.getFnr()));
     }
 
-    private List<MinidialogInnslag> hentFra(URI uri) {
-        LOG.trace("Henter  minidialoger fra {}", uri);
-        List<MinidialogInnslag> dialoger = Optional
-                .ofNullable(getForObject(uri, MinidialogInnslag[].class))
-                .map(Arrays::asList)
-                .orElse(emptyList());
-        LOG.trace("Hentet minidialoger {} fra {}", dialoger, uri);
-        return dialoger;
+    private List<MinidialogInnslag> getIfEnabled(URI uri) {
+        if (isEnabled()) {
+            LOG.info("Henter minidialoger fra {}", uri);
+            List<MinidialogInnslag> dialoger = Optional
+                    .ofNullable(getForObject(uri, MinidialogInnslag[].class))
+                    .map(Arrays::asList)
+                    .orElse(emptyList());
+            LOG.trace("Hentet minidialoger {} fra {}", dialoger, uri);
+            return dialoger;
+        }
+        LOG.warn("Henting av  minidialoger er deaktivert");
+        return Collections.emptyList();
     }
 
     @Override

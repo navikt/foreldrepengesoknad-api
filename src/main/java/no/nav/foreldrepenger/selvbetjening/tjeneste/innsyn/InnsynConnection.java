@@ -26,7 +26,6 @@ public class InnsynConnection extends AbstractRestConnection {
     public InnsynConnection(RestOperations operations, InnsynConfig cfg) {
         super(operations);
         this.cfg = cfg;
-        LOG.info("Config is " + cfg);
     }
 
     @Override
@@ -40,15 +39,23 @@ public class InnsynConnection extends AbstractRestConnection {
     }
 
     public Uttaksplan hentUttaksplan(String saksnummer) {
-        return getForObject(cfg.uttakURI(saksnummer), Uttaksplan.class, false);
+        return getIfEnabled(cfg.uttakURI(saksnummer), Uttaksplan.class, false);
     }
 
     public Uttaksplan hentUttaksplanAnnenPart(String annenPart) {
-        return getForObject(cfg.uttakURIForAnnenPart(annenPart), Uttaksplan.class, false);
+        return getIfEnabled(cfg.uttakURIForAnnenPart(annenPart), Uttaksplan.class, false);
     }
 
     public Vedtak hentVedtak(String saksnummer) {
-        return getForObject(cfg.vedtakURI(saksnummer), Vedtak.class, false);
+        return getIfEnabled(cfg.vedtakURI(saksnummer), Vedtak.class, false);
+    }
+
+    private <T> T getIfEnabled(URI uri, Class<T> clazz, boolean shouldThrow) {
+        if (isEnabled()) {
+            return getForObject(uri, clazz, shouldThrow);
+        }
+        LOG.warn("Innsyn er ikke aktivert");
+        return null;
     }
 
     public List<Sak> hentSaker() {

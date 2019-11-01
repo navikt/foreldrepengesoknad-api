@@ -28,9 +28,13 @@ public class OppslagConnection extends AbstractRestConnection {
     }
 
     public PersonDto hentPerson() {
-        PersonDto person = getForObject(config.personURI(), PersonDto.class);
-        LOG.info(CONFIDENTIAL, "Fikk person {}", person);
-        return person;
+        if (isEnabled()) {
+            PersonDto person = getForObject(config.personURI(), PersonDto.class);
+            LOG.info(CONFIDENTIAL, "Fikk person {}", person);
+            return person;
+        }
+        LOG.warn("Oppslag av person er deaktivert");
+        return null;
 
     }
 

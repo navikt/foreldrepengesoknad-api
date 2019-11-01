@@ -35,32 +35,31 @@ class VirusScanConnection extends AbstractRestConnection {
     }
 
     public void scan(byte[] bytes, String name) {
-        if (!isEnabled()) {
-            LOG.info("Scanning er ikke aktivert");
-            return;
-        }
-        if (bytes != null) {
-            try {
-                LOG.info("Scanner {}", name);
-                ScanResult[] scanResults = putForObject(config.getUri(), bytes, ScanResult[].class);
-                if (scanResults.length != 1) {
-                    LOG.warn("Uventet respons med lengde {}, forventet lengde er 1", scanResults.length);
+        if (isEnabled()) {
+            if (bytes != null) {
+                try {
+                    LOG.info("Scanner {}", name);
+                    ScanResult[] scanResults = putForObject(config.getUri(), bytes, ScanResult[].class);
+                    if (scanResults.length != 1) {
+                        LOG.warn("Uventet respons med lengde {}, forventet lengde er 1", scanResults.length);
+                        return;
+                    }
+                    ScanResult scanResult = scanResults[0];
+                    LOG.info("Fikk scan result {}", scanResult);
+                    if (OK.equals(scanResult.getResult())) {
+                        LOG.info("Ingen virus i {}", name);
+                        return;
+                    }
+                    LOG.warn("Fant virus i {}, status {}", name, scanResult.getResult());
+                    throw new AttachmentVirusException(name);
+                } catch (Exception e) {
+                    LOG.warn("Kunne ikke scanne {}", name, e);
                     return;
                 }
-                ScanResult scanResult = scanResults[0];
-                LOG.info("Fikk scan result {}", scanResult);
-                if (OK.equals(scanResult.getResult())) {
-                    LOG.info("Ingen virus i {}", name);
-                    return;
-                }
-                LOG.warn("Fant virus i {}, status {}", name, scanResult.getResult());
-                throw new AttachmentVirusException(name);
-            } catch (Exception e) {
-                LOG.warn("Kunne ikke scanne {}", name, e);
-                return;
             }
+            LOG.info("Ingen scanning av null bytes", bytes);
         }
-        LOG.info("Ingen scanning av null bytes", bytes);
+        LOG.warn("Scanning er deaktivert");
     }
 
     @Override
