@@ -9,18 +9,13 @@ import com.fasterxml.jackson.annotation.JsonInclude;
 @JsonInclude(NON_NULL)
 public class Barn {
 
-    public String fornavn;
-    public String mellomnavn;
-    public String etternavn;
-    public String fnr;
-    public String kjønn;
-    public LocalDate fødselsdato;
-    public AnnenForelder annenForelder;
-
-    @SuppressWarnings("unused")
-    public Barn() {
-
-    }
+    public final String fornavn;
+    public final String mellomnavn;
+    public final String etternavn;
+    public final String fnr;
+    public final String kjønn;
+    public final LocalDate fødselsdato;
+    public final AnnenForelder annenForelder;
 
     public Barn(String fnr, String fornavn, String mellomnavn, String etternavn, String kjønn, LocalDate fødselsdato,
             AnnenForelder annenForelder) {
@@ -31,6 +26,13 @@ public class Barn {
         this.kjønn = kjønn;
         this.fødselsdato = fødselsdato;
         this.annenForelder = annenForelder;
+    }
+
+    @Override
+    public String toString() {
+        return getClass().getSimpleName() + "[fornavn=" + fornavn + ", mellomnavn=" + mellomnavn + ", etternavn="
+                + etternavn + ", fnr=" + fnr + ", kjønn=" + kjønn + ", fødselsdato=" + fødselsdato + ", annenForelder="
+                + annenForelder + "]";
     }
 
 }
