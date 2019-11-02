@@ -45,7 +45,7 @@ public class S3Mellomlagring extends AbstractMellomlagringTjeneste implements En
     }
 
     @Recover
-    protected boolean recoverySlett(String bøtte, String katalog, String key) {
+    protected boolean recoverySlett(SdkClientException e, String bøtte, String katalog, String key) {
         LOG.trace("(Recovery) Kunne ikke slette {} fra bøtte {}, finnes sannsynligvis ikke", katalog, bøtte);
         return false;
     }
