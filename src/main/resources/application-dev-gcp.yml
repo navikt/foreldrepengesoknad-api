@@ -4,7 +4,17 @@ allowed.origins:
    https://svangerskapspengesoknad.dev-nav.no,
    https://foreldrepenger.dev-nav.no
    
-no.nav.security.jwt.issuer.selvbetjening.discoveryurl: https://login.microsoftonline.com/NAVtestB2C.onmicrosoft.com/v2.0/.well-known/openid-configuration?p=B2C_1A_idporten_ver1
+no.nav:
+   foreldrepenger:
+      selvbetjening:
+         api:
+            virus:
+               enabled: false
+   security:
+      jwt:
+        issuer:
+          selvbetjening:
+             discoveryurl: https://login.microsoftonline.com/NAVtestB2C.onmicrosoft.com/v2.0/.well-known/openid-configuration?p=B2C_1A_idporten_ver1
 management:
    endpoints:
      web:
