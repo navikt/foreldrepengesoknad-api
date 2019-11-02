@@ -82,8 +82,8 @@ public abstract class AbstractMellomlagringTjeneste implements MellomlagringTjen
     }
 
     @Recover
-    public String recoveryLes(AmazonS3Exception e, String bøtte, String katalog, String key) {
-        LOG.trace("(Recovery) Kunne ikke lese {} fra bøtte {}, finnes sannsynligvis ikke", katalog, bøtte);
+    public String recoveryLes(AmazonS3Exception e, String katalog, String key) {
+        LOG.trace("(Recovery) Kunne ikke lese {}, finnes sannsynligvis ikke", katalog);
         return null;
     }
 
