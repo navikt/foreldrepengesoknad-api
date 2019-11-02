@@ -16,13 +16,13 @@ import org.springframework.http.client.ClientHttpResponse;
 
 import no.nav.foreldrepenger.selvbetjening.util.EnvUtil;
 
-public class ApiKeyInjectingClientInterceptor implements ClientHttpRequestInterceptor {
+public class ZoneCrossingAwareClientInterceptor implements ClientHttpRequestInterceptor {
 
-    private static final Logger LOG = getLogger(ApiKeyInjectingClientInterceptor.class);
+    private static final Logger LOG = getLogger(ZoneCrossingAwareClientInterceptor.class);
 
     private final Map<URI, String> apiKeys;
 
-    public ApiKeyInjectingClientInterceptor(Map<URI, String> apiKeys) {
+    public ZoneCrossingAwareClientInterceptor(Map<URI, String> apiKeys) {
         this.apiKeys = apiKeys;
         LOG.info(EnvUtil.CONFIDENTIAL, "apiKeys {}", apiKeys);
     }

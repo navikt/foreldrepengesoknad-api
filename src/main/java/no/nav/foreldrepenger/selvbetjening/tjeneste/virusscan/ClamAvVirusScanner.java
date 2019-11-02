@@ -25,6 +25,16 @@ public class ClamAvVirusScanner implements VirusScanner {
     }
 
     @Override
+    public String ping() {
+        return connection.ping();
+    }
+
+    @Override
+    public boolean isEnabled() {
+        return connection.isEnabled();
+    }
+
+    @Override
     public String toString() {
         return getClass().getSimpleName() + " [connection=" + connection + "]";
     }

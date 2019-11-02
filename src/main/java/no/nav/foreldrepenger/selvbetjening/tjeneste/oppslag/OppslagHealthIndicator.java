@@ -7,7 +7,7 @@ import no.nav.foreldrepenger.selvbetjening.health.AbstractPingableHealthIndicato
 @Component
 public class OppslagHealthIndicator extends AbstractPingableHealthIndicator {
 
-    public OppslagHealthIndicator(Oppslag tjeneste) {
+    public OppslagHealthIndicator(OppslagConnection tjeneste) {
         super(tjeneste);
     }
 }

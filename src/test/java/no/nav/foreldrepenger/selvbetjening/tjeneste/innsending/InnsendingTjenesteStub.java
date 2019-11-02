@@ -3,7 +3,6 @@ package no.nav.foreldrepenger.selvbetjening.tjeneste.innsending;
 import static java.time.LocalDateTime.now;
 import static org.slf4j.LoggerFactory.getLogger;
 
-import java.net.URI;
 import java.time.LocalDate;
 
 import javax.inject.Inject;
@@ -100,7 +99,8 @@ public class InnsendingTjenesteStub implements Innsending {
     }
 
     @Override
-    public URI pingURI() {
-        return URI.create("http://www.vg.no");
+    public boolean isEnabled() {
+        return true;
     }
+
 }

@@ -7,6 +7,8 @@ import java.net.URI;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.context.EnvironmentAware;
+import org.springframework.core.env.Environment;
 
 import com.google.cloud.storage.BlobId;
 import com.google.cloud.storage.BlobInfo;
@@ -14,11 +16,13 @@ import com.google.cloud.storage.Storage;
 import com.google.cloud.storage.StorageException;
 import com.google.cloud.storage.StorageOptions;
 
-public class GCPMellomlagring extends AbstractMellomlagringTjeneste {
+public class GCPMellomlagring extends AbstractMellomlagringTjeneste implements EnvironmentAware {
 
     private static final Logger LOG = LoggerFactory.getLogger(GCPMellomlagring.class);
 
     private final Storage storage;
+
+    private Environment env;
 
     public GCPMellomlagring(String søknadBøtte, String mellomlagringBøtte) {
         super(søknadBøtte, mellomlagringBøtte);
@@ -64,8 +68,24 @@ public class GCPMellomlagring extends AbstractMellomlagringTjeneste {
     }
 
     @Override
+    public boolean isEnabled() {
+        return env.getProperty("mellomlagring.gcp.enabled", boolean.class, true);
+    }
+
+    @Override
+    public void setEnvironment(Environment env) {
+        this.env = env;
+    }
+
+    @Override
+    public String name() {
+        return pingURI().getHost();
+    }
+
+    @Override
     public String toString() {
         return getClass().getSimpleName() + "[storage=" + storage + ", søknadBøtte=" + getSøknadBøtte()
                 + ", mellomlagringBøtte=" + getMellomlagringBøtte() + "]";
     }
+
 }

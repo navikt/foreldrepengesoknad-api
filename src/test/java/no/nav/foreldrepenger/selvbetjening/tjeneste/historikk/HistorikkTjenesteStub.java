@@ -1,6 +1,5 @@
 package no.nav.foreldrepenger.selvbetjening.tjeneste.historikk;
 
-import java.net.URI;
 import java.util.Collections;
 import java.util.List;
 
@@ -19,11 +18,6 @@ public class HistorikkTjenesteStub implements Historikk {
     }
 
     @Override
-    public URI pingURI() {
-        return URI.create("http://www.db.no");
-    }
-
-    @Override
     public List<HistorikkInnslag> hentHistorikk() {
         return Collections.emptyList();
     }
@@ -31,6 +25,11 @@ public class HistorikkTjenesteStub implements Historikk {
     @Override
     public List<HistorikkInnslag> hentHistorikkFor(Fødselsnummer fnr) {
         return Collections.emptyList();
+    }
+
+    @Override
+    public boolean isEnabled() {
+        return true;
     }
 
 }

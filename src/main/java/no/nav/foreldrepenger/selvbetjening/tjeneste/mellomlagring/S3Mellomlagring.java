@@ -8,6 +8,8 @@ import java.net.URI;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.context.EnvironmentAware;
+import org.springframework.core.env.Environment;
 
 import com.amazonaws.SdkClientException;
 import com.amazonaws.services.s3.AmazonS3;
@@ -17,11 +19,13 @@ import com.amazonaws.services.s3.model.CreateBucketRequest;
 import com.amazonaws.services.s3.model.S3Object;
 import com.amazonaws.services.s3.model.lifecycle.LifecycleFilter;
 
-public class S3Mellomlagring extends AbstractMellomlagringTjeneste {
+public class S3Mellomlagring extends AbstractMellomlagringTjeneste implements EnvironmentAware {
 
     private static final Logger LOG = LoggerFactory.getLogger(S3Mellomlagring.class);
 
     private final AmazonS3 s3;
+
+    private Environment env;
 
     public S3Mellomlagring(AmazonS3 s3, String søknadBucket, String mellomlagringBucket) {
         super(søknadBucket, mellomlagringBucket);
@@ -31,14 +35,30 @@ public class S3Mellomlagring extends AbstractMellomlagringTjeneste {
     }
 
     @Override
+    public void setEnvironment(Environment env) {
+        this.env = env;
+
+    }
+
+    @Override
     public String ping() {
         ensureBucketExists(getMellomlagringBøtte());
         return "OK";
     }
 
     @Override
+    public String name() {
+        return "S3";
+    }
+
+    @Override
     public URI pingURI() {
         return URI.create(s3.getUrl(getMellomlagringBøtte(), "42").toString());
+    }
+
+    @Override
+    public boolean isEnabled() {
+        return env.getProperty("mellomlagring.s3.enabled", boolean.class, true);
     }
 
     @Override

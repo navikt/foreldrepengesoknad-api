@@ -11,11 +11,9 @@ import org.springframework.http.RequestEntity;
 import org.springframework.web.client.HttpClientErrorException;
 import org.springframework.web.client.RestOperations;
 
-public abstract class AbstractRestConnection implements RestConnection {
+public abstract class AbstractRestConnection implements RestConnection, PingEndpointAware {
 
     protected static final Logger LOG = LoggerFactory.getLogger(AbstractRestConnection.class);
-
-    protected abstract boolean isEnabled();
 
     private final RestOperations operations;
 
@@ -23,6 +21,12 @@ public abstract class AbstractRestConnection implements RestConnection {
         this.operations = operations;
     }
 
+    @Override
+    public String name() {
+        return pingURI().getHost();
+    }
+
+    @Override
     public String ping() {
         return getForObject(pingURI(), String.class);
     }

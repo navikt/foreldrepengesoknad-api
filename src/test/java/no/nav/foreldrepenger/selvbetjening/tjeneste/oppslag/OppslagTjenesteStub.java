@@ -5,7 +5,6 @@ import static java.time.LocalDate.now;
 import static java.util.Collections.singletonList;
 import static org.slf4j.LoggerFactory.getLogger;
 
-import java.net.URI;
 import java.util.ArrayList;
 
 import org.slf4j.Logger;
@@ -29,11 +28,6 @@ public class OppslagTjenesteStub implements Oppslag {
     @Override
     public String ping() {
         return "hello earthlings";
-    }
-
-    @Override
-    public URI pingURI() {
-        return URI.create("http.//www.vg.no");
     }
 
     private static final Logger LOG = getLogger(OppslagTjenesteStub.class);
@@ -82,5 +76,10 @@ public class OppslagTjenesteStub implements Oppslag {
     @Override
     public AktørId hentAktørId(String fnr) {
         return new AktørId("1234567890");
+    }
+
+    @Override
+    public boolean isEnabled() {
+        return true;
     }
 }

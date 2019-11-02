@@ -4,7 +4,6 @@ import static java.time.LocalDate.now;
 import static java.util.Collections.emptyList;
 import static java.util.Collections.singletonList;
 
-import java.net.URI;
 import java.time.LocalDateTime;
 import java.util.Arrays;
 import java.util.Collections;
@@ -25,11 +24,6 @@ public class InnsynTjenesteStub implements Innsyn {
     @Override
     public String ping() {
         return "hello earthlings";
-    }
-
-    @Override
-    public URI pingURI() {
-        return URI.create("http.//www.vg.no");
     }
 
     @Override
@@ -57,5 +51,10 @@ public class InnsynTjenesteStub implements Innsyn {
     @Override
     public Uttaksplan hentUttaksplanAnnenPart(String annenPart) {
         return null;
+    }
+
+    @Override
+    public boolean isEnabled() {
+        return true;
     }
 }

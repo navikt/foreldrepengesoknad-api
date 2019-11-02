@@ -7,7 +7,7 @@ import no.nav.foreldrepenger.selvbetjening.health.AbstractPingableHealthIndicato
 @Component
 public class InnsynHealthIndicator extends AbstractPingableHealthIndicator {
 
-    public InnsynHealthIndicator(Innsyn tjeneste) {
+    public InnsynHealthIndicator(InnsynConnection tjeneste) {
         super(tjeneste);
     }
 }

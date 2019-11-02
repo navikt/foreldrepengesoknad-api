@@ -2,7 +2,6 @@ package no.nav.foreldrepenger.selvbetjening.tjeneste.innsending;
 
 import static org.slf4j.LoggerFactory.getLogger;
 
-import java.net.URI;
 import java.security.SecureRandom;
 import java.util.List;
 import java.util.Random;
@@ -64,19 +63,6 @@ public class InnsendingTjeneste implements Innsending {
         return kvittering;
     }
 
-    private Vedlegg vedleggFra(BrukerTekst brukerTekst) {
-        Vedlegg vedlegg = new Vedlegg();
-        vedlegg.setBeskrivelse("Tekst fra bruker");
-        vedlegg.setId(id());
-        vedlegg.setContent(pdfGenerator.generate(brukerTekst.getOverskrift(), brukerTekst.getTekst()));
-        vedlegg.setSkjemanummer(brukerTekst.getDokumentType());
-        return vedlegg;
-    }
-
-    private static String id() {
-        return "V" + IDGENERATOR.nextLong();
-    }
-
     @Override
     public Kvittering endre(Søknad endringssøknad) {
         LOG.info("Endrer søknad av type {}", endringssøknad.getType());
@@ -88,13 +74,26 @@ public class InnsendingTjeneste implements Innsending {
     }
 
     @Override
+    public boolean isEnabled() {
+        return connection.isEnabled();
+    }
+
+    @Override
     public String ping() {
         return connection.ping();
     }
 
-    @Override
-    public URI pingURI() {
-        return connection.pingURI();
+    private Vedlegg vedleggFra(BrukerTekst brukerTekst) {
+        Vedlegg vedlegg = new Vedlegg();
+        vedlegg.setBeskrivelse("Tekst fra bruker");
+        vedlegg.setId(id());
+        vedlegg.setContent(pdfGenerator.generate(brukerTekst.getOverskrift(), brukerTekst.getTekst()));
+        vedlegg.setSkjemanummer(brukerTekst.getDokumentType());
+        return vedlegg;
+    }
+
+    private static String id() {
+        return "V" + IDGENERATOR.nextLong();
     }
 
     private void hentOgSjekk(List<Vedlegg> vedlegg) {

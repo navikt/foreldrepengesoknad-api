@@ -2,7 +2,6 @@ package no.nav.foreldrepenger.selvbetjening.tjeneste.minidialog;
 
 import static no.nav.foreldrepenger.selvbetjening.util.EnvUtil.isDevOrLocal;
 
-import java.net.URI;
 import java.util.List;
 
 import org.springframework.boot.autoconfigure.condition.ConditionalOnProperty;
@@ -50,8 +49,8 @@ public class MinidialogTjeneste implements Minidialog, EnvironmentAware {
     }
 
     @Override
-    public URI pingURI() {
-        return connection.pingURI();
+    public boolean isEnabled() {
+        return connection.isEnabled();
     }
 
     @Override

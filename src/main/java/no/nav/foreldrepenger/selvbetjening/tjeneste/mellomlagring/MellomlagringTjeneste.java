@@ -2,9 +2,9 @@ package no.nav.foreldrepenger.selvbetjening.tjeneste.mellomlagring;
 
 import java.util.Optional;
 
-import no.nav.foreldrepenger.selvbetjening.tjeneste.Pingable;
+import no.nav.foreldrepenger.selvbetjening.tjeneste.PingEndpointAware;
 
-public interface MellomlagringTjeneste extends Pingable {
+public interface MellomlagringTjeneste extends PingEndpointAware {
 
     void lagre(String directory, String key, String value);
 

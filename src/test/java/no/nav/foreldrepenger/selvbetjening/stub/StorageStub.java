@@ -54,4 +54,14 @@ public class StorageStub implements MellomlagringTjeneste {
     public URI pingURI() {
         return URI.create("http://localhost/stub");
     }
+
+    @Override
+    public String name() {
+        return pingURI().getHost();
+    }
+
+    @Override
+    public boolean isEnabled() {
+        return true;
+    }
 }

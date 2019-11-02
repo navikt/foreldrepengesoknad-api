@@ -32,19 +32,19 @@ import org.springframework.web.servlet.config.annotation.WebMvcConfigurer;
 
 import com.google.common.collect.ImmutableMap;
 
-import no.nav.foreldrepenger.selvbetjening.interceptors.client.ApiKeyInjectingClientInterceptor;
+import no.nav.foreldrepenger.selvbetjening.interceptors.client.ZoneCrossingAwareClientInterceptor;
 import no.nav.foreldrepenger.selvbetjening.tjeneste.ZoneCrossingAware;
 import no.nav.foreldrepenger.selvbetjening.tjeneste.mellomlagring.MellomlagringKrypto;
 
 @Configuration
 public class ApiConfiguration implements WebMvcConfigurer {
+    private static final Logger LOG = LoggerFactory.getLogger(ApiConfiguration.class);
+
     private final String[] allowedOrigins;
 
     public ApiConfiguration(@Value("${allowed.origins}") String[] allowedOrigins) {
         this.allowedOrigins = allowedOrigins;
     }
-
-    private static final Logger LOG = LoggerFactory.getLogger(ApiConfiguration.class);
 
     @Bean
     public RestOperations restTemplate(ClientHttpRequestInterceptor... interceptors) {
@@ -55,11 +55,11 @@ public class ApiConfiguration implements WebMvcConfigurer {
     }
 
     @Bean
-    public ClientHttpRequestInterceptor apiKeyInjectingClientInterceptor(ZoneCrossingAware... configs) {
+    public ClientHttpRequestInterceptor zoneCrossingAwareRequestInterceptor(ZoneCrossingAware... zoneCrossers) {
         var builder = ImmutableMap.<URI, String>builder();
-        Arrays.stream(configs)
+        Arrays.stream(zoneCrossers)
                 .forEach(c -> builder.put(c.zoneCrossingUri(), c.getKey()));
-        return new ApiKeyInjectingClientInterceptor(builder.build());
+        return new ZoneCrossingAwareClientInterceptor(builder.build());
 
     }
 
@@ -83,6 +83,7 @@ public class ApiConfiguration implements WebMvcConfigurer {
             @Override
             public <T, E extends Throwable> void onError(RetryContext context, RetryCallback<T, E> callback,
                     Throwable t) {
+                context.attributeNames();
                 log.warn("Retry-methode {} kastet {}. exception {}",
                         context.getAttribute(NAME), context.getRetryCount(), t.getClass().getSimpleName(), t);
             }

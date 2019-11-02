@@ -2,7 +2,6 @@ package no.nav.foreldrepenger.selvbetjening.tjeneste.historikk;
 
 import static no.nav.foreldrepenger.selvbetjening.util.EnvUtil.isDevOrLocal;
 
-import java.net.URI;
 import java.util.List;
 
 import org.springframework.boot.autoconfigure.condition.ConditionalOnProperty;
@@ -41,11 +40,6 @@ public class HistorikkTjeneste implements Historikk, EnvironmentAware {
     }
 
     @Override
-    public URI pingURI() {
-        return connection.pingURI();
-    }
-
-    @Override
     public void setEnvironment(Environment env) {
         this.env = env;
     }
@@ -53,6 +47,11 @@ public class HistorikkTjeneste implements Historikk, EnvironmentAware {
     @Override
     public String toString() {
         return getClass().getSimpleName() + " [connection=" + connection + "]";
+    }
+
+    @Override
+    public boolean isEnabled() {
+        return connection.isEnabled();
     }
 
 }

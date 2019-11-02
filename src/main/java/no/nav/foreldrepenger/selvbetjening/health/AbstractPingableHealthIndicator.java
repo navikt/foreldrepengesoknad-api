@@ -3,37 +3,34 @@ package no.nav.foreldrepenger.selvbetjening.health;
 import org.springframework.boot.actuate.health.Health;
 import org.springframework.boot.actuate.health.HealthIndicator;
 
-import no.nav.foreldrepenger.selvbetjening.tjeneste.Pingable;
+import no.nav.foreldrepenger.selvbetjening.tjeneste.PingEndpointAware;
 
 public abstract class AbstractPingableHealthIndicator implements HealthIndicator {
 
-    private final Pingable pingable;
+    private final PingEndpointAware pingable;
 
-    public AbstractPingableHealthIndicator(Pingable pingable) {
+    public AbstractPingableHealthIndicator(PingEndpointAware pingable) {
         this.pingable = pingable;
     }
 
     @Override
     public Health health() {
+        if (!pingable.isEnabled()) {
+            return Health.up()
+                    .withDetail(pingable.name(), pingable.pingURI() + " (Disabled)")
+                    .build();
+        }
         try {
             pingable.ping();
-            return up();
+            return Health.up()
+                    .withDetail(pingable.getClass().getSimpleName(), pingable.pingURI())
+                    .build();
         } catch (Exception e) {
-            return down(e);
+            return Health.down()
+                    .withDetail(pingable.getClass().getSimpleName(), pingable.pingURI())
+                    .withException(e)
+                    .build();
         }
-    }
-
-    private Health up() {
-        return Health.up()
-                .withDetail(pingable.getClass().getSimpleName(), pingable.pingURI())
-                .build();
-    }
-
-    private Health down(Exception e) {
-        return Health.down()
-                .withDetail(pingable.getClass().getSimpleName(), pingable.pingURI())
-                .withException(e)
-                .build();
     }
 
     @Override
