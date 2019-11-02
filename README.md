@@ -13,7 +13,7 @@
 
 Spørsmål knyttet til koden eller prosjektet kan rettes til:
 
-* nav.team.bris@nav.no
+* teamforeldrepenger@nav.no
 
 ## For NAV-ansatte
 
