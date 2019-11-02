@@ -29,21 +29,25 @@ no.nav:
 historikk :
   key: foreldrepengesoknad-api-historikk
   uri: http://localhost:9000/api
+  enabled: false
    
 mottak:
   key: foreldrepengesoknad-api-mottak
   uri: http://localhost:9000/api/mottak
+  enabled: false
      
 oppslag:
   key: foreldrepengesoknad-ap-oppslag
   uri: http://localhost:9000/api/oppslag
+  enabled: false
   
 minidialog:
   uri: http://localhost:9000/api
+  enabled: false
 innsyn:
   oppslag:  http://localhost:9000/api/oppslag
   mottak:  http://localhost:9000/api/mottak
-  enabled: true
+  enabled: false
    
 s3 : 
   username : user

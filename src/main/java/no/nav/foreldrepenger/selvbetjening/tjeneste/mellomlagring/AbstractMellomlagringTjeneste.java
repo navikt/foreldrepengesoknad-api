@@ -31,63 +31,90 @@ public abstract class AbstractMellomlagringTjeneste implements MellomlagringTjen
 
     @Override
     public void lagre(String katalog, String key, String value) {
-        LOG.info("Lagrer søknad i bøtte {}, katalog {}", søknadBøtte, katalog);
-        if (lagre(søknadBøtte, katalog, key, value)) {
-            LOG.info("Lagret søknad OK i bøtte {}, katalog {}", søknadBøtte, katalog);
+        if (isEnabled()) {
+            LOG.info("Lagrer søknad i bøtte {}, katalog {}", søknadBøtte, katalog);
+            if (lagre(søknadBøtte, katalog, key, value)) {
+                LOG.info("Lagret søknad OK i bøtte {}, katalog {}", søknadBøtte, katalog);
+            } else {
+                LOG.warn("Lagret ikke søknad i bøtte {}, katalog {}", søknadBøtte, katalog);
+            }
         } else {
-            LOG.warn("Lagret ikke søknad i bøtte {}, katalog {}", søknadBøtte, katalog);
+            LOG.warn("Mellomlagringsoperasjoner er deaktivert");
         }
     }
 
     @Override
     public void lagreTmp(String katalog, String key, String value) {
-        LOG.info("Mellomlagrer søknad i bøtte {}, katalog {}", mellomlagringBøtte, katalog);
-        if (lagre(mellomlagringBøtte, katalog, key, value)) {
-            LOG.info("Mellomlagret søknad OK i bøtte {}, katalog {}", mellomlagringBøtte, katalog);
+        if (isEnabled()) {
+
+            LOG.info("Mellomlagrer søknad i bøtte {}, katalog {}", mellomlagringBøtte, katalog);
+            if (lagre(mellomlagringBøtte, katalog, key, value)) {
+                LOG.info("Mellomlagret søknad OK i bøtte {}, katalog {}", mellomlagringBøtte, katalog);
+            } else {
+                LOG.warn("Mellomlagret ikke søknad i bøtte {}, katalog {}", mellomlagringBøtte, katalog);
+            }
         } else {
-            LOG.warn("Mellomlagret ikke søknad i bøtte {}, katalog {}", mellomlagringBøtte, katalog);
+            LOG.warn("Mellomlagringsoperasjoner er deaktivert");
         }
     }
 
     @Override
     public Optional<String> les(String katalog, String key) {
-        LOG.info("Henter søknad fra bøtte {}, katalog {}", søknadBøtte, katalog);
-        var søknad = Optional.ofNullable(les(søknadBøtte, katalog, key));
-        if (søknad.isPresent()) {
-            LOG.info("Hentet søknad OK fra bøtte {}, katalog {}", søknadBøtte, katalog);
+        if (isEnabled()) {
+            LOG.info("Henter søknad fra bøtte {}, katalog {}", søknadBøtte, katalog);
+            var søknad = Optional.ofNullable(les(søknadBøtte, katalog, key));
+            if (søknad.isPresent()) {
+                LOG.info("Hentet søknad OK fra bøtte {}, katalog {}", søknadBøtte, katalog);
+            } else {
+                LOG.info("Hentet ingen søknad fra bøtte {}, katalog {}", søknadBøtte, katalog);
+            }
+            return søknad;
         } else {
-            LOG.info("Hentet ingen søknad fra bøtte {}, katalog {}", søknadBøtte, katalog);
+            LOG.warn("Mellomlagringsoperasjoner er deaktivert");
+            return null;
         }
-        return søknad;
     }
 
     @Override
     public Optional<String> lesTmp(String katalog, String key) {
-        LOG.info("Henter mellomlagret søknad fra bøtte {}, katalog {}", mellomlagringBøtte, katalog);
-        var søknad = Optional.ofNullable(les(mellomlagringBøtte, katalog, key));
-        if (søknad.isPresent()) {
-            LOG.info("Hentet mellomlagret søknad OK fra bøtte {}, katalog {}", mellomlagringBøtte, katalog);
+        if (isEnabled()) {
+            LOG.info("Henter mellomlagret søknad fra bøtte {}, katalog {}", mellomlagringBøtte, katalog);
+            var søknad = Optional.ofNullable(les(mellomlagringBøtte, katalog, key));
+            if (søknad.isPresent()) {
+                LOG.info("Hentet mellomlagret søknad OK fra bøtte {}, katalog {}", mellomlagringBøtte, katalog);
+            } else {
+                LOG.info("Hentet ingen mellomlagret søknad fra bøtte {}, katalog {}", mellomlagringBøtte, katalog);
+            }
+            return søknad;
         } else {
-            LOG.info("Hentet ingen mellomlagret søknad fra bøtte {}, katalog {}", mellomlagringBøtte, katalog);
+            LOG.warn("Mellomlagringsoperasjoner er deaktivert");
+            return null;
         }
-        return søknad;
     }
 
     @Override
     public void slett(String katalog, String key) {
-        LOG.info("Fjerner søknad fra bøtte {}, katalog {}", søknadBøtte, katalog);
-        if (slett(søknadBøtte, katalog, key)) {
-            LOG.info("Fjernet søknad OK fra bøtte {}, katalog {}", søknadBøtte, katalog);
+        if (isEnabled()) {
+            LOG.info("Fjerner søknad fra bøtte {}, katalog {}", søknadBøtte, katalog);
+            if (slett(søknadBøtte, katalog, key)) {
+                LOG.info("Fjernet søknad OK fra bøtte {}, katalog {}", søknadBøtte, katalog);
+            } else {
+                LOG.warn("Fjernet ikke søknad fra bøtte {}, katalog {}", søknadBøtte, katalog);
+            }
         } else {
-            LOG.warn("Fjernet ikke søknad fra bøtte {}, katalog {}", søknadBøtte, katalog);
+            LOG.warn("Mellomlagringsoperasjoner er deaktivert");
         }
     }
 
     @Override
     public void slettTmp(String katalog, String key) {
-        LOG.info("Fjerner mellomlagret søknad fra bøtte {}, katalog {}", mellomlagringBøtte, katalog);
-        slett(mellomlagringBøtte, katalog, key);
-        LOG.info("Fjerner mellomlagret søknad OK fra bøtte {}, katalog {}", mellomlagringBøtte, katalog);
+        if (isEnabled()) {
+            LOG.info("Fjerner mellomlagret søknad fra bøtte {}, katalog {}", mellomlagringBøtte, katalog);
+            slett(mellomlagringBøtte, katalog, key);
+            LOG.info("Fjerner mellomlagret søknad OK fra bøtte {}, katalog {}", mellomlagringBøtte, katalog);
+        } else {
+            LOG.warn("Mellomlagringsoperasjoner er deaktivert");
+        }
     }
 
     String getSøknadBøtte() {
