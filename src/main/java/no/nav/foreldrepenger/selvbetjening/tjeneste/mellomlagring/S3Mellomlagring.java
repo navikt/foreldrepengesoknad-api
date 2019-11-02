@@ -10,6 +10,9 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.context.EnvironmentAware;
 import org.springframework.core.env.Environment;
+import org.springframework.retry.annotation.Backoff;
+import org.springframework.retry.annotation.Recover;
+import org.springframework.retry.annotation.Retryable;
 
 import com.amazonaws.SdkClientException;
 import com.amazonaws.services.s3.AmazonS3;
@@ -27,17 +30,59 @@ public class S3Mellomlagring extends AbstractMellomlagringTjeneste implements En
 
     private Environment env;
 
-    public S3Mellomlagring(AmazonS3 s3, String søknadBucket, String mellomlagringBucket) {
-        super(søknadBucket, mellomlagringBucket);
+    public S3Mellomlagring(AmazonS3 s3, String søknadBøtte, String mellomlagringBøtte) {
+        super(søknadBøtte, mellomlagringBøtte);
         this.s3 = s3;
-        ensureBucketExists(søknadBucket, 365);
-        ensureBucketExists(mellomlagringBucket, 1);
+        ensureBucketExists(søknadBøtte, 365);
+        ensureBucketExists(mellomlagringBøtte, 1);
+    }
+
+    @Override
+    @Retryable(value = { SdkClientException.class }, maxAttempts = 3, backoff = @Backoff(delay = 1000))
+    protected boolean slett(String bøtte, String katalog, String key) {
+        s3.deleteObject(bøtte, fileName(katalog, key));
+        return true;
+    }
+
+    @Recover
+    protected boolean recoverySlett(String bøtte, String katalog, String key) {
+        LOG.trace("(Recovery) Kunne ikke slette {} fra bøtte {}, finnes sannsynligvis ikke", katalog, bøtte);
+        return false;
+    }
+
+    @Override
+    @Retryable(value = { SdkClientException.class }, maxAttempts = 3, backoff = @Backoff(delay = 1000))
+    protected boolean lagre(String bøtte, String katalog, String key, String value) {
+        s3.putObject(bøtte, fileName(katalog, key), value);
+        return true;
+    }
+
+    @Recover
+    protected boolean recoveryLagre(SdkClientException e, String bøtte, String katalog, String key,
+            String value) {
+        LOG.trace("(Recovery) Kunne ikke lagre {} i bøtte {}, finnes sannsynligvis ikke", katalog, bøtte);
+        return false;
+    }
+
+    @Override
+    @Retryable(value = { SdkClientException.class }, maxAttempts = 3, backoff = @Backoff(delay = 1000))
+    protected String les(String bøtte, String katalog, String key) {
+        String path = fileName(katalog, key);
+        S3Object object = s3.getObject(bøtte, path);
+        return new BufferedReader(new InputStreamReader(object.getObjectContent()))
+                .lines()
+                .collect(joining("\n"));
+    }
+
+    @Recover
+    protected String recoveryLes(SdkClientException e, String bøtte, String directory, String key) {
+        LOG.trace("(Recovery) Kunne ikke lese {} fra bøtte {}, finnes sannsynligvis ikke", directory, bøtte);
+        return null;
     }
 
     @Override
     public void setEnvironment(Environment env) {
         this.env = env;
-
     }
 
     @Override
@@ -61,41 +106,6 @@ public class S3Mellomlagring extends AbstractMellomlagringTjeneste implements En
         return env.getProperty("mellomlagring.s3.enabled", boolean.class, true);
     }
 
-    @Override
-    protected boolean slett(String bucketName, String directory, String key) {
-        try {
-            s3.deleteObject(bucketName, fileName(directory, key));
-            return true;
-        } catch (SdkClientException e) {
-            LOG.warn("Feil ved fjerning", e);
-            return false;
-        }
-    }
-
-    protected boolean lagre(String bucketName, String directory, String key, String value) {
-        try {
-            s3.putObject(bucketName, fileName(directory, key), value);
-            return true;
-        } catch (SdkClientException e) {
-            LOG.warn("Feil ved lagring", e);
-            return false;
-        }
-    }
-
-    @Override
-    protected String les(String bucketName, String directory, String key) {
-        String path = fileName(directory, key);
-        try {
-            S3Object object = s3.getObject(bucketName, path);
-            return new BufferedReader(new InputStreamReader(object.getObjectContent()))
-                    .lines()
-                    .collect(joining("\n"));
-        } catch (Exception e) {
-            LOG.trace("Kunne ikke hente {}, finnes sannsynligvis ikke", path, e.toString());
-            return null;
-        }
-    }
-
     private static BucketLifecycleConfiguration objectExpiresInDays(Integer days) {
         return new BucketLifecycleConfiguration().withRules(
                 new BucketLifecycleConfiguration.Rule()
@@ -105,34 +115,34 @@ public class S3Mellomlagring extends AbstractMellomlagringTjeneste implements En
                         .withExpirationInDays(days));
     }
 
-    private void ensureBucketExists(String bucketName) {
-        LOG.info("Sjekker om bøtte {} eksisterer", bucketName);
-        boolean bucketExists = s3.listBuckets().stream()
-                .anyMatch(b -> b.getName().equals(bucketName));
-        if (!bucketExists) {
-            createBucket(bucketName);
+    private void ensureBucketExists(String bøtte) {
+        LOG.info("Sjekker om bøtte {} eksisterer", bøtte);
+        boolean finnes = s3.listBuckets().stream()
+                .anyMatch(b -> b.getName().equals(bøtte));
+        if (!finnes) {
+            createBucket(bøtte);
         } else {
-            LOG.info("Bøtte {} eksisterer", bucketName);
+            LOG.info("Bøtte {} eksisterer", bøtte);
         }
     }
 
-    private void ensureBucketExists(String bucketName, Integer expirationInDays) {
-        ensureBucketExists(bucketName);
-        setLifeCycleConfig(bucketName, objectExpiresInDays(expirationInDays));
+    private void ensureBucketExists(String bøtte, Integer expirationInDays) {
+        ensureBucketExists(bøtte);
+        setLifeCycleConfig(bøtte, objectExpiresInDays(expirationInDays));
     }
 
-    private void setLifeCycleConfig(String bucketName, BucketLifecycleConfiguration expiry) {
+    private void setLifeCycleConfig(String bøtte, BucketLifecycleConfiguration expiry) {
         try {
-            LOG.info("Setter lifecycle config for bøtte {}", bucketName);
-            s3.setBucketLifecycleConfiguration(bucketName, expiry);
+            LOG.info("Setter lifecycle config for bøtte {}", bøtte);
+            s3.setBucketLifecycleConfiguration(bøtte, expiry);
         } catch (Exception e) {
-            LOG.info("Kunne ikke setter lifecycle config for bøtte {}", bucketName, e);
+            LOG.info("Kunne ikke setter lifecycle config for bøtte {}", bøtte, e);
         }
     }
 
-    private void createBucket(String bucketName) {
-        LOG.info("Lager bøtte {}", bucketName);
-        s3.createBucket(new CreateBucketRequest(bucketName)
+    private void createBucket(String bøtte) {
+        LOG.info("Lager bøtte {}", bøtte);
+        s3.createBucket(new CreateBucketRequest(bøtte)
                 .withCannedAcl(CannedAccessControlList.Private));
     }
 

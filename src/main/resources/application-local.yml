@@ -8,8 +8,7 @@ management :
    endpoint: 
      health:
        show-details : always
-                   
-no.nav.security.jwt:
+no.nav.security.jwt: 
   issuer.selvbetjening : 
      discoveryurl: http://metadata
      accepted_audience: aud-localhost
