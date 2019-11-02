@@ -1,4 +1,4 @@
-# REST-API for foreldrepenger/engangsstønad
+# REST-API for foreldrepenger/engangsstønad/svangerskappenger
 
 ## Kjøre opp lokalt
 * Kjør klassen ```ApiApplicationLocal``` fra din favoritteditor
@@ -17,4 +17,4 @@ Spørsmål knyttet til koden eller prosjektet kan rettes til:
 
 ## For NAV-ansatte
 
-Interne henvendelser kan sendes via Slack i kanalen #bris.
+Interne henvendelser kan sendes via Slack i kanalen #fp-teknisk.
