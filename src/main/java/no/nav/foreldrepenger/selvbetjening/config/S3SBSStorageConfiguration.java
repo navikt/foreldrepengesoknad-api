@@ -6,7 +6,6 @@ import static no.nav.foreldrepenger.selvbetjening.util.Cluster.PROD_SBS;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
-import org.springframework.context.annotation.Lazy;
 
 import com.amazonaws.ClientConfiguration;
 import com.amazonaws.auth.AWSCredentials;
@@ -25,7 +24,7 @@ import no.nav.foreldrepenger.selvbetjening.util.ConditionalOnClusters;
 public class S3SBSStorageConfiguration {
 
     @Bean
-    @Lazy
+    // @Lazy
     public AmazonS3 s3(AWSCredentials s3Credentials, EndpointConfiguration endpointConfig,
             ClientConfiguration clientConfig) {
         return AmazonS3ClientBuilder.standard()

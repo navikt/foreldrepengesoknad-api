@@ -31,8 +31,8 @@ import org.springframework.web.servlet.config.annotation.WebMvcConfigurer;
 
 import com.google.common.collect.ImmutableMap;
 
+import no.nav.foreldrepenger.selvbetjening.interceptors.client.ZoneCrossingAware;
 import no.nav.foreldrepenger.selvbetjening.interceptors.client.ZoneCrossingAwareClientInterceptor;
-import no.nav.foreldrepenger.selvbetjening.tjeneste.ZoneCrossingAware;
 import no.nav.foreldrepenger.selvbetjening.tjeneste.mellomlagring.MellomlagringKrypto;
 
 @Configuration
