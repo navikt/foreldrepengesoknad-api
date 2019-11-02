@@ -1,4 +1,4 @@
-# REST-API for foreldrepenger/engangsstønad/svangerskappenger
+# REST-API for foreldrepenger/engangsstønad/svangerskapspenger
 
 ## Kjøre opp lokalt
 * Kjør klassen ```ApiApplicationLocal``` fra din favoritteditor
