@@ -16,6 +16,7 @@ import org.springframework.retry.annotation.Retryable;
 
 import com.amazonaws.SdkClientException;
 import com.amazonaws.services.s3.AmazonS3;
+import com.amazonaws.services.s3.model.AmazonS3Exception;
 import com.amazonaws.services.s3.model.BucketLifecycleConfiguration;
 import com.amazonaws.services.s3.model.CannedAccessControlList;
 import com.amazonaws.services.s3.model.CreateBucketRequest;
@@ -65,7 +66,7 @@ public class S3Mellomlagring extends AbstractMellomlagringTjeneste implements En
     }
 
     @Override
-    @Retryable(value = { SdkClientException.class }, maxAttempts = 3, backoff = @Backoff(delay = 1000))
+    @Retryable(value = { AmazonS3Exception.class }, maxAttempts = 3, backoff = @Backoff(delay = 1000))
     protected String les(String bøtte, String katalog, String key) {
         String path = fileName(katalog, key);
         S3Object object = s3.getObject(bøtte, path);
@@ -75,8 +76,8 @@ public class S3Mellomlagring extends AbstractMellomlagringTjeneste implements En
     }
 
     @Recover
-    protected String recoveryLes(SdkClientException e, String bøtte, String directory, String key) {
-        LOG.trace("(Recovery) Kunne ikke lese {} fra bøtte {}, finnes sannsynligvis ikke", directory, bøtte);
+    protected String recoveryLes(AmazonS3Exception e, String bøtte, String katalog, String key) {
+        LOG.trace("(Recovery) Kunne ikke lese {} fra bøtte {}, finnes sannsynligvis ikke", katalog, bøtte);
         return null;
     }
 
