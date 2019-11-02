@@ -88,6 +88,7 @@ public abstract class AbstractMellomlagringTjeneste implements MellomlagringTjen
     }
 
     @Override
+    @Retryable(value = { AmazonS3Exception.class }, maxAttempts = 3, backoff = @Backoff(delay = 1000))
     public Optional<String> lesTmp(String katalog, String key) {
         if (isEnabled()) {
             LOG.info("Henter mellomlagret søknad fra bøtte {}, katalog {}", mellomlagringBøtte, katalog);
