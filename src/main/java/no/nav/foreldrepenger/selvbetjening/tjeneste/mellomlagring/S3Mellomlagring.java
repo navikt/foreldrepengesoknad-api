@@ -8,11 +8,13 @@ import java.net.URI;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.EnvironmentAware;
 import org.springframework.core.env.Environment;
 import org.springframework.retry.annotation.Backoff;
 import org.springframework.retry.annotation.Recover;
 import org.springframework.retry.annotation.Retryable;
+import org.springframework.stereotype.Component;
 
 import com.amazonaws.SdkClientException;
 import com.amazonaws.services.s3.AmazonS3;
@@ -23,6 +25,11 @@ import com.amazonaws.services.s3.model.CreateBucketRequest;
 import com.amazonaws.services.s3.model.S3Object;
 import com.amazonaws.services.s3.model.lifecycle.LifecycleFilter;
 
+import no.nav.foreldrepenger.selvbetjening.util.Cluster;
+import no.nav.foreldrepenger.selvbetjening.util.ConditionalOnClusters;
+
+@Component
+@ConditionalOnClusters(clusters = { Cluster.DEV_SBS, Cluster.PROD_SBS })
 public class S3Mellomlagring extends AbstractMellomlagringTjeneste implements EnvironmentAware {
 
     private static final Logger LOG = LoggerFactory.getLogger(S3Mellomlagring.class);
@@ -31,7 +38,8 @@ public class S3Mellomlagring extends AbstractMellomlagringTjeneste implements En
 
     private Environment env;
 
-    public S3Mellomlagring(AmazonS3 s3, String søknadBøtte, String mellomlagringBøtte) {
+    public S3Mellomlagring(AmazonS3 s3, @Value("${storage.søknad:foreldrepengesoknad}") String søknadBøtte,
+            @Value("${storage.mellomlagring:mellomlagring}") String mellomlagringBøtte) {
         super(søknadBøtte, mellomlagringBøtte);
         this.s3 = s3;
         ensureBucketExists(søknadBøtte, 365);

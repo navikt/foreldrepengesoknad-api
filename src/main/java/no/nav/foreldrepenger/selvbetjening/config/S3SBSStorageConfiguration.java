@@ -16,19 +16,11 @@ import com.amazonaws.client.builder.AwsClientBuilder.EndpointConfiguration;
 import com.amazonaws.services.s3.AmazonS3;
 import com.amazonaws.services.s3.AmazonS3ClientBuilder;
 
-import no.nav.foreldrepenger.selvbetjening.tjeneste.mellomlagring.S3Mellomlagring;
-import no.nav.foreldrepenger.selvbetjening.tjeneste.mellomlagring.MellomlagringTjeneste;
 import no.nav.foreldrepenger.selvbetjening.util.ConditionalOnClusters;
 
 @Configuration
 @ConditionalOnClusters(clusters = { DEV_SBS, PROD_SBS })
 public class S3SBSStorageConfiguration {
-
-    @Bean
-    public MellomlagringTjeneste s3Storage(AmazonS3 s3, @Value("${storage.søknad:foreldrepengesoknad}") String søknadBucket,
-            @Value("${storage.mellomlagring:mellomlagring}") String mellomlagringBucket) {
-        return new S3Mellomlagring(s3, søknadBucket, mellomlagringBucket);
-    }
 
     @Bean
     @Lazy
