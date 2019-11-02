@@ -4,6 +4,11 @@ import java.util.Optional;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.retry.annotation.Backoff;
+import org.springframework.retry.annotation.Recover;
+import org.springframework.retry.annotation.Retryable;
+
+import com.amazonaws.services.s3.model.AmazonS3Exception;
 
 public abstract class AbstractMellomlagringTjeneste implements MellomlagringTjeneste {
     private static final Logger LOG = LoggerFactory.getLogger(AbstractMellomlagringTjeneste.class);
@@ -59,6 +64,7 @@ public abstract class AbstractMellomlagringTjeneste implements MellomlagringTjen
     }
 
     @Override
+    @Retryable(value = { AmazonS3Exception.class }, maxAttempts = 3, backoff = @Backoff(delay = 1000))
     public Optional<String> les(String katalog, String key) {
         if (isEnabled()) {
             LOG.info("Henter søknad fra bøtte {}, katalog {}", søknadBøtte, katalog);
@@ -73,6 +79,12 @@ public abstract class AbstractMellomlagringTjeneste implements MellomlagringTjen
             LOG.warn("Mellomlagringsoperasjoner er deaktivert");
             return null;
         }
+    }
+
+    @Recover
+    public String recoveryLes(AmazonS3Exception e, String bøtte, String katalog, String key) {
+        LOG.trace("(Recovery) Kunne ikke lese {} fra bøtte {}, finnes sannsynligvis ikke", katalog, bøtte);
+        return null;
     }
 
     @Override

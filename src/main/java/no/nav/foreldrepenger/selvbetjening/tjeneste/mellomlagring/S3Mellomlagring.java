@@ -18,7 +18,6 @@ import org.springframework.stereotype.Component;
 
 import com.amazonaws.SdkClientException;
 import com.amazonaws.services.s3.AmazonS3;
-import com.amazonaws.services.s3.model.AmazonS3Exception;
 import com.amazonaws.services.s3.model.BucketLifecycleConfiguration;
 import com.amazonaws.services.s3.model.CannedAccessControlList;
 import com.amazonaws.services.s3.model.CreateBucketRequest;
@@ -74,19 +73,12 @@ public class S3Mellomlagring extends AbstractMellomlagringTjeneste implements En
     }
 
     @Override
-    @Retryable(value = { AmazonS3Exception.class }, maxAttempts = 3, backoff = @Backoff(delay = 1000))
     protected String les(String bøtte, String katalog, String key) {
         String path = fileName(katalog, key);
         S3Object object = s3.getObject(bøtte, path);
         return new BufferedReader(new InputStreamReader(object.getObjectContent()))
                 .lines()
                 .collect(joining("\n"));
-    }
-
-    @Recover
-    protected String recoveryLes(AmazonS3Exception e, String bøtte, String katalog, String key) {
-        LOG.trace("(Recovery) Kunne ikke lese {} fra bøtte {}, finnes sannsynligvis ikke", katalog, bøtte);
-        return null;
     }
 
     @Override
