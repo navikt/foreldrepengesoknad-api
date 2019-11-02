@@ -11,12 +11,8 @@ import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.EnvironmentAware;
 import org.springframework.core.env.Environment;
-import org.springframework.retry.annotation.Backoff;
-import org.springframework.retry.annotation.Recover;
-import org.springframework.retry.annotation.Retryable;
 import org.springframework.stereotype.Component;
 
-import com.amazonaws.SdkClientException;
 import com.amazonaws.services.s3.AmazonS3;
 import com.amazonaws.services.s3.model.BucketLifecycleConfiguration;
 import com.amazonaws.services.s3.model.CannedAccessControlList;
@@ -46,39 +42,36 @@ public class S3Mellomlagring extends AbstractMellomlagringTjeneste implements En
     }
 
     @Override
-    @Retryable(value = { SdkClientException.class }, maxAttempts = 3, backoff = @Backoff(delay = 1000))
     protected boolean slett(String bøtte, String katalog, String key) {
-        s3.deleteObject(bøtte, fileName(katalog, key));
-        return true;
-    }
-
-    @Recover
-    protected boolean recoverySlett(SdkClientException e, String bøtte, String katalog, String key) {
-        LOG.trace("(Recovery) Kunne ikke slette {} fra bøtte {}, finnes sannsynligvis ikke", katalog, bøtte);
-        return false;
+        try {
+            s3.deleteObject(bøtte, fileName(katalog, key));
+            return true;
+        } catch (Exception e) {
+            return false;
+        }
     }
 
     @Override
-    @Retryable(value = { SdkClientException.class }, maxAttempts = 3, backoff = @Backoff(delay = 1000))
     protected boolean lagre(String bøtte, String katalog, String key, String value) {
-        s3.putObject(bøtte, fileName(katalog, key), value);
-        return true;
-    }
-
-    @Recover
-    protected boolean recoveryLagre(SdkClientException e, String bøtte, String katalog, String key,
-            String value) {
-        LOG.trace("(Recovery) Kunne ikke lagre {} i bøtte {}, finnes sannsynligvis ikke", katalog, bøtte);
-        return false;
+        try {
+            s3.putObject(bøtte, fileName(katalog, key), value);
+            return true;
+        } catch (Exception e) {
+            return false;
+        }
     }
 
     @Override
     protected String les(String bøtte, String katalog, String key) {
-        String path = fileName(katalog, key);
-        S3Object object = s3.getObject(bøtte, path);
-        return new BufferedReader(new InputStreamReader(object.getObjectContent()))
-                .lines()
-                .collect(joining("\n"));
+        try {
+            String path = fileName(katalog, key);
+            S3Object object = s3.getObject(bøtte, path);
+            return new BufferedReader(new InputStreamReader(object.getObjectContent()))
+                    .lines()
+                    .collect(joining("\n"));
+        } catch (Exception e) {
+            return null;
+        }
     }
 
     @Override
