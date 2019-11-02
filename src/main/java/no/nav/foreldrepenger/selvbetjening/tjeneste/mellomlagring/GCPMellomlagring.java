@@ -9,7 +9,9 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.context.EnvironmentAware;
 import org.springframework.core.env.Environment;
+import org.threeten.bp.Duration;
 
+import com.google.api.gax.retrying.RetrySettings;
 import com.google.cloud.storage.BlobId;
 import com.google.cloud.storage.BlobInfo;
 import com.google.cloud.storage.Storage;
@@ -26,7 +28,15 @@ public class GCPMellomlagring extends AbstractMellomlagringTjeneste implements E
 
     public GCPMellomlagring(String søknadBøtte, String mellomlagringBøtte) {
         super(søknadBøtte, mellomlagringBøtte);
-        this.storage = StorageOptions.getDefaultInstance().getService();
+
+        var retrySettings = RetrySettings.newBuilder()
+                .setTotalTimeout(Duration.ofSeconds(5))
+                .build();
+        this.storage = StorageOptions
+                .newBuilder()
+                .setRetrySettings(retrySettings)
+                .build()
+                .getService();
     }
 
     @Override

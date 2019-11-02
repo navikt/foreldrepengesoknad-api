@@ -13,6 +13,8 @@ import com.amazonaws.auth.AWSCredentials;
 import com.amazonaws.auth.AWSStaticCredentialsProvider;
 import com.amazonaws.auth.BasicAWSCredentials;
 import com.amazonaws.client.builder.AwsClientBuilder.EndpointConfiguration;
+import com.amazonaws.retry.PredefinedRetryPolicies;
+import com.amazonaws.retry.RetryPolicy;
 import com.amazonaws.services.s3.AmazonS3;
 import com.amazonaws.services.s3.AmazonS3ClientBuilder;
 
@@ -35,11 +37,17 @@ public class S3SBSStorageConfiguration {
     }
 
     @Bean
-    public ClientConfiguration s3ClientConfig(@Value("${s3.timeout:3000}") int requestTimeout,
+    public ClientConfiguration s3ClientConfig(RetryPolicy retryPolicy, @Value("${s3.timeout:3000}") int requestTimeout,
             @Value("${s3.retries:3}") int retries) {
         return new ClientConfiguration()
+                .withRetryPolicy(retryPolicy)
                 .withRequestTimeout(requestTimeout)
                 .withMaxErrorRetry(retries);
+    }
+
+    @Bean
+    public RetryPolicy retryPolicy(@Value("${s3.retries:3}") int retries) {
+        return PredefinedRetryPolicies.getDefaultRetryPolicyWithCustomMaxRetries(retries);
     }
 
     @Bean
