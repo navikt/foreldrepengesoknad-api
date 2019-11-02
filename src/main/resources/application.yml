@@ -23,9 +23,13 @@ info:
 management:
    metrics:
       web:
-         server:
-            auto-time-requests: true
+        server:
+           request:
+             autotime:
+                 enabled: true                
    health :
+      refresh:
+         enabled: false
       diskspace:
          enabled: false
    endpoint:
@@ -39,7 +43,7 @@ management:
 server:
    servlet:
       context-path: /
-   use-forward-headers: true
+   forward-headers-strategy: native
    error:
       whitelabel:
          enabled: false
@@ -68,4 +72,4 @@ spring:
    mvc:
       throw-exception-if-no-handler-found: true
    resources:
-      add-mappings: false
+      add-mappings: true
