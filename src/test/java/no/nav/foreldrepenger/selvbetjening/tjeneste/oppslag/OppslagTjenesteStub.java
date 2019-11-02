@@ -78,8 +78,4 @@ public class OppslagTjenesteStub implements Oppslag {
         return new AktørId("1234567890");
     }
 
-    @Override
-    public boolean isEnabled() {
-        return true;
-    }
 }

@@ -47,9 +47,4 @@ public class OppslagTjeneste implements Oppslag {
         return getClass().getSimpleName() + " [connection=" + connection + "]";
     }
 
-    @Override
-    public boolean isEnabled() {
-        return connection.isEnabled();
-    }
-
 }

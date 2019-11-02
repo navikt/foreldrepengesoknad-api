@@ -98,9 +98,4 @@ public class InnsendingTjenesteStub implements Innsending {
         return "Hello earthlings";
     }
 
-    @Override
-    public boolean isEnabled() {
-        return true;
-    }
-
 }

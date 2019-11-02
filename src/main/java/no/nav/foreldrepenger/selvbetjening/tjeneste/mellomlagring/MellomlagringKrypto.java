@@ -1,8 +1,7 @@
 package no.nav.foreldrepenger.selvbetjening.tjeneste.mellomlagring;
 
-import static javax.xml.bind.DatatypeConverter.printHexBinary;
-
 public class MellomlagringKrypto {
+    private static final char[] hexCode = "0123456789ABCDEF".toCharArray();
 
     private final String passphrase;
 
@@ -20,5 +19,14 @@ public class MellomlagringKrypto {
 
     public String decrypt(String encrypted, String fnr) {
         return new Krypto(passphrase, fnr).decrypt(encrypted);
+    }
+
+    public String printHexBinary(byte[] data) {
+        StringBuilder r = new StringBuilder(data.length * 2);
+        for (byte b : data) {
+            r.append(hexCode[(b >> 4) & 0xF]);
+            r.append(hexCode[(b & 0xF)]);
+        }
+        return r.toString();
     }
 }

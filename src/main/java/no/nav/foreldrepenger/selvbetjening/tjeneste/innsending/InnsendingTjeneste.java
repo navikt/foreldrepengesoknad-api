@@ -74,11 +74,6 @@ public class InnsendingTjeneste implements Innsending {
     }
 
     @Override
-    public boolean isEnabled() {
-        return connection.isEnabled();
-    }
-
-    @Override
     public String ping() {
         return connection.ping();
     }

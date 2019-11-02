@@ -1,7 +1,6 @@
 package no.nav.foreldrepenger.selvbetjening.error;
 
 import static java.lang.String.format;
-import static org.apache.commons.io.FileUtils.byteCountToDisplaySize;
 
 import org.springframework.util.unit.DataSize;
 
@@ -22,8 +21,7 @@ public class AttachmentTooLargeException extends AttachmentException {
     }
 
     private static String msg(long attachmentSize, DataSize max) {
-        return format("Vedlegg-størrelse er %s, men kan ikke overstige %s",
-                byteCountToDisplaySize(attachmentSize),
-                byteCountToDisplaySize(max.toBytes()));
+        return format("Vedlegg-størrelse er %s Mb, men kan ikke overstige %s",
+                attachmentSize, max);
     }
 }

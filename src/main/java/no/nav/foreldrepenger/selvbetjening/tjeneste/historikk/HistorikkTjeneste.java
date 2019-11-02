@@ -49,9 +49,4 @@ public class HistorikkTjeneste implements Historikk, EnvironmentAware {
         return getClass().getSimpleName() + " [connection=" + connection + "]";
     }
 
-    @Override
-    public boolean isEnabled() {
-        return connection.isEnabled();
-    }
-
 }

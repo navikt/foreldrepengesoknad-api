@@ -49,11 +49,6 @@ public class MinidialogTjeneste implements Minidialog, EnvironmentAware {
     }
 
     @Override
-    public boolean isEnabled() {
-        return connection.isEnabled();
-    }
-
-    @Override
     public void setEnvironment(Environment env) {
         this.env = env;
     }

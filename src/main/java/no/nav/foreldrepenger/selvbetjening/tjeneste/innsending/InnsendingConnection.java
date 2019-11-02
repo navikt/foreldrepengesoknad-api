@@ -6,7 +6,6 @@ import java.net.URI;
 import java.time.LocalDate;
 
 import javax.inject.Inject;
-import javax.ws.rs.BadRequestException;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -16,6 +15,7 @@ import org.springframework.web.client.RestOperations;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 
+import no.nav.foreldrepenger.selvbetjening.error.UnexpectedInputException;
 import no.nav.foreldrepenger.selvbetjening.tjeneste.AbstractRestConnection;
 import no.nav.foreldrepenger.selvbetjening.tjeneste.innsending.domain.Engangsstønad;
 import no.nav.foreldrepenger.selvbetjening.tjeneste.innsending.domain.Ettersending;
@@ -92,7 +92,7 @@ public class InnsendingConnection extends AbstractRestConnection {
             logJSON(dto);
         } else {
             LOG.warn("Mottok en søknad av ukjent type {}", søknad.getClass().getSimpleName());
-            throw new BadRequestException("Unknown application type " + søknad.getClass().getSimpleName());
+            throw new UnexpectedInputException("Unknown application type " + søknad.getClass().getSimpleName());
         }
         dto.mottattdato = LocalDate.now();
         dto.tilleggsopplysninger = søknad.getTilleggsopplysninger();

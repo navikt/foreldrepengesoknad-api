@@ -7,7 +7,6 @@ import static org.springframework.test.web.client.response.MockRestResponseCreat
 
 import java.net.URI;
 
-import javax.ws.rs.BadRequestException;
 import javax.ws.rs.NotFoundException;
 
 import org.junit.jupiter.api.BeforeEach;
@@ -28,6 +27,7 @@ import org.springframework.test.web.client.MockRestServiceServer;
 import org.springframework.util.unit.DataSize;
 import org.springframework.util.unit.DataUnit;
 
+import no.nav.foreldrepenger.selvbetjening.error.UnexpectedInputException;
 import no.nav.foreldrepenger.selvbetjening.tjeneste.innsending.domain.Søknad;
 import no.nav.foreldrepenger.selvbetjening.tjeneste.mellomlagring.KryptertMellomlagringTjeneste;
 import no.nav.foreldrepenger.selvbetjening.tjeneste.virusscan.VirusScanner;
@@ -90,7 +90,7 @@ public class InnsendingTest {
         server.expect(ExpectedCount.once(), requestTo(CFG.innsendingURI()))
                 .andExpect(method(HttpMethod.GET))
                 .andRespond(withStatus(HttpStatus.OK));
-        assertThrows(BadRequestException.class, () -> innsending.sendInn(new Søknad()));
+        assertThrows(UnexpectedInputException.class, () -> innsending.sendInn(new Søknad()));
 
     }
 }

@@ -3,13 +3,14 @@ package no.nav.foreldrepenger.selvbetjening.tjeneste.innsending.dto;
 import static com.fasterxml.jackson.annotation.JsonInclude.Include.NON_EMPTY;
 import static com.fasterxml.jackson.annotation.JsonInclude.Include.NON_NULL;
 import static java.util.stream.Collectors.toList;
-import static org.apache.commons.collections4.CollectionUtils.isNotEmpty;
 import static org.apache.commons.lang3.StringUtils.isEmpty;
 import static org.apache.commons.lang3.StringUtils.isNotBlank;
 
 import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
+
+import org.springframework.util.CollectionUtils;
 
 import com.fasterxml.jackson.annotation.JsonInclude;
 
@@ -59,7 +60,7 @@ public class YtelseDto {
         if (søknad instanceof Svangerskapspengesøknad) {
             Svangerskapspengesøknad svangerskapspengesøknad = (Svangerskapspengesøknad) søknad;
             this.termindato = svangerskapspengesøknad.getBarn().termindato;
-            if (isNotEmpty(svangerskapspengesøknad.getBarn().fødselsdatoer)) {
+            if (!CollectionUtils.isEmpty(svangerskapspengesøknad.getBarn().fødselsdatoer)) {
                 this.fødselsdato = svangerskapspengesøknad.getBarn().fødselsdatoer.get(0);
             }
             this.tilrettelegging = svangerskapspengesøknad.getTilrettelegging().stream().map(TilretteleggingDto::new)

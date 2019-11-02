@@ -27,9 +27,4 @@ public class HistorikkTjenesteStub implements Historikk {
         return Collections.emptyList();
     }
 
-    @Override
-    public boolean isEnabled() {
-        return true;
-    }
-
 }
