@@ -4,6 +4,8 @@ import static java.nio.charset.StandardCharsets.UTF_8;
 import static org.springframework.http.MediaType.APPLICATION_JSON_VALUE;
 
 import java.net.URI;
+import java.util.Objects;
+import java.util.Optional;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -12,6 +14,7 @@ import org.springframework.core.env.Environment;
 import org.threeten.bp.Duration;
 
 import com.google.api.gax.retrying.RetrySettings;
+import com.google.cloud.storage.Blob;
 import com.google.cloud.storage.BlobId;
 import com.google.cloud.storage.BlobInfo;
 import com.google.cloud.storage.Storage;
@@ -59,7 +62,11 @@ public class GCPMellomlagring extends AbstractMellomlagringTjeneste implements E
     @Override
     protected String les(String bøtte, String katalog, String key) {
         try {
-            return new String(storage.get(bøtte, fileName(katalog, key)).getContent(), UTF_8);
+            return Optional.ofNullable(storage.get(bøtte, fileName(katalog, key)))
+                    .map(Blob::getContent)
+                    .filter(Objects::nonNull)
+                    .map(b -> new String(b, UTF_8))
+                    .orElse(null);
         } catch (StorageException e) {
             LOG.warn("Feil ved henting", e);
             return null;
