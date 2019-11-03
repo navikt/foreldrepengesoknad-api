@@ -17,10 +17,10 @@ public class GCPStorageConfiguration {
 
     @Bean
     public MellomlagringTjeneste gcpCloudStorage(
-            @Value("${storage.mellomlagring.søknad:foreldrepengesoknad}") String søknadBucket,
-            @Value("${storage.mellomlagring.mellomlagring:mellomlagring}") String mellomlagringBucket,
-            @Value("${storage.mellomlagring.enabled:true}") boolean enabled) {
-        return new GCPMellomlagring(søknadBucket, mellomlagringBucket, enabled);
+            @Value("${storage.mellomlagring.søknad:foreldrepengesoknad}") String søknadBøtte,
+            @Value("${storage.mellomlagring.mellomlagring:mellomlagring}") String mellomlagringBøtte,
+            @Value("${storage.mellomlagring:enabled:true}") boolean enabled) {
+        return new GCPMellomlagring(søknadBøtte, mellomlagringBøtte, enabled);
     }
 
 }
