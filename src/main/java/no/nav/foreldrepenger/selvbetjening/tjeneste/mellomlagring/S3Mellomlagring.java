@@ -33,7 +33,7 @@ public class S3Mellomlagring extends AbstractMellomlagringTjeneste {
     }
 
     @Override
-    protected void slett(String bøtte, String katalog, String key) {
+    protected void doDelete(String bøtte, String katalog, String key) {
         try {
             s3.deleteObject(bøtte, key(katalog, key));
         } catch (SdkClientException e) {
@@ -42,7 +42,7 @@ public class S3Mellomlagring extends AbstractMellomlagringTjeneste {
     }
 
     @Override
-    protected void lagre(String bøtte, String katalog, String key, String value) {
+    protected void doStore(String bøtte, String katalog, String key, String value) {
         try {
             s3.putObject(bøtte, key(katalog, key), value);
         } catch (SdkClientException e) {
@@ -51,7 +51,7 @@ public class S3Mellomlagring extends AbstractMellomlagringTjeneste {
     }
 
     @Override
-    protected String les(String bøtte, String katalog, String key) {
+    protected String doRead(String bøtte, String katalog, String key) {
         try {
             S3Object object = s3.getObject(bøtte, key(katalog, key));
             return new BufferedReader(new InputStreamReader(object.getObjectContent()))
