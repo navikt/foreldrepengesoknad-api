@@ -15,11 +15,11 @@ public abstract class AbstractMellomlagringTjeneste implements Mellomlagring {
 
     protected abstract void validerBøtte(Bøtte bøtte);
 
-    protected abstract void doStore(String bøtte, String katalog, String key, String value);
+    protected abstract void lagre(String bøtte, String katalog, String key, String value);
 
-    protected abstract String doRead(String bøtte, String katalog, String key);
+    protected abstract String les(String bøtte, String katalog, String key);
 
-    protected abstract void doDelete(String bøtte, String katalog, String key);
+    protected abstract void slett(String bøtte, String katalog, String key);
 
     private final Bøtte søknadBøtte;
     private final Bøtte mellomlagringBøtte;
@@ -63,7 +63,7 @@ public abstract class AbstractMellomlagringTjeneste implements Mellomlagring {
         try {
             if (bøtte.isEnabled()) {
                 LOG.info("Henter fra bøtte {}, katalog {}", bøtte, katalog);
-                var søknad = Optional.ofNullable(doRead(bøtte.getNavn(), katalog, key));
+                var søknad = Optional.ofNullable(les(bøtte.getNavn(), katalog, key));
                 if (søknad.isPresent()) {
                     LOG.info("Hentet fra bøtte {}, katalog {}", bøtte, katalog);
                 } else {
@@ -83,7 +83,7 @@ public abstract class AbstractMellomlagringTjeneste implements Mellomlagring {
         try {
             if (bøtte.isEnabled()) {
                 LOG.info("Lagrer i bøtte {}, katalog {}", bøtte, katalog);
-                doStore(bøtte.getNavn(), katalog, key, value);
+                lagre(bøtte.getNavn(), katalog, key, value);
                 LOG.info("Lagret i bøtte {}, katalog {}", bøtte, katalog);
             } else {
                 disabled();
@@ -97,7 +97,7 @@ public abstract class AbstractMellomlagringTjeneste implements Mellomlagring {
         try {
             if (bøtte.isEnabled()) {
                 LOG.info("Fjerner fra bøtte {}, katalog {}", bøtte, katalog);
-                doDelete(bøtte.getNavn(), katalog, key);
+                slett(bøtte.getNavn(), katalog, key);
                 LOG.info("Fjerner fra bøtte {}, katalog {}", bøtte, katalog);
             } else {
                 disabled();

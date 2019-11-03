@@ -41,7 +41,7 @@ public class GCPMellomlagring extends AbstractMellomlagringTjeneste {
     }
 
     @Override
-    protected void doStore(String bøtte, String katalog, String key, String value) {
+    protected void lagre(String bøtte, String katalog, String key, String value) {
         try {
             storage.create(BlobInfo.newBuilder(BlobId.of(bøtte, key(katalog, key)))
                     .setContentType(APPLICATION_JSON_VALUE).build(), value.getBytes(UTF_8));
@@ -51,7 +51,7 @@ public class GCPMellomlagring extends AbstractMellomlagringTjeneste {
     }
 
     @Override
-    protected String doRead(String bøtte, String katalog, String key) {
+    protected String les(String bøtte, String katalog, String key) {
         try {
             return Optional.ofNullable(storage.get(bøtte, key(katalog, key)))
                     .map(Blob::getContent)
@@ -64,7 +64,7 @@ public class GCPMellomlagring extends AbstractMellomlagringTjeneste {
     }
 
     @Override
-    protected void doDelete(String bøtte, String katalog, String key) {
+    protected void slett(String bøtte, String katalog, String key) {
         try {
             storage.delete(BlobId.of(bøtte, key(katalog, key)));
         } catch (StorageException e) {
