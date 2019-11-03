@@ -76,6 +76,23 @@ public class GCPMellomlagring extends AbstractMellomlagringTjeneste {
     }
 
     @Override
+    protected void validerBøtter(Bøtte... bøtter) {
+        try {
+
+            for (Bøtte bøtte : bøtter) {
+                if (!storage.get(bøtte.getNavn()).exists()) {
+                    LOG.warn("Bøtte {} finnes ikke", bøtte);
+                } else {
+                    LOG.warn("Bøtte {} finnes", bøtte);
+                }
+            }
+        } catch (StorageException e) {
+            throw new MellomlagringException(e);
+        }
+
+    }
+
+    @Override
     public String toString() {
         return getClass().getSimpleName() + "[storage=" + storage + ", søknadBøtte=" + getSøknadBøtte()
                 + ", mellomlagringBøtte=" + getMellomlagringBøtte() + "]";

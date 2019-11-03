@@ -72,7 +72,8 @@ public class S3Mellomlagring extends AbstractMellomlagringTjeneste {
         return URI.create(s3.getUrl(getMellomlagringBøtte().getNavn(), "42").toString());
     }
 
-    private void validerBøtter(Bøtte... bøtter) {
+    @Override
+    protected void validerBøtter(Bøtte... bøtter) {
         for (Bøtte bøtte : bøtter) {
             LOG.info("Sjekker om bøtte {} eksisterer", bøtte);
             if (s3.doesBucketExistV2(bøtte.getNavn())) {

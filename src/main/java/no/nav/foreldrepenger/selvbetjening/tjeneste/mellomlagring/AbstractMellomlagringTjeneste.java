@@ -9,6 +9,8 @@ public abstract class AbstractMellomlagringTjeneste implements Mellomlagring {
     private static final String DEAKIVERT = "Mellomlagringsoperasjoner er deaktivert";
     private static final Logger LOG = LoggerFactory.getLogger(AbstractMellomlagringTjeneste.class);
 
+    protected abstract void validerBøtter(Bøtte... bøtter);
+
     protected abstract void doStore(String bøtte, String katalog, String key, String value);
 
     protected abstract String doRead(String bøtte, String katalog, String key);
@@ -21,6 +23,7 @@ public abstract class AbstractMellomlagringTjeneste implements Mellomlagring {
     public AbstractMellomlagringTjeneste(Bøtte søknadBøtte, Bøtte mellomlagringBøtte) {
         this.søknadBøtte = søknadBøtte;
         this.mellomlagringBøtte = mellomlagringBøtte;
+        validerBøtter(søknadBøtte, mellomlagringBøtte);
     }
 
     @Override
