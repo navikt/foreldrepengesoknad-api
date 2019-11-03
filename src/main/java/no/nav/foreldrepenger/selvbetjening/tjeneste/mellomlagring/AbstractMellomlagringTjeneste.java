@@ -60,7 +60,6 @@ public abstract class AbstractMellomlagringTjeneste implements Mellomlagring {
     public Optional<String> lesTmp(String katalog, String key) {
         if (isEnabled()) {
             return lesFra(mellomlagringBøtte, katalog, key);
-
         }
         return disabled();
     }
@@ -88,7 +87,7 @@ public abstract class AbstractMellomlagringTjeneste implements Mellomlagring {
             LOG.info("Henter fra bøtte {}, katalog {}", bøtte, katalog);
             var søknad = Optional.ofNullable(doRead(bøtte, katalog, key));
             if (søknad.isPresent()) {
-                LOG.info("Hentet ikke fra bøtte {}, katalog {}", bøtte, katalog);
+                LOG.info("Hentet fra bøtte {}, katalog {}", bøtte, katalog);
             } else {
                 LOG.info("Hentet ikke fra bøtte {}, katalog {}", bøtte, katalog);
             }
