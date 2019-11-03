@@ -9,6 +9,7 @@ import java.util.Optional;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.core.NestedExceptionUtils;
 import org.threeten.bp.Duration;
 
 import com.google.api.gax.retrying.RetrySettings;
@@ -97,7 +98,7 @@ public class GCPMellomlagring extends AbstractMellomlagringTjeneste {
                 LOG.info("Bøtte {} eksisterer", bøtte);
             }
         } catch (Exception e) {
-            throw new MellomlagringException(e.getMessage(), e);
+            throw new MellomlagringException(NestedExceptionUtils.getMostSpecificCause(e).getMessage(), e);
         }
     }
 
