@@ -81,9 +81,9 @@ public class GCPMellomlagring extends AbstractMellomlagringTjeneste {
 
             for (Bøtte bøtte : bøtter) {
                 if (!storage.get(bøtte.getNavn()).exists()) {
-                    LOG.warn("Bøtte {} finnes ikke", bøtte);
+                    LOG.warn("Bøtte {} eksisterer ikke", bøtte);
                 } else {
-                    LOG.warn("Bøtte {} finnes", bøtte);
+                    LOG.warn("Bøtte {} eksisterer", bøtte);
                 }
             }
         } catch (StorageException e) {
