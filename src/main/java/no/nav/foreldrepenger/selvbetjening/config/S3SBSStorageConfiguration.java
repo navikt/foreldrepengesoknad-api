@@ -29,7 +29,7 @@ public class S3SBSStorageConfiguration {
     public MellomlagringTjeneste S3Mellomlagring(AmazonS3 s3,
             @Value("${storage.søknad:foreldrepengesoknad}") String søknadBøtte,
             @Value("${storage.mellomlagring:mellomlagring}") String mellomlagringBøtte,
-            @Value("${storage.søknad:enabled:true}") boolean enabled) {
+            @Value("${storage.mellomlagring:enabled:true}") boolean enabled) {
         return new S3Mellomlagring(s3, søknadBøtte, mellomlagringBøtte, enabled);
     }
 

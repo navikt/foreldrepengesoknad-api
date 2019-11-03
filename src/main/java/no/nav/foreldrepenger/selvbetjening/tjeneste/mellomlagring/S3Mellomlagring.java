@@ -8,7 +8,6 @@ import java.net.URI;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.springframework.beans.factory.annotation.Value;
 
 import com.amazonaws.SdkClientException;
 import com.amazonaws.services.s3.AmazonS3;
@@ -24,8 +23,7 @@ public class S3Mellomlagring extends AbstractMellomlagringTjeneste {
 
     private final AmazonS3 s3;
 
-    public S3Mellomlagring(AmazonS3 s3, @Value("${storage.søknad:foreldrepengesoknad}") String søknadBøtte,
-            @Value("${storage.mellomlagring:mellomlagring}") String mellomlagringBøtte, boolean enabled) {
+    public S3Mellomlagring(AmazonS3 s3, String søknadBøtte, String mellomlagringBøtte, boolean enabled) {
         super(søknadBøtte, mellomlagringBøtte, enabled);
         this.s3 = s3;
         ensureBucketExists(søknadBøtte, 365);
