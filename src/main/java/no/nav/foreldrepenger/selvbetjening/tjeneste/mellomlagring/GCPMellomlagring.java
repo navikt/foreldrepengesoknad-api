@@ -96,8 +96,8 @@ public class GCPMellomlagring extends AbstractMellomlagringTjeneste {
             } else {
                 LOG.info("Bøtte {} eksisterer", bøtte);
             }
-        } catch (StorageException e) {
-            throw new MellomlagringException(e);
+        } catch (Exception e) {
+            throw new MellomlagringException(e.getMessage(), e);
         }
     }
 
