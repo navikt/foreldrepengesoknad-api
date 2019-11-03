@@ -27,8 +27,8 @@
     </springProfile>
 
     <!-- Turn off Spring's warning logs for already resolved exceptions -->
-    <logger name="com.amazonaws" level="trace" />
-    <logger name="com.google" level="trace" />
+    <logger name="com.amazonaws" level="info" />
+    <logger name="com.google" level="info" />
     <logger name="org.springframework.retry" level="info" />
     <logger name="org.springframework.web.servlet.mvc.method.annotation.ExceptionHandlerExceptionResolver" level="ERROR" />
     <logger name="org.apache.pdfbox.pdmodel.font" level="ERROR" />
