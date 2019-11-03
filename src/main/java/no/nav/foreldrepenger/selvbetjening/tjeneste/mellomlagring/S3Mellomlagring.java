@@ -28,7 +28,6 @@ public class S3Mellomlagring extends AbstractMellomlagringTjeneste {
     public S3Mellomlagring(AmazonS3 s3, Bøtte søknadBøtte, Bøtte mellomlagringBøtte) {
         super(søknadBøtte, mellomlagringBøtte);
         this.s3 = s3;
-        validerBøtter(søknadBøtte, mellomlagringBøtte);
     }
 
     @Override
@@ -75,7 +74,7 @@ public class S3Mellomlagring extends AbstractMellomlagringTjeneste {
     @Override
     protected void validerBøtter(Bøtte... bøtter) {
         for (Bøtte bøtte : bøtter) {
-            LOG.info("Sjekker om bøtte {} eksisterer", bøtte);
+            LOG.info("Validerer bøtte {}", bøtte);
             if (s3.doesBucketExistV2(bøtte.getNavn())) {
                 LOG.info("Bøtte {} eksisterer", bøtte);
             } else {
