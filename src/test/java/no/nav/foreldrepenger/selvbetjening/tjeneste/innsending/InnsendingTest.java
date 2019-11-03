@@ -29,7 +29,7 @@ import org.springframework.util.unit.DataUnit;
 
 import no.nav.foreldrepenger.selvbetjening.error.UnexpectedInputException;
 import no.nav.foreldrepenger.selvbetjening.tjeneste.innsending.domain.Søknad;
-import no.nav.foreldrepenger.selvbetjening.tjeneste.mellomlagring.KryptertMellomlagringTjeneste;
+import no.nav.foreldrepenger.selvbetjening.tjeneste.mellomlagring.KryptertMellomlagring;
 import no.nav.foreldrepenger.selvbetjening.tjeneste.virusscan.VirusScanner;
 import no.nav.foreldrepenger.selvbetjening.util.EnvUtil;
 import no.nav.foreldrepenger.selvbetjening.util.TokenUtil;
@@ -54,7 +54,7 @@ public class InnsendingTest {
     TokenUtil tokenHandler;
 
     @Mock
-    KryptertMellomlagringTjeneste storage;
+    KryptertMellomlagring storage;
     @Mock
     VirusScanner scanner;
 

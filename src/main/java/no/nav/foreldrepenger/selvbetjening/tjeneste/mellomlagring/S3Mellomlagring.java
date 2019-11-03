@@ -1,6 +1,7 @@
 package no.nav.foreldrepenger.selvbetjening.tjeneste.mellomlagring;
 
 import static java.util.stream.Collectors.joining;
+import static org.springframework.http.HttpStatus.NOT_FOUND;
 
 import java.io.BufferedReader;
 import java.io.InputStreamReader;
@@ -11,6 +12,7 @@ import org.slf4j.LoggerFactory;
 
 import com.amazonaws.SdkClientException;
 import com.amazonaws.services.s3.AmazonS3;
+import com.amazonaws.services.s3.model.AmazonS3Exception;
 import com.amazonaws.services.s3.model.BucketLifecycleConfiguration;
 import com.amazonaws.services.s3.model.CannedAccessControlList;
 import com.amazonaws.services.s3.model.CreateBucketRequest;
@@ -51,17 +53,19 @@ public class S3Mellomlagring extends AbstractMellomlagringTjeneste {
     @Override
     protected String les(String bøtte, String katalog, String key) {
         try {
-            String path = key(katalog, key);
-            S3Object object = s3.getObject(bøtte, path);
-            var v = new BufferedReader(new InputStreamReader(object.getObjectContent()))
+            S3Object object = s3.getObject(bøtte, key(katalog, key));
+            return new BufferedReader(new InputStreamReader(object.getObjectContent()))
                     .lines()
                     .collect(joining("\n"));
-            LOG.trace("debugging v {}", v);
-            return v;
+        } catch (AmazonS3Exception e) {
+            if (e.getStatusCode() == NOT_FOUND.value()) {
+                LOG.info("Ikke funnet, finnes antagelig ikke");
+                return null;
+            }
         } catch (Exception e) {
-            LOG.trace("debugging", e);
-            return null;
+            throw new MellomlagringException(e);
         }
+        return null;
     }
 
     @Override

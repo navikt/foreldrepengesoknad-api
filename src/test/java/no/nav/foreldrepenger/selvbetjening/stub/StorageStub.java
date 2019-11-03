@@ -6,9 +6,9 @@ import java.util.Optional;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import no.nav.foreldrepenger.selvbetjening.tjeneste.mellomlagring.MellomlagringTjeneste;
+import no.nav.foreldrepenger.selvbetjening.tjeneste.mellomlagring.Mellomlagring;
 
-public class StorageStub implements MellomlagringTjeneste {
+public class StorageStub implements Mellomlagring {
 
     private static final Logger log = LoggerFactory.getLogger(StorageStub.class);
 

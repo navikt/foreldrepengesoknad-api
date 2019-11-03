@@ -13,17 +13,17 @@ import no.nav.foreldrepenger.selvbetjening.util.TokenUtil;
 import no.nav.foreldrepenger.selvbetjening.vedlegg.VedleggSjekker;
 
 @Service
-public class KryptertMellomlagringTjeneste {
+public class KryptertMellomlagring {
 
-    private static final Logger LOG = LoggerFactory.getLogger(KryptertMellomlagringTjeneste.class);
+    private static final Logger LOG = LoggerFactory.getLogger(KryptertMellomlagring.class);
     private static final String SØKNAD = "soknad";
     private static final Gson GSON = new Gson();
     private final TokenUtil tokenUtil;
-    private final MellomlagringTjeneste mellomlagring;
+    private final Mellomlagring mellomlagring;
     private final MellomlagringKrypto krypto;
     private final VedleggSjekker sjekker;
 
-    public KryptertMellomlagringTjeneste(TokenUtil tokenUtil, MellomlagringTjeneste mellomlagring,
+    public KryptertMellomlagring(TokenUtil tokenUtil, Mellomlagring mellomlagring,
             MellomlagringKrypto krypto, VedleggSjekker sjekker) {
         this.tokenUtil = tokenUtil;
         this.mellomlagring = mellomlagring;

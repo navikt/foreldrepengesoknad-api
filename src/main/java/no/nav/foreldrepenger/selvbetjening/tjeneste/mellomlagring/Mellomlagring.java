@@ -4,7 +4,7 @@ import java.util.Optional;
 
 import no.nav.foreldrepenger.selvbetjening.tjeneste.PingEndpointAware;
 
-public interface MellomlagringTjeneste extends PingEndpointAware {
+public interface Mellomlagring extends PingEndpointAware {
 
     void lagre(String directory, String key, String value);
 

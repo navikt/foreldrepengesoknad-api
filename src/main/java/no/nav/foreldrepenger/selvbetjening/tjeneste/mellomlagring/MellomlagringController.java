@@ -30,9 +30,9 @@ public class MellomlagringController {
 
     public static final String REST_STORAGE = "/rest/storage";
 
-    private final KryptertMellomlagringTjeneste mellomlagring;
+    private final KryptertMellomlagring mellomlagring;
 
-    public MellomlagringController(KryptertMellomlagringTjeneste mellomlagring) {
+    public MellomlagringController(KryptertMellomlagring mellomlagring) {
         this.mellomlagring = mellomlagring;
     }
 

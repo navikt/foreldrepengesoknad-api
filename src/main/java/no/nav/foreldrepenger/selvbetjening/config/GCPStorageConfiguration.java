@@ -8,7 +8,7 @@ import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 
 import no.nav.foreldrepenger.selvbetjening.tjeneste.mellomlagring.GCPMellomlagring;
-import no.nav.foreldrepenger.selvbetjening.tjeneste.mellomlagring.MellomlagringTjeneste;
+import no.nav.foreldrepenger.selvbetjening.tjeneste.mellomlagring.Mellomlagring;
 import no.nav.foreldrepenger.selvbetjening.util.ConditionalOnClusters;
 
 @Configuration
@@ -16,7 +16,7 @@ import no.nav.foreldrepenger.selvbetjening.util.ConditionalOnClusters;
 public class GCPStorageConfiguration {
 
     @Bean
-    public MellomlagringTjeneste gcpCloudStorage(
+    public Mellomlagring gcpCloudStorage(
             @Value("${mellomlagring.søknad:foreldrepengesoknad}") String søknadBøtte,
             @Value("${mellomlagring.mellomlagring:mellomlagring}") String mellomlagringBøtte,
             @Value("${mellomlagring.enabled:true}") boolean enabled) {

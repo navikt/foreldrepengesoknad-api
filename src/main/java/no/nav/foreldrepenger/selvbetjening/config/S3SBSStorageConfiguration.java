@@ -17,7 +17,7 @@ import com.amazonaws.retry.RetryPolicy;
 import com.amazonaws.services.s3.AmazonS3;
 import com.amazonaws.services.s3.AmazonS3ClientBuilder;
 
-import no.nav.foreldrepenger.selvbetjening.tjeneste.mellomlagring.MellomlagringTjeneste;
+import no.nav.foreldrepenger.selvbetjening.tjeneste.mellomlagring.Mellomlagring;
 import no.nav.foreldrepenger.selvbetjening.tjeneste.mellomlagring.S3Mellomlagring;
 import no.nav.foreldrepenger.selvbetjening.util.ConditionalOnClusters;
 
@@ -26,7 +26,7 @@ import no.nav.foreldrepenger.selvbetjening.util.ConditionalOnClusters;
 public class S3SBSStorageConfiguration {
 
     @Bean
-    public MellomlagringTjeneste S3Mellomlagring(AmazonS3 s3,
+    public Mellomlagring S3Mellomlagring(AmazonS3 s3,
             @Value("${mellomlagring.søknad:foreldrepengesoknad}") String søknadBøtte,
             @Value("${mellomlagring.mellomlagring:mellomlagring}") String mellomlagringBøtte,
             @Value("${mellomlagring.enabled:true}") boolean enabled) {

@@ -16,7 +16,7 @@ import no.nav.foreldrepenger.selvbetjening.tjeneste.innsending.domain.Kvittering
 import no.nav.foreldrepenger.selvbetjening.tjeneste.innsending.domain.Søknad;
 import no.nav.foreldrepenger.selvbetjening.tjeneste.innsending.domain.Vedlegg;
 import no.nav.foreldrepenger.selvbetjening.tjeneste.innsending.pdf.PDFGenerator;
-import no.nav.foreldrepenger.selvbetjening.tjeneste.mellomlagring.KryptertMellomlagringTjeneste;
+import no.nav.foreldrepenger.selvbetjening.tjeneste.mellomlagring.KryptertMellomlagring;
 import no.nav.foreldrepenger.selvbetjening.vedlegg.VedleggSjekker;
 
 @Service
@@ -27,11 +27,11 @@ public class InnsendingTjeneste implements Innsending {
     private static final Logger LOG = getLogger(InnsendingTjeneste.class);
     private static final Random IDGENERATOR = new SecureRandom();
     private final InnsendingConnection connection;
-    private final KryptertMellomlagringTjeneste mellomlagring;
+    private final KryptertMellomlagring mellomlagring;
     private final VedleggSjekker vedleggSjekker;
     private final PDFGenerator pdfGenerator;
 
-    public InnsendingTjeneste(InnsendingConnection connection, KryptertMellomlagringTjeneste mellomlagring,
+    public InnsendingTjeneste(InnsendingConnection connection, KryptertMellomlagring mellomlagring,
             VedleggSjekker vedleggSjekker, PDFGenerator pdfGenerator) {
         this.connection = connection;
         this.mellomlagring = mellomlagring;

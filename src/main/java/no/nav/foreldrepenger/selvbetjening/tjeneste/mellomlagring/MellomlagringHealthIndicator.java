@@ -7,7 +7,7 @@ import no.nav.foreldrepenger.selvbetjening.health.AbstractPingableHealthIndicato
 @Component
 public class MellomlagringHealthIndicator extends AbstractPingableHealthIndicator {
 
-    public MellomlagringHealthIndicator(MellomlagringTjeneste pingable) {
+    public MellomlagringHealthIndicator(Mellomlagring pingable) {
         super(pingable);
     }
 }
