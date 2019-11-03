@@ -23,7 +23,7 @@ public abstract class AbstractMellomlagringTjeneste implements Mellomlagring {
     public AbstractMellomlagringTjeneste(Bøtte søknadBøtte, Bøtte mellomlagringBøtte) {
         this.søknadBøtte = søknadBøtte;
         this.mellomlagringBøtte = mellomlagringBøtte;
-        validerBøtter(søknadBøtte, mellomlagringBøtte);
+        // validerBøtter(søknadBøtte, mellomlagringBøtte);
     }
 
     @Override
