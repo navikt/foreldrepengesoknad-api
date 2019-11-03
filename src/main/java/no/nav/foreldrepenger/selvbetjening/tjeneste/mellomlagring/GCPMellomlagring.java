@@ -27,7 +27,6 @@ public class GCPMellomlagring extends AbstractMellomlagringTjeneste {
 
     public GCPMellomlagring(Bøtte søknadBøtte, Bøtte mellomlagringBøtte) {
         super(søknadBøtte, mellomlagringBøtte);
-
         var retrySettings = RetrySettings.newBuilder()
                 .setTotalTimeout(Duration.ofSeconds(5))
                 .build();
@@ -78,7 +77,6 @@ public class GCPMellomlagring extends AbstractMellomlagringTjeneste {
     @Override
     protected void validerBøtter(Bøtte... bøtter) {
         try {
-
             for (Bøtte bøtte : bøtter) {
                 if (!storage.get(bøtte.getNavn()).exists()) {
                     LOG.warn("Bøtte {} eksisterer ikke", bøtte);
