@@ -78,6 +78,7 @@ public class GCPMellomlagring extends AbstractMellomlagringTjeneste {
     protected void validerBøtter(Bøtte... bøtter) {
         try {
             for (Bøtte bøtte : bøtter) {
+                LOG.warn("Validerer bøtte {}", bøtte);
                 if (!storage.get(bøtte.getNavn()).exists()) {
                     LOG.warn("Bøtte {} eksisterer ikke", bøtte);
                 } else {
