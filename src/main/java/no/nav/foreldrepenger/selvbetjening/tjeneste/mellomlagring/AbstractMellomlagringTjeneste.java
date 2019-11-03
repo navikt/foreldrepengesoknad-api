@@ -104,7 +104,7 @@ public abstract class AbstractMellomlagringTjeneste implements Mellomlagring {
             doStore(bøtte, katalog, key, value);
             LOG.info("Lagret i bøtte {}, katalog {}", bøtte, katalog);
         } catch (MellomlagringException e) {
-            LOG.warn("Lagret ikke i bøtte {}, katalog {}", bøtte, katalog);
+            LOG.warn("Lagret ikke i bøtte {}, katalog {}", bøtte, katalog, e);
         }
     }
 
