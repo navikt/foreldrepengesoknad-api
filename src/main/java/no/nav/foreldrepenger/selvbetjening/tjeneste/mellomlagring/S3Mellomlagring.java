@@ -74,11 +74,11 @@ public class S3Mellomlagring extends AbstractMellomlagringTjeneste {
 
     private void validerBøtter(Bøtte... bøtter) {
         for (Bøtte bøtte : bøtter) {
-            LOG.info("Sjekker om bøtte {} eksisterer", bøtte.getNavn());
+            LOG.info("Sjekker om bøtte {} eksisterer", bøtte);
             if (s3.doesBucketExistV2(bøtte.getNavn())) {
-                LOG.info("Bøtte {} eksisterer", bøtte.getNavn());
+                LOG.info("Bøtte {} eksisterer", bøtte);
             } else {
-                LOG.info("Bøtte {} eksisterer ikke", bøtte.getNavn());
+                LOG.info("Bøtte {} eksisterer ikke", bøtte);
                 lagBøtte(bøtte);
             }
         }
@@ -86,12 +86,12 @@ public class S3Mellomlagring extends AbstractMellomlagringTjeneste {
 
     private void lagBøtte(Bøtte bøtte) {
         try {
-            LOG.info("Lager bøtte {}", bøtte.getNavn());
+            LOG.info("Lager bøtte {}", bøtte);
             s3.createBucket(new CreateBucketRequest(bøtte.getNavn())
                     .withCannedAcl(CannedAccessControlList.Private));
             s3.setBucketLifecycleConfiguration(bøtte.getNavn(),
                     objectExpiresInDays(Math.toIntExact(bøtte.getLevetid().toDays())));
-            LOG.info("Laget bøtte {}", bøtte.getNavn());
+            LOG.info("Laget bøtte {}", bøtte);
         } catch (SdkClientException e) {
             throw new MellomlagringException(e);
         }
