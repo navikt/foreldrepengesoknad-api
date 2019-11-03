@@ -60,8 +60,4 @@ public class StorageStub implements Mellomlagring {
         return pingURI().getHost();
     }
 
-    @Override
-    public boolean isEnabled() {
-        return true;
-    }
 }

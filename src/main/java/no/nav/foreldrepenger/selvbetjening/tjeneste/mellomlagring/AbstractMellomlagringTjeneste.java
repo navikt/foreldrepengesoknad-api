@@ -15,14 +15,12 @@ public abstract class AbstractMellomlagringTjeneste implements Mellomlagring {
 
     protected abstract void doDelete(String bøtte, String katalog, String key);
 
-    private final String søknadBøtte;
-    private final String mellomlagringBøtte;
-    private final boolean enabled;
+    private final Bøtte søknadBøtte;
+    private final Bøtte mellomlagringBøtte;
 
-    public AbstractMellomlagringTjeneste(String søknadBøtte, String mellomlagringBøtte, boolean enabled) {
+    public AbstractMellomlagringTjeneste(Bøtte søknadBøtte, Bøtte mellomlagringBøtte) {
         this.søknadBøtte = søknadBøtte;
         this.mellomlagringBøtte = mellomlagringBøtte;
-        this.enabled = enabled;
     }
 
     @Override
@@ -32,7 +30,7 @@ public abstract class AbstractMellomlagringTjeneste implements Mellomlagring {
 
     @Override
     public void lagre(String katalog, String key, String value) {
-        if (isEnabled()) {
+        if (søknadBøtte.isEnabled()) {
             lagreI(søknadBøtte, katalog, key, value);
         } else {
             disabled();
@@ -41,7 +39,7 @@ public abstract class AbstractMellomlagringTjeneste implements Mellomlagring {
 
     @Override
     public void lagreTmp(String katalog, String key, String value) {
-        if (isEnabled()) {
+        if (mellomlagringBøtte.isEnabled()) {
             lagreI(mellomlagringBøtte, katalog, key, value);
         } else {
             disabled();
@@ -50,7 +48,7 @@ public abstract class AbstractMellomlagringTjeneste implements Mellomlagring {
 
     @Override
     public Optional<String> les(String katalog, String key) {
-        if (isEnabled()) {
+        if (søknadBøtte.isEnabled()) {
             return lesFra(søknadBøtte, katalog, key);
         }
         return disabled();
@@ -58,7 +56,7 @@ public abstract class AbstractMellomlagringTjeneste implements Mellomlagring {
 
     @Override
     public Optional<String> lesTmp(String katalog, String key) {
-        if (isEnabled()) {
+        if (mellomlagringBøtte.isEnabled()) {
             return lesFra(mellomlagringBøtte, katalog, key);
         }
         return disabled();
@@ -66,7 +64,7 @@ public abstract class AbstractMellomlagringTjeneste implements Mellomlagring {
 
     @Override
     public void slett(String katalog, String key) {
-        if (isEnabled()) {
+        if (søknadBøtte.isEnabled()) {
             slettFra(søknadBøtte, katalog, key);
         } else {
             disabled();
@@ -75,17 +73,17 @@ public abstract class AbstractMellomlagringTjeneste implements Mellomlagring {
 
     @Override
     public void slettTmp(String katalog, String key) {
-        if (isEnabled()) {
+        if (mellomlagringBøtte.isEnabled()) {
             slettFra(mellomlagringBøtte, katalog, key);
         } else {
             disabled();
         }
     }
 
-    private Optional<String> lesFra(String bøtte, String katalog, String key) {
+    private Optional<String> lesFra(Bøtte bøtte, String katalog, String key) {
         try {
             LOG.info("Henter fra bøtte {}, katalog {}", bøtte, katalog);
-            var søknad = Optional.ofNullable(doRead(bøtte, katalog, key));
+            var søknad = Optional.ofNullable(doRead(bøtte.getNavn(), katalog, key));
             if (søknad.isPresent()) {
                 LOG.info("Hentet fra bøtte {}, katalog {}", bøtte, katalog);
             } else {
@@ -98,36 +96,31 @@ public abstract class AbstractMellomlagringTjeneste implements Mellomlagring {
         }
     }
 
-    private void lagreI(String bøtte, String katalog, String key, String value) {
+    private void lagreI(Bøtte bøtte, String katalog, String key, String value) {
         try {
             LOG.info("Lagrer i bøtte {}, katalog {}", bøtte, katalog);
-            doStore(bøtte, katalog, key, value);
+            doStore(bøtte.getNavn(), katalog, key, value);
             LOG.info("Lagret i bøtte {}, katalog {}", bøtte, katalog);
         } catch (MellomlagringException e) {
             LOG.warn("Lagret ikke i bøtte {}, katalog {}", bøtte, katalog, e);
         }
     }
 
-    private void slettFra(String bøtte, String katalog, String key) {
+    private void slettFra(Bøtte bøtte, String katalog, String key) {
         try {
             LOG.info("Fjerner fra bøtte {}, katalog {}", bøtte, katalog);
-            doDelete(bøtte, katalog, key);
+            doDelete(bøtte.getNavn(), katalog, key);
             LOG.info("Fjerner fra bøtte {}, katalog {}", bøtte, katalog);
         } catch (MellomlagringException e) {
             LOG.warn("Fjernet ikke fra bøtte {}, katalog {}", bøtte, katalog, e);
         }
     }
 
-    @Override
-    public boolean isEnabled() {
-        return enabled;
-    }
-
-    String getSøknadBøtte() {
+    Bøtte getSøknadBøtte() {
         return søknadBøtte;
     }
 
-    String getMellomlagringBøtte() {
+    Bøtte getMellomlagringBøtte() {
         return mellomlagringBøtte;
     }
 

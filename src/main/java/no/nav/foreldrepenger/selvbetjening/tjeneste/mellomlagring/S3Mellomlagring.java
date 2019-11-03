@@ -25,11 +25,11 @@ public class S3Mellomlagring extends AbstractMellomlagringTjeneste {
 
     private final AmazonS3 s3;
 
-    public S3Mellomlagring(AmazonS3 s3, String søknadBøtte, String mellomlagringBøtte, boolean enabled) {
-        super(søknadBøtte, mellomlagringBøtte, enabled);
+    public S3Mellomlagring(AmazonS3 s3, Bøtte søknadBøtte, Bøtte mellomlagringBøtte) {
+        super(søknadBøtte, mellomlagringBøtte);
         this.s3 = s3;
-        ensureBucketExists(søknadBøtte, 365);
-        ensureBucketExists(mellomlagringBøtte, 1);
+        ensureBucketExists(søknadBøtte);
+        ensureBucketExists(mellomlagringBøtte);
     }
 
     @Override
@@ -81,10 +81,10 @@ public class S3Mellomlagring extends AbstractMellomlagringTjeneste {
 
     @Override
     public URI pingURI() {
-        return URI.create(s3.getUrl(getMellomlagringBøtte(), "42").toString());
+        return URI.create(s3.getUrl(getMellomlagringBøtte().getNavn(), "42").toString());
     }
 
-    private static BucketLifecycleConfiguration objectExpiresInDays(Integer days) {
+    private static BucketLifecycleConfiguration objectExpiresInDays(int days) {
         return new BucketLifecycleConfiguration().withRules(
                 new BucketLifecycleConfiguration.Rule()
                         .withId("soknad-retention-policy-" + days)
@@ -93,26 +93,27 @@ public class S3Mellomlagring extends AbstractMellomlagringTjeneste {
                         .withExpirationInDays(days));
     }
 
-    private void ensureBucketExists(String bøtte) {
-        LOG.info("Sjekker om bøtte {} eksisterer", bøtte);
+    private void ensureBucketExists(String bøtteNavn) {
+        LOG.info("Sjekker om bøtte {} eksisterer", bøtteNavn);
         boolean finnes = s3.listBuckets().stream()
-                .anyMatch(b -> b.getName().equals(bøtte));
+                .anyMatch(b -> b.getName().equals(bøtteNavn));
         if (!finnes) {
-            createBucket(bøtte);
+            createBucket(bøtteNavn);
         } else {
-            LOG.info("Bøtte {} eksisterer", bøtte);
+            LOG.info("Bøtte {} eksisterer", bøtteNavn);
         }
     }
 
-    private void ensureBucketExists(String bøtte, Integer expirationInDays) {
-        ensureBucketExists(bøtte);
-        setLifeCycleConfig(bøtte, objectExpiresInDays(expirationInDays));
+    private void ensureBucketExists(Bøtte bøtte) {
+        ensureBucketExists(bøtte.getNavn());
+        LOG.info("Setter livssyklus for {}", bøtte);
+        setLifeCycleConfig(bøtte, objectExpiresInDays(Math.toIntExact(bøtte.getLevetid().toDays())));
     }
 
-    private void setLifeCycleConfig(String bøtte, BucketLifecycleConfiguration expiry) {
+    private void setLifeCycleConfig(Bøtte bøtte, BucketLifecycleConfiguration expiry) {
         try {
             LOG.info("Setter lifecycle config for bøtte {}", bøtte);
-            s3.setBucketLifecycleConfiguration(bøtte, expiry);
+            s3.setBucketLifecycleConfiguration(bøtte.getNavn(), expiry);
         } catch (Exception e) {
             LOG.info("Kunne ikke setter lifecycle config for bøtte {}", bøtte, e);
         }

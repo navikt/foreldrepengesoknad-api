@@ -1,6 +1,10 @@
 package no.nav.foreldrepenger.selvbetjening.config;
 
 import static java.util.Collections.singletonList;
+import static no.nav.foreldrepenger.selvbetjening.util.Cluster.DEV_GCP;
+import static no.nav.foreldrepenger.selvbetjening.util.Cluster.DEV_SBS;
+import static no.nav.foreldrepenger.selvbetjening.util.Cluster.PROD_GCP;
+import static no.nav.foreldrepenger.selvbetjening.util.Cluster.PROD_SBS;
 import static no.nav.foreldrepenger.selvbetjening.util.Constants.FNR;
 import static org.springframework.http.HttpHeaders.CONTENT_TYPE;
 import static org.springframework.http.HttpHeaders.LOCATION;
@@ -11,11 +15,13 @@ import static org.springframework.http.HttpMethod.POST;
 import static org.springframework.retry.RetryContext.NAME;
 
 import java.net.URI;
+import java.time.Duration;
 import java.util.Arrays;
 import java.util.List;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.boot.web.client.RestTemplateBuilder;
 import org.springframework.context.annotation.Bean;
@@ -33,7 +39,9 @@ import com.google.common.collect.ImmutableMap;
 
 import no.nav.foreldrepenger.selvbetjening.interceptors.client.ZoneCrossingAware;
 import no.nav.foreldrepenger.selvbetjening.interceptors.client.ZoneCrossingAwareClientInterceptor;
+import no.nav.foreldrepenger.selvbetjening.tjeneste.mellomlagring.Bøtte;
 import no.nav.foreldrepenger.selvbetjening.tjeneste.mellomlagring.MellomlagringKrypto;
+import no.nav.foreldrepenger.selvbetjening.util.ConditionalOnClusters;
 
 @Configuration
 public class ApiConfiguration implements WebMvcConfigurer {
@@ -75,6 +83,26 @@ public class ApiConfiguration implements WebMvcConfigurer {
                         context.getAttribute(NAME), context.getRetryCount(), t.getClass().getSimpleName(), t);
             }
         });
+    }
+
+    @Bean
+    @ConditionalOnClusters(clusters = { DEV_GCP, PROD_GCP, DEV_SBS, PROD_SBS })
+    @Qualifier(Bøtte.SØKNAD)
+    public Bøtte søknadsBøtte(
+            @Value("${mellomlagring.søknad.navn:foreldrepengesoknad}") String navn,
+            @Value("${mellomlagring.søknad.levetid:365d}") Duration levetid,
+            @Value("${mellomlagring.søknad.enabled:true}") boolean enabled) {
+        return new Bøtte(navn, levetid, enabled);
+    }
+
+    @Bean
+    @Qualifier(Bøtte.TMP)
+    @ConditionalOnClusters(clusters = { DEV_GCP, PROD_GCP, DEV_SBS, PROD_SBS })
+    public Bøtte tmpBøtte(
+            @Value("${mellomlagring.tmp.navn:mellomlagring}") String navn,
+            @Value("${mellomlagring.tmp.levetid:1d}") Duration levetid,
+            @Value("${mellomlagring.tmp.enabled:true}") boolean enabled) {
+        return new Bøtte(navn, levetid, enabled);
     }
 
     @Bean

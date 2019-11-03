@@ -15,6 +15,8 @@ public abstract class AbstractRestConnection implements RestConnection, PingEndp
 
     protected static final Logger LOG = LoggerFactory.getLogger(AbstractRestConnection.class);
 
+    protected abstract boolean isEnabled();
+
     private final RestOperations operations;
 
     public AbstractRestConnection(RestOperations operations) {

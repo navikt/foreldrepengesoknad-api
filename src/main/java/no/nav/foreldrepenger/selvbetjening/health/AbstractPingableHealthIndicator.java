@@ -15,11 +15,6 @@ public abstract class AbstractPingableHealthIndicator implements HealthIndicator
 
     @Override
     public Health health() {
-        if (!pingable.isEnabled()) {
-            return Health.up()
-                    .withDetail(pingable.name(), pingable.pingURI() + " (Disabled)")
-                    .build();
-        }
         try {
             pingable.ping();
             return Health.up()
