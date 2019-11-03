@@ -28,8 +28,8 @@ public class S3Mellomlagring extends AbstractMellomlagringTjeneste {
     public S3Mellomlagring(AmazonS3 s3, Bøtte søknadBøtte, Bøtte mellomlagringBøtte) {
         super(søknadBøtte, mellomlagringBøtte);
         this.s3 = s3;
-        lagBøtteHvisIkkeFinnes(søknadBøtte);
-        lagBøtteHvisIkkeFinnes(mellomlagringBøtte);
+        valider(søknadBøtte);
+        valider(mellomlagringBøtte);
     }
 
     @Override
@@ -70,7 +70,7 @@ public class S3Mellomlagring extends AbstractMellomlagringTjeneste {
 
     @Override
     public String ping() {
-        lagBøtteHvisIkkeFinnes(getMellomlagringBøtte());
+        valider(getMellomlagringBøtte());
         return "OK";
     }
 
@@ -84,6 +84,29 @@ public class S3Mellomlagring extends AbstractMellomlagringTjeneste {
         return URI.create(s3.getUrl(getMellomlagringBøtte().getNavn(), "42").toString());
     }
 
+    private void valider(Bøtte bøtte) {
+        LOG.info("Sjekker om bøtte {} eksisterer", bøtte.getNavn());
+        if (s3.doesBucketExistV2(bøtte.getNavn())) {
+            LOG.info("Bøtte {} eksisterer", bøtte.getNavn());
+        } else {
+            LOG.info("Bøtte {} eksisterer ikke", bøtte.getNavn());
+            lagBøtte(bøtte);
+        }
+    }
+
+    private void lagBøtte(Bøtte bøtte) {
+        try {
+            LOG.info("Lager bøtte {}", bøtte.getNavn());
+            s3.createBucket(new CreateBucketRequest(bøtte.getNavn())
+                    .withCannedAcl(CannedAccessControlList.Private));
+            s3.setBucketLifecycleConfiguration(bøtte.getNavn(),
+                    objectExpiresInDays(Math.toIntExact(bøtte.getLevetid().toDays())));
+            LOG.info("Laget bøtte {}", bøtte.getNavn());
+        } catch (SdkClientException e) {
+            throw new MellomlagringException(e);
+        }
+    }
+
     private static BucketLifecycleConfiguration objectExpiresInDays(int days) {
         return new BucketLifecycleConfiguration().withRules(
                 new BucketLifecycleConfiguration.Rule()
@@ -91,29 +114,6 @@ public class S3Mellomlagring extends AbstractMellomlagringTjeneste {
                         .withFilter(new LifecycleFilter())
                         .withStatus(BucketLifecycleConfiguration.ENABLED)
                         .withExpirationInDays(days));
-    }
-
-    private void lagBøtteHvisIkkeFinnes(Bøtte bøtte) {
-        LOG.info("Sjekker om bøtte {} eksisterer", bøtteNavn);
-        if (s3.doesBucketExistV2(bøtteNavn)) {
-            LOG.info("Bøtte {} eksisterer", bøtteNavn);
-        } else {
-            LOG.info("Bøtte {} eksisterer ikke", bøtteNavn);
-            lagBøtte(bøtteNavn);
-        }
-    }
-
-    private void lagBøtte(String bøtte) {
-        try {
-            LOG.info("Lager bøtte {}", bøtte);
-            s3.createBucket(new CreateBucketRequest(bøtte)
-                    .withCannedAcl(CannedAccessControlList.Private));
-            s3.setBucketLifecycleConfiguration(bøtte.getNavn(),
-                    objectExpiresInDays(Math.toIntExact(bøtte.getLevetid().toDays())));
-
-        } catch (SdkClientException e) {
-            throw new MellomlagringException(e);
-        }
     }
 
     @Override
