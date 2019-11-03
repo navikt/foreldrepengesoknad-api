@@ -83,7 +83,7 @@ public class GCPMellomlagring extends AbstractMellomlagringTjeneste {
                 validerBøtte(bøtte);
             }
         } catch (MellomlagringException e) {
-            LOG.warn("Shit happens (ignorerer foreløpig) {}", e.getMessage());
+            LOG.warn("{}", e.getMessage());
             // throw new MellomlagringException(e);
         }
     }
