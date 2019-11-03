@@ -9,8 +9,6 @@ import java.util.Optional;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.springframework.context.EnvironmentAware;
-import org.springframework.core.env.Environment;
 import org.threeten.bp.Duration;
 
 import com.google.api.gax.retrying.RetrySettings;
@@ -21,16 +19,14 @@ import com.google.cloud.storage.Storage;
 import com.google.cloud.storage.StorageException;
 import com.google.cloud.storage.StorageOptions;
 
-public class GCPMellomlagring extends AbstractMellomlagringTjeneste implements EnvironmentAware {
+public class GCPMellomlagring extends AbstractMellomlagringTjeneste {
 
     private static final Logger LOG = LoggerFactory.getLogger(GCPMellomlagring.class);
 
     private final Storage storage;
 
-    private Environment env;
-
-    public GCPMellomlagring(String søknadBøtte, String mellomlagringBøtte) {
-        super(søknadBøtte, mellomlagringBøtte);
+    public GCPMellomlagring(String søknadBøtte, String mellomlagringBøtte, boolean enabled) {
+        super(søknadBøtte, mellomlagringBøtte, enabled);
 
         var retrySettings = RetrySettings.newBuilder()
                 .setTotalTimeout(Duration.ofSeconds(5))
@@ -48,50 +44,35 @@ public class GCPMellomlagring extends AbstractMellomlagringTjeneste implements E
     }
 
     @Override
-    protected boolean lagre(String bøtte, String katalog, String key, String value) {
+    protected void lagre(String bøtte, String katalog, String key, String value) {
         try {
-            storage.create(BlobInfo.newBuilder(BlobId.of(bøtte, fileName(katalog, key)))
+            storage.create(BlobInfo.newBuilder(BlobId.of(bøtte, key(katalog, key)))
                     .setContentType(APPLICATION_JSON_VALUE).build(), value.getBytes(UTF_8));
-            return true;
         } catch (StorageException e) {
-            LOG.warn("Feil ved lagring", e);
-            return false;
+            throw new MellomlagringException(e);
         }
     }
 
     @Override
     protected String les(String bøtte, String katalog, String key) {
         try {
-            return Optional.ofNullable(storage.get(bøtte, fileName(katalog, key)))
+            return Optional.ofNullable(storage.get(bøtte, key(katalog, key)))
                     .map(Blob::getContent)
                     .filter(Objects::nonNull)
                     .map(b -> new String(b, UTF_8))
                     .orElse(null);
         } catch (StorageException e) {
-            LOG.warn("Feil ved henting", e);
             return null;
         }
     }
 
     @Override
-    protected boolean slett(String bøtte, String katalog, String key) {
+    protected void slett(String bøtte, String katalog, String key) {
         try {
-            storage.delete(BlobId.of(bøtte, fileName(katalog, key)));
-            return true;
+            storage.delete(BlobId.of(bøtte, key(katalog, key)));
         } catch (StorageException e) {
-            LOG.warn("Feil ved fjerning", e);
-            return false;
+            throw new MellomlagringException(e);
         }
-    }
-
-    @Override
-    public boolean isEnabled() {
-        return env.getProperty("mellomlagring.gcp.enabled", boolean.class, true);
-    }
-
-    @Override
-    public void setEnvironment(Environment env) {
-        this.env = env;
     }
 
     @Override

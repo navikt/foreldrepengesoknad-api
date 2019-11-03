@@ -9,10 +9,8 @@ import java.net.URI;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Value;
-import org.springframework.context.EnvironmentAware;
-import org.springframework.core.env.Environment;
-import org.springframework.stereotype.Component;
 
+import com.amazonaws.SdkClientException;
 import com.amazonaws.services.s3.AmazonS3;
 import com.amazonaws.services.s3.model.BucketLifecycleConfiguration;
 import com.amazonaws.services.s3.model.CannedAccessControlList;
@@ -20,63 +18,52 @@ import com.amazonaws.services.s3.model.CreateBucketRequest;
 import com.amazonaws.services.s3.model.S3Object;
 import com.amazonaws.services.s3.model.lifecycle.LifecycleFilter;
 
-import no.nav.foreldrepenger.selvbetjening.util.Cluster;
-import no.nav.foreldrepenger.selvbetjening.util.ConditionalOnClusters;
-
-@Component
-@ConditionalOnClusters(clusters = { Cluster.DEV_SBS, Cluster.PROD_SBS })
-public class S3Mellomlagring extends AbstractMellomlagringTjeneste implements EnvironmentAware {
+public class S3Mellomlagring extends AbstractMellomlagringTjeneste {
 
     private static final Logger LOG = LoggerFactory.getLogger(S3Mellomlagring.class);
 
     private final AmazonS3 s3;
 
-    private Environment env;
-
     public S3Mellomlagring(AmazonS3 s3, @Value("${storage.søknad:foreldrepengesoknad}") String søknadBøtte,
-            @Value("${storage.mellomlagring:mellomlagring}") String mellomlagringBøtte) {
-        super(søknadBøtte, mellomlagringBøtte);
+            @Value("${storage.mellomlagring:mellomlagring}") String mellomlagringBøtte, boolean enabled) {
+        super(søknadBøtte, mellomlagringBøtte, enabled);
         this.s3 = s3;
         ensureBucketExists(søknadBøtte, 365);
         ensureBucketExists(mellomlagringBøtte, 1);
     }
 
     @Override
-    protected boolean slett(String bøtte, String katalog, String key) {
+    protected void slett(String bøtte, String katalog, String key) {
         try {
-            s3.deleteObject(bøtte, fileName(katalog, key));
-            return true;
-        } catch (Exception e) {
-            return false;
+            s3.deleteObject(bøtte, key(katalog, key));
+        } catch (SdkClientException e) {
+            throw new MellomlagringException(e);
         }
     }
 
     @Override
-    protected boolean lagre(String bøtte, String katalog, String key, String value) {
+    protected void lagre(String bøtte, String katalog, String key, String value) {
         try {
-            s3.putObject(bøtte, fileName(katalog, key), value);
-            return true;
-        } catch (Exception e) {
-            return false;
+            s3.putObject(bøtte, key(katalog, key), value);
+        } catch (SdkClientException e) {
+            throw new MellomlagringException(e);
         }
     }
 
     @Override
     protected String les(String bøtte, String katalog, String key) {
         try {
-            String path = fileName(katalog, key);
+            String path = key(katalog, key);
             S3Object object = s3.getObject(bøtte, path);
-            return new BufferedReader(new InputStreamReader(object.getObjectContent()))
+            var v = new BufferedReader(new InputStreamReader(object.getObjectContent()))
                     .lines()
                     .collect(joining("\n"));
+            LOG.trace("debugging v {}", v);
+            return v;
         } catch (Exception e) {
+            LOG.trace("debugging", e);
             return null;
         }
-    }
-
-    @Override
-    public void setEnvironment(Environment env) {
-        this.env = env;
     }
 
     @Override
@@ -93,11 +80,6 @@ public class S3Mellomlagring extends AbstractMellomlagringTjeneste implements En
     @Override
     public URI pingURI() {
         return URI.create(s3.getUrl(getMellomlagringBøtte(), "42").toString());
-    }
-
-    @Override
-    public boolean isEnabled() {
-        return env.getProperty("mellomlagring.s3.enabled", boolean.class, true);
     }
 
     private static BucketLifecycleConfiguration objectExpiresInDays(Integer days) {
