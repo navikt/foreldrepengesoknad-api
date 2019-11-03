@@ -84,7 +84,6 @@ public class GCPMellomlagring extends AbstractMellomlagringTjeneste {
         } catch (StorageException e) {
             throw new MellomlagringException(e);
         }
-
     }
 
     private void validerBøtte(Bøtte bøtte) {

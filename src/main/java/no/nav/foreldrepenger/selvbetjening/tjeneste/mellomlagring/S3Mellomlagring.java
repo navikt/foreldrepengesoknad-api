@@ -74,13 +74,17 @@ public class S3Mellomlagring extends AbstractMellomlagringTjeneste {
     @Override
     protected void validerBøtter(Bøtte... bøtter) {
         for (Bøtte bøtte : bøtter) {
-            LOG.info("Validerer bøtte {}", bøtte);
-            if (s3.doesBucketExistV2(bøtte.getNavn())) {
-                LOG.info("Bøtte {} eksisterer", bøtte);
-            } else {
-                LOG.info("Bøtte {} eksisterer ikke", bøtte);
-                lagBøtte(bøtte);
-            }
+            validerBøtte(bøtte);
+        }
+    }
+
+    private void validerBøtte(Bøtte bøtte) {
+        LOG.info("Validerer bøtte {}", bøtte);
+        if (s3.doesBucketExistV2(bøtte.getNavn())) {
+            LOG.info("Bøtte {} eksisterer", bøtte);
+        } else {
+            LOG.info("Bøtte {} eksisterer ikke", bøtte);
+            lagBøtte(bøtte);
         }
     }
 
