@@ -79,11 +79,11 @@ public class GCPMellomlagring extends AbstractMellomlagringTjeneste {
         try {
             for (Bøtte bøtte : bøtter) {
                 LOG.info("Validerer bøtte {}", bøtte);
-                if (!storage.get(bøtte.getNavn()).exists()) {
-                    LOG.warn("Bøtte {} eksisterer ikke", bøtte);
-                } else {
-                    LOG.info("Bøtte {} eksisterer", bøtte);
-                }
+                /*
+                 * if (!storage.get(bøtte.getNavn()).exists()) {
+                 * LOG.warn("Bøtte {} eksisterer ikke", bøtte); } else {
+                 * LOG.info("Bøtte {} eksisterer", bøtte); }
+                 */
             }
         } catch (StorageException e) {
             throw new MellomlagringException(e);
