@@ -34,27 +34,41 @@ public class KryptertMellomlagring {
     public Optional<String> lesKryptertSøknad() {
         LOG.info("Leser kryptert søknad");
         String fnr = tokenUtil.autentisertBruker();
-        return mellomlagring.lesTmp(krypto.katalognavn(fnr), SØKNAD)
+        var lest = mellomlagring.lesTmp(krypto.katalognavn(fnr), SØKNAD)
                 .map(s -> krypto.decrypt(s, fnr));
+        if (lest.isPresent()) {
+            LOG.info("Lest kryptert søknad");
+        } else {
+            LOG.info("Fant ingen kryptert søknad");
+        }
+        return lest;
     }
 
     public void lagreKryptertSøknad(String søknad) {
         LOG.info("Lagrer kryptert søknad");
         String fnr = tokenUtil.autentisertBruker();
         mellomlagring.lagreTmp(krypto.katalognavn(fnr), SØKNAD, krypto.encrypt(søknad, fnr));
+        LOG.info("Lagret kryptert søknad");
     }
 
     public void slettKryptertSøknad() {
         LOG.info("Sletter kryptert søknad");
         mellomlagring.slettTmp(krypto.katalognavn(tokenUtil.autentisertBruker()), SØKNAD);
+        LOG.info("Slettet kryptert søknad");
     }
 
     public Optional<Attachment> lesKryptertVedlegg(String key) {
         LOG.info("Leser kryptert vedlegg");
         String fnr = tokenUtil.autentisertBruker();
-        return mellomlagring.lesTmp(krypto.katalognavn(fnr), key)
+        var a = mellomlagring.lesTmp(krypto.katalognavn(fnr), key)
                 .map(vedlegg -> krypto.decrypt(vedlegg, fnr))
                 .map(v -> GSON.fromJson(v, Attachment.class));
+        if (a.isPresent()) {
+            LOG.info("Lest kryptert vedlegg");
+        } else {
+            LOG.info("Fant intet kryptert vedlegg");
+        }
+        return a;
     }
 
     public void lagreKryptertVedlegg(Attachment attachment) {
@@ -63,6 +77,7 @@ public class KryptertMellomlagring {
         String fnr = tokenUtil.autentisertBruker();
         mellomlagring.lagreTmp(krypto.katalognavn(fnr), attachment.uuid,
                 krypto.encrypt(GSON.toJson(attachment), fnr));
+        LOG.info("Lagret kryptert vedlegg");
     }
 
     public void slettKryptertVedlegg(Vedlegg vedlegg) {
@@ -75,20 +90,28 @@ public class KryptertMellomlagring {
         if (uuid != null) {
             LOG.info("Sletter kryptert vedlegg");
             mellomlagring.slettTmp(krypto.katalognavn(tokenUtil.autentisertBruker()), uuid);
+            LOG.info("Slettet kryptert vedlegg");
         }
     }
 
     public Optional<String> lesKryptertKvittering(String type) {
         LOG.info("Leser kryptert kvittering");
         String fnr = tokenUtil.autentisertBruker();
-        return mellomlagring.les(krypto.katalognavn(fnr), type)
+        var kv = mellomlagring.les(krypto.katalognavn(fnr), type)
                 .map(k -> krypto.decrypt(k, fnr));
+        if (kv.isPresent()) {
+            LOG.info("Lest kryptert kvittering");
+        } else {
+            LOG.info("Fant ingen kryptert kvittering");
+        }
+        return kv;
     }
 
     public void lagreKryptertKvittering(String type, String kvittering) {
         LOG.info("Lagrer kryptert kvittering");
         String fnr = tokenUtil.autentisertBruker();
         mellomlagring.lagre(krypto.katalognavn(fnr), type, krypto.encrypt(kvittering, fnr));
+        LOG.info("Lagret kryptert kvittering");
     }
 
     @Override
