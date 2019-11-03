@@ -28,8 +28,7 @@ public class S3Mellomlagring extends AbstractMellomlagringTjeneste {
     public S3Mellomlagring(AmazonS3 s3, Bøtte søknadBøtte, Bøtte mellomlagringBøtte) {
         super(søknadBøtte, mellomlagringBøtte);
         this.s3 = s3;
-        valider(søknadBøtte);
-        valider(mellomlagringBøtte);
+        validerBøtter(søknadBøtte, mellomlagringBøtte);
     }
 
     @Override
@@ -70,7 +69,7 @@ public class S3Mellomlagring extends AbstractMellomlagringTjeneste {
 
     @Override
     public String ping() {
-        valider(getMellomlagringBøtte());
+        validerBøtter(getMellomlagringBøtte());
         return "OK";
     }
 
@@ -84,13 +83,15 @@ public class S3Mellomlagring extends AbstractMellomlagringTjeneste {
         return URI.create(s3.getUrl(getMellomlagringBøtte().getNavn(), "42").toString());
     }
 
-    private void valider(Bøtte bøtte) {
-        LOG.info("Sjekker om bøtte {} eksisterer", bøtte.getNavn());
-        if (s3.doesBucketExistV2(bøtte.getNavn())) {
-            LOG.info("Bøtte {} eksisterer", bøtte.getNavn());
-        } else {
-            LOG.info("Bøtte {} eksisterer ikke", bøtte.getNavn());
-            lagBøtte(bøtte);
+    private void validerBøtter(Bøtte... bøtter) {
+        for (Bøtte bøtte : bøtter) {
+            LOG.info("Sjekker om bøtte {} eksisterer", bøtte.getNavn());
+            if (s3.doesBucketExistV2(bøtte.getNavn())) {
+                LOG.info("Bøtte {} eksisterer", bøtte.getNavn());
+            } else {
+                LOG.info("Bøtte {} eksisterer ikke", bøtte.getNavn());
+                lagBøtte(bøtte);
+            }
         }
     }
 
