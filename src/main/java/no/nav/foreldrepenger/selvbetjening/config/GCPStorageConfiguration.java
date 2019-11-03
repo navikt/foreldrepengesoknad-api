@@ -17,9 +17,9 @@ public class GCPStorageConfiguration {
 
     @Bean
     public MellomlagringTjeneste gcpCloudStorage(
-            @Value("${storage.mellomlagring.søknad:foreldrepengesoknad}") String søknadBøtte,
-            @Value("${storage.mellomlagring.mellomlagring:mellomlagring}") String mellomlagringBøtte,
-            @Value("${storage.mellomlagring:enabled:true}") boolean enabled) {
+            @Value("${mellomlagring.søknad:foreldrepengesoknad}") String søknadBøtte,
+            @Value("${mellomlagring.mellomlagring:mellomlagring}") String mellomlagringBøtte,
+            @Value("${mellomlagring:enabled:true}") boolean enabled) {
         return new GCPMellomlagring(søknadBøtte, mellomlagringBøtte, enabled);
     }
 
