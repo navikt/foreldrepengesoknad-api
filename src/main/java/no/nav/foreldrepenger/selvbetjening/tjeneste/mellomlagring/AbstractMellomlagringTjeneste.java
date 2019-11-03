@@ -2,6 +2,8 @@ package no.nav.foreldrepenger.selvbetjening.tjeneste.mellomlagring;
 
 import java.util.Optional;
 
+import javax.annotation.PostConstruct;
+
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -23,7 +25,11 @@ public abstract class AbstractMellomlagringTjeneste implements Mellomlagring {
     public AbstractMellomlagringTjeneste(Bøtte søknadBøtte, Bøtte mellomlagringBøtte) {
         this.søknadBøtte = søknadBøtte;
         this.mellomlagringBøtte = mellomlagringBøtte;
-        // validerBøtter(søknadBøtte, mellomlagringBøtte);
+    }
+
+    @PostConstruct
+    void valider() {
+        validerBøtter(søknadBøtte, mellomlagringBøtte);
     }
 
     @Override
