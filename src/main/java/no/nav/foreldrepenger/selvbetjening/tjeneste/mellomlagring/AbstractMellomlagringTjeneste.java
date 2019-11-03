@@ -29,6 +29,11 @@ public abstract class AbstractMellomlagringTjeneste implements Mellomlagring {
     }
 
     @Override
+    public String name() {
+        return pingURI().getHost();
+    }
+
+    @Override
     public void lagre(String katalog, String key, String value) {
         if (søknadBøtte.isEnabled()) {
             lagreI(søknadBøtte, katalog, key, value);

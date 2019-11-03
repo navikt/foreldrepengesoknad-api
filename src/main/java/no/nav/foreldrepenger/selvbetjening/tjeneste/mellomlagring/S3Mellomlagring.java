@@ -68,17 +68,6 @@ public class S3Mellomlagring extends AbstractMellomlagringTjeneste {
     }
 
     @Override
-    public String ping() {
-        validerBøtter(getMellomlagringBøtte());
-        return "OK";
-    }
-
-    @Override
-    public String name() {
-        return "S3";
-    }
-
-    @Override
     public URI pingURI() {
         return URI.create(s3.getUrl(getMellomlagringBøtte().getNavn(), "42").toString());
     }

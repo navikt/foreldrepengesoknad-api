@@ -76,11 +76,6 @@ public class GCPMellomlagring extends AbstractMellomlagringTjeneste {
     }
 
     @Override
-    public String name() {
-        return pingURI().getHost();
-    }
-
-    @Override
     public String toString() {
         return getClass().getSimpleName() + "[storage=" + storage + ", søknadBøtte=" + getSøknadBøtte()
                 + ", mellomlagringBøtte=" + getMellomlagringBøtte() + "]";
