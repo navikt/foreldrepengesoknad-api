@@ -81,18 +81,23 @@ public class GCPMellomlagring extends AbstractMellomlagringTjeneste {
             for (Bøtte bøtte : bøtter) {
                 validerBøtte(bøtte);
             }
-        } catch (StorageException e) {
-            throw new MellomlagringException(e);
+        } catch (MellomlagringException e) {
+            LOG.warn("Shit happens (ignorerer foreløpig) {}", e.getMessage());
+            // throw new MellomlagringException(e);
         }
     }
 
     private void validerBøtte(Bøtte bøtte) {
-        LOG.info("Validerer bøtte {}", bøtte);
-        Bucket b = storage.get(bøtte.getNavn());
-        if (b == null || !b.exists()) {
-            LOG.warn("Bøtte {} eksisterer ikke", bøtte);
-        } else {
-            LOG.info("Bøtte {} eksisterer", bøtte);
+        try {
+            LOG.info("Validerer bøtte {}", bøtte);
+            Bucket b = storage.get(bøtte.getNavn());
+            if (b == null || !b.exists()) {
+                LOG.warn("Bøtte {} eksisterer ikke", bøtte);
+            } else {
+                LOG.info("Bøtte {} eksisterer", bøtte);
+            }
+        } catch (StorageException e) {
+            throw new MellomlagringException(e);
         }
     }
 
