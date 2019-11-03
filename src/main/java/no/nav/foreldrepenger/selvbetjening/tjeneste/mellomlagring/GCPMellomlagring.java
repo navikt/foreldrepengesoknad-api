@@ -1,6 +1,7 @@
 package no.nav.foreldrepenger.selvbetjening.tjeneste.mellomlagring;
 
 import static java.nio.charset.StandardCharsets.UTF_8;
+import static org.springframework.core.NestedExceptionUtils.getMostSpecificCause;
 import static org.springframework.http.MediaType.APPLICATION_JSON_VALUE;
 
 import java.net.URI;
@@ -9,19 +10,19 @@ import java.util.Optional;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.springframework.core.NestedExceptionUtils;
 import org.threeten.bp.Duration;
 
 import com.google.api.gax.retrying.RetrySettings;
 import com.google.cloud.storage.Blob;
 import com.google.cloud.storage.BlobId;
 import com.google.cloud.storage.BlobInfo;
-import com.google.cloud.storage.Bucket;
 import com.google.cloud.storage.Storage;
 import com.google.cloud.storage.StorageException;
 import com.google.cloud.storage.StorageOptions;
 
 public class GCPMellomlagring extends AbstractMellomlagringTjeneste {
+
+    private static final URI STORAGE = URI.create("https://storage.googleapis.com");
 
     private static final Logger LOG = LoggerFactory.getLogger(GCPMellomlagring.class);
 
@@ -37,11 +38,6 @@ public class GCPMellomlagring extends AbstractMellomlagringTjeneste {
                 .setRetrySettings(retrySettings)
                 .build()
                 .getService();
-    }
-
-    @Override
-    public URI pingURI() {
-        return URI.create("https://storage.googleapis.com");
     }
 
     @Override
@@ -77,29 +73,24 @@ public class GCPMellomlagring extends AbstractMellomlagringTjeneste {
     }
 
     @Override
-    protected void validerBøtter(Bøtte... bøtter) {
-        try {
-            for (Bøtte bøtte : bøtter) {
-                validerBøtte(bøtte);
-            }
-        } catch (MellomlagringException e) {
-            LOG.warn("{}", e.getMessage());
-            // throw new MellomlagringException(e);
-        }
-    }
-
-    private void validerBøtte(Bøtte bøtte) {
+    protected void validerBøtte(Bøtte bøtte) {
         try {
             LOG.info("Validerer bøtte {}", bøtte);
-            Bucket b = storage.get(bøtte.getNavn());
-            if (b == null || !b.exists()) {
+            if (Optional.ofNullable(storage.get(bøtte.getNavn()))
+                    .filter(Objects::nonNull)
+                    .isPresent()) {
                 LOG.warn("Bøtte {} eksisterer ikke", bøtte);
             } else {
                 LOG.info("Bøtte {} eksisterer", bøtte);
             }
         } catch (Exception e) {
-            throw new MellomlagringException(NestedExceptionUtils.getMostSpecificCause(e).getMessage(), e);
+            throw new MellomlagringException(getMostSpecificCause(e).getMessage(), e);
         }
+    }
+
+    @Override
+    public URI pingURI() {
+        return STORAGE;
     }
 
     @Override
