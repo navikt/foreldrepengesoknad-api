@@ -15,6 +15,7 @@ import com.google.api.gax.retrying.RetrySettings;
 import com.google.cloud.storage.Blob;
 import com.google.cloud.storage.BlobId;
 import com.google.cloud.storage.BlobInfo;
+import com.google.cloud.storage.Bucket;
 import com.google.cloud.storage.Storage;
 import com.google.cloud.storage.StorageException;
 import com.google.cloud.storage.StorageOptions;
@@ -78,17 +79,22 @@ public class GCPMellomlagring extends AbstractMellomlagringTjeneste {
     protected void validerBøtter(Bøtte... bøtter) {
         try {
             for (Bøtte bøtte : bøtter) {
-                LOG.info("Validerer bøtte {}", bøtte);
-                if (!storage.get(bøtte.getNavn()).exists()) {
-                    LOG.warn("Bøtte {} eksisterer ikke", bøtte);
-                } else {
-                    LOG.info("Bøtte {} eksisterer", bøtte);
-                }
+                validerBøtte(bøtte);
             }
         } catch (StorageException e) {
             throw new MellomlagringException(e);
         }
 
+    }
+
+    private void validerBøtte(Bøtte bøtte) {
+        LOG.info("Validerer bøtte {}", bøtte);
+        Bucket b = storage.get(bøtte.getNavn());
+        if (b == null || !b.exists()) {
+            LOG.warn("Bøtte {} eksisterer ikke", bøtte);
+        } else {
+            LOG.info("Bøtte {} eksisterer", bøtte);
+        }
     }
 
     @Override
