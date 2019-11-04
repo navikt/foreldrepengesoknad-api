@@ -40,7 +40,7 @@ public class KryptertMellomlagring {
                 .map(s -> krypto.decrypt(s, fnr));
         if (lest.isPresent()) {
             LOG.info("Lest kryptert søknad");
-            LOG.info(CONFIDENTIAL, "Dekryptert søknad {}", lest);
+            LOG.info(CONFIDENTIAL, "Dekryptert søknad {}", lest.get());
         } else {
             LOG.info("Fant ingen kryptert søknad");
         }
@@ -68,7 +68,7 @@ public class KryptertMellomlagring {
                 .map(v -> GSON.fromJson(v, Attachment.class));
         if (a.isPresent()) {
             LOG.info("Lest kryptert vedlegg");
-            LOG.info(CONFIDENTIAL, "Dekryptert vedlegg {}", a);
+            LOG.info(CONFIDENTIAL, "Dekryptert vedlegg {}", a.get());
         } else {
             LOG.info("Fant intet kryptert vedlegg");
         }
@@ -105,7 +105,7 @@ public class KryptertMellomlagring {
                 .map(k -> krypto.decrypt(k, fnr));
         if (kv.isPresent()) {
             LOG.info("Lest kryptert kvittering");
-            LOG.info(CONFIDENTIAL, "Dekryptert kvittering {}", kv);
+            LOG.info(CONFIDENTIAL, "Dekryptert kvittering {}", kv.get());
         } else {
             LOG.info("Fant ingen kryptert kvittering");
         }
