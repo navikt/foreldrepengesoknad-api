@@ -14,11 +14,9 @@ import org.springframework.web.client.HttpClientErrorException;
 import org.springframework.web.client.HttpServerErrorException;
 import org.springframework.web.client.RestOperations;
 
-public abstract class AbstractRestConnection implements PingEndpointAware {
+public abstract class AbstractRestConnection implements PingEndpointAware, Togglable {
 
     protected static final Logger LOG = LoggerFactory.getLogger(AbstractRestConnection.class);
-
-    protected abstract boolean isEnabled();
 
     private final RestOperations operations;
 

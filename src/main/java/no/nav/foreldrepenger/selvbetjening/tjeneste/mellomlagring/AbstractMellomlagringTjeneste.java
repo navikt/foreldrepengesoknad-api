@@ -10,6 +10,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 public abstract class AbstractMellomlagringTjeneste implements Mellomlagring {
+    private static final String MSG = "{} bøtte {}, katalog {}";
     private static final String DEAKIVERT = "Mellomlagringsoperasjoner er deaktivert";
     private static final Logger LOG = LoggerFactory.getLogger(AbstractMellomlagringTjeneste.class);
 
@@ -27,6 +28,11 @@ public abstract class AbstractMellomlagringTjeneste implements Mellomlagring {
     public AbstractMellomlagringTjeneste(Bøtte søknadBøtte, Bøtte mellomlagringBøtte) {
         this.søknadBøtte = søknadBøtte;
         this.mellomlagringBøtte = mellomlagringBøtte;
+    }
+
+    @PostConstruct
+    void valider() {
+        validerBøtter(søknadBøtte, mellomlagringBøtte);
     }
 
     @Override
@@ -62,19 +68,19 @@ public abstract class AbstractMellomlagringTjeneste implements Mellomlagring {
     private Optional<String> lesFra(Bøtte bøtte, String katalog, String key) {
         try {
             if (bøtte.isEnabled()) {
-                LOG.info("Henter fra bøtte {}, katalog {}", bøtte, katalog);
+                LOG.info(MSG, "Henter fra", bøtte, katalog);
                 var søknad = Optional.ofNullable(les(bøtte.getNavn(), katalog, key));
                 if (søknad.isPresent()) {
-                    LOG.info("Hentet fra bøtte {}, katalog {}", bøtte, katalog);
+                    LOG.info(MSG, "Hentet fra", bøtte, katalog);
                 } else {
-                    LOG.info("Hentet ikke fra bøtte {}, katalog {}", bøtte, katalog);
+                    LOG.info(MSG, "Hentet ikke fra", bøtte, katalog);
                 }
                 return søknad;
             } else {
                 return disabled();
             }
         } catch (MellomlagringException e) {
-            LOG.warn("Hentet ikke fra bøtte {}, katalog {}", bøtte, katalog, e);
+            LOG.warn(MSG, "Hentet ikke", bøtte, katalog, e);
             return Optional.empty();
         }
     }
@@ -82,34 +88,35 @@ public abstract class AbstractMellomlagringTjeneste implements Mellomlagring {
     private void lagreI(Bøtte bøtte, String katalog, String key, String value) {
         try {
             if (bøtte.isEnabled()) {
-                LOG.info("Lagrer i bøtte {}, katalog {}", bøtte, katalog);
+                LOG.info(MSG, "Lagrer i", bøtte, katalog);
                 lagre(bøtte.getNavn(), katalog, key, value);
-                LOG.info("Lagret i bøtte {}, katalog {}", bøtte, katalog);
+                LOG.info(MSG, "Lagret i", bøtte, katalog);
             } else {
                 disabled();
             }
         } catch (MellomlagringException e) {
-            LOG.warn("Lagret ikke i bøtte {}, katalog {}", bøtte, katalog, e);
+            LOG.warn(MSG, "Lagret ikke i", bøtte, katalog, e);
         }
     }
 
     private void slettFra(Bøtte bøtte, String katalog, String key) {
         try {
             if (bøtte.isEnabled()) {
-                LOG.info("Fjerner fra bøtte {}, katalog {}", bøtte, katalog);
+                LOG.info(MSG, "Fjerner fra", bøtte, katalog);
                 slett(bøtte.getNavn(), katalog, key);
-                LOG.info("Fjerner fra bøtte {}, katalog {}", bøtte, katalog);
+                LOG.info(MSG, "Fjernet fra", bøtte, katalog);
             } else {
                 disabled();
             }
         } catch (MellomlagringException e) {
-            LOG.warn("Fjernet ikke fra bøtte {}, katalog {}", bøtte, katalog, e);
+            LOG.warn(MSG, "Fjernet ikke fra", bøtte, katalog, e);
         }
     }
 
     private void validerBøtter(Bøtte... bøtter) {
         try {
             safeStream(bøtter)
+                    .filter(Bøtte::isEnabled)
                     .forEach(this::validerBøtte);
         } catch (MellomlagringException e) {
             LOG.warn("{}", e.getMessage());
@@ -128,11 +135,6 @@ public abstract class AbstractMellomlagringTjeneste implements Mellomlagring {
     private static Optional<String> disabled() {
         LOG.warn(DEAKIVERT);
         return Optional.empty();
-    }
-
-    @PostConstruct
-    void valider() {
-        validerBøtter(søknadBøtte, mellomlagringBøtte);
     }
 
     @Override

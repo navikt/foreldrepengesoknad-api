@@ -2,7 +2,9 @@ package no.nav.foreldrepenger.selvbetjening.tjeneste.mellomlagring;
 
 import java.time.Duration;
 
-public class Bøtte {
+import no.nav.foreldrepenger.selvbetjening.tjeneste.Togglable;
+
+public class Bøtte implements Togglable {
 
     public static final String TMP = "tmp";
     public static final String SØKNAD = "søknad";
@@ -20,6 +22,7 @@ public class Bøtte {
         return navn;
     }
 
+    @Override
     public boolean isEnabled() {
         return enabled;
     }
