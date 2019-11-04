@@ -8,10 +8,13 @@ import java.net.URI;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.http.RequestEntity;
+import org.springframework.retry.annotation.Backoff;
+import org.springframework.retry.annotation.Retryable;
 import org.springframework.web.client.HttpClientErrorException;
+import org.springframework.web.client.HttpServerErrorException;
 import org.springframework.web.client.RestOperations;
 
-public abstract class AbstractRestConnection implements RestConnection, PingEndpointAware {
+public abstract class AbstractRestConnection implements PingEndpointAware {
 
     protected static final Logger LOG = LoggerFactory.getLogger(AbstractRestConnection.class);
 
@@ -33,14 +36,17 @@ public abstract class AbstractRestConnection implements RestConnection, PingEndp
         return getForObject(pingURI(), String.class);
     }
 
-    @Override
     public <T> T getForObject(URI uri, Class<T> responseType) {
         return getForObject(uri, responseType, true);
     }
 
-    @Override
+    @Retryable(value = { HttpServerErrorException.class }, maxAttempts = 3, backoff = @Backoff(delay = 1000))
     public <T> T getForObject(URI uri, Class<T> responseType, boolean throwOnNotFound) {
         try {
+            if (!isEnabled()) {
+                LOG.info("Service er ikke aktiv, GETer ikke fra {}", uri);
+                return null;
+            }
             T respons = operations.getForObject(uri, responseType);
             if (respons != null) {
                 LOG.trace(CONFIDENTIAL, "Respons: {}", respons);
@@ -55,12 +61,16 @@ public abstract class AbstractRestConnection implements RestConnection, PingEndp
         }
     }
 
-    @Override
+    @Retryable(value = { HttpServerErrorException.class }, maxAttempts = 3, backoff = @Backoff(delay = 1000))
     public <T> T postForObject(URI uri, Object payload, Class<T> responseType) {
+        if (!isEnabled()) {
+            LOG.info("Service er ikke aktiv, POSTer ikke til {}", uri);
+            return null;
+        }
         return operations.postForObject(uri, payload, responseType);
     }
 
-    @Override
+    @Retryable(value = { HttpServerErrorException.class }, maxAttempts = 3, backoff = @Backoff(delay = 1000))
     public <T> T putForObject(URI uri, Object payload, Class<T> responseType) {
         if (!isEnabled()) {
             LOG.info("Service er ikke aktiv, PUTer ikke til {}", uri);
