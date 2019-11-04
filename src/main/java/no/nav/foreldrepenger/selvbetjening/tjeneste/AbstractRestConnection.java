@@ -38,7 +38,8 @@ public abstract class AbstractRestConnection implements PingEndpointAware, Toggl
         return getForObject(uri, responseType, true);
     }
 
-    @Retryable(value = { HttpServerErrorException.class }, maxAttempts = 3, backoff = @Backoff(delay = 1000))
+    @Retryable(value = {
+            HttpServerErrorException.class }, maxAttemptsExpression = "#{${rest.retry.attempts:3}}", backoff = @Backoff(delayExpression = "#{${rest.retry.delay:1000}}"))
     public <T> T getForObject(URI uri, Class<T> responseType, boolean throwOnNotFound) {
         try {
             if (!isEnabled()) {
@@ -59,7 +60,8 @@ public abstract class AbstractRestConnection implements PingEndpointAware, Toggl
         }
     }
 
-    @Retryable(value = { HttpServerErrorException.class }, maxAttempts = 3, backoff = @Backoff(delay = 1000))
+    @Retryable(value = {
+            HttpServerErrorException.class }, maxAttemptsExpression = "#{${rest.retry.attempts:3}}", backoff = @Backoff(delayExpression = "#{${rest.retry.delay:1000}}"))
     public <T> T postForObject(URI uri, Object payload, Class<T> responseType) {
         if (!isEnabled()) {
             LOG.info("Service er ikke aktiv, POSTer ikke til {}", uri);
@@ -68,7 +70,8 @@ public abstract class AbstractRestConnection implements PingEndpointAware, Toggl
         return operations.postForObject(uri, payload, responseType);
     }
 
-    @Retryable(value = { HttpServerErrorException.class }, maxAttempts = 3, backoff = @Backoff(delay = 1000))
+    @Retryable(value = {
+            HttpServerErrorException.class }, maxAttemptsExpression = "#{${rest.retry.attempts:3}}", backoff = @Backoff(delayExpression = "#{${rest.retry.delay:1000}}"))
     public <T> T putForObject(URI uri, Object payload, Class<T> responseType) {
         if (!isEnabled()) {
             LOG.info("Service er ikke aktiv, PUTer ikke til {}", uri);
