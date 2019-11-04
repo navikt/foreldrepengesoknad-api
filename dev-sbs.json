@@ -7,6 +7,6 @@
     "mottak_uri": "https://api-gw-q1.oera.no/fpsoknad-mottak/api/",
     "innsyn_mottak": "https://api-gw-q1.oera.no/fpsoknad-mottak/api/",
     "innsyn_oppslag": "https://api-gw-q1.oera.no/fpsoknad-oppslag/api/",
-    "minidialog_uri": "https://api-gw-q1.oera.no/fpsoknad-mottak/api/"
+    "minidialog_uri": "https://api-gw-q1.oera.no/fpinfo-historikk/api/"
   }
 }
