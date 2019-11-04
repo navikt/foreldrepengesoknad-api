@@ -77,10 +77,24 @@ public class ApiConfiguration implements WebMvcConfigurer {
 
             @Override
             public <T, E extends Throwable> void onError(RetryContext context, RetryCallback<T, E> callback,
+                    Throwable throwable) {
+                log.warn("Metode {} kastet exception {} for {}. gang",
+                        context.getAttribute(NAME), throwable.toString(), context.getRetryCount());
+            }
+
+            @Override
+            public <T, E extends Throwable> void close(RetryContext context, RetryCallback<T, E> callback,
                     Throwable t) {
-                context.attributeNames();
-                log.warn("Retry-methode {} kastet {}. exception {}",
-                        context.getAttribute(NAME), context.getRetryCount(), t.getClass().getSimpleName(), t);
+                log.warn("Metode {} avslutter {} retry grunnet {} etter {}. forsøk",
+                        context.getAttribute(NAME), t != null ? "ikke vellykket" : "vellykket",
+                        context.getRetryCount());
+            }
+
+            @Override
+            public <T, E extends Throwable> boolean open(RetryContext context, RetryCallback<T, E> callback) {
+                log.info("Metode {} gjør retry for {}. gang",
+                        context.getAttribute(NAME), context.getRetryCount());
+                return super.open(context, callback);
             }
         });
     }
