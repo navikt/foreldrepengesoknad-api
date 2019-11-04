@@ -5,34 +5,41 @@ import static java.util.Collections.emptyList;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.ArgumentMatchers.eq;
-import static org.mockito.Mockito.when;
+import static org.mockito.Mockito.lenient;
 
+import java.net.URI;
 import java.util.List;
 
+import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
-import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
+import org.springframework.test.context.junit.jupiter.SpringExtension;
 import org.springframework.web.client.RestOperations;
 
 import no.nav.foreldrepenger.selvbetjening.tjeneste.innsyn.saker.Sak;
 
 @ExtendWith(MockitoExtension.class)
+@ExtendWith(SpringExtension.class)
 public class InnsynConnectionTest {
 
     @Mock
     RestOperations rest;
 
-    @Mock
-    InnsynConfig config;
+    private static final InnsynConfig CFG = new InnsynConfig(URI.create("http://www.innsyn.no"),
+            URI.create("http://www.oppslag.no"), true);
 
-    @InjectMocks
     InnsynConnection connection;
+
+    @BeforeEach
+    public void beforeEach() {
+        connection = new InnsynConnection(rest, CFG);
+    }
 
     @Test
     public void testUthentingAvSakerMedKunSakerFraFpsak() {
-        when(rest.getForObject(any(), eq(Sak[].class))).thenReturn(sakerFraFpsak());
+        lenient().when(rest.getForObject(any(), eq(Sak[].class))).thenReturn(sakerFraFpsak());
         List<Sak> saker = connection.hentSaker();
         assertThat(saker).hasSize(1);
         Sak sak = saker.get(0);
@@ -41,7 +48,8 @@ public class InnsynConnectionTest {
 
     @Test
     public void testUthentingAvSakerMedKunSakerFraInfotrygd() {
-        when(rest.getForObject(any(), eq(Sak[].class))).thenReturn(new Sak[0]).thenReturn(sakerFraInfotrygd());
+        lenient().when(rest.getForObject(any(), eq(Sak[].class))).thenReturn(new Sak[0])
+                .thenReturn(sakerFraInfotrygd());
         List<Sak> saker = connection.hentSaker();
         assertThat(saker).hasSize(1);
         Sak sak = saker.get(0);
@@ -50,7 +58,8 @@ public class InnsynConnectionTest {
 
     @Test
     public void testUthentingAvSakerMedSakerFraFpsakOgInfotrygd() {
-        when(rest.getForObject(any(), eq(Sak[].class))).thenReturn(sakerFraFpsak()).thenReturn(sakerFraInfotrygd());
+        lenient().when(rest.getForObject(any(), eq(Sak[].class))).thenReturn(sakerFraFpsak())
+                .thenReturn(sakerFraInfotrygd());
         List<Sak> saker = connection.hentSaker();
         assertThat(saker).hasSize(1);
         Sak sak = saker.get(0);
