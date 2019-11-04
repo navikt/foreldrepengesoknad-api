@@ -80,7 +80,7 @@ public abstract class AbstractMellomlagringTjeneste implements Mellomlagring {
                 return disabled();
             }
         } catch (MellomlagringException e) {
-            LOG.warn(MSG, "Hentet ikke", bøtte, katalog, e);
+            LOG.warn(MSG, "(feil) Hentet ikke", bøtte, katalog, e);
             return Optional.empty();
         }
     }
@@ -95,7 +95,7 @@ public abstract class AbstractMellomlagringTjeneste implements Mellomlagring {
                 disabled();
             }
         } catch (MellomlagringException e) {
-            LOG.warn(MSG, "Lagret ikke i", bøtte, katalog, e);
+            LOG.warn(MSG, "(feil) Lagret ikke i", bøtte, katalog, e);
         }
     }
 
@@ -109,7 +109,7 @@ public abstract class AbstractMellomlagringTjeneste implements Mellomlagring {
                 disabled();
             }
         } catch (MellomlagringException e) {
-            LOG.warn(MSG, "Fjernet ikke fra", bøtte, katalog, e);
+            LOG.warn(MSG, "(feil) Fjernet ikke fra", bøtte, katalog, e);
         }
     }
 
