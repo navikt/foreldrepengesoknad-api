@@ -1,5 +1,7 @@
 package no.nav.foreldrepenger.selvbetjening.tjeneste.mellomlagring;
 
+import static no.nav.foreldrepenger.selvbetjening.util.EnvUtil.CONFIDENTIAL;
+
 import java.util.Optional;
 
 import org.slf4j.Logger;
@@ -38,6 +40,7 @@ public class KryptertMellomlagring {
                 .map(s -> krypto.decrypt(s, fnr));
         if (lest.isPresent()) {
             LOG.info("Lest kryptert søknad");
+            LOG.info(CONFIDENTIAL, "Dekryptert søknad {}", lest);
         } else {
             LOG.info("Fant ingen kryptert søknad");
         }
@@ -65,6 +68,7 @@ public class KryptertMellomlagring {
                 .map(v -> GSON.fromJson(v, Attachment.class));
         if (a.isPresent()) {
             LOG.info("Lest kryptert vedlegg");
+            LOG.info(CONFIDENTIAL, "Dekryptert vedlegg {}", a);
         } else {
             LOG.info("Fant intet kryptert vedlegg");
         }
@@ -101,6 +105,7 @@ public class KryptertMellomlagring {
                 .map(k -> krypto.decrypt(k, fnr));
         if (kv.isPresent()) {
             LOG.info("Lest kryptert kvittering");
+            LOG.info(CONFIDENTIAL, "Dekryptert kvittering {}", kv);
         } else {
             LOG.info("Fant ingen kryptert kvittering");
         }
