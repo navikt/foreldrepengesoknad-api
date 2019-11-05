@@ -8,7 +8,7 @@ import org.springframework.core.type.AnnotatedTypeMetadata;
 
 import no.nav.foreldrepenger.selvbetjening.util.Cluster;
 
-class OnNotProdCondition extends OnClusterCondition {
+public class OnNotProdCondition extends OnClusterCondition {
 
     @Override
     protected Cluster[] clusters(AnnotatedTypeMetadata md) {
