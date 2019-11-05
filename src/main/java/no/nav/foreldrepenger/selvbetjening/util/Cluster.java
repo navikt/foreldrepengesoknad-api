@@ -31,7 +31,31 @@ public enum Cluster {
         var aktiv = Optional.ofNullable(env.getProperty(NAIS_CLUSTER_NAME))
                 .filter(clusterName::equals)
                 .isPresent();
-        LOG.info("Cluster {} er {} aktivt", clusterName(), aktiv ? "" : "ikke");
+        LOG.trace("Cluster {} er {}", clusterName(), aktiv ? "aktivt" : "ikke aktivt");
         return aktiv;
+    }
+
+    public static Cluster[] prodClusters() {
+        return new Cluster[] { PROD_SBS, PROD_GCP };
+    }
+
+    public static Cluster[] sbsClusters() {
+        return new Cluster[] { DEV_SBS, PROD_SBS };
+    }
+
+    public static Cluster[] notProdClusters() {
+        return new Cluster[] { DEV_SBS, DEV_GCP, LOCAL };
+    }
+
+    public static Cluster[] k8Clusters() {
+        return new Cluster[] { DEV_SBS, DEV_GCP, PROD_GCP, PROD_GCP };
+    }
+
+    public static Cluster[] gcpClusters() {
+        return new Cluster[] { DEV_GCP, PROD_GCP };
+    }
+
+    public static Cluster[] local() {
+        return new Cluster[] { LOCAL };
     }
 }
