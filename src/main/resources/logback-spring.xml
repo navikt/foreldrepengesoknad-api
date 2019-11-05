@@ -7,9 +7,7 @@
     <springProfile name="local, localstack, test">
         <appender name="stdout" class="ch.qos.logback.core.ConsoleAppender">
             <layout class="ch.qos.logback.classic.PatternLayout">
-                <Pattern>
-                    %d{yyyy-MM-dd HH:mm:ss} %X{X-Nav-CallId} [%thread] %-5level %logger{70} - %msg%n
-                </Pattern>
+                <Pattern>%d{yyyy-MM-dd HH:mm:ss} %X{X-Nav-CallId} [%thread] %-5level %logger{70} - %msg%n</Pattern>
             </layout>
         </appender>
     </springProfile>
@@ -34,7 +32,6 @@
     <logger name="org.springframework.web.servlet.mvc.method.annotation.ExceptionHandlerExceptionResolver" level="ERROR" />
     <logger name="org.apache.pdfbox.pdmodel.font" level="ERROR" />
     <logger name="org.apache.pdfbox.rendering.CIDType0Glyph2D" level="ERROR" />
-    <logger name="org.apache.tika.parser.SQLite3Parser" level="ERROR" />
     <root level="info">
         <appender-ref ref="stdout"/>
     </root>
