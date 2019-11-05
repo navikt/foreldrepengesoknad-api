@@ -11,7 +11,7 @@ import org.springframework.http.RequestEntity;
 import org.springframework.web.client.HttpClientErrorException;
 import org.springframework.web.client.RestOperations;
 
-public abstract class AbstractRestConnection implements PingEndpointAware, Togglable, RestConnection {
+public abstract class AbstractRestConnection implements RestConnection {
 
     protected static final Logger LOG = LoggerFactory.getLogger(AbstractRestConnection.class);
 
@@ -19,16 +19,6 @@ public abstract class AbstractRestConnection implements PingEndpointAware, Toggl
 
     public AbstractRestConnection(RestOperations operations) {
         this.operations = operations;
-    }
-
-    @Override
-    public String name() {
-        return pingURI().getHost();
-    }
-
-    @Override
-    public String ping() {
-        return getForObject(pingURI(), String.class);
     }
 
     @Override
@@ -58,7 +48,6 @@ public abstract class AbstractRestConnection implements PingEndpointAware, Toggl
     }
 
     @Override
-
     public <T> T postForObject(URI uri, Object payload, Class<T> responseType) {
         if (!isEnabled()) {
             LOG.info("Service er ikke aktiv, POSTer ikke til {}", uri);
@@ -68,13 +57,22 @@ public abstract class AbstractRestConnection implements PingEndpointAware, Toggl
     }
 
     @Override
-
     public <T> T putForObject(URI uri, Object payload, Class<T> responseType) {
         if (!isEnabled()) {
             LOG.info("Service er ikke aktiv, PUTer ikke til {}", uri);
             return null;
         }
         return operations.exchange(RequestEntity.put(uri).body(payload), responseType).getBody();
+    }
+
+    @Override
+    public String name() {
+        return pingURI().getHost();
+    }
+
+    @Override
+    public String ping() {
+        return getForObject(pingURI(), String.class);
     }
 
     @Override
