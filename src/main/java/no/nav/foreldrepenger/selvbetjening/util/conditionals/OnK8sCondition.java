@@ -11,7 +11,7 @@ import no.nav.foreldrepenger.selvbetjening.util.Cluster;
 class OnK8sCondition extends OnClusterCondition {
 
     @Override
-    protected Cluster[] clusters(AnnotatedTypeMetadata metadata) {
+    protected Cluster[] clusters(AnnotatedTypeMetadata md) {
         return new Cluster[] { DEV_SBS, DEV_GCP, PROD_GCP, PROD_GCP };
     }
 }

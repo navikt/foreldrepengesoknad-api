@@ -17,12 +17,12 @@ import no.nav.foreldrepenger.selvbetjening.util.Cluster;
 public class OnClusterCondition extends SpringBootCondition {
 
     @Override
-    public ConditionOutcome getMatchOutcome(ConditionContext context, AnnotatedTypeMetadata metadata) {
+    public ConditionOutcome getMatchOutcome(ConditionContext ctx, AnnotatedTypeMetadata metadata) {
         var message = forCondition(ConditionalOnClusters.class);
         var clusters = clusters(metadata);
         return safeStream(clusters)
-                .filter(cluster -> cluster.isActive(context.getEnvironment()))
-                .map(cluster -> match(message.foundExactly(cluster.clusterName())))
+                .filter(c -> c.isActive(ctx.getEnvironment()))
+                .map(c -> match(message.foundExactly(c.clusterName())))
                 .findFirst()
                 .orElseGet(() -> noMatch(message.because(Arrays.toString(clusters))));
     }
