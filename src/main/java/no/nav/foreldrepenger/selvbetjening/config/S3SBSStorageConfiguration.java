@@ -1,8 +1,5 @@
 package no.nav.foreldrepenger.selvbetjening.config;
 
-import static no.nav.foreldrepenger.selvbetjening.util.Cluster.DEV_SBS;
-import static no.nav.foreldrepenger.selvbetjening.util.Cluster.PROD_SBS;
-
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;
@@ -21,10 +18,10 @@ import com.amazonaws.services.s3.AmazonS3ClientBuilder;
 import no.nav.foreldrepenger.selvbetjening.tjeneste.mellomlagring.Bøtte;
 import no.nav.foreldrepenger.selvbetjening.tjeneste.mellomlagring.Mellomlagring;
 import no.nav.foreldrepenger.selvbetjening.tjeneste.mellomlagring.S3Mellomlagring;
-import no.nav.foreldrepenger.selvbetjening.util.conditionals.ConditionalOnClusters;
+import no.nav.foreldrepenger.selvbetjening.util.conditionals.ConditionalOnSBS;
 
 @Configuration
-@ConditionalOnClusters(clusters = { DEV_SBS, PROD_SBS })
+@ConditionalOnSBS
 public class S3SBSStorageConfiguration {
 
     @Bean

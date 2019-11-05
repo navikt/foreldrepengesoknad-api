@@ -8,8 +8,6 @@ import java.lang.annotation.Target;
 
 import org.springframework.context.annotation.Conditional;
 
-import no.nav.foreldrepenger.selvbetjening.util.conditionals.OnClusterCondition.OnProdCondition;
-
 @Target({ ElementType.TYPE, ElementType.METHOD })
 @Retention(RetentionPolicy.RUNTIME)
 @Documented

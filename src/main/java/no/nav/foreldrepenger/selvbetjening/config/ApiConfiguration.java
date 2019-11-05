@@ -1,10 +1,6 @@
 package no.nav.foreldrepenger.selvbetjening.config;
 
 import static java.util.Collections.singletonList;
-import static no.nav.foreldrepenger.selvbetjening.util.Cluster.DEV_GCP;
-import static no.nav.foreldrepenger.selvbetjening.util.Cluster.DEV_SBS;
-import static no.nav.foreldrepenger.selvbetjening.util.Cluster.PROD_GCP;
-import static no.nav.foreldrepenger.selvbetjening.util.Cluster.PROD_SBS;
 import static no.nav.foreldrepenger.selvbetjening.util.Constants.FNR;
 import static org.springframework.http.HttpHeaders.CONTENT_TYPE;
 import static org.springframework.http.HttpHeaders.LOCATION;
@@ -41,7 +37,7 @@ import no.nav.foreldrepenger.selvbetjening.interceptors.client.ZoneCrossingAware
 import no.nav.foreldrepenger.selvbetjening.interceptors.client.ZoneCrossingAwareClientInterceptor;
 import no.nav.foreldrepenger.selvbetjening.tjeneste.mellomlagring.Bøtte;
 import no.nav.foreldrepenger.selvbetjening.tjeneste.mellomlagring.MellomlagringKrypto;
-import no.nav.foreldrepenger.selvbetjening.util.conditionals.ConditionalOnClusters;
+import no.nav.foreldrepenger.selvbetjening.util.conditionals.ConditionalOnK8s;
 
 @Configuration
 public class ApiConfiguration implements WebMvcConfigurer {
@@ -100,7 +96,7 @@ public class ApiConfiguration implements WebMvcConfigurer {
     }
 
     @Bean
-    @ConditionalOnClusters(clusters = { DEV_GCP, PROD_GCP, DEV_SBS, PROD_SBS })
+    @ConditionalOnK8s
     @Qualifier(Bøtte.SØKNAD)
     public Bøtte søknadsBøtte(
             @Value("${mellomlagring.søknad.navn:foreldrepengesoknad}") String navn,
@@ -111,7 +107,7 @@ public class ApiConfiguration implements WebMvcConfigurer {
 
     @Bean
     @Qualifier(Bøtte.TMP)
-    @ConditionalOnClusters(clusters = { DEV_GCP, PROD_GCP, DEV_SBS, PROD_SBS })
+    @ConditionalOnK8s
     public Bøtte tmpBøtte(
             @Value("${mellomlagring.tmp.navn:mellomlagring}") String navn,
             @Value("${mellomlagring.tmp.levetid:1d}") Duration levetid,
