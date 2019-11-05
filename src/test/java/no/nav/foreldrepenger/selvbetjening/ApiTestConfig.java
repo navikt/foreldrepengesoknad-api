@@ -9,7 +9,7 @@ import org.springframework.context.annotation.Configuration;
 import io.micrometer.core.instrument.MeterRegistry;
 import io.micrometer.prometheus.PrometheusConfig;
 import io.micrometer.prometheus.PrometheusMeterRegistry;
-import no.nav.foreldrepenger.selvbetjening.util.ConditionalOnClusters;
+import no.nav.foreldrepenger.selvbetjening.util.conditionals.ConditionalOnClusters;
 
 @Configuration
 public class ApiTestConfig {

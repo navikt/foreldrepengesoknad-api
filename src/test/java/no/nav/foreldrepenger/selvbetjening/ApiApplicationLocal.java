@@ -19,8 +19,7 @@ import com.google.common.base.Joiner;
 
 import no.nav.foreldrepenger.selvbetjening.stub.StorageStub;
 import no.nav.foreldrepenger.selvbetjening.tjeneste.mellomlagring.Mellomlagring;
-import no.nav.foreldrepenger.selvbetjening.util.Cluster;
-import no.nav.foreldrepenger.selvbetjening.util.ConditionalOnClusters;
+import no.nav.foreldrepenger.selvbetjening.util.conditionals.ConditionalOnLocal;
 import no.nav.security.token.support.spring.api.EnableJwtTokenValidation;
 import no.nav.security.token.support.test.spring.TokenGeneratorConfiguration;
 import springfox.documentation.swagger2.annotations.EnableSwagger2;
@@ -48,7 +47,7 @@ public class ApiApplicationLocal {
     }
 
     @Bean
-    @ConditionalOnClusters(clusters = Cluster.LOCAL)
+    @ConditionalOnLocal
     public Mellomlagring storageStub() {
         return new StorageStub();
     }

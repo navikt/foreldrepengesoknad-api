@@ -15,7 +15,7 @@ import org.springframework.web.bind.annotation.RestController;
 
 import no.nav.foreldrepenger.selvbetjening.tjeneste.historikk.MinidialogInnslag;
 import no.nav.foreldrepenger.selvbetjening.tjeneste.oppslag.domain.Fødselsnummer;
-import no.nav.foreldrepenger.selvbetjening.util.ConditionalOnClusters;
+import no.nav.foreldrepenger.selvbetjening.util.conditionals.ConditionalOnClusters;
 import no.nav.security.token.support.core.api.Unprotected;
 
 @ConditionalOnClusters(clusters = { DEV_GCP, DEV_SBS, LOCAL })

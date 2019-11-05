@@ -41,7 +41,7 @@ import no.nav.foreldrepenger.selvbetjening.interceptors.client.ZoneCrossingAware
 import no.nav.foreldrepenger.selvbetjening.interceptors.client.ZoneCrossingAwareClientInterceptor;
 import no.nav.foreldrepenger.selvbetjening.tjeneste.mellomlagring.Bøtte;
 import no.nav.foreldrepenger.selvbetjening.tjeneste.mellomlagring.MellomlagringKrypto;
-import no.nav.foreldrepenger.selvbetjening.util.ConditionalOnClusters;
+import no.nav.foreldrepenger.selvbetjening.util.conditionals.ConditionalOnClusters;
 
 @Configuration
 public class ApiConfiguration implements WebMvcConfigurer {

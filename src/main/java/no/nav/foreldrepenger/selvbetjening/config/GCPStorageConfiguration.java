@@ -12,7 +12,7 @@ import org.springframework.context.annotation.Configuration;
 import no.nav.foreldrepenger.selvbetjening.tjeneste.mellomlagring.Bøtte;
 import no.nav.foreldrepenger.selvbetjening.tjeneste.mellomlagring.GCPMellomlagring;
 import no.nav.foreldrepenger.selvbetjening.tjeneste.mellomlagring.Mellomlagring;
-import no.nav.foreldrepenger.selvbetjening.util.ConditionalOnClusters;
+import no.nav.foreldrepenger.selvbetjening.util.conditionals.ConditionalOnClusters;
 
 @Configuration
 @ConditionalOnClusters(clusters = { DEV_GCP, PROD_GCP })
