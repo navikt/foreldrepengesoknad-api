@@ -1,6 +1,8 @@
 package no.nav.foreldrepenger.selvbetjening.config;
 
 import static java.util.Collections.singletonList;
+import static no.nav.foreldrepenger.selvbetjening.tjeneste.mellomlagring.Bøtte.SØKNAD;
+import static no.nav.foreldrepenger.selvbetjening.tjeneste.mellomlagring.Bøtte.TMP;
 import static no.nav.foreldrepenger.selvbetjening.util.Constants.FNR;
 import static org.springframework.http.HttpHeaders.CONTENT_TYPE;
 import static org.springframework.http.HttpHeaders.LOCATION;
@@ -27,6 +29,7 @@ import org.springframework.retry.RetryCallback;
 import org.springframework.retry.RetryContext;
 import org.springframework.retry.RetryListener;
 import org.springframework.retry.listener.RetryListenerSupport;
+import org.springframework.util.ReflectionUtils;
 import org.springframework.web.client.RestOperations;
 import org.springframework.web.servlet.config.annotation.CorsRegistry;
 import org.springframework.web.servlet.config.annotation.WebMvcConfigurer;
@@ -72,10 +75,10 @@ public class ApiConfiguration implements WebMvcConfigurer {
         return singletonList(new RetryListenerSupport() {
 
             @Override
-            public <T, E extends Throwable> void onError(RetryContext context, RetryCallback<T, E> callback,
-                    Throwable throwable) {
+            public <T, E extends Throwable> void onError(RetryContext ctx, RetryCallback<T, E> callback,
+                    Throwable t) {
                 log.warn("Metode {} kastet exception {} for {}. gang",
-                        context.getAttribute(NAME), throwable.toString(), context.getRetryCount());
+                        ctx.getAttribute(NAME), t.toString(), ctx.getRetryCount());
             }
 
             @Override
@@ -91,17 +94,19 @@ public class ApiConfiguration implements WebMvcConfigurer {
             }
 
             @Override
-            public <T, E extends Throwable> boolean open(RetryContext context, RetryCallback<T, E> callback) {
-                log.info("Metode {} gjør retry for {}. gang",
-                        context.getAttribute(NAME), context.getRetryCount());
-                return super.open(context, callback);
+            public <T, E extends Throwable> boolean open(RetryContext ctx, RetryCallback<T, E> callback) {
+                var labelField = ReflectionUtils.findField(callback.getClass(), "val$label");
+                ReflectionUtils.makeAccessible(labelField);
+                String label = (String) ReflectionUtils.getField(labelField, callback);
+                log.info("Metode {} initierer retry", label);
+                return true;
             }
         });
     }
 
     @Bean
     @ConditionalOnK8s
-    @Qualifier(Bøtte.SØKNAD)
+    @Qualifier(SØKNAD)
     public Bøtte søknadsBøtte(
             @Value("${mellomlagring.søknad.navn:foreldrepengesoknad}") String navn,
             @Value("${mellomlagring.søknad.levetid:365d}") Duration levetid,
@@ -110,7 +115,7 @@ public class ApiConfiguration implements WebMvcConfigurer {
     }
 
     @Bean
-    @Qualifier(Bøtte.TMP)
+    @Qualifier(TMP)
     @ConditionalOnK8s
     public Bøtte tmpBøtte(
             @Value("${mellomlagring.tmp.navn:mellomlagring}") String navn,
