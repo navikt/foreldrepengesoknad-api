@@ -79,11 +79,15 @@ public class ApiConfiguration implements WebMvcConfigurer {
             }
 
             @Override
-            public <T, E extends Throwable> void close(RetryContext context, RetryCallback<T, E> callback,
+            public <T, E extends Throwable> void close(RetryContext ctx, RetryCallback<T, E> callback,
                     Throwable t) {
-                log.warn("Metode {} avslutter {} retry etter {}. forsøk",
-                        context.getAttribute(NAME), t != null ? "ikke vellykket" : "vellykket",
-                        context.getRetryCount());
+                if (t != null) {
+                    log.warn("Metode {} avslutter ikke-vellykket retry etter {}. forsøk", ctx.getAttribute(NAME),
+                            ctx.getRetryCount());
+                } else {
+                    log.info("Metode {} avslutter vellykket retry etter {}. forsøk", ctx.getAttribute(NAME),
+                            ctx.getRetryCount());
+                }
             }
 
             @Override
