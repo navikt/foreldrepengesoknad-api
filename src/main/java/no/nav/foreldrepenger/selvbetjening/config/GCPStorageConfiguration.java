@@ -1,5 +1,7 @@
 package no.nav.foreldrepenger.selvbetjening.config;
 
+import static no.nav.foreldrepenger.selvbetjening.tjeneste.mellomlagring.Bøtte.SØKNAD;
+import static no.nav.foreldrepenger.selvbetjening.tjeneste.mellomlagring.Bøtte.TMP;
 import static no.nav.foreldrepenger.selvbetjening.util.Cluster.DEV_GCP;
 import static no.nav.foreldrepenger.selvbetjening.util.Cluster.PROD_GCP;
 
@@ -17,10 +19,9 @@ import no.nav.foreldrepenger.selvbetjening.util.ConditionalOnClusters;
 public class GCPStorageConfiguration {
 
     @Bean
-    public Mellomlagring gcpCloudStorage(
-            @Qualifier(Bøtte.SØKNAD) Bøtte søknadBøtte,
-            @Qualifier(Bøtte.TMP) Bøtte mellomlagringBøtte) {
-        return new GCPMellomlagring(søknadBøtte, mellomlagringBøtte);
+    public Mellomlagring gcpMellomlagring(
+            @Qualifier(SØKNAD) Bøtte søknad,
+            @Qualifier(TMP) Bøtte mellomlagring) {
+        return new GCPMellomlagring(søknad, mellomlagring);
     }
-
 }

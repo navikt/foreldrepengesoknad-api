@@ -35,10 +35,10 @@ public class Attachment {
     }
 
     public static Attachment of(MultipartFile file) {
-        return new Attachment(file.getOriginalFilename(), getBytes(file), MediaType.valueOf(file.getContentType()));
+        return of(file.getOriginalFilename(), getBytes(file), MediaType.valueOf(file.getContentType()));
     }
 
-    static Attachment of(String fileName, byte[] bytes, MediaType mediaType) {
+    private static Attachment of(String fileName, byte[] bytes, MediaType mediaType) {
         return new Attachment(fileName, bytes, mediaType);
     }
 
