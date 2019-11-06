@@ -1,24 +1,32 @@
 package no.nav.foreldrepenger.selvbetjening.tjeneste.mellomlagring;
 
+import org.springframework.beans.factory.annotation.Value;
+import org.springframework.stereotype.Component;
+
+import no.nav.foreldrepenger.selvbetjening.util.TokenUtil;
+
+@Component
 public class MellomlagringKrypto {
     private static final char[] hexCode = "0123456789ABCDEF".toCharArray();
 
     private final String passphrase;
+    private final TokenUtil tokenUtil;
 
-    public MellomlagringKrypto(String passphrase) {
+    public MellomlagringKrypto(@Value("${storage.passphrase}") String passphrase, TokenUtil tokenUtil) {
         this.passphrase = passphrase;
+        this.tokenUtil = tokenUtil;
     }
 
-    public String katalognavn(String plaintext) {
-        return hexBinary(encrypt(plaintext, plaintext).getBytes());
+    public String katalognavn() {
+        return hexBinary(encrypt(tokenUtil.autentisertBruker()).getBytes());
     }
 
-    public String encrypt(String plaintext, String fnr) {
-        return new Krypto(passphrase, fnr).encrypt(plaintext);
+    public String encrypt(String plaintext) {
+        return new Krypto(passphrase, tokenUtil.autentisertBruker()).encrypt(plaintext);
     }
 
-    public String decrypt(String encrypted, String fnr) {
-        return new Krypto(passphrase, fnr).decrypt(encrypted);
+    public String decrypt(String encrypted) {
+        return new Krypto(passphrase, tokenUtil.autentisertBruker()).decrypt(encrypted);
     }
 
     public String hexBinary(byte[] data) {

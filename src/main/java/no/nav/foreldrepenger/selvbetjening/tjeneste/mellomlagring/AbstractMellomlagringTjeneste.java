@@ -9,6 +9,8 @@ import javax.annotation.PostConstruct;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import no.nav.foreldrepenger.selvbetjening.error.UnexpectedInputException;
+
 public abstract class AbstractMellomlagringTjeneste implements Mellomlagring {
     private static final String MSG = "{} bøtte {}, katalog {}";
     private static final String DEAKIVERT = "Mellomlagringsoperasjoner er deaktivert";
@@ -16,11 +18,11 @@ public abstract class AbstractMellomlagringTjeneste implements Mellomlagring {
 
     protected abstract void validerBøtte(Bøtte bøtte);
 
-    protected abstract void lagre(String bøtte, String katalog, String key, String value);
+    protected abstract void doLagre(String bøtte, String katalog, String key, String value);
 
-    protected abstract String les(String bøtte, String katalog, String key);
+    protected abstract String doLes(String bøtte, String katalog, String key);
 
-    protected abstract void slett(String bøtte, String katalog, String key);
+    protected abstract void doSlett(String bøtte, String katalog, String key);
 
     private final Bøtte søknadBøtte;
     private final Bøtte mellomlagringBøtte;
@@ -36,40 +38,25 @@ public abstract class AbstractMellomlagringTjeneste implements Mellomlagring {
     }
 
     @Override
-    public void lagre(String katalog, String key, String value) {
-        lagreI(søknadBøtte, katalog, key, value);
+    public void lagre(MellomlagringType type, String katalog, String key, String value) {
+        lagreI(bøtteFor(type), katalog, key, value);
     }
 
     @Override
-    public void lagreTmp(String katalog, String key, String value) {
-        lagreI(mellomlagringBøtte, katalog, key, value);
+    public Optional<String> les(MellomlagringType type, String katalog, String key) {
+        return lesFra(bøtteFor(type), katalog, key);
     }
 
     @Override
-    public Optional<String> les(String katalog, String key) {
-        return lesFra(søknadBøtte, katalog, key);
-    }
-
-    @Override
-    public Optional<String> lesTmp(String katalog, String key) {
-        return lesFra(mellomlagringBøtte, katalog, key);
-    }
-
-    @Override
-    public void slett(String katalog, String key) {
-        slettFra(søknadBøtte, katalog, key);
-    }
-
-    @Override
-    public void slettTmp(String katalog, String key) {
-        slettFra(mellomlagringBøtte, katalog, key);
+    public void slett(MellomlagringType type, String katalog, String key) {
+        slettFra(bøtteFor(type), katalog, key);
     }
 
     private Optional<String> lesFra(Bøtte bøtte, String katalog, String key) {
         try {
             if (bøtte.isEnabled()) {
                 LOG.info(MSG, "Henter fra", bøtte, katalog);
-                var søknad = Optional.ofNullable(les(bøtte.getNavn(), katalog, key));
+                var søknad = Optional.ofNullable(doLes(bøtte.getNavn(), katalog, key));
                 if (søknad.isPresent()) {
                     LOG.info(MSG, "Hentet fra", bøtte, katalog);
                 } else {
@@ -89,7 +76,7 @@ public abstract class AbstractMellomlagringTjeneste implements Mellomlagring {
         try {
             if (bøtte.isEnabled()) {
                 LOG.info(MSG, "Lagrer i", bøtte, katalog);
-                lagre(bøtte.getNavn(), katalog, key, value);
+                doLagre(bøtte.getNavn(), katalog, key, value);
                 LOG.info(MSG, "Lagret i", bøtte, katalog);
             } else {
                 disabled();
@@ -103,7 +90,7 @@ public abstract class AbstractMellomlagringTjeneste implements Mellomlagring {
         try {
             if (bøtte.isEnabled()) {
                 LOG.info(MSG, "Fjerner fra", bøtte, katalog);
-                slett(bøtte.getNavn(), katalog, key);
+                doSlett(bøtte.getNavn(), katalog, key);
                 LOG.info(MSG, "Fjernet fra", bøtte, katalog);
             } else {
                 disabled();
@@ -124,12 +111,15 @@ public abstract class AbstractMellomlagringTjeneste implements Mellomlagring {
         }
     }
 
-    Bøtte getSøknadBøtte() {
-        return søknadBøtte;
-    }
-
-    Bøtte getMellomlagringBøtte() {
-        return mellomlagringBøtte;
+    private Bøtte bøtteFor(MellomlagringType type) {
+        switch (type) {
+        case LANGTIDS:
+            return søknadBøtte;
+        case KORTTIDS:
+            return mellomlagringBøtte;
+        default:
+            throw new UnexpectedInputException("Type " + type + " er ukjent");
+        }
     }
 
     private static Optional<String> disabled() {
@@ -139,7 +129,7 @@ public abstract class AbstractMellomlagringTjeneste implements Mellomlagring {
 
     @Override
     public String ping() {
-        return ping("ping", "key", "42");
+        return ping(MellomlagringType.KORTTIDS, "ping", "key", "42");
     }
 
     @Override
@@ -147,9 +137,9 @@ public abstract class AbstractMellomlagringTjeneste implements Mellomlagring {
         return pingURI().getHost();
     }
 
-    private String ping(String ping, String key, String value) {
-        lagre(ping, key, value);
-        slett(ping, key);
+    private String ping(MellomlagringType type, String ping, String key, String value) {
+        lagre(type, ping, key, value);
+        slett(type, ping, key);
         return "OK";
     }
 

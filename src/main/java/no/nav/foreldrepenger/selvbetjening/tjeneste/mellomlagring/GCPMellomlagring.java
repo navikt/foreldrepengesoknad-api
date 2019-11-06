@@ -41,9 +41,9 @@ public class GCPMellomlagring extends AbstractMellomlagringTjeneste {
     }
 
     @Override
-    protected void lagre(String bøtte, String katalog, String key, String value) {
+    protected void doLagre(String bøttenavn, String katalog, String key, String value) {
         try {
-            storage.create(BlobInfo.newBuilder(BlobId.of(bøtte, key(katalog, key)))
+            storage.create(BlobInfo.newBuilder(BlobId.of(bøttenavn, key(katalog, key)))
                     .setContentType(APPLICATION_JSON_VALUE).build(), value.getBytes(UTF_8));
         } catch (StorageException e) {
             throw new MellomlagringException(e);
@@ -51,7 +51,7 @@ public class GCPMellomlagring extends AbstractMellomlagringTjeneste {
     }
 
     @Override
-    protected String les(String bøtte, String katalog, String key) {
+    protected String doLes(String bøtte, String katalog, String key) {
         try {
             return Optional.ofNullable(storage.get(bøtte, key(katalog, key)))
                     .map(Blob::getContent)
@@ -64,7 +64,7 @@ public class GCPMellomlagring extends AbstractMellomlagringTjeneste {
     }
 
     @Override
-    protected void slett(String bøtte, String katalog, String key) {
+    protected void doSlett(String bøtte, String katalog, String key) {
         try {
             storage.delete(BlobId.of(bøtte, key(katalog, key)));
         } catch (StorageException e) {
@@ -92,11 +92,4 @@ public class GCPMellomlagring extends AbstractMellomlagringTjeneste {
     public URI pingURI() {
         return STORAGE;
     }
-
-    @Override
-    public String toString() {
-        return getClass().getSimpleName() + "[storage=" + storage + ", søknadBøtte=" + getSøknadBøtte()
-                + ", mellomlagringBøtte=" + getMellomlagringBøtte() + "]";
-    }
-
 }

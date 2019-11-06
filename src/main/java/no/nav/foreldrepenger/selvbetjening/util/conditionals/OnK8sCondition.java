@@ -8,6 +8,6 @@ public class OnK8sCondition extends OnClusterCondition {
 
     @Override
     protected Cluster[] clusters(AnnotatedTypeMetadata md) {
-        return Cluster.k8Clusters();
+        return Cluster.k8sClusters();
     }
 }

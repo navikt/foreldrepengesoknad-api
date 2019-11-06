@@ -31,7 +31,7 @@ public class S3Mellomlagring extends AbstractMellomlagringTjeneste {
     }
 
     @Override
-    protected void slett(String bøtte, String katalog, String key) {
+    protected void doSlett(String bøtte, String katalog, String key) {
         try {
             s3.deleteObject(bøtte, key(katalog, key));
         } catch (SdkClientException e) {
@@ -40,16 +40,16 @@ public class S3Mellomlagring extends AbstractMellomlagringTjeneste {
     }
 
     @Override
-    protected void lagre(String bøtte, String katalog, String key, String value) {
+    protected void doLagre(String bøttenavn, String katalog, String key, String value) {
         try {
-            s3.putObject(bøtte, key(katalog, key), value);
+            s3.putObject(bøttenavn, key(katalog, key), value);
         } catch (SdkClientException e) {
             throw new MellomlagringException(e);
         }
     }
 
     @Override
-    protected String les(String bøtte, String katalog, String key) {
+    protected String doLes(String bøtte, String katalog, String key) {
         try {
             S3Object object = s3.getObject(bøtte, key(katalog, key));
             return new BufferedReader(new InputStreamReader(object.getObjectContent()))
@@ -68,7 +68,9 @@ public class S3Mellomlagring extends AbstractMellomlagringTjeneste {
 
     @Override
     public URI pingURI() {
-        return URI.create(s3.getUrl(getMellomlagringBøtte().getNavn(), "42").toString());
+        return URI.create("http://www.vg.no");
+        // return URI.create(s3.getUrl(getMellomlagringBøtte().getNavn(),
+        // "42").toString());
     }
 
     @Override
@@ -102,12 +104,6 @@ public class S3Mellomlagring extends AbstractMellomlagringTjeneste {
                         .withFilter(new LifecycleFilter())
                         .withStatus(BucketLifecycleConfiguration.ENABLED)
                         .withExpirationInDays(days));
-    }
-
-    @Override
-    public String toString() {
-        return getClass().getSimpleName() + "[søknadBucket=" + getSøknadBøtte() + ", mellomlagringBucket="
-                + getMellomlagringBøtte() + ", s3=" + s3 + "]";
     }
 
 }

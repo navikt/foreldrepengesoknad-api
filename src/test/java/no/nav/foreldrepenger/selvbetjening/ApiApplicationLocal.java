@@ -1,10 +1,13 @@
 package no.nav.foreldrepenger.selvbetjening;
 
 import static no.nav.foreldrepenger.selvbetjening.config.ClusterAwareSpringProfileResolver.profiles;
+import static no.nav.foreldrepenger.selvbetjening.tjeneste.mellomlagring.Bøtte.SØKNAD;
+import static no.nav.foreldrepenger.selvbetjening.tjeneste.mellomlagring.Bøtte.TMP;
 import static no.nav.foreldrepenger.selvbetjening.util.Constants.NAIS_CLUSTER_NAME;
 import static no.nav.foreldrepenger.selvbetjening.util.EnvUtil.LOCAL;
 import static org.springframework.context.annotation.FilterType.ASSIGNABLE_TYPE;
 
+import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.boot.builder.SpringApplicationBuilder;
 import org.springframework.boot.context.properties.EnableConfigurationProperties;
@@ -17,7 +20,8 @@ import org.springframework.retry.annotation.EnableRetry;
 
 import com.google.common.base.Joiner;
 
-import no.nav.foreldrepenger.selvbetjening.stub.StorageStub;
+import no.nav.foreldrepenger.selvbetjening.stub.InMemoryMellomlagring;
+import no.nav.foreldrepenger.selvbetjening.tjeneste.mellomlagring.Bøtte;
 import no.nav.foreldrepenger.selvbetjening.tjeneste.mellomlagring.Mellomlagring;
 import no.nav.foreldrepenger.selvbetjening.util.conditionals.ConditionalOnLocal;
 import no.nav.security.token.support.spring.api.EnableJwtTokenValidation;
@@ -48,7 +52,7 @@ public class ApiApplicationLocal {
 
     @Bean
     @ConditionalOnLocal
-    public Mellomlagring storageStub() {
-        return new StorageStub();
+    public Mellomlagring inMemoryMellomlager(@Qualifier(SØKNAD) Bøtte b1, @Qualifier(TMP) Bøtte b2) {
+        return new InMemoryMellomlagring(b1, b2);
     }
 }

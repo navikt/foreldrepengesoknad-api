@@ -39,8 +39,6 @@ import com.google.common.collect.ImmutableMap;
 import no.nav.foreldrepenger.selvbetjening.interceptors.client.ZoneCrossingAware;
 import no.nav.foreldrepenger.selvbetjening.interceptors.client.ZoneCrossingAwareClientInterceptor;
 import no.nav.foreldrepenger.selvbetjening.tjeneste.mellomlagring.Bøtte;
-import no.nav.foreldrepenger.selvbetjening.tjeneste.mellomlagring.MellomlagringKrypto;
-import no.nav.foreldrepenger.selvbetjening.util.conditionals.ConditionalOnK8s;
 
 @Configuration
 public class ApiConfiguration implements WebMvcConfigurer {
@@ -105,7 +103,6 @@ public class ApiConfiguration implements WebMvcConfigurer {
     }
 
     @Bean
-    @ConditionalOnK8s
     @Qualifier(SØKNAD)
     public Bøtte søknadsBøtte(
             @Value("${mellomlagring.søknad.navn:foreldrepengesoknad}") String navn,
@@ -116,17 +113,11 @@ public class ApiConfiguration implements WebMvcConfigurer {
 
     @Bean
     @Qualifier(TMP)
-    @ConditionalOnK8s
     public Bøtte tmpBøtte(
             @Value("${mellomlagring.tmp.navn:mellomlagring}") String navn,
             @Value("${mellomlagring.tmp.levetid:1d}") Duration levetid,
             @Value("${mellomlagring.tmp.enabled:true}") boolean enabled) {
         return new Bøtte(navn, levetid, enabled);
-    }
-
-    @Bean
-    public MellomlagringKrypto krypto(@Value("${storage.passphrase}") String passPhrase) {
-        return new MellomlagringKrypto(passPhrase);
     }
 
     @Override

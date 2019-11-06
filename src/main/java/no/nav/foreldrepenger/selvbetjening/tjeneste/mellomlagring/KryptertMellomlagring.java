@@ -1,5 +1,7 @@
 package no.nav.foreldrepenger.selvbetjening.tjeneste.mellomlagring;
 
+import static no.nav.foreldrepenger.selvbetjening.tjeneste.mellomlagring.MellomlagringType.KORTTIDS;
+import static no.nav.foreldrepenger.selvbetjening.tjeneste.mellomlagring.MellomlagringType.LANGTIDS;
 import static no.nav.foreldrepenger.selvbetjening.util.EnvUtil.CONFIDENTIAL;
 
 import java.util.Optional;
@@ -11,7 +13,6 @@ import org.springframework.stereotype.Service;
 import com.google.gson.Gson;
 
 import no.nav.foreldrepenger.selvbetjening.tjeneste.innsending.domain.Vedlegg;
-import no.nav.foreldrepenger.selvbetjening.util.TokenUtil;
 import no.nav.foreldrepenger.selvbetjening.vedlegg.VedleggSjekker;
 
 @Service
@@ -20,68 +21,60 @@ public class KryptertMellomlagring {
     private static final Logger LOG = LoggerFactory.getLogger(KryptertMellomlagring.class);
     private static final String SØKNAD = "soknad";
     private static final Gson GSON = new Gson();
-    private final TokenUtil tokenUtil;
     private final Mellomlagring mellomlagring;
     private final MellomlagringKrypto krypto;
     private final VedleggSjekker sjekker;
 
-    public KryptertMellomlagring(TokenUtil tokenUtil, Mellomlagring mellomlagring,
-            MellomlagringKrypto krypto, VedleggSjekker sjekker) {
-        this.tokenUtil = tokenUtil;
+    public KryptertMellomlagring(Mellomlagring mellomlagring, MellomlagringKrypto krypto, VedleggSjekker sjekker) {
         this.mellomlagring = mellomlagring;
         this.krypto = krypto;
         this.sjekker = sjekker;
     }
 
     public Optional<String> lesKryptertSøknad() {
-        LOG.info("Leser kryptert søknad");
-        String fnr = tokenUtil.autentisertBruker();
-        var lest = mellomlagring.lesTmp(krypto.katalognavn(fnr), SØKNAD)
-                .map(s -> krypto.decrypt(s, fnr));
-        if (lest.isPresent()) {
-            LOG.info("Lest kryptert søknad");
-            LOG.info(CONFIDENTIAL, "Dekryptert søknad {}", lest.get());
+        LOG.info("Leser kryptert søknad fra {}", katalog());
+        var søknad = mellomlagring.les(KORTTIDS, katalog(), SØKNAD)
+                .map(krypto::decrypt);
+        if (søknad.isPresent()) {
+            LOG.info("Lest kryptert søknad fra {}", katalog());
+            LOG.info(CONFIDENTIAL, "Dekryptert søknad {}", søknad.get());
         } else {
-            LOG.info("Fant ingen kryptert søknad");
+            LOG.info("Fant ingen kryptert søknad i {}", katalog());
         }
-        return lest;
+        return søknad;
     }
 
     public void lagreKryptertSøknad(String søknad) {
-        LOG.info("Lagrer kryptert søknad");
-        String fnr = tokenUtil.autentisertBruker();
-        mellomlagring.lagreTmp(krypto.katalognavn(fnr), SØKNAD, krypto.encrypt(søknad, fnr));
-        LOG.info("Lagret kryptert søknad");
+        LOG.info("Lagrer kryptert søknad i {}", katalog());
+        mellomlagring.lagre(KORTTIDS, katalog(), SØKNAD, krypto.encrypt(søknad));
+        LOG.info("Lagret kryptert søknad i {}", katalog());
     }
 
     public void slettKryptertSøknad() {
-        LOG.info("Sletter kryptert søknad");
-        mellomlagring.slettTmp(krypto.katalognavn(tokenUtil.autentisertBruker()), SØKNAD);
-        LOG.info("Slettet kryptert søknad");
+        LOG.info("Sletter kryptert søknad fra {}", katalog());
+        mellomlagring.slett(KORTTIDS, katalog(), SØKNAD);
+        LOG.info("Slettet kryptert søknad fra {}", katalog());
     }
 
     public Optional<Attachment> lesKryptertVedlegg(String key) {
-        LOG.info("Leser kryptert vedlegg");
-        String fnr = tokenUtil.autentisertBruker();
-        var a = mellomlagring.lesTmp(krypto.katalognavn(fnr), key)
-                .map(vedlegg -> krypto.decrypt(vedlegg, fnr))
+        LOG.info("Leser kryptert vedlegg fra {}", katalog());
+        var vedlegg = mellomlagring.les(KORTTIDS, katalog(), key)
+                .map(krypto::decrypt)
                 .map(v -> GSON.fromJson(v, Attachment.class));
-        if (a.isPresent()) {
+        if (vedlegg.isPresent()) {
             LOG.info("Lest kryptert vedlegg");
-            LOG.info(CONFIDENTIAL, "Dekryptert vedlegg {}", a.get());
+            LOG.info(CONFIDENTIAL, "Dekryptert vedlegg {}", vedlegg.get());
         } else {
-            LOG.info("Fant intet kryptert vedlegg");
+            LOG.info("Fant intet kryptert vedlegg i {}", katalog());
         }
-        return a;
+        return vedlegg;
     }
 
-    public void lagreKryptertVedlegg(Attachment attachment) {
-        LOG.info("Lagrer kryptert vedlegg");
-        sjekker.sjekkAttachments(attachment);
-        String fnr = tokenUtil.autentisertBruker();
-        mellomlagring.lagreTmp(krypto.katalognavn(fnr), attachment.uuid,
-                krypto.encrypt(GSON.toJson(attachment), fnr));
-        LOG.info("Lagret kryptert vedlegg");
+    public void lagreKryptertVedlegg(Attachment vedlegg) {
+        LOG.info("Lagrer kryptert vedlegg i {}", katalog());
+        sjekker.sjekkAttachments(vedlegg);
+        mellomlagring.lagre(KORTTIDS, katalog(), vedlegg.getUuid(), krypto.encrypt(GSON.toJson(vedlegg)));
+        LOG.info("Lagret kryptert vedlegg i {}", katalog());
     }
 
     public void slettKryptertVedlegg(Vedlegg vedlegg) {
@@ -92,36 +85,38 @@ public class KryptertMellomlagring {
 
     public void slettKryptertVedlegg(String uuid) {
         if (uuid != null) {
-            LOG.info("Sletter kryptert vedlegg");
-            mellomlagring.slettTmp(krypto.katalognavn(tokenUtil.autentisertBruker()), uuid);
-            LOG.info("Slettet kryptert vedlegg");
+            LOG.info("Sletter kryptert vedlegg med uuid {} fra {}", uuid, katalog());
+            mellomlagring.slett(KORTTIDS, katalog(), uuid);
+            LOG.info("Slettet kryptert vedlegg med uuid {} fra {}", uuid, katalog());
         }
     }
 
     public Optional<String> lesKryptertKvittering(String type) {
-        LOG.info("Leser kryptert kvittering");
-        String fnr = tokenUtil.autentisertBruker();
-        var kv = mellomlagring.les(krypto.katalognavn(fnr), type)
-                .map(k -> krypto.decrypt(k, fnr));
-        if (kv.isPresent()) {
-            LOG.info("Lest kryptert kvittering");
-            LOG.info(CONFIDENTIAL, "Dekryptert kvittering {}", kv.get());
+        LOG.info("Leser kryptert kvittering fra {}", katalog());
+        var kvittering = mellomlagring.les(LANGTIDS, katalog(), type)
+                .map(krypto::decrypt);
+        if (kvittering.isPresent()) {
+            LOG.info("Lest kryptert kvittering fra {}", katalog());
+            LOG.info(CONFIDENTIAL, "Dekryptert kvittering {}", kvittering.get());
         } else {
-            LOG.info("Fant ingen kryptert kvittering");
+            LOG.info("Fant ingen kryptert kvittering i {}", katalog());
         }
-        return kv;
+        return kvittering;
     }
 
     public void lagreKryptertKvittering(String type, String kvittering) {
-        LOG.info("Lagrer kryptert kvittering");
-        String fnr = tokenUtil.autentisertBruker();
-        mellomlagring.lagre(krypto.katalognavn(fnr), type, krypto.encrypt(kvittering, fnr));
-        LOG.info("Lagret kryptert kvittering");
+        LOG.info("Lagrer kryptert kvittering i {}", katalog());
+        mellomlagring.lagre(KORTTIDS, katalog(), type, krypto.encrypt(kvittering));
+        LOG.info("Lagret kryptert kvittering i katalog {}", katalog());
+    }
+
+    private String katalog() {
+        return krypto.katalognavn();
     }
 
     @Override
     public String toString() {
-        return getClass().getSimpleName() + "[tokenUtil=" + tokenUtil + ", storage=" + mellomlagring + ", crypto="
-                + krypto + ", sjekker=" + sjekker + "]";
+        return getClass().getSimpleName() + "[storage=" + mellomlagring + ", crypto=" + krypto + ", sjekker=" + sjekker
+                + "]";
     }
 }
