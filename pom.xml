@@ -28,7 +28,7 @@
         <logback.logstash.version>6.2</logback.logstash.version>
         <nv.version>1.27</nv.version>
         <pdfbox.version>2.0.17</pdfbox.version>
-        <aws.version>1.11.667</aws.version>
+        <aws.version>1.11.669</aws.version>
         <jacoco.version>0.8.5</jacoco.version>
         <gcp.version>0.117.0-alpha</gcp.version>
         <spring.cloud.vault.version>2.1.3.RELEASE</spring.cloud.vault.version>
