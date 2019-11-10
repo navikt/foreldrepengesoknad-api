@@ -28,7 +28,6 @@ import org.springframework.http.client.ClientHttpRequestInterceptor;
 import org.springframework.retry.RetryCallback;
 import org.springframework.retry.RetryContext;
 import org.springframework.retry.RetryListener;
-import org.springframework.retry.listener.RetryListenerSupport;
 import org.springframework.util.ReflectionUtils;
 import org.springframework.web.client.RestOperations;
 import org.springframework.web.servlet.config.annotation.CorsRegistry;
@@ -70,33 +69,41 @@ public class ApiConfiguration implements WebMvcConfigurer {
     public List<RetryListener> retryListeners() {
         Logger log = LoggerFactory.getLogger(getClass());
 
-        return singletonList(new RetryListenerSupport() {
+        return singletonList(new RetryListener() {
 
             @Override
-            public <T, E extends Throwable> void onError(RetryContext ctx, RetryCallback<T, E> callback,
-                    Throwable t) {
+            public <T, E extends Throwable> void onError(RetryContext context, RetryCallback<T, E> callback,
+                    Throwable throwable) {
                 log.warn("Metode {} kastet exception {} for {}. gang",
-                        ctx.getAttribute(NAME), t.toString(), ctx.getRetryCount());
+                        context.getAttribute(NAME), throwable.toString(), context.getRetryCount());
             }
 
             @Override
             public <T, E extends Throwable> void close(RetryContext ctx, RetryCallback<T, E> callback,
                     Throwable t) {
                 if (t != null) {
-                    log.warn("Metode {} avslutter ikke-vellykket retry etter {}. forsøk", ctx.getAttribute(NAME),
-                            ctx.getRetryCount());
+                    log.warn("Metode {} avslutter ikke-vellykket retry etter {}. forsøk",
+                            ctx.getAttribute(NAME), ctx.getRetryCount(), t);
                 } else {
-                    log.info("Metode {} avslutter vellykket retry etter {}. forsøk", ctx.getAttribute(NAME),
-                            ctx.getRetryCount());
+                    if (ctx.getRetryCount() > 0) {
+                        log.info("Metode {} avslutter vellykket retry etter {}. forsøk",
+                                ctx.getAttribute(NAME), ctx.getRetryCount());
+                    } else {
+                        log.trace("Metode {} avslutter vellykket uten retry", ctx.getAttribute(NAME));
+                    }
                 }
             }
 
             @Override
-            public <T, E extends Throwable> boolean open(RetryContext ctx, RetryCallback<T, E> callback) {
+            public <T, E extends Throwable> boolean open(RetryContext context, RetryCallback<T, E> callback) {
                 var labelField = ReflectionUtils.findField(callback.getClass(), "val$label");
                 ReflectionUtils.makeAccessible(labelField);
-                String label = (String) ReflectionUtils.getField(labelField, callback);
-                log.info("Metode {} initierer retry", label);
+                String metode = (String) ReflectionUtils.getField(labelField, callback);
+                if (context.getRetryCount() > 0) {
+                    log.info("Metode {} gjør retry for {}. gang", metode, context.getRetryCount());
+                } else {
+                    log.trace("Metode {} initierer retry", metode);
+                }
                 return true;
             }
         });
