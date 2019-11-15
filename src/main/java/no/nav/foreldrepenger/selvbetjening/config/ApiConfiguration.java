@@ -38,7 +38,6 @@ import com.google.common.collect.ImmutableMap;
 import no.nav.foreldrepenger.selvbetjening.interceptors.client.ZoneCrossingAware;
 import no.nav.foreldrepenger.selvbetjening.interceptors.client.ZoneCrossingAwareClientInterceptor;
 import no.nav.foreldrepenger.selvbetjening.tjeneste.mellomlagring.Bøtte;
-import no.nav.foreldrepenger.selvbetjening.util.conditionals.ConditionalOnToggle;
 
 @Configuration
 public class ApiConfiguration implements WebMvcConfigurer {
@@ -51,7 +50,7 @@ public class ApiConfiguration implements WebMvcConfigurer {
     }
 
     @Bean
-    @ConditionalOnToggle("foreldrepengesoknad-api.test")
+    // @ConditionalOnToggle("foreldrepengesoknad-api.test")
     public String jalla() {
         return "42";
     }
