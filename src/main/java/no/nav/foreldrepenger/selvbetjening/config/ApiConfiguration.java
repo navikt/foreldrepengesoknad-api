@@ -51,7 +51,7 @@ public class ApiConfiguration implements WebMvcConfigurer {
     }
 
     @Bean
-    @ConditionalOnToggle("jalla")
+    @ConditionalOnToggle("foreldrepengesoknad-api.test")
     public String jalla() {
         return "42";
     }
