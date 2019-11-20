@@ -57,9 +57,8 @@ public class S3SBSStorageConfiguration {
     }
 
     @Bean
-    // objectstore.rook-ceph fra onsdag
     public EndpointConfiguration s3EndpointConfig(@Value("${s3.region:us-east-1}") String region,
-            @Value("${s3.url:http://s3.nais-rook.svc.nais.local/}") String url) {
+            @Value("${s3.url:http://objectstore.rook-ceph.svc.nais.local/}") String url) {
         return new EndpointConfiguration(url, region);
     }
 
