@@ -8,6 +8,7 @@ allowed.origins:
     https://foreldrepenger-q.nav.no,
     https://svangerskapspengesoknad-q.nav.no
 no.nav.security.jwt.issuer.selvbetjening.discoveryurl: https://login.microsoftonline.com/NAVtestB2C.onmicrosoft.com/v2.0/.well-known/openid-configuration?p=B2C_1A_idporten_ver1
+s3.url: http://objectstore.rook-ceph.svc.nais.local/
 management:
    endpoints:
      web:
