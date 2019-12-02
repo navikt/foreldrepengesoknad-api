@@ -50,12 +50,6 @@ public class ApiConfiguration implements WebMvcConfigurer {
     }
 
     @Bean
-    // @ConditionalOnToggle("foreldrepengesoknad-api.test")
-    public String jalla() {
-        return "42";
-    }
-
-    @Bean
     public RestOperations restTemplate(ClientHttpRequestInterceptor... interceptors) {
         LOG.info("Registrerer interceptorer {}", Arrays.toString(interceptors));
         return new RestTemplateBuilder()
@@ -73,14 +67,13 @@ public class ApiConfiguration implements WebMvcConfigurer {
 
     @Bean
     public List<RetryListener> retryListeners() {
-        Logger log = LoggerFactory.getLogger(getClass());
 
         return singletonList(new RetryListener() {
 
             @Override
             public <T, E extends Throwable> void onError(RetryContext context, RetryCallback<T, E> callback,
                     Throwable throwable) {
-                log.warn("Metode {} kastet exception {} for {}. gang",
+                LOG.warn("Metode {} kastet exception {} for {}. gang",
                         context.getAttribute(NAME), throwable.toString(), context.getRetryCount());
             }
 
@@ -88,14 +81,14 @@ public class ApiConfiguration implements WebMvcConfigurer {
             public <T, E extends Throwable> void close(RetryContext ctx, RetryCallback<T, E> callback,
                     Throwable t) {
                 if (t != null) {
-                    log.warn("Metode {} avslutter ikke-vellykket retry etter {}. forsøk",
+                    LOG.warn("Metode {} avslutter ikke-vellykket retry etter {}. forsøk",
                             ctx.getAttribute(NAME), ctx.getRetryCount(), t);
                 } else {
                     if (ctx.getRetryCount() > 0) {
-                        log.info("Metode {} avslutter vellykket retry etter {}. forsøk",
+                        LOG.info("Metode {} avslutter vellykket retry etter {}. forsøk",
                                 ctx.getAttribute(NAME), ctx.getRetryCount());
                     } else {
-                        log.trace("Metode {} avslutter vellykket uten retry", ctx.getAttribute(NAME));
+                        LOG.trace("Metode {} avslutter vellykket uten retry", ctx.getAttribute(NAME));
                     }
                 }
             }
@@ -106,9 +99,9 @@ public class ApiConfiguration implements WebMvcConfigurer {
                 ReflectionUtils.makeAccessible(labelField);
                 String metode = (String) ReflectionUtils.getField(labelField, callback);
                 if (context.getRetryCount() > 0) {
-                    log.info("Metode {} gjør retry for {}. gang", metode, context.getRetryCount());
+                    LOG.info("Metode {} gjør retry for {}. gang", metode, context.getRetryCount());
                 } else {
-                    log.trace("Metode {} initierer retry", metode);
+                    LOG.trace("Metode {} initierer retry", metode);
                 }
                 return true;
             }
