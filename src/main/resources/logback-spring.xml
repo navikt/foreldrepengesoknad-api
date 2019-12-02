@@ -22,10 +22,10 @@
 
     <springProfile name="dev-gcp, dev-sbs,local,test">
         <logger name="no.nav.foreldrepenger.selvbetjening" level="trace"/>
+        <logger name="org.apache.http.impl.execchain" level="trace"/>
     </springProfile>
 
     <!-- Turn off Spring's warning logs for already resolved exceptions -->
-    <logger name="org.apache.http.impl.execchain" level="trace"/>
     <logger name="com.amazonaws" level="info" />
     <logger name="com.google" level="info" />
     <logger name="org.springframework.retry" level="trace" />
