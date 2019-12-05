@@ -50,6 +50,7 @@ public class ApiExceptionHandler extends ResponseEntityExceptionHandler {
         if (e.getCause() instanceof AttachmentException) {
             return handleAttachmentException(AttachmentException.class.cast(e.getCause()), req, headers);
         }
+        LOG.warn("Nested servlet exception med rotårsak {}", e.getCause().getClass().getSimpleName());
         return catchAll(e, req, headers);
     }
 
