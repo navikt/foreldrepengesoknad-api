@@ -26,6 +26,7 @@ import org.springframework.web.multipart.MaxUploadSizeExceededException;
 import org.springframework.web.multipart.MultipartException;
 import org.springframework.web.servlet.NoHandlerFoundException;
 import org.springframework.web.servlet.mvc.method.annotation.ResponseEntityExceptionHandler;
+import org.springframework.web.util.NestedServletException;
 
 import no.nav.foreldrepenger.selvbetjening.util.TokenUtil;
 import no.nav.security.token.support.core.exceptions.JwtTokenValidatorException;
@@ -42,6 +43,15 @@ public class ApiExceptionHandler extends ResponseEntityExceptionHandler {
     }
 
     private static final Logger LOG = LoggerFactory.getLogger(ApiExceptionHandler.class);
+
+    @ExceptionHandler
+    public ResponseEntity<Object> handleNestedServletException(NestedServletException e, HttpHeaders headers,
+            WebRequest req) {
+        if (e.getCause() instanceof AttachmentException) {
+            return handleAttachmentException(AttachmentException.class.cast(e.getCause()), req, headers);
+        }
+        return catchAll(e, req, headers);
+    }
 
     @Override
     protected ResponseEntity<Object> handleMethodArgumentNotValid(MethodArgumentNotValidException e,
