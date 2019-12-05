@@ -38,18 +38,18 @@ public class RequestFilterBean extends GenericFilterBean {
 
         HttpServletResponse res = HttpServletResponse.class.cast(response);
 
-        try {
-            String fnr = HttpServletRequest.class.cast(request).getHeader(FNR_HEADER_VALUE);
-            if ((fnr != null) && (tokenUtil.getSubject() != null) && !fnr.equals(tokenUtil.getSubject())) {
-                res.sendError(CONFLICT.value(),
-                        "FNR " + fnr + " i header matcher ikke subject " + tokenUtil.getSubject());
-            } else {
-                chain.doFilter(request, response);
-            }
-        } catch (Exception e) {
-            LOG.warn("Feil i filter, ignorerer", e);
+        // try {
+        String fnr = HttpServletRequest.class.cast(request).getHeader(FNR_HEADER_VALUE);
+        if ((fnr != null) && (tokenUtil.getSubject() != null) && !fnr.equals(tokenUtil.getSubject())) {
+            res.sendError(CONFLICT.value(),
+                    "FNR " + fnr + " i header matcher ikke subject " + tokenUtil.getSubject());
+        } else {
             chain.doFilter(request, response);
         }
+        /*
+         * } catch (Exception e) { LOG.warn("Feil i filter, ignorerer", e);
+         * chain.doFilter(request, response); }
+         */
     }
 
     @Override
