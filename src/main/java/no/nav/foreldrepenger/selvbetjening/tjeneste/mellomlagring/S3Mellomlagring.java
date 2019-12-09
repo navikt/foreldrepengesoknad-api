@@ -10,7 +10,6 @@ import java.net.URI;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import com.amazonaws.SdkClientException;
 import com.amazonaws.services.s3.AmazonS3;
 import com.amazonaws.services.s3.model.AmazonS3Exception;
 import com.amazonaws.services.s3.model.BucketLifecycleConfiguration;
@@ -73,16 +72,13 @@ public class S3Mellomlagring extends AbstractMellomlagringTjeneste {
     }
 
     private void lagBøtte(Bøtte bøtte) {
-        try {
-            LOG.info("Lager bøtte {}", bøtte);
-            s3.createBucket(new CreateBucketRequest(bøtte.getNavn())
-                    .withCannedAcl(CannedAccessControlList.Private));
-            s3.setBucketLifecycleConfiguration(bøtte.getNavn(),
-                    objectExpiresInDays(Math.toIntExact(bøtte.getLevetid().toDays())));
-            LOG.info("Laget bøtte {}", bøtte);
-        } catch (SdkClientException e) {
-            throw new MellomlagringException(e);
-        }
+
+        LOG.info("Lager bøtte {}", bøtte);
+        s3.createBucket(new CreateBucketRequest(bøtte.getNavn())
+                .withCannedAcl(CannedAccessControlList.Private));
+        s3.setBucketLifecycleConfiguration(bøtte.getNavn(),
+                objectExpiresInDays(Math.toIntExact(bøtte.getLevetid().toDays())));
+        LOG.info("Laget bøtte {}", bøtte);
     }
 
     private static BucketLifecycleConfiguration objectExpiresInDays(int days) {

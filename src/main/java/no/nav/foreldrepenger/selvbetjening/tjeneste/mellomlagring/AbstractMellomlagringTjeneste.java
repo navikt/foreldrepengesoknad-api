@@ -66,8 +66,8 @@ public abstract class AbstractMellomlagringTjeneste implements Mellomlagring {
             } else {
                 return disabled();
             }
-        } catch (MellomlagringException e) {
-            LOG.warn(MSG, "(feil) Hentet ikke", bøtte, katalog, e);
+        } catch (Exception e) {
+            LOG.warn(MSG, "(Feil) Hentet ikke", bøtte, katalog, e);
             return Optional.empty();
         }
     }
@@ -81,8 +81,8 @@ public abstract class AbstractMellomlagringTjeneste implements Mellomlagring {
             } else {
                 disabled();
             }
-        } catch (MellomlagringException e) {
-            LOG.warn(MSG, "(feil) Lagret ikke i", bøtte, katalog, e);
+        } catch (Exception e) {
+            LOG.warn(MSG, "(Feil) Lagret ikke i", bøtte, katalog, e);
         }
     }
 
@@ -95,20 +95,15 @@ public abstract class AbstractMellomlagringTjeneste implements Mellomlagring {
             } else {
                 disabled();
             }
-        } catch (MellomlagringException e) {
-            LOG.warn(MSG, "(feil) Fjernet ikke fra", bøtte, katalog, e);
+        } catch (Exception e) {
+            LOG.warn(MSG, "(Feil) Fjernet ikke fra", bøtte, katalog, e);
         }
     }
 
     private void validerBøtter(Bøtte... bøtter) {
-        try {
-            safeStream(bøtter)
-                    .filter(Bøtte::isEnabled)
-                    .forEach(this::validerBøtte);
-        } catch (MellomlagringException e) {
-            LOG.warn("{}", e.getMessage());
-            // throw new MellomlagringException(e);
-        }
+        safeStream(bøtter)
+                .filter(Bøtte::isEnabled)
+                .forEach(this::validerBøtte);
     }
 
     private Bøtte bøtteFor(MellomlagringType type) {

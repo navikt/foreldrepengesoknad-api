@@ -1,7 +1,6 @@
 package no.nav.foreldrepenger.selvbetjening.tjeneste.mellomlagring;
 
 import static java.nio.charset.StandardCharsets.UTF_8;
-import static org.springframework.core.NestedExceptionUtils.getMostSpecificCause;
 import static org.springframework.http.MediaType.APPLICATION_JSON_VALUE;
 
 import java.net.URI;
@@ -42,12 +41,8 @@ public class GCPMellomlagring extends AbstractMellomlagringTjeneste {
 
     @Override
     protected void doLagre(String bøttenavn, String katalog, String key, String value) {
-        try {
-            storage.create(BlobInfo.newBuilder(BlobId.of(bøttenavn, key(katalog, key)))
-                    .setContentType(APPLICATION_JSON_VALUE).build(), value.getBytes(UTF_8));
-        } catch (StorageException e) {
-            throw new MellomlagringException(e);
-        }
+        storage.create(BlobInfo.newBuilder(BlobId.of(bøttenavn, key(katalog, key)))
+                .setContentType(APPLICATION_JSON_VALUE).build(), value.getBytes(UTF_8));
     }
 
     @Override
@@ -59,32 +54,26 @@ public class GCPMellomlagring extends AbstractMellomlagringTjeneste {
                     .map(b -> new String(b, UTF_8))
                     .orElse(null);
         } catch (StorageException e) {
+            LOG.info("Katalog {} ikke funnet, finnes antagelig ikke ({})", katalog, e.getCode());
             return null;
         }
     }
 
     @Override
     protected void doSlett(String bøtte, String katalog, String key) {
-        try {
-            storage.delete(BlobId.of(bøtte, key(katalog, key)));
-        } catch (StorageException e) {
-            throw new MellomlagringException(e);
-        }
+        storage.delete(BlobId.of(bøtte, key(katalog, key)));
     }
 
     @Override
     protected void validerBøtte(Bøtte bøtte) {
-        try {
-            LOG.info("Validerer bøtte {}", bøtte);
-            if (Optional.ofNullable(storage.get(bøtte.getNavn()))
-                    .filter(Objects::nonNull)
-                    .isPresent()) {
-                LOG.warn("Bøtte {} eksisterer ikke", bøtte);
-            } else {
-                LOG.info("Bøtte {} eksisterer", bøtte);
-            }
-        } catch (Exception e) {
-            throw new MellomlagringException(getMostSpecificCause(e).getMessage(), e);
+
+        LOG.info("Validerer bøtte {}", bøtte);
+        if (Optional.ofNullable(storage.get(bøtte.getNavn()))
+                .filter(Objects::nonNull)
+                .isPresent()) {
+            LOG.warn("Bøtte {} eksisterer ikke", bøtte);
+        } else {
+            LOG.info("Bøtte {} eksisterer", bøtte);
         }
     }
 

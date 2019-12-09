@@ -6,11 +6,13 @@ import org.springframework.retry.annotation.Backoff;
 import org.springframework.retry.annotation.Retryable;
 
 import com.amazonaws.SdkClientException;
+import com.google.cloud.storage.StorageException;
 
 import no.nav.foreldrepenger.selvbetjening.tjeneste.PingEndpointAware;
 
 @Retryable(include = {
-        SdkClientException.class }, maxAttemptsExpression = "#{${rest.retry.attempts:3}}", backoff = @Backoff(delayExpression = "#{${rest.retry.delay:1000}}"))
+        SdkClientException.class,
+        StorageException.class }, maxAttemptsExpression = "#{${rest.retry.attempts:3}}", backoff = @Backoff(delayExpression = "#{${rest.retry.delay:1000}}"))
 
 public interface Mellomlagring extends PingEndpointAware {
 
