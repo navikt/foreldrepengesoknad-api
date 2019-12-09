@@ -58,8 +58,9 @@ class VirusScanConnection extends AbstractRestConnection {
                 }
             }
             LOG.info("Ingen scanning av null bytes", bytes);
+            return;
         }
-        LOG.warn("Scanning er deaktivert");
+        LOG.warn("Scanning av {} er deaktivert", name);
     }
 
     @Override
