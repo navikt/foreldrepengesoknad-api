@@ -20,7 +20,7 @@ public abstract class AbstractMellomlagringTjeneste implements Mellomlagring {
 
     protected abstract void doLagre(String bøtte, String katalog, String key, String value);
 
-    protected abstract String doLes(String bøtte, String katalog, String key);
+    protected abstract Optional<String> doLes(String bøtte, String katalog, String key);
 
     protected abstract void doSlett(String bøtte, String katalog, String key);
 
@@ -53,50 +53,39 @@ public abstract class AbstractMellomlagringTjeneste implements Mellomlagring {
     }
 
     private Optional<String> lesFra(Bøtte bøtte, String katalog, String key) {
-        try {
-            if (bøtte.isEnabled()) {
-                LOG.info(MSG, "Henter fra", bøtte, katalog);
-                var søknad = Optional.ofNullable(doLes(bøtte.getNavn(), katalog, key));
-                if (søknad.isPresent()) {
-                    LOG.info(MSG, "Hentet fra", bøtte, katalog);
-                } else {
-                    LOG.info(MSG, "Hentet ikke fra", bøtte, katalog);
-                }
-                return søknad;
+
+        if (bøtte.isEnabled()) {
+            LOG.info(MSG, "Henter fra", bøtte, katalog);
+            var søknad = doLes(bøtte.getNavn(), katalog, key);
+            if (søknad.isPresent()) {
+                LOG.info(MSG, "Hentet fra", bøtte, katalog);
             } else {
-                return disabled();
+                LOG.info(MSG, "Hentet ikke fra", bøtte, katalog);
             }
-        } catch (Exception e) {
-            LOG.warn(MSG, "(Feil) Hentet ikke", bøtte, katalog, e);
-            return Optional.empty();
+            return søknad;
         }
+        return disabled();
     }
 
     private void lagreI(Bøtte bøtte, String katalog, String key, String value) {
-        try {
-            if (bøtte.isEnabled()) {
-                LOG.info(MSG, "Lagrer i", bøtte, katalog);
-                doLagre(bøtte.getNavn(), katalog, key, value);
-                LOG.info(MSG, "Lagret i", bøtte, katalog);
-            } else {
-                disabled();
-            }
-        } catch (Exception e) {
-            LOG.warn(MSG, "(Feil) Lagret ikke i", bøtte, katalog, e);
+
+        if (bøtte.isEnabled()) {
+            LOG.info(MSG, "Lagrer i", bøtte, katalog);
+            doLagre(bøtte.getNavn(), katalog, key, value);
+            LOG.info(MSG, "Lagret i", bøtte, katalog);
+        } else {
+            disabled();
         }
     }
 
     private void slettFra(Bøtte bøtte, String katalog, String key) {
-        try {
-            if (bøtte.isEnabled()) {
-                LOG.info(MSG, "Fjerner fra", bøtte, katalog);
-                doSlett(bøtte.getNavn(), katalog, key);
-                LOG.info(MSG, "Fjernet fra", bøtte, katalog);
-            } else {
-                disabled();
-            }
-        } catch (Exception e) {
-            LOG.warn(MSG, "(Feil) Fjernet ikke fra", bøtte, katalog, e);
+
+        if (bøtte.isEnabled()) {
+            LOG.info(MSG, "Fjerner fra", bøtte, katalog);
+            doSlett(bøtte.getNavn(), katalog, key);
+            LOG.info(MSG, "Fjernet fra", bøtte, katalog);
+        } else {
+            disabled();
         }
     }
 

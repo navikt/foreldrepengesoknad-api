@@ -3,6 +3,7 @@ package no.nav.foreldrepenger.selvbetjening.stub;
 import java.net.URI;
 import java.util.HashMap;
 import java.util.Map;
+import java.util.Optional;
 
 import no.nav.foreldrepenger.selvbetjening.tjeneste.mellomlagring.AbstractMellomlagringTjeneste;
 import no.nav.foreldrepenger.selvbetjening.tjeneste.mellomlagring.Bøtte;
@@ -49,8 +50,8 @@ public class InMemoryMellomlagring extends AbstractMellomlagringTjeneste {
     }
 
     @Override
-    protected String doLes(String bøtte, String katalog, String key) {
-        return store.get(key(katalog, key));
+    protected Optional<String> doLes(String bøtte, String katalog, String key) {
+        return Optional.of(store.get(key(katalog, key)));
     }
 
     @Override

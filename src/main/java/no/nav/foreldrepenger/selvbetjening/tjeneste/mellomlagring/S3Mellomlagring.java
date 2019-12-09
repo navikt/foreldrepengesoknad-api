@@ -6,6 +6,7 @@ import static org.springframework.http.HttpStatus.NOT_FOUND;
 import java.io.BufferedReader;
 import java.io.InputStreamReader;
 import java.net.URI;
+import java.util.Optional;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -39,15 +40,16 @@ public class S3Mellomlagring extends AbstractMellomlagringTjeneste {
     }
 
     @Override
-    protected String doLes(String bøtte, String katalog, String key) {
+    protected Optional<String> doLes(String bøtte, String katalog, String key) {
         try {
-            return new BufferedReader(new InputStreamReader(s3.getObject(bøtte, key(katalog, key)).getObjectContent()))
-                    .lines()
-                    .collect(joining("\n"));
+            return Optional.of(
+                    new BufferedReader(new InputStreamReader(s3.getObject(bøtte, key(katalog, key)).getObjectContent()))
+                            .lines()
+                            .collect(joining("\n")));
         } catch (AmazonS3Exception e) {
             if (e.getStatusCode() == NOT_FOUND.value()) {
                 LOG.info("Katalog {} ikke funnet, finnes antagelig ikke ({})", katalog, e.getErrorCode());
-                return null;
+                return Optional.empty();
             }
             throw e;
         }

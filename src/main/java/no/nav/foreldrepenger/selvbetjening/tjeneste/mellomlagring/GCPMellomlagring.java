@@ -1,6 +1,7 @@
 package no.nav.foreldrepenger.selvbetjening.tjeneste.mellomlagring;
 
 import static java.nio.charset.StandardCharsets.UTF_8;
+import static org.apache.http.HttpStatus.SC_NOT_FOUND;
 import static org.springframework.http.MediaType.APPLICATION_JSON_VALUE;
 
 import java.net.URI;
@@ -9,7 +10,6 @@ import java.util.Optional;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.threeten.bp.Duration;
 
 import com.google.api.gax.retrying.RetrySettings;
 import com.google.cloud.storage.Blob;
@@ -27,11 +27,8 @@ public class GCPMellomlagring extends AbstractMellomlagringTjeneste {
 
     private final Storage storage;
 
-    public GCPMellomlagring(Bøtte søknadBøtte, Bøtte mellomlagringBøtte) {
+    public GCPMellomlagring(Bøtte søknadBøtte, Bøtte mellomlagringBøtte, RetrySettings retrySettings) {
         super(søknadBøtte, mellomlagringBøtte);
-        var retrySettings = RetrySettings.newBuilder()
-                .setTotalTimeout(Duration.ofSeconds(5))
-                .build();
         this.storage = StorageOptions
                 .newBuilder()
                 .setRetrySettings(retrySettings)
@@ -41,27 +38,30 @@ public class GCPMellomlagring extends AbstractMellomlagringTjeneste {
 
     @Override
     protected void doLagre(String bøttenavn, String katalog, String key, String value) {
-        storage.create(BlobInfo.newBuilder(BlobId.of(bøttenavn, key(katalog, key)))
+        storage.create(BlobInfo.newBuilder(blobFra(bøttenavn, katalog, key))
                 .setContentType(APPLICATION_JSON_VALUE).build(), value.getBytes(UTF_8));
     }
 
     @Override
-    protected String doLes(String bøtte, String katalog, String key) {
+    protected Optional<String> doLes(String bøtte, String katalog, String key) {
         try {
-            return Optional.ofNullable(storage.get(bøtte, key(katalog, key)))
+            return Optional.of(storage.get(bøtte, key(katalog, key)))
                     .map(Blob::getContent)
                     .filter(Objects::nonNull)
-                    .map(b -> new String(b, UTF_8))
-                    .orElse(null);
+                    .map(b -> new String(b, UTF_8));
         } catch (StorageException e) {
-            LOG.info("Katalog {} ikke funnet, finnes antagelig ikke ({})", katalog, e.getCode());
-            return null;
+            if (SC_NOT_FOUND == e.getCode()) {
+                LOG.info("Katalog {} finnes ikke ({})", katalog, e.getCode());
+                return Optional.empty();
+            }
+            LOG.info("Katalog {} ikke funnet, ({})", katalog, e.getCode());
+            throw e;
         }
     }
 
     @Override
     protected void doSlett(String bøtte, String katalog, String key) {
-        storage.delete(BlobId.of(bøtte, key(katalog, key)));
+        storage.delete(blobFra(bøtte, katalog, key));
     }
 
     @Override
@@ -75,6 +75,10 @@ public class GCPMellomlagring extends AbstractMellomlagringTjeneste {
         } else {
             LOG.info("Bøtte {} eksisterer", bøtte);
         }
+    }
+
+    private static BlobId blobFra(String bøttenavn, String katalog, String key) {
+        return BlobId.of(bøttenavn, key(katalog, key));
     }
 
     @Override

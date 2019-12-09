@@ -43,16 +43,17 @@ public class S3SBSStorageConfiguration {
     }
 
     @Bean
-    public ClientConfiguration s3ClientConfig(RetryPolicy retryPolicy, @Value("${s3.timeout:3000}") int requestTimeout,
-            @Value("${s3.retries:3}") int retries) {
+    public ClientConfiguration s3ClientConfig(RetryPolicy retryPolicy,
+            @Value("${mellomlagring.timeout:3000}") int requestTimeoutMs,
+            @Value("${mellomlagring.retries:3}") int retries) {
         return new ClientConfiguration()
                 .withRetryPolicy(retryPolicy)
-                .withRequestTimeout(requestTimeout)
+                .withRequestTimeout(requestTimeoutMs)
                 .withMaxErrorRetry(retries);
     }
 
     @Bean
-    public RetryPolicy retryPolicy(@Value("${s3.retries:3}") int retries) {
+    public RetryPolicy retryPolicy(@Value("${mellomlagring.retries:3}") int retries) {
         return PredefinedRetryPolicies.getDefaultRetryPolicyWithCustomMaxRetries(retries);
     }
 
