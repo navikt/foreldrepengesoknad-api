@@ -33,7 +33,8 @@ public class Bøtte implements Togglable {
 
     @Override
     public String toString() {
-        return getClass().getSimpleName() + "[navn=" + navn + ", levetid=" + levetid + ", enabled=" + enabled + "]";
+        return getClass().getSimpleName() + "[navn=" + navn + ", levetid=" + levetid.toDays() + " dager" + ", enabled="
+                + enabled + "]";
     }
 
 }
