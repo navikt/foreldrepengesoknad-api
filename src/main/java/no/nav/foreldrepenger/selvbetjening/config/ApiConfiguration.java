@@ -67,8 +67,7 @@ public class ApiConfiguration implements WebMvcConfigurer {
 
     @Bean
     public List<RetryListener> retryListeners() {
-
-        return singletonList(new RetryListener() {
+        List<RetryListener> listener = singletonList(new RetryListener() {
 
             @Override
             public <T, E extends Throwable> void onError(RetryContext context, RetryCallback<T, E> callback,
@@ -106,6 +105,9 @@ public class ApiConfiguration implements WebMvcConfigurer {
                 return true;
             }
         });
+        LOG.info("Registrerer retry listener {}", listener);
+        return listener;
+
     }
 
     @Bean
