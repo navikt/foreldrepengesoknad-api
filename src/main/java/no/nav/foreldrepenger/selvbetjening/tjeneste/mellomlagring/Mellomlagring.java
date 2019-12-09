@@ -4,12 +4,13 @@ import java.util.Optional;
 
 import org.springframework.retry.annotation.Backoff;
 import org.springframework.retry.annotation.Retryable;
-import org.springframework.web.client.HttpServerErrorException.InternalServerError;
+
+import com.amazonaws.SdkClientException;
 
 import no.nav.foreldrepenger.selvbetjening.tjeneste.PingEndpointAware;
 
-@Retryable(include = { MellomlagringException.class }, exclude = {
-        InternalServerError.class }, maxAttemptsExpression = "#{${rest.retry.attempts:3}}", backoff = @Backoff(delayExpression = "#{${rest.retry.delay:1000}}"))
+@Retryable(include = {
+        SdkClientException.class }, maxAttemptsExpression = "#{${rest.retry.attempts:3}}", backoff = @Backoff(delayExpression = "#{${rest.retry.delay:1000}}"))
 
 public interface Mellomlagring extends PingEndpointAware {
 

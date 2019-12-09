@@ -32,20 +32,12 @@ public class S3Mellomlagring extends AbstractMellomlagringTjeneste {
 
     @Override
     protected void doSlett(String bøtte, String katalog, String key) {
-        try {
-            s3.deleteObject(bøtte, key(katalog, key));
-        } catch (SdkClientException e) {
-            throw new MellomlagringException(e);
-        }
+        s3.deleteObject(bøtte, key(katalog, key));
     }
 
     @Override
     protected void doLagre(String bøttenavn, String katalog, String key, String value) {
-        try {
-            s3.putObject(bøttenavn, key(katalog, key), value);
-        } catch (SdkClientException e) {
-            throw new MellomlagringException(e);
-        }
+        s3.putObject(bøttenavn, key(katalog, key), value);
     }
 
     @Override
@@ -60,10 +52,8 @@ public class S3Mellomlagring extends AbstractMellomlagringTjeneste {
                 LOG.info("Ikke funnet, finnes antagelig ikke");
                 return null;
             }
-        } catch (SdkClientException e) {
-            throw new MellomlagringException(e);
+            throw e;
         }
-        return null;
     }
 
     @Override
