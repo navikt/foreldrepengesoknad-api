@@ -16,7 +16,6 @@ import com.amazonaws.services.s3.model.AmazonS3Exception;
 import com.amazonaws.services.s3.model.BucketLifecycleConfiguration;
 import com.amazonaws.services.s3.model.CannedAccessControlList;
 import com.amazonaws.services.s3.model.CreateBucketRequest;
-import com.amazonaws.services.s3.model.S3Object;
 import com.amazonaws.services.s3.model.lifecycle.LifecycleFilter;
 
 public class S3Mellomlagring extends AbstractMellomlagringTjeneste {
@@ -43,13 +42,12 @@ public class S3Mellomlagring extends AbstractMellomlagringTjeneste {
     @Override
     protected String doLes(String bøtte, String katalog, String key) {
         try {
-            S3Object object = s3.getObject(bøtte, key(katalog, key));
-            return new BufferedReader(new InputStreamReader(object.getObjectContent()))
+            return new BufferedReader(new InputStreamReader(s3.getObject(bøtte, key(katalog, key)).getObjectContent()))
                     .lines()
                     .collect(joining("\n"));
         } catch (AmazonS3Exception e) {
             if (e.getStatusCode() == NOT_FOUND.value()) {
-                LOG.info("Ikke funnet, finnes antagelig ikke");
+                LOG.info("Katalog {} ikke funnet, finnes antagelig ikke");
                 return null;
             }
             throw e;
