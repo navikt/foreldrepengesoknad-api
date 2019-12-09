@@ -66,14 +66,17 @@ public class GCPMellomlagring extends AbstractMellomlagringTjeneste {
 
     @Override
     protected void validerBøtte(Bøtte bøtte) {
-
-        LOG.info("Validerer bøtte {}", bøtte);
-        if (Optional.ofNullable(storage.get(bøtte.getNavn()))
-                .filter(Objects::nonNull)
-                .isPresent()) {
-            LOG.warn("Bøtte {} eksisterer ikke", bøtte);
-        } else {
-            LOG.info("Bøtte {} eksisterer", bøtte);
+        try {
+            LOG.info("Validerer bøtte {}", bøtte);
+            if (Optional.ofNullable(storage.get(bøtte.getNavn()))
+                    .filter(Objects::nonNull)
+                    .isPresent()) {
+                LOG.warn("Bøtte {} eksisterer ikke", bøtte);
+            } else {
+                LOG.info("Bøtte {} eksisterer", bøtte);
+            }
+        } catch (StorageException e) {
+            LOG.warn("Validerering av {} bøtte feilet", bøtte);
         }
     }
 
