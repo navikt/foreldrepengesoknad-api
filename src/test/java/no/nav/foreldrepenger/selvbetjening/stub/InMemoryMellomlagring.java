@@ -51,7 +51,8 @@ public class InMemoryMellomlagring extends AbstractMellomlagringTjeneste {
 
     @Override
     protected Optional<String> doLes(String bøtte, String katalog, String key) {
-        return Optional.of(store.get(key(katalog, key)));
+        var val = store.get(key(katalog, key));
+        return val != null ? Optional.of(val) : Optional.empty();
     }
 
     @Override
