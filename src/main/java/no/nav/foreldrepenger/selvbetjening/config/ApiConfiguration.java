@@ -87,7 +87,7 @@ public class ApiConfiguration implements WebMvcConfigurer {
                         LOG.info("Metode {} avslutter vellykket retry etter {}. forsøk",
                                 ctx.getAttribute(NAME), ctx.getRetryCount());
                     } else {
-                        LOG.trace("Metode {} avslutter vellykket uten retry", ctx.getAttribute(NAME));
+                        LOG.info("Metode {} avslutter vellykket uten retry", ctx.getAttribute(NAME));
                     }
                 }
             }
@@ -100,7 +100,7 @@ public class ApiConfiguration implements WebMvcConfigurer {
                 if (context.getRetryCount() > 0) {
                     LOG.info("Metode {} gjør retry for {}. gang", metode, context.getRetryCount());
                 } else {
-                    LOG.trace("Metode {} initierer retry", metode);
+                    LOG.info("Metode {} initierer retry", metode);
                 }
                 return true;
             }
