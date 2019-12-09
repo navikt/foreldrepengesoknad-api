@@ -1,7 +1,7 @@
 package no.nav.foreldrepenger.selvbetjening.tjeneste.mellomlagring;
 
 import static java.util.stream.Collectors.joining;
-import static org.springframework.http.HttpStatus.NOT_FOUND;
+import static org.apache.http.HttpStatus.SC_NOT_FOUND;
 
 import java.io.BufferedReader;
 import java.io.InputStreamReader;
@@ -47,10 +47,11 @@ public class S3Mellomlagring extends AbstractMellomlagringTjeneste {
                             .lines()
                             .collect(joining("\n")));
         } catch (AmazonS3Exception e) {
-            if (e.getStatusCode() == NOT_FOUND.value()) {
-                LOG.info("Katalog {} ikke funnet, finnes antagelig ikke ({})", katalog, e.getErrorCode());
+            if (SC_NOT_FOUND == e.getStatusCode()) {
+                LOG.info("Katalog {} finnes ikke ({})", katalog);
                 return Optional.empty();
             }
+            LOG.info("Katalog {} ikke funnet, ({})", katalog, e.getErrorCode());
             throw e;
         }
     }

@@ -51,7 +51,7 @@ public class GCPMellomlagring extends AbstractMellomlagringTjeneste {
                     .map(b -> new String(b, UTF_8));
         } catch (StorageException e) {
             if (SC_NOT_FOUND == e.getCode()) {
-                LOG.info("Katalog {} finnes ikke ({})", katalog, e.getCode());
+                LOG.info("Katalog {} finnes ikke", katalog);
                 return Optional.empty();
             }
             LOG.info("Katalog {} ikke funnet, ({})", katalog, e.getCode());
