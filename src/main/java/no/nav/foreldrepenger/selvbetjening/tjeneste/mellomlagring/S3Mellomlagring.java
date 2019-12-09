@@ -48,7 +48,7 @@ public class S3Mellomlagring extends AbstractMellomlagringTjeneste {
                             .collect(joining("\n")));
         } catch (AmazonS3Exception e) {
             if (SC_NOT_FOUND == e.getStatusCode()) {
-                LOG.info("Katalog {} finnes ikke ({})", katalog);
+                LOG.info("Katalog {} finnes ikke ({})", katalog, e.getErrorCode());
                 return Optional.empty();
             }
             LOG.info("Katalog {} ikke funnet, ({})", katalog, e.getErrorCode());
