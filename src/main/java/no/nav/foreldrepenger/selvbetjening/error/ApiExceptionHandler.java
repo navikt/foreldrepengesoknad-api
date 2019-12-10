@@ -47,11 +47,22 @@ public class ApiExceptionHandler extends ResponseEntityExceptionHandler {
     @ExceptionHandler
     public ResponseEntity<Object> handleNestedServletException(NestedServletException e, HttpHeaders headers,
             WebRequest req) {
-        if (e.getCause() instanceof AttachmentException) {
-            return handleAttachmentException(AttachmentException.class.cast(e.getCause()), req, headers);
+        Exception cause = cause(e.getCause());
+        if (cause != null) {
+            LOG.warn("NestedServletException med cause {}", cause.getClass().getSimpleName());
+            return cause instanceof AttachmentException
+                    ? handleAttachmentException(AttachmentException.class.cast(cause), req, headers)
+                    : catchAll(cause, req, headers);
         }
-        LOG.warn("Nested servlet exception med rotårsak {}", e.getCause().getClass().getSimpleName());
+        LOG.warn("Nested servlet exception uten cause");
         return catchAll(e, req, headers);
+    }
+
+    private static Exception cause(Throwable t) {
+        if (t instanceof Exception) {
+            return Exception.class.cast(t);
+        }
+        return null;
     }
 
     @Override
