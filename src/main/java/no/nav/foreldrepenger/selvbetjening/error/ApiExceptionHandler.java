@@ -51,7 +51,7 @@ public class ApiExceptionHandler extends ResponseEntityExceptionHandler {
         if (cause != null) {
             LOG.warn("NestedServletException med cause {}", cause.getClass().getSimpleName());
             if (cause instanceof MultipartException || cause instanceof MaxUploadSizeExceededException
-                    || cause instanceof AttachmentsTooLargeException) {
+                    || cause instanceof AttachmentsTooLargeException || cause instanceof AttachmentTooLargeException) {
                 return handleTooLargeAttchment(cause, req, headers);
             }
             if (cause instanceof AttachmentException) {
@@ -107,7 +107,7 @@ public class ApiExceptionHandler extends ResponseEntityExceptionHandler {
     }
 
     @ExceptionHandler({ MultipartException.class, MaxUploadSizeExceededException.class,
-            AttachmentTooLargeException.class })
+            AttachmentTooLargeException.class, AttachmentsTooLargeException.class })
     public ResponseEntity<Object> handleTooLargeAttchment(Exception e, WebRequest req, HttpHeaders headers) {
         return logAndHandle(PAYLOAD_TOO_LARGE, e, req, headers);
     }
