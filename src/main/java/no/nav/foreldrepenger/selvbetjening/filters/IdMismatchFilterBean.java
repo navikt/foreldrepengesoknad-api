@@ -21,13 +21,13 @@ import no.nav.foreldrepenger.selvbetjening.util.TokenUtil;
 
 @Component
 @Order(1)
-public class RequestFilterBean extends GenericFilterBean {
+public class IdMismatchFilterBean extends GenericFilterBean {
 
-    private static final Logger LOG = LoggerFactory.getLogger(RequestFilterBean.class);
+    private static final Logger LOG = LoggerFactory.getLogger(IdMismatchFilterBean.class);
 
     private final TokenUtil tokenUtil;
 
-    public RequestFilterBean(TokenUtil tokenUtil) {
+    public IdMismatchFilterBean(TokenUtil tokenUtil) {
         this.tokenUtil = tokenUtil;
     }
 

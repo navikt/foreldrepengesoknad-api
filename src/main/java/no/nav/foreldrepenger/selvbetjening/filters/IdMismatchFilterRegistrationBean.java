@@ -11,10 +11,10 @@ import org.springframework.boot.web.servlet.FilterRegistrationBean;
 import org.springframework.stereotype.Component;
 
 @Component
-public class RequestFilterRegistrationBean extends FilterRegistrationBean<RequestFilterBean> {
-    private static final Logger LOG = LoggerFactory.getLogger(RequestFilterRegistrationBean.class);
+public class IdMismatchFilterRegistrationBean extends FilterRegistrationBean<IdMismatchFilterBean> {
+    private static final Logger LOG = LoggerFactory.getLogger(IdMismatchFilterRegistrationBean.class);
 
-    public RequestFilterRegistrationBean(RequestFilterBean requestFilter) {
+    public IdMismatchFilterRegistrationBean(IdMismatchFilterBean requestFilter) {
         setFilter(requestFilter);
         setUrlPatterns(urlPatternsFor(REST_SOKNAD, REST_STORAGE, INNSYN));
         LOG.info("Registrert filter {}", this);
