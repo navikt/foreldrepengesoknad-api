@@ -1,5 +1,6 @@
 package no.nav.foreldrepenger.selvbetjening.error;
 
+import static org.springframework.http.HttpStatus.CONFLICT;
 import static org.springframework.http.HttpStatus.FORBIDDEN;
 import static org.springframework.http.HttpStatus.INTERNAL_SERVER_ERROR;
 import static org.springframework.http.HttpStatus.NOT_FOUND;
@@ -92,6 +93,12 @@ public class ApiExceptionHandler extends ResponseEntityExceptionHandler {
     protected ResponseEntity<Object> handleNoHandlerFoundException(NoHandlerFoundException e, HttpHeaders headers,
             HttpStatus status, WebRequest req) {
         return logAndHandle(NOT_FOUND, e, req, headers);
+    }
+
+    @ExceptionHandler
+    public ResponseEntity<Object> handleIdMismatch(IdMismatchException e,
+            HttpHeaders headers, HttpStatus status, WebRequest req) {
+        return logAndHandle(CONFLICT, e, req, headers);
     }
 
     @ExceptionHandler

@@ -1,7 +1,6 @@
 package no.nav.foreldrepenger.selvbetjening.filters;
 
 import static no.nav.foreldrepenger.selvbetjening.util.Constants.FNR_HEADER_VALUE;
-import static org.springframework.http.HttpStatus.CONFLICT;
 
 import java.io.IOException;
 
@@ -10,7 +9,6 @@ import javax.servlet.ServletException;
 import javax.servlet.ServletRequest;
 import javax.servlet.ServletResponse;
 import javax.servlet.http.HttpServletRequest;
-import javax.servlet.http.HttpServletResponse;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -18,6 +16,7 @@ import org.springframework.core.annotation.Order;
 import org.springframework.stereotype.Component;
 import org.springframework.web.filter.GenericFilterBean;
 
+import no.nav.foreldrepenger.selvbetjening.error.IdMismatchException;
 import no.nav.foreldrepenger.selvbetjening.util.TokenUtil;
 
 @Component
@@ -35,21 +34,19 @@ public class RequestFilterBean extends GenericFilterBean {
     @Override
     public void doFilter(ServletRequest request, ServletResponse response, FilterChain chain)
             throws IOException, ServletException {
+        checkIds(request);
+        chain.doFilter(request, response);
+    }
 
-        HttpServletResponse res = HttpServletResponse.class.cast(response);
-
-        // try {
-        String fnr = HttpServletRequest.class.cast(request).getHeader(FNR_HEADER_VALUE);
-        if ((fnr != null) && (tokenUtil.getSubject() != null) && !fnr.equals(tokenUtil.getSubject())) {
-            res.sendError(CONFLICT.value(),
-                    "FNR " + fnr + " i header matcher ikke subject " + tokenUtil.getSubject());
-        } else {
-            chain.doFilter(request, response);
+    private void checkIds(ServletRequest request) {
+        try {
+            String fnr = HttpServletRequest.class.cast(request).getHeader(FNR_HEADER_VALUE);
+            if ((fnr != null) && (tokenUtil.getSubject() != null) && !fnr.equals(tokenUtil.getSubject())) {
+                throw new IdMismatchException(fnr, tokenUtil.getSubject());
+            }
+        } catch (Exception e) {
+            LOG.warn("Feil i filter, ignorerer", e);
         }
-        /*
-         * } catch (Exception e) { LOG.warn("Feil i filter, ignorerer", e);
-         * chain.doFilter(request, response); }
-         */
     }
 
     @Override
