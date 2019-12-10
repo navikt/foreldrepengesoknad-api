@@ -45,7 +45,6 @@ public class ApiExceptionHandler extends ResponseEntityExceptionHandler {
 
     private static final Logger LOG = LoggerFactory.getLogger(ApiExceptionHandler.class);
 
-    /*
     @ExceptionHandler
     public ResponseEntity<Object> handleNestedServletException(NestedServletException e, HttpHeaders headers,
             WebRequest req) {
@@ -76,7 +75,7 @@ public class ApiExceptionHandler extends ResponseEntityExceptionHandler {
                 .filter(Exception.class::isInstance)
                 .map(Exception.class::cast)
                 .orElse(null);
-    }*/
+    }
 
     @Override
     protected ResponseEntity<Object> handleMethodArgumentNotValid(MethodArgumentNotValidException e,
