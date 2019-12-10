@@ -39,13 +39,9 @@ public class IdMismatchFilterBean extends GenericFilterBean {
     }
 
     private void checkIds(ServletRequest request) {
-        try {
-            String fnr = HttpServletRequest.class.cast(request).getHeader(FNR_HEADER_VALUE);
-            if ((fnr != null) && (tokenUtil.getSubject() != null) && !fnr.equals(tokenUtil.getSubject())) {
-                throw new IdMismatchException(fnr, tokenUtil.getSubject());
-            }
-        } catch (Exception e) {
-            LOG.warn("Feil i filter, ignorerer", e);
+        String fnr = HttpServletRequest.class.cast(request).getHeader(FNR_HEADER_VALUE);
+        if ((fnr != null) && (tokenUtil.getSubject() != null) && !fnr.equals(tokenUtil.getSubject())) {
+            throw new IdMismatchException(fnr, tokenUtil.getSubject());
         }
     }
 
