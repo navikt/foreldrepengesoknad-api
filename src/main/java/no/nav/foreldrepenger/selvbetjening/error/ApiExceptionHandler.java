@@ -59,10 +59,10 @@ public class ApiExceptionHandler extends ResponseEntityExceptionHandler {
     }
 
     private static Exception cause(Throwable t) {
-        if (t instanceof Exception) {
-            return Exception.class.cast(t);
-        }
-        return null;
+        return Optional.ofNullable(t)
+                .filter(Exception.class::isInstance)
+                .map(Exception.class::cast)
+                .orElse(null);
     }
 
     @Override
