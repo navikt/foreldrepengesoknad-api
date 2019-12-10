@@ -3,7 +3,6 @@ allowed.origins:
    https://foreldrepengesoknad.nav.no,
    https://svangerskapspengesoknad.nav.no,
    https://foreldrepenger.nav.no
-s3.url: http://s3.nais-rook.svc.nais.local/
 no.nav:
    foreldrepenger:
       selvbetjening:

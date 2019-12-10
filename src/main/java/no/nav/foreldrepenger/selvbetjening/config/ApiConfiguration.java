@@ -70,18 +70,17 @@ public class ApiConfiguration implements WebMvcConfigurer {
         List<RetryListener> listener = singletonList(new RetryListener() {
 
             @Override
-            public <T, E extends Throwable> void onError(RetryContext context, RetryCallback<T, E> callback,
+            public <T, E extends Throwable> void onError(RetryContext context, RetryCallback<T, E> cb,
                     Throwable throwable) {
                 LOG.warn("Metode {} kastet exception {} for {}. gang",
                         context.getAttribute(NAME), throwable.toString(), context.getRetryCount());
             }
 
             @Override
-            public <T, E extends Throwable> void close(RetryContext ctx, RetryCallback<T, E> callback,
-                    Throwable t) {
+            public <T, E extends Throwable> void close(RetryContext ctx, RetryCallback<T, E> cb, Throwable t) {
                 if (t != null) {
-                    LOG.warn("Metode {} avslutter ikke-vellykket retry etter {}. forsøk",
-                            ctx.getAttribute(NAME), ctx.getRetryCount(), t);
+                    LOG.warn("Metode {} avslutter ikke-vellykket retry etter {}. forsøk grunnet {}",
+                            ctx.getAttribute(NAME), ctx.getRetryCount(), t.toString(), t);
                 } else {
                     if (ctx.getRetryCount() > 0) {
                         LOG.info("Metode {} avslutter vellykket retry etter {}. forsøk",
@@ -93,12 +92,12 @@ public class ApiConfiguration implements WebMvcConfigurer {
             }
 
             @Override
-            public <T, E extends Throwable> boolean open(RetryContext context, RetryCallback<T, E> callback) {
-                var labelField = ReflectionUtils.findField(callback.getClass(), "val$label");
+            public <T, E extends Throwable> boolean open(RetryContext ctx, RetryCallback<T, E> cb) {
+                var labelField = ReflectionUtils.findField(cb.getClass(), "val$label");
                 ReflectionUtils.makeAccessible(labelField);
-                String metode = (String) ReflectionUtils.getField(labelField, callback);
-                if (context.getRetryCount() > 0) {
-                    LOG.info("Metode {} gjør retry for {}. gang", metode, context.getRetryCount());
+                String metode = (String) ReflectionUtils.getField(labelField, cb);
+                if (ctx.getRetryCount() > 0) {
+                    LOG.info("Metode {} gjør retry for {}. gang", metode, ctx.getRetryCount());
                 } else {
                     LOG.info("Metode {} initierer retry", metode);
                 }
