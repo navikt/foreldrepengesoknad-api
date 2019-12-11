@@ -10,7 +10,7 @@ import no.nav.foreldrepenger.selvbetjening.tjeneste.AbstractConfig;
 
 @ConfigurationProperties(prefix = "no.nav.foreldrepenger.selvbetjening.api.virus")
 @ConstructorBinding
-class VirusScanConfig extends AbstractConfig {
+public class VirusScanConfig extends AbstractConfig {
 
     private static final String DEFAULT_CLAM_URI = "http://clamav.nais.svc.nais.local/scan";
 

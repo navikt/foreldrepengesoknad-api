@@ -4,16 +4,18 @@ import static no.nav.foreldrepenger.selvbetjening.config.ClusterAwareSpringProfi
 
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.boot.builder.SpringApplicationBuilder;
-import org.springframework.boot.context.properties.EnableConfigurationProperties;
+import org.springframework.boot.context.properties.ConfigurationPropertiesScan;
 import org.springframework.cache.annotation.EnableCaching;
 import org.springframework.retry.annotation.EnableRetry;
 
 import no.nav.security.token.support.spring.api.EnableJwtTokenValidation;
+import springfox.documentation.swagger2.annotations.EnableSwagger2;
 
 @SpringBootApplication
+@EnableSwagger2
 @EnableCaching
 @EnableRetry
-@EnableConfigurationProperties
+@ConfigurationPropertiesScan("no.nav.foreldrepenger.selvbetjening")
 @EnableJwtTokenValidation(ignore = { "org.springframework", "springfox.documentation" })
 public class ApiApplication {
 

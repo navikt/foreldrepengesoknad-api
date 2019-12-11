@@ -70,10 +70,10 @@ public class ApiConfiguration implements WebMvcConfigurer {
         List<RetryListener> listener = singletonList(new RetryListener() {
 
             @Override
-            public <T, E extends Throwable> void onError(RetryContext context, RetryCallback<T, E> cb,
+            public <T, E extends Throwable> void onError(RetryContext ctx, RetryCallback<T, E> cb,
                     Throwable throwable) {
                 LOG.warn("Metode {} kastet exception {} for {}. gang",
-                        context.getAttribute(NAME), throwable.toString(), context.getRetryCount());
+                        ctx.getAttribute(NAME), throwable.toString(), ctx.getRetryCount());
             }
 
             @Override

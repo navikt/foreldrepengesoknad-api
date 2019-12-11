@@ -45,7 +45,7 @@ public class ApiExceptionHandler extends ResponseEntityExceptionHandler {
 
     private static final Logger LOG = LoggerFactory.getLogger(ApiExceptionHandler.class);
 
-    @ExceptionHandler
+    @ExceptionHandler(NestedServletException.class)
     public ResponseEntity<Object> handleNestedServletException(NestedServletException e, HttpHeaders headers,
             WebRequest req) {
         Exception cause = cause(e.getCause());

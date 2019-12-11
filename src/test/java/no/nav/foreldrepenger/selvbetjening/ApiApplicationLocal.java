@@ -10,7 +10,7 @@ import static org.springframework.context.annotation.FilterType.ASSIGNABLE_TYPE;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.boot.builder.SpringApplicationBuilder;
-import org.springframework.boot.context.properties.EnableConfigurationProperties;
+import org.springframework.boot.context.properties.ConfigurationPropertiesScan;
 import org.springframework.cache.annotation.EnableCaching;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.ComponentScan;
@@ -29,7 +29,7 @@ import no.nav.security.token.support.test.spring.TokenGeneratorConfiguration;
 import springfox.documentation.swagger2.annotations.EnableSwagger2;
 
 @SpringBootApplication
-@EnableConfigurationProperties
+@ConfigurationPropertiesScan("no.nav.foreldrepenger.selvbetjening")
 @EnableCaching
 @EnableRetry
 @EnableSwagger2
