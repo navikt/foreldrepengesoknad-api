@@ -2,11 +2,13 @@ package no.nav.foreldrepenger.selvbetjening.tjeneste;
 
 import java.net.URI;
 
+import org.springframework.boot.context.properties.ConstructorBinding;
 import org.springframework.http.HttpHeaders;
 import org.springframework.web.util.UriComponentsBuilder;
 
 import no.nav.foreldrepenger.selvbetjening.util.Pair;
 
+@ConstructorBinding
 public abstract class AbstractConfig {
 
     protected abstract URI pingURI();

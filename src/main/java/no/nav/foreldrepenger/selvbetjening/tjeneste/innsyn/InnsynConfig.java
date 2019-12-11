@@ -3,12 +3,10 @@ package no.nav.foreldrepenger.selvbetjening.tjeneste.innsyn;
 import java.net.URI;
 
 import org.springframework.boot.context.properties.ConfigurationProperties;
-import org.springframework.boot.context.properties.ConstructorBinding;
 import org.springframework.boot.context.properties.bind.DefaultValue;
 
 import no.nav.foreldrepenger.selvbetjening.tjeneste.AbstractConfig;
 
-@ConstructorBinding
 @ConfigurationProperties(prefix = "innsyn", ignoreInvalidFields = false)
 public class InnsynConfig extends AbstractConfig {
 
