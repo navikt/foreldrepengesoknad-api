@@ -7,6 +7,7 @@ import org.springframework.boot.context.properties.bind.DefaultValue;
 
 import no.nav.foreldrepenger.selvbetjening.interceptors.client.ZoneCrossingAware;
 import no.nav.foreldrepenger.selvbetjening.tjeneste.AbstractConfig;
+import no.nav.foreldrepenger.selvbetjening.util.StringUtil;
 
 @ConfigurationProperties(prefix = "mottak")
 public class InnsendingConfig extends AbstractConfig implements ZoneCrossingAware {
@@ -55,6 +56,7 @@ public class InnsendingConfig extends AbstractConfig implements ZoneCrossingAwar
 
     @Override
     public String toString() {
-        return getClass().getSimpleName() + "[key=" + key + ", zoneCrossingUri()=" + zoneCrossingUri() + "]";
+        return getClass().getSimpleName() + "[key=" + StringUtil.limit(key, 3) + ", zoneCrossingUri()="
+                + zoneCrossingUri() + "]";
     }
 }
