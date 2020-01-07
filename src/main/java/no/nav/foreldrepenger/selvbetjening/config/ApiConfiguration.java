@@ -59,6 +59,7 @@ public class ApiConfiguration implements WebMvcConfigurer {
 
     @Bean
     public ClientHttpRequestInterceptor zoneCrossingAwareRequestInterceptor(ZoneCrossingAware... zoneCrossers) {
+        LOG.info("Registrerer zoneCrossers {}", Arrays.toString(zoneCrossers));
         var builder = ImmutableMap.<URI, String>builder();
         Arrays.stream(zoneCrossers)
                 .forEach(c -> builder.put(c.zoneCrossingUri(), c.getKey()));

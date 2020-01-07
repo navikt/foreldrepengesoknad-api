@@ -52,4 +52,9 @@ public class InnsendingConfig extends AbstractConfig implements ZoneCrossingAwar
     public URI zoneCrossingUri() {
         return getUri();
     }
+
+    @Override
+    public String toString() {
+        return getClass().getSimpleName() + "[key=" + key + ", zoneCrossingUri()=" + zoneCrossingUri() + "]";
+    }
 }

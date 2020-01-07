@@ -52,8 +52,7 @@ public class OppslagConfig extends AbstractConfig implements ZoneCrossingAware {
 
     @Override
     public String toString() {
-        return getClass().getSimpleName() + " [pingURI=" + pingURI() + ", personURI=" + personURI()
-                + ", søkerinfoURI=" + søkerInfoURI() + ", aktørIdURI=" + aktørIdURI("42") + "]";
+        return getClass().getSimpleName() + "[key=" + key + ", zoneCrossingUri()=" + zoneCrossingUri() + "]";
     }
 
 }

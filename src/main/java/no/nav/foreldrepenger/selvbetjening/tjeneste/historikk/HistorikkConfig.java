@@ -45,4 +45,9 @@ public class HistorikkConfig extends AbstractConfig implements ZoneCrossingAware
     public URI zoneCrossingUri() {
         return getUri();
     }
+
+    @Override
+    public String toString() {
+        return getClass().getSimpleName() + "[key=" + key + ", zoneCrossingUri()=" + zoneCrossingUri() + "]";
+    }
 }
