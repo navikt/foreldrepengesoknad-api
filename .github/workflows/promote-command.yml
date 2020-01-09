@@ -4,7 +4,7 @@ on:
     types: [promote-command]
 env:
   GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-  IMAGE_BASE: docker.pkg.github.com/${{ github.repository }}/foreldrepemngesoknad-api
+  IMAGE_BASE: docker.pkg.github.com/${{ github.repository }}/foreldrepengesoknad-api
       
 jobs:
   promote:
