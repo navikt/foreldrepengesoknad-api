@@ -1,6 +1,5 @@
 {
   "ingress": "https://foreldrepengesoknad-api-q.nav.no",
-  "application_name": "foreldrepengesoknad-api",
   "env": {
     "oppslag_uri": "https://api-gw-q1.oera.no/fpsoknad-oppslag/api/",
     "historikk_uri": "https://api-gw-q1.oera.no/fpinfo-historikk/api/",
