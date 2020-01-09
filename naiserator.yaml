@@ -32,7 +32,7 @@ spec:
       type: files
 {{/if}}  
 
-  image: {{image}}
+  image: {{version}}
   port: 8080
   replicas:
       min: 2
