@@ -8,7 +8,12 @@ metadata:
   namespace: default
 {{/if}} 
   labels:
+{{#if namespace}}
+    team: foreldrepenger
+{{else}}
     team: teamforeldrepenger
+{{/if}} 
+
 spec:
 {{#if namespace}}
   accessPolicy:
