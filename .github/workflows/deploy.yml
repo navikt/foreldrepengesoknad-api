@@ -53,8 +53,10 @@ jobs:
             Kommenter med <b>/promote ${{ env.TAG }} cluster</b>, hvor <b>cluster</b> er et gyldig clusternavn
             <table>
             <tr><th>Cluster</th></tr>
-            <tr><td>dev-fss</td></tr>
-            <tr><td>prod-fss</td></tr>
+            <tr><td>dev-sbs</td></tr>
+            <tr><td>dev-gcp</td></tr>
+            <tr><td>prod-gcp</td></tr>
+            <tr><td>prod-sbs</td></tr>
             </table>
       
       - name: Trigg deploy til dev-sbs
