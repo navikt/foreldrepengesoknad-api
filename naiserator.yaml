@@ -66,6 +66,7 @@ spec:
 {{else}} 
      enabled: true   
 {{/if}} 
+
   env: 
   {{#each env}}
    - name: {{@key}}
