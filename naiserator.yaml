@@ -67,10 +67,10 @@ spec:
 {{/if}} 
   env: 
   {{#each env}}
-   - name: {{@key}}
-     value: "{{this}}"
+    - name: {{@key}}
+      value: "{{this}}"
   {{/each}}
- {{#if namespace}}
+{{#if namespace}}
   webproxy: false
 {{else}}
   webproxy: true
