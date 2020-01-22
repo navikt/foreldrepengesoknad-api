@@ -20,11 +20,7 @@ jobs:
      
       - name: Hent tag    
         run: echo "::set-env name=TAG::$(git log -1 --pretty='%ad' --date=format:'%Y%m%d%H%M%S')-$(echo $GITHUB_SHA | cut -c1-7)"  
-             
-      - name: Hent maven version    
-        run: |
-          echo "::set-env name=MVN_VERSION::$(mvn help:evaluate -Dsha1=${TAG} -Dexpression=project.version -q -DforceStdout)"
-                  
+                
       - name: Hent Maven cache
         uses: actions/cache@v1
         with:
@@ -39,7 +35,7 @@ jobs:
     
       - name: Kompiler
         run: | 
-          mvn versions:set -DnewVersion=${MVN_VERSION}
+          mvn versions:set -DnewVersion=${TAG}
           echo "::set-env name=IMAGE::$IMAGE_BASE:$TAG" 
           mvn --quiet jacoco:prepare-agent install jacoco:report sonar:sonar  -e --batch-mode   -Dsonar.login=${SONAR} -Djacoco.destFile=$(pwd)/target/jacoco.exec
   #       mvn clean install --batch-mode --quiet 
@@ -56,8 +52,8 @@ jobs:
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }} 
         with:
-          tag_name: ${{ env.MVN_VERSION }}
-          release_name: Release ${{ env.MVN_VERSION }}
+          tag_name: ${{ env.TAG }}
+          release_name: Release ${{ env.TAG }}
           draft: false
           prerelease: false         
     
