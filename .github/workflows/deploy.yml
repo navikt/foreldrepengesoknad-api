@@ -20,6 +20,10 @@ jobs:
       - name: Hent tag    
         run: echo "::set-env name=TAG::$(git log -1 --pretty='%ad' --date=format:'%Y%m%d%H%M%S')-$(echo $GITHUB_SHA | cut -c1-7)"  
              
+      - name: Hent maven version    
+        run: |
+          echo "::set-env name=MVN_VERSION::$(mvn help:evaluate -Dsha1=${TAG} -Dexpression=project.version -q -DforceStdout)"
+                  
       - name: Hent Maven cache
         uses: actions/cache@v1
         with:
@@ -34,14 +38,27 @@ jobs:
     
       - name: Kompiler
         run: | 
+          mvn versions:set -DnewVersion=${MVN_VERSION}
           echo "::set-env name=IMAGE::$IMAGE_BASE:$TAG" 
-          mvn clean install --batch-mode --quiet 
+          mvn --quiet jacoco:prepare-agent install jacoco:report sonar:sonar  -e --batch-mode   -Dsonar.login=${SONAR} -Djacoco.destFile=$(pwd)/target/jacoco.exec
+  #       mvn clean install --batch-mode --quiet 
                    
       - name: Bygg, tag og push Docker image  
         run: |
           docker build --tag ${IMAGE} --tag ${IMAGE_BASE}:latest .
           echo  ${GITHUB_TOKEN} | docker login docker.pkg.github.com -u ${GITHUB_REPOSITORY} --password-stdin
-          docker push ${IMAGE_BASE}   
+          docker push ${IMAGE_BASE}  
+      
+      - name: Create Release
+        id: create_release
+        uses: actions/create-release@v1
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }} 
+        with:
+          tag_name: ${{ env.MVN_VERSION }}
+          release_name: Release ${{ env.MVN_VERSION }}
+          draft: false
+          prerelease: false         
     
       - name: Opprett deployment issue
         if: success()
