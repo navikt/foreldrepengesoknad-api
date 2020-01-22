@@ -5,6 +5,7 @@ on:
     branches:
       - master
 env:
+  SONAR: ${{ secrets.SONAR }}   
   GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
   CLUSTER: dev-sbs
   IMAGE_BASE: docker.pkg.github.com/${{ github.repository }}/foreldrepengesoknad-api
