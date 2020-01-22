@@ -87,11 +87,4 @@ jobs:
           issue-number: ${{ steps.createdeployissue.outputs.number }}
           body: /promote ${{ env.TAG }} ${{ env.CLUSTER }}
     
-      - name: Trigg deploy til dev-gcp
-        if: success()
-        uses: peter-evans/create-or-update-comment@v1
-        with:
-          token: ${{ secrets.NOTIFICATION }}
-          issue-number: ${{ steps.createdeployissue.outputs.number }}
-          body: /promote ${{ env.TAG }} dev-gcp
      
