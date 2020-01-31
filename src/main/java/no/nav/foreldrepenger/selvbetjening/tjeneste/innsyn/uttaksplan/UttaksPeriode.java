@@ -34,25 +34,29 @@ public class UttaksPeriode {
     private final Integer samtidigUttaksprosent;
     private final UttakArbeidType uttakArbeidType;
     private final ArbeidsgiverInfo arbeidsgiverInfo;
+    private final String periodeResultatÅrsak;
 
     public UttaksPeriode(@JsonProperty("oppholdAarsak") OppholdÅrsak oppholdAarsak,
-            @JsonProperty("overfoeringAarsak") OverføringÅrsak overfoeringAarsak,
-            @JsonProperty("graderingAvslagAarsak") GraderingAvslagÅrsak graderingAvslagAarsak,
-            @JsonProperty("utsettelsePeriodeType") UtsettelsePeriodeType utsettelsePeriodeType,
-            @JsonProperty("periodeResultatType") PeriodeResultatType periodeResultatType,
-            @JsonProperty("graderingInnvilget") Boolean graderingInnvilget,
-            @JsonProperty("samtidigUttak") Boolean samtidigUttak, @JsonProperty("fom") LocalDate fom,
-            @JsonProperty("tom") LocalDate tom,
-            @JsonProperty("stønadskontotype") @JsonAlias("trekkonto") StønadskontoType stønadskontotype,
-            @JsonProperty("trekkDager") Double trekkDager, @JsonProperty("arbeidstidprosent") Integer arbeidstidProsent,
-            @JsonProperty("utbetalingsprosent") Integer utbetalingsprosent,
-            @JsonProperty("gjelderAnnenPart") Boolean gjelderAnnenPart,
-            @JsonProperty("manueltBehandlet") Boolean manueltBehandlet,
-            @JsonProperty("samtidigUttaksprosent") Integer samtidigUttaksprosent,
-            @JsonProperty("morsAktivitet") MorsAktivitet morsAktivitet,
-            @JsonProperty("flerbarnsdager") Boolean flerbarnsdager,
-            @JsonProperty("uttakArbeidType") UttakArbeidType uttakArbeidType,
-            @JsonProperty("arbeidsgiverInfo") ArbeidsgiverInfo arbeidsgiverInfo) {
+                         @JsonProperty("overfoeringAarsak") OverføringÅrsak overfoeringAarsak,
+                         @JsonProperty("graderingAvslagAarsak") GraderingAvslagÅrsak graderingAvslagAarsak,
+                         @JsonProperty("utsettelsePeriodeType") UtsettelsePeriodeType utsettelsePeriodeType,
+                         @JsonProperty("periodeResultatType") PeriodeResultatType periodeResultatType,
+                         @JsonProperty("graderingInnvilget") Boolean graderingInnvilget,
+                         @JsonProperty("samtidigUttak") Boolean samtidigUttak,
+                         @JsonProperty("fom") LocalDate fom,
+                         @JsonProperty("tom") LocalDate tom,
+                         @JsonProperty("stønadskontotype") @JsonAlias("trekkonto") StønadskontoType stønadskontotype,
+                         @JsonProperty("trekkDager") Double trekkDager,
+                         @JsonProperty("arbeidstidprosent") Integer arbeidstidProsent,
+                         @JsonProperty("utbetalingsprosent") Integer utbetalingsprosent,
+                         @JsonProperty("gjelderAnnenPart") Boolean gjelderAnnenPart,
+                         @JsonProperty("manueltBehandlet") Boolean manueltBehandlet,
+                         @JsonProperty("samtidigUttaksprosent") Integer samtidigUttaksprosent,
+                         @JsonProperty("morsAktivitet") MorsAktivitet morsAktivitet,
+                         @JsonProperty("flerbarnsdager") Boolean flerbarnsdager,
+                         @JsonProperty("uttakArbeidType") UttakArbeidType uttakArbeidType,
+                         @JsonProperty("arbeidsgiverInfo") ArbeidsgiverInfo arbeidsgiverInfo,
+                         @JsonProperty("periodeResultatÅrsak") String periodeResultatÅrsak) {
         this.oppholdAarsak = oppholdAarsak;
         this.overfoeringAarsak = overfoeringAarsak;
         this.utsettelsePeriodeType = utsettelsePeriodeType;
@@ -61,6 +65,7 @@ public class UttaksPeriode {
         this.samtidigUttak = samtidigUttak;
         this.fom = fom;
         this.tom = tom;
+        this.periodeResultatÅrsak = periodeResultatÅrsak;
         this.periode = new LukketPeriode(fom, tom);
         this.stønadskontotype = stønadskontotype;
         this.trekkDager = trekkDager;
@@ -160,11 +165,15 @@ public class UttaksPeriode {
         return gjelderAnnenPart;
     }
 
+    public String getPeriodeResultatÅrsak() {
+        return periodeResultatÅrsak;
+    }
+
     @Override
     public int hashCode() {
         return Objects.hash(gjelderAnnenPart, utbetalingsprosent, arbeidstidProsent, trekkDager, stønadskontotype,
                 periode, samtidigUttak, graderingInnvilget, periodeResultatType, oppholdAarsak, overfoeringAarsak, fom,
-                tom, uttakArbeidType, arbeidsgiverInfo);
+                tom, uttakArbeidType, arbeidsgiverInfo, periodeResultatÅrsak);
     }
 
     @Override
@@ -187,6 +196,7 @@ public class UttaksPeriode {
                 && Objects.equals(this.tom, that.tom) && Objects.equals(this.fom, that.fom)
                 && Objects.equals(this.uttakArbeidType, that.uttakArbeidType)
                 && Objects.equals(this.arbeidsgiverInfo, that.arbeidsgiverInfo)
+                && Objects.equals(this.periodeResultatÅrsak, that.periodeResultatÅrsak)
                 && Objects.equals(this.graderingInnvilget, that.graderingInnvilget);
     }
 
@@ -197,7 +207,7 @@ public class UttaksPeriode {
                 + periodeResultatType + ", graderingInnvilget=" + graderingInnvilget + ", samtidigUttak="
                 + samtidigUttak + ", periode=" + periode + ", stønadskontotype=" + stønadskontotype + ", trekkDager="
                 + trekkDager + ", arbeidstidProsent=" + arbeidstidProsent + ", utbetalingsprosent=" + utbetalingsprosent
-                + ", gjelderAnnenPart=" + gjelderAnnenPart + ", uttakArbeidType=" + uttakArbeidType
+                + ", gjelderAnnenPart=" + gjelderAnnenPart + ", uttakArbeidType=" + uttakArbeidType  + ", periodeResultatÅrsak=" + periodeResultatÅrsak
                 + ", arbeidsgiverInfo=" + arbeidsgiverInfo + ", fom=" + fom + ", tom=" + tom + "]";
     }
 }
