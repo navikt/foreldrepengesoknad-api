@@ -6,6 +6,7 @@ import static org.apache.http.HttpStatus.SC_NOT_FOUND;
 import java.io.BufferedReader;
 import java.io.InputStreamReader;
 import java.net.URI;
+import java.util.List;
 import java.util.Optional;
 
 import org.slf4j.Logger;
@@ -14,6 +15,7 @@ import org.slf4j.LoggerFactory;
 import com.amazonaws.services.s3.AmazonS3;
 import com.amazonaws.services.s3.model.AmazonS3Exception;
 import com.amazonaws.services.s3.model.BucketLifecycleConfiguration;
+import com.amazonaws.services.s3.model.BucketLifecycleConfiguration.Rule;
 import com.amazonaws.services.s3.model.CannedAccessControlList;
 import com.amazonaws.services.s3.model.CreateBucketRequest;
 import com.amazonaws.services.s3.model.lifecycle.LifecycleFilter;
@@ -68,10 +70,17 @@ public class S3Mellomlagring extends AbstractMellomlagringTjeneste {
         LOG.info("Validerer bøtte {}", bøtte);
         if (s3.doesBucketExistV2(bøtte.getNavn())) {
             LOG.info("Bøtte {} eksisterer", bøtte);
+            visRegler(s3.getBucketLifecycleConfiguration(bøtte.getNavn()).getRules());
         } else {
             LOG.info("Bøtte {} eksisterer ikke", bøtte);
             lagBøtte(bøtte);
         }
+    }
+
+    private static void visRegler(List<Rule> rules) {
+        rules.stream()
+                .forEach(r -> LOG.info("Regel har expiry om {} dager", r.getExpirationInDays()));
+
     }
 
     private void lagBøtte(Bøtte bøtte) {
