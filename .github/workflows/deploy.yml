@@ -5,6 +5,8 @@ on:
     branches:
       - master
 env:
+  GITHUB_USERNAME: x-access-token
+  GITHUB_PASSWORD: ${{ secrets.GITHUB_TOKEN }}
   SONAR: ${{ secrets.SONAR }}   
   GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
   CLUSTER: dev-sbs
@@ -37,7 +39,7 @@ jobs:
         run: | 
           mvn versions:set -DnewVersion=${TAG}
           echo "::set-env name=IMAGE::$IMAGE_BASE:$TAG" 
-          mvn --quiet jacoco:prepare-agent install jacoco:report sonar:sonar  -e --batch-mode   -Dsonar.login=${SONAR} -Djacoco.destFile=$(pwd)/target/jacoco.exec
+          mvn --settings ./.m2/settings.xml  --quiet jacoco:prepare-agent install jacoco:report sonar:sonar  -e --batch-mode   -Dsonar.login=${SONAR} -Djacoco.destFile=$(pwd)/target/jacoco.exec
   #       mvn clean install --batch-mode --quiet 
                    
       - name: Bygg, tag og push Docker image  
@@ -46,17 +48,6 @@ jobs:
           echo  ${GITHUB_TOKEN} | docker login docker.pkg.github.com -u ${GITHUB_REPOSITORY} --password-stdin
           docker push ${IMAGE_BASE}  
       
-      - name: Create Release
-        id: create_release
-        uses: actions/create-release@v1
-        env:
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }} 
-        with:
-          tag_name: ${{ env.TAG }}
-          release_name: Release ${{ env.TAG }}
-          draft: false
-          prerelease: false         
-    
       - name: Opprett deployment issue
         if: success()
         uses: maxkomarychev/oction-create-issue@v0.7.1
