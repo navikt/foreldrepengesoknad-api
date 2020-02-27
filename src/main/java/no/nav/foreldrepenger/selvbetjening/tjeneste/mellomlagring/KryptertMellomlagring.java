@@ -2,7 +2,7 @@ package no.nav.foreldrepenger.selvbetjening.tjeneste.mellomlagring;
 
 import static no.nav.foreldrepenger.selvbetjening.tjeneste.mellomlagring.MellomlagringType.KORTTIDS;
 import static no.nav.foreldrepenger.selvbetjening.tjeneste.mellomlagring.MellomlagringType.LANGTIDS;
-import static no.nav.foreldrepenger.selvbetjening.util.EnvUtil.CONFIDENTIAL;
+import static no.nav.foreldrepenger.selvbetjening.util.MDCUtil.CONFIDENTIAL;
 
 import java.util.Optional;
 

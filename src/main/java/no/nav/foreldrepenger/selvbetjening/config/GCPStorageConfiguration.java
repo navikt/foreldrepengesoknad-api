@@ -11,10 +11,10 @@ import org.threeten.bp.Duration;
 
 import com.google.api.gax.retrying.RetrySettings;
 
+import no.nav.foreldrepenger.boot.conditionals.ConditionalOnGCP;
 import no.nav.foreldrepenger.selvbetjening.tjeneste.mellomlagring.Bøtte;
 import no.nav.foreldrepenger.selvbetjening.tjeneste.mellomlagring.GCPMellomlagring;
 import no.nav.foreldrepenger.selvbetjening.tjeneste.mellomlagring.Mellomlagring;
-import no.nav.foreldrepenger.selvbetjening.util.conditionals.ConditionalOnGCP;
 
 @Configuration
 @ConditionalOnGCP

@@ -1,6 +1,6 @@
 package no.nav.foreldrepenger.selvbetjening.tjeneste.historikk;
 
-import static no.nav.foreldrepenger.selvbetjening.util.EnvUtil.isDevOrLocal;
+import static no.nav.foreldrepenger.boot.conditionals.EnvUtil.isDevOrLocal;
 
 import java.util.List;
 

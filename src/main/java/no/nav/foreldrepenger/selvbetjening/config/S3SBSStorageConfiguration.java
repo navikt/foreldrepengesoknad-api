@@ -15,10 +15,10 @@ import com.amazonaws.retry.RetryPolicy;
 import com.amazonaws.services.s3.AmazonS3;
 import com.amazonaws.services.s3.AmazonS3ClientBuilder;
 
+import no.nav.foreldrepenger.boot.conditionals.ConditionalOnSBS;
 import no.nav.foreldrepenger.selvbetjening.tjeneste.mellomlagring.Bøtte;
 import no.nav.foreldrepenger.selvbetjening.tjeneste.mellomlagring.Mellomlagring;
 import no.nav.foreldrepenger.selvbetjening.tjeneste.mellomlagring.S3Mellomlagring;
-import no.nav.foreldrepenger.selvbetjening.util.conditionals.ConditionalOnSBS;
 
 @Configuration
 @ConditionalOnSBS

@@ -1,8 +1,8 @@
 package no.nav.foreldrepenger.selvbetjening.filters;
 
+import static no.nav.foreldrepenger.boot.conditionals.EnvUtil.isDevOrLocal;
 import static no.nav.foreldrepenger.selvbetjening.util.Constants.NAV_TOKEN_EXPIRY_ID;
 import static no.nav.foreldrepenger.selvbetjening.util.Constants.NAV_USER_ID;
-import static no.nav.foreldrepenger.selvbetjening.util.EnvUtil.isDevOrLocal;
 import static no.nav.foreldrepenger.selvbetjening.util.MDCUtil.toMDC;
 import static org.springframework.core.Ordered.HIGHEST_PRECEDENCE;
 

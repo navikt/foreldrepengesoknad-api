@@ -1,10 +1,10 @@
 package no.nav.foreldrepenger.selvbetjening;
 
+import static no.nav.foreldrepenger.boot.conditionals.EnvUtil.LOCAL;
 import static no.nav.foreldrepenger.selvbetjening.config.ClusterAwareSpringProfileResolver.profiles;
 import static no.nav.foreldrepenger.selvbetjening.tjeneste.mellomlagring.Bøtte.SØKNAD;
 import static no.nav.foreldrepenger.selvbetjening.tjeneste.mellomlagring.Bøtte.TMP;
 import static no.nav.foreldrepenger.selvbetjening.util.Constants.NAIS_CLUSTER_NAME;
-import static no.nav.foreldrepenger.selvbetjening.util.EnvUtil.LOCAL;
 import static org.springframework.context.annotation.FilterType.ASSIGNABLE_TYPE;
 
 import org.springframework.beans.factory.annotation.Qualifier;
@@ -20,10 +20,10 @@ import org.springframework.retry.annotation.EnableRetry;
 
 import com.google.common.base.Joiner;
 
+import no.nav.foreldrepenger.boot.conditionals.ConditionalOnLocal;
 import no.nav.foreldrepenger.selvbetjening.stub.InMemoryMellomlagring;
 import no.nav.foreldrepenger.selvbetjening.tjeneste.mellomlagring.Bøtte;
 import no.nav.foreldrepenger.selvbetjening.tjeneste.mellomlagring.Mellomlagring;
-import no.nav.foreldrepenger.selvbetjening.util.conditionals.ConditionalOnLocal;
 import no.nav.security.token.support.spring.api.EnableJwtTokenValidation;
 import no.nav.security.token.support.test.spring.TokenGeneratorConfiguration;
 import springfox.documentation.swagger2.annotations.EnableSwagger2;

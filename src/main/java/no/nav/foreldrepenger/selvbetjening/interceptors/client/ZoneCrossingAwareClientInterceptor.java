@@ -14,7 +14,7 @@ import org.springframework.http.client.ClientHttpRequestExecution;
 import org.springframework.http.client.ClientHttpRequestInterceptor;
 import org.springframework.http.client.ClientHttpResponse;
 
-import no.nav.foreldrepenger.selvbetjening.util.EnvUtil;
+import no.nav.foreldrepenger.selvbetjening.util.MDCUtil;
 
 public class ZoneCrossingAwareClientInterceptor implements ClientHttpRequestInterceptor {
 
@@ -24,7 +24,7 @@ public class ZoneCrossingAwareClientInterceptor implements ClientHttpRequestInte
 
     public ZoneCrossingAwareClientInterceptor(Map<URI, String> apiKeys) {
         this.apiKeys = apiKeys;
-        LOG.info(EnvUtil.CONFIDENTIAL, "apiKeys {}", apiKeys);
+        LOG.info(MDCUtil.CONFIDENTIAL, "apiKeys {}", apiKeys);
     }
 
     @Override

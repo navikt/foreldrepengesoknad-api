@@ -31,7 +31,6 @@ import no.nav.foreldrepenger.selvbetjening.error.UnexpectedInputException;
 import no.nav.foreldrepenger.selvbetjening.tjeneste.innsending.domain.Søknad;
 import no.nav.foreldrepenger.selvbetjening.tjeneste.mellomlagring.KryptertMellomlagring;
 import no.nav.foreldrepenger.selvbetjening.tjeneste.virusscan.VirusScanner;
-import no.nav.foreldrepenger.selvbetjening.util.EnvUtil;
 import no.nav.foreldrepenger.selvbetjening.util.TokenUtil;
 import no.nav.foreldrepenger.selvbetjening.vedlegg.Image2PDFConverter;
 import no.nav.foreldrepenger.selvbetjening.vedlegg.PDFEncryptionChecker;
@@ -44,7 +43,7 @@ import no.nav.security.token.support.spring.SpringTokenValidationContextHolder;
         TokenUtil.class, SpringTokenValidationContextHolder.class })
 @RestClientTest
 
-@ActiveProfiles(EnvUtil.TEST)
+@ActiveProfiles("test")
 public class InnsendingTest {
 
     private static final DataSize MAX_TOTAL = DataSize.of(32, DataUnit.MEGABYTES);

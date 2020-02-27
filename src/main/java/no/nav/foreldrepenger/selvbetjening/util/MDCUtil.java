@@ -5,8 +5,13 @@ import static no.nav.foreldrepenger.selvbetjening.util.Constants.NAV_CALL_ID;
 import java.util.Optional;
 
 import org.slf4j.MDC;
+import org.slf4j.Marker;
+import org.slf4j.MarkerFactory;
 
 public final class MDCUtil {
+
+    public static final Marker CONFIDENTIAL = MarkerFactory.getMarker("CONFIDENTIAL");
+
     private MDCUtil() {
 
     }

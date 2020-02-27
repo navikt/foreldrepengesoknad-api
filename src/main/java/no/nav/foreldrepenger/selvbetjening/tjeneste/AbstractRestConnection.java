@@ -1,6 +1,6 @@
 package no.nav.foreldrepenger.selvbetjening.tjeneste;
 
-import static no.nav.foreldrepenger.selvbetjening.util.EnvUtil.CONFIDENTIAL;
+import static no.nav.foreldrepenger.selvbetjening.util.MDCUtil.CONFIDENTIAL;
 import static org.springframework.http.HttpStatus.NOT_FOUND;
 
 import java.net.URI;

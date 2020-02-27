@@ -2,7 +2,7 @@ package no.nav.foreldrepenger.selvbetjening.tjeneste.innsending;
 
 import static no.nav.foreldrepenger.selvbetjening.tjeneste.innsending.InnsendingController.REST_SOKNAD;
 import static no.nav.foreldrepenger.selvbetjening.util.Constants.ISSUER;
-import static no.nav.foreldrepenger.selvbetjening.util.EnvUtil.CONFIDENTIAL;
+import static no.nav.foreldrepenger.selvbetjening.util.MDCUtil.CONFIDENTIAL;
 import static org.springframework.http.MediaType.APPLICATION_JSON_VALUE;
 
 import org.slf4j.Logger;

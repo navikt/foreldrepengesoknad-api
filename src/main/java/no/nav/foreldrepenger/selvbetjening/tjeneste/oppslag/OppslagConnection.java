@@ -1,6 +1,6 @@
 package no.nav.foreldrepenger.selvbetjening.tjeneste.oppslag;
 
-import static no.nav.foreldrepenger.selvbetjening.util.EnvUtil.CONFIDENTIAL;
+import static no.nav.foreldrepenger.selvbetjening.util.MDCUtil.CONFIDENTIAL;
 
 import java.net.URI;
 
