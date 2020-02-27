@@ -129,7 +129,7 @@ public class OpptjeningDto {
             TilknyttetPerson regnskapsfører = selvstendig.getRegnskapsfører();
             TilknyttetPerson revisor = selvstendig.getRevisor();
 
-            LocalDate sisteDagIFjor = now().minusYears(4).with(lastDayOfYear);
+            LocalDate sisteDagIFjor = now().minusYears(4).with(lastDayOfYear());
 
             this.type = selvstendig.getRegistrertINorge() ? "norsk" : "utenlandsk";
             this.stillingsprosent = selvstendig.getStillingsprosent();
