@@ -2,6 +2,7 @@ package no.nav.foreldrepenger.selvbetjening.tjeneste.innsending.dto;
 
 import static com.fasterxml.jackson.annotation.JsonInclude.Include.NON_EMPTY;
 import static java.time.LocalDate.now;
+import static java.time.temporal.TemporalAdjusters.lastDayOfYear;
 
 import java.time.LocalDate;
 import java.time.Period;
@@ -128,7 +129,7 @@ public class OpptjeningDto {
             TilknyttetPerson regnskapsfører = selvstendig.getRegnskapsfører();
             TilknyttetPerson revisor = selvstendig.getRevisor();
 
-            LocalDate fireÅrSiden = now().minusYears(4);
+            LocalDate sisteDagIFjor = now().minusYears(4).with(lastDayOfYear);
 
             this.type = selvstendig.getRegistrertINorge() ? "norsk" : "utenlandsk";
             this.stillingsprosent = selvstendig.getStillingsprosent();
@@ -138,7 +139,7 @@ public class OpptjeningDto {
             this.periode.tom = selvstendig.getTidsperiode().getTom();
             this.registrertILand = selvstendig.getRegistrertILand();
             this.erNyIArbeidslivet = selvstendig.getHarBlittYrkesaktivILøpetAvDeTreSisteFerdigliknedeÅrene();
-            this.erNyOpprettet = this.periode.fom.isAfter(fireÅrSiden.minusDays(1));
+            this.erNyOpprettet = this.periode.fom.isAfter(sisteDagIFjor.minusDays(1));
             this.erVarigEndring = selvstendig.getHattVarigEndringAvNæringsinntektSiste4Kalenderår();
             this.vedlegg = selvstendig.getVedlegg();
             this.virksomhetsTyper.addAll(selvstendig.getNæringstyper());
