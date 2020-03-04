@@ -1,22 +1,22 @@
 package no.nav.foreldrepenger.selvbetjening.tjeneste.innsending.pdf;
 
-import java.io.ByteArrayOutputStream;
-
+import no.nav.foreldrepenger.selvbetjening.error.UnexpectedInputException;
+import no.nav.foreldrepenger.selvbetjening.tjeneste.innsending.domain.tilbakebetaling.TilbakebetalingUttalelse;
 import org.apache.pdfbox.pdmodel.PDDocument;
 import org.apache.pdfbox.pdmodel.PDPage;
 import org.apache.pdfbox.pdmodel.PDPageContentStream;
 import org.apache.pdfbox.pdmodel.font.PDType1Font;
+import org.springframework.boot.autoconfigure.condition.ConditionalOnProperty;
 import org.springframework.stereotype.Component;
 
-import no.nav.foreldrepenger.selvbetjening.error.UnexpectedInputException;
+import java.io.ByteArrayOutputStream;
 
-@Component
-public class PDFGenerator {
+public class PdfGeneratorStub implements PdfGenerator {
 
     public byte[] generate(String overskrift, String tekst) {
 
         try (PDDocument document = new PDDocument();
-                ByteArrayOutputStream baos = new ByteArrayOutputStream()) {
+             ByteArrayOutputStream baos = new ByteArrayOutputStream()) {
 
             PDPage page = new PDPage();
             document.addPage(page);
@@ -34,4 +34,11 @@ public class PDFGenerator {
             throw new UnexpectedInputException("Kunne ikke lage PDF", e);
         }
     }
+
+    @Override
+    public byte[] generate(TilbakebetalingUttalelse uttalelse) {
+        return generate("Stubbet test", uttalelse.getBrukerTekst().getTekst());
+    }
 }
+
+
