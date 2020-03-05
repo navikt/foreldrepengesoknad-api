@@ -21,8 +21,8 @@ import org.springframework.retry.annotation.EnableRetry;
 import com.google.common.base.Joiner;
 
 import no.nav.foreldrepenger.boot.conditionals.ConditionalOnLocal;
-import no.nav.foreldrepenger.selvbetjening.stub.InMemoryMellomlagring;
 import no.nav.foreldrepenger.selvbetjening.tjeneste.mellomlagring.Bøtte;
+import no.nav.foreldrepenger.selvbetjening.tjeneste.mellomlagring.InMemoryMellomlagring;
 import no.nav.foreldrepenger.selvbetjening.tjeneste.mellomlagring.Mellomlagring;
 import no.nav.security.token.support.spring.api.EnableJwtTokenValidation;
 import no.nav.security.token.support.test.spring.TokenGeneratorConfiguration;

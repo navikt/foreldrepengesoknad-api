@@ -9,20 +9,27 @@ import static no.nav.foreldrepenger.selvbetjening.util.Constants.NAIS_CLUSTER_NA
 
 import java.util.Optional;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
 public class ClusterAwareSpringProfileResolver {
+
+    private static final Logger LOG = LoggerFactory.getLogger(ClusterAwareSpringProfileResolver.class);
 
     private ClusterAwareSpringProfileResolver() {
 
     }
 
     public static String[] profiles() {
-        return Optional.ofNullable(clusterFra(getenv(NAIS_CLUSTER_NAME)))
+        return Optional.ofNullable(profilFra(getenv(NAIS_CLUSTER_NAME)))
                 .map(c -> new String[] { c })
                 .orElse(new String[0]);
     }
 
-    private static String clusterFra(String cluster) {
+    private static String profilFra(String cluster) {
         if (cluster == null) {
+            LOG.info("NAIS cluster ikke detektert, antar {}", LOCAL);
+            System.setProperty(NAIS_CLUSTER_NAME, LOCAL);
             return LOCAL;
         }
         if (cluster.equals(DEV_SBS)) {

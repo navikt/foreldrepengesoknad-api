@@ -1,14 +1,16 @@
-package no.nav.foreldrepenger.selvbetjening.stub;
+package no.nav.foreldrepenger.selvbetjening.tjeneste.mellomlagring;
 
 import java.net.URI;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.Optional;
 
-import no.nav.foreldrepenger.selvbetjening.tjeneste.mellomlagring.AbstractMellomlagringTjeneste;
-import no.nav.foreldrepenger.selvbetjening.tjeneste.mellomlagring.Bøtte;
-import no.nav.foreldrepenger.selvbetjening.tjeneste.mellomlagring.MellomlagringType;
+import org.springframework.stereotype.Service;
 
+import no.nav.foreldrepenger.boot.conditionals.ConditionalOnLocal;
+
+@Service
+@ConditionalOnLocal
 public class InMemoryMellomlagring extends AbstractMellomlagringTjeneste {
 
     private final Map<String, String> store;

@@ -19,7 +19,6 @@ import org.springframework.util.unit.DataSize;
 
 import com.google.gson.Gson;
 
-import no.nav.foreldrepenger.selvbetjening.stub.InMemoryMellomlagring;
 import no.nav.foreldrepenger.selvbetjening.tjeneste.innsending.domain.Kvittering;
 import no.nav.foreldrepenger.selvbetjening.tjeneste.innsending.pdf.PDFGenerator;
 import no.nav.foreldrepenger.selvbetjening.tjeneste.virusscan.VirusScanner;
