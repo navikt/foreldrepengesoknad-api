@@ -41,7 +41,7 @@
         <aws.version>1.11.739</aws.version>
         <jacoco.version>0.8.5</jacoco.version>
         <gcp.version>0.122.3-alpha</gcp.version>
-        <spring.cloud.vault.version>2.2.1.RELEASE</spring.cloud.vault.version>
+        <spring.cloud.vault.version>2.2.2.RELEASE</spring.cloud.vault.version>
         <simpleclient.version>0.8.1</simpleclient.version>
     </properties>
     <dependencyManagement>
