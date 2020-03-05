@@ -12,6 +12,15 @@ import org.springframework.context.annotation.ComponentScan.Filter;
 import org.springframework.context.annotation.Import;
 import org.springframework.retry.annotation.EnableRetry;
 
+<<<<<<< master
+=======
+import com.google.common.base.Joiner;
+
+import no.nav.foreldrepenger.boot.conditionals.ConditionalOnLocal;
+import no.nav.foreldrepenger.selvbetjening.tjeneste.mellomlagring.Bøtte;
+import no.nav.foreldrepenger.selvbetjening.tjeneste.mellomlagring.InMemoryMellomlagring;
+import no.nav.foreldrepenger.selvbetjening.tjeneste.mellomlagring.Mellomlagring;
+>>>>>>> d1fd397 sett local cluster hvis ikke NAIS
 import no.nav.security.token.support.spring.api.EnableJwtTokenValidation;
 import no.nav.security.token.support.test.spring.TokenGeneratorConfiguration;
 import springfox.documentation.swagger2.annotations.EnableSwagger2;
