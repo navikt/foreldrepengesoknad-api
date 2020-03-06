@@ -34,7 +34,7 @@ public class PdfGeneratorTjeneste implements PdfGenerator {
             person.getSøker().fnr,
             uttalelse.getSaksnummer(),
             uttalelse.getType(),
-            LocalDate.now().format(DateTimeFormatter.BASIC_ISO_DATE),
+            LocalDate.now().format(DateTimeFormatter.ISO_DATE_TIME),
             uttalelse.getBrukerTekst().getTekst());
     }
 
