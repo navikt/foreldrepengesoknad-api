@@ -4,7 +4,6 @@ import no.nav.foreldrepenger.selvbetjening.tjeneste.innsending.domain.tilbakebet
 import no.nav.foreldrepenger.selvbetjening.tjeneste.oppslag.OppslagTjeneste;
 import no.nav.foreldrepenger.selvbetjening.tjeneste.oppslag.domain.Person;
 import no.nav.foreldrepenger.selvbetjening.tjeneste.oppslag.domain.Søkerinfo;
-import org.springframework.boot.autoconfigure.condition.ConditionalOnProperty;
 import org.springframework.stereotype.Component;
 
 import java.time.LocalDate;
