@@ -6,7 +6,7 @@ import no.nav.foreldrepenger.selvbetjening.tjeneste.oppslag.domain.Person;
 import no.nav.foreldrepenger.selvbetjening.tjeneste.oppslag.domain.Søkerinfo;
 import org.springframework.stereotype.Component;
 
-import java.time.LocalDate;
+import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 import java.util.Objects;
 import java.util.stream.Collectors;
@@ -34,7 +34,7 @@ public class PdfGeneratorTjeneste implements PdfGenerator {
             person.getSøker().fnr,
             uttalelse.getSaksnummer(),
             uttalelse.getType(),
-            LocalDate.now().format(DateTimeFormatter.ISO_DATE_TIME),
+            LocalDateTime.now().format(DateTimeFormatter.ISO_DATE_TIME),
             uttalelse.getBrukerTekst().getTekst());
     }
 
