@@ -5,41 +5,41 @@ management :
      web:
        exposure:
          include:  '*'
-   endpoint:
+   endpoint: 
      health:
        show-details : always
-no.nav.security.jwt:
-  issuer.selvbetjening :
+no.nav.security.jwt: 
+  issuer.selvbetjening : 
      discoveryurl: http://metadata
      accepted_audience: aud-localhost
      cookie_name: localhost-idtoken
-
+     
 spring :
    http:
-     log-request-details : true
+     log-request-details : true      
 
 no.nav:
   foreldrepenger:
     selvbetjening:
       api:
         virus:
-          enabled : false
-
+          enabled : false 
+ 
 historikk :
   key: foreldrepengesoknad-api-historikk
   uri: http://localhost:9000/api
   enabled: false
-
+   
 mottak:
   key: foreldrepengesoknad-api-mottak
   uri: http://localhost:9000/api/mottak
   enabled: false
-
+     
 oppslag:
   key: foreldrepengesoknad-ap-oppslag
   uri: http://localhost:9000/api/oppslag
   enabled: false
-
+  
 minidialog:
   uri: http://localhost:9000/api
   enabled: false
@@ -47,14 +47,10 @@ innsyn:
   oppslag:  http://localhost:9000/api/oppslag
   mottak:  http://localhost:9000/api/mottak
   enabled: false
-
-s3 :
+   
+s3 : 
   username : user
   password : pwd
   url : some.host.somewhere
 storage :
   passphrase: tullogtøys
-
-pdfgenerator:
-    uri: http://localhost:8080/api/v1/genpdf
-    enabled: false
