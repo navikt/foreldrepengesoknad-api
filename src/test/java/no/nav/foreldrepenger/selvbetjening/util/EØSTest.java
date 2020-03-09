@@ -23,4 +23,5 @@ public class EØSTest {
     public void testNull() {
         assertFalse(IkkeNordiskEØSLand.ikkeNordiskEøsLand(null));
     }
+
 }
