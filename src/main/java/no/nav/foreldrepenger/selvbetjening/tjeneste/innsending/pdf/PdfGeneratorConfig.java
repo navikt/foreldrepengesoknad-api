@@ -12,7 +12,7 @@ public class PdfGeneratorConfig extends AbstractConfig {
     private static final String TILBAKEBETALING_UTTALELSE = "tilbakebetaling/uttalelse";
     private static final String PING = "/is_alive";
 
-    public PdfGeneratorConfig(URI uri, @DefaultValue("true") boolean enabled) {
+    public PdfGeneratorConfig(URI uri, @DefaultValue("false") boolean enabled) {
         super(uri, enabled);
     }
 

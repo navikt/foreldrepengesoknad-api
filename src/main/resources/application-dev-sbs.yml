@@ -1,6 +1,6 @@
 allowed.origins:
     https://engangsstonad.nais.oera-q.local,
-    https://engangsstonad-q.nav.no, 
+    https://engangsstonad-q.nav.no,
     https://foreldrepengesoknad.nais.oera-q.local,
     https://foreldrepengesoknad-q.nav.no,
     https://foreldrepengeoversikt.nais.oera-q.local,
@@ -17,8 +17,10 @@ management:
    endpoint :
       health:
         show-details : always
-      
+
 spring :
     http:
-      log-request-details : true      
-                      
+      log-request-details : true
+
+pdfgenerator:
+    enabled: true

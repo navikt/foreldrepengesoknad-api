@@ -26,15 +26,15 @@ management:
         server:
            request:
              autotime:
-                 enabled: true                
+                 enabled: true
    health :
       refresh:
          enabled: false
       diskspace:
          enabled: false
    endpoint:
-      health:    
-         show-details : never  
+      health:
+         show-details : never
    endpoints:
       web:
          exposure:
