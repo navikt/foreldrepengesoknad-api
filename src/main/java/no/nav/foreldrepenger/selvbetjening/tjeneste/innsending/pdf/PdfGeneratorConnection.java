@@ -1,15 +1,18 @@
 package no.nav.foreldrepenger.selvbetjening.tjeneste.innsending.pdf;
 
-import com.fasterxml.jackson.core.JsonProcessingException;
-import com.fasterxml.jackson.databind.ObjectMapper;
-import no.nav.foreldrepenger.selvbetjening.tjeneste.AbstractRestConnection;
+import java.net.URI;
+
+import javax.inject.Inject;
+
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Component;
 import org.springframework.web.client.RestOperations;
 
-import javax.inject.Inject;
-import java.net.URI;
+import com.fasterxml.jackson.core.JsonProcessingException;
+import com.fasterxml.jackson.databind.ObjectMapper;
+
+import no.nav.foreldrepenger.selvbetjening.tjeneste.AbstractRestConnection;
 
 @Component
 public class PdfGeneratorConnection extends AbstractRestConnection {
@@ -54,5 +57,10 @@ public class PdfGeneratorConnection extends AbstractRestConnection {
         } catch (JsonProcessingException e) {
 
         }
+    }
+
+    @Override
+    public String toString() {
+        return getClass().getSimpleName() + "[config=" + config + "]";
     }
 }

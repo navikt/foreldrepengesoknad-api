@@ -1,16 +1,17 @@
 package no.nav.foreldrepenger.selvbetjening.tjeneste.innsending.pdf;
 
-import no.nav.foreldrepenger.selvbetjening.tjeneste.innsending.domain.tilbakebetaling.TilbakebetalingUttalelse;
-import no.nav.foreldrepenger.selvbetjening.tjeneste.oppslag.OppslagTjeneste;
-import no.nav.foreldrepenger.selvbetjening.tjeneste.oppslag.domain.Person;
-import no.nav.foreldrepenger.selvbetjening.tjeneste.oppslag.domain.Søkerinfo;
-import org.springframework.stereotype.Component;
-
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 import java.util.Objects;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
+
+import org.springframework.stereotype.Component;
+
+import no.nav.foreldrepenger.selvbetjening.tjeneste.innsending.domain.tilbakebetaling.TilbakebetalingUttalelse;
+import no.nav.foreldrepenger.selvbetjening.tjeneste.oppslag.OppslagTjeneste;
+import no.nav.foreldrepenger.selvbetjening.tjeneste.oppslag.domain.Person;
+import no.nav.foreldrepenger.selvbetjening.tjeneste.oppslag.domain.Søkerinfo;
 
 @Component
 public class PdfGeneratorTjeneste implements PdfGenerator {
@@ -31,17 +32,22 @@ public class PdfGeneratorTjeneste implements PdfGenerator {
     private TilbakebetalingUttalelseDto fra(TilbakebetalingUttalelse uttalelse) {
         Søkerinfo person = oppslagTjeneste.hentSøkerinfo();
         return new TilbakebetalingUttalelseDto(fulltnavn(person.getSøker()),
-            person.getSøker().fnr,
-            uttalelse.getSaksnummer(),
-            uttalelse.getType(),
-            LocalDateTime.now().format(DateTimeFormatter.ISO_DATE_TIME),
-            uttalelse.getBrukerTekst().getTekst());
+                person.getSøker().fnr,
+                uttalelse.getSaksnummer(),
+                uttalelse.getType(),
+                LocalDateTime.now().format(DateTimeFormatter.ISO_DATE_TIME),
+                uttalelse.getBrukerTekst().getTekst());
     }
 
     private String fulltnavn(Person person) {
         return Stream.of(person.fornavn, person.mellomnavn, person.etternavn)
-            .filter(Objects::nonNull)
-            .filter(s -> !s.isBlank())
-            .collect(Collectors.joining(" "));
+                .filter(Objects::nonNull)
+                .filter(s -> !s.isBlank())
+                .collect(Collectors.joining(" "));
+    }
+
+    @Override
+    public String toString() {
+        return getClass().getSimpleName() + "[connection=" + connection + ", oppslagTjeneste=" + oppslagTjeneste + "]";
     }
 }

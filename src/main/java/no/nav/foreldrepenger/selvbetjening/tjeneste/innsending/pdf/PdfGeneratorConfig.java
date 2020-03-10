@@ -1,10 +1,11 @@
 package no.nav.foreldrepenger.selvbetjening.tjeneste.innsending.pdf;
 
-import no.nav.foreldrepenger.selvbetjening.tjeneste.AbstractConfig;
+import java.net.URI;
+
 import org.springframework.boot.context.properties.ConfigurationProperties;
 import org.springframework.boot.context.properties.bind.DefaultValue;
 
-import java.net.URI;
+import no.nav.foreldrepenger.selvbetjening.tjeneste.AbstractConfig;
 
 @ConfigurationProperties(prefix = "pdfgenerator")
 public class PdfGeneratorConfig extends AbstractConfig {
@@ -23,5 +24,11 @@ public class PdfGeneratorConfig extends AbstractConfig {
 
     URI tilbakebetalingURI() {
         return uri(getUri(), TILBAKEBETALING_UTTALELSE);
+    }
+
+    @Override
+    public String toString() {
+        return getClass().getSimpleName() + "[pingURI=" + pingURI() + ", tilbakebetalingURI="
+                + tilbakebetalingURI() + "]";
     }
 }
