@@ -17,7 +17,7 @@ import no.nav.foreldrepenger.selvbetjening.tjeneste.innsending.domain.arbeid.Fri
 import no.nav.foreldrepenger.selvbetjening.tjeneste.innsending.domain.arbeid.NæringsinntektInformasjon;
 import no.nav.foreldrepenger.selvbetjening.tjeneste.innsending.domain.arbeid.SelvstendigNæringsdrivendeInformasjon;
 import no.nav.foreldrepenger.selvbetjening.tjeneste.innsending.domain.arbeid.TilknyttetPerson;
-import no.nav.foreldrepenger.selvbetjening.util.TimeUtil;
+import no.nav.foreldrepenger.selvbetjening.util.DateUtil;
 
 @JsonInclude(NON_EMPTY)
 public class OpptjeningDto {
@@ -137,7 +137,7 @@ public class OpptjeningDto {
             this.periode.tom = selvstendig.getTidsperiode().getTom();
             this.registrertILand = selvstendig.getRegistrertILand();
             this.erNyIArbeidslivet = selvstendig.getHarBlittYrkesaktivILøpetAvDeTreSisteFerdigliknedeÅrene();
-            this.erNyOpprettet = TimeUtil.erNyopprettet(periode.fom);
+            this.erNyOpprettet = DateUtil.erNyopprettet(periode.fom);
             this.erVarigEndring = selvstendig.getHattVarigEndringAvNæringsinntektSiste4Kalenderår();
             this.vedlegg = selvstendig.getVedlegg();
             this.virksomhetsTyper.addAll(selvstendig.getNæringstyper());

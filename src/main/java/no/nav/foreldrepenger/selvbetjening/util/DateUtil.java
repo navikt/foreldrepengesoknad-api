@@ -6,9 +6,9 @@ import static java.time.temporal.TemporalAdjusters.firstDayOfYear;
 import java.time.LocalDate;
 import java.time.Month;
 
-public final class TimeUtil {
+public final class DateUtil {
 
-    private TimeUtil() {
+    private DateUtil() {
     }
 
     public static boolean erNyopprettet(LocalDate fom) {

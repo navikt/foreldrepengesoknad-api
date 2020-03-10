@@ -1,6 +1,6 @@
 package no.nav.foreldrepenger.selvbetjening.util;
 
-import static no.nav.foreldrepenger.selvbetjening.util.TimeUtil.erNyoppstartet;
+import static no.nav.foreldrepenger.selvbetjening.util.DateUtil.erNyoppstartet;
 import static org.junit.jupiter.api.Assertions.assertFalse;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
@@ -9,7 +9,7 @@ import java.time.Month;
 
 import org.junit.jupiter.api.Test;
 
-public class TimeUtilTest {
+public class DateUtilTest {
 
     private static final LocalDate FØR = LocalDate.of(LocalDate.now().getYear(), Month.MAY, 1);
     private static final LocalDate ETTER = LocalDate.of(LocalDate.now().getYear(), Month.DECEMBER, 1);
