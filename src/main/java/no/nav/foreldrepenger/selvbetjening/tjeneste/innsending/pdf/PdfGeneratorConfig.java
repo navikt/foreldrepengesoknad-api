@@ -7,13 +7,14 @@ import org.springframework.boot.context.properties.bind.DefaultValue;
 
 import no.nav.foreldrepenger.selvbetjening.tjeneste.AbstractConfig;
 
-@ConfigurationProperties(prefix = "pdfgenerator")
+@ConfigurationProperties(prefix = "no.nav.foreldrepenger.selvbetjening.api.pdfgenerator")
 public class PdfGeneratorConfig extends AbstractConfig {
 
+    private static final String DEFAULT_FPPDFGEN_URI = "http://fppdfgen.default.svc.nais.local/api/v1/genpdf/";
     private static final String TILBAKEBETALING_UTTALELSE = "tilbakebetaling/uttalelse";
     private static final String PING = "/is_alive";
 
-    public PdfGeneratorConfig(URI uri, @DefaultValue("false") boolean enabled) {
+    public PdfGeneratorConfig(@DefaultValue(DEFAULT_FPPDFGEN_URI) URI uri, @DefaultValue("false") boolean enabled) {
         super(uri, enabled);
     }
 

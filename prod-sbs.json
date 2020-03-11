@@ -6,7 +6,6 @@
     "mottak_uri": "https://api-gw.oera.no/fpsoknad-mottak/api/",
     "innsyn_mottak": "https://api-gw.oera.no/fpsoknad-mottak/api/",
     "innsyn_oppslag": "https://api-gw.oera.no/fpsoknad-oppslag/api/",
-    "minidialog_uri": "https://api-gw.oera.no/fpinfo-historikk/api/",
-    "pdfgenerator_uri": "http://fppdfgen.default.svc.nais.local/api/v1/genpdf/"
+    "minidialog_uri": "https://api-gw.oera.no/fpinfo-historikk/api/"
   }
 }
