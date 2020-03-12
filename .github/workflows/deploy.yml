@@ -56,7 +56,7 @@ jobs:
           title: Deploy av ${{ env.TAG }}
           labels: ${{env.CLUSTER}}
           body: |
-            Kommenter med <b>/promote ${{ env.TAG }} cluster</b>, hvor <b>cluster</b> er et gyldig clusternavn
+            Kommenter med <b>/promote cluster</b>, hvor <b>cluster</b> er et gyldig clusternavn
             <table>
             <tr><th>Cluster</th></tr>
             <tr><td>dev-sbs</td></tr>
@@ -71,6 +71,6 @@ jobs:
         with:
           token: ${{ secrets.NOTIFICATION }}
           issue-number: ${{ steps.createdeployissue.outputs.number }}
-          body: /promote ${{ env.TAG }} ${{ env.CLUSTER }}
+          body: /promote ${{ env.CLUSTER }}
     
      
