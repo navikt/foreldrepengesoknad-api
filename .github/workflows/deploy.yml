@@ -54,7 +54,6 @@ jobs:
         with:
           token: ${{ secrets.NOTIFICATION }}
           title: Deploy av ${{ env.TAG }}
-          labels: ${{env.CLUSTER}}
           body: |
             Kommenter med <b>/promote cluster</b>, hvor <b>cluster</b> er et gyldig clusternavn
             <table>
