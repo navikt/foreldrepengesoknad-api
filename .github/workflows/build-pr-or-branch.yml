@@ -32,4 +32,4 @@ jobs:
     
       - name: Kompiler
         run: | 
-          mvn install --batch-mode --quiet 
+          mvn install --batch-mode --quiet --settings ./.m2/settings.xml
