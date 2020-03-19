@@ -15,8 +15,6 @@ import org.springframework.web.client.RestOperations;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 
-import org.springframework.web.client.RestOperations;
-
 import no.nav.foreldrepenger.selvbetjening.error.UnexpectedInputException;
 import no.nav.foreldrepenger.selvbetjening.tjeneste.AbstractRestConnection;
 import no.nav.foreldrepenger.selvbetjening.tjeneste.innsending.domain.Engangsstønad;
@@ -85,17 +83,15 @@ public class InnsendingConnection extends AbstractRestConnection {
         SøknadDto dto;
         if (søknad instanceof Engangsstønad) {
             dto = new EngangsstønadDto((Engangsstønad) søknad);
-            logJSON(dto);
         } else if (søknad instanceof Foreldrepengesøknad) {
             dto = new ForeldrepengesøknadDto((Foreldrepengesøknad) søknad);
-            logJSON(dto);
         } else if (søknad instanceof Svangerskapspengesøknad) {
             dto = new SvangerskapspengesøknadDto((Svangerskapspengesøknad) søknad);
-            logJSON(dto);
         } else {
             LOG.warn("Mottok en søknad av ukjent type {}", søknad.getClass().getSimpleName());
             throw new UnexpectedInputException("Unknown application type " + søknad.getClass().getSimpleName());
         }
+        logJSON(dto);
         dto.mottattdato = LocalDate.now();
         dto.tilleggsopplysninger = søknad.getTilleggsopplysninger();
         søknad.getVedlegg().forEach(v -> dto.addVedlegg(convert(v)));
