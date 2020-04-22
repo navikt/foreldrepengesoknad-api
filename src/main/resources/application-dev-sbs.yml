@@ -21,10 +21,3 @@ management:
 spring:
     http:
         log-request-details: true
-
-no.nav:
-    foreldrepenger:
-        selvbetjening:
-            api:
-                pdfgenerator:
-                    enabled: true

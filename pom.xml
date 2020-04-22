@@ -34,13 +34,13 @@
         <project.reporting.outputEncoding>UTF-8</project.reporting.outputEncoding>
         <springfox.version>2.9.2</springfox.version>
         <token-validation-version>1.1.4</token-validation-version>
-        <tika.version>1.23</tika.version>
+        <tika.version>1.24</tika.version>
         <logback.logstash.version>6.3</logback.logstash.version>
         <nv.version>1.27</nv.version>
         <pdfbox.version>2.0.19</pdfbox.version>
-        <aws.version>1.11.752</aws.version>
+        <aws.version>1.11.766</aws.version>
         <jacoco.version>0.8.5</jacoco.version>
-        <gcp.version>0.123.0-alpha</gcp.version>
+        <gcp.version>0.124.0</gcp.version>
         <spring.cloud.vault.version>2.2.2.RELEASE</spring.cloud.vault.version>
         <simpleclient.version>0.8.1</simpleclient.version>
     </properties>
@@ -82,7 +82,7 @@
         <dependency>
             <groupId>no.finn.unleash</groupId>
             <artifactId>unleash-client-java</artifactId>
-            <version>3.3.2</version>
+            <version>3.3.3</version>
         </dependency>
         <dependency>
             <groupId>com.google.cloud</groupId>
