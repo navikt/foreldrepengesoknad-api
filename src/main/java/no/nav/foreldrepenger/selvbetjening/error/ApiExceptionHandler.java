@@ -27,7 +27,6 @@ import org.springframework.web.multipart.MaxUploadSizeExceededException;
 import org.springframework.web.multipart.MultipartException;
 import org.springframework.web.servlet.NoHandlerFoundException;
 import org.springframework.web.servlet.mvc.method.annotation.ResponseEntityExceptionHandler;
-import org.springframework.web.util.NestedServletException;
 
 import no.nav.foreldrepenger.selvbetjening.util.TokenUtil;
 import no.nav.security.token.support.core.exceptions.JwtTokenValidatorException;
@@ -44,38 +43,6 @@ public class ApiExceptionHandler extends ResponseEntityExceptionHandler {
     }
 
     private static final Logger LOG = LoggerFactory.getLogger(ApiExceptionHandler.class);
-
-    @ExceptionHandler(NestedServletException.class)
-    public ResponseEntity<Object> handleNestedServletException(NestedServletException e, HttpHeaders headers,
-            WebRequest req) {
-        Exception cause = cause(e.getCause());
-        if (cause != null) {
-            LOG.warn("NestedServletException med cause {}", cause.getClass().getSimpleName());
-            if (isTooLargeAttachment(cause)) {
-                return handleTooLargeAttchment(cause, req, headers);
-            }
-            if (cause instanceof AttachmentException) {
-                return handleAttachmentException(AttachmentException.class.cast(cause), req, headers);
-            }
-            return catchAll(cause, req, headers);
-        }
-        LOG.warn("NestedServletException uten cause");
-        return catchAll(e, req, headers);
-    }
-
-    private static boolean isTooLargeAttachment(Exception cause) {
-        return cause instanceof MultipartException ||
-                cause instanceof MaxUploadSizeExceededException ||
-                cause instanceof AttachmentsTooLargeException ||
-                cause instanceof AttachmentTooLargeException;
-    }
-
-    private static Exception cause(Throwable t) {
-        return Optional.ofNullable(t)
-                .filter(Exception.class::isInstance)
-                .map(Exception.class::cast)
-                .orElse(null);
-    }
 
     @Override
     protected ResponseEntity<Object> handleMethodArgumentNotValid(MethodArgumentNotValidException e,
@@ -97,55 +64,55 @@ public class ApiExceptionHandler extends ResponseEntityExceptionHandler {
 
     @ExceptionHandler
     public ResponseEntity<Object> handleIdMismatch(IdMismatchException e,
-            HttpHeaders headers, HttpStatus status, WebRequest req) {
-        return logAndHandle(CONFLICT, e, req, headers);
+            HttpStatus status, WebRequest req) {
+        return logAndHandle(CONFLICT, e, req);
     }
 
     @ExceptionHandler
-    public ResponseEntity<Object> handleIncompleteException(UnexpectedInputException e, HttpHeaders headers,
+    public ResponseEntity<Object> handleIncompleteException(UnexpectedInputException e,
             WebRequest req) {
-        return logAndHandle(UNPROCESSABLE_ENTITY, e, req, headers);
+        return logAndHandle(UNPROCESSABLE_ENTITY, e, req);
     }
 
     @ExceptionHandler
-    public ResponseEntity<Object> handleHttpStatusCodeException(HttpStatusCodeException e, WebRequest request,
-            HttpHeaders headers) {
-        return logAndHandle(e.getStatusCode(), e, request, headers);
+    public ResponseEntity<Object> handleHttpStatusCodeException(HttpStatusCodeException e, WebRequest request) {
+        return logAndHandle(e.getStatusCode(), e, request);
     }
 
     @ExceptionHandler
-    protected ResponseEntity<Object> handleAttachmentException(AttachmentException e, WebRequest req,
-            HttpHeaders headers) {
-        return logAndHandle(UNPROCESSABLE_ENTITY, e, req, headers);
+    protected ResponseEntity<Object> handleAttachmentException(AttachmentException e, WebRequest req) {
+        return logAndHandle(UNPROCESSABLE_ENTITY, e, req);
     }
 
     @ExceptionHandler({ MultipartException.class, MaxUploadSizeExceededException.class,
             AttachmentTooLargeException.class, AttachmentsTooLargeException.class })
-    public ResponseEntity<Object> handleTooLargeAttchment(Exception e, WebRequest req, HttpHeaders headers) {
-        return logAndHandle(PAYLOAD_TOO_LARGE, e, req, headers);
+    public ResponseEntity<Object> handleTooLargeAttchment(Exception e, WebRequest req) {
+        return logAndHandle(PAYLOAD_TOO_LARGE, e, req);
     }
 
     @ExceptionHandler
-    public ResponseEntity<Object> handleUnauthorizedJwt(JwtTokenUnauthorizedException e, WebRequest req,
-            HttpHeaders headers) {
-        return logAndHandle(UNAUTHORIZED, e, req, headers);
+    public ResponseEntity<Object> handleUnauthorizedJwt(JwtTokenUnauthorizedException e, WebRequest req) {
+        return logAndHandle(UNAUTHORIZED, e, req);
     }
 
     @ExceptionHandler
-    public ResponseEntity<Object> handleForbiddenJwt(JwtTokenValidatorException e, WebRequest req,
-            HttpHeaders headers) {
-        return logAndHandle(FORBIDDEN, e, req, headers);
+    public ResponseEntity<Object> handleForbiddenJwt(JwtTokenValidatorException e, WebRequest req) {
+        return logAndHandle(FORBIDDEN, e, req);
     }
 
     @ExceptionHandler
-    public ResponseEntity<Object> catchAll(Exception e, WebRequest req, HttpHeaders headers) {
-        return logAndHandle(INTERNAL_SERVER_ERROR, e, req, headers);
+    public ResponseEntity<Object> catchAll(Exception e, WebRequest req) {
+        return logAndHandle(INTERNAL_SERVER_ERROR, e, req);
+    }
+
+    private ResponseEntity<Object> logAndHandle(HttpStatus status, Exception e, WebRequest req) {
+        return logAndHandle(status, e, req, new HttpHeaders());
     }
 
     private ResponseEntity<Object> logAndHandle(HttpStatus status, Exception e, WebRequest req, HttpHeaders headers,
             Object... messages) {
         ApiError apiError = apiErrorFra(status, e, messages);
-        LOG.warn("[{} ({})] {}  {} {} ({})", req.getContextPath(), subject(), headers, status, apiError.getMessages(),
+        LOG.warn("[{} ({})] {} {} ({})", req.getContextPath(), subject(), status, apiError.getMessages(),
                 status.value(), e);
         return handleExceptionInternal(e, apiError, headers, status, req);
     }
