@@ -102,11 +102,18 @@ public class ApiExceptionHandler extends ResponseEntityExceptionHandler {
 
     @ExceptionHandler
     public ResponseEntity<Object> catchAll(Exception e, WebRequest req) {
+        LOG.warn("Ikke-forventet exception", e);
         return logAndHandle(INTERNAL_SERVER_ERROR, e, req);
     }
 
     private ResponseEntity<Object> logAndHandle(HttpStatus status, Exception e, WebRequest req) {
-        return logAndHandle(status, e, req, new HttpHeaders());
+        return logAndHandle(status, e, req, headers());
+    }
+
+    private HttpHeaders headers() {
+        var h = new HttpHeaders();
+        // h.setContentType(MediaType.APPLICATION_JSON);
+        return h;
     }
 
     private ResponseEntity<Object> logAndHandle(HttpStatus status, Exception e, WebRequest req, HttpHeaders headers,
