@@ -32,46 +32,46 @@ public class KryptertMellomlagring {
     }
 
     public Optional<String> lesKryptertSøknad() {
-        LOG.info("Leser kryptert søknad fra {}", katalog());
+        LOG.trace("Leser kryptert søknad fra {}", katalog());
         var søknad = mellomlagring.les(KORTTIDS, katalog(), SØKNAD)
                 .map(krypto::decrypt);
         if (søknad.isPresent()) {
-            LOG.info("Lest kryptert søknad fra {}", katalog());
+            LOG.trace("Lest kryptert søknad fra {}", katalog());
             LOG.info(CONFIDENTIAL, "Dekryptert søknad {}", søknad.get());
         } else {
-            LOG.info("Fant ingen kryptert søknad i {}", katalog());
+            LOG.trace("Fant ingen kryptert søknad i {}", katalog());
         }
         return søknad;
     }
 
     public void lagreKryptertSøknad(String søknad) {
-        LOG.info("Lagrer kryptert søknad i {}", katalog());
+        LOG.trace("Lagrer kryptert søknad i {}", katalog());
         mellomlagring.lagre(KORTTIDS, katalog(), SØKNAD, krypto.encrypt(søknad));
-        LOG.info("Lagret kryptert søknad i {}", katalog());
+        LOG.trace("Lagret kryptert søknad i {}", katalog());
     }
 
     public void slettKryptertSøknad() {
-        LOG.info("Sletter kryptert søknad fra {}", katalog());
+        LOG.trace("Sletter kryptert søknad fra {}", katalog());
         mellomlagring.slett(KORTTIDS, katalog(), SØKNAD);
-        LOG.info("Slettet kryptert søknad fra {}", katalog());
+        LOG.trace("Slettet kryptert søknad fra {}", katalog());
     }
 
     public Optional<Attachment> lesKryptertVedlegg(String key) {
-        LOG.info("Leser kryptert vedlegg fra {}", katalog());
+        LOG.trace("Leser kryptert vedlegg fra {}", katalog());
         var vedlegg = mellomlagring.les(KORTTIDS, katalog(), key)
                 .map(krypto::decrypt)
                 .map(v -> GSON.fromJson(v, Attachment.class));
         if (vedlegg.isPresent()) {
-            LOG.info("Lest kryptert vedlegg");
+            LOG.trace("Lest kryptert vedlegg");
             LOG.info(CONFIDENTIAL, "Dekryptert vedlegg {}", vedlegg.get());
         } else {
-            LOG.info("Fant intet kryptert vedlegg i {}", katalog());
+            LOG.trace("Fant intet kryptert vedlegg i {}", katalog());
         }
         return vedlegg;
     }
 
     public void lagreKryptertVedlegg(Attachment vedlegg) {
-        LOG.info("Lagrer kryptert vedlegg i {}", katalog());
+        LOG.trace("Lagrer kryptert vedlegg i {}", katalog());
         sjekker.sjekkAttachments(vedlegg);
         mellomlagring.lagre(KORTTIDS, katalog(), vedlegg.getUuid(), krypto.encrypt(GSON.toJson(vedlegg)));
         LOG.info("Lagret kryptert vedlegg i {}", katalog());
@@ -85,29 +85,29 @@ public class KryptertMellomlagring {
 
     public void slettKryptertVedlegg(String uuid) {
         if (uuid != null) {
-            LOG.info("Sletter kryptert vedlegg med uuid {} fra {}", uuid, katalog());
+            LOG.trace("Sletter kryptert vedlegg med uuid {} fra {}", uuid, katalog());
             mellomlagring.slett(KORTTIDS, katalog(), uuid);
-            LOG.info("Slettet kryptert vedlegg med uuid {} fra {}", uuid, katalog());
+            LOG.trace("Slettet kryptert vedlegg med uuid {} fra {}", uuid, katalog());
         }
     }
 
     public Optional<String> lesKryptertKvittering(String type) {
-        LOG.info("Leser kryptert kvittering fra {}", katalog());
+        LOG.trace("Leser kryptert kvittering fra {}", katalog());
         var kvittering = mellomlagring.les(LANGTIDS, katalog(), type)
                 .map(krypto::decrypt);
         if (kvittering.isPresent()) {
-            LOG.info("Lest kryptert kvittering fra {}", katalog());
+            LOG.trace("Lest kryptert kvittering fra {}", katalog());
             LOG.info(CONFIDENTIAL, "Dekryptert kvittering {}", kvittering.get());
         } else {
-            LOG.info("Fant ingen kryptert kvittering i {}", katalog());
+            LOG.trace("Fant ingen kryptert kvittering i {}", katalog());
         }
         return kvittering;
     }
 
     public void lagreKryptertKvittering(String type, String kvittering) {
-        LOG.info("Lagrer kryptert kvittering i {}", katalog());
+        LOG.trace("Lagrer kryptert kvittering i {}", katalog());
         mellomlagring.lagre(KORTTIDS, katalog(), type, krypto.encrypt(kvittering));
-        LOG.info("Lagret kryptert kvittering i katalog {}", katalog());
+        LOG.trace("Lagret kryptert kvittering i katalog {}", katalog());
     }
 
     private String katalog() {
