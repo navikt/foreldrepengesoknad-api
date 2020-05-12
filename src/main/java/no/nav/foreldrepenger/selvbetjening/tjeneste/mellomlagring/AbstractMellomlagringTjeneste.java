@@ -55,14 +55,7 @@ public abstract class AbstractMellomlagringTjeneste implements Mellomlagring {
     private Optional<String> lesFra(Bøtte bøtte, String katalog, String key) {
 
         if (bøtte.isEnabled()) {
-            LOG.info(MSG, "Henter fra", bøtte, katalog);
-            var søknad = doLes(bøtte.getNavn(), katalog, key);
-            if (søknad.isPresent()) {
-                LOG.info(MSG, "Hentet fra", bøtte, katalog);
-            } else {
-                LOG.info(MSG, "Hentet ikke fra", bøtte, katalog);
-            }
-            return søknad;
+            return doLes(bøtte.getNavn(), katalog, key);
         }
         return disabled();
     }
@@ -70,9 +63,7 @@ public abstract class AbstractMellomlagringTjeneste implements Mellomlagring {
     private void lagreI(Bøtte bøtte, String katalog, String key, String value) {
 
         if (bøtte.isEnabled()) {
-            LOG.info(MSG, "Lagrer i", bøtte, katalog);
             doLagre(bøtte.getNavn(), katalog, key, value);
-            LOG.info(MSG, "Lagret i", bøtte, katalog);
         } else {
             disabled();
         }
@@ -81,9 +72,7 @@ public abstract class AbstractMellomlagringTjeneste implements Mellomlagring {
     private void slettFra(Bøtte bøtte, String katalog, String key) {
 
         if (bøtte.isEnabled()) {
-            LOG.info(MSG, "Fjerner fra", bøtte, katalog);
             doSlett(bøtte.getNavn(), katalog, key);
-            LOG.info(MSG, "Fjernet fra", bøtte, katalog);
         } else {
             disabled();
         }
