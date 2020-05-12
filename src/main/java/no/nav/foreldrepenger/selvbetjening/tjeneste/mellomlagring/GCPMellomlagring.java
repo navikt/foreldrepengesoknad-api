@@ -51,7 +51,6 @@ public class GCPMellomlagring extends AbstractMellomlagringTjeneste {
                     .map(b -> new String(b, UTF_8));
         } catch (StorageException e) {
             if (SC_NOT_FOUND == e.getCode()) {
-                LOG.info("Katalog {} finnes ikke", katalog);
                 return Optional.empty();
             }
             LOG.info("Katalog {} ikke funnet, ({})", katalog, e.getCode());
@@ -67,14 +66,7 @@ public class GCPMellomlagring extends AbstractMellomlagringTjeneste {
     @Override
     protected void validerBøtte(Bøtte bøtte) {
         try {
-            LOG.info("Validerer bøtte {}", bøtte);
-            if (Optional.ofNullable(storage.get(bøtte.getNavn()))
-                    .filter(Objects::nonNull)
-                    .isPresent()) {
-                LOG.warn("Bøtte {} eksisterer ikke", bøtte);
-            } else {
-                LOG.info("Bøtte {} eksisterer", bøtte);
-            }
+            storage.get(bøtte.getNavn());
         } catch (StorageException e) {
             LOG.warn("Validerering av {} bøtte feilet", bøtte);
         }

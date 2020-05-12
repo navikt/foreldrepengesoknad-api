@@ -12,7 +12,6 @@ import org.slf4j.LoggerFactory;
 import no.nav.foreldrepenger.selvbetjening.error.UnexpectedInputException;
 
 public abstract class AbstractMellomlagringTjeneste implements Mellomlagring {
-    private static final String MSG = "{} bøtte {}, katalog {}";
     private static final String DEAKIVERT = "Mellomlagringsoperasjoner er deaktivert";
     private static final Logger LOG = LoggerFactory.getLogger(AbstractMellomlagringTjeneste.class);
 
@@ -53,7 +52,6 @@ public abstract class AbstractMellomlagringTjeneste implements Mellomlagring {
     }
 
     private Optional<String> lesFra(Bøtte bøtte, String katalog, String key) {
-
         if (bøtte.isEnabled()) {
             return doLes(bøtte.getNavn(), katalog, key);
         }
@@ -61,7 +59,6 @@ public abstract class AbstractMellomlagringTjeneste implements Mellomlagring {
     }
 
     private void lagreI(Bøtte bøtte, String katalog, String key, String value) {
-
         if (bøtte.isEnabled()) {
             doLagre(bøtte.getNavn(), katalog, key, value);
         } else {
@@ -70,7 +67,6 @@ public abstract class AbstractMellomlagringTjeneste implements Mellomlagring {
     }
 
     private void slettFra(Bøtte bøtte, String katalog, String key) {
-
         if (bøtte.isEnabled()) {
             doSlett(bøtte.getNavn(), katalog, key);
         } else {
