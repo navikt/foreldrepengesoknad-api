@@ -24,6 +24,10 @@ public class HistorikkConfig extends AbstractConfig implements ZoneCrossingAware
         return uri(getUri(), "historikk" + "/me/all");
     }
 
+    public URI vedleggURI(String saksnr) {
+        return uri(getUri(), "historikk" + "/me/manglendevedlegg", queryParams("saksnummer", saksnr));
+    }
+
     public URI historikkPreprodURI(String fnr) {
         return uri(getUri(), "historikk" + "/dev/all", queryParams("fnr", fnr));
     }

@@ -51,8 +51,19 @@ public class HistorikkConnection extends AbstractRestConnection {
         return historikk;
     }
 
+    public List<String> manglendeVedlegg(String saksnr) {
+        LOG.trace("Henter manglende vedlegg  for {}", saksnr);
+        List<String> vedleggIds = Optional
+                .ofNullable(getForObject(config.vedleggURI(saksnr), String[].class))
+                .map(Arrays::asList)
+                .orElse(emptyList());
+        LOG.trace("Hentet manglende vedlegg {} for {}", vedleggIds, saksnr);
+        return vedleggIds;
+    }
+
     @Override
     public String toString() {
         return getClass().getSimpleName() + " [config=" + config + "]";
     }
+
 }

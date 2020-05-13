@@ -27,6 +27,11 @@ public class HistorikkTjeneste implements Historikk, EnvironmentAware {
     }
 
     @Override
+    public List<String> manglendeVedlegg(String saksnr) {
+        return connection.manglendeVedlegg(saksnr);
+    }
+
+    @Override
     public List<HistorikkInnslag> hentHistorikkFor(Fødselsnummer fnr) {
         if (isDevOrLocal(env)) {
             return connection.hentHistorikk(fnr);

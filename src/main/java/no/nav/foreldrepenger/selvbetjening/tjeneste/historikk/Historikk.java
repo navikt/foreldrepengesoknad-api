@@ -11,4 +11,6 @@ public interface Historikk extends Pingable {
 
     List<HistorikkInnslag> hentHistorikkFor(Fødselsnummer fnr);
 
+    List<String> manglendeVedlegg(String saksnr);
+
 }
