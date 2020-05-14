@@ -30,6 +30,11 @@ public class HistorikkController {
         return historikk.hentHistorikk();
     }
 
+    @GetMapping(path = "/inntektsmeldinger")
+    public List<HistorikkInnslag> inntektsmeldinger() {
+        return historikk.hentHistorikk();
+    }
+
     @GetMapping(path = "/vedlegg")
     public List<String> vedlegg(@RequestParam("saksnummer") String saksnummer) {
         return historikk.manglendeVedlegg(saksnummer);
