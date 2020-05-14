@@ -27,4 +27,9 @@ public class HistorikkTjenesteStub implements Historikk {
         return Collections.emptyList();
     }
 
+    @Override
+    public List<String> manglendeVedlegg(String saksnr) {
+        return Collections.emptyList();
+    }
+
 }
