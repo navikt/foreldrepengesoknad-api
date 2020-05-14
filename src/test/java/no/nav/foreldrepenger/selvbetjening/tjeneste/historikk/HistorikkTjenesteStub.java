@@ -18,17 +18,22 @@ public class HistorikkTjenesteStub implements Historikk {
     }
 
     @Override
-    public List<HistorikkInnslag> hentHistorikk() {
+    public List<HistorikkInnslag> historikk() {
         return Collections.emptyList();
     }
 
     @Override
-    public List<HistorikkInnslag> hentHistorikkFor(Fødselsnummer fnr) {
+    public List<HistorikkInnslag> historikkFor(Fødselsnummer fnr) {
         return Collections.emptyList();
     }
 
     @Override
     public List<String> manglendeVedlegg(String saksnr) {
+        return Collections.emptyList();
+    }
+
+    @Override
+    public List<String> manglendeVedleggFor(Fødselsnummer fnr, String saksnr) {
         return Collections.emptyList();
     }
 

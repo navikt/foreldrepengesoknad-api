@@ -30,12 +30,12 @@ public class HistorikkDevController {
 
     @GetMapping
     public List<HistorikkInnslag> historikk(@RequestParam("fnr") Fødselsnummer fnr) {
-        return historikk.hentHistorikkFor(fnr);
+        return historikk.historikkFor(fnr);
     }
 
-    @GetMapping(path = "/crash")
-    public List<HistorikkInnslag> crash() {
-        throw new NullPointerException("nope");
+    @GetMapping(path = "/vedlegg")
+    public List<String> vedlegg(@RequestParam("fnr") Fødselsnummer fnr, @RequestParam("saksnummer") String saksnummer) {
+        return historikk.manglendeVedleggFor(fnr, saksnummer);
     }
 
     @Override

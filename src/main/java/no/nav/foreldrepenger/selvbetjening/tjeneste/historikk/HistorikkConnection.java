@@ -51,14 +51,23 @@ public class HistorikkConnection extends AbstractRestConnection {
         return historikk;
     }
 
+    public List<String> manglendeVedlegg(Fødselsnummer fnr, String saksnr) {
+        return hentManglendeVedlegg(config.vedleggPreprodURI(fnr, saksnr));
+    }
+
     public List<String> manglendeVedlegg(String saksnr) {
-        LOG.trace("Henter manglende vedlegg  for {}", saksnr);
+        return hentManglendeVedlegg(config.vedleggURI(saksnr));
+    }
+
+    private List<String> hentManglendeVedlegg(URI uri) {
+        LOG.trace("Henter manglende vedlegg fra {}", uri);
         List<String> vedleggIds = Optional
-                .ofNullable(getForObject(config.vedleggURI(saksnr), String[].class))
+                .ofNullable(getForObject(uri, String[].class))
                 .map(Arrays::asList)
                 .orElse(emptyList());
-        LOG.trace("Hentet manglende vedlegg {} for {}", vedleggIds, saksnr);
+        LOG.trace("Hentet manglende vedlegg {} fra {}", vedleggIds, uri);
         return vedleggIds;
+
     }
 
     @Override

@@ -27,12 +27,7 @@ public class HistorikkController {
 
     @GetMapping
     public List<HistorikkInnslag> historikk() {
-        return historikk.hentHistorikk();
-    }
-
-    @GetMapping(path = "/inntektsmeldinger")
-    public List<HistorikkInnslag> inntektsmeldinger() {
-        return historikk.hentHistorikk();
+        return historikk.historikk();
     }
 
     @GetMapping(path = "/vedlegg")

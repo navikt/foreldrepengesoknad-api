@@ -7,6 +7,8 @@ import org.springframework.boot.context.properties.bind.DefaultValue;
 
 import no.nav.foreldrepenger.selvbetjening.interceptors.client.ZoneCrossingAware;
 import no.nav.foreldrepenger.selvbetjening.tjeneste.AbstractConfig;
+import no.nav.foreldrepenger.selvbetjening.tjeneste.oppslag.domain.Fødselsnummer;
+import no.nav.foreldrepenger.selvbetjening.util.Pair;
 import no.nav.foreldrepenger.selvbetjening.util.StringUtil;
 
 @ConfigurationProperties("historikk")
@@ -30,6 +32,11 @@ public class HistorikkConfig extends AbstractConfig implements ZoneCrossingAware
 
     public URI historikkPreprodURI(String fnr) {
         return uri(getUri(), "historikk" + "/dev/all", queryParams("fnr", fnr));
+    }
+
+    public URI vedleggPreprodURI(Fødselsnummer fnr, String saksnr) {
+        return uri(getUri(), "historikk" + "/dev/vedlegg",
+                queryParams(Pair.of("saksnummer", saksnr), Pair.of("fnr", fnr.getFnr())));
     }
 
     public URI pingURI() {
@@ -56,4 +63,5 @@ public class HistorikkConfig extends AbstractConfig implements ZoneCrossingAware
         return getClass().getSimpleName() + "[key=" + StringUtil.limit(key, 3) + ", zoneCrossingUri()="
                 + zoneCrossingUri() + "]";
     }
+
 }

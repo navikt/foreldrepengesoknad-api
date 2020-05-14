@@ -22,7 +22,7 @@ public class HistorikkTjeneste implements Historikk, EnvironmentAware {
     }
 
     @Override
-    public List<HistorikkInnslag> hentHistorikk() {
+    public List<HistorikkInnslag> historikk() {
         return connection.hentHistorikk();
     }
 
@@ -32,7 +32,16 @@ public class HistorikkTjeneste implements Historikk, EnvironmentAware {
     }
 
     @Override
-    public List<HistorikkInnslag> hentHistorikkFor(Fødselsnummer fnr) {
+    public List<String> manglendeVedleggFor(Fødselsnummer fnr, String saksnr) {
+        if (isDevOrLocal(env)) {
+            return connection.manglendeVedlegg(fnr, saksnr);
+        }
+        throw new IllegalStateException("Eksplisitt bruk av FNR ikke støttet i produksjon");
+
+    }
+
+    @Override
+    public List<HistorikkInnslag> historikkFor(Fødselsnummer fnr) {
         if (isDevOrLocal(env)) {
             return connection.hentHistorikk(fnr);
         }
