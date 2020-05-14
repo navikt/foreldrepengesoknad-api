@@ -1,7 +1,7 @@
 {
 "ingresses": [
         "https://foreldrepengesoknad-api-q.nav.no",
-        "foreldrepengesoknad-api.nais.oera-q.local"
+        "https://foreldrepengesoknad-api.nais.oera-q.local"
     ],
   "env": {
     "oppslag_uri": "https://api-gw-q1.oera.no/fpsoknad-oppslag/api/",
