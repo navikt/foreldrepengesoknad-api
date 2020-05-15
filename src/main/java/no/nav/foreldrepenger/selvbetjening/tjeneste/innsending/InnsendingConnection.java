@@ -81,12 +81,12 @@ public class InnsendingConnection extends AbstractRestConnection {
 
     private SøknadDto body(Søknad søknad) {
         SøknadDto dto;
-        if (søknad instanceof Engangsstønad) {
-            dto = new EngangsstønadDto((Engangsstønad) søknad);
-        } else if (søknad instanceof Foreldrepengesøknad) {
-            dto = new ForeldrepengesøknadDto((Foreldrepengesøknad) søknad);
-        } else if (søknad instanceof Svangerskapspengesøknad) {
-            dto = new SvangerskapspengesøknadDto((Svangerskapspengesøknad) søknad);
+        if (søknad instanceof Engangsstønad es) {
+            dto = new EngangsstønadDto(es);
+        } else if (søknad instanceof Foreldrepengesøknad fp) {
+            dto = new ForeldrepengesøknadDto(fp);
+        } else if (søknad instanceof Svangerskapspengesøknad svp) {
+            dto = new SvangerskapspengesøknadDto(svp);
         } else {
             LOG.warn("Mottok en søknad av ukjent type {}", søknad.getClass().getSimpleName());
             throw new UnexpectedInputException("Unknown application type " + søknad.getClass().getSimpleName());

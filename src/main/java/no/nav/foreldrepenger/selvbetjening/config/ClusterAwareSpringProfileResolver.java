@@ -1,7 +1,6 @@
 package no.nav.foreldrepenger.selvbetjening.config;
 
 import static java.lang.System.getenv;
-import static no.nav.foreldrepenger.boot.conditionals.EnvUtil.DEFAULT;
 import static no.nav.foreldrepenger.boot.conditionals.EnvUtil.DEV_GCP;
 import static no.nav.foreldrepenger.boot.conditionals.EnvUtil.DEV_SBS;
 import static no.nav.foreldrepenger.boot.conditionals.EnvUtil.LOCAL;
@@ -27,17 +26,14 @@ public class ClusterAwareSpringProfileResolver {
     }
 
     private static String profilFra(String cluster) {
-        if (cluster == null) {
-            LOG.info("NAIS cluster ikke detektert, antar {}", LOCAL);
-            System.setProperty(NAIS_CLUSTER_NAME, LOCAL);
-            return LOCAL;
-        }
-        if (cluster.equals(DEV_SBS)) {
-            return DEV_SBS;
-        }
-        if (cluster.equals(DEV_GCP)) {
-            return DEV_GCP;
-        }
-        return DEFAULT;
+        return switch (cluster) {
+            case DEV_SBS -> DEV_SBS;
+            case DEV_GCP -> DEV_GCP;
+            default -> {
+                LOG.info("NAIS cluster ikke detektert, antar {}", LOCAL);
+                System.setProperty(NAIS_CLUSTER_NAME, LOCAL);
+                yield LOCAL;
+            }
+        };
     }
 }
