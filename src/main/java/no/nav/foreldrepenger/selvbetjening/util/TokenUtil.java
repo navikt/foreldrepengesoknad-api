@@ -65,8 +65,8 @@ public class TokenUtil {
         if (value instanceof Date d) {
             return d;
         }
-        if (value instanceof Number n) {
-            return new Date(n.longValue() * 1000L);
+        if (value instanceof Number) {
+            return new Date(Number.class.cast(value).longValue() * 1000L);
         }
         return null;
     }
