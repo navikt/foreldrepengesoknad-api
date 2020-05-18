@@ -21,6 +21,7 @@ public class Sak {
     private final String saksnummer;
     private final String fagsakId;
     private AnnenPart annenPart;
+    private String behandlingTema;
     private final List<Behandling> behandlinger;
 
     @JsonCreator
@@ -30,6 +31,7 @@ public class Sak {
             @JsonProperty("opprettet") LocalDate opprettet,
             @JsonProperty("fagsakId") String fagsakId,
             @JsonProperty("annenPart") AnnenPart annenPart,
+            @JsonProperty("behandlingTema") String behandlingTema,
             @JsonProperty("behandlinger") List<Behandling> behandlinger) {
         this.type = type;
         this.saksnummer = saksnummer;
@@ -37,6 +39,7 @@ public class Sak {
         this.opprettet = opprettet;
         this.fagsakId = fagsakId;
         this.annenPart = annenPart;
+        this.behandlingTema = behandlingTema;
         this.behandlinger = Optional.ofNullable(behandlinger).orElse(emptyList());
     }
 
@@ -76,11 +79,19 @@ public class Sak {
         return saksnummer;
     }
 
+    public String getBehandlingTema() {
+        return behandlingTema;
+    }
+
+    public void setBehandlingTema(String behandlingTema) {
+        this.behandlingTema = behandlingTema;
+    }
+
     @Override
     public String toString() {
-        return getClass().getSimpleName() + " [type=" + type + ", status=" + status + ", opprettet=" + opprettet
-                + ", saksnummer=" + saksnummer
-                + ", fagsakId=" + fagsakId + ", annenPart=" + annenPart + ", behandlinger=" + behandlinger + "]";
+        return getClass().getSimpleName() + "[type=" + type + ", status=" + status + ", opprettet=" + opprettet
+                + ", saksnummer=" + saksnummer + ", fagsakId=" + fagsakId + ", annenPart=" + annenPart
+                + ", behandlingTema=" + behandlingTema + ", behandlinger=" + behandlinger + "]";
     }
 
 }

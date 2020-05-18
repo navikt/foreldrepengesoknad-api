@@ -67,11 +67,11 @@ public class InnsynConnectionTest {
     }
 
     private Sak[] sakerFraFpsak() {
-        return new Sak[] { new Sak("FPSAK", "1", "UBEH", now().minusMonths(1), null, null, emptyList()) };
+        return new Sak[] { new Sak("FPSAK", "1", "UBEH", now().minusMonths(1), null, null, "FORP", emptyList()) };
     }
 
     private Sak[] sakerFraInfotrygd() {
-        return new Sak[] { new Sak("SAK", "9", null, now().minusMonths(2), "LA8PV", null, emptyList()) };
+        return new Sak[] { new Sak("SAK", "9", null, now().minusMonths(2), "LA8PV", null, "FORP", emptyList()) };
     }
 
 }
