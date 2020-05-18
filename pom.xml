@@ -33,7 +33,7 @@
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
         <project.reporting.outputEncoding>UTF-8</project.reporting.outputEncoding>
         <springfox.version>2.9.2</springfox.version>
-        <token-validation-version>1.1.5</token-validation-version>
+        <token-validation-version>1.1.4</token-validation-version>
         <tika.version>1.24.1</tika.version>
         <logback.logstash.version>6.3</logback.logstash.version>
         <nv.version>1.27</nv.version>
