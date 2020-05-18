@@ -28,6 +28,7 @@ import org.springframework.web.multipart.MultipartException;
 import org.springframework.web.servlet.NoHandlerFoundException;
 import org.springframework.web.servlet.mvc.method.annotation.ResponseEntityExceptionHandler;
 
+import no.nav.foreldrepenger.selvbetjening.util.StringUtil;
 import no.nav.foreldrepenger.selvbetjening.util.TokenUtil;
 import no.nav.security.token.support.core.exceptions.JwtTokenValidatorException;
 import no.nav.security.token.support.spring.validation.interceptor.JwtTokenUnauthorizedException;
@@ -132,7 +133,7 @@ public class ApiExceptionHandler extends ResponseEntityExceptionHandler {
     }
 
     private String subject() {
-        return Optional.ofNullable(tokenUtil.getSubject())
+        return Optional.ofNullable(StringUtil.maskFnr(tokenUtil.getSubject()))
                 .orElse("Uautentisert");
     }
 
