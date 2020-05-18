@@ -80,22 +80,26 @@ public class InnsendingConnection extends AbstractRestConnection {
     }
 
     private SøknadDto body(Søknad søknad) {
-        SøknadDto dto;
-        if (søknad instanceof Engangsstønad) {
-            dto = EngangsstønadDto.class.cast(søknad);
-        } else if (søknad instanceof Foreldrepengesøknad) {
-            dto = ForeldrepengesøknadDto.class.cast(søknad);
-        } else if (søknad instanceof Svangerskapspengesøknad) {
-            dto = SvangerskapspengesøknadDto.class.cast(søknad);
-        } else {
-            LOG.warn("Mottok en søknad av ukjent type {}", søknad.getClass().getSimpleName());
-            throw new UnexpectedInputException("Unknown application type " + søknad.getClass().getSimpleName());
-        }
+        SøknadDto dto = ytelse(søknad);
         logJSON(dto);
         dto.mottattdato = LocalDate.now();
         dto.tilleggsopplysninger = søknad.getTilleggsopplysninger();
         søknad.getVedlegg().forEach(v -> dto.addVedlegg(convert(v)));
         return dto;
+    }
+
+    private SøknadDto ytelse(Søknad søknad) {
+        if (søknad instanceof Engangsstønad) {
+            return new EngangsstønadDto((Engangsstønad) søknad);
+        }
+        if (søknad instanceof Foreldrepengesøknad) {
+            return new ForeldrepengesøknadDto((Foreldrepengesøknad) søknad);
+        }
+        if (søknad instanceof Svangerskapspengesøknad) {
+            return new SvangerskapspengesøknadDto((Svangerskapspengesøknad) søknad);
+        }
+        LOG.warn("Mottok en søknad av ukjent type {}", søknad.getClass().getSimpleName());
+        throw new UnexpectedInputException("Unknown application type " + søknad.getClass().getSimpleName());
     }
 
     private EttersendingDto body(Ettersending ettersending) {
