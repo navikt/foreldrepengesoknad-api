@@ -16,10 +16,6 @@ public class ClusterAwareSpringProfileResolver {
 
     private static final Logger LOG = LoggerFactory.getLogger(ClusterAwareSpringProfileResolver.class);
 
-    private ClusterAwareSpringProfileResolver() {
-
-    }
-
     public static String[] profiles() {
         return Optional.ofNullable(profilFra(getenv(NAIS_CLUSTER_NAME)))
                 .map(c -> new String[] { c })
