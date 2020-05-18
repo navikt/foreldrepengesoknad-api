@@ -62,8 +62,8 @@ public class TokenUtil {
     }
 
     public Date getDateClaim(Object value) {
-        if (value instanceof Date d) {
-            return d;
+        if (value instanceof Date) {
+            return Date.class.cast(value);
         }
         if (value instanceof Number) {
             return new Date(Number.class.cast(value).longValue() * 1000L);
