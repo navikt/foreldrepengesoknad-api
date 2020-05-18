@@ -2,19 +2,10 @@ package no.nav.foreldrepenger.selvbetjening.tjeneste.mellomlagring;
 
 import java.util.Optional;
 
-import org.springframework.retry.annotation.Backoff;
-import org.springframework.retry.annotation.Retryable;
-
-import com.amazonaws.SdkClientException;
-import com.google.cloud.storage.StorageException;
-
 import no.nav.foreldrepenger.selvbetjening.tjeneste.PingEndpointAware;
+import no.nav.foreldrepenger.selvbetjening.tjeneste.felles.RetryAware;
 
-@Retryable(include = {
-        SdkClientException.class,
-        StorageException.class }, maxAttemptsExpression = "#{${rest.retry.attempts:3}}", backoff = @Backoff(delayExpression = "#{${rest.retry.delay:1000}}"))
-
-public interface Mellomlagring extends PingEndpointAware {
+public interface Mellomlagring extends PingEndpointAware, RetryAware {
 
     void lagre(MellomlagringType type, String katalog, String key, String value);
 

@@ -19,8 +19,6 @@ import no.nav.foreldrepenger.selvbetjening.util.StreamUtil;
 @Component
 public class VedleggSjekker {
 
-    private static final String LASTET_OPP = "LASTET_OPP";
-
     private static final Logger LOG = LoggerFactory.getLogger(VedleggSjekker.class);
 
     private final DataSize maxTotalSize;

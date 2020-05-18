@@ -21,7 +21,7 @@ public class InMemoryMellomlagring extends AbstractMellomlagringTjeneste {
 
     public InMemoryMellomlagring(@Qualifier(SØKNAD) Bøtte b1, @Qualifier(TMP) Bøtte b2) {
         super(b1, b2);
-        store = new HashMap<String, String>();
+        store = new HashMap<>();
     }
 
     @Override
