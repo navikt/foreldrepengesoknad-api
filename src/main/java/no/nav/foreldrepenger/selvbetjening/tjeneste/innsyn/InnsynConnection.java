@@ -1,6 +1,7 @@
 package no.nav.foreldrepenger.selvbetjening.tjeneste.innsyn;
 
 import static java.util.Collections.emptyList;
+import static no.nav.foreldrepenger.selvbetjening.util.StringUtil.flertall;
 
 import java.net.URI;
 import java.util.Arrays;
@@ -74,7 +75,7 @@ public class InnsynConnection extends AbstractRestConnection {
 
         saker.forEach(sak -> sak.setType(fra));
 
-        LOG.info("Hentet {} sak(er) fra {}", saker.size(), uri);
+        LOG.info("Hentet {} sak{} fra {} ({})", saker.size(), flertall(saker.size()), uri, saker);
         return saker;
 
     }
