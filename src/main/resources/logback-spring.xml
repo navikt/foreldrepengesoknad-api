@@ -26,6 +26,7 @@
     </springProfile>
 
     <!-- Turn off Spring's warning logs for already resolved exceptions -->
+    <logger name="org.apache.pdfbox.pdfparser.XrefTrailerResolver" level="ERROR" />
     <logger name="org.apache.pdfbox.pdmodel.font" level="ERROR" />
     <logger name="org.apache.pdfbox.rendering.CIDType0Glyph2D" level="ERROR" />
     <root level="info">
