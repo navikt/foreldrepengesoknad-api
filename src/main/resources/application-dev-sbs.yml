@@ -19,5 +19,5 @@ management:
             show-details: always
 
 spring:
-    http:
+    mvc:
         log-request-details: true
