@@ -1,5 +1,7 @@
 package no.nav.foreldrepenger.selvbetjening.tjeneste.innsyn.saker;
 
+import static no.nav.foreldrepenger.selvbetjening.util.StringUtil.limit;
+
 import com.fasterxml.jackson.annotation.JsonCreator;
 import com.fasterxml.jackson.annotation.JsonProperty;
 
@@ -36,8 +38,9 @@ public class Navn {
 
     @Override
     public String toString() {
-        return getClass().getSimpleName() + "[fornavn=" + fornavn + ", mellomnavn=" + mellomnavn + ", etternavn="
-                + etternavn + ", kjønn="
+        return getClass().getSimpleName() + "[fornavn=" + limit(fornavn, 1) + ", mellomnavn=" + limit(mellomnavn, 1)
+                + ", etternavn="
+                + limit(etternavn, 1) + ", kjønn="
                 + kjønn + "]";
     }
 }
