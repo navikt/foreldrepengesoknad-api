@@ -10,6 +10,6 @@ spring:
               service-account-token-file: /var/run/secrets/kubernetes.io/serviceaccount/token
          generic:
              enabled: true
-             backend: /
+             backend: secrets
              application-name: kv/preprod/sbs,apigw/preprod/fppdfgen/foreldrepengesoknad-api_q1
              default-context: foreldrepengesoknad-api/default
