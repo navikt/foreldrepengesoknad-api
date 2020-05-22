@@ -1,5 +1,6 @@
 {
 "ingresses": [
+        "https://foreldrepengesøknad-api.dev-sbs.nais.io",
         "https://foreldrepengesoknad-api-q.nav.no",
         "https://foreldrepengesoknad-api.nais.oera-q.local"
     ],
