@@ -45,7 +45,7 @@ public class GCPMellomlagring extends AbstractMellomlagringTjeneste {
     @Override
     protected Optional<String> doLes(String bøtte, String katalog, String key) {
         try {
-            return Optional.of(storage.get(bøtte, key(katalog, key)))
+            return Optional.ofNullable(storage.get(bøtte, key(katalog, key)))
                     .map(Blob::getContent)
                     .filter(Objects::nonNull)
                     .map(b -> new String(b, UTF_8));
