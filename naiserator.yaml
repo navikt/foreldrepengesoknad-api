@@ -25,6 +25,7 @@ spec:
   secrets:
     - name: gcp.accesskey
     - name: gcp.secretkey
+    - name: fppdfgen.key
     - name: oppslag.key
     - name: mottak.key
     - name: historikk.key
