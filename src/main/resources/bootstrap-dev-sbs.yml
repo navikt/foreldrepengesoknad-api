@@ -8,7 +8,7 @@ spring:
               role: foreldrepengesoknad-api
               kubernetes-path: kubernetes/preprod/sbs
               service-account-token-file: /var/run/secrets/kubernetes.io/serviceaccount/token
-         generic:
+         kv:
              enabled: true
              backend: kv/preprod/sbs
              application-name: foreldrepengesoknad-api/default
