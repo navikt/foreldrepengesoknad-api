@@ -14,8 +14,8 @@ spec:
 {{#if namespace}}
   gcp:
     buckets:
-      - name: tmp
-      - name: søknad
+      - name: mellomlagring
+      - name: foreldrepengesoknad
   accessPolicy:
     outbound:
       external: 
@@ -25,7 +25,6 @@ spec:
  {{#if gw}}       
         - host: {{gw}}
  {{/if}}       
-      rules: []
   secrets:
     - name: fppdfgen.key
     - name: oppslag.key
