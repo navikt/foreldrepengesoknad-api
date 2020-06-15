@@ -1,6 +1,6 @@
 {
   "ingresses": ["https://foreldrepengesoknad-api.dev-nav.no"],
-  "namespace": "foreldrepenger",
+  "namespace": "teamforeldrepenger",
   "gw" : "api-gw-q1.oera.no",
   "env": {
     "GOOGLE_APPLICATION_CREDENTIALS": "/var/run/secrets/gcp.json",
