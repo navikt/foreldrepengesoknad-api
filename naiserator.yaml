@@ -25,13 +25,12 @@ spec:
  {{#if gw}}       
         - host: {{gw}}
  {{/if}}       
-  secrets:
-      envFrom:
-        - secret: fppdfgen.key
-        - secret: oppslag.key
-        - secret: mottak.key
-        - secret: historikk.key
-        - secret: storage.passphrase
+  envFrom:
+     - secret: fppdfgen.key
+     - secret: oppslag.key
+     - secret: mottak.key
+     - secret: historikk.key
+     - secret: storage.passphrase
 {{/if}}  
   image: {{image}}
   port: 8080
