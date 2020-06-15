@@ -1,5 +1,8 @@
 package no.nav.foreldrepenger.selvbetjening.tjeneste.historikk;
 
+import static no.nav.foreldrepenger.selvbetjening.util.StringUtil.limit;
+import static org.apache.commons.lang3.StringUtils.reverse;
+
 import java.net.URI;
 
 import org.springframework.boot.context.properties.ConfigurationProperties;
@@ -10,7 +13,6 @@ import no.nav.foreldrepenger.selvbetjening.interceptors.client.ZoneCrossingAware
 import no.nav.foreldrepenger.selvbetjening.tjeneste.AbstractConfig;
 import no.nav.foreldrepenger.selvbetjening.tjeneste.oppslag.domain.Fødselsnummer;
 import no.nav.foreldrepenger.selvbetjening.util.Pair;
-import no.nav.foreldrepenger.selvbetjening.util.StringUtil;
 
 @ConfigurationProperties("historikk")
 public class HistorikkConfig extends AbstractConfig implements ZoneCrossingAware {
@@ -62,8 +64,8 @@ public class HistorikkConfig extends AbstractConfig implements ZoneCrossingAware
 
     @Override
     public String toString() {
-        return getClass().getSimpleName() + "[key=" + StringUtil.limit(key, 3) + ", zoneCrossingUri="
-                + zoneCrossingUri() + "]";
+        return getClass().getSimpleName() + "[key=" + limit(reverse(key), 3)
+                + ", zoneCrossingUri=" + zoneCrossingUri() + "]";
     }
 
 }

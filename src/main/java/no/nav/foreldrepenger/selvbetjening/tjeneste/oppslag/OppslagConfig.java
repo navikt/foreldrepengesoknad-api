@@ -1,5 +1,8 @@
 package no.nav.foreldrepenger.selvbetjening.tjeneste.oppslag;
 
+import static no.nav.foreldrepenger.selvbetjening.util.StringUtil.limit;
+import static org.apache.commons.lang3.StringUtils.reverse;
+
 import java.net.URI;
 
 import org.springframework.boot.context.properties.ConfigurationProperties;
@@ -8,7 +11,6 @@ import org.springframework.boot.context.properties.bind.DefaultValue;
 
 import no.nav.foreldrepenger.selvbetjening.interceptors.client.ZoneCrossingAware;
 import no.nav.foreldrepenger.selvbetjening.tjeneste.AbstractConfig;
-import no.nav.foreldrepenger.selvbetjening.util.StringUtil;
 
 @ConfigurationProperties("oppslag")
 public class OppslagConfig extends AbstractConfig implements ZoneCrossingAware {
@@ -55,8 +57,8 @@ public class OppslagConfig extends AbstractConfig implements ZoneCrossingAware {
 
     @Override
     public String toString() {
-        return getClass().getSimpleName() + "[key=" + StringUtil.limit(key, 3) + ", zoneCrossingUri="
-                + zoneCrossingUri() + "]";
+        return getClass().getSimpleName() + "[key=" + limit(reverse(key), 3)
+                + ", zoneCrossingUri=" + zoneCrossingUri() + "]";
     }
 
 }
