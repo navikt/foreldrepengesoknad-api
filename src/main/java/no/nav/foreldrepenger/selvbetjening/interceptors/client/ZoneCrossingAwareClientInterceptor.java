@@ -1,6 +1,7 @@
 package no.nav.foreldrepenger.selvbetjening.interceptors.client;
 
 import static no.nav.foreldrepenger.selvbetjening.util.Constants.X_NAV_API_KEY;
+import static no.nav.foreldrepenger.selvbetjening.util.MDCUtil.CONFIDENTIAL;
 import static org.slf4j.LoggerFactory.getLogger;
 
 import java.io.IOException;
@@ -14,8 +15,6 @@ import org.springframework.http.client.ClientHttpRequestExecution;
 import org.springframework.http.client.ClientHttpRequestInterceptor;
 import org.springframework.http.client.ClientHttpResponse;
 
-import no.nav.foreldrepenger.selvbetjening.util.MDCUtil;
-
 public class ZoneCrossingAwareClientInterceptor implements ClientHttpRequestInterceptor {
 
     private static final Logger LOG = getLogger(ZoneCrossingAwareClientInterceptor.class);
@@ -24,7 +23,6 @@ public class ZoneCrossingAwareClientInterceptor implements ClientHttpRequestInte
 
     public ZoneCrossingAwareClientInterceptor(Map<URI, String> apiKeys) {
         this.apiKeys = apiKeys;
-        LOG.info(MDCUtil.CONFIDENTIAL, "apiKeys {}", apiKeys);
     }
 
     @Override
@@ -32,6 +30,7 @@ public class ZoneCrossingAwareClientInterceptor implements ClientHttpRequestInte
             throws IOException {
         Optional<String> apiKey = apiKeyFor(request.getURI());
         if (apiKey.isPresent()) {
+            LOG.trace(CONFIDENTIAL, "apiKey={}", apiKey.get());
             LOG.trace("Injisert API-key som header {} for {}", X_NAV_API_KEY, request.getURI());
             request.getHeaders().add(X_NAV_API_KEY, apiKey.get());
         } else {
@@ -42,7 +41,8 @@ public class ZoneCrossingAwareClientInterceptor implements ClientHttpRequestInte
     }
 
     private Optional<String> apiKeyFor(URI uri) {
-        return apiKeys.entrySet().stream()
+        return apiKeys.entrySet()
+                .stream()
                 .filter(s -> uri.toString().startsWith(s.getKey().toString()))
                 .map(Map.Entry::getValue)
                 .findFirst();
