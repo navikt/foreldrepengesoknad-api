@@ -10,13 +10,11 @@
     <version>0-SNAPSHOT</version>
     <name>foreldrepengesoknad-api</name>
     <description>API for selvbetjening av foreldrepenger og engangsstønad</description>
-
     <parent>
         <groupId>org.springframework.boot</groupId>
         <artifactId>spring-boot-starter-parent</artifactId>
         <version>2.3.1.RELEASE</version>
     </parent>
-
     <licenses>
         <license>
             <name>MIT License</name>
