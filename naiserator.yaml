@@ -12,6 +12,10 @@ metadata:
 
 spec:
 {{#if namespace}}
+  gcp:
+    buckets:
+      - name: tmp
+      - name: søknad
   accessPolicy:
     outbound:
       external: 
@@ -23,15 +27,11 @@ spec:
  {{/if}}       
       rules: []
   secrets:
-    - name: gcp.accesskey
-    - name: gcp.secretkey
     - name: fppdfgen.key
     - name: oppslag.key
     - name: mottak.key
     - name: historikk.key
     - name: storage.passphrase
-    - name: buckets
-      type: files
 {{/if}}  
   image: {{image}}
   port: 8080
