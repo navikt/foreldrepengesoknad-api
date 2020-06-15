@@ -3,6 +3,7 @@ package no.nav.foreldrepenger.selvbetjening.tjeneste.innsending;
 import java.net.URI;
 
 import org.springframework.boot.context.properties.ConfigurationProperties;
+import org.springframework.boot.context.properties.ConstructorBinding;
 import org.springframework.boot.context.properties.bind.DefaultValue;
 
 import no.nav.foreldrepenger.selvbetjening.interceptors.client.ZoneCrossingAware;
@@ -22,6 +23,7 @@ public class InnsendingConfig extends AbstractConfig implements ZoneCrossingAwar
 
     private final String key;
 
+    @ConstructorBinding
     public InnsendingConfig(URI uri, String key, @DefaultValue("true") boolean enabled) {
         super(uri, enabled);
         this.key = key;

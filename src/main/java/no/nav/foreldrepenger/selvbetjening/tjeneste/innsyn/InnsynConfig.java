@@ -3,6 +3,7 @@ package no.nav.foreldrepenger.selvbetjening.tjeneste.innsyn;
 import java.net.URI;
 
 import org.springframework.boot.context.properties.ConfigurationProperties;
+import org.springframework.boot.context.properties.ConstructorBinding;
 import org.springframework.boot.context.properties.bind.DefaultValue;
 
 import no.nav.foreldrepenger.selvbetjening.tjeneste.AbstractConfig;
@@ -21,6 +22,7 @@ public class InnsynConfig extends AbstractConfig {
 
     private final URI oppslag;
 
+    @ConstructorBinding
     public InnsynConfig(URI mottak, URI oppslag, @DefaultValue("true") boolean enabled) {
         super(mottak, enabled);
         this.oppslag = oppslag;

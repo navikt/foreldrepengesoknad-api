@@ -3,6 +3,7 @@ package no.nav.foreldrepenger.selvbetjening.tjeneste.oppslag;
 import java.net.URI;
 
 import org.springframework.boot.context.properties.ConfigurationProperties;
+import org.springframework.boot.context.properties.ConstructorBinding;
 import org.springframework.boot.context.properties.bind.DefaultValue;
 
 import no.nav.foreldrepenger.selvbetjening.interceptors.client.ZoneCrossingAware;
@@ -20,6 +21,7 @@ public class OppslagConfig extends AbstractConfig implements ZoneCrossingAware {
 
     private final String key;
 
+    @ConstructorBinding
     public OppslagConfig(URI uri, String key, @DefaultValue("true") boolean enabled) {
         super(uri, enabled);
         this.key = key;
