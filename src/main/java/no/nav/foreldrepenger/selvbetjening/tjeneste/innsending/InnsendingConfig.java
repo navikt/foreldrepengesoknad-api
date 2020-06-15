@@ -58,7 +58,7 @@ public class InnsendingConfig extends AbstractConfig implements ZoneCrossingAwar
 
     @Override
     public String toString() {
-        return getClass().getSimpleName() + "[key=" + StringUtil.limit(key, 3) + ", zoneCrossingUri()="
+        return getClass().getSimpleName() + "[key=" + StringUtil.limit(key, 3) + ", zoneCrossingUri="
                 + zoneCrossingUri() + "]";
     }
 }
