@@ -15,7 +15,7 @@ no.nav.security.jwt:
      cookie_name: localhost-idtoken
 
 spring :
-   http:
+   mvc:
      log-request-details : true
 
 no.nav:
