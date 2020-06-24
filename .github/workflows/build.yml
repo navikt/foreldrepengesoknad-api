@@ -49,7 +49,7 @@ jobs:
           docker push ${IMAGE_BASE}  
           
       - name: Lukk gamle issues
-        uses: actions/github-script@0.8.0
+        uses: actions/github-script@v2
         with:
           github-token: ${{ secrets.GITHUB_TOKEN }}
           script: |
@@ -89,7 +89,7 @@ jobs:
       
       - name: Trigg deploy til dev-fss
         if: success()
-        uses: actions/github-script@0.8.0
+        uses: actions/github-script@v2
         with:
           github-token: ${{secrets.NOTIFICATION}}
           script: |
