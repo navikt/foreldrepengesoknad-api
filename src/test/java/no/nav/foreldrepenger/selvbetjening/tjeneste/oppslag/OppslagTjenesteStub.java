@@ -43,12 +43,8 @@ public class OppslagTjenesteStub implements Oppslag {
         SøkerinfoDto dto = new SøkerinfoDto();
         dto.person = person();
         dto.arbeidsforhold = new ArrayList<>();
-        Arbeidsforhold arbeidsforhold = new Arbeidsforhold();
-        arbeidsforhold.arbeidsgiverId = "123456789";
-        arbeidsforhold.arbeidsgiverIdType = "orgnr";
-        arbeidsforhold.fom = now().minusYears(2);
-        arbeidsforhold.arbeidsgiverNavn = "KJELL T. RINGS SYKKELVERKSTED";
-        arbeidsforhold.stillingsprosent = 100d;
+        Arbeidsforhold arbeidsforhold = new Arbeidsforhold("123456789", "orgnr", "KJELL T. RINGS SYKKELVERKSTED", 100d,
+                now().minusYears(2), null);
         dto.arbeidsforhold.add(arbeidsforhold);
         return new Søkerinfo(dto);
     }

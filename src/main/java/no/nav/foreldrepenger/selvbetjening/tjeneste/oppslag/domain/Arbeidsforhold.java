@@ -4,22 +4,17 @@ import java.time.LocalDate;
 
 import com.fasterxml.jackson.annotation.JsonAlias;
 
+import lombok.Data;
+
+@Data
 public class Arbeidsforhold {
 
-    public String arbeidsgiverId;
-    public String arbeidsgiverIdType;
-    public String arbeidsgiverNavn;
-    public Double stillingsprosent;
+    private final String arbeidsgiverId;
+    private final String arbeidsgiverIdType;
+    private final String arbeidsgiverNavn;
+    private final Double stillingsprosent;
     @JsonAlias("from")
-    public LocalDate fom;
+    private final LocalDate fom;
     @JsonAlias("to")
-    public LocalDate tom;
-
-    @Override
-    public String toString() {
-        return getClass().getSimpleName() + " [arbeidsgiverId=" + arbeidsgiverId + ", arbeidsgiverIdType="
-                + arbeidsgiverIdType
-                + ", arbeidsgiverNavn=" + arbeidsgiverNavn + ", stillingsprosent=" + stillingsprosent + ", fom=" + fom
-                + ", tom=" + tom + "]";
-    }
+    private final LocalDate tom;
 }
