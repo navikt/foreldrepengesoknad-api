@@ -48,7 +48,7 @@ public class OppslagTest {
     private MockRestServiceServer server;
 
     @Autowired
-    private RestTemplateBuilder builder;
+    private RestTemplateBuilder oppslagBuilder;
 
     private OppslagConnection oppslagConnection;
     private InnsynConnection innsynConnection;
@@ -57,8 +57,8 @@ public class OppslagTest {
 
     @BeforeEach
     public void restOperations() {
-        oppslagConnection = new OppslagConnection(builder.build(), oppslagConfig);
-        innsynConnection = new InnsynConnection(builder.build(), innsynConfig);
+        oppslagConnection = new OppslagConnection(oppslagBuilder.build(), oppslagConfig);
+        innsynConnection = new InnsynConnection(null, innsynConfig);
         oppslag = new OppslagTjeneste(oppslagConnection, innsynConnection);
     }
 
