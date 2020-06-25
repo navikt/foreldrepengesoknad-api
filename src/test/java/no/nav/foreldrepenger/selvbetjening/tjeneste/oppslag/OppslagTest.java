@@ -23,6 +23,8 @@ import org.springframework.test.context.junit.jupiter.SpringExtension;
 import org.springframework.test.web.client.ExpectedCount;
 import org.springframework.test.web.client.MockRestServiceServer;
 
+import no.nav.foreldrepenger.selvbetjening.tjeneste.innsyn.InnsynConfig;
+import no.nav.foreldrepenger.selvbetjening.tjeneste.innsyn.InnsynConnection;
 import no.nav.foreldrepenger.selvbetjening.util.TokenUtil;
 import no.nav.security.token.support.spring.SpringTokenValidationContextHolder;
 
@@ -39,6 +41,8 @@ public class OppslagTest {
     TokenUtil tokenHandler;
 
     private OppslagConfig oppslagConfig = new OppslagConfig(URI.create("http://www.vg.no"), "key", true);
+    private InnsynConfig innsynConfig = new InnsynConfig(URI.create("http://www.vg.no"), URI.create("http://www.vg.no"),
+            true);
 
     @Autowired
     private MockRestServiceServer server;
@@ -47,13 +51,15 @@ public class OppslagTest {
     private RestTemplateBuilder builder;
 
     private OppslagConnection oppslagConnection;
+    private InnsynConnection innsynConnection;
 
     private OppslagTjeneste oppslag;
 
     @BeforeEach
     public void restOperations() {
         oppslagConnection = new OppslagConnection(builder.build(), oppslagConfig);
-        oppslag = new OppslagTjeneste(oppslagConnection);
+        innsynConnection = new InnsynConnection(builder.build(), innsynConfig);
+        oppslag = new OppslagTjeneste(oppslagConnection, innsynConnection);
     }
 
     @Test
