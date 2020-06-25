@@ -17,8 +17,12 @@ public class Søkerinfo {
     private final List<Arbeidsforhold> arbeidsforhold;
 
     public Søkerinfo(SøkerinfoDto dto) {
-        this.søker = new Person(dto.person);
-        this.arbeidsforhold = Optional.ofNullable(dto.arbeidsforhold).orElse(emptyList());
+        this(new Person(dto.person), Optional.ofNullable(dto.arbeidsforhold).orElse(emptyList()));
+    }
+
+    public Søkerinfo(Person søker, List<Arbeidsforhold> arbeidsforhold) {
+        this.søker = søker;
+        this.arbeidsforhold = arbeidsforhold;
     }
 
     public Person getSøker() {
