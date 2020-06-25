@@ -14,13 +14,13 @@ import org.springframework.retry.annotation.EnableRetry;
 
 import no.nav.security.token.support.spring.api.EnableJwtTokenValidation;
 import no.nav.security.token.support.test.spring.TokenGeneratorConfiguration;
-import springfox.documentation.swagger2.annotations.EnableSwagger2;
+import springfox.documentation.swagger2.annotations.EnableSwagger2WebMvc;
 
 @SpringBootApplication
 @ConfigurationPropertiesScan("no.nav.foreldrepenger.selvbetjening")
 @EnableCaching
 @EnableRetry
-@EnableSwagger2
+@EnableSwagger2WebMvc
 @EnableJwtTokenValidation(ignore = { "org.springframework", "springfox.documentation" })
 @Import(value = TokenGeneratorConfiguration.class)
 @ComponentScan(excludeFilters = { @Filter(type = ASSIGNABLE_TYPE, value = ApiApplication.class) })

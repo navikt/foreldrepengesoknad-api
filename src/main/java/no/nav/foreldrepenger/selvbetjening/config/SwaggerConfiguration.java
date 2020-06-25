@@ -16,11 +16,11 @@ import io.swagger.models.Scheme;
 import no.nav.foreldrepenger.boot.conditionals.ConditionalOnNotProd;
 import springfox.documentation.builders.PathSelectors;
 import springfox.documentation.spring.web.plugins.Docket;
-import springfox.documentation.swagger2.annotations.EnableSwagger2;
+import springfox.documentation.swagger2.annotations.EnableSwagger2WebMvc;
 
 @Configuration
 @ConditionalOnNotProd
-@EnableSwagger2
+@EnableSwagger2WebMvc
 public class SwaggerConfiguration {
 
     @Bean
