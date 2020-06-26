@@ -12,7 +12,7 @@ metadata:
     xxx: {{cluster}}
 
 spec:
-{{#if (eq {{cluster}} "dev-gcp")}}
+{{#if namespace}}
   gcp:
     buckets:
       - name: mellomlagring
