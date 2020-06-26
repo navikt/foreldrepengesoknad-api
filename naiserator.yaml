@@ -9,6 +9,7 @@ metadata:
 {{/if}} 
   labels:
     team: teamforeldrepenger
+    xxx: {{cluster}}
 
 spec:
 {{#if (eq {{cluster}} "dev-gcp")}}
