@@ -4,6 +4,7 @@
         "https://foreldrepengesoknad-api-q.nav.no",
         "https://foreldrepengesoknad-api.nais.oera-q.local"
     ],
+  "namespace": "teamforeldrepenger",
   "env": {
     "oppslag_uri": "https://api-gw-q1.oera.no/fpsoknad-oppslag/api/",
     "historikk_uri": "https://api-gw-q1.oera.no/fpinfo-historikk/api/",
