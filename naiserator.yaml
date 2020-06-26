@@ -60,12 +60,10 @@ spec:
       requests:
         cpu: 250m
         memory: 1536Mi 
+{{#unless gcp}} 
   vault:
-{{#if gcp}}
-      enabled: false   
-{{else}} 
-     enabled: true   
-{{/if}} 
+      enabled: true    
+{{/unless}}
   env: 
 {{#each env}}
     - name: {{@key}}
