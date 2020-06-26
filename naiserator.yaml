@@ -11,7 +11,7 @@ metadata:
     team: teamforeldrepenger
     cluster: {{cluster}}
 spec:
-{{#if (eq {{cluster}}  "dev-gcp")}}
+{{#if (eq .cluster  "dev-gcp")}}
     buckets:
       - name: mellomlagring
       - name: foreldrepengesoknad
