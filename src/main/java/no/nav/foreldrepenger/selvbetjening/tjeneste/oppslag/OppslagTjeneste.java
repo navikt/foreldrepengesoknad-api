@@ -1,5 +1,7 @@
 package no.nav.foreldrepenger.selvbetjening.tjeneste.oppslag;
 
+import static no.nav.foreldrepenger.selvbetjening.util.MDCUtil.CONFIDENTIAL;
+
 import javax.inject.Inject;
 
 import org.slf4j.Logger;
@@ -34,7 +36,8 @@ public class OppslagTjeneste implements Oppslag {
     public Søkerinfo hentSøkerinfo() {
         LOG.info("Henter søkerinfo");
         var info = new Søkerinfo(hentPerson(), innsyn.hentArbeidsForhold());
-        LOG.info("Hentet søkerinfo OK {}", info);
+        LOG.info("Hentet søkerinfo med {} arbeidsforhold OK", info.getArbeidsforhold());
+        LOG.info(CONFIDENTIAL, "Hentet søkerinfo {}", info);
         return info;
     }
 
