@@ -3,7 +3,6 @@ kind: "Application"
 metadata:
   name: foreldrepengesoknad-api
   namespace: {{namespace}}
-{{/if}} 
   labels:
     team: teamforeldrepenger
 spec:
