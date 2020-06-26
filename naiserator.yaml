@@ -4,10 +4,10 @@ metadata:
   name: foreldrepengesoknad-api
   namespace: {{namespace}}
   labels:
-    team: teamforeldrepenger
+    team: teamforeldrepenger 
 spec:
 {{#if gcp}}
-  buckets:
+  buckets: 
      - name: mellomlagring
      - name: foreldrepengesoknad
   accessPolicy:
