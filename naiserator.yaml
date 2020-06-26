@@ -2,10 +2,7 @@ apiVersion: "nais.io/v1alpha1"
 kind: "Application"
 metadata:
   name: foreldrepengesoknad-api
-{{#if namespace}}
   namespace: {{namespace}}
-{{else}}
-  namespace: default
 {{/if}} 
   labels:
     team: teamforeldrepenger
@@ -53,11 +50,11 @@ spec:
 {{/each}} 
   resources:
       limits:
-        cpu: 1500m
-        memory: 3072Mi
+         cpu: 1500m
+         memory: 3072Mi
       requests:
-        cpu: 250m
-        memory: 1536Mi 
+         cpu: 250m
+         memory: 1536Mi 
 {{#unless gcp}} 
   vault:
       enabled: true    
