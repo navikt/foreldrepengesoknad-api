@@ -23,7 +23,7 @@ spec:
         - host: www.googleapis.com
 {{#if gcp}}
         - host: {{gw}}
- {{/if}}       
+{{/if}}       
   envFrom:
      - secret: fppdfgen.key
      - secret: oppslag.key
@@ -68,12 +68,10 @@ spec:
      enabled: true   
 {{/if}} 
   env: 
-  {{#each env}}
+{{#each env}}
     - name: {{@key}}
       value: "{{this}}"
-  {{/each}}
-{{#if gcp}}
-  webproxy: false
-{{else}}
+{{/each}}
+{{#unless gcp}}
   webproxy: true
-{{/if}} 
+{{/unless}}
