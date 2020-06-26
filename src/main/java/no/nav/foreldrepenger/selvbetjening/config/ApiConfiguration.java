@@ -59,7 +59,6 @@ public class ApiConfiguration implements WebMvcConfigurer {
 
     @Bean
     public ClientHttpRequestInterceptor zoneCrossingAwareRequestInterceptor(ZoneCrossingAware... zoneCrossers) {
-        LOG.info("Registrerer zoneCrossers {}", Arrays.toString(zoneCrossers));
         var builder = ImmutableMap.<URI, String>builder();
         Arrays.stream(zoneCrossers)
                 .forEach(c -> builder.put(c.zoneCrossingUri(), c.getKey()));
@@ -86,8 +85,6 @@ public class ApiConfiguration implements WebMvcConfigurer {
                     if (ctx.getRetryCount() > 0) {
                         LOG.info("Metode {} avslutter vellykket retry etter {}. forsøk",
                                 ctx.getAttribute(NAME), ctx.getRetryCount());
-                    } else {
-                        LOG.debug("Metode {} avslutter vellykket uten retry", ctx.getAttribute(NAME));
                     }
                 }
             }
@@ -99,13 +96,10 @@ public class ApiConfiguration implements WebMvcConfigurer {
                 String metode = (String) ReflectionUtils.getField(labelField, cb);
                 if (ctx.getRetryCount() > 0) {
                     LOG.info("Metode {} gjør retry for {}. gang", metode, ctx.getRetryCount());
-                } else {
-                    LOG.debug("Metode {} initierer retry", metode);
                 }
                 return true;
             }
         });
-        LOG.info("Registrerer retry listener {}", listener);
         return listener;
 
     }
