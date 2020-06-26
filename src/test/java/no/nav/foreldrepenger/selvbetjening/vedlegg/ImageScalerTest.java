@@ -59,7 +59,7 @@ public class ImageScalerTest {
                 (bytes[0] & 0XFF) == 0xFF;
     }
 
-    private BufferedImage fromBytes(byte[] bytes) {
+    private static BufferedImage fromBytes(byte[] bytes) {
         try (InputStream in = new ByteArrayInputStream(bytes)) {
             return ImageIO.read(in);
         } catch (Exception ex) {

@@ -32,17 +32,10 @@ public class OppslagTjeneste implements Oppslag {
 
     @Override
     public Søkerinfo hentSøkerinfo() {
-        try {
-            LOG.info("Henter søkerinfo");
-            var info = new Søkerinfo(hentPerson(), innsyn.hentArbeidsForhold());
-            LOG.info("Hentet søkerinfo OK {}", info);
-            return info;
-        } catch (Exception e) {
-            LOG.info("Henter søkerinfo alternativt");
-            var info = new Søkerinfo(oppslag.hentSøkerInfo());
-            LOG.info("Hentet søkerinfo alternativt OK {}", info);
-            return info;
-        }
+        LOG.info("Henter søkerinfo");
+        var info = new Søkerinfo(hentPerson(), innsyn.hentArbeidsForhold());
+        LOG.info("Hentet søkerinfo OK {}", info);
+        return info;
     }
 
     @Override

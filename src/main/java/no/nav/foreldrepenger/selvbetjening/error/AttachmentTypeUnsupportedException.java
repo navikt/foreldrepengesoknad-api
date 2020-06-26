@@ -9,7 +9,7 @@ public class AttachmentTypeUnsupportedException extends AttachmentException {
     }
 
     public AttachmentTypeUnsupportedException(Throwable e) {
-        this(null, null, null);
+        this(null, null, e);
     }
 
     public AttachmentTypeUnsupportedException(String msg, MediaType mediaType, Throwable e) {

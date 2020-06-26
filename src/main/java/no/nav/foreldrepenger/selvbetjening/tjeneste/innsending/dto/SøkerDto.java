@@ -23,7 +23,7 @@ public class SøkerDto {
         }
     }
 
-    private boolean morFarEllerMedmor(String rolle) {
+    private static boolean morFarEllerMedmor(String rolle) {
         return (rolle != null) && (rolle.equals("MOR") || rolle.equals("FAR") || rolle.equals("MEDMOR"));
     }
 

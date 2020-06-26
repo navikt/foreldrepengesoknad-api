@@ -5,7 +5,7 @@ import static java.time.LocalDate.now;
 import static java.util.Collections.singletonList;
 import static org.slf4j.LoggerFactory.getLogger;
 
-import java.util.ArrayList;
+import java.util.List;
 
 import org.slf4j.Logger;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnProperty;
@@ -19,37 +19,39 @@ import no.nav.foreldrepenger.selvbetjening.tjeneste.oppslag.domain.Barn;
 import no.nav.foreldrepenger.selvbetjening.tjeneste.oppslag.domain.Person;
 import no.nav.foreldrepenger.selvbetjening.tjeneste.oppslag.domain.Søkerinfo;
 import no.nav.foreldrepenger.selvbetjening.tjeneste.oppslag.dto.PersonDto;
-import no.nav.foreldrepenger.selvbetjening.tjeneste.oppslag.dto.SøkerinfoDto;
 
 @Service("oppslagTjeneste")
 @ConditionalOnProperty(name = "stub.oppslag", havingValue = "true")
 public class OppslagTjenesteStub implements Oppslag {
+    private static final Logger LOG = getLogger(OppslagTjenesteStub.class);
 
     @Override
     public String ping() {
         return "hello earthlings";
     }
 
-    private static final Logger LOG = getLogger(OppslagTjenesteStub.class);
-
     @Override
     public Person hentPerson() {
         LOG.info("Stubber oppslag...");
-        return new Person(person());
+        return person();
     }
 
     @Override
     public Søkerinfo hentSøkerinfo() {
-        SøkerinfoDto dto = new SøkerinfoDto();
-        dto.person = person();
-        dto.arbeidsforhold = new ArrayList<>();
-        Arbeidsforhold arbeidsforhold = new Arbeidsforhold("123456789", "orgnr", "KJELL T. RINGS SYKKELVERKSTED", 100d,
-                now().minusYears(2), null);
-        dto.arbeidsforhold.add(arbeidsforhold);
-        return new Søkerinfo(dto);
+        return new Søkerinfo(person(), arbeidsforhold());
     }
 
-    public static PersonDto person() {
+    @Override
+    public AktørId hentAktørId(String fnr) {
+        return new AktørId("1234567890");
+    }
+
+    private static Person person() {
+        PersonDto dto = personDto();
+        return new Person(dto);
+    }
+
+    public static PersonDto personDto() {
         PersonDto dto = new PersonDto();
         dto.fnr = "25987148243";
         dto.aktorId = "0123456789999";
@@ -59,19 +61,23 @@ public class OppslagTjenesteStub implements Oppslag {
         dto.kjønn = "K";
         dto.landKode = NO;
         dto.bankkonto = new Bankkonto("1234567890", "Stub NOR");
-
-        AnnenForelder annenForelder = new AnnenForelder("01017098765", "Steve", "Grønland", "Nichols",
-                now().minusYears(45));
-
-        Barn barn = new Barn("01011812345", "Mo", null, "Hoelsveen", "M", now().minusYears(1), annenForelder);
-        dto.barn = singletonList(barn);
-
+        dto.barn = barn();
         return dto;
     }
 
-    @Override
-    public AktørId hentAktørId(String fnr) {
-        return new AktørId("1234567890");
+    private static AnnenForelder annenForelder() {
+        return new AnnenForelder("01017098765", "Steve", "Grønland", "Nichols",
+                now().minusYears(45));
+    }
+
+    private static List<Barn> barn() {
+        return singletonList(
+                new Barn("01011812345", "Mo", null, "Hoelsveen", "M", now().minusYears(1), annenForelder()));
+    }
+
+    private static List<Arbeidsforhold> arbeidsforhold() {
+        return singletonList(new Arbeidsforhold("123456789", "orgnr", "KJELL T. RINGS SYKKELVERKSTED", 100d,
+                now().minusYears(2), null));
     }
 
 }

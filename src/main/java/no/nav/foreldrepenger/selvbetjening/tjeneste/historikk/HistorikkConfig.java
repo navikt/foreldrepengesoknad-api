@@ -43,6 +43,7 @@ public class HistorikkConfig extends AbstractConfig implements ZoneCrossingAware
                 queryParams(Pair.of("saksnummer", saksnr), Pair.of("fnr", fnr.getFnr())));
     }
 
+    @Override
     public URI pingURI() {
         return uri(getUri(), DEFAULT_PING_PATH);
     }

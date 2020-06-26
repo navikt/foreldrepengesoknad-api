@@ -88,7 +88,7 @@ public class InnsendingConnection extends AbstractRestConnection {
         return dto;
     }
 
-    private SøknadDto ytelse(Søknad søknad) {
+    private static SøknadDto ytelse(Søknad søknad) {
         if (søknad instanceof Engangsstønad) {
             return new EngangsstønadDto((Engangsstønad) søknad);
         }

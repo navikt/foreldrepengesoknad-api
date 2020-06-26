@@ -54,7 +54,7 @@ public class Krypto {
         return cipher;
     }
 
-    private SecretKey key(String passphrase, String salt) {
+    private static SecretKey key(String passphrase, String salt) {
         try {
             return new SecretKeySpec(SecretKeyFactory.getInstance("PBKDF2WithHmacSHA256")
                     .generateSecret(new PBEKeySpec(passphrase.toCharArray(), salt.getBytes(), 10000, 256)).getEncoded(),
@@ -64,7 +64,7 @@ public class Krypto {
         }
     }
 
-    private boolean isEmpty(String str) {
+    private static boolean isEmpty(String str) {
         return str == null || str.trim().isEmpty();
     }
 }

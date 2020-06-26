@@ -1,9 +1,10 @@
 package no.nav.foreldrepenger.selvbetjening.tjeneste.innsending.pdf;
 
+import static java.util.stream.Collectors.joining;
+
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 import java.util.Objects;
-import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
 import org.springframework.stereotype.Component;
@@ -39,11 +40,11 @@ public class PdfGeneratorTjeneste implements PdfGenerator {
                 uttalelse.getBrukerTekst().getTekst());
     }
 
-    private String fulltnavn(Person person) {
+    private static String fulltnavn(Person person) {
         return Stream.of(person.fornavn, person.mellomnavn, person.etternavn)
                 .filter(Objects::nonNull)
                 .filter(s -> !s.isBlank())
-                .collect(Collectors.joining(" "));
+                .collect(joining(" "));
     }
 
     @Override

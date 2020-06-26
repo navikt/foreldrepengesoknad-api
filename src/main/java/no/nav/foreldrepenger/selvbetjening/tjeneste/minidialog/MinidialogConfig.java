@@ -34,6 +34,7 @@ public class MinidialogConfig extends AbstractConfig {
         return uri(getUri(), AKTIVE, queryParams(Pair.of("fnr", fnr)));
     }
 
+    @Override
     public URI pingURI() {
         return uri(getUri(), DEFAULT_PING_PATH);
     }

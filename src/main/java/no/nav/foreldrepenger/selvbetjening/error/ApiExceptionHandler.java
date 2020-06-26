@@ -108,13 +108,7 @@ public class ApiExceptionHandler extends ResponseEntityExceptionHandler {
     }
 
     private ResponseEntity<Object> logAndHandle(HttpStatus status, Exception e, WebRequest req) {
-        return logAndHandle(status, e, req, headers());
-    }
-
-    private HttpHeaders headers() {
-        var h = new HttpHeaders();
-        // h.setContentType(MediaType.APPLICATION_JSON);
-        return h;
+        return logAndHandle(status, e, req, new HttpHeaders());
     }
 
     private ResponseEntity<Object> logAndHandle(HttpStatus status, Exception e, WebRequest req, HttpHeaders headers,
@@ -125,7 +119,7 @@ public class ApiExceptionHandler extends ResponseEntityExceptionHandler {
         return handleExceptionInternal(e, apiError, headers, status, req);
     }
 
-    private Object[] validationErrors(MethodArgumentNotValidException e) {
+    private static Object[] validationErrors(MethodArgumentNotValidException e) {
         return e.getBindingResult().getFieldErrors()
                 .stream()
                 .map(ApiExceptionHandler::errorMessage)
