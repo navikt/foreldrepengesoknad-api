@@ -9,7 +9,7 @@ metadata:
 {{/if}} 
   labels:
     team: teamforeldrepenger
-
+    cluster: {{cluster}}
 spec:
 {{#if gcp}}
   gcp:
