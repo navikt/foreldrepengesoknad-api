@@ -11,9 +11,9 @@ metadata:
     team: teamforeldrepenger
 spec:
 {{#if gcp}}
-    buckets:
-      - name: mellomlagring
-      - name: foreldrepengesoknad
+  buckets:
+     - name: mellomlagring
+     - name: foreldrepengesoknad
   accessPolicy:
     outbound:
       external: 
