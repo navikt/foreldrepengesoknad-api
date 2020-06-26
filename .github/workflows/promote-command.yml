@@ -31,7 +31,6 @@ jobs:
           RESOURCE: naiserator.yaml
           PRINT_PAYLOAD: true
           VARS: ${{ env.CLUSTER }}.json 
-          VAR: cluster=${{ env.CLUSTER }}
           
       - name: Oppdater kommentar med deployment status ved feil
         if: failure()
