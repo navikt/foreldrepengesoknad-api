@@ -20,9 +20,7 @@ spec:
         - host: storage.googleapis.com
         - host: oauth2.googleapis.com
         - host: www.googleapis.com
-{{#if gcp}}
-        - host: {{gw}}
-{{/if}}       
+        - host: {{gw}}      
   envFrom:
      - secret: fppdfgen.key
      - secret: oppslag.key
