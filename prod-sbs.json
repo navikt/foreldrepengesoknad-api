@@ -2,7 +2,6 @@
 "ingresses": ["https://foreldrepengesoknad-api.nav.no",
               "https://foreldrepengesoknad-api.nais.oera.no",
               "https://foreldrepengesoknad-api.prod-sbs.nais.no"],
-  "cluster" : "prod-gcp",            
   "env": {
     "oppslag_uri": "https://api-gw.oera.no/fpsoknad-oppslag/api/",
     "historikk_uri": "https://api-gw.oera.no/fpinfo-historikk/api/",
