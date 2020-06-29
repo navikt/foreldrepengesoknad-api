@@ -90,11 +90,11 @@ jobs:
                                   title: 'Deploy av ${{ env.TAG }}'} );
             const issue = { owner: context.issue.owner,
                             repo: context.issue.repo,
-                            issue_number: ${{ steps.createdeployissue.outputs.number }} }
-            github.issues.createComment({...id,
+                            issue_number: id.issue_number }
+            github.issues.createComment({...issue,
                                     title: 'Deploy av ${{ env.TAG }}',
                                     body: '/promote ${{ env.CLUSTER }} teamforeldrepenger'})
-            github.issues.createComment({...id,
+            github.issues.createComment({...issue,
                                     title: 'Deploy av ${{ env.TAG }}',
                                     body: '/promote dev-gcp teamforeldrepenger'})
   
