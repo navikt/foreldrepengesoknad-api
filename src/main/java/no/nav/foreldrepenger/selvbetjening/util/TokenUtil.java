@@ -47,7 +47,7 @@ public class TokenUtil {
 
     public String autentisertBruker() {
         return Optional.ofNullable(getSubject())
-                .orElseThrow(() -> new JwtTokenValidatorException("Fant ikke subject", getExpiryDate()));
+                .orElseThrow(() -> new JwtTokenValidatorException("Fant ikke subject", getExpiryDate(), null));
     }
 
     private JwtTokenClaims claimSet() {
