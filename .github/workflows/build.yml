@@ -85,7 +85,9 @@ jobs:
         with:
           github-token: ${{secrets.NOTIFICATION}}
           script: |
-            github.issues.create({owner: context.issue.owner,repo: context.issue.repo,title: 'test-123'});
+            const id = github.issues.create( {owner: context.issue.owner,
+                                  repo: context.issue.repo,
+                                  title: 'Deploy av ${{ env.TAG }}'} );
             const issue = { owner: context.issue.owner,
                             repo: context.issue.repo,
                             issue_number: ${{ steps.createdeployissue.outputs.number }} }
