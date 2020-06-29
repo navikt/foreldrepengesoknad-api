@@ -85,12 +85,12 @@ jobs:
         with:
           github-token: ${{secrets.NOTIFICATION}}
           script: |
-            const id = github.issues.create( {owner: context.issue.owner,
+            const nyttissue = github.issues.create( {owner: context.issue.owner,
                                   repo: context.issue.repo,
                                   title: 'Deploy av ${{ env.TAG }}'} );
             const issue = { owner: context.issue.owner,
                             repo: context.issue.repo,
-                            issue_number: id.issue_number }
+                            issue_number: nyttissue.id }
             github.issues.createComment({...issue,
                                     title: 'Deploy av ${{ env.TAG }}',
                                     body: '/promote ${{ env.CLUSTER }} teamforeldrepenger'})
