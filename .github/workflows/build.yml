@@ -90,7 +90,7 @@ jobs:
                                   repo: context.issue.repo,
                                   title: 'Deploy av ${{ env.TAG }}'})
                                   .then(response => {
-                                      console.log('response', response)
+                                        console.log('response', response)
                                         const issue = { owner: context.issue.owner,
                                                         repo: context.issue.repo,
                                                         issue_number: response.data.number }
