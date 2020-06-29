@@ -5,9 +5,10 @@ import org.springframework.retry.annotation.Retryable;
 import org.springframework.web.client.HttpClientErrorException;
 import org.springframework.web.client.HttpServerErrorException;
 import org.springframework.web.client.RestClientException;
+import org.springframework.web.multipart.MultipartException;
 
 @Retryable(include = {
-        RestClientException.class }, exclude = {
+        RestClientException.class, MultipartException.class }, exclude = {
                 HttpServerErrorException.class,
                 HttpClientErrorException.NotFound.class,
                 HttpClientErrorException.Forbidden.class,
