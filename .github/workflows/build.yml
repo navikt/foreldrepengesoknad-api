@@ -15,8 +15,7 @@ jobs:
   kompiler:
     runs-on: ubuntu-latest
     steps:
-     
-    
+         
       - name: Sjekk ut kode
         uses: actions/checkout@v2
      
