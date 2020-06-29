@@ -5,7 +5,6 @@ on:
     branches:
       - master
 env:
-  GITHUB_USERNAME: x-access-token
   SONAR: ${{ secrets.SONAR }}   
   GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
   IMAGE_BASE: docker.pkg.github.com/${{ github.repository }}/foreldrepengesoknad-api
