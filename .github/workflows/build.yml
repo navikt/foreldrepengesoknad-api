@@ -8,7 +8,6 @@ env:
   GITHUB_USERNAME: x-access-token
   SONAR: ${{ secrets.SONAR }}   
   GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-  CLUSTER: dev-sbs
   IMAGE_BASE: docker.pkg.github.com/${{ github.repository }}/foreldrepengesoknad-api
   
 jobs:
@@ -84,7 +83,7 @@ jobs:
                       issue_number: response.data.number }
                      github.issues.createComment({...issue,
                             title: 'Deploy av ${{ env.TAG }}',
-                            body: '/promote ${{ env.CLUSTER }} teamforeldrepenger'})
+                            body: '/promote dev-sbs teamforeldrepenger'})
                      github.issues.createComment({...issue,
                             title: 'Deploy av ${{ env.TAG }}',
                             body: '/promote dev-gcp teamforeldrepenger'})
