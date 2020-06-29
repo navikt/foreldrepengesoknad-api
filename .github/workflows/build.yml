@@ -39,7 +39,6 @@ jobs:
           mvn versions:set -DnewVersion=${TAG}
           echo "::set-env name=IMAGE::$IMAGE_BASE:$TAG" 
           mvn --settings ./.m2/settings.xml  --quiet jacoco:prepare-agent install jacoco:report sonar:sonar  -e --batch-mode   -Dsonar.login=${SONAR} -Djacoco.destFile=$(pwd)/target/jacoco.exec
-  #       mvn clean install --batch-mode --quiet 
                    
       - name: Bygg, tag og push Docker image  
         run: |
@@ -47,7 +46,7 @@ jobs:
           echo  ${GITHUB_TOKEN} | docker login docker.pkg.github.com -u ${GITHUB_REPOSITORY} --password-stdin
           docker push ${IMAGE_BASE}  
           
-      - name: Lukk gamle issues
+      - name: Lukk gamle bygg-issues
         uses: actions/github-script@v2
         with:
           github-token: ${{ secrets.GITHUB_TOKEN }}
