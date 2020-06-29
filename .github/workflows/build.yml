@@ -85,22 +85,19 @@ jobs:
         with:
           github-token: ${{secrets.NOTIFICATION}}
           script: |
-            
-            const nyttissue = github.issues.create( {
+                            github.issues.create( {
                                   owner: context.issue.owner,
                                   repo: context.issue.repo,
                                   title: 'Deploy av ${{ env.TAG }}'})
                                   .then(response => {
                                       console.log('response', response)
-                                  });
-                                 
-            const issue = { owner: context.issue.owner,
-                            repo: context.issue.repo,
-                            issue_number: nyttissue.data.number }
-            github.issues.createComment({...issue,
-                                    title: 'Deploy av ${{ env.TAG }}',
-                                    body: '/promote ${{ env.CLUSTER }} teamforeldrepenger'})
-            github.issues.createComment({...issue,
-                                    title: 'Deploy av ${{ env.TAG }}',
-                                    body: '/promote dev-gcp teamforeldrepenger'})
-  
+                                        const issue = { owner: context.issue.owner,
+                                                        repo: context.issue.repo,
+                                                        issue_number: response.data.number }
+                                        github.issues.createComment({...issue,
+                                                                      title: 'Deploy av ${{ env.TAG }}',
+                                                                      body: '/promote ${{ env.CLUSTER }} teamforeldrepenger'})
+                                        github.issues.createComment({...issue,
+                                                                      title: 'Deploy av ${{ env.TAG }}',
+                                                                      body: '/promote dev-gcp teamforeldrepenger'})
+                               });
