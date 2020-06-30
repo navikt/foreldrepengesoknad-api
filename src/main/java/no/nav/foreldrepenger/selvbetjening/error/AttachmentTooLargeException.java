@@ -12,12 +12,12 @@ public class AttachmentTooLargeException extends AttachmentException {
         this(vedlegg.getContent().length, max);
     }
 
-    public AttachmentTooLargeException(String msg) {
-        super(msg);
-    }
-
     public AttachmentTooLargeException(long size, DataSize maxVedleggSize) {
         this(msg(DataSize.ofBytes(size), maxVedleggSize));
+    }
+
+    private AttachmentTooLargeException(String msg) {
+        super(msg);
     }
 
     private static String msg(DataSize attachmentSize, DataSize max) {
