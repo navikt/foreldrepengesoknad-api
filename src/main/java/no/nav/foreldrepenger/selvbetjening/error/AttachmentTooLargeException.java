@@ -17,11 +17,11 @@ public class AttachmentTooLargeException extends AttachmentException {
     }
 
     public AttachmentTooLargeException(long size, DataSize maxVedleggSize) {
-        this(msg(size, maxVedleggSize));
+        this(msg(DataSize.ofBytes(size), maxVedleggSize));
     }
 
-    private static String msg(long attachmentSize, DataSize max) {
-        return format("Vedlegg-størrelse er %s Mb, men kan ikke overstige %s",
+    private static String msg(DataSize attachmentSize, DataSize max) {
+        return format("Vedlegg-størrelse er %s, men kan ikke overstige %s",
                 attachmentSize, max);
     }
 }
