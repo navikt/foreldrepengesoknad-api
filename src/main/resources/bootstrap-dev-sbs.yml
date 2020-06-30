@@ -11,5 +11,5 @@ spring:
          kv:
              enabled: true
              backend: kv/preprod/sbs
-             application-name: foreldrepengesoknad-api/default
-             default-context: foreldrepengesoknad-api/default
+             application-name: foreldrepengesoknad-api/teamforeldrepenger
+             default-context: foreldrepengesoknad-api/teamforeldrepenger
