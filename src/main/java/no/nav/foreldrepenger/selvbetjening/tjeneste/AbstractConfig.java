@@ -48,6 +48,7 @@ public abstract class AbstractConfig {
         return queryParams(Pair.of(key, value));
     }
 
+    @SafeVarargs
     protected static HttpHeaders queryParams(Pair<String, Object>... pairs) {
         HttpHeaders queryParams = new HttpHeaders();
         for (Pair<String, Object> pair : pairs) {

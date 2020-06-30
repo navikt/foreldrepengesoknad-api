@@ -1,10 +1,10 @@
 package no.nav.foreldrepenger.selvbetjening.util;
 
 import static java.time.LocalDate.now;
+import static java.time.Month.OCTOBER;
 import static java.time.temporal.TemporalAdjusters.firstDayOfYear;
 
 import java.time.LocalDate;
-import java.time.Month;
 
 public final class DateUtil {
 
@@ -16,7 +16,8 @@ public final class DateUtil {
     }
 
     static boolean erNyoppstartet(LocalDate nå, LocalDate fom) {
-        return fom.isAfter(now().minusYears(nå.isAfter(LocalDate.of(nå.getYear(), Month.OCTOBER, 20)) ? 3 : 4).with(firstDayOfYear()).minusDays(1));
+        return fom.isAfter(now().minusYears(nå.isAfter(LocalDate.of(nå.getYear(), OCTOBER, 20)) ? 3 : 4)
+                .with(firstDayOfYear()).minusDays(1));
     }
 
 }
