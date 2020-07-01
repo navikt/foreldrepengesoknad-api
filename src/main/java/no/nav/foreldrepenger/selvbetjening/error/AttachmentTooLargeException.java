@@ -9,11 +9,11 @@ import no.nav.foreldrepenger.selvbetjening.tjeneste.innsending.domain.Vedlegg;
 public class AttachmentTooLargeException extends AttachmentException {
 
     public AttachmentTooLargeException(Vedlegg vedlegg, DataSize max) {
-        this(vedlegg.getContent().length, max);
+        this(DataSize.ofBytes(vedlegg.getContent().length), max);
     }
 
-    public AttachmentTooLargeException(long size, DataSize maxVedleggSize) {
-        this(msg(DataSize.ofBytes(size), maxVedleggSize));
+    public AttachmentTooLargeException(DataSize size, DataSize maxVedleggSize) {
+        this(msg(size, maxVedleggSize));
     }
 
     private AttachmentTooLargeException(String msg) {

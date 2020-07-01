@@ -104,7 +104,7 @@ public class VedleggSjekker {
 
     private void sjekkAttachmentEnkeltStørrelse(Attachment vedlegg) {
         LOG.info("Sjekker størrelse for {}", vedlegg);
-        if (vedlegg.size > maxEnkelSize.toBytes()) {
+        if (vedlegg.size.toBytes() > maxEnkelSize.toBytes()) {
             throw new AttachmentTooLargeException(vedlegg.size, maxEnkelSize);
         }
     }

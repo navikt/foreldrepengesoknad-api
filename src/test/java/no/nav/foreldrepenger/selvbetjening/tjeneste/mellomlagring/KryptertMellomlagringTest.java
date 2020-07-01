@@ -8,7 +8,6 @@ import static org.mockito.Mockito.lenient;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 
-import no.nav.foreldrepenger.selvbetjening.tjeneste.innsending.pdf.PdfGeneratorStub;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -21,6 +20,7 @@ import org.springframework.util.unit.DataSize;
 import com.google.gson.Gson;
 
 import no.nav.foreldrepenger.selvbetjening.tjeneste.innsending.domain.Kvittering;
+import no.nav.foreldrepenger.selvbetjening.tjeneste.innsending.pdf.PdfGeneratorStub;
 import no.nav.foreldrepenger.selvbetjening.tjeneste.virusscan.VirusScanner;
 import no.nav.foreldrepenger.selvbetjening.util.TokenUtil;
 import no.nav.foreldrepenger.selvbetjening.vedlegg.PDFEncryptionChecker;
@@ -74,7 +74,7 @@ public class KryptertMellomlagringTest {
 
     @Test
     public void TestKryptertVedlegg() throws Exception {
-        var pdf = new PdfGeneratorStub().generate("test", "test");
+        var pdf = new PdfGeneratorStub().generate("test");
         Attachment original = Attachment
                 .of(new MockMultipartFile("vedlegg", "originalt vedlegg", "application/pdf", pdf));
         km.lagreKryptertVedlegg(original);

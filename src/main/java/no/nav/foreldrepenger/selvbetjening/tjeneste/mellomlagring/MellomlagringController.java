@@ -91,7 +91,7 @@ public class MellomlagringController {
     private ResponseEntity<byte[]> found(Attachment att) {
         return ok()
                 .contentType(att.getContentType())
-                .contentLength(att.getSize())
+                .contentLength(att.getSize().toBytes())
                 .body(att.getBytes());
     }
 

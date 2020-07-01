@@ -64,8 +64,7 @@ public class ApiExceptionHandler extends ResponseEntityExceptionHandler {
     }
 
     @ExceptionHandler
-    public ResponseEntity<Object> handleIdMismatch(IdMismatchException e,
-            HttpStatus status, WebRequest req) {
+    public ResponseEntity<Object> handleIdMismatch(IdMismatchException e, WebRequest req) {
         return logAndHandle(CONFLICT, e, req);
     }
 

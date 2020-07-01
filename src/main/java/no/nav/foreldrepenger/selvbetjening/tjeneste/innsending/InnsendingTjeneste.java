@@ -6,7 +6,6 @@ import java.security.SecureRandom;
 import java.util.List;
 import java.util.Random;
 
-import no.nav.foreldrepenger.selvbetjening.tjeneste.innsending.domain.tilbakebetaling.TilbakebetalingUttalelse;
 import org.slf4j.Logger;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnProperty;
 import org.springframework.stereotype.Service;
@@ -15,6 +14,7 @@ import no.nav.foreldrepenger.selvbetjening.tjeneste.innsending.domain.Ettersendi
 import no.nav.foreldrepenger.selvbetjening.tjeneste.innsending.domain.Kvittering;
 import no.nav.foreldrepenger.selvbetjening.tjeneste.innsending.domain.Søknad;
 import no.nav.foreldrepenger.selvbetjening.tjeneste.innsending.domain.Vedlegg;
+import no.nav.foreldrepenger.selvbetjening.tjeneste.innsending.domain.tilbakebetaling.TilbakebetalingUttalelse;
 import no.nav.foreldrepenger.selvbetjening.tjeneste.innsending.pdf.PdfGenerator;
 import no.nav.foreldrepenger.selvbetjening.tjeneste.mellomlagring.KryptertMellomlagring;
 import no.nav.foreldrepenger.selvbetjening.vedlegg.VedleggSjekker;
@@ -32,7 +32,7 @@ public class InnsendingTjeneste implements Innsending {
     private final PdfGenerator pdfGenerator;
 
     public InnsendingTjeneste(InnsendingConnection connection, KryptertMellomlagring mellomlagring,
-                              VedleggSjekker vedleggSjekker, PdfGenerator pdfGenerator) {
+            VedleggSjekker vedleggSjekker, PdfGenerator pdfGenerator) {
         this.connection = connection;
         this.mellomlagring = mellomlagring;
         this.vedleggSjekker = vedleggSjekker;
@@ -87,11 +87,11 @@ public class InnsendingTjeneste implements Innsending {
         return vedlegg;
     }
 
-    private TilbakebetalingUttalelse uttalelseFra(Ettersending ettersending) {
+    private static TilbakebetalingUttalelse uttalelseFra(Ettersending ettersending) {
         return new TilbakebetalingUttalelse(ettersending.getType(),
-            ettersending.getSaksnummer(),
-            ettersending.getDialogId(),
-            ettersending.getBrukerTekst());
+                ettersending.getSaksnummer(),
+                ettersending.getDialogId(),
+                ettersending.getBrukerTekst());
     }
 
     private static String id() {

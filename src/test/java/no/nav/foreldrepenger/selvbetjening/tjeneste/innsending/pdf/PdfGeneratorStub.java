@@ -1,20 +1,21 @@
 package no.nav.foreldrepenger.selvbetjening.tjeneste.innsending.pdf;
 
-import no.nav.foreldrepenger.selvbetjening.error.UnexpectedInputException;
-import no.nav.foreldrepenger.selvbetjening.tjeneste.innsending.domain.tilbakebetaling.TilbakebetalingUttalelse;
+import java.io.ByteArrayOutputStream;
+
 import org.apache.pdfbox.pdmodel.PDDocument;
 import org.apache.pdfbox.pdmodel.PDPage;
 import org.apache.pdfbox.pdmodel.PDPageContentStream;
 import org.apache.pdfbox.pdmodel.font.PDType1Font;
 
-import java.io.ByteArrayOutputStream;
+import no.nav.foreldrepenger.selvbetjening.error.UnexpectedInputException;
+import no.nav.foreldrepenger.selvbetjening.tjeneste.innsending.domain.tilbakebetaling.TilbakebetalingUttalelse;
 
 public class PdfGeneratorStub implements PdfGenerator {
 
-    public byte[] generate(String overskrift, String tekst) {
+    public byte[] generate(String tekst) {
 
         try (PDDocument document = new PDDocument();
-             ByteArrayOutputStream baos = new ByteArrayOutputStream()) {
+                ByteArrayOutputStream baos = new ByteArrayOutputStream()) {
 
             PDPage page = new PDPage();
             document.addPage(page);
@@ -35,6 +36,6 @@ public class PdfGeneratorStub implements PdfGenerator {
 
     @Override
     public byte[] generate(TilbakebetalingUttalelse uttalelse) {
-        return generate("Stubbet test", uttalelse.getBrukerTekst().getTekst());
+        return generate(uttalelse.getBrukerTekst().getTekst());
     }
 }

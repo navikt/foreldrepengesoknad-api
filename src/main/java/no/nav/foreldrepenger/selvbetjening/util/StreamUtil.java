@@ -16,6 +16,7 @@ public final class StreamUtil {
     private StreamUtil() {
     }
 
+    @SafeVarargs
     public static <T> Stream<T> safeStream(T... elems) {
         return safeStream(Arrays.asList(elems));
     }

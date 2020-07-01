@@ -26,7 +26,7 @@ public class PDFEncryptionChecker {
         check(v.getContent(), v.getBeskrivelse());
     }
 
-    private void check(byte[] bytes, String name) {
+    private static void check(byte[] bytes, String name) {
         if (bytes != null && APPLICATION_PDF.equals(mediaType(bytes))) {
             try (PDDocument doc = PDDocument.load(bytes)) {
             } catch (InvalidPasswordException e) {

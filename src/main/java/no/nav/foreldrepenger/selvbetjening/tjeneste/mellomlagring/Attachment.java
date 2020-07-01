@@ -1,8 +1,10 @@
 package no.nav.foreldrepenger.selvbetjening.tjeneste.mellomlagring;
 
+import static no.nav.foreldrepenger.selvbetjening.util.StringUtil.limit;
+
 import java.io.IOException;
 import java.net.URI;
-import java.util.Arrays;
+import java.util.Objects;
 import java.util.UUID;
 
 import org.springframework.http.MediaType;
@@ -12,68 +14,24 @@ import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 
 import no.nav.foreldrepenger.selvbetjening.error.AttachmentTooLargeException;
-import no.nav.foreldrepenger.selvbetjening.util.StringUtil;
 
 public class Attachment {
-
-    @Override
-    public int hashCode() {
-        final int prime = 31;
-        int result = 1;
-        result = prime * result + Arrays.hashCode(bytes);
-        result = prime * result + ((contentType == null) ? 0 : contentType.hashCode());
-        result = prime * result + ((filename == null) ? 0 : filename.hashCode());
-        result = prime * result + (int) (size ^ (size >>> 32));
-        result = prime * result + ((uuid == null) ? 0 : uuid.hashCode());
-        return result;
-    }
-
-    @Override
-    public boolean equals(Object obj) {
-        if (this == obj)
-            return true;
-        if (obj == null)
-            return false;
-        if (getClass() != obj.getClass())
-            return false;
-        Attachment other = (Attachment) obj;
-        if (!Arrays.equals(bytes, other.bytes))
-            return false;
-        if (contentType == null) {
-            if (other.contentType != null)
-                return false;
-        } else if (!contentType.equals(other.contentType))
-            return false;
-        if (filename == null) {
-            if (other.filename != null)
-                return false;
-        } else if (!filename.equals(other.filename))
-            return false;
-        if (size != other.size)
-            return false;
-        if (uuid == null) {
-            if (other.uuid != null)
-                return false;
-        } else if (!uuid.equals(other.uuid))
-            return false;
-        return true;
-    }
 
     public static final DataSize MAX_VEDLEGG_SIZE = DataSize.of(8, DataUnit.MEGABYTES);
 
     public final String filename;
     public final byte[] bytes;
     public final MediaType contentType;
-    public final long size;
+    public final DataSize size;
     public final String uuid;
 
     private Attachment(String filename, byte[] bytes, MediaType contentType) {
         this.filename = filename;
         this.bytes = bytes;
         this.contentType = contentType;
-        this.size = bytes.length;
+        this.size = DataSize.ofBytes(bytes.length);
         this.uuid = UUID.randomUUID().toString();
-        if (size > MAX_VEDLEGG_SIZE.toBytes()) {
+        if (size.toBytes() > MAX_VEDLEGG_SIZE.toBytes()) {
             throw new AttachmentTooLargeException(size, MAX_VEDLEGG_SIZE);
         }
     }
@@ -112,7 +70,7 @@ public class Attachment {
         return contentType;
     }
 
-    public long getSize() {
+    public DataSize getSize() {
         return size;
     }
 
@@ -121,9 +79,31 @@ public class Attachment {
     }
 
     @Override
+    public int hashCode() {
+        return Objects.hash(bytes, contentType, filename, size, uuid);
+    }
+
+    @Override
+    public boolean equals(Object obj) {
+        if (this == obj) {
+            return true;
+        }
+        if (obj == null) {
+            return false;
+        }
+        if (getClass() != obj.getClass()) {
+            return false;
+        }
+        Attachment other = Attachment.class.cast(obj);
+        return Objects.equals(getContentType(), other.getContentType())
+                && Objects.equals(getSize(), other.getSize())
+                && Objects.equals(getFilename(), other.getFilename())
+                && Objects.equals(getBytes(), other.getBytes());
+    }
+
+    @Override
     public String toString() {
-        return getClass().getSimpleName() + " [filename=" + filename + ", bytes=" + StringUtil.limit(bytes)
-                + ", contentType=" + contentType
-                + ", size=" + size + ", uuid=" + uuid + "]";
+        return getClass().getSimpleName() + " [filename=" + filename + ", bytes=" + limit(bytes) + ", contentType="
+                + contentType + ", size=" + size + ", uuid=" + uuid + "]";
     }
 }
