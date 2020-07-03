@@ -1,5 +1,5 @@
 {
-  "ingresses": ["https://foreldrepengesoknad-api.dev.nav.no"],
+  "ingresses": ["https://foreldrepengesoknad-api.dev.nav.no","https://foreldrepengesoknad-api.dev-gcp.nais.io],
   "namespace": "teamforeldrepenger",
   "gw" : "api-gw-q1.oera.no",
   "gcp" : "true",
