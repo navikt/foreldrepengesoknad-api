@@ -16,6 +16,12 @@ import no.nav.foreldrepenger.selvbetjening.util.Pair;
 
 @ConfigurationProperties("historikk")
 public class HistorikkConfig extends AbstractConfig implements ZoneCrossingAware {
+    private static final String HISTORIKK = "historikk";
+
+    private static final String FNR = "fnr";
+
+    private static final String SAKSNUMMER = "saksnummer";
+
     private static final String DEFAULT_PING_PATH = "actuator/info";
 
     private final String key;
@@ -27,20 +33,20 @@ public class HistorikkConfig extends AbstractConfig implements ZoneCrossingAware
     }
 
     public URI historikkURI() {
-        return uri(getUri(), "historikk" + "/me/all");
+        return uri(getUri(), HISTORIKK + "/me/all");
     }
 
     public URI vedleggURI(String saksnr) {
-        return uri(getUri(), "historikk" + "/me/manglendevedlegg", queryParams("saksnummer", saksnr));
+        return uri(getUri(), HISTORIKK + "/me/manglendevedlegg", queryParams(SAKSNUMMER, saksnr));
     }
 
     public URI historikkPreprodURI(String fnr) {
-        return uri(getUri(), "historikk" + "/dev/all", queryParams("fnr", fnr));
+        return uri(getUri(), HISTORIKK + "/dev/all", queryParams(FNR, fnr));
     }
 
     public URI vedleggPreprodURI(Fødselsnummer fnr, String saksnr) {
-        return uri(getUri(), "historikk" + "/dev/vedlegg",
-                queryParams(Pair.of("saksnummer", saksnr), Pair.of("fnr", fnr.getFnr())));
+        return uri(getUri(), HISTORIKK + "/dev/vedlegg",
+                queryParams(Pair.of(SAKSNUMMER, saksnr), Pair.of(FNR, fnr.getFnr())));
     }
 
     @Override
