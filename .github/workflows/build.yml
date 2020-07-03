@@ -64,19 +64,13 @@ jobs:
                 });
               });
             });  
-            
-      - name: hent rikere token    
-        uses: navikt/github-app-token-generator@v1
-        id: get-token
-        with:
-         private-key: ${{ secrets.REPO_CLONER_PRIVATE_KEY }}
-         app-id: ${{ secrets.REPO_CLONER_APP_ID }}
+      
       
       - name: Opprett issue, trigg deploy til dev-fss og dev-gcp
         if: success()
         uses: actions/github-script@v2
         with:
-          github-token: ${{ steps.get-token.outputs.token }}
+          github-token: ${{ secrets.NOTIFICATION }}
           script: |
               github.issues.create( {
                 owner: context.issue.owner,
