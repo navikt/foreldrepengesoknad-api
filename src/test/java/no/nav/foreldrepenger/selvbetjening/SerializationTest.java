@@ -13,6 +13,7 @@ import org.junit.jupiter.api.extension.ExtendWith;
 import org.springframework.boot.test.autoconfigure.json.AutoConfigureJsonTesters;
 import org.springframework.test.context.junit.jupiter.SpringExtension;
 
+import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 
 import no.nav.foreldrepenger.selvbetjening.tjeneste.innsending.domain.Barn;
@@ -26,24 +27,27 @@ public class SerializationTest {
     ObjectMapper mapper;
 
     @Test
-    public void person_serialialization() throws IOException {
+    public void person_serialiaztion() throws IOException {
         test(personDto());
     }
 
     @Test
-    public void engangstonad_deserialization() throws IOException {
+    public void engangstonad_deserialisation() throws IOException {
         Engangsstønad engangsstønad = new Engangsstønad();
         engangsstønad.setOpprettet(now());
         Barn barn = new Barn();
         barn.erBarnetFødt = false;
         engangsstønad.setBarn(barn);
+
         test(engangsstønad);
     }
 
     private void test(Object object) throws IOException {
         assertThat(object)
-                .usingRecursiveComparison(
-                        mapper.readValue(mapper.writeValueAsString(object), object.getClass()));
+                .isEqualToComparingFieldByFieldRecursively(mapper.readValue(write(object), object.getClass()));
     }
 
+    private String write(Object obj) throws JsonProcessingException {
+        return mapper.writeValueAsString(obj);
+    }
 }
