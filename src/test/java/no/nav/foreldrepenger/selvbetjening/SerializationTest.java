@@ -42,7 +42,7 @@ public class SerializationTest {
 
     private void test(Object object) throws IOException {
         assertThat(object)
-                .isEqualToComparingFieldByFieldRecursively(
+                .usingRecursiveComparison(
                         mapper.readValue(mapper.writeValueAsString(object), object.getClass()));
     }
 

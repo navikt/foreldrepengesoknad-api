@@ -4,6 +4,7 @@ import static no.nav.foreldrepenger.selvbetjening.util.StringUtil.limit;
 
 import java.io.IOException;
 import java.net.URI;
+import java.util.Arrays;
 import java.util.Objects;
 import java.util.UUID;
 
@@ -98,7 +99,7 @@ public class Attachment {
         return Objects.equals(getContentType(), other.getContentType())
                 && Objects.equals(getSize(), other.getSize())
                 && Objects.equals(getFilename(), other.getFilename())
-                && Objects.equals(getBytes(), other.getBytes());
+                && Arrays.equals(getBytes(), other.getBytes());
     }
 
     @Override
