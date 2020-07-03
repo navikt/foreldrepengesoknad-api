@@ -1,4 +1,4 @@
-name: Deployment pipeline q1
+name: Deployment pipeline dev
 
 on:
   push:
@@ -63,13 +63,14 @@ jobs:
                   state: 'closed'
                 });
               });
-            });     
+            });  
+      
       
       - name: Opprett issue, trigg deploy til dev-fss og dev-gcp
         if: success()
         uses: actions/github-script@v2
         with:
-          github-token: ${{secrets.NOTIFICATION}}
+          github-token: ${{ secrets.NOTIFICATION }}
           script: |
               github.issues.create( {
                 owner: context.issue.owner,
