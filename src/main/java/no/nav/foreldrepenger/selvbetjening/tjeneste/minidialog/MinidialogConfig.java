@@ -3,6 +3,7 @@ package no.nav.foreldrepenger.selvbetjening.tjeneste.minidialog;
 import java.net.URI;
 
 import org.springframework.boot.context.properties.ConfigurationProperties;
+import org.springframework.boot.context.properties.ConstructorBinding;
 import org.springframework.boot.context.properties.bind.DefaultValue;
 
 import no.nav.foreldrepenger.selvbetjening.tjeneste.AbstractConfig;
@@ -18,6 +19,7 @@ public class MinidialogConfig extends AbstractConfig {
 
     private static final String DEFAULT_PING_PATH = "actuator/info";
 
+    @ConstructorBinding
     public MinidialogConfig(URI uri, @DefaultValue("true") boolean enabled) {
         super(uri, enabled);
     }

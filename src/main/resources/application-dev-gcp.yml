@@ -9,7 +9,8 @@ no.nav:
       selvbetjening:
          api:
             virus:
-               enabled: false
+               uri: http://clamav.clamav.svc.cluster.local
+               enabled: true
    security:
       jwt:
         issuer:

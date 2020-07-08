@@ -3,6 +3,7 @@ package no.nav.foreldrepenger.selvbetjening.tjeneste.innsending.pdf;
 import java.net.URI;
 
 import org.springframework.boot.context.properties.ConfigurationProperties;
+import org.springframework.boot.context.properties.ConstructorBinding;
 import org.springframework.boot.context.properties.bind.DefaultValue;
 
 import no.nav.foreldrepenger.selvbetjening.tjeneste.AbstractConfig;
@@ -14,6 +15,7 @@ public class PdfGeneratorConfig extends AbstractConfig {
     private static final String TILBAKEBETALING_UTTALELSE = "tilbakebetaling/uttalelse";
     private static final String PING = "/is_alive";
 
+    @ConstructorBinding
     public PdfGeneratorConfig(@DefaultValue(DEFAULT_FPPDFGEN_URI) URI uri, @DefaultValue("true") boolean enabled) {
         super(uri, enabled);
     }
