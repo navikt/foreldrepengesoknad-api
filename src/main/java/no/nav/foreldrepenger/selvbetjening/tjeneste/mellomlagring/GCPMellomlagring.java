@@ -68,7 +68,7 @@ public class GCPMellomlagring extends AbstractMellomlagringTjeneste {
         try {
             storage.get(bøtte.getNavn());
         } catch (StorageException e) {
-            LOG.warn("Validerering av {} bøtte feilet", bøtte);
+            LOG.warn("Validerering av {} bøtte feilet", bøtte, e);
         }
     }
 
