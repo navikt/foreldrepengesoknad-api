@@ -65,11 +65,7 @@ public class GCPMellomlagring extends AbstractMellomlagringTjeneste {
 
     @Override
     protected void validerBøtte(Bøtte bøtte) {
-        try {
-            storage.get(bøtte.getNavn());
-        } catch (StorageException e) {
-            LOG.warn("Validerering av {} bøtte feilet", bøtte, e);
-        }
+        storage.get(bøtte.getNavn());
     }
 
     private static BlobId blobFra(String bøttenavn, String katalog, String key) {
