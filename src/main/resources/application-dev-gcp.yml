@@ -1,3 +1,4 @@
+debug: true
 allowed.origins:
    https://engangsstonad.dev-nav.no,
    https://foreldrepengesoknad.dev-nav.no,
