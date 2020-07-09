@@ -8,22 +8,23 @@ metadata:
     jalla:  "{{env.xx}}"
 spec:
 {{#if gcp}}
-  buckets: 
-     - name: mellomlagring
-     - name: foreldrepengesoknad
-  accessPolicy:
-    outbound:
-      external: 
-        - host: storage.googleapis.com
-        - host: oauth2.googleapis.com
-        - host: www.googleapis.com
-        - host: {{gw}}      
-  envFrom:
-     - secret: fppdfgen.key
-     - secret: oppslag.key
-     - secret: mottak.key
-     - secret: historikk.key
-     - secret: storage.passphrase
+  gcp: 
+    buckets: 
+      - name: mellomlagring
+      - name: foreldrepengesoknad
+    accessPolicy:
+     outbound:
+       external: 
+         - host: storage.googleapis.com
+         - host: oauth2.googleapis.com
+         - host: www.googleapis.com
+         - host: {{gw}}      
+    envFrom:
+      - secret: fppdfgen.key
+      - secret: oppslag.key
+      - secret: mottak.key
+      - secret: historikk.key
+      - secret: storage.passphrase
 {{/if}}  
   image: {{image}}
   port: 8080
