@@ -11,14 +11,14 @@ spec:
     buckets: 
       - name: mellomlagring
       - name: foreldrepengesoknad
-    accessPolicy:
+  accessPolicy:
      outbound:
        external: 
          - host: storage.googleapis.com
          - host: oauth2.googleapis.com
          - host: www.googleapis.com
          - host: {{gw}}      
-    envFrom:
+  envFrom:
       - secret: fppdfgen.key
       - secret: oppslag.key
       - secret: mottak.key
