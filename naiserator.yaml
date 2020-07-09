@@ -5,7 +5,7 @@ metadata:
   namespace: {{namespace}}
   labels:
     team: teamforeldrepenger 
-    jalla:  {{env.xx}}
+    jalla:  "{{env.xx}}"
 spec:
 {{#if gcp}}
   buckets: 
