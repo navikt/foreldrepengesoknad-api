@@ -5,12 +5,14 @@ import static no.nav.foreldrepenger.selvbetjening.tjeneste.historikk.HistorikkCo
 import java.util.List;
 
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 
 import no.nav.foreldrepenger.selvbetjening.http.UnprotectedRestController;
 import no.nav.foreldrepenger.selvbetjening.tjeneste.oppslag.domain.Fødselsnummer;
 
-@UnprotectedRestController(HistorikkDevController.DEVPATH)
+@RequestMapping(HistorikkDevController.DEVPATH)
+@UnprotectedRestController
 public class HistorikkDevController {
 
     static final String DEVPATH = HISTORIKK + "/dev";

@@ -3,11 +3,13 @@ package no.nav.foreldrepenger.selvbetjening.tjeneste.historikk;
 import java.util.List;
 
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 
 import no.nav.foreldrepenger.selvbetjening.http.ProtectedRestController;
 
-@ProtectedRestController(HistorikkController.HISTORIKK)
+@RequestMapping(HistorikkController.HISTORIKK)
+@ProtectedRestController
 public class HistorikkController {
 
     static final String HISTORIKK = "/rest/historikk";

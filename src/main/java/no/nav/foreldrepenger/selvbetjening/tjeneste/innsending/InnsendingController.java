@@ -1,19 +1,20 @@
 package no.nav.foreldrepenger.selvbetjening.tjeneste.innsending;
 
-import static no.nav.foreldrepenger.selvbetjening.tjeneste.innsending.InnsendingController.REST_SOKNAD;
 import static no.nav.foreldrepenger.selvbetjening.util.MDCUtil.CONFIDENTIAL;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestMapping;
 
 import no.nav.foreldrepenger.selvbetjening.http.ProtectedRestController;
 import no.nav.foreldrepenger.selvbetjening.tjeneste.innsending.domain.Ettersending;
 import no.nav.foreldrepenger.selvbetjening.tjeneste.innsending.domain.Kvittering;
 import no.nav.foreldrepenger.selvbetjening.tjeneste.innsending.domain.Søknad;
 
-@ProtectedRestController(path = REST_SOKNAD)
+@ProtectedRestController
+@RequestMapping(InnsendingController.REST_SOKNAD)
 public class InnsendingController {
 
     private static final Logger LOG = LoggerFactory.getLogger(InnsendingController.class);

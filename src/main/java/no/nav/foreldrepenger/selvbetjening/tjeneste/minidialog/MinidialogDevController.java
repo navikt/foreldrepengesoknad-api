@@ -5,13 +5,15 @@ import static no.nav.foreldrepenger.selvbetjening.tjeneste.minidialog.Minidialog
 import java.util.List;
 
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 
 import no.nav.foreldrepenger.selvbetjening.http.UnprotectedRestController;
 import no.nav.foreldrepenger.selvbetjening.tjeneste.historikk.MinidialogInnslag;
 import no.nav.foreldrepenger.selvbetjening.tjeneste.oppslag.domain.Fødselsnummer;
 
-@UnprotectedRestController(MinidialogDevController.DEVPATH)
+@UnprotectedRestController
+@RequestMapping(MinidialogDevController.DEVPATH)
 public class MinidialogDevController {
 
     static final String DEVPATH = MINIDIALOG + "/dev";
