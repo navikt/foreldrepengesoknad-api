@@ -1,4 +1,4 @@
-package no.nav.foreldrepenger.selvbetjening.filters;
+package no.nav.foreldrepenger.selvbetjening.http.filters;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;

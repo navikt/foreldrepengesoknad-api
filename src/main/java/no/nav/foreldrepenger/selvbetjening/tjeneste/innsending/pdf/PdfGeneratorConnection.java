@@ -12,7 +12,7 @@ import org.springframework.web.client.RestOperations;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 
-import no.nav.foreldrepenger.selvbetjening.tjeneste.AbstractRestConnection;
+import no.nav.foreldrepenger.selvbetjening.http.AbstractRestConnection;
 
 @Component
 public class PdfGeneratorConnection extends AbstractRestConnection {

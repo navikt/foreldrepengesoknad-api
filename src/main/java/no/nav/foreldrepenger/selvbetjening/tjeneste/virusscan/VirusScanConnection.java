@@ -10,7 +10,7 @@ import org.springframework.stereotype.Component;
 import org.springframework.web.client.RestOperations;
 
 import no.nav.foreldrepenger.selvbetjening.error.AttachmentVirusException;
-import no.nav.foreldrepenger.selvbetjening.tjeneste.AbstractRestConnection;
+import no.nav.foreldrepenger.selvbetjening.http.AbstractRestConnection;
 
 @Component
 class VirusScanConnection extends AbstractRestConnection {

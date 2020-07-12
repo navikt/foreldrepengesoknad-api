@@ -2,8 +2,8 @@ package no.nav.foreldrepenger.selvbetjening.tjeneste.mellomlagring;
 
 import java.util.Optional;
 
-import no.nav.foreldrepenger.selvbetjening.tjeneste.PingEndpointAware;
-import no.nav.foreldrepenger.selvbetjening.tjeneste.felles.RetryAware;
+import no.nav.foreldrepenger.selvbetjening.http.PingEndpointAware;
+import no.nav.foreldrepenger.selvbetjening.http.RetryAware;
 
 public interface Mellomlagring extends PingEndpointAware, RetryAware {
 

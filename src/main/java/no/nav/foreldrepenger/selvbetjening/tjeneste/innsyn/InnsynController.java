@@ -1,8 +1,5 @@
 package no.nav.foreldrepenger.selvbetjening.tjeneste.innsyn;
 
-import static no.nav.foreldrepenger.selvbetjening.util.Constants.ISSUER;
-import static org.springframework.http.MediaType.APPLICATION_JSON_VALUE;
-
 import java.util.List;
 
 import javax.inject.Inject;
@@ -11,18 +8,14 @@ import javax.validation.constraints.NotNull;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.bind.annotation.RestController;
 
+import no.nav.foreldrepenger.selvbetjening.http.ProtectedRestController;
 import no.nav.foreldrepenger.selvbetjening.tjeneste.innsyn.saker.Sak;
 import no.nav.foreldrepenger.selvbetjening.tjeneste.innsyn.uttaksplan.Uttaksplan;
 import no.nav.foreldrepenger.selvbetjening.tjeneste.innsyn.vedtak.Vedtak;
-import no.nav.security.token.support.core.api.ProtectedWithClaims;
 
-@RestController
-@RequestMapping(path = InnsynController.INNSYN, produces = APPLICATION_JSON_VALUE)
-@ProtectedWithClaims(issuer = ISSUER, claimMap = { "acr=Level4" })
+@ProtectedRestController(InnsynController.INNSYN)
 public class InnsynController {
 
     private static final Logger LOG = LoggerFactory.getLogger(InnsynController.class);

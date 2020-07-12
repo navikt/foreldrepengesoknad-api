@@ -7,7 +7,7 @@ import java.net.URI;
 import org.springframework.stereotype.Component;
 import org.springframework.web.client.RestOperations;
 
-import no.nav.foreldrepenger.selvbetjening.tjeneste.AbstractRestConnection;
+import no.nav.foreldrepenger.selvbetjening.http.AbstractRestConnection;
 import no.nav.foreldrepenger.selvbetjening.tjeneste.oppslag.domain.AktørId;
 import no.nav.foreldrepenger.selvbetjening.tjeneste.oppslag.dto.PersonDto;
 import no.nav.foreldrepenger.selvbetjening.tjeneste.oppslag.dto.SøkerinfoDto;

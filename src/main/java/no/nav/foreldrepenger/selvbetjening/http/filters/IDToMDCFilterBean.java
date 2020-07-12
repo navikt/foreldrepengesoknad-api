@@ -1,4 +1,4 @@
-package no.nav.foreldrepenger.selvbetjening.filters;
+package no.nav.foreldrepenger.selvbetjening.http.filters;
 
 import static no.nav.foreldrepenger.boot.conditionals.EnvUtil.isDevOrLocal;
 import static no.nav.foreldrepenger.selvbetjening.util.Constants.NAV_TOKEN_EXPIRY_ID;

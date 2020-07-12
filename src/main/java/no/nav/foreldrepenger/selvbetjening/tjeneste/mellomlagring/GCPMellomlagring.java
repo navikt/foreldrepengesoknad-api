@@ -53,7 +53,7 @@ public class GCPMellomlagring extends AbstractMellomlagringTjeneste {
             if (SC_NOT_FOUND == e.getCode()) {
                 return Optional.empty();
             }
-            LOG.info("Katalog {} ikke funnet, ({})", katalog, e.getCode());
+            LOG.warn("Katalog {} ikke funnet, ({})", katalog, e.getCode());
             throw e;
         }
     }

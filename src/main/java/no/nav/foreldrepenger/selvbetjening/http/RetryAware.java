@@ -1,4 +1,4 @@
-package no.nav.foreldrepenger.selvbetjening.tjeneste.felles;
+package no.nav.foreldrepenger.selvbetjening.http;
 
 import org.springframework.retry.annotation.Backoff;
 import org.springframework.retry.annotation.Retryable;

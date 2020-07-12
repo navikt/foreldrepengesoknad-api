@@ -2,7 +2,7 @@ package no.nav.foreldrepenger.selvbetjening.tjeneste.mellomlagring;
 
 import java.time.Duration;
 
-import no.nav.foreldrepenger.selvbetjening.tjeneste.Togglable;
+import no.nav.foreldrepenger.selvbetjening.http.Togglable;
 
 public class Bøtte implements Togglable {
 

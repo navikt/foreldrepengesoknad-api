@@ -1,21 +1,14 @@
 package no.nav.foreldrepenger.selvbetjening.tjeneste.oppslag;
 
-import static no.nav.foreldrepenger.selvbetjening.util.Constants.ISSUER;
-import static org.springframework.http.MediaType.APPLICATION_JSON_VALUE;
-
 import javax.inject.Inject;
 
 import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
 
+import no.nav.foreldrepenger.selvbetjening.http.ProtectedRestController;
 import no.nav.foreldrepenger.selvbetjening.tjeneste.oppslag.domain.Person;
 import no.nav.foreldrepenger.selvbetjening.tjeneste.oppslag.domain.Søkerinfo;
-import no.nav.security.token.support.core.api.ProtectedWithClaims;
 
-@RestController
-@RequestMapping(path = OppslagController.OPPSLAG, produces = APPLICATION_JSON_VALUE)
-@ProtectedWithClaims(issuer = ISSUER, claimMap = { "acr=Level4" })
+@ProtectedRestController(OppslagController.OPPSLAG)
 public class OppslagController {
 
     public static final String OPPSLAG = "/rest";

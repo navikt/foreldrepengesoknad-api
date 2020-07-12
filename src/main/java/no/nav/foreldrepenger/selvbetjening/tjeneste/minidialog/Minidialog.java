@@ -2,8 +2,8 @@ package no.nav.foreldrepenger.selvbetjening.tjeneste.minidialog;
 
 import java.util.List;
 
-import no.nav.foreldrepenger.selvbetjening.tjeneste.Pingable;
-import no.nav.foreldrepenger.selvbetjening.tjeneste.felles.RetryAware;
+import no.nav.foreldrepenger.selvbetjening.http.Pingable;
+import no.nav.foreldrepenger.selvbetjening.http.RetryAware;
 import no.nav.foreldrepenger.selvbetjening.tjeneste.historikk.MinidialogInnslag;
 import no.nav.foreldrepenger.selvbetjening.tjeneste.oppslag.domain.Fødselsnummer;
 

@@ -1,25 +1,19 @@
 package no.nav.foreldrepenger.selvbetjening.tjeneste.innsending;
 
 import static no.nav.foreldrepenger.selvbetjening.tjeneste.innsending.InnsendingController.REST_SOKNAD;
-import static no.nav.foreldrepenger.selvbetjening.util.Constants.ISSUER;
 import static no.nav.foreldrepenger.selvbetjening.util.MDCUtil.CONFIDENTIAL;
-import static org.springframework.http.MediaType.APPLICATION_JSON_VALUE;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
 
+import no.nav.foreldrepenger.selvbetjening.http.ProtectedRestController;
 import no.nav.foreldrepenger.selvbetjening.tjeneste.innsending.domain.Ettersending;
 import no.nav.foreldrepenger.selvbetjening.tjeneste.innsending.domain.Kvittering;
 import no.nav.foreldrepenger.selvbetjening.tjeneste.innsending.domain.Søknad;
-import no.nav.security.token.support.core.api.ProtectedWithClaims;
 
-@RestController
-@ProtectedWithClaims(issuer = ISSUER, claimMap = { "acr=Level4" })
-@RequestMapping(path = REST_SOKNAD, produces = APPLICATION_JSON_VALUE)
+@ProtectedRestController(path = REST_SOKNAD)
 public class InnsendingController {
 
     private static final Logger LOG = LoggerFactory.getLogger(InnsendingController.class);

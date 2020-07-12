@@ -1,4 +1,4 @@
-package no.nav.foreldrepenger.selvbetjening.tjeneste;
+package no.nav.foreldrepenger.selvbetjening.http;
 
 import static no.nav.foreldrepenger.selvbetjening.util.MDCUtil.CONFIDENTIAL;
 import static org.springframework.http.HttpStatus.NOT_FOUND;

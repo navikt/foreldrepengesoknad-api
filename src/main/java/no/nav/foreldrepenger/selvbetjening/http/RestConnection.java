@@ -1,4 +1,4 @@
-package no.nav.foreldrepenger.selvbetjening.tjeneste;
+package no.nav.foreldrepenger.selvbetjening.http;
 
 import java.net.URI;
 

@@ -82,12 +82,12 @@ public abstract class AbstractMellomlagringTjeneste implements Mellomlagring {
 
     private Bøtte bøtteFor(MellomlagringType type) {
         switch (type) {
-        case LANGTIDS:
-            return søknadBøtte;
-        case KORTTIDS:
-            return mellomlagringBøtte;
-        default:
-            throw new UnexpectedInputException("Type " + type + " er ukjent");
+            case LANGTIDS:
+                return søknadBøtte;
+            case KORTTIDS:
+                return mellomlagringBøtte;
+            default:
+                throw new UnexpectedInputException("Type " + type + " er ukjent");
         }
     }
 

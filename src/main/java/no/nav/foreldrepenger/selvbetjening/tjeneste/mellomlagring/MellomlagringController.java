@@ -1,6 +1,5 @@
 package no.nav.foreldrepenger.selvbetjening.tjeneste.mellomlagring;
 
-import static no.nav.foreldrepenger.selvbetjening.util.Constants.ISSUER;
 import static org.springframework.http.HttpStatus.NO_CONTENT;
 import static org.springframework.http.MediaType.APPLICATION_JSON_VALUE;
 import static org.springframework.http.MediaType.MULTIPART_FORM_DATA_VALUE;
@@ -15,17 +14,13 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestPart;
 import org.springframework.web.bind.annotation.ResponseStatus;
-import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.multipart.MultipartFile;
 
-import no.nav.security.token.support.core.api.ProtectedWithClaims;
+import no.nav.foreldrepenger.selvbetjening.http.ProtectedRestController;
 
-@RestController
-@ProtectedWithClaims(issuer = ISSUER, claimMap = { "acr=Level4" })
-@RequestMapping(MellomlagringController.REST_STORAGE)
+@ProtectedRestController(MellomlagringController.REST_STORAGE)
 public class MellomlagringController {
 
     public static final String REST_STORAGE = "/rest/storage";

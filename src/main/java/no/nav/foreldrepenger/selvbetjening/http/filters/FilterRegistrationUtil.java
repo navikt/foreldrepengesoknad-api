@@ -1,4 +1,4 @@
-package no.nav.foreldrepenger.selvbetjening.filters;
+package no.nav.foreldrepenger.selvbetjening.http.filters;
 
 import static java.util.Collections.singletonList;
 import static java.util.stream.Collectors.toList;

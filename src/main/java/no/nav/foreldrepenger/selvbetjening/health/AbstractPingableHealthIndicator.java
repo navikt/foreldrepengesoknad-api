@@ -3,7 +3,7 @@ package no.nav.foreldrepenger.selvbetjening.health;
 import org.springframework.boot.actuate.health.Health;
 import org.springframework.boot.actuate.health.HealthIndicator;
 
-import no.nav.foreldrepenger.selvbetjening.tjeneste.PingEndpointAware;
+import no.nav.foreldrepenger.selvbetjening.http.PingEndpointAware;
 
 public abstract class AbstractPingableHealthIndicator implements HealthIndicator {
 

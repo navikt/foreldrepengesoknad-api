@@ -1,6 +1,6 @@
-package no.nav.foreldrepenger.selvbetjening.filters;
+package no.nav.foreldrepenger.selvbetjening.http.filters;
 
-import static no.nav.foreldrepenger.selvbetjening.filters.FilterRegistrationUtil.urlPatternsFor;
+import static no.nav.foreldrepenger.selvbetjening.http.filters.FilterRegistrationUtil.urlPatternsFor;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;

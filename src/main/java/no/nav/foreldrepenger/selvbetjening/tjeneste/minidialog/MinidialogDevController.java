@@ -1,24 +1,17 @@
 package no.nav.foreldrepenger.selvbetjening.tjeneste.minidialog;
 
 import static no.nav.foreldrepenger.selvbetjening.tjeneste.minidialog.MinidialogController.MINIDIALOG;
-import static org.springframework.http.MediaType.APPLICATION_JSON_VALUE;
 
 import java.util.List;
 
 import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.bind.annotation.RestController;
 
-import no.nav.foreldrepenger.boot.conditionals.ConditionalOnNotProd;
+import no.nav.foreldrepenger.selvbetjening.http.UnprotectedRestController;
 import no.nav.foreldrepenger.selvbetjening.tjeneste.historikk.MinidialogInnslag;
 import no.nav.foreldrepenger.selvbetjening.tjeneste.oppslag.domain.Fødselsnummer;
-import no.nav.security.token.support.core.api.Unprotected;
 
-@ConditionalOnNotProd
-@RestController
-@RequestMapping(path = MinidialogDevController.DEVPATH, produces = APPLICATION_JSON_VALUE)
-@Unprotected
+@UnprotectedRestController(MinidialogDevController.DEVPATH)
 public class MinidialogDevController {
 
     static final String DEVPATH = MINIDIALOG + "/dev";
