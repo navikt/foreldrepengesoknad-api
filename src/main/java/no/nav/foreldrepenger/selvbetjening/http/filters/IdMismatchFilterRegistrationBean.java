@@ -1,9 +1,9 @@
 package no.nav.foreldrepenger.selvbetjening.http.filters;
 
 import static no.nav.foreldrepenger.selvbetjening.http.filters.FilterRegistrationUtil.urlPatternsFor;
-import static no.nav.foreldrepenger.selvbetjening.tjeneste.innsending.InnsendingController.REST_SOKNAD;
-import static no.nav.foreldrepenger.selvbetjening.tjeneste.innsyn.InnsynController.INNSYN;
-import static no.nav.foreldrepenger.selvbetjening.tjeneste.mellomlagring.MellomlagringController.REST_STORAGE;
+import static no.nav.foreldrepenger.selvbetjening.innsending.InnsendingController.REST_SOKNAD;
+import static no.nav.foreldrepenger.selvbetjening.innsyn.InnsynController.INNSYN;
+import static no.nav.foreldrepenger.selvbetjening.mellomlagring.MellomlagringController.REST_STORAGE;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;

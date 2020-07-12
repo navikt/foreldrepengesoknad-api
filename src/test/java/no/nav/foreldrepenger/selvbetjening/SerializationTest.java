@@ -1,7 +1,7 @@
 package no.nav.foreldrepenger.selvbetjening;
 
 import static java.time.LocalDateTime.now;
-import static no.nav.foreldrepenger.selvbetjening.tjeneste.oppslag.OppslagTjenesteStub.personDto;
+import static no.nav.foreldrepenger.selvbetjening.oppslag.OppslagTjenesteStub.personDto;
 import static org.assertj.core.api.Assertions.assertThat;
 
 import java.io.IOException;
@@ -16,8 +16,8 @@ import org.springframework.test.context.junit.jupiter.SpringExtension;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 
-import no.nav.foreldrepenger.selvbetjening.tjeneste.innsending.domain.Barn;
-import no.nav.foreldrepenger.selvbetjening.tjeneste.innsending.domain.Engangsstønad;
+import no.nav.foreldrepenger.selvbetjening.innsending.domain.Barn;
+import no.nav.foreldrepenger.selvbetjening.innsending.domain.Engangsstønad;
 
 @ExtendWith(SpringExtension.class)
 @AutoConfigureJsonTesters

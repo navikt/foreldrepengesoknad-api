@@ -1,8 +1,8 @@
 package no.nav.foreldrepenger.selvbetjening.config;
 
 import static java.util.Collections.singletonList;
-import static no.nav.foreldrepenger.selvbetjening.tjeneste.mellomlagring.Bøtte.SØKNAD;
-import static no.nav.foreldrepenger.selvbetjening.tjeneste.mellomlagring.Bøtte.TMP;
+import static no.nav.foreldrepenger.selvbetjening.mellomlagring.Bøtte.SØKNAD;
+import static no.nav.foreldrepenger.selvbetjening.mellomlagring.Bøtte.TMP;
 import static no.nav.foreldrepenger.selvbetjening.util.Constants.FNR;
 import static org.springframework.http.HttpHeaders.CONTENT_TYPE;
 import static org.springframework.http.HttpHeaders.LOCATION;
@@ -37,7 +37,7 @@ import com.google.common.collect.ImmutableMap;
 
 import no.nav.foreldrepenger.selvbetjening.interceptors.client.ZoneCrossingAware;
 import no.nav.foreldrepenger.selvbetjening.interceptors.client.ZoneCrossingAwareClientInterceptor;
-import no.nav.foreldrepenger.selvbetjening.tjeneste.mellomlagring.Bøtte;
+import no.nav.foreldrepenger.selvbetjening.mellomlagring.Bøtte;
 
 @Configuration
 public class ApiConfiguration implements WebMvcConfigurer {

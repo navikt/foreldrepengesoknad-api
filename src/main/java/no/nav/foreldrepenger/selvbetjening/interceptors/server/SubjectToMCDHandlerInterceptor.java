@@ -13,7 +13,7 @@ import org.springframework.context.annotation.DependsOn;
 import org.springframework.core.annotation.Order;
 import org.springframework.web.servlet.HandlerInterceptor;
 
-import no.nav.foreldrepenger.selvbetjening.tjeneste.oppslag.Oppslag;
+import no.nav.foreldrepenger.selvbetjening.oppslag.Oppslag;
 import no.nav.foreldrepenger.selvbetjening.util.TokenUtil;
 
 //@Component

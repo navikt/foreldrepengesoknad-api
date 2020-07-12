@@ -11,10 +11,10 @@ import org.springframework.util.unit.DataSize;
 
 import no.nav.foreldrepenger.selvbetjening.error.AttachmentTooLargeException;
 import no.nav.foreldrepenger.selvbetjening.error.AttachmentsTooLargeException;
-import no.nav.foreldrepenger.selvbetjening.tjeneste.innsending.domain.Vedlegg;
-import no.nav.foreldrepenger.selvbetjening.tjeneste.mellomlagring.Attachment;
-import no.nav.foreldrepenger.selvbetjening.tjeneste.virusscan.VirusScanner;
+import no.nav.foreldrepenger.selvbetjening.innsending.domain.Vedlegg;
+import no.nav.foreldrepenger.selvbetjening.mellomlagring.Attachment;
 import no.nav.foreldrepenger.selvbetjening.util.StreamUtil;
+import no.nav.foreldrepenger.selvbetjening.virusscan.VirusScanner;
 
 @Component
 public class VedleggSjekker {
