@@ -5,11 +5,13 @@ import java.util.List;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.RestController;
 
-import no.nav.foreldrepenger.selvbetjening.http.ProtectedRestController;
+import no.nav.security.token.support.core.api.ProtectedWithClaims;
 
 @RequestMapping(HistorikkController.HISTORIKK)
-@ProtectedRestController
+@RestController
+@ProtectedWithClaims(issuer = "selvbetjening", claimMap = { "acr=Level4" })
 public class HistorikkController {
 
     static final String HISTORIKK = "/rest/historikk";

@@ -7,12 +7,16 @@ import java.util.List;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.RestController;
 
+import no.nav.foreldrepenger.boot.conditionals.ConditionalOnNotProd;
 import no.nav.foreldrepenger.selvbetjening.historikk.MinidialogInnslag;
-import no.nav.foreldrepenger.selvbetjening.http.UnprotectedRestController;
 import no.nav.foreldrepenger.selvbetjening.oppslag.domain.Fødselsnummer;
+import no.nav.security.token.support.core.api.Unprotected;
 
-@UnprotectedRestController
+@RestController
+@Unprotected
+@ConditionalOnNotProd
 @RequestMapping(MinidialogDevController.DEVPATH)
 public class MinidialogDevController {
 
