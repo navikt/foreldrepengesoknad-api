@@ -11,7 +11,7 @@ import org.springframework.http.RequestEntity;
 import org.springframework.web.client.HttpClientErrorException;
 import org.springframework.web.client.RestOperations;
 
-public abstract class AbstractRestConnection implements RestConnection {
+public abstract class AbstractRestConnection implements PingEndpointAware, Togglable {
 
     protected static final Logger LOG = LoggerFactory.getLogger(AbstractRestConnection.class);
 
@@ -21,12 +21,10 @@ public abstract class AbstractRestConnection implements RestConnection {
         this.operations = operations;
     }
 
-    @Override
     public <T> T getForObject(URI uri, Class<T> responseType) {
         return getForObject(uri, responseType, true);
     }
 
-    @Override
     public <T> T getForObject(URI uri, Class<T> responseType, boolean throwOnNotFound) {
         try {
             if (!isEnabled()) {
@@ -47,7 +45,6 @@ public abstract class AbstractRestConnection implements RestConnection {
         }
     }
 
-    @Override
     public <T> T postForObject(URI uri, Object payload, Class<T> responseType) {
         if (!isEnabled()) {
             LOG.info("Service er ikke aktiv, POSTer ikke til {}", uri);
@@ -56,7 +53,6 @@ public abstract class AbstractRestConnection implements RestConnection {
         return operations.postForObject(uri, payload, responseType);
     }
 
-    @Override
     public <T> T putForObject(URI uri, Object payload, Class<T> responseType) {
         if (!isEnabled()) {
             LOG.info("Service er ikke aktiv, PUTer ikke til {}", uri);

@@ -1,4 +1,4 @@
-package no.nav.foreldrepenger.selvbetjening.interceptors.client;
+package no.nav.foreldrepenger.selvbetjening.http.interceptors;
 
 import static java.util.concurrent.TimeUnit.MILLISECONDS;
 import static org.springframework.http.HttpStatus.Series.CLIENT_ERROR;

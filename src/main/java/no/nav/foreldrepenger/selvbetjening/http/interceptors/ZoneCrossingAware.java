@@ -1,4 +1,4 @@
-package no.nav.foreldrepenger.selvbetjening.interceptors.client;
+package no.nav.foreldrepenger.selvbetjening.http.interceptors;
 
 import java.net.URI;
 

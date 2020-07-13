@@ -1,4 +1,4 @@
-package no.nav.foreldrepenger.selvbetjening.interceptors.client;
+package no.nav.foreldrepenger.selvbetjening.http.interceptors;
 
 import static no.nav.foreldrepenger.selvbetjening.util.Constants.X_NAV_API_KEY;
 import static no.nav.foreldrepenger.selvbetjening.util.MDCUtil.CONFIDENTIAL;
