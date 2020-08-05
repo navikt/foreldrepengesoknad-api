@@ -28,6 +28,10 @@ management:
              autotime:
                  enabled: true
    health :
+      livenessstate:
+        enabled: true
+      readynessstate:
+        enabled: true
       refresh:
          enabled: false
       diskspace:
