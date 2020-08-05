@@ -38,6 +38,11 @@ management:
          enabled: false
    endpoint:
       health:
+         group:
+           liveness:
+             include: livenessStateProbeIndicator
+           readiness:
+             include: readinessStateProbeIndicator    
          show-details : never
    endpoints:
       web:
