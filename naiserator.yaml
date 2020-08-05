@@ -35,7 +35,7 @@ spec:
       path: /internal/actuator/health/liveness
       initialDelay: 60
   readiness:
-      path: /internal/actuator/health/liveness
+      path: /internal/actuator/health/readiness
       initialDelay: 60  
   prometheus:
       enabled: true
