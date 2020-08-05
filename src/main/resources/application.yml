@@ -30,7 +30,7 @@ management:
    health :
       livenessstate:
         enabled: true
-      readynessstate:
+      readinessstate:
         enabled: true
       refresh:
          enabled: false
