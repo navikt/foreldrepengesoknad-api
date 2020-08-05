@@ -34,8 +34,6 @@ management:
          enabled: false
    endpoint:
       health:
-         probes:
-           enabled: true    
          show-details : never
    endpoints:
       web:
