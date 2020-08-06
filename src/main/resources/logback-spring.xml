@@ -12,7 +12,7 @@
         </appender>
     </springProfile>
 
-    <springProfile name="default">
+    <springProfile name="prod">
         <turboFilter class="ch.qos.logback.classic.turbo.MarkerFilter">
             <Name>CONFIDENTIAL_FILTER</Name>
             <Marker>CONFIDENTIAL</Marker>
@@ -20,9 +20,8 @@
         </turboFilter>
     </springProfile>
 
-    <springProfile name="dev-gcp, dev-sbs,local,test">
+    <springProfile name="dev,local,test">
         <logger name="no.nav.foreldrepenger.selvbetjening" level="trace"/>
-        <logger name="org.springframework.retry" level="trace" />
     </springProfile>
 
     <!-- Turn off Spring's warning logs for already resolved exceptions -->
