@@ -15,12 +15,12 @@ import org.springframework.context.annotation.Configuration;
 import io.swagger.models.Scheme;
 import no.nav.foreldrepenger.boot.conditionals.ConditionalOnNotProd;
 import springfox.documentation.builders.PathSelectors;
+import springfox.documentation.oas.annotations.EnableOpenApi;
 import springfox.documentation.spring.web.plugins.Docket;
-import springfox.documentation.swagger2.annotations.EnableSwagger2WebMvc;
 
 @Configuration
 @ConditionalOnNotProd
-@EnableSwagger2WebMvc
+@EnableOpenApi
 public class SwaggerConfiguration {
 
     @Bean
