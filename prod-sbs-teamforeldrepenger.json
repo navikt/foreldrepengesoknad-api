@@ -1,14 +1,5 @@
 {
 "ingresses": ["https://foreldrepengesoknad-api.nav.no",
               "https://foreldrepengesoknad-api.nais.oera.no"],
-  "namespace": "teamforeldrepenger",             
-  "env": {
-    "oppslag_uri": "https://api-gw.oera.no/fpsoknad-oppslag/api/",
-    "historikk_uri": "https://api-gw.oera.no/fpinfo-historikk/api/",
-    "mottak_uri": "https://api-gw.oera.no/fpsoknad-mottak/api/",
-    "innsyn_mottak": "https://api-gw.oera.no/fpsoknad-mottak/api/",
-    "innsyn_oppslag": "https://api-gw.oera.no/fpsoknad-oppslag/api/",
-    "minidialog_uri": "https://api-gw.oera.no/fpinfo-historikk/api/",
-    "fppdfgen_uri": "https://api-gw.oera.no/fppdfgen"
-  }
+  "namespace": "teamforeldrepenger"
 }

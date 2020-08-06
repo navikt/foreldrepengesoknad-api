@@ -1,6 +1,7 @@
-no.nav.security.jwt.issuer.selvbetjening:
-  discoveryurl: https://login.microsoftonline.com/NAVtestB2C.onmicrosoft.com/v2.0/.well-known/openid-configuration?p=B2C_1A_idporten_ver1
-  accepted_audience: 0090b6e1-ffcc-4c37-bc21-049f7d1f0fe5
+no.nav:
+  security.jwt.issuer.selvbetjening:
+    discoveryurl: https://login.microsoftonline.com/NAVtestB2C.onmicrosoft.com/v2.0/.well-known/openid-configuration?p=B2C_1A_idporten_ver1
+    accepted_audience: 0090b6e1-ffcc-4c37-bc21-049f7d1f0fe5
 
 management:
     endpoints:
