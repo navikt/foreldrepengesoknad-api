@@ -75,7 +75,7 @@
         <dependency>
             <groupId>no.nav.foreldrepenger</groupId>
             <artifactId>boot-conditionals</artifactId>
-            <version>1.0.20200618143940-e78f33f</version>
+            <version>1.0.20200806142535-1eeb754</version>
         </dependency>
         <dependency>
             <groupId>javax.xml.bind</groupId>

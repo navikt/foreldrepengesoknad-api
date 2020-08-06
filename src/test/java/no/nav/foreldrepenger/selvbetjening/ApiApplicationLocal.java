@@ -1,6 +1,6 @@
 package no.nav.foreldrepenger.selvbetjening;
 
-import static no.nav.foreldrepenger.selvbetjening.config.ClusterAwareSpringProfileResolver.profiles;
+import static no.nav.foreldrepenger.selvbetjening.config.ClusterAwareSpringProfileResolver.profiler;
 import static org.springframework.context.annotation.FilterType.ASSIGNABLE_TYPE;
 
 import org.springframework.boot.autoconfigure.SpringBootApplication;
@@ -28,7 +28,7 @@ public class ApiApplicationLocal {
 
     public static void main(String[] args) {
         new SpringApplicationBuilder(ApiApplicationLocal.class)
-                .profiles(profiles())
+                .profiles(profiler())
                 .main(ApiApplicationLocal.class)
                 .run(args);
     }
