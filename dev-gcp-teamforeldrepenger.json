@@ -2,8 +2,5 @@
   "ingresses": ["https://foreldrepengesoknad-api.dev.nav.no"],
   "namespace": "teamforeldrepenger",
   "gw" : "api-gw-q1.oera.no",
-  "gcp" : "true",
-  "env": {
-    "no_nav_security_jwt_issuer_selvbetjening_acceptedaudience": "0090b6e1-ffcc-4c37-bc21-049f7d1f0fe5"
-   }
+  "gcp" : "true"
 }

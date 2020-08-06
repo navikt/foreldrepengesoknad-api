@@ -56,12 +56,6 @@ spec:
          cpu: 250m
          memory: 1536Mi 
   env: 
-{{#if env}}
-{{#each env}}
-    - name: {{@key}}
-      value: "{{this}}"
-{{/each}}
-{{/if}} 
 {{#unless gcp}}
   webproxy: true
 {{/unless}}
