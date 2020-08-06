@@ -1,5 +1,5 @@
-debug: true
-allowed.origins:
+allowed:
+  origins:
    https://engangsstonad.dev-nav.no,
    https://foreldrepengesoknad.dev-nav.no,
    https://svangerskapspengesoknad.dev-nav.no,
@@ -14,21 +14,4 @@ no.nav:
       selvbetjening:
          api:
             virus:
-               uri: http://clamav.clamav.svc.cluster.local
-   security:
-      jwt:
-        issuer:
-          selvbetjening:
-             discoveryurl: https://login.microsoftonline.com/NAVtestB2C.onmicrosoft.com/v2.0/.well-known/openid-configuration?p=B2C_1A_idporten_ver1
-management:
-   endpoints:
-     web:
-       exposure:
-         include:  '*'
-   endpoint :
-      health:
-        show-details : always
-      
-spring :
-    mvc:
-      log-request-details : true      
+               uri: http://clamav.clamav.svc.cluster.local     

@@ -1,4 +1,5 @@
-allowed.origins:
+allowed:
+  origins:
     https://engangsstonad.nais.oera-q.local,
     https://engangsstonad-q.nav.no,
     https://foreldrepengesoknad.nais.oera-q.local,
@@ -7,17 +8,5 @@ allowed.origins:
     https://foreldrepengeoversikt.nais.oera-q.local,
     https://foreldrepenger-q.nav.no,
     https://svangerskapspengesoknad-q.nav.no
-no.nav.security.jwt.issuer.selvbetjening.discoveryurl: https://login.microsoftonline.com/NAVtestB2C.onmicrosoft.com/v2.0/.well-known/openid-configuration?p=B2C_1A_idporten_ver1
-s3.url: http://objectstore.rook-ceph.svc.nais.local/
-management:
-    endpoints:
-        web:
-            exposure:
-                include:  '*'
-    endpoint:
-        health:
-            show-details: always
-
-spring:
-    mvc:
-        log-request-details: true
+s3:
+  url: http://objectstore.rook-ceph.svc.nais.local/
