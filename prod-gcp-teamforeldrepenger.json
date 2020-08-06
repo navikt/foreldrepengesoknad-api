@@ -1,0 +1,6 @@
+{
+  "ingresses": ["https://foreldrepengesoknad-api.nav.no"],
+  "namespace": "teamforeldrepenger",
+  "gw" : "api-gw.oera.no",
+  "gcp" : "true"
+}
