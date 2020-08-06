@@ -11,3 +11,6 @@ management:
 spring:
     mvc:
         log-request-details: true
+        
+oppslag:        
+  uri:  https://api-gw-q1.oera.no/fpsoknad-oppslag/api/

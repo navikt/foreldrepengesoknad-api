@@ -6,7 +6,7 @@
     ],
   "namespace": "teamforeldrepenger",
   "env": {
-    "oppslag_uri": "https://api-gw-q1.oera.no/fpsoknad-oppslag/api/",
+    "oppslagNOTUSED_uri": "https://api-gw-q1.oera.no/fpsoknad-oppslag/api/",
     "historikk_uri": "https://api-gw-q1.oera.no/fpinfo-historikk/api/",
     "mottak_uri": "https://api-gw-q1.oera.no/fpsoknad-mottak/api/",
     "innsyn_mottak": "https://api-gw-q1.oera.no/fpsoknad-mottak/api/",
