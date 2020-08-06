@@ -55,7 +55,6 @@ spec:
       requests:
          cpu: 250m
          memory: 1536Mi 
-  env: 
 {{#unless gcp}}
   webproxy: true
 {{/unless}}
