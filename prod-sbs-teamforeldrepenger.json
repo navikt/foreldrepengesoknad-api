@@ -1,7 +1,6 @@
 {
 "ingresses": ["https://foreldrepengesoknad-api.nav.no",
-              "https://foreldrepengesoknad-api.nais.oera.no",
-              "https://foreldrepengesoknad-api.prod-sbs.nais.no"],
+              "https://foreldrepengesoknad-api.nais.oera.no"],
   "namespace": "teamforeldrepenger",             
   "env": {
     "oppslag_uri": "https://api-gw.oera.no/fpsoknad-oppslag/api/",
