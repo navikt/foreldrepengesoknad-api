@@ -6,12 +6,6 @@
   "gcp" : "true",
   "env": {
     "no_nav_security_jwt_issuer_selvbetjening_acceptedaudience": "0090b6e1-ffcc-4c37-bc21-049f7d1f0fe5",
-    "oppslagNOTUSED_uri": "https://api-gw-q1.oera.no/fpsoknad-oppslag/api/",
-    "historikk_uri": "https://api-gw-q1.oera.no/fpinfo-historikk/api/",
-    "mottak_uri": "https://api-gw-q1.oera.no/fpsoknad-mottak/api/",
-    "innsyn_mottak": "https://api-gw-q1.oera.no/fpsoknad-mottak/api/",
-    "fppdfgen_uri": "https://api-gw-q1.oera.no/fppdfgen/",
-    "innsyn_oppslag": "https://api-gw-q1.oera.no/fpsoknad-oppslag/api/",
     "minidialog_uri": "https://api-gw-q1.oera.no/fpinfo-historikk/api/"
   }
 }

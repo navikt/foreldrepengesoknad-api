@@ -8,7 +8,7 @@ import org.springframework.boot.context.properties.bind.DefaultValue;
 
 import no.nav.foreldrepenger.selvbetjening.http.AbstractConfig;
 
-@ConfigurationProperties(prefix = "no.nav.foreldrepenger.selvbetjening.api.pdfgenerator")
+@ConfigurationProperties(prefix = "fppdfgen")
 public class PdfGeneratorConfig extends AbstractConfig {
 
     private static final String DEFAULT_FPPDFGEN_URI = "http://fppdfgen.default.svc.nais.local/api/v1/genpdf/";
