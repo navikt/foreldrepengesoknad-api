@@ -16,7 +16,7 @@ import no.nav.foreldrepenger.selvbetjening.http.interceptors.ZoneCrossingAware;
 public class OppslagConfig extends AbstractConfig implements ZoneCrossingAware {
 
     private static final String FNR = "fnr";
-    private static final String PING = "oppslag/ping";
+    private static final String PING = "actuator/liveness";
     private static final String PERSON = "person";
     private static final String SØKERINFO = "oppslag";
     private static final String AKTØRFNR = "oppslag/aktorfnr";
