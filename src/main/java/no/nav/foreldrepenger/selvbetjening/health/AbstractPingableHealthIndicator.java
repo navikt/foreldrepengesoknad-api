@@ -1,5 +1,7 @@
 package no.nav.foreldrepenger.selvbetjening.health;
 
+import java.util.Map;
+
 import org.springframework.boot.actuate.health.Health;
 import org.springframework.boot.actuate.health.HealthIndicator;
 
@@ -16,16 +18,23 @@ public abstract class AbstractPingableHealthIndicator implements HealthIndicator
     @Override
     public Health health() {
         try {
-            pingable.ping();
-            return Health.up()
-                    .withDetail(pingable.getClass().getSimpleName(), pingable.pingURI())
-                    .build();
+            if (pingable.isEnabled()) {
+                pingable.ping();
+                return up();
+            }
+            return up();
         } catch (Exception e) {
             return Health.down()
                     .withDetail(pingable.getClass().getSimpleName(), pingable.pingURI())
                     .withException(e)
                     .build();
         }
+    }
+
+    private Health up() {
+        return Health.up()
+                .withDetails(Map.of(pingable.getClass().getSimpleName(), pingable.pingURI(), "enabled", pingable.isEnabled()))
+                .build();
     }
 
     @Override

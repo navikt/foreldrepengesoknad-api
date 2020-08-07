@@ -37,6 +37,11 @@ public abstract class AbstractMellomlagringTjeneste implements Mellomlagring {
     }
 
     @Override
+    public boolean isEnabled() {
+        return søknadBøtte.isEnabled() && mellomlagringBøtte.isEnabled();
+    }
+
+    @Override
     public void lagre(MellomlagringType type, String katalog, String key, String value) {
         lagreI(bøtteFor(type), katalog, key, value);
     }

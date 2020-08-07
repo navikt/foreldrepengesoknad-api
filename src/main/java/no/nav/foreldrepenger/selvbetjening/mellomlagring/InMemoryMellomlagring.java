@@ -66,4 +66,9 @@ public class InMemoryMellomlagring extends AbstractMellomlagringTjeneste {
         store.remove(key(katalog, key));
     }
 
+    @Override
+    public boolean isEnabled() {
+        return true;
+    }
+
 }
