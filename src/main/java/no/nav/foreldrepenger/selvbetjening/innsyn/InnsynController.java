@@ -10,15 +10,13 @@ import org.slf4j.LoggerFactory;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.bind.annotation.RestController;
 
+import no.nav.foreldrepenger.selvbetjening.http.ProtectedRestController;
 import no.nav.foreldrepenger.selvbetjening.innsyn.saker.Sak;
 import no.nav.foreldrepenger.selvbetjening.innsyn.uttaksplan.Uttaksplan;
 import no.nav.foreldrepenger.selvbetjening.innsyn.vedtak.Vedtak;
-import no.nav.security.token.support.core.api.ProtectedWithClaims;
 
-@RestController
-@ProtectedWithClaims(issuer = "selvbetjening", claimMap = { "acr=Level4" })
+@ProtectedRestController
 @RequestMapping(InnsynController.INNSYN)
 public class InnsynController {
     private static final Logger LOG = LoggerFactory.getLogger(InnsynController.class);

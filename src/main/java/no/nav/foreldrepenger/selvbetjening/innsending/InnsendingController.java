@@ -7,15 +7,13 @@ import org.slf4j.LoggerFactory;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
 
+import no.nav.foreldrepenger.selvbetjening.http.ProtectedRestController;
 import no.nav.foreldrepenger.selvbetjening.innsending.domain.Ettersending;
 import no.nav.foreldrepenger.selvbetjening.innsending.domain.Kvittering;
 import no.nav.foreldrepenger.selvbetjening.innsending.domain.Søknad;
-import no.nav.security.token.support.core.api.ProtectedWithClaims;
 
-@RestController
-@ProtectedWithClaims(issuer = "selvbetjening", claimMap = { "acr=Level4" })
+@ProtectedRestController
 @RequestMapping(InnsendingController.REST_SOKNAD)
 public class InnsendingController {
 

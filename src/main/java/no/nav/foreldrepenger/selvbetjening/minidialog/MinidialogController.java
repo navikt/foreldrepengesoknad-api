@@ -6,13 +6,11 @@ import javax.inject.Inject;
 
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
 
 import no.nav.foreldrepenger.selvbetjening.historikk.MinidialogInnslag;
-import no.nav.security.token.support.core.api.ProtectedWithClaims;
+import no.nav.foreldrepenger.selvbetjening.http.ProtectedRestController;
 
-@RestController
-@ProtectedWithClaims(issuer = "selvbetjening", claimMap = { "acr=Level4" })
+@ProtectedRestController
 @RequestMapping(MinidialogController.MINIDIALOG)
 public class MinidialogController {
 
