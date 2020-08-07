@@ -58,6 +58,7 @@ server:
       whitelabel:
          enabled: false
 spring:
+   cloud.discovery.client.health-indicator.enabled: false
    cache:
       cache-names: aktør
       caffeine:
