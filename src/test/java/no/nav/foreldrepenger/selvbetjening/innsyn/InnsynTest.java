@@ -24,9 +24,6 @@ import org.springframework.test.context.junit.jupiter.SpringExtension;
 import org.springframework.test.web.client.ExpectedCount;
 import org.springframework.test.web.client.MockRestServiceServer;
 
-import no.nav.foreldrepenger.selvbetjening.innsyn.InnsynConfig;
-import no.nav.foreldrepenger.selvbetjening.innsyn.InnsynConnection;
-import no.nav.foreldrepenger.selvbetjening.innsyn.InnsynTjeneste;
 import no.nav.foreldrepenger.selvbetjening.util.TokenUtil;
 import no.nav.security.token.support.spring.SpringTokenValidationContextHolder;
 

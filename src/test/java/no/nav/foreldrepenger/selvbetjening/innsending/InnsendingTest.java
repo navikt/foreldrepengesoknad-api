@@ -28,9 +28,6 @@ import org.springframework.util.unit.DataSize;
 import org.springframework.util.unit.DataUnit;
 
 import no.nav.foreldrepenger.selvbetjening.error.UnexpectedInputException;
-import no.nav.foreldrepenger.selvbetjening.innsending.InnsendingConfig;
-import no.nav.foreldrepenger.selvbetjening.innsending.InnsendingConnection;
-import no.nav.foreldrepenger.selvbetjening.innsending.InnsendingTjeneste;
 import no.nav.foreldrepenger.selvbetjening.innsending.domain.Søknad;
 import no.nav.foreldrepenger.selvbetjening.mellomlagring.KryptertMellomlagring;
 import no.nav.foreldrepenger.selvbetjening.util.TokenUtil;

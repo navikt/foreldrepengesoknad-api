@@ -21,12 +21,6 @@ import com.google.gson.Gson;
 
 import no.nav.foreldrepenger.selvbetjening.innsending.domain.Kvittering;
 import no.nav.foreldrepenger.selvbetjening.innsending.pdf.PdfGeneratorStub;
-import no.nav.foreldrepenger.selvbetjening.mellomlagring.Attachment;
-import no.nav.foreldrepenger.selvbetjening.mellomlagring.Bøtte;
-import no.nav.foreldrepenger.selvbetjening.mellomlagring.InMemoryMellomlagring;
-import no.nav.foreldrepenger.selvbetjening.mellomlagring.KryptertMellomlagring;
-import no.nav.foreldrepenger.selvbetjening.mellomlagring.Mellomlagring;
-import no.nav.foreldrepenger.selvbetjening.mellomlagring.MellomlagringKrypto;
 import no.nav.foreldrepenger.selvbetjening.util.TokenUtil;
 import no.nav.foreldrepenger.selvbetjening.vedlegg.PDFEncryptionChecker;
 import no.nav.foreldrepenger.selvbetjening.vedlegg.VedleggSjekker;

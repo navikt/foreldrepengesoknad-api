@@ -9,10 +9,10 @@ import org.springframework.cache.annotation.EnableCaching;
 import org.springframework.retry.annotation.EnableRetry;
 
 import no.nav.security.token.support.spring.api.EnableJwtTokenValidation;
-import springfox.documentation.swagger2.annotations.EnableSwagger2WebMvc;
+import springfox.documentation.oas.annotations.EnableOpenApi;
 
 @SpringBootApplication
-@EnableSwagger2WebMvc
+@EnableOpenApi
 @EnableCaching
 @EnableRetry
 @ConfigurationPropertiesScan("no.nav.foreldrepenger.selvbetjening")

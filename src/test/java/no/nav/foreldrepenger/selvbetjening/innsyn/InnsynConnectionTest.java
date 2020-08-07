@@ -18,8 +18,6 @@ import org.mockito.junit.jupiter.MockitoExtension;
 import org.springframework.test.context.junit.jupiter.SpringExtension;
 import org.springframework.web.client.RestOperations;
 
-import no.nav.foreldrepenger.selvbetjening.innsyn.InnsynConfig;
-import no.nav.foreldrepenger.selvbetjening.innsyn.InnsynConnection;
 import no.nav.foreldrepenger.selvbetjening.innsyn.saker.Sak;
 
 @ExtendWith(MockitoExtension.class)

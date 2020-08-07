@@ -11,7 +11,6 @@ import org.slf4j.Logger;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnProperty;
 import org.springframework.stereotype.Service;
 
-import no.nav.foreldrepenger.selvbetjening.oppslag.Oppslag;
 import no.nav.foreldrepenger.selvbetjening.oppslag.domain.AktørId;
 import no.nav.foreldrepenger.selvbetjening.oppslag.domain.AnnenForelder;
 import no.nav.foreldrepenger.selvbetjening.oppslag.domain.Arbeidsforhold;

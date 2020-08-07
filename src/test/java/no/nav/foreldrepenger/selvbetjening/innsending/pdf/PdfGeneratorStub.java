@@ -9,7 +9,6 @@ import org.apache.pdfbox.pdmodel.font.PDType1Font;
 
 import no.nav.foreldrepenger.selvbetjening.error.UnexpectedInputException;
 import no.nav.foreldrepenger.selvbetjening.innsending.domain.tilbakebetaling.TilbakebetalingUttalelse;
-import no.nav.foreldrepenger.selvbetjening.innsending.pdf.PdfGenerator;
 
 public class PdfGeneratorStub implements PdfGenerator {
 

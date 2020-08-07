@@ -8,8 +8,6 @@ import java.util.Base64;
 
 import org.junit.jupiter.api.Test;
 
-import no.nav.foreldrepenger.selvbetjening.mellomlagring.Krypto;
-
 public class CryptoTest {
 
     @Test

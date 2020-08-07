@@ -9,8 +9,6 @@ import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 
-import no.nav.foreldrepenger.selvbetjening.oppslag.OppslagController;
-import no.nav.foreldrepenger.selvbetjening.oppslag.OppslagTjeneste;
 import no.nav.foreldrepenger.selvbetjening.oppslag.domain.Person;
 import no.nav.foreldrepenger.selvbetjening.oppslag.dto.PersonDto;
 
