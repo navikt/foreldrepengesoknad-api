@@ -32,7 +32,7 @@ spec:
       max: 2
       cpuThresholdPercentage: 50  
   liveness:
-      path: /internal/actuator/health/readiness
+      path: /internal/actuator/health/liveness
       initialDelay: 60
   readiness:
       path: /internal/actuator/health/readiness
