@@ -8,7 +8,7 @@ import org.springframework.boot.context.properties.bind.DefaultValue;
 
 import no.nav.foreldrepenger.selvbetjening.http.AbstractConfig;
 
-@ConfigurationProperties(prefix = "no.nav.foreldrepenger.selvbetjening.api.virus")
+@ConfigurationProperties(prefix = "virus")
 public class VirusScanConfig extends AbstractConfig {
 
     private static final String DEFAULT_CLAM_URI = "http://clamav.nais.svc.nais.local/scan";
