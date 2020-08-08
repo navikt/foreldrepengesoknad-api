@@ -17,12 +17,15 @@ import no.nav.security.token.support.core.api.ProtectedWithClaims;
 
 @RestController
 @Documented
-@ProtectedWithClaims(issuer = ISSUER, claimMap = { CLAIMS })
+@ProtectedWithClaims(issuer = ISSUER)
 @Target(TYPE)
 @Retention(RUNTIME)
 @RequestMapping
 public @interface ProtectedRestController {
     @AliasFor(annotation = RequestMapping.class, attribute = "value")
     String[] value() default {};
+
+    @AliasFor(annotation = ProtectedWithClaims.class, attribute = "claimMap")
+    String[] claimMap() default CLAIMS;
 
 }
