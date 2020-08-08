@@ -5,13 +5,11 @@ import java.util.List;
 import javax.inject.Inject;
 
 import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
 
 import no.nav.foreldrepenger.selvbetjening.historikk.MinidialogInnslag;
 import no.nav.foreldrepenger.selvbetjening.http.ProtectedRestController;
 
-@ProtectedRestController
-@RequestMapping(MinidialogController.MINIDIALOG)
+@ProtectedRestController(MinidialogController.MINIDIALOG)
 public class MinidialogController {
 
     static final String MINIDIALOG = "/rest/minidialog";

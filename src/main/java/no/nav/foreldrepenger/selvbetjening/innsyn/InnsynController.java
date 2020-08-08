@@ -8,7 +8,6 @@ import javax.validation.constraints.NotNull;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 
 import no.nav.foreldrepenger.selvbetjening.http.ProtectedRestController;
@@ -16,8 +15,7 @@ import no.nav.foreldrepenger.selvbetjening.innsyn.saker.Sak;
 import no.nav.foreldrepenger.selvbetjening.innsyn.uttaksplan.Uttaksplan;
 import no.nav.foreldrepenger.selvbetjening.innsyn.vedtak.Vedtak;
 
-@ProtectedRestController
-@RequestMapping(InnsynController.INNSYN)
+@ProtectedRestController(InnsynController.INNSYN)
 public class InnsynController {
     private static final Logger LOG = LoggerFactory.getLogger(InnsynController.class);
 

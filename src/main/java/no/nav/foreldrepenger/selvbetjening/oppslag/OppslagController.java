@@ -3,14 +3,12 @@ package no.nav.foreldrepenger.selvbetjening.oppslag;
 import javax.inject.Inject;
 
 import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
 
 import no.nav.foreldrepenger.selvbetjening.http.ProtectedRestController;
 import no.nav.foreldrepenger.selvbetjening.oppslag.domain.Person;
 import no.nav.foreldrepenger.selvbetjening.oppslag.domain.Søkerinfo;
 
-@ProtectedRestController
-@RequestMapping(OppslagController.OPPSLAG)
+@ProtectedRestController(OppslagController.OPPSLAG)
 public class OppslagController {
 
     public static final String OPPSLAG = "/rest";
