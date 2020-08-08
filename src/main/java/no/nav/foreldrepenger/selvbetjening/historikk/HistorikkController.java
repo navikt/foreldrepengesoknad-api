@@ -7,7 +7,7 @@ import org.springframework.web.bind.annotation.RequestParam;
 
 import no.nav.foreldrepenger.selvbetjening.http.ProtectedRestController;
 
-@ProtectedRestController(HistorikkController.HISTORIKK)
+@ProtectedRestController(value = HistorikkController.HISTORIKK)
 public class HistorikkController {
 
     static final String HISTORIKK = "/rest/historikk";
