@@ -2,14 +2,16 @@ package no.nav.foreldrepenger.selvbetjening.config;
 
 import static java.lang.System.getenv;
 import static java.lang.System.setProperty;
+import static no.nav.foreldrepenger.boot.conditionals.Cluster.NAIS_CLUSTER_NAME;
 import static no.nav.foreldrepenger.boot.conditionals.EnvUtil.DEV;
+import static no.nav.foreldrepenger.boot.conditionals.EnvUtil.DEV_FSS;
 import static no.nav.foreldrepenger.boot.conditionals.EnvUtil.DEV_GCP;
 import static no.nav.foreldrepenger.boot.conditionals.EnvUtil.DEV_SBS;
 import static no.nav.foreldrepenger.boot.conditionals.EnvUtil.LOCAL;
 import static no.nav.foreldrepenger.boot.conditionals.EnvUtil.PROD;
+import static no.nav.foreldrepenger.boot.conditionals.EnvUtil.PROD_FSS;
 import static no.nav.foreldrepenger.boot.conditionals.EnvUtil.PROD_GCP;
 import static no.nav.foreldrepenger.boot.conditionals.EnvUtil.PROD_SBS;
-import static no.nav.foreldrepenger.selvbetjening.util.Constants.NAIS_CLUSTER_NAME;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -39,6 +41,12 @@ public class ClusterAwareSpringProfileResolver {
         }
         if (cluster.equals(PROD_SBS)) {
             return new String[] { PROD, PROD_SBS };
+        }
+        if (cluster.equals(DEV_FSS)) {
+            return new String[] { DEV, DEV_FSS };
+        }
+        if (cluster.equals(PROD_FSS)) {
+            return new String[] { DEV, PROD_FSS };
         }
         throw new IllegalArgumentException("Cluster " + cluster + " er ikke støttet");
     }

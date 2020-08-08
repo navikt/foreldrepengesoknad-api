@@ -15,6 +15,7 @@ import no.nav.foreldrepenger.boot.conditionals.ConditionalOnNotProd;
 import no.nav.security.token.support.core.api.Unprotected;
 
 @RestController
+@RequestMapping
 @Unprotected
 @Documented
 @ConditionalOnNotProd
