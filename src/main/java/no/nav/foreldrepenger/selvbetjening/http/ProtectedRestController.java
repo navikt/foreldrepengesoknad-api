@@ -5,6 +5,7 @@ import static java.lang.annotation.RetentionPolicy.RUNTIME;
 import static no.nav.foreldrepenger.selvbetjening.util.Constants.CLAIMS;
 import static no.nav.foreldrepenger.selvbetjening.util.Constants.ISSUER;
 
+import java.lang.annotation.Documented;
 import java.lang.annotation.Retention;
 import java.lang.annotation.Target;
 
@@ -15,6 +16,7 @@ import org.springframework.web.bind.annotation.RestController;
 import no.nav.security.token.support.core.api.ProtectedWithClaims;
 
 @RestController
+@Documented
 @ProtectedWithClaims(issuer = ISSUER, claimMap = { CLAIMS })
 @Target(TYPE)
 @Retention(RUNTIME)
