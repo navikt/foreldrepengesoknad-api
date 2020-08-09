@@ -12,10 +12,10 @@ public final class DateUtil {
     }
 
     public static boolean erNyopprettet(LocalDate fom) {
-        return erNyoppstartet(LocalDate.now(), fom);
+        return erNyopprettet(LocalDate.now(), fom);
     }
 
-    static boolean erNyoppstartet(LocalDate nå, LocalDate fom) {
+    static boolean erNyopprettet(LocalDate nå, LocalDate fom) {
         return fom.isAfter(now().minusYears(nå.isAfter(LocalDate.of(nå.getYear(), OCTOBER, 20)) ? 3 : 4)
                 .with(firstDayOfYear()).minusDays(1));
     }

@@ -1,6 +1,6 @@
 package no.nav.foreldrepenger.selvbetjening.util;
 
-import static no.nav.foreldrepenger.selvbetjening.util.DateUtil.erNyoppstartet;
+import static no.nav.foreldrepenger.selvbetjening.util.DateUtil.erNyopprettet;
 import static org.junit.jupiter.api.Assertions.assertFalse;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
@@ -17,24 +17,24 @@ public class DateUtilTest {
 
     @Test
     public void testFørLigningsårAvsluttet() {
-        assertTrue(erNyoppstartet(FØR, LocalDate.of(LocalDate.now().minusYears(4).getYear(), Month.JUNE, 24)));
-        assertFalse(erNyoppstartet(FØR, LocalDate.of(LocalDate.now().minusYears(5).getYear(), Month.JUNE, 24)));
+        assertTrue(erNyopprettet(FØR, LocalDate.of(LocalDate.now().minusYears(4).getYear(), Month.JUNE, 24)));
+        assertFalse(erNyopprettet(FØR, LocalDate.of(LocalDate.now().minusYears(5).getYear(), Month.JUNE, 24)));
     }
 
     @Test
     public void testEtterLigningsårAvsluttet() {
-        assertTrue(erNyoppstartet(ETTER, LocalDate.of(LocalDate.now().minusYears(3).getYear(), Month.JUNE, 24)));
-        assertFalse(erNyoppstartet(ETTER, LocalDate.of(LocalDate.now().minusYears(4).getYear(), Month.JUNE, 24)));
+        assertTrue(erNyopprettet(ETTER, LocalDate.of(LocalDate.now().minusYears(3).getYear(), Month.JUNE, 24)));
+        assertFalse(erNyopprettet(ETTER, LocalDate.of(LocalDate.now().minusYears(4).getYear(), Month.JUNE, 24)));
     }
 
     @Test
     public void testAkkuratAvsluttet() {
-        assertTrue(erNyoppstartet(PÅ, PÅ.minusYears(4)));
+        assertTrue(erNyopprettet(PÅ, PÅ.minusYears(4)));
     }
 
     @Test
     public void testAkkuratEtterAvsluttet() {
-        assertFalse(erNyoppstartet(PÅ.plusDays(1), PÅ.minusYears(4)));
+        assertFalse(erNyopprettet(PÅ.plusDays(1), PÅ.minusYears(4)));
 
     }
 }

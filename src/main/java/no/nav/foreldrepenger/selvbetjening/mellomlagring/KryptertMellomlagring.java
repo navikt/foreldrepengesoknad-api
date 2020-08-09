@@ -38,8 +38,6 @@ public class KryptertMellomlagring {
         if (søknad.isPresent()) {
             LOG.trace("Lest kryptert søknad fra {}", katalog());
             LOG.info(CONFIDENTIAL, "Dekryptert søknad {}", søknad.get());
-        } else {
-            LOG.trace("Fant ingen kryptert søknad i {}", katalog());
         }
         return søknad;
     }
@@ -64,8 +62,6 @@ public class KryptertMellomlagring {
         if (vedlegg.isPresent()) {
             LOG.trace("Lest kryptert vedlegg");
             LOG.info(CONFIDENTIAL, "Dekryptert vedlegg {}", vedlegg.get());
-        } else {
-            LOG.trace("Fant intet kryptert vedlegg i {}", katalog());
         }
         return vedlegg;
     }
@@ -98,8 +94,6 @@ public class KryptertMellomlagring {
         if (kvittering.isPresent()) {
             LOG.trace("Lest kryptert kvittering fra {}", katalog());
             LOG.info(CONFIDENTIAL, "Dekryptert kvittering {}", kvittering.get());
-        } else {
-            LOG.trace("Fant ingen kryptert kvittering i {}", katalog());
         }
         return kvittering;
     }

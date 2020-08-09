@@ -4,7 +4,6 @@ import static java.util.Collections.emptyList;
 
 import java.net.URI;
 import java.util.Arrays;
-import java.util.Collections;
 import java.util.List;
 import java.util.Optional;
 
@@ -58,7 +57,7 @@ public class MinidialogConnection extends AbstractRestConnection {
             return dialoger;
         }
         LOG.warn("Henting av  minidialoger er deaktivert");
-        return Collections.emptyList();
+        return emptyList();
     }
 
     @Override

@@ -20,6 +20,8 @@ import com.amazonaws.services.s3.model.CannedAccessControlList;
 import com.amazonaws.services.s3.model.CreateBucketRequest;
 import com.amazonaws.services.s3.model.lifecycle.LifecycleFilter;
 
+import no.nav.foreldrepenger.selvbetjening.util.StringUtil;
+
 public class S3Mellomlagring extends AbstractMellomlagringTjeneste {
 
     private static final Logger LOG = LoggerFactory.getLogger(S3Mellomlagring.class);
@@ -78,7 +80,7 @@ public class S3Mellomlagring extends AbstractMellomlagringTjeneste {
 
     private static void visRegler(List<Rule> rules) {
         rules.stream()
-                .forEach(r -> LOG.info("Regel har expiry om {} dager", r.getExpirationInDays()));
+                .forEach(r -> LOG.info("Regel har expiry om {} dag{}", r.getExpirationInDays(), StringUtil.flertall(r.getExpirationInDays())));
 
     }
 
