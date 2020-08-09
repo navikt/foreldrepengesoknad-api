@@ -43,12 +43,12 @@ public class Image2PDFConverter {
         this(IMAGE_JPEG, IMAGE_PNG);
     }
 
-    Image2PDFConverter(MediaType... mediaTypes) {
-        this(asList(mediaTypes));
+    Image2PDFConverter(MediaType... supportedMediaTypes) {
+        this(asList(supportedMediaTypes));
     }
 
-    private Image2PDFConverter(List<MediaType> mediaTypes) {
-        this.supportedMediaTypes = mediaTypes;
+    private Image2PDFConverter(List<MediaType> supportedMediaTypes) {
+        this.supportedMediaTypes = supportedMediaTypes;
     }
 
     byte[] convert(String classPathResource) {
@@ -81,30 +81,30 @@ public class Image2PDFConverter {
     }
 
     private static byte[] embedImagesInPdf(List<byte[]> images, String imgType) {
-        try (PDDocument doc = new PDDocument(); ByteArrayOutputStream outputStream = new ByteArrayOutputStream()) {
+        try (var doc = new PDDocument(); var outputStream = new ByteArrayOutputStream()) {
             images.forEach(i -> addPDFPageFromImage(doc, i, imgType));
             doc.save(outputStream);
             return outputStream.toByteArray();
-        } catch (Exception ex) {
-            throw new AttachmentConversionException("Konvertering av vedlegg feilet", ex);
+        } catch (Exception e) {
+            throw new AttachmentConversionException("Konvertering av vedlegg feilet", e);
         }
     }
 
     private boolean validImageTypes(MediaType mediaType) {
-        boolean validImageTypes = supportedMediaTypes.contains(mediaType);
-        LOG.info("{} konvertere bytes av type {} til PDF", validImageTypes ? "Vil" : "Vil ikke", mediaType);
-        return validImageTypes;
+        boolean isValid = supportedMediaTypes.contains(mediaType);
+        LOG.info("{} konvertere bytes av type {} til PDF", isValid ? "Vil" : "Vil ikke", mediaType);
+        return isValid;
     }
 
     private static void addPDFPageFromImage(PDDocument doc, byte[] origImg, String imgFormat) {
         PDPage page = new PDPage(A4);
         doc.addPage(page);
         byte[] scaledImg = ImageScaler.downToA4(origImg, imgFormat);
-        try (PDPageContentStream contentStream = new PDPageContentStream(doc, page)) {
-            PDImageXObject ximage = PDImageXObject.createFromByteArray(doc, scaledImg, "img");
+        try (var contentStream = new PDPageContentStream(doc, page)) {
+            var ximage = PDImageXObject.createFromByteArray(doc, scaledImg, "img");
             contentStream.drawImage(ximage, (int) A4.getLowerLeftX(), (int) A4.getLowerLeftY());
-        } catch (Exception ex) {
-            throw new AttachmentConversionException("Konvertering av vedlegg feilet", ex);
+        } catch (Exception e) {
+            throw new AttachmentConversionException("Konvertering av vedlegg feilet", e);
         }
     }
 

@@ -33,10 +33,8 @@ public class ImageScaler {
         final PDRectangle A4 = PDRectangle.A4;
 
         try {
-            BufferedImage image = ImageIO.read(new ByteArrayInputStream(origImage));
-
+            var image = ImageIO.read(new ByteArrayInputStream(origImage));
             image = rotatePortrait(image);
-
             Dimension pdfPageDim = new Dimension((int) A4.getWidth(), (int) A4.getHeight());
             Dimension origDim = new Dimension(image.getWidth(), image.getHeight());
             Dimension newDim = getScaledDimension(origDim, pdfPageDim);
@@ -62,10 +60,10 @@ public class ImageScaler {
 
         }
 
-        BufferedImage rotatedImage = new BufferedImage(image.getHeight(), image.getWidth(), image.getType());
-        AffineTransform transform = new AffineTransform();
+        var rotatedImage = new BufferedImage(image.getHeight(), image.getWidth(), image.getType());
+        var transform = new AffineTransform();
         transform.rotate(Math.toRadians(90), image.getHeight() / 2f, image.getHeight() / 2f);
-        AffineTransformOp op = new AffineTransformOp(transform, TYPE_BILINEAR);
+        var op = new AffineTransformOp(transform, TYPE_BILINEAR);
         rotatedImage = op.filter(image, rotatedImage);
         return rotatedImage;
     }
@@ -103,7 +101,7 @@ public class ImageScaler {
     }
 
     private static byte[] toBytes(BufferedImage img, String format) throws IOException {
-        try (ByteArrayOutputStream baos = new ByteArrayOutputStream()) {
+        try (var baos = new ByteArrayOutputStream()) {
             ImageIO.write(img, format, baos);
             return baos.toByteArray();
         }

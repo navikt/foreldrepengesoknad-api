@@ -39,12 +39,12 @@ class VirusScanConnection extends AbstractRestConnection {
             if (bytes != null) {
                 try {
                     LOG.info("Scanner {}", name);
-                    ScanResult[] scanResults = putForObject(config.getUri(), bytes, ScanResult[].class);
+                    var scanResults = putForObject(config.getUri(), bytes, ScanResult[].class);
                     if (scanResults.length != 1) {
                         LOG.warn("Uventet respons med lengde {}, forventet lengde er 1", scanResults.length);
                         return;
                     }
-                    ScanResult scanResult = scanResults[0];
+                    var scanResult = scanResults[0];
                     LOG.info("Fikk scan result {}", scanResult);
                     if (OK.equals(scanResult.getResult())) {
                         LOG.info("Ingen virus i {}", name);

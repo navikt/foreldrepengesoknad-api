@@ -1,5 +1,7 @@
 package no.nav.foreldrepenger.selvbetjening.vedlegg;
 
+import static no.nav.foreldrepenger.selvbetjening.util.StreamUtil.safeStream;
+
 import java.util.Arrays;
 import java.util.List;
 
@@ -13,7 +15,6 @@ import no.nav.foreldrepenger.selvbetjening.error.AttachmentTooLargeException;
 import no.nav.foreldrepenger.selvbetjening.error.AttachmentsTooLargeException;
 import no.nav.foreldrepenger.selvbetjening.innsending.domain.Vedlegg;
 import no.nav.foreldrepenger.selvbetjening.mellomlagring.Attachment;
-import no.nav.foreldrepenger.selvbetjening.util.StreamUtil;
 import no.nav.foreldrepenger.selvbetjening.virusscan.VirusScanner;
 
 @Component
@@ -45,7 +46,7 @@ public class VedleggSjekker {
 
     public void sjekkAttachments(List<Attachment> vedlegg) {
         LOG.info("Sjekker {} vedlegg {}", vedlegg.size(), vedlegg);
-        sjekkAttachmentEnkeltStørrelser(vedlegg);
+        sjekkAttachmentStørrelser(vedlegg);
         sjekkAttachmentTotalStørrelse(vedlegg);
         sjekkAttachmentVirus(vedlegg);
         sjekkAttachmentKryptert(vedlegg);
@@ -55,43 +56,43 @@ public class VedleggSjekker {
     public void sjekk(List<Vedlegg> vedlegg) {
         LOG.info("Sjekker {} vedlegg {}", vedlegg.size(), vedlegg);
         sjekkTotalStørrelse(vedlegg);
-        sjekkEnkeltStørrelser(vedlegg);
+        sjekkStørrelser(vedlegg);
         sjekkVirus(vedlegg);
         sjekkKryptert(vedlegg);
         LOG.info("Sjekket {} vedlegg OK", vedlegg.size());
     }
 
-    private void sjekkEnkeltStørrelser(List<Vedlegg> vedlegg) {
-        StreamUtil.safeStream(vedlegg)
+    private void sjekkStørrelser(List<Vedlegg> vedlegg) {
+        safeStream(vedlegg)
                 .forEach(this::sjekkStørrelse);
     }
 
-    private void sjekkAttachmentEnkeltStørrelser(List<Attachment> vedlegg) {
-        StreamUtil.safeStream(vedlegg)
-                .forEach(this::sjekkAttachmentEnkeltStørrelse);
+    private void sjekkAttachmentStørrelser(List<Attachment> vedlegg) {
+        safeStream(vedlegg)
+                .forEach(this::sjekkAttachmentStørrelse);
     }
 
     private void sjekkKryptert(List<Vedlegg> vedlegg) {
         LOG.info("Sjekker kryptering for {}", vedlegg);
-        vedlegg.stream()
-                .forEach(encryptionChecker::checkEncrypted);
+        safeStream(vedlegg)
+                .forEach(encryptionChecker::sjekkKryptert);
     }
 
     private void sjekkAttachmentKryptert(List<Attachment> vedlegg) {
         LOG.info("Sjekker kryptering for {}", vedlegg);
-        vedlegg.stream()
+        safeStream(vedlegg)
                 .forEach(encryptionChecker::checkEncrypted);
     }
 
     private void sjekkVirus(List<Vedlegg> vedlegg) {
         LOG.info("Sjekker virus for {}", vedlegg);
-        StreamUtil.safeStream(vedlegg)
-                .forEach(virusScanner::scan);
+        safeStream(vedlegg)
+                .forEach(virusScanner::sjekkVirus);
     }
 
     private void sjekkAttachmentVirus(List<Attachment> vedlegg) {
         LOG.info("Sjekker virus for {}", vedlegg);
-        vedlegg.stream()
+        safeStream(vedlegg)
                 .forEach(virusScanner::scan);
     }
 
@@ -102,7 +103,7 @@ public class VedleggSjekker {
         }
     }
 
-    private void sjekkAttachmentEnkeltStørrelse(Attachment vedlegg) {
+    private void sjekkAttachmentStørrelse(Attachment vedlegg) {
         LOG.info("Sjekker størrelse for {}", vedlegg);
         if (vedlegg.size.toBytes() > maxEnkelSize.toBytes()) {
             throw new AttachmentTooLargeException(vedlegg.size, maxEnkelSize);
@@ -111,7 +112,7 @@ public class VedleggSjekker {
 
     private void sjekkTotalStørrelse(List<Vedlegg> vedlegg) {
         LOG.info("Sjekker total størrelse for {}", vedlegg);
-        long total = vedlegg.stream()
+        long total = safeStream(vedlegg)
                 .filter(v -> v.getContent() != null)
                 .mapToLong(v -> v.getContent().length)
                 .sum();
@@ -122,7 +123,7 @@ public class VedleggSjekker {
 
     private void sjekkAttachmentTotalStørrelse(List<Attachment> vedlegg) {
         LOG.info("Sjekker total størrelse for {}", vedlegg);
-        long total = vedlegg.stream()
+        long total = safeStream(vedlegg)
                 .filter(v -> v.bytes != null)
                 .mapToLong(v -> v.bytes.length)
                 .sum();

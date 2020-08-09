@@ -2,6 +2,7 @@ package no.nav.foreldrepenger.selvbetjening.mellomlagring;
 
 import static javax.crypto.Cipher.DECRYPT_MODE;
 import static javax.crypto.Cipher.ENCRYPT_MODE;
+import static org.springframework.util.StringUtils.isEmpty;
 
 import java.security.InvalidAlgorithmParameterException;
 import java.security.InvalidKeyException;
@@ -64,7 +65,4 @@ public class Krypto {
         }
     }
 
-    private static boolean isEmpty(String str) {
-        return str == null || str.trim().isEmpty();
-    }
 }

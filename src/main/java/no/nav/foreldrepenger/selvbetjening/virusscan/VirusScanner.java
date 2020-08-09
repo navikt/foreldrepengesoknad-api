@@ -7,7 +7,7 @@ import no.nav.foreldrepenger.selvbetjening.mellomlagring.Attachment;
 
 public interface VirusScanner extends Pingable, RetryAware {
 
-    void scan(Vedlegg vedlegg);
+    void sjekkVirus(Vedlegg vedlegg);
 
     void scan(Attachment vedlegg);
 
