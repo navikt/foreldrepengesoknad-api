@@ -1,6 +1,6 @@
 package no.nav.foreldrepenger.selvbetjening;
 
-import static no.nav.foreldrepenger.selvbetjening.config.ClusterAwareSpringProfileResolver.profiler;
+import static no.nav.foreldrepenger.boot.conditionals.Cluster.profiler;
 
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.boot.builder.SpringApplicationBuilder;
