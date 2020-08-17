@@ -15,7 +15,6 @@ import org.springframework.core.env.Environment;
 import org.springframework.stereotype.Component;
 import org.springframework.web.client.RestOperations;
 
-import no.nav.foreldrepenger.boot.conditionals.EnvUtil;
 import no.nav.foreldrepenger.selvbetjening.http.AbstractRestConnection;
 import no.nav.foreldrepenger.selvbetjening.innsyn.saker.Sak;
 import no.nav.foreldrepenger.selvbetjening.innsyn.uttaksplan.Uttaksplan;
@@ -67,10 +66,11 @@ public class InnsynConnection extends AbstractRestConnection implements Environm
 
     public List<Sak> hentSaker() {
         List<Sak> saker = saker(cfg.fpsakURI(), "FPSAK");
-        if (env != null && EnvUtil.isDev(env)) {
-            LOG.info("Henter saker test fra {}", cfg.sakURIViaMottak());
-            saker(cfg.sakURIViaMottak(), "SAKFRAMOTTAK"); // TEST
-        }
+        /*
+         * if (env != null && EnvUtil.isDev(env)) { LOG.info("Henter saker test fra {}",
+         * cfg.sakURIViaMottak()); saker(cfg.sakURIViaMottak(), "SAKFRAMOTTAK"); // TEST
+         * }
+         */
         if (saker.isEmpty()) {
             saker = saker(cfg.sakURI(), "SAK");
         }
