@@ -10,9 +10,12 @@ import java.util.Optional;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.context.EnvironmentAware;
+import org.springframework.core.env.Environment;
 import org.springframework.stereotype.Component;
 import org.springframework.web.client.RestOperations;
 
+import no.nav.foreldrepenger.boot.conditionals.EnvUtil;
 import no.nav.foreldrepenger.selvbetjening.http.AbstractRestConnection;
 import no.nav.foreldrepenger.selvbetjening.innsyn.saker.Sak;
 import no.nav.foreldrepenger.selvbetjening.innsyn.uttaksplan.Uttaksplan;
@@ -20,10 +23,12 @@ import no.nav.foreldrepenger.selvbetjening.innsyn.vedtak.Vedtak;
 import no.nav.foreldrepenger.selvbetjening.oppslag.domain.Arbeidsforhold;
 
 @Component
-public class InnsynConnection extends AbstractRestConnection {
+public class InnsynConnection extends AbstractRestConnection implements EnvironmentAware {
     private static final Logger LOG = LoggerFactory.getLogger(InnsynConnection.class);
 
     private final InnsynConfig cfg;
+
+    private Environment env;
 
     public InnsynConnection(RestOperations operations, InnsynConfig cfg) {
         super(operations);
@@ -62,9 +67,11 @@ public class InnsynConnection extends AbstractRestConnection {
 
     public List<Sak> hentSaker() {
         List<Sak> saker = saker(cfg.fpsakURI(), "FPSAK");
-        if (saker.isEmpty()) {
+        if (EnvUtil.isDevOrLocal(env)) {
             LOG.info("Henter saker test fra {}", cfg.sakURIViaMottak());
-            var s1 = saker(cfg.sakURIViaMottak(), "SAK"); // TEST
+            saker(cfg.sakURIViaMottak(), "SAKFRAMOTTAK"); // TEST
+        }
+        if (saker.isEmpty()) {
             saker = saker(cfg.sakURI(), "SAK");
         }
 
@@ -88,6 +95,12 @@ public class InnsynConnection extends AbstractRestConnection {
                 .ofNullable(getForObject(cfg.arbeidsforholdURI(), Arbeidsforhold[].class, false))
                 .map(Arrays::asList)
                 .orElse(emptyList());
+    }
+
+    @Override
+    public void setEnvironment(Environment env) {
+        this.env = env;
+
     }
 
 }
