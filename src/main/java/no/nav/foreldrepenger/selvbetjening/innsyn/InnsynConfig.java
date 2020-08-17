@@ -12,7 +12,9 @@ import no.nav.foreldrepenger.selvbetjening.http.AbstractConfig;
 public class InnsynConfig extends AbstractConfig {
 
     private static final String PING = "mottak/ping";
-    private static final String FPSAK_SAKER = "innsyn/sak1";
+    private static final String FPSAK_SAKER = "innsyn/saker";
+    private static final String FPSAK_SAK1 = "innsyn/sak1";
+
     private static final String ARBEIDSFORHOLD = "innsyn/arbeidsforhold";
     private static final String SAK_SAKER = "sak";
     private static final String SAKSNUMMER = "saksnummer";
@@ -51,7 +53,7 @@ public class InnsynConfig extends AbstractConfig {
     }
 
     URI sakURIViaMottak() {
-        return uri(getMottak(), SAK_SAKER);
+        return uri(getMottak(), FPSAK_SAK1);
     }
 
     URI uttakURI(String saksnummer) {
