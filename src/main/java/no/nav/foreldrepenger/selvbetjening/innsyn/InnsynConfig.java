@@ -50,6 +50,10 @@ public class InnsynConfig extends AbstractConfig {
         return uri(getOppslag(), SAK_SAKER);
     }
 
+    URI sakURIViaMottak() {
+        return uri(getMottak(), SAK_SAKER);
+    }
+
     URI uttakURI(String saksnummer) {
         return uri(getMottak(), UTTAKSPLAN, queryParams(SAKSNUMMER, saksnummer));
     }

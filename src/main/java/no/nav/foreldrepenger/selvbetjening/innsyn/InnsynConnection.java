@@ -63,6 +63,8 @@ public class InnsynConnection extends AbstractRestConnection {
     public List<Sak> hentSaker() {
         List<Sak> saker = saker(cfg.fpsakURI(), "FPSAK");
         if (saker.isEmpty()) {
+            LOG.info("Henter saker test fra {}", cfg.sakURIViaMottak());
+            var s1 = saker(cfg.sakURIViaMottak(), "SAK"); // TEST
             saker = saker(cfg.sakURI(), "SAK");
         }
 
