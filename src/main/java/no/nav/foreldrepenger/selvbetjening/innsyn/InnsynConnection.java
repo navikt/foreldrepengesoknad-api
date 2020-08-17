@@ -67,7 +67,7 @@ public class InnsynConnection extends AbstractRestConnection implements Environm
 
     public List<Sak> hentSaker() {
         List<Sak> saker = saker(cfg.fpsakURI(), "FPSAK");
-        if (EnvUtil.isDevOrLocal(env)) {
+        if (env != null && EnvUtil.isDev(env)) {
             LOG.info("Henter saker test fra {}", cfg.sakURIViaMottak());
             saker(cfg.sakURIViaMottak(), "SAKFRAMOTTAK"); // TEST
         }
