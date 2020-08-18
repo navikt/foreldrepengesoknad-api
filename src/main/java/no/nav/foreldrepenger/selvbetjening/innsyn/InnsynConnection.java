@@ -63,7 +63,7 @@ public class InnsynConnection extends AbstractRestConnection {
     public List<Sak> hentSaker() {
         List<Sak> saker = saker(cfg.fpsakURI(), "FPSAK");
         if (saker.isEmpty()) {
-            saker = saker(cfg.sakURIViaMottak(), "SAK");
+            saker = saker(cfg.infotrygdSakerURI(), "SAK");
         }
 
         return saker;
