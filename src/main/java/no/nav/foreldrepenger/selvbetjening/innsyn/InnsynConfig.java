@@ -8,7 +8,7 @@ import org.springframework.boot.context.properties.bind.DefaultValue;
 
 import no.nav.foreldrepenger.selvbetjening.http.AbstractConfig;
 
-@ConfigurationProperties(prefix = "innsyn", ignoreInvalidFields = false)
+@ConfigurationProperties(prefix = "innsyn")
 public class InnsynConfig extends AbstractConfig {
 
     private static final String PING = "mottak/ping";
@@ -16,7 +16,6 @@ public class InnsynConfig extends AbstractConfig {
     private static final String INFOTRYGD_SAKER = "innsyn/sak1";
 
     private static final String ARBEIDSFORHOLD = "innsyn/arbeidsforhold";
-    private static final String SAK_SAKER = "sak";
     private static final String SAKSNUMMER = "saksnummer";
     private static final String ANNENPART = "annenPart";
     private static final String UTTAKSPLAN = "innsyn/uttaksplan";
@@ -46,10 +45,6 @@ public class InnsynConfig extends AbstractConfig {
 
     URI fpsakURI() {
         return uri(getMottak(), FPSAK_SAKER);
-    }
-
-    URI sakURI() {
-        return uri(getOppslag(), SAK_SAKER);
     }
 
     URI infotrygdSakerURI() {
