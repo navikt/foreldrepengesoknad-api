@@ -27,8 +27,7 @@ public class InnsynConnectionTest {
     @Mock
     RestOperations rest;
 
-    private static final InnsynConfig CFG = new InnsynConfig(URI.create("http://www.innsyn.no"),
-            URI.create("http://www.oppslag.no"), true);
+    private static final InnsynConfig CFG = new InnsynConfig(URI.create("http://www.innsyn.no"), true);
 
     InnsynConnection connection;
 

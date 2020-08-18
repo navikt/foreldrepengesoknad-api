@@ -40,7 +40,7 @@ public class InnsynTest {
     private static final InnsynConfig CFG = innsynCfg();
 
     private static InnsynConfig innsynCfg() {
-        return new InnsynConfig(URI.create("http://www.mottak.no"), URI.create("http://www.oppslag.no"), true);
+        return new InnsynConfig(URI.create("http://www.mottak.no"), true);
     }
 
     @Autowired

@@ -41,8 +41,7 @@ public class OppslagTest {
     TokenUtil tokenHandler;
 
     private OppslagConfig oppslagConfig = new OppslagConfig(URI.create("http://www.vg.no"), "key", true);
-    private InnsynConfig innsynConfig = new InnsynConfig(URI.create("http://www.vg.no"), URI.create("http://www.vg.no"),
-            true);
+    private InnsynConfig innsynConfig = new InnsynConfig(URI.create("http://www.vg.no"), true);
 
     @Autowired
     private MockRestServiceServer server;

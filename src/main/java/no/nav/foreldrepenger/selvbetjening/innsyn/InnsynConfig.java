@@ -22,16 +22,9 @@ public class InnsynConfig extends AbstractConfig {
     private static final String UTTAKSPLANANNEN = "innsyn/uttaksplanannen";
     private static final String VEDTAK = "innsyn/vedtak";
 
-    private final URI oppslag;
-
     @ConstructorBinding
-    public InnsynConfig(URI mottak, URI oppslag, @DefaultValue("true") boolean enabled) {
+    public InnsynConfig(URI mottak, @DefaultValue("true") boolean enabled) {
         super(mottak, enabled);
-        this.oppslag = oppslag;
-    }
-
-    public URI getOppslag() {
-        return oppslag;
     }
 
     public URI getMottak() {
