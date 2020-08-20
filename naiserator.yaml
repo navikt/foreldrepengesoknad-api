@@ -6,7 +6,7 @@ metadata:
   labels:
     team: teamforeldrepenger 
 spec:
-{{#if gcp}}
+{{#if gcp}} 
   gcp:
     buckets: 
       - name: mellomlagring

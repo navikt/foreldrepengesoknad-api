@@ -11,7 +11,7 @@ import no.nav.foreldrepenger.selvbetjening.http.AbstractConfig;
 @ConfigurationProperties(prefix = "innsyn")
 public class InnsynConfig extends AbstractConfig {
 
-    private static final String PING = "mottak/ping";
+    private static final String PING = "actuator/health/liveness";
     private static final String FPSAK_SAKER = "innsyn/saker";
     private static final String INFOTRYGD_SAKER = "innsyn/sak1";
 
