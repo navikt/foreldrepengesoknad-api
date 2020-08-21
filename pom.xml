@@ -33,7 +33,7 @@
         <tika.version>1.24.1</tika.version>
         <logback.logstash.version>6.4</logback.logstash.version>
         <nv.version>1.27</nv.version>
-        <pdfbox.version>2.0.20</pdfbox.version>
+        <pdfbox.version>2.0.21</pdfbox.version>
         <aws.version>1.11.847</aws.version>
         <jacoco.version>0.8.5</jacoco.version>
         <gcp.version>0.133.0</gcp.version>
