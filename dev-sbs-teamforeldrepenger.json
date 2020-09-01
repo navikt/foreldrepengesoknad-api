@@ -1,6 +1,6 @@
 {
 "ingresses": [
         "https://foreldrepengesoknad-api-q.nav.no",
-        "https://foreldrepengesoknad-api.dev.adeo.no"
+        "https://foreldrepengesoknad-api.nav.adeo.no"
     ]
 }
