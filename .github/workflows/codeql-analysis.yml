@@ -57,7 +57,7 @@ jobs:
     #    uses a compiled language
 
     - run: |
-       mvn --settings ./.m2/settings.xml package
+       mvn  --quiet --settings ./.m2/settings.xml package
     #   make release
 
     - name: Perform CodeQL Analysis
