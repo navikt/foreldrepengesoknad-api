@@ -59,8 +59,7 @@ jobs:
     - name: Sett opp Java 14      
       uses: actions/setup-java@v1
       with:
-          java-version: 14
-    - name: Kompiler      
+          java-version: 14     
     - run: |
        mvn  --quiet --settings ./.m2/settings.xml package
     #   make release
