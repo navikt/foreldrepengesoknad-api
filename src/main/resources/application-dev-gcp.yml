@@ -1,9 +1,9 @@
 allowed:
   origins:
-   https://engangsstonad.dev-nav.no,
-   https://foreldrepengesoknad.dev-nav.no,
-   https://svangerskapspengesoknad.dev-nav.no,
-   https://foreldrepenger.dev-nav.no,
+   https://engangsstonad.dev.nav.no,
+   https://foreldrepengesoknad.dev.nav.no,
+   https://svangerskapspengesoknad.dev.nav.no,
+   https://foreldrepenger.dev.nav.no,
    https://engangsstonad.dev.nav.no,
    https://foreldrepengesoknad.dev.nav.no,
    https://svangerskapspengesoknad.dev.nav.no,
