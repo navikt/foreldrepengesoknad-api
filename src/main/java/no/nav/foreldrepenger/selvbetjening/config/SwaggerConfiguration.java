@@ -28,7 +28,7 @@ public class SwaggerConfiguration {
         return new Docket(SWAGGER_2)
                 .protocols(allProtocols())
                 .select()
-                .apis(basePackage("no.nav.foreldrepenger.selvbetjening.tjeneste"))
+                .apis(basePackage("no.nav.foreldrepenger.selvbetjening"))
                 .paths(PathSelectors.any())
                 .build();
     }
