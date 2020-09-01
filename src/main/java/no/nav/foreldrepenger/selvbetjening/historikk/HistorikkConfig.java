@@ -22,7 +22,7 @@ public class HistorikkConfig extends AbstractConfig implements ZoneCrossingAware
 
     private static final String SAKSNUMMER = "saksnummer";
 
-    private static final String DEFAULT_PING_PATH = "actuator/health/liveness'";
+    private static final String DEFAULT_PING_PATH = "actuator/health/liveness";
 
     private final String key;
 
