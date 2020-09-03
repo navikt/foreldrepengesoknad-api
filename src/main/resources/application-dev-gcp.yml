@@ -15,8 +15,8 @@ no.nav:
       selvbetjening:
          api:
             virus:
-               uri: http://clamav.clamav.svc.cluster.local
+               uri: http://clamav.clamav.svc.nais.local
 
 fppdfgen:
-   uri: http://fppdfgen.teamforeldrepenger.svc.nais.local/
+   uri: http://fppdfgen.teamforeldrepenger.svc.nais.local
    
