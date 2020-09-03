@@ -18,4 +18,5 @@ no.nav:
                uri: http://clamav.clamav.svc.cluster.local
 
 fppdfgen:
-   uri: http://fppdfgen
+   uri: http://fppdfgen.teamforeldrepenger.svc.nais.local/
+   
