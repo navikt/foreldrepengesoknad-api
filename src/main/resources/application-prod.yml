@@ -1,4 +1,4 @@
-oppslag:        
+oppslag:
   uri:  https://api-gw.oera.no/fpsoknad-oppslag/api/
 historikk:
   uri: https://api-gw.oera.no/fpinfo-historikk/api/
@@ -7,7 +7,5 @@ mottak:
 innsyn:
   mottak: https://api-gw.oera.no/fpsoknad-mottak/api/
   oppslag: https://api-gw.oera.no/fpsoknad-oppslag/api/
-fppdfgen:
-  uri: https://api-gw.oera.no/fppdfgen/
 minidialog:
   uri: https://api-gw.oera.no/fpinfo-historikk/api/
