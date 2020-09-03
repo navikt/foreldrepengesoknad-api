@@ -9,10 +9,13 @@ allowed:
    https://foreldrepengesoknad.dev.nav.no,
    https://svangerskapspengesoknad.dev.nav.no,
    https://foreldrepenger.dev.nav.no
-   
+
 no.nav:
    foreldrepenger:
       selvbetjening:
          api:
             virus:
-               uri: http://clamav.clamav.svc.cluster.local     
+               uri: http://clamav.clamav.svc.cluster.local
+
+fppdfgen:
+   uri: http://fppdfgen.teamforeldrepenger.svc.cluster.local/
