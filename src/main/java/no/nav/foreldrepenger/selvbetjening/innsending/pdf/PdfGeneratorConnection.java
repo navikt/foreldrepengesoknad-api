@@ -30,7 +30,7 @@ public class PdfGeneratorConnection extends AbstractRestConnection {
 
     @Override
     public URI pingURI() {
-        return null;
+        return config.pingURI();
     }
 
     public byte[] genererPdf(TilbakebetalingUttalelseDto dto) {
