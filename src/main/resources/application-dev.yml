@@ -15,10 +15,10 @@ management:
 spring:
     mvc:
         log-request-details: true
-        
+
 virus:
   enabled: false
-oppslag:        
+oppslag:
   uri:  https://api-gw-q1.oera.no/fpsoknad-oppslag/api/
 historikk:
   uri: https://api-gw-q1.oera.no/fpinfo-historikk/api/
@@ -28,11 +28,6 @@ innsyn:
   mottak: https://api-gw-q1.oera.no/fpsoknad-mottak/api/
   oppslag: https://api-gw-q1.oera.no/fpsoknad-oppslag/api/
 fppdfgen:
-  uri: https://api-gw-q1.oera.no/fppdfgen/
+  uri: http://fppdfgen.teamforeldrepenger.svc.nais.local
 minidialog:
   uri: https://api-gw-q1.oera.no/fpinfo-historikk/api/
-  
-  
-  
-  
-  
