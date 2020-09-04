@@ -27,7 +27,5 @@ mottak:
 innsyn:
   mottak: https://api-gw-q1.oera.no/fpsoknad-mottak/api/
   oppslag: https://api-gw-q1.oera.no/fpsoknad-oppslag/api/
-fppdfgen:
-  uri: http://fppdfgen.default.svc.nais.local/
 minidialog:
   uri: https://api-gw-q1.oera.no/fpinfo-historikk/api/
