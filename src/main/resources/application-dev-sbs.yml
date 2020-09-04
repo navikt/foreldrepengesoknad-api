@@ -9,3 +9,5 @@ allowed:
     https://svangerskapspengesoknad-q.nav.no
 s3:
   url: http://objectstore.rook-ceph.svc.nais.local/
+fppdfgen:
+   uri: http://fppdfgen
