@@ -13,6 +13,8 @@ spec:
       - name: foreldrepengesoknad
   accessPolicy:
      outbound:
+       rule:
+         - application: fppdfgen  
        external: 
          - host: storage.googleapis.com
          - host: oauth2.googleapis.com
