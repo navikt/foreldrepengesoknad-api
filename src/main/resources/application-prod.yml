@@ -9,3 +9,5 @@ innsyn:
   oppslag: https://api-gw.oera.no/fpsoknad-oppslag/api/
 minidialog:
   uri: https://api-gw.oera.no/fpinfo-historikk/api/
+fppdfgen:
+  uri: https://api-gw.oera.no/fppdfgen/

@@ -16,7 +16,3 @@ no.nav:
          api:
             virus:
                uri: http://clamav.clamav.svc.cluster.local
-
-fppdfgen:
-   uri: http://fppdfgen
-   

@@ -38,4 +38,9 @@ public class PdfGeneratorStub implements PdfGenerator {
     public byte[] generate(TilbakebetalingUttalelse uttalelse) {
         return generate(uttalelse.getBrukerTekst().getTekst());
     }
+
+    @Override
+    public String ping() {
+        return "HEI";
+    }
 }

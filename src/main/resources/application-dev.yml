@@ -29,3 +29,5 @@ innsyn:
   oppslag: https://api-gw-q1.oera.no/fpsoknad-oppslag/api/
 minidialog:
   uri: https://api-gw-q1.oera.no/fpinfo-historikk/api/
+fppdfgen:
+  uri: https://api-gw-q1.oera.no/fppdfgen/
