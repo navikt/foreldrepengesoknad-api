@@ -4,41 +4,39 @@ metadata:
   name: foreldrepengesoknad-api
   namespace: teamforeldrepenger
   labels:
-    team: teamforeldrepenger 
+    team: teamforeldrepenger
 spec:
-{{#if gcp}} 
+{{#if gcp}}
   gcp:
-    buckets: 
+    buckets:
       - name: mellomlagring
       - name: foreldrepengesoknad
   accessPolicy:
      outbound:
-       rules:
-         - application: fppdfgen  
-       external: 
+       external:
          - host: storage.googleapis.com
          - host: oauth2.googleapis.com
          - host: www.googleapis.com
-         - host: {{gw}}      
+         - host: {{gw}}
   envFrom:
       - secret: fppdfgen.key
       - secret: oppslag.key
       - secret: mottak.key
       - secret: historikk.key
       - secret: storage.passphrase
-{{/if}}  
+{{/if}}
   image: {{image}}
   port: 8080
   replicas:
       min: 2
       max: 2
-      cpuThresholdPercentage: 50  
+      cpuThresholdPercentage: 50
   liveness:
       path: /internal/actuator/health/liveness
       initialDelay: 60
   readiness:
       path: /internal/actuator/health/readiness
-      initialDelay: 60  
+      initialDelay: 60
   prometheus:
       enabled: true
       path: /internal/actuator/prometheus
@@ -49,14 +47,14 @@ spec:
   ingresses:
 {{#each ingresses as |url|}}
     - {{url}}
-{{/each}} 
+{{/each}}
   resources:
       limits:
          cpu: 1500m
          memory: 3072Mi
       requests:
          cpu: 250m
-         memory: 1536Mi 
+         memory: 1536Mi
 {{#unless gcp}}
   webproxy: true
 {{/unless}}
