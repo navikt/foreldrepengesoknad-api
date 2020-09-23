@@ -1,6 +1,7 @@
 package no.nav.foreldrepenger.selvbetjening.http.filters;
 
 import static no.nav.foreldrepenger.selvbetjening.util.Constants.FNR_HEADER_VALUE;
+import static no.nav.foreldrepenger.selvbetjening.util.StringUtil.maskFnr;
 
 import java.io.IOException;
 
@@ -41,7 +42,7 @@ public class IdMismatchFilterBean extends GenericFilterBean {
         String fnr = HttpServletRequest.class.cast(request).getHeader(FNR_HEADER_VALUE);
         if ((fnr != null) && (tokenUtil.getSubject() != null) && !fnr.equals(tokenUtil.getSubject())) {
             LOG.warn("ID Mismatch mellom {} og {}", fnr, tokenUtil.getSubject());
-            throw new IdMismatchException(fnr, tokenUtil.getSubject());
+            throw new IdMismatchException(maskFnr(fnr), maskFnr(tokenUtil.getSubject()));
         }
     }
 
