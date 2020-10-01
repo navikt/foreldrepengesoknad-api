@@ -1,16 +1,16 @@
 package no.nav.foreldrepenger.selvbetjening.innsending.pdf;
 
+import static no.nav.foreldrepenger.selvbetjening.util.StringUtil.limit;
+import static org.apache.commons.lang3.StringUtils.reverse;
+
 import java.net.URI;
 
-import no.nav.foreldrepenger.selvbetjening.http.interceptors.ZoneCrossingAware;
 import org.springframework.boot.context.properties.ConfigurationProperties;
 import org.springframework.boot.context.properties.ConstructorBinding;
 import org.springframework.boot.context.properties.bind.DefaultValue;
 
 import no.nav.foreldrepenger.selvbetjening.http.AbstractConfig;
-
-import static no.nav.foreldrepenger.selvbetjening.util.StringUtil.limit;
-import static org.apache.commons.lang3.StringUtils.reverse;
+import no.nav.foreldrepenger.selvbetjening.http.interceptors.ZoneCrossingAware;
 
 @ConfigurationProperties(prefix = "fppdfgen")
 public class PdfGeneratorConfig extends AbstractConfig implements ZoneCrossingAware {
@@ -35,12 +35,6 @@ public class PdfGeneratorConfig extends AbstractConfig implements ZoneCrossingAw
     }
 
     @Override
-    public String toString() {
-        return getClass().getSimpleName() + "[key=" + limit(reverse(key), 3)
-            + ", zoneCrossingUri=" + zoneCrossingUri() + "]";
-    }
-
-    @Override
     public String getKey() {
         return key;
     }
@@ -48,5 +42,11 @@ public class PdfGeneratorConfig extends AbstractConfig implements ZoneCrossingAw
     @Override
     public URI zoneCrossingUri() {
         return getUri();
+    }
+
+    @Override
+    public String toString() {
+        return getClass().getSimpleName() + "[key=" + limit(reverse(key), 3)
+                + ", zoneCrossingUri=" + zoneCrossingUri() + "]";
     }
 }
