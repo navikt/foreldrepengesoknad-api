@@ -27,6 +27,10 @@ public class OppslagConnection extends AbstractRestConnection {
         return config.isEnabled();
     }
 
+    public PDLPerson hentPDLPerson() {
+        return getForObject(config.personPDLURI(), PDLPerson.class);
+    }
+
     public PersonDto hentPerson() {
         if (isEnabled()) {
             PersonDto person = getForObject(config.personURI(), PersonDto.class);

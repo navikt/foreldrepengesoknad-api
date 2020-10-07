@@ -6,6 +6,7 @@ import static no.nav.foreldrepenger.selvbetjening.util.StringUtil.maskFnr;
 import javax.inject.Inject;
 
 import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnProperty;
 import org.springframework.stereotype.Service;
 
@@ -18,7 +19,7 @@ import no.nav.foreldrepenger.selvbetjening.oppslag.domain.Søkerinfo;
 @ConditionalOnProperty(name = "stub.oppslag", havingValue = "false", matchIfMissing = true)
 public class OppslagTjeneste implements Oppslag {
 
-    private static final Logger LOG = org.slf4j.LoggerFactory.getLogger(OppslagTjeneste.class);
+    private static final Logger LOG = LoggerFactory.getLogger(OppslagTjeneste.class);
     private final OppslagConnection oppslag;
     private final InnsynConnection innsyn;
 
@@ -30,6 +31,13 @@ public class OppslagTjeneste implements Oppslag {
 
     @Override
     public Person hentPerson() {
+        try {
+            LOG.info("Henter PDL-person");
+            var pdl = oppslag.hentPDLPerson();
+            LOG.info("PDL-person {}", pdl);
+        } catch (Exception e) {
+            LOG.warn("Feil ved oppslag av PDL-person");
+        }
         return new Person(oppslag.hentPerson());
     }
 
