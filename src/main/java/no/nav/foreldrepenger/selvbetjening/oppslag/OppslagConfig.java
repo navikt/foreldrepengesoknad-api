@@ -22,11 +22,13 @@ public class OppslagConfig extends AbstractConfig implements ZoneCrossingAware {
     private static final String AKTØRFNR = "oppslag/aktorfnr";
 
     private final String key;
+    private final URI pdlUri;
 
     @ConstructorBinding
-    public OppslagConfig(URI uri, String key, @DefaultValue("true") boolean enabled) {
+    public OppslagConfig(URI uri, URI pdlUri, String key, @DefaultValue("true") boolean enabled) {
         super(uri, enabled);
         this.key = key;
+        this.pdlUri = pdlUri;
     }
 
     @Override
@@ -42,6 +44,10 @@ public class OppslagConfig extends AbstractConfig implements ZoneCrossingAware {
     @Override
     public URI pingURI() {
         return uri(getUri(), PING);
+    }
+
+    URI personPDLURI() {
+        return uri(pdlUri, PERSON);
     }
 
     URI personURI() {
