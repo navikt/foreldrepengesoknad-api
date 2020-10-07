@@ -36,7 +36,7 @@ public class OppslagTjeneste implements Oppslag {
             var pdl = oppslag.hentPDLPerson();
             LOG.info("PDL-person {}", pdl);
         } catch (Exception e) {
-            LOG.warn("Feil ved oppslag av PDL-person");
+            LOG.warn("Feil ved oppslag av PDL-person", e);
         }
         return new Person(oppslag.hentPerson());
     }
