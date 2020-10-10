@@ -31,14 +31,29 @@ public class OppslagTjeneste implements Oppslag {
 
     @Override
     public Person hentPerson() {
+        var pdlPerson = pdlPerson();
+        var tpsPerson = new Person(oppslag.hentPerson());
+        if (tpsPerson != pdlPerson) {
+            LOG.warn("TPS person {} og PDL-person {} er ulike", tpsPerson, pdlPerson);
+        } else {
+            LOG.info("TPS person og PDL-person er like");
+        }
+        return tpsPerson;
+
+    }
+
+    private Person pdlPerson() {
         try {
             LOG.info("Henter PDL-person");
             var pdl = oppslag.hentPDLPerson();
             LOG.info("PDL-person {}", pdl);
+            var p = new Person(pdl);
+            LOG.info("PDL-person mapped til {}", p);
+            return p;
         } catch (Exception e) {
             LOG.warn("Feil ved oppslag av PDL-person", e);
+            return null;
         }
-        return new Person(oppslag.hentPerson());
     }
 
     @Override
