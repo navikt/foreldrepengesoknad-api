@@ -32,7 +32,7 @@ public class OppslagTjeneste implements Oppslag {
     @Override
     public Person hentPerson() {
         var pdlPerson = pdlPerson();
-        var tpsPerson = new Person(oppslag.hentPerson());
+        var tpsPerson = tpsPerson();
         if (tpsPerson != pdlPerson) {
             LOG.warn("TPS person {} og PDL-person {} er ulike", tpsPerson, pdlPerson);
         } else {
@@ -40,6 +40,15 @@ public class OppslagTjeneste implements Oppslag {
         }
         return tpsPerson;
 
+    }
+
+    private Person tpsPerson() {
+        LOG.info("Henter TPS-person");
+        var tps = oppslag.hentPerson();
+        LOG.info("TPS-person {}", tps);
+        var p = new Person(tps);
+        LOG.info("TPS-person mapped til {}", p);
+        return p;
     }
 
     private Person pdlPerson() {
