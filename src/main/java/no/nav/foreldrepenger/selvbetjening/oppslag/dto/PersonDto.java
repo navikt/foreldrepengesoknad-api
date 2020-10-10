@@ -4,6 +4,7 @@ import java.time.LocalDate;
 import java.util.List;
 import java.util.Objects;
 
+import com.fasterxml.jackson.annotation.JsonAlias;
 import com.neovisionaries.i18n.CountryCode;
 
 import no.nav.foreldrepenger.selvbetjening.oppslag.domain.Bankkonto;
@@ -11,6 +12,7 @@ import no.nav.foreldrepenger.selvbetjening.oppslag.domain.Barn;
 
 public class PersonDto {
 
+    @JsonAlias("id")
     public String fnr;
     public String aktorId;
     public String fornavn;
