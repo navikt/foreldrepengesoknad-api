@@ -33,7 +33,16 @@ public class OppslagTjeneste implements Oppslag {
     public Person hentPerson() {
         var pdlPerson = pdlPerson();
         var tpsPerson = tpsPerson();
-        if (tpsPerson != pdlPerson) {
+        if (!tpsPerson.equals(pdlPerson)) {
+            LOG.info("ikkeNordiskEøsLand " + tpsPerson.ikkeNordiskEøsLand.equals(pdlPerson.ikkeNordiskEøsLand));
+            LOG.info("barn " + tpsPerson.barn.equals(pdlPerson.barn));
+            LOG.info("fødselsdato " + tpsPerson.fødselsdato.equals(pdlPerson.fødselsdato));
+            LOG.info("kjønn " + tpsPerson.kjønn.equals(pdlPerson.kjønn));
+            LOG.info("fnr " + tpsPerson.fnr.equals(pdlPerson.fnr));
+            LOG.info("fornavn " + tpsPerson.fornavn.equals(pdlPerson.fornavn));
+            LOG.info("mellomnavn " + tpsPerson.mellomnavn.equals(pdlPerson.mellomnavn));
+            LOG.info("etternavn " + tpsPerson.etternavn.equals(pdlPerson.etternavn));
+            LOG.info("Bankkonto " + tpsPerson.bankkonto.equals(pdlPerson.bankkonto));
             LOG.warn("TPS person {} og PDL-person {} er ulike", tpsPerson, pdlPerson);
         } else {
             LOG.info("TPS person og PDL-person er like");
