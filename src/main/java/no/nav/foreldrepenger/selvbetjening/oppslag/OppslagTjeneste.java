@@ -34,6 +34,7 @@ public class OppslagTjeneste implements Oppslag {
         var pdlPerson = pdlPerson();
         var tpsPerson = tpsPerson();
         if (!tpsPerson.equals(pdlPerson)) {
+            LOG.info("land " + tpsPerson.land.equals(pdlPerson.land));
             LOG.info("ikkeNordiskEøsLand " + tpsPerson.ikkeNordiskEøsLand.equals(pdlPerson.ikkeNordiskEøsLand));
             LOG.info("barn " + tpsPerson.barn.equals(pdlPerson.barn));
             LOG.info("fødselsdato " + tpsPerson.fødselsdato.equals(pdlPerson.fødselsdato));
