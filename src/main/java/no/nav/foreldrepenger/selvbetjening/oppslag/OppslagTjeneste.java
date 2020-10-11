@@ -31,34 +31,20 @@ public class OppslagTjeneste implements Oppslag {
 
     @Override
     public Person hentPerson() {
-        var pdlPerson = pdlPerson();
-        var tpsPerson = tpsPerson();
-        if (!tpsPerson.equals(pdlPerson)) {
-            LOG.info("land " + tpsPerson.land.equals(pdlPerson.land));
-            LOG.info("ikkeNordiskEøsLand " + tpsPerson.ikkeNordiskEøsLand.equals(pdlPerson.ikkeNordiskEøsLand));
-            LOG.info("barn " + tpsPerson.barn.equals(pdlPerson.barn));
-            LOG.info("fødselsdato " + tpsPerson.fødselsdato.equals(pdlPerson.fødselsdato));
-            LOG.info("kjønn " + tpsPerson.kjønn.equals(pdlPerson.kjønn));
-            LOG.info("fnr " + tpsPerson.fnr.equals(pdlPerson.fnr));
-            LOG.info("fornavn " + tpsPerson.fornavn.equals(pdlPerson.fornavn));
-            LOG.info("mellomnavn " + tpsPerson.mellomnavn.equals(pdlPerson.mellomnavn));
-            LOG.info("etternavn " + tpsPerson.etternavn.equals(pdlPerson.etternavn));
-            LOG.info("Bankkonto " + tpsPerson.bankkonto.equals(pdlPerson.bankkonto));
-            LOG.warn("TPS person {} og PDL-person {} er ulike", tpsPerson, pdlPerson);
-        } else {
-            LOG.info("TPS person og PDL-person er like");
-        }
-        return tpsPerson;
+        return sammenlign(pdlPerson(), tpsPerson());
+    }
 
+    private Person sammenlign(Person pdl, Person tps) {
+        if (!tps.equals(pdl)) {
+            LOG.warn("TPS-person {} og PDL-person {} er ulike", tps, pdl);
+        } else {
+            LOG.info("TPS-person og PDL-person er like");
+        }
+        return tps;
     }
 
     private Person tpsPerson() {
-        LOG.info("Henter TPS-person");
-        var tps = oppslag.hentPerson();
-        LOG.info("TPS-person {}", tps);
-        var p = new Person(tps);
-        LOG.info("TPS-person mapped til {}", p);
-        return p;
+        return new Person(oppslag.hentPerson());
     }
 
     private Person pdlPerson() {
@@ -77,10 +63,14 @@ public class OppslagTjeneste implements Oppslag {
 
     @Override
     public Søkerinfo hentSøkerinfo() {
-        LOG.info("Henter søkerinfo");
+        return tpsSøkerinfo();
+    }
+
+    private Søkerinfo tpsSøkerinfo() {
+        LOG.info("Henter TPS-søkerinfo");
         var info = new Søkerinfo(hentPerson(), innsyn.hentArbeidsForhold());
-        LOG.info("Hentet søkerinfo for {} med {} arbeidsforhold OK", maskFnr(info.getSøker().fnr), info.getArbeidsforhold());
-        LOG.info(CONFIDENTIAL, "Hentet søkerinfo {}", info);
+        LOG.info("Hentet TPS-søkerinfo for {} med {} arbeidsforhold OK", maskFnr(info.getSøker().fnr), info.getArbeidsforhold());
+        LOG.info(CONFIDENTIAL, "Hentet TPS-søkerinfo {}", info);
         return info;
     }
 
