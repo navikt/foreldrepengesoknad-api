@@ -4,6 +4,7 @@ import static com.fasterxml.jackson.annotation.JsonInclude.Include.NON_NULL;
 
 import java.time.LocalDate;
 
+import com.fasterxml.jackson.annotation.JsonAlias;
 import com.fasterxml.jackson.annotation.JsonCreator;
 import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.annotation.JsonProperty;
@@ -17,6 +18,7 @@ public class Barn {
     private final String fnr;
     private final String kjønn;
     private final LocalDate fødselsdato;
+
     private final AnnenForelder annenForelder;
 
     @JsonCreator
@@ -24,7 +26,7 @@ public class Barn {
             @JsonProperty("mellomnavn") String mellomnavn,
             @JsonProperty("etternavn") String etternavn, @JsonProperty("kjønn") String kjønn,
             @JsonProperty("fødselsdato") LocalDate fødselsdato,
-            @JsonProperty("annenForelder") AnnenForelder annenForelder) {
+            @JsonProperty("annenForelder") @JsonAlias("annenPart") AnnenForelder annenForelder) {
         this.fnr = fnr;
         this.fornavn = fornavn;
         this.mellomnavn = mellomnavn;
