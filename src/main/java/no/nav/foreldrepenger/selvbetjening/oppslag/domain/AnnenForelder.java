@@ -3,10 +3,13 @@ package no.nav.foreldrepenger.selvbetjening.oppslag.domain;
 import static com.fasterxml.jackson.annotation.JsonInclude.Include.NON_NULL;
 
 import java.time.LocalDate;
+import java.util.Optional;
 
 import com.fasterxml.jackson.annotation.JsonCreator;
 import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.annotation.JsonProperty;
+
+import no.nav.foreldrepenger.selvbetjening.innsyn.saker.Navn;
 
 @JsonInclude(NON_NULL)
 public class AnnenForelder {
@@ -18,14 +21,12 @@ public class AnnenForelder {
     private final LocalDate fødselsdato;
 
     @JsonCreator
-    public AnnenForelder(@JsonProperty("fnr") String fnr, @JsonProperty("fornavn") String fornavn,
-            @JsonProperty("mellomnavn") String mellomnavn,
-            @JsonProperty("etternavn") String etternavn,
+    public AnnenForelder(@JsonProperty("fnr") String fnr, @JsonProperty("navn") Navn navn,
             @JsonProperty("fødselsdato") LocalDate fødselsdato) {
         this.fnr = fnr;
-        this.fornavn = fornavn;
-        this.mellomnavn = mellomnavn;
-        this.etternavn = etternavn;
+        this.fornavn = Optional.ofNullable(navn).map(Navn::getFornavn).orElse(null);
+        this.mellomnavn = Optional.ofNullable(navn).map(Navn::getMellomnavn).orElse(null);
+        this.etternavn = Optional.ofNullable(navn).map(Navn::getEtternavn).orElse(null);
         this.fødselsdato = fødselsdato;
     }
 

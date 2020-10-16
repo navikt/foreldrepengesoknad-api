@@ -11,6 +11,8 @@ import org.slf4j.Logger;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnProperty;
 import org.springframework.stereotype.Service;
 
+import no.nav.foreldrepenger.selvbetjening.innsyn.saker.Kjønn;
+import no.nav.foreldrepenger.selvbetjening.innsyn.saker.Navn;
 import no.nav.foreldrepenger.selvbetjening.oppslag.domain.AktørId;
 import no.nav.foreldrepenger.selvbetjening.oppslag.domain.AnnenForelder;
 import no.nav.foreldrepenger.selvbetjening.oppslag.domain.Arbeidsforhold;
@@ -66,7 +68,7 @@ public class OppslagTjenesteStub implements Oppslag {
     }
 
     private static AnnenForelder annenForelder() {
-        return new AnnenForelder("01017098765", "Steve", "Grønland", "Nichols",
+        return new AnnenForelder("01017098765", new Navn("Steve", "Grønland", "Nichols", Kjønn.M),
                 now().minusYears(45));
     }
 
