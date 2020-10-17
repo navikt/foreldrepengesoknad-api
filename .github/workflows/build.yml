@@ -20,7 +20,7 @@ jobs:
       - name: Hent tag    
         echo 'TAG<<EOF' >> $GITHUB_ENV
         git log -1 --pretty=%ad --date=format:%Y%m%d%H%M%S-$GITHUB_SHA | cut -c1-7 >> $GITHUB_ENV
-        echo 'EOF" >> $GITHUB_ENV
+        echo 'EOF' >> $GITHUB_ENV
                 
       - name: Hent Maven cache
         uses: actions/cache@v2
