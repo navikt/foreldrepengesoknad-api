@@ -37,6 +37,7 @@ jobs:
     
       - name: Kompiler
         run: | 
+         echo $TAG
           mvn versions:set -DnewVersion=${TAG}
           echo "::set-env name=IMAGE::$IMAGE_BASE:$TAG" 
           mvn --settings ./.m2/settings.xml  --quiet jacoco:prepare-agent install jacoco:report sonar:sonar  -e --batch-mode   -Dsonar.login=${SONAR} -Djacoco.destFile=$(pwd)/target/jacoco.exec
