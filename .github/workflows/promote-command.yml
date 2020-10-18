@@ -13,20 +13,23 @@ jobs:
     
     steps:
        
-      - name: Set variabler for image og cluster
+      - name: Set variabler for cluster og tag
         run: |
          echo 'TAG<<EOF' >> $GITHUB_ENV
          echo ${{ github.event.client_payload.github.payload.issue.title }} | awk '{print $NF}' | awk -F- '{print $NF}'   >> $GITHUB_ENV
          echo 'EOF' >> $GITHUB_ENV
          
-         echo 'IMAGE1<<EOF' >> $GITHUB_ENV
-         echo "$IMAGE_BASE:${{ github.event.client_payload.github.payload.issue.title }}" | awk '{print $NF}'   >> $GITHUB_ENV
+         echo 'NAME<<EOF' >> $GITHUB_ENV
+         echo ${{ github.event.client_payload.github.payload.issue.title }} | awk '{print $NF}'   >> $GITHUB_ENV
          echo 'EOF' >> $GITHUB_ENV
          
          echo "::set-env name=IMAGE::$IMAGE_BASE:$(echo ${{ github.event.client_payload.github.payload.issue.title }} | awk '{print $NF}')"
          echo "CLUSTER=${{github.event.client_payload.slash_command.arg1}}" >> $GITHUB_ENV
 
-                     
+      - name: Set variabel for image
+        run: |
+         echo "IMAGE1=$IMAGE_BASE:$NAME >> $GITHUB_ENV
+          
       - name: Sjekk ut kode
         uses: actions/checkout@v1
         with:
