@@ -20,7 +20,7 @@ jobs:
          echo 'EOF' >> $GITHUB_ENV
          
          echo 'IMAGE1<<EOF' >> $GITHUB_ENV
-         echo "${{ IMAGE_BASE }}:${{ github.event.client_payload.github.payload.issue.title }}" | awk '{print $NF}' | awk -F- '{print $NF}'   >> $GITHUB_ENV
+         echo "$IMAGE_BASE:${{ github.event.client_payload.github.payload.issue.title }}" | awk '{print $NF}' | awk -F- '{print $NF}'   >> $GITHUB_ENV
          echo 'EOF' >> $GITHUB_ENV
          
          echo "::set-env name=IMAGE::$IMAGE_BASE:$(echo ${{ github.event.client_payload.github.payload.issue.title }} | awk '{print $NF}')"
