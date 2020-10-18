@@ -28,7 +28,7 @@ jobs:
 
       - name: Set variabel for image
         run: |
-         echo "IMAGE1=$IMAGE_BASE:$NAME >> $GITHUB_ENV
+         echo IMAGE1=$IMAGE_BASE:$NAME >> $GITHUB_ENV
           
       - name: Sjekk ut kode
         uses: actions/checkout@v1
