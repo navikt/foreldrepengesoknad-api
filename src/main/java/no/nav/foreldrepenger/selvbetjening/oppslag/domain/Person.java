@@ -6,10 +6,12 @@ import static no.nav.foreldrepenger.selvbetjening.util.IkkeNordiskEØSLand.ikkeN
 import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Optional;
 
 import com.fasterxml.jackson.annotation.JsonInclude;
 import com.neovisionaries.i18n.CountryCode;
 
+import no.nav.foreldrepenger.selvbetjening.innsyn.saker.Navn;
 import no.nav.foreldrepenger.selvbetjening.oppslag.dto.PersonDto;
 
 @JsonInclude(NON_EMPTY)
@@ -28,9 +30,9 @@ public class Person {
 
     public Person(PersonDto dto) {
         this.fnr = dto.fnr;
-        this.fornavn = dto.navn.getFornavn();
-        this.etternavn = dto.navn.getEtternavn();
-        this.mellomnavn = dto.navn.getMellomnavn();
+        this.fornavn = Optional.ofNullable(dto.navn).map(Navn::getFornavn).orElse(null);
+        this.etternavn = Optional.ofNullable(dto.navn).map(Navn::getEtternavn).orElse(null);
+        this.mellomnavn = Optional.ofNullable(dto.navn).map(Navn::getMellomnavn).orElse(null);
         this.kjønn = dto.navn.getKjønn().name();
         this.fødselsdato = dto.fødselsdato;
         this.land = dto.landKode;
