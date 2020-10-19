@@ -2,7 +2,6 @@ package no.nav.foreldrepenger.selvbetjening.oppslag;
 
 import static com.neovisionaries.i18n.CountryCode.NO;
 import static java.time.LocalDate.now;
-import static java.util.Collections.singletonList;
 import static org.slf4j.LoggerFactory.getLogger;
 
 import java.util.List;
@@ -49,8 +48,7 @@ public class OppslagTjenesteStub implements Oppslag {
     }
 
     private static Person person() {
-        PersonDto dto = personDto();
-        return new Person(dto);
+        return new Person(personDto());
     }
 
     public static PersonDto personDto() {
@@ -76,7 +74,7 @@ public class OppslagTjenesteStub implements Oppslag {
     }
 
     private static List<Arbeidsforhold> arbeidsforhold() {
-        return singletonList(new Arbeidsforhold("123456789", "orgnr", "KJELL T. RINGS SYKKELVERKSTED", 100d,
+        return List.of(new Arbeidsforhold("123456789", "orgnr", "KJELL T. RINGS SYKKELVERKSTED", 100d,
                 now().minusYears(2), null));
     }
 
