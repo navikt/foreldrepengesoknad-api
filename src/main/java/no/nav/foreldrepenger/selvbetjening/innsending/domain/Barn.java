@@ -8,7 +8,10 @@ import java.util.List;
 
 import com.fasterxml.jackson.annotation.JsonInclude;
 
+import lombok.EqualsAndHashCode;
+
 @JsonInclude(NON_EMPTY)
+@EqualsAndHashCode
 public class Barn {
 
     public Boolean erBarnetFødt;

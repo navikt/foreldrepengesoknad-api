@@ -10,12 +10,15 @@ import com.fasterxml.jackson.annotation.JsonSubTypes;
 import com.fasterxml.jackson.annotation.JsonSubTypes.Type;
 import com.fasterxml.jackson.annotation.JsonTypeInfo;
 
+import lombok.EqualsAndHashCode;
+
 @JsonTypeInfo(use = NAME, property = "type", visible = true)
 @JsonSubTypes({
         @Type(value = Engangsstønad.class, name = "engangsstønad"),
         @Type(value = Foreldrepengesøknad.class, name = "foreldrepenger"),
         @Type(value = Svangerskapspengesøknad.class, name = "svangerskapspenger")
 })
+@EqualsAndHashCode
 public class Søknad {
 
     private String type;

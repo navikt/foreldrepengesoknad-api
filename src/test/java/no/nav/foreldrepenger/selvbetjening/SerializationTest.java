@@ -2,7 +2,7 @@ package no.nav.foreldrepenger.selvbetjening;
 
 import static java.time.LocalDateTime.now;
 import static no.nav.foreldrepenger.selvbetjening.oppslag.OppslagTjenesteStub.personDto;
-import static org.assertj.core.api.Assertions.assertThat;
+import static org.junit.jupiter.api.Assertions.assertEquals;
 
 import java.io.IOException;
 
@@ -43,8 +43,7 @@ public class SerializationTest {
     }
 
     private void test(Object object) throws IOException {
-        assertThat(object)
-                .isEqualToComparingFieldByFieldRecursively(mapper.readValue(write(object), object.getClass()));
+        assertEquals(object, mapper.readValue(write(object), object.getClass()));
     }
 
     private String write(Object obj) throws JsonProcessingException {
