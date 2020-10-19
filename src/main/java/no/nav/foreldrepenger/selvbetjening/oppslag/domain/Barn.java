@@ -9,9 +9,11 @@ import com.fasterxml.jackson.annotation.JsonCreator;
 import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.annotation.JsonProperty;
 
+import lombok.EqualsAndHashCode;
 import no.nav.foreldrepenger.selvbetjening.innsyn.saker.Navn;
 
 @JsonInclude(NON_NULL)
+@EqualsAndHashCode
 public class Barn {
 
     private final Navn navn;
