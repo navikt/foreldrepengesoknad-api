@@ -7,6 +7,7 @@ import java.util.Objects;
 import com.fasterxml.jackson.annotation.JsonAlias;
 import com.neovisionaries.i18n.CountryCode;
 
+import no.nav.foreldrepenger.selvbetjening.innsyn.saker.Navn;
 import no.nav.foreldrepenger.selvbetjening.oppslag.domain.Bankkonto;
 import no.nav.foreldrepenger.selvbetjening.oppslag.domain.Barn;
 
@@ -15,10 +16,7 @@ public class PersonDto {
     @JsonAlias("id")
     public String fnr;
     public String aktorId;
-    public String fornavn;
-    public String mellomnavn;
-    public String etternavn;
-    public String kjønn;
+    public Navn navn;
     public LocalDate fødselsdato;
     public String målform;
     public CountryCode landKode;
@@ -47,9 +45,8 @@ public class PersonDto {
 
     @Override
     public String toString() {
-        return getClass().getSimpleName() + " [fnr=" + fnr + ", aktorId=" + aktorId + ", fornavn=" + fornavn
-                + ", mellomnavn=" + mellomnavn
-                + ", etternavn=" + etternavn + ", kjønn=" + kjønn + ", fødselsdato=" + fødselsdato + ", målform="
+        return getClass().getSimpleName() + " [fnr=" + fnr + ", aktorId=" + aktorId + ", navn=" + navn
+                + "fødselsdato=" + fødselsdato + ", målform="
                 + målform + ", landKode=" + landKode + ", bankkonto=" + bankkonto + ", barn=" + barn + "]";
     }
 

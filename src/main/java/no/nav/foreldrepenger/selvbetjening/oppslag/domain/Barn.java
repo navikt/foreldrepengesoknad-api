@@ -3,7 +3,6 @@ package no.nav.foreldrepenger.selvbetjening.oppslag.domain;
 import static com.fasterxml.jackson.annotation.JsonInclude.Include.NON_NULL;
 
 import java.time.LocalDate;
-import java.util.Optional;
 
 import com.fasterxml.jackson.annotation.JsonAlias;
 import com.fasterxml.jackson.annotation.JsonCreator;
@@ -15,39 +14,31 @@ import no.nav.foreldrepenger.selvbetjening.innsyn.saker.Navn;
 @JsonInclude(NON_NULL)
 public class Barn {
 
-    private final String fornavn;
-    private final String mellomnavn;
-    private final String etternavn;
+    private final Navn navn;
     private final String fnr;
-    private final String kjønn;
     private final LocalDate fødselsdato;
-
     private final AnnenForelder annenForelder;
 
     @JsonCreator
     public Barn(@JsonProperty("fnr") String fnr, @JsonProperty("barn") Navn navn,
-            @JsonProperty("kjønn") String kjønn,
             @JsonProperty("fødselsdato") LocalDate fødselsdato,
             @JsonProperty("annenForelder") @JsonAlias("annenPart") AnnenForelder annenForelder) {
         this.fnr = fnr;
-        this.fornavn = Optional.ofNullable(navn).map(Navn::getFornavn).orElse(null);
-        this.mellomnavn = Optional.ofNullable(navn).map(Navn::getMellomnavn).orElse(null);
-        this.etternavn = Optional.ofNullable(navn).map(Navn::getEtternavn).orElse(null);
-        this.kjønn = kjønn;
+        this.navn = navn;
         this.fødselsdato = fødselsdato;
         this.annenForelder = annenForelder;
     }
 
     public String getFornavn() {
-        return fornavn;
+        return navn.getFornavn();
     }
 
     public String getMellomnavn() {
-        return mellomnavn;
+        return navn.getMellomnavn();
     }
 
     public String getEtternavn() {
-        return etternavn;
+        return navn.getEtternavn();
     }
 
     public String getFnr() {
@@ -55,7 +46,7 @@ public class Barn {
     }
 
     public String getKjønn() {
-        return kjønn;
+        return navn.getKjønn().name();
     }
 
     public LocalDate getFødselsdato() {
@@ -68,9 +59,7 @@ public class Barn {
 
     @Override
     public String toString() {
-        return getClass().getSimpleName() + "[fornavn=" + fornavn + ", mellomnavn=" + mellomnavn + ", etternavn="
-                + etternavn + ", fnr=" + fnr + ", kjønn=" + kjønn + ", fødselsdato=" + fødselsdato + ", annenForelder="
-                + annenForelder + "]";
+        return getClass().getSimpleName() + "[navn=" + navn + ", fødselsdato=" + fødselsdato + ", annenForelder=" + annenForelder + "]";
     }
 
 }

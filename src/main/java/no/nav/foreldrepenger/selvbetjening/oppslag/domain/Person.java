@@ -28,10 +28,10 @@ public class Person {
 
     public Person(PersonDto dto) {
         this.fnr = dto.fnr;
-        this.fornavn = dto.fornavn;
-        this.etternavn = dto.etternavn;
-        this.mellomnavn = dto.mellomnavn;
-        this.kjønn = dto.kjønn;
+        this.fornavn = dto.navn.getFornavn();
+        this.etternavn = dto.navn.getEtternavn();
+        this.mellomnavn = dto.navn.getMellomnavn();
+        this.kjønn = dto.navn.getKjønn().name();
         this.fødselsdato = dto.fødselsdato;
         this.land = dto.landKode;
         this.ikkeNordiskEøsLand = ikkeNordiskEøsLand(dto.landKode);
