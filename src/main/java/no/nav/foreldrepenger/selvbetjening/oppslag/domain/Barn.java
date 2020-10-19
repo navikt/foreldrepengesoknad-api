@@ -20,7 +20,7 @@ public class Barn {
     private final AnnenForelder annenForelder;
 
     @JsonCreator
-    public Barn(@JsonProperty("fnr") String fnr, @JsonProperty("barn") Navn navn,
+    public Barn(@JsonProperty("fnr") String fnr, @JsonProperty("navn") Navn navn,
             @JsonProperty("fødselsdato") LocalDate fødselsdato,
             @JsonProperty("annenForelder") @JsonAlias("annenPart") AnnenForelder annenForelder) {
         this.fnr = fnr;

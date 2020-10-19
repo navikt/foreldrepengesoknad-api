@@ -43,7 +43,7 @@ public class PersonDto {
     @Override
     public String toString() {
         return getClass().getSimpleName() + " [fnr=" + fnr + ", aktorId=" + aktorId + ", navn=" + navn
-                + "fødselsdato=" + fødselsdato + ", målform="
+                + ", fødselsdato=" + fødselsdato + ", målform="
                 + målform + ", landKode=" + landKode + ", bankkonto=" + bankkonto + ", barn=" + barn + "]";
     }
 
