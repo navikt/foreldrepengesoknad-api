@@ -71,8 +71,8 @@ public class OppslagTjenesteStub implements Oppslag {
     }
 
     private static List<Barn> barn() {
-        return singletonList(
-                new Barn("01011812345", new Navn("Mo", null, "Hoelsveen", Kjønn.M), "M", now().minusYears(1), annenForelder()));
+        return List.of(
+                new Barn("01011812345", new Navn("Mo", null, "Hoelsveen", Kjønn.M), now().minusYears(1), annenForelder()));
     }
 
     private static List<Arbeidsforhold> arbeidsforhold() {
