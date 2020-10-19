@@ -1,7 +1,6 @@
 package no.nav.foreldrepenger.selvbetjening.http.interceptors;
 
 import static no.nav.foreldrepenger.selvbetjening.util.Constants.X_NAV_API_KEY;
-import static no.nav.foreldrepenger.selvbetjening.util.MDCUtil.CONFIDENTIAL;
 import static org.slf4j.LoggerFactory.getLogger;
 
 import java.io.IOException;
@@ -30,7 +29,6 @@ public class ZoneCrossingAwareClientInterceptor implements ClientHttpRequestInte
             throws IOException {
         Optional<String> apiKey = apiKeyFor(request.getURI());
         if (apiKey.isPresent()) {
-            LOG.trace(CONFIDENTIAL, "apiKey={}", apiKey.get());
             LOG.trace("Injisert API-key som header {} for {}", X_NAV_API_KEY, request.getURI());
             request.getHeaders().add(X_NAV_API_KEY, apiKey.get());
         } else {

@@ -53,7 +53,7 @@ public class OppslagTjeneste implements Oppslag {
             var pdl = oppslag.hentPDLPerson();
             LOG.info("PDL-person hentet {}", pdl);
             var p = new Person(pdl);
-            LOG.info("PDL-person {} mapped til {}", pdl, p);
+            LOG.info("PDL-person {} mappet til {}", pdl, p);
             return p;
         } catch (Exception e) {
             LOG.warn("Feil ved oppslag av PDL-person", e);

@@ -11,6 +11,7 @@ import java.util.Optional;
 import com.fasterxml.jackson.annotation.JsonInclude;
 import com.neovisionaries.i18n.CountryCode;
 
+import no.nav.foreldrepenger.selvbetjening.innsyn.saker.Kjønn;
 import no.nav.foreldrepenger.selvbetjening.innsyn.saker.Navn;
 import no.nav.foreldrepenger.selvbetjening.oppslag.dto.PersonDto;
 
@@ -33,7 +34,7 @@ public class Person {
         this.fornavn = Optional.ofNullable(dto.navn).map(Navn::getFornavn).orElse(null);
         this.etternavn = Optional.ofNullable(dto.navn).map(Navn::getEtternavn).orElse(null);
         this.mellomnavn = Optional.ofNullable(dto.navn).map(Navn::getMellomnavn).orElse(null);
-        this.kjønn = dto.navn.getKjønn().name();
+        this.kjønn = Optional.ofNullable(dto.navn).map(Navn::getKjønn).map(Kjønn::name).orElse(null);
         this.fødselsdato = dto.fødselsdato;
         this.land = dto.landKode;
         this.ikkeNordiskEøsLand = ikkeNordiskEøsLand(dto.landKode);
