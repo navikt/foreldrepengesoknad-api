@@ -23,9 +23,6 @@ public class PersonDto {
     public Bankkonto bankkonto;
     public List<Barn> barn;
 
-    public PersonDto() {
-    }
-
     @Override
     public boolean equals(Object o) {
         if (this == o) {
