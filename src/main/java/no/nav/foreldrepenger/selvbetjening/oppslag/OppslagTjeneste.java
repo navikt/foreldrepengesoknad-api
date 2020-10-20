@@ -31,16 +31,12 @@ public class OppslagTjeneste implements Oppslag {
 
     @Override
     public Person hentPerson() {
-        return sammenlign(pdlPerson(), tpsPerson());
+        return sammenlign(tpsPerson(), pdlPerson());
     }
 
-    private Person sammenlign(Person pdl, Person tps) {
-        if (!tps.equals(pdl)) {
-            LOG.warn("TPS-person {} og PDL-person {} er ulike", tps, pdl);
-        } else {
-            LOG.info("TPS-person og PDL-person er like");
-        }
-        return tps;
+    @Override
+    public Søkerinfo hentSøkerinfo() {
+        return sammenlign(tpsSøkerinfo(), pdlSøkerinfo());
     }
 
     private Person tpsPerson() {
@@ -61,17 +57,38 @@ public class OppslagTjeneste implements Oppslag {
         }
     }
 
-    @Override
-    public Søkerinfo hentSøkerinfo() {
-        return tpsSøkerinfo();
-    }
-
     private Søkerinfo tpsSøkerinfo() {
         LOG.info("Henter TPS-søkerinfo");
-        var info = new Søkerinfo(hentPerson(), innsyn.hentArbeidsForhold());
+        var info = new Søkerinfo(tpsPerson(), innsyn.hentArbeidsForhold());
         LOG.info("Hentet TPS-søkerinfo for {} med {} arbeidsforhold OK", maskFnr(info.getSøker().fnr), info.getArbeidsforhold());
         LOG.info(CONFIDENTIAL, "Hentet TPS-søkerinfo {}", info);
         return info;
+    }
+
+    private Søkerinfo pdlSøkerinfo() {
+        LOG.info("Henter PDL-søkerinfo");
+        var info = new Søkerinfo(pdlPerson(), innsyn.hentArbeidsForhold());
+        LOG.info("Hentet PDL-søkerinfo for {} med {} arbeidsforhold OK", maskFnr(info.getSøker().fnr), info.getArbeidsforhold());
+        LOG.info(CONFIDENTIAL, "Hentet PDL-søkerinfo {}", info);
+        return info;
+    }
+
+    private Søkerinfo sammenlign(Søkerinfo tps, Søkerinfo pdl) {
+        if (!tps.equals(pdl)) {
+            LOG.warn("TPS-info {} og PDL-info {} er ulike", tps, pdl);
+        } else {
+            LOG.info("TPS-info og PDL-info er like");
+        }
+        return tps;
+    }
+
+    private Person sammenlign(Person tps, Person pdl) {
+        if (!tps.equals(pdl)) {
+            LOG.warn("TPS-person {} og PDL-person {} er ulike", tps, pdl);
+        } else {
+            LOG.info("TPS-person og PDL-person er like");
+        }
+        return tps;
     }
 
     @Override
