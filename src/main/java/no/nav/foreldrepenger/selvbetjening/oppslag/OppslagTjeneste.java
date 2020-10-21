@@ -73,22 +73,13 @@ public class OppslagTjeneste implements Oppslag {
         return info;
     }
 
-    private Søkerinfo sammenlign(Søkerinfo tps, Søkerinfo pdl) {
-        LOG.info("Sammenligner Søkerinfo");
+    private <T> T sammenlign(T tps, T pdl) {
+        String name = tps.getClass().getSimpleName();
+        LOG.info("Sammenligner {} ", name);
         if (!tps.equals(pdl)) {
-            LOG.warn("TPS-info {} og PDL-info {} er ulike", tps, pdl);
+            LOG.warn("TPS-{} og PDL-{} er ulike", name, tps, pdl);
         } else {
-            LOG.info("TPS-info og PDL-info er like");
-        }
-        return tps;
-    }
-
-    private Person sammenlign(Person tps, Person pdl) {
-        LOG.info("Sammenligner personer");
-        if (!tps.equals(pdl)) {
-            LOG.warn("TPS-person {} og PDL-person {} er ulike", tps, pdl);
-        } else {
-            LOG.info("TPS-person og PDL-person er like");
+            LOG.info("TPS-{} og PDL-{} er like", name);
         }
         return tps;
     }
