@@ -74,6 +74,7 @@ public class OppslagTjeneste implements Oppslag {
     }
 
     private Søkerinfo sammenlign(Søkerinfo tps, Søkerinfo pdl) {
+        LOG.info("Sammenligner Søkerinfo");
         if (!tps.equals(pdl)) {
             LOG.warn("TPS-info {} og PDL-info {} er ulike", tps, pdl);
         } else {
@@ -83,6 +84,7 @@ public class OppslagTjeneste implements Oppslag {
     }
 
     private Person sammenlign(Person tps, Person pdl) {
+        LOG.info("Sammenligner personer");
         if (!tps.equals(pdl)) {
             LOG.warn("TPS-person {} og PDL-person {} er ulike", tps, pdl);
         } else {

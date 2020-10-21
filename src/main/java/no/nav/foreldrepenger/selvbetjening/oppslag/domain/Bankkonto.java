@@ -7,9 +7,11 @@ import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.annotation.JsonProperty;
 
 import lombok.EqualsAndHashCode;
+import lombok.ToString;
 
 @JsonInclude(NON_NULL)
 @EqualsAndHashCode
+@ToString
 public class Bankkonto {
 
     private final String kontonummer;
@@ -27,10 +29,5 @@ public class Bankkonto {
 
     public String getBanknavn() {
         return banknavn;
-    }
-
-    @Override
-    public String toString() {
-        return getClass().getSimpleName() + "[kontonummer=" + kontonummer + ", banknavn=" + banknavn + "]";
     }
 }

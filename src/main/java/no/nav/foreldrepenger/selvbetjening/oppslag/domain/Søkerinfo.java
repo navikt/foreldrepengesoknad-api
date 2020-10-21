@@ -7,9 +7,11 @@ import java.util.List;
 import com.fasterxml.jackson.annotation.JsonInclude;
 
 import lombok.EqualsAndHashCode;
+import lombok.ToString;
 
 @JsonInclude(NON_EMPTY)
 @EqualsAndHashCode
+@ToString
 public class Søkerinfo {
 
     private final Person søker;
@@ -28,8 +30,4 @@ public class Søkerinfo {
         return arbeidsforhold;
     }
 
-    @Override
-    public String toString() {
-        return getClass().getSimpleName() + " [søker=" + søker + ", arbeidsforhold=" + arbeidsforhold + "]";
-    }
 }
