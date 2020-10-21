@@ -68,7 +68,6 @@ public class OppslagTjeneste implements Oppslag {
     private Søkerinfo pdlSøkerinfo() {
         LOG.info("Henter PDL-søkerinfo");
         var info = new Søkerinfo(pdlPerson(), innsyn.hentArbeidsForhold());
-        LOG.info("Hentet PDL-søkerinfo for {} med {} arbeidsforhold OK", maskFnr(info.getSøker().fnr), info.getArbeidsforhold());
         LOG.info(CONFIDENTIAL, "Hentet PDL-søkerinfo {}", info);
         return info;
     }
