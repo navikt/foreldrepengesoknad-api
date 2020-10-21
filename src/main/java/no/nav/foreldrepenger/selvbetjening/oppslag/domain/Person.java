@@ -12,14 +12,13 @@ import com.fasterxml.jackson.annotation.JsonInclude;
 import com.neovisionaries.i18n.CountryCode;
 
 import lombok.EqualsAndHashCode;
-import lombok.ToString;
 import no.nav.foreldrepenger.selvbetjening.innsyn.saker.Kjønn;
 import no.nav.foreldrepenger.selvbetjening.innsyn.saker.Navn;
 import no.nav.foreldrepenger.selvbetjening.oppslag.dto.PersonDto;
+import no.nav.foreldrepenger.selvbetjening.util.StringUtil;
 
 @JsonInclude(NON_EMPTY)
 @EqualsAndHashCode
-@ToString
 public class Person {
 
     public String fnr;
@@ -47,5 +46,13 @@ public class Person {
         if (dto.barn != null) {
             this.barn = new ArrayList<>(dto.barn);
         }
+    }
+
+    @Override
+    public String toString() {
+        return getClass().getSimpleName() + " [fnr=" + StringUtil.maskFnr(fnr) + ", fornavn=" + fornavn + ", mellomnavn=" + mellomnavn
+                + ", etternavn=" + etternavn + ", kjønn=" + kjønn
+                + ", fødselsdato=" + fødselsdato + ", land=" + land + ", ikkeNordiskEøsLand=" + ikkeNordiskEøsLand + ", bankkonto=" + bankkonto
+                + ", barn=" + barn + "]";
     }
 }
