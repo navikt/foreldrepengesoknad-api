@@ -10,12 +10,11 @@ import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.annotation.JsonProperty;
 
 import lombok.EqualsAndHashCode;
-import lombok.ToString;
 import no.nav.foreldrepenger.selvbetjening.innsyn.saker.Navn;
+import no.nav.foreldrepenger.selvbetjening.util.StringUtil;
 
 @JsonInclude(NON_NULL)
 @EqualsAndHashCode
-@ToString
 public class Barn {
 
     private final Navn navn;
@@ -59,5 +58,12 @@ public class Barn {
 
     public AnnenForelder getAnnenForelder() {
         return annenForelder;
+    }
+
+    @Override
+    public String toString() {
+        return getClass().getSimpleName() + " [navn=" + navn + ", fnr=" + StringUtil.maskFnr(fnr) + ", fødselsdato=" + fødselsdato
+                + ", annenForelder=" + annenForelder
+                + "]";
     }
 }
