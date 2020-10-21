@@ -77,9 +77,9 @@ public class OppslagTjeneste implements Oppslag {
         String name = tps.getClass().getSimpleName();
         LOG.info("Sammenligner {} ", name);
         if (!tps.equals(pdl)) {
-            LOG.warn("TPS-{} og PDL-{} er ulike", name, tps, pdl);
+            LOG.warn("TPS-{} og PDL-{} er ulike", name, name, tps, pdl);
         } else {
-            LOG.info("TPS-{} og PDL-{} er like", name);
+            LOG.info("TPS-{} og PDL-{} er like", name, name);
         }
         return tps;
     }
