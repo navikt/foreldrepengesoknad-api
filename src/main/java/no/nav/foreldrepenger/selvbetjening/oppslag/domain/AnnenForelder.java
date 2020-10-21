@@ -11,6 +11,7 @@ import com.fasterxml.jackson.annotation.JsonProperty;
 
 import lombok.EqualsAndHashCode;
 import no.nav.foreldrepenger.selvbetjening.innsyn.saker.Navn;
+import no.nav.foreldrepenger.selvbetjening.util.StringUtil;
 
 @JsonInclude(NON_NULL)
 @EqualsAndHashCode
@@ -54,7 +55,7 @@ public class AnnenForelder {
 
     @Override
     public String toString() {
-        return getClass().getSimpleName() + "[fnr=" + fnr + ", fornavn=" + fornavn + ", mellomnavn=" + mellomnavn
+        return getClass().getSimpleName() + "[fnr=" + StringUtil.maskFnr(fnr) + ", fornavn=" + fornavn + ", mellomnavn=" + mellomnavn
                 + ", etternavn=" + etternavn + ", fødselsdato=" + fødselsdato + "]";
     }
 }
