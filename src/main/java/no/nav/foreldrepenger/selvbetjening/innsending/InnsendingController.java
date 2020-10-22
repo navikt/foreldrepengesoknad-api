@@ -29,6 +29,7 @@ public class InnsendingController {
     public Kvittering sendInn(@RequestBody Søknad søknad) {
         LOG.info("Mottok søknad med {} vedlegg", søknad.getVedlegg().size());
         LOG.info(CONFIDENTIAL, "{}", søknad);
+        LOG.info(CONFIDENTIAL, "Søker er {}", søknad.getSøker());
         return innsending.sendInn(søknad);
     }
 
