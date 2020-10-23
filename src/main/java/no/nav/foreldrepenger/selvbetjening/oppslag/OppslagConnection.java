@@ -22,6 +22,10 @@ public class OppslagConnection extends AbstractRestConnection {
         this.config = config;
     }
 
+    boolean isUsePdl() {
+        return config.isUsePdl();
+    }
+
     @Override
     public boolean isEnabled() {
         return config.isEnabled();

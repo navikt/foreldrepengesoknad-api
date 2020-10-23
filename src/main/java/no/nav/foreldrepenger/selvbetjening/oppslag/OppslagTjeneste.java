@@ -74,13 +74,13 @@ public class OppslagTjeneste implements Oppslag {
 
     private <T> T sammenlign(T tps, T pdl) {
         String name = tps.getClass().getSimpleName();
-        LOG.info("Sammenligner {} ", name);
+        LOG.info("Sammenligner {}, PDL-bruk er {}", name, oppslag.isUsePdl());
         if (!tps.equals(pdl)) {
             LOG.warn("TPS-{} og PDL-{} er ulike, tps={}, pdl={}", name, name, tps, pdl);
         } else {
             LOG.info("TPS-{} og PDL-{} er like, {}", name, name, pdl);
         }
-        return tps;
+        return oppslag.isUsePdl() ? pdl : tps;
     }
 
     @Override
