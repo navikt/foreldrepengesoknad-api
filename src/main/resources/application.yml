@@ -5,17 +5,22 @@ allowed:
    https://svangerskapspengesoknad.nav.no,
    https://foreldrepenger.nav.no
 no.nav:
+   security:
+    jwt:
+      issuer:
+        selvbetjening:
+           discoveryurl: ${loginservice.idporten.discovery.url}
+           accepted_audience: ${loginservice.idporten.audience}  
+           cookie_name: selvbetjening-idtoken
+   
    foreldrepenger:
       selvbetjening:
          api:
             virus:
                enabled: true
-   security:
-      jwt:
-        issuer:
-           selvbetjening:
-              discoveryurl: https://login.microsoftonline.com/navnob2c.onmicrosoft.com/v2.0/.well-known/openid-configuration?p=B2C_1A_idporten
-              cookie_name: selvbetjening-idtoken
+               
+no.nav:
+       
 management:
    metrics:
       web:
