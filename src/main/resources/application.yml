@@ -18,8 +18,6 @@ no.nav:
          api:
             virus:
                enabled: true
-               
-no.nav:
        
 management:
    metrics:
