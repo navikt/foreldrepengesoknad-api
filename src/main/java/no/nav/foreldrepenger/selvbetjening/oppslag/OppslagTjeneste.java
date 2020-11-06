@@ -36,7 +36,11 @@ public class OppslagTjeneste implements Oppslag {
 
     @Override
     public Søkerinfo hentSøkerinfo() {
-        return sammenlign(tpsSøkerinfo(), pdlSøkerinfo());
+        Søkerinfo tps = tpsSøkerinfo();
+        Søkerinfo pdl = pdlSøkerinfo();
+        LOG.info("SØKER " + tps.getSøker().equals(pdl.getSøker()));
+        LOG.info("ARBEID " + tps.getArbeidsforhold().equals(pdl.getArbeidsforhold()));
+        return sammenlign(tps, pdl);
     }
 
     private Person tpsPerson() {
