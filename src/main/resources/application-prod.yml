@@ -1,4 +1,5 @@
 oppslag:
+  pdl-uri: https://api-gw.oera.no/fpsoknad-mottak/api/pdl/
   uri:  https://api-gw.oera.no/fpsoknad-oppslag/api/
 historikk:
   uri: https://api-gw.oera.no/fpinfo-historikk/api/
