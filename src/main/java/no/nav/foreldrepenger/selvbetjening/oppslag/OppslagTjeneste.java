@@ -49,7 +49,7 @@ public class OppslagTjeneste implements Oppslag {
             var pdl = oppslag.hentPDLPerson();
             LOG.trace("PDL-person hentet {}", pdl);
             var p = new Person(pdl);
-            LOG.info("PDL-person {} mappet til {}", pdl, p);
+            LOG.trace("PDL-person {} mappet til {}", pdl, p);
             return p;
         } catch (Exception e) {
             LOG.warn("Feil ved oppslag av PDL-person", e);
@@ -76,7 +76,7 @@ public class OppslagTjeneste implements Oppslag {
         String name = tps.getClass().getSimpleName();
         LOG.info("Sammenligner {}, PDL-bruk er {}", name, oppslag.isUsePdl());
         if (!tps.equals(pdl)) {
-            LOG.warn("TPS-{} og PDL-{} er ulike, tps={}, pdl={}", name, name, tps, pdl);
+            LOG.trace("TPS-{} og PDL-{} er ulike, tps={}, pdl={}", name, name, tps, pdl);
             return oppslag.isUsePdl() ? pdl : tps;
         } else {
             LOG.warn("TPS-{} og PDL-{} er like", name, name);
