@@ -80,6 +80,7 @@ public class OppslagTjeneste implements Oppslag {
         String name = tps.getClass().getSimpleName();
         LOG.info("Sammenligner {}, PDL-bruk er {}", name, oppslag.isUsePdl());
         if (!tps.equals(pdl)) {
+            LOG.info("TPS-{} og PDL-{} er ulike", name, name);
             LOG.trace("TPS-{} og PDL-{} er ulike, tps={}, pdl={}", name, name, tps, pdl);
             return oppslag.isUsePdl() ? pdl : tps;
         } else {
