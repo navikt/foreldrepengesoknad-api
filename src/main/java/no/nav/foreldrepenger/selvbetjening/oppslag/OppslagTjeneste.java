@@ -14,7 +14,6 @@ import no.nav.foreldrepenger.selvbetjening.innsyn.InnsynConnection;
 import no.nav.foreldrepenger.selvbetjening.oppslag.domain.AktørId;
 import no.nav.foreldrepenger.selvbetjening.oppslag.domain.Person;
 import no.nav.foreldrepenger.selvbetjening.oppslag.domain.Søkerinfo;
-import no.nav.foreldrepenger.selvbetjening.util.StreamUtil;
 
 @Service
 @ConditionalOnProperty(name = "stub.oppslag", havingValue = "false", matchIfMissing = true)
@@ -49,13 +48,9 @@ public class OppslagTjeneste implements Oppslag {
                     LOG.warn("TPS BARN " + tpsBarn);
                     LOG.warn("PDL BARN " + pdlBarn);
                 } else {
-                    LOG.warn("BARN LIKE");
+                    LOG.info("BARN LIKE");
                 }
 
-            }
-            if (!tps.getArbeidsforhold().equals(pdl.getArbeidsforhold())) {
-                StreamUtil.safeStream(tps.getArbeidsforhold()).forEach(a -> LOG.info("TPS ARBEID:" + a));
-                StreamUtil.safeStream(pdl.getArbeidsforhold()).forEach(a -> LOG.info("PDL ARBEID:" + a));
             }
             return sammenlign(tps, pdl);
         } catch (Exception e) {
