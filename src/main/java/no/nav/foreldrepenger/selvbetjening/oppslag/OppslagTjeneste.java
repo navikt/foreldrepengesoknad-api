@@ -38,16 +38,29 @@ public class OppslagTjeneste implements Oppslag {
     @Override
     public Søkerinfo hentSøkerinfo() {
         Søkerinfo tps = tpsSøkerinfo();
-        Søkerinfo pdl = pdlSøkerinfo();
-        if (!tps.getSøker().equals(pdl.getSøker())) {
-            LOG.warn("TPS SØKER " + tps.getSøker());
-            LOG.warn("PDL SØKER " + pdl.getSøker());
+        try {
+            Søkerinfo pdl = pdlSøkerinfo();
+            if (!tps.getSøker().equals(pdl.getSøker())) {
+                LOG.warn("TPS SØKER " + tps.getSøker());
+                LOG.warn("PDL SØKER " + pdl.getSøker());
+                var pdlBarn = pdl.getSøker().barn;
+                var tpsBarn = tps.getSøker().barn;
+                if (!tpsBarn.equals(pdlBarn)) {
+                    LOG.warn("TPS BARN " + tpsBarn);
+                    LOG.warn("PDL BARN " + pdlBarn);
+                } else {
+                    LOG.warn("BARN LIKE");
+                }
+
+            }
+            if (!tps.getArbeidsforhold().equals(pdl.getArbeidsforhold())) {
+                StreamUtil.safeStream(tps.getArbeidsforhold()).forEach(a -> LOG.info("TPS ARBEID:" + a));
+                StreamUtil.safeStream(pdl.getArbeidsforhold()).forEach(a -> LOG.info("PDL ARBEID:" + a));
+            }
+            return sammenlign(tps, pdl);
+        } catch (Exception e) {
+            return tps;
         }
-        if (!tps.getArbeidsforhold().equals(pdl.getArbeidsforhold())) {
-            StreamUtil.safeStream(tps.getArbeidsforhold()).forEach(a -> LOG.info("TPS ARBEID:" + a));
-            StreamUtil.safeStream(pdl.getArbeidsforhold()).forEach(a -> LOG.info("PDL ARBEID:" + a));
-        }
-        return sammenlign(tps, pdl);
     }
 
     private Person tpsPerson() {
