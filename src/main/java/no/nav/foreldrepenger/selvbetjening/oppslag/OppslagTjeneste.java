@@ -47,7 +47,7 @@ public class OppslagTjeneste implements Oppslag {
         try {
             LOG.info("Henter PDL-person");
             var pdl = oppslag.hentPDLPerson();
-            LOG.info("PDL-person hentet {}", pdl);
+            LOG.trace("PDL-person hentet {}", pdl);
             var p = new Person(pdl);
             LOG.info("PDL-person {} mappet til {}", pdl, p);
             return p;
@@ -61,14 +61,14 @@ public class OppslagTjeneste implements Oppslag {
         LOG.info("Henter TPS-søkerinfo");
         var info = new Søkerinfo(tpsPerson(), innsyn.hentArbeidsForhold());
         LOG.info("Hentet TPS-søkerinfo for {} med {} arbeidsforhold OK", maskFnr(info.getSøker().fnr), info.getArbeidsforhold());
-        LOG.info(CONFIDENTIAL, "Hentet TPS-søkerinfo {}", info);
+        LOG.trace(CONFIDENTIAL, "Hentet TPS-søkerinfo {}", info);
         return info;
     }
 
     private Søkerinfo pdlSøkerinfo() {
         LOG.info("Henter PDL-søkerinfo");
         var info = new Søkerinfo(pdlPerson(), innsyn.hentArbeidsForhold());
-        LOG.info(CONFIDENTIAL, "Hentet PDL-søkerinfo {}", info);
+        LOG.trace(CONFIDENTIAL, "Hentet PDL-søkerinfo {}", info);
         return info;
     }
 
