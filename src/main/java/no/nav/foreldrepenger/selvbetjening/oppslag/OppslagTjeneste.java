@@ -38,8 +38,14 @@ public class OppslagTjeneste implements Oppslag {
     public Søkerinfo hentSøkerinfo() {
         Søkerinfo tps = tpsSøkerinfo();
         Søkerinfo pdl = pdlSøkerinfo();
-        LOG.info("SØKER " + tps.getSøker().equals(pdl.getSøker()));
-        LOG.info("ARBEID " + tps.getArbeidsforhold().equals(pdl.getArbeidsforhold()));
+        if (!tps.getSøker().equals(pdl.getSøker())) {
+            LOG.warn("TPS SØKER " + tps.getSøker());
+            LOG.warn("PDL SØKER " + pdl.getSøker());
+        }
+        if (!tps.getArbeidsforhold().equals(pdl.getArbeidsforhold())) {
+            LOG.warn("TPS ARBEID " + tps.getArbeidsforhold());
+            LOG.warn("PDL ARBEID " + pdl.getArbeidsforhold());
+        }
         return sammenlign(tps, pdl);
     }
 
