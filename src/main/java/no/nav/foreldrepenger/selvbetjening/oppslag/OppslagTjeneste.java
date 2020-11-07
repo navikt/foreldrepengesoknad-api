@@ -81,7 +81,7 @@ public class OppslagTjeneste implements Oppslag {
     private Søkerinfo tpsSøkerinfo() {
         LOG.info("Henter TPS-søkerinfo");
         var info = new Søkerinfo(tpsPerson(), innsyn.hentArbeidsForhold());
-        LOG.info("Hentet TPS-søkerinfo for {} med {} arbeidsforhold OK", maskFnr(info.getSøker().fnr), info.getArbeidsforhold());
+        LOG.info("Hentet TPS-søkerinfo for {} med {} arbeidsforhold OK", maskFnr(info.getSøker().fnr), info.getArbeidsforhold().size());
         LOG.trace(CONFIDENTIAL, "Hentet TPS-søkerinfo {}", info);
         return info;
     }
