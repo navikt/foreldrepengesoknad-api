@@ -1,12 +1,17 @@
 package no.nav.foreldrepenger.selvbetjening.oppslag.domain;
 
 import static com.fasterxml.jackson.annotation.JsonInclude.Include.NON_EMPTY;
+import static java.util.Comparator.comparing;
+import static java.util.stream.Collectors.toList;
 import static no.nav.foreldrepenger.selvbetjening.util.IkkeNordiskEØSLand.ikkeNordiskEøsLand;
+import static no.nav.foreldrepenger.selvbetjening.util.StreamUtil.safeStream;
 
 import java.time.LocalDate;
-import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
+
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import com.fasterxml.jackson.annotation.JsonInclude;
 import com.neovisionaries.i18n.CountryCode;
@@ -21,6 +26,7 @@ import no.nav.foreldrepenger.selvbetjening.util.StringUtil;
 @EqualsAndHashCode
 public class Person {
 
+    private static final Logger LOG = LoggerFactory.getLogger(Person.class);
     public String fnr;
     public String fornavn;
     public String mellomnavn;
@@ -42,9 +48,18 @@ public class Person {
         this.land = dto.landKode;
         this.ikkeNordiskEøsLand = ikkeNordiskEøsLand(dto.landKode);
         this.bankkonto = dto.bankkonto;
+        this.barn = sort(dto.barn);
+    }
 
-        if (dto.barn != null) {
-            this.barn = new ArrayList<>(dto.barn);
+    private static List<Barn> sort(List<Barn> barn) {
+        try {
+            return safeStream(barn)
+                    .sorted(comparing(p -> p.getFødselsdato()))
+                    .collect(toList());
+        } catch (Exception e) {
+            LOG.warn("Feil ved sortering", e);
+            return barn;
+
         }
     }
 
