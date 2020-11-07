@@ -39,17 +39,6 @@ public class OppslagTjeneste implements Oppslag {
         Søkerinfo tps = tpsSøkerinfo();
         try {
             Søkerinfo pdl = pdlSøkerinfo();
-            /*
-             * var pdlBarn = pdl.getSøker().barn; var tpsBarn = tps.getSøker().barn;
-             * 
-             * if (!tps.equals(pdl)) { LOG.warn("TPS ULIKE BARN " + tpsBarn);
-             * LOG.warn("PDL ULIKE BARN " + pdlBarn); } else { LOG.info("BARN LIKE"); } if
-             * (!pdl.getArbeidsforhold().containsAll(tps.getArbeidsforhold()) ||
-             * !tps.getArbeidsforhold().containsAll(pdl.getArbeidsforhold())) {
-             * LOG.info("ARBEIDSFORHOLD ULIKE"); } else { LOG.info("ARBEIDSFORHOLD LIKE"); }
-             * 
-             * return tps;
-             */
             return sammenlign(tps, pdl);
         } catch (Exception e) {
             return tps;
@@ -97,7 +86,7 @@ public class OppslagTjeneste implements Oppslag {
             LOG.trace("TPS-{} og PDL-{} er ulike, tps={}, pdl={}", name, name, tps, pdl);
             return oppslag.isUsePdl() ? pdl : tps;
         } else {
-            LOG.warn("TPS-{} og PDL-{} er like", name, name);
+            LOG.info("TPS-{} og PDL-{} er like", name, name);
             return pdl;
         }
     }
