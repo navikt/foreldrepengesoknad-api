@@ -39,22 +39,18 @@ public class OppslagTjeneste implements Oppslag {
         Søkerinfo tps = tpsSøkerinfo();
         try {
             Søkerinfo pdl = pdlSøkerinfo();
-            var pdlBarn = pdl.getSøker().barn;
-            var tpsBarn = tps.getSøker().barn;
-            if (!pdlBarn.containsAll(tpsBarn) || !tpsBarn.containsAll(pdlBarn)) {
-                LOG.warn("TPS ULIKE BARN " + tpsBarn);
-                LOG.warn("PDL ULIKE BARN " + pdlBarn);
-            } else {
-                LOG.info("BARN LIKE");
-            }
-            if (!pdl.getArbeidsforhold().containsAll(tps.getArbeidsforhold()) || !tps.getArbeidsforhold().containsAll(pdl.getArbeidsforhold())) {
-                LOG.info("ARBEIDSFORHOLD ULIKE");
-            } else {
-                LOG.info("ARBEIDSFORHOLD LIKE");
-            }
-
-            return tps;
-            // return sammenlign(tps, pdl);
+            /*
+             * var pdlBarn = pdl.getSøker().barn; var tpsBarn = tps.getSøker().barn;
+             * 
+             * if (!tps.equals(pdl)) { LOG.warn("TPS ULIKE BARN " + tpsBarn);
+             * LOG.warn("PDL ULIKE BARN " + pdlBarn); } else { LOG.info("BARN LIKE"); } if
+             * (!pdl.getArbeidsforhold().containsAll(tps.getArbeidsforhold()) ||
+             * !tps.getArbeidsforhold().containsAll(pdl.getArbeidsforhold())) {
+             * LOG.info("ARBEIDSFORHOLD ULIKE"); } else { LOG.info("ARBEIDSFORHOLD LIKE"); }
+             * 
+             * return tps;
+             */
+            return sammenlign(tps, pdl);
         } catch (Exception e) {
             return tps;
         }
