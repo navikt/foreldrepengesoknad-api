@@ -39,20 +39,22 @@ public class OppslagTjeneste implements Oppslag {
         Søkerinfo tps = tpsSøkerinfo();
         try {
             Søkerinfo pdl = pdlSøkerinfo();
-            if (!tps.getSøker().equals(pdl.getSøker())) {
-                LOG.warn("TPS SØKER " + tps.getSøker());
-                LOG.warn("PDL SØKER " + pdl.getSøker());
-                var pdlBarn = pdl.getSøker().barn;
-                var tpsBarn = tps.getSøker().barn;
-                if (!tpsBarn.equals(pdlBarn)) {
-                    LOG.warn("TPS BARN " + tpsBarn);
-                    LOG.warn("PDL BARN " + pdlBarn);
-                } else {
-                    LOG.info("BARN LIKE");
-                }
-
+            var pdlBarn = pdl.getSøker().barn;
+            var tpsBarn = tps.getSøker().barn;
+            if (!pdlBarn.containsAll(tpsBarn) || !tpsBarn.containsAll(pdlBarn)) {
+                LOG.warn("TPS ULIKE BARN " + tpsBarn);
+                LOG.warn("PDL ULIKE BARN " + pdlBarn);
+            } else {
+                LOG.info("BARN LIKE");
             }
-            return sammenlign(tps, pdl);
+            if (!pdl.getArbeidsforhold().containsAll(tps.getArbeidsforhold()) || !tps.getArbeidsforhold().containsAll(pdl.getArbeidsforhold())) {
+                LOG.info("ARBEIDSFORHOLD ULIKE");
+            } else {
+                LOG.info("ARBEIDSFORHOLD LIKE");
+            }
+
+            return tps;
+            // return sammenlign(tps, pdl);
         } catch (Exception e) {
             return tps;
         }
