@@ -278,7 +278,7 @@
                 <configuration>
                     <compilerArgs>--enable-preview</compilerArgs>
                     <parameters>true</parameters>
-                    <release>14</release>
+                    <release>15</release>
                 </configuration>
             </plugin>
             <plugin>
