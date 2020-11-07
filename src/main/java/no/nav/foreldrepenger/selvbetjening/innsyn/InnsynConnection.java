@@ -76,7 +76,7 @@ public class InnsynConnection extends AbstractRestConnection {
 
         saker.forEach(sak -> sak.setType(fra));
 
-        LOG.info("Hentet {} sak{} fra {} ({})", saker.size(), flertall(saker.size()), uri, saker);
+        LOG.info("Hentet {} sak{} fra {}", saker.size(), flertall(saker.size()), uri);
         return saker;
 
     }
