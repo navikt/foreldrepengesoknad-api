@@ -16,6 +16,7 @@ import java.net.URI;
 import java.time.Duration;
 import java.util.Arrays;
 import java.util.List;
+import java.util.Set;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -58,13 +59,13 @@ public class ApiConfiguration implements WebMvcConfigurer {
     }
 
     @Bean
-    public ClientHttpRequestInterceptor zoneCrossingAwareRequestInterceptor(ZoneCrossingAware... zoneCrossers) {
-        LOG.info("Registrerer zone crossers {}", Arrays.toString(zoneCrossers));
+    public ClientHttpRequestInterceptor zoneCrossingAwareRequestInterceptor(Set<ZoneCrossingAware> zoneCrossers) {
+        LOG.info("Registrerer zone crossers {}", zoneCrossers);
 
         var builder = ImmutableMap.<URI, String>builder();
-        Arrays.stream(zoneCrossers)
+        zoneCrossers.stream()
                 .forEach(c -> builder.put(c.zoneCrossingUri(), c.getKey()));
-        return new ZoneCrossingAwareClientInterceptor(zoneCrossers);
+        return new ZoneCrossingAwareClientInterceptor(builder.build());
     }
 
     @Bean
