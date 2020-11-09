@@ -1,11 +1,13 @@
 package no.nav.foreldrepenger.selvbetjening.http.interceptors;
 
+import static java.util.stream.Collectors.toList;
 import static no.nav.foreldrepenger.selvbetjening.util.Constants.X_NAV_API_KEY;
 import static org.slf4j.LoggerFactory.getLogger;
 
 import java.io.IOException;
 import java.net.URI;
-import java.util.Map;
+import java.util.Arrays;
+import java.util.List;
 import java.util.Optional;
 
 import org.slf4j.Logger;
@@ -18,10 +20,10 @@ public class ZoneCrossingAwareClientInterceptor implements ClientHttpRequestInte
 
     private static final Logger LOG = getLogger(ZoneCrossingAwareClientInterceptor.class);
 
-    private final Map<URI, String> apiKeys;
+    private final List<ZoneCrossingAware> zoneCrossers;
 
-    public ZoneCrossingAwareClientInterceptor(Map<URI, String> apiKeys) {
-        this.apiKeys = apiKeys;
+    public ZoneCrossingAwareClientInterceptor(ZoneCrossingAware... zoneCrossers) {
+        this.zoneCrossers = Arrays.asList(zoneCrossers);
     }
 
     @Override
@@ -33,22 +35,21 @@ public class ZoneCrossingAwareClientInterceptor implements ClientHttpRequestInte
             request.getHeaders().add(X_NAV_API_KEY, apiKey.get());
         } else {
             LOG.trace("Ingen API-key ble funnet for {} (sjekket {} konfigurasjoner)", request.getURI(),
-                    apiKeys.values().size());
+                    zoneCrossers.size());
         }
         return execution.execute(request, body);
     }
 
     private Optional<String> apiKeyFor(URI uri) {
-        return apiKeys.entrySet()
-                .stream()
-                .filter(s -> uri.toString().startsWith(s.getKey().toString()))
-                .map(Map.Entry::getValue)
+        return zoneCrossers.stream()
+                .filter(z -> uri.toString().startsWith(z.zoneCrossingUri().toString()))
+                .map(ZoneCrossingAware::getKey)
                 .findFirst();
     }
 
     @Override
     public String toString() {
-        return getClass().getSimpleName() + " [apiKeys=" + apiKeys.keySet() + "]";
+        return getClass().getSimpleName() + " [zoneCrossers=" + zoneCrossers.stream().map(ZoneCrossingAware::zoneCrossingUri).collect(toList()) + "]";
     }
 
 }
