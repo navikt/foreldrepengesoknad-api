@@ -31,64 +31,20 @@ public class OppslagTjeneste implements Oppslag {
 
     @Override
     public Person hentPerson() {
-        return sammenlign(tpsPerson(), pdlPerson());
+        return new Person(oppslag.hentPerson());
     }
 
     @Override
     public Søkerinfo hentSøkerinfo() {
-        Søkerinfo tps = tpsSøkerinfo();
-        try {
-            Søkerinfo pdl = pdlSøkerinfo();
-            return sammenlign(tps, pdl);
-        } catch (Exception e) {
-            return tps;
-        }
+        return søkerinfo();
     }
 
-    private Person tpsPerson() {
-        return new Person(oppslag.hentPerson());
-    }
-
-    private Person pdlPerson() {
-        try {
-            LOG.info("Henter PDL-person");
-            var pdl = oppslag.hentPDLPerson();
-            LOG.trace("PDL-person hentet {}", pdl);
-            var p = new Person(pdl);
-            LOG.trace("PDL-person {} mappet til {}", pdl, p);
-            return p;
-        } catch (Exception e) {
-            LOG.warn("Feil ved oppslag av PDL-person", e);
-            return null;
-        }
-    }
-
-    private Søkerinfo tpsSøkerinfo() {
-        LOG.info("Henter TPS-søkerinfo");
-        var info = new Søkerinfo(tpsPerson(), innsyn.hentArbeidsForhold());
-        LOG.info("Hentet TPS-søkerinfo for {} med {} arbeidsforhold OK", maskFnr(info.getSøker().fnr), info.getArbeidsforhold().size());
-        LOG.trace(CONFIDENTIAL, "Hentet TPS-søkerinfo {}", info);
+    private Søkerinfo søkerinfo() {
+        LOG.info("Henter søkerinfo");
+        var info = new Søkerinfo(new Person(oppslag.hentPerson()), innsyn.hentArbeidsForhold());
+        LOG.info("Hentet søkerinfo for {} med {} arbeidsforhold OK", maskFnr(info.getSøker().fnr), info.getArbeidsforhold().size());
+        LOG.trace(CONFIDENTIAL, "Hentet søkerinfo {}", info);
         return info;
-    }
-
-    private Søkerinfo pdlSøkerinfo() {
-        LOG.info("Henter PDL-søkerinfo");
-        var info = new Søkerinfo(pdlPerson(), innsyn.hentArbeidsForhold());
-        LOG.trace(CONFIDENTIAL, "Hentet PDL-søkerinfo {}", info);
-        return info;
-    }
-
-    private <T> T sammenlign(T tps, T pdl) {
-        String name = tps.getClass().getSimpleName();
-        LOG.info("Sammenligner {}, PDL-bruk er {}", name, oppslag.isUsePdl());
-        if (!tps.equals(pdl)) {
-            LOG.info("TPS-{} og PDL-{} er ulike", name, name);
-            LOG.trace("TPS-{} og PDL-{} er ulike, tps={}, pdl={}", name, name, tps, pdl);
-            return oppslag.isUsePdl() ? pdl : tps;
-        } else {
-            LOG.info("TPS-{} og PDL-{} er like", name, name);
-            return pdl;
-        }
     }
 
     @Override

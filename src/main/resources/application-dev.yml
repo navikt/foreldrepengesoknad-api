@@ -15,8 +15,7 @@ spring:
 virus:
   enabled: false
 oppslag:
-  uri:  https://api-gw-q1.oera.no/fpsoknad-oppslag/api/
-  pdl-uri: https://api-gw-q1.oera.no/fpsoknad-mottak/api/pdl/
+  uri: https://api-gw-q1.oera.no/fpsoknad-mottak/api/
 historikk:
   uri: https://api-gw-q1.oera.no/fpinfo-historikk/api/
 mottak:

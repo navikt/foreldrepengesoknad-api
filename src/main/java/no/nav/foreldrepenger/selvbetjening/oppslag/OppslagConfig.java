@@ -17,24 +17,15 @@ public class OppslagConfig extends AbstractConfig implements ZoneCrossingAware {
 
     private static final String FNR = "fnr";
     private static final String PING = "actuator/health/liveness";
-    private static final String PERSON = "person";
-    private static final String SØKERINFO = "oppslag";
-    private static final String AKTØRFNR = "oppslag/aktorfnr";
+    private static final String PERSON = "oppslag/person";
+    private static final String AKTØRFNR = "oppslag/fnr";
 
     private final String key;
-    private final URI pdlUri;
-    private final boolean isUsePdl;
 
     @ConstructorBinding
-    public OppslagConfig(URI uri, URI pdlUri, String key, @DefaultValue("true") boolean enabled, @DefaultValue("false") boolean isUsePdl) {
+    public OppslagConfig(URI uri, String key, @DefaultValue("true") boolean enabled) {
         super(uri, enabled);
         this.key = key;
-        this.pdlUri = pdlUri;
-        this.isUsePdl = isUsePdl;
-    }
-
-    public boolean isUsePdl() {
-        return isUsePdl;
     }
 
     @Override
@@ -52,16 +43,8 @@ public class OppslagConfig extends AbstractConfig implements ZoneCrossingAware {
         return uri(getUri(), PING);
     }
 
-    URI personPDLURI() {
-        return uri(pdlUri, PERSON);
-    }
-
     URI personURI() {
         return uri(getUri(), PERSON);
-    }
-
-    URI søkerInfoURI() {
-        return uri(getUri(), SØKERINFO);
     }
 
     URI aktørIdURI(String fnr) {

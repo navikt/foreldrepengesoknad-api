@@ -10,7 +10,6 @@ import org.springframework.web.client.RestOperations;
 import no.nav.foreldrepenger.selvbetjening.http.AbstractRestConnection;
 import no.nav.foreldrepenger.selvbetjening.oppslag.domain.AktørId;
 import no.nav.foreldrepenger.selvbetjening.oppslag.dto.PersonDto;
-import no.nav.foreldrepenger.selvbetjening.oppslag.dto.SøkerinfoDto;
 
 @Component
 public class OppslagConnection extends AbstractRestConnection {
@@ -22,18 +21,14 @@ public class OppslagConnection extends AbstractRestConnection {
         this.config = config;
     }
 
-    boolean isUsePdl() {
-        return config.isUsePdl();
-    }
-
     @Override
     public boolean isEnabled() {
         return config.isEnabled();
     }
 
     public PersonDto hentPDLPerson() {
-        LOG.warn("Henter PDL-person fra {}", config.personPDLURI());
-        return getForObject(config.personPDLURI(), PersonDto.class);
+        LOG.warn("Henter PDL-person fra {}", config.personURI());
+        return getForObject(config.personURI(), PersonDto.class);
     }
 
     public PersonDto hentPerson() {
@@ -44,13 +39,6 @@ public class OppslagConnection extends AbstractRestConnection {
         }
         LOG.warn("Oppslag av person er deaktivert");
         return null;
-
-    }
-
-    public SøkerinfoDto hentSøkerInfo() {
-        SøkerinfoDto info = getForObject(config.søkerInfoURI(), SøkerinfoDto.class);
-        LOG.info(CONFIDENTIAL, "Fikk søkerinfo {}", info);
-        return info;
 
     }
 
