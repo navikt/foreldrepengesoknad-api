@@ -15,13 +15,15 @@ spring:
 virus:
   enabled: false
 oppslag:
-  uri: https://api-gw-q1.oera.no/fpsoknad-mottak/api/
+  uri:  https://api-gw-q1.oera.no/fpsoknad-oppslag/api/
+  pdl-uri: https://api-gw-q1.oera.no/fpsoknad-mottak/api/pdl/
 historikk:
   uri: https://api-gw-q1.oera.no/fpinfo-historikk/api/
 mottak:
   uri: https://api-gw-q1.oera.no/fpsoknad-mottak/api/
 innsyn:
   mottak: https://api-gw-q1.oera.no/fpsoknad-mottak/api/
+  oppslag: https://api-gw-q1.oera.no/fpsoknad-oppslag/api/
 minidialog:
   uri: https://api-gw-q1.oera.no/fpinfo-historikk/api/
 fppdfgen:
