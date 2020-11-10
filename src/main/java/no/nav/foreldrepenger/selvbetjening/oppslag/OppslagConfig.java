@@ -17,9 +17,9 @@ public class OppslagConfig extends AbstractConfig implements ZoneCrossingAware {
 
     private static final String FNR = "fnr";
     private static final String PING = "actuator/health/liveness";
-    private static final String PERSON = "person";
+    private static final String PERSON = "oppslag/person";
     private static final String SØKERINFO = "oppslag";
-    private static final String AKTØRFNR = "oppslag/aktorfnr";
+    private static final String AKTØRFNR = "oppslag/aktoer";
 
     private final String key;
     private final URI pdlUri;
@@ -47,7 +47,7 @@ public class OppslagConfig extends AbstractConfig implements ZoneCrossingAware {
     }
 
     URI personURI() {
-        return uri(pdlUri, "/oppslag/" + PERSON);
+        return uri(pdlUri, PERSON);
     }
 
     URI søkerInfoURI() {
@@ -55,7 +55,7 @@ public class OppslagConfig extends AbstractConfig implements ZoneCrossingAware {
     }
 
     URI aktørIdURI(String fnr) {
-        return uri(getUri(), AKTØRFNR, queryParams(FNR, fnr));
+        return uri(pdlUri, AKTØRFNR, queryParams(FNR, fnr));
     }
 
     @Override
