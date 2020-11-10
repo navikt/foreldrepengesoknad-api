@@ -23,40 +23,36 @@ public class InnsynConfig extends AbstractConfig {
     private static final String VEDTAK = "innsyn/vedtak";
 
     @ConstructorBinding
-    public InnsynConfig(URI mottak, @DefaultValue("true") boolean enabled) {
-        super(mottak, enabled);
-    }
-
-    public URI getMottak() {
-        return getUri();
+    public InnsynConfig(URI uri, @DefaultValue("true") boolean enabled) {
+        super(uri, enabled);
     }
 
     @Override
     public URI pingURI() {
-        return uri(getMottak(), PING);
+        return uri(getUri(), PING);
     }
 
     URI fpsakURI() {
-        return uri(getMottak(), FPSAK_SAKER);
+        return uri(getUri(), FPSAK_SAKER);
     }
 
     URI infotrygdSakerURI() {
-        return uri(getMottak(), INFOTRYGD_SAKER);
+        return uri(getUri(), INFOTRYGD_SAKER);
     }
 
     URI uttakURI(String saksnummer) {
-        return uri(getMottak(), UTTAKSPLAN, queryParams(SAKSNUMMER, saksnummer));
+        return uri(getUri(), UTTAKSPLAN, queryParams(SAKSNUMMER, saksnummer));
     }
 
     URI uttakURIForAnnenPart(String annenPart) {
-        return uri(getMottak(), UTTAKSPLANANNEN, queryParams(ANNENPART, annenPart));
+        return uri(getUri(), UTTAKSPLANANNEN, queryParams(ANNENPART, annenPart));
     }
 
     public URI vedtakURI(String saksnummer) {
-        return uri(getMottak(), VEDTAK, queryParams(SAKSNUMMER, saksnummer));
+        return uri(getUri(), VEDTAK, queryParams(SAKSNUMMER, saksnummer));
     }
 
     public URI arbeidsforholdURI() {
-        return uri(getMottak(), ARBEIDSFORHOLD);
+        return uri(getUri(), ARBEIDSFORHOLD);
     }
 }

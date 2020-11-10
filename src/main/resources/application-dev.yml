@@ -21,8 +21,7 @@ historikk:
 mottak:
   uri: https://api-gw-q1.oera.no/fpsoknad-mottak/api/
 innsyn:
-  mottak: https://api-gw-q1.oera.no/fpsoknad-mottak/api/
-  oppslag: https://api-gw-q1.oera.no/fpsoknad-oppslag/api/
+  uri: https://api-gw-q1.oera.no/fpsoknad-mottak/api/
 minidialog:
   uri: https://api-gw-q1.oera.no/fpinfo-historikk/api/
 fppdfgen:
