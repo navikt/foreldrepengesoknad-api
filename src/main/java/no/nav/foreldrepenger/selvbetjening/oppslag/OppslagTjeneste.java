@@ -11,7 +11,6 @@ import org.springframework.boot.autoconfigure.condition.ConditionalOnProperty;
 import org.springframework.stereotype.Service;
 
 import no.nav.foreldrepenger.selvbetjening.innsyn.InnsynConnection;
-import no.nav.foreldrepenger.selvbetjening.oppslag.domain.AktørId;
 import no.nav.foreldrepenger.selvbetjening.oppslag.domain.Person;
 import no.nav.foreldrepenger.selvbetjening.oppslag.domain.Søkerinfo;
 
@@ -45,11 +44,6 @@ public class OppslagTjeneste implements Oppslag {
         LOG.info("Hentet søkerinfo for {} med {} arbeidsforhold OK", maskFnr(info.getSøker().fnr), info.getArbeidsforhold().size());
         LOG.trace(CONFIDENTIAL, "Hentet søkerinfo {}", info);
         return info;
-    }
-
-    @Override
-    public AktørId hentAktørId(String fnr) {
-        return oppslag.HentAktørId(fnr);
     }
 
     @Override

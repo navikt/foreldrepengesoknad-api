@@ -8,7 +8,6 @@ import org.springframework.stereotype.Component;
 import org.springframework.web.client.RestOperations;
 
 import no.nav.foreldrepenger.selvbetjening.http.AbstractRestConnection;
-import no.nav.foreldrepenger.selvbetjening.oppslag.domain.AktørId;
 import no.nav.foreldrepenger.selvbetjening.oppslag.dto.PersonDto;
 
 @Component
@@ -35,10 +34,6 @@ public class OppslagConnection extends AbstractRestConnection {
         LOG.warn("Oppslag av person er deaktivert");
         return null;
 
-    }
-
-    public AktørId HentAktørId(String fnr) {
-        return getForObject(config.aktørIdURI(fnr), AktørId.class);
     }
 
     @Override

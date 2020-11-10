@@ -11,10 +11,8 @@ import no.nav.foreldrepenger.selvbetjening.http.AbstractConfig;
 @ConfigurationProperties("oppslag")
 public class OppslagConfig extends AbstractConfig {
 
-    private static final String FNR = "fnr";
     private static final String PING = "actuator/health/liveness";
     private static final String PERSON = "oppslag/person";
-    private static final String AKTØRFNR = "oppslag/aktoer";
 
     @ConstructorBinding
     public OppslagConfig(URI uri, @DefaultValue("true") boolean enabled) {
@@ -30,7 +28,4 @@ public class OppslagConfig extends AbstractConfig {
         return uri(getUri(), PERSON);
     }
 
-    URI aktørIdURI(String fnr) {
-        return uri(getUri(), AKTØRFNR, queryParams(FNR, fnr));
-    }
 }

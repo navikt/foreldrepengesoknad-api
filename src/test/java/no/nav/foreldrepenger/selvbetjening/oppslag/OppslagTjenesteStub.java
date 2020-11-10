@@ -12,7 +12,6 @@ import org.springframework.stereotype.Service;
 
 import no.nav.foreldrepenger.selvbetjening.innsyn.saker.Kjønn;
 import no.nav.foreldrepenger.selvbetjening.innsyn.saker.Navn;
-import no.nav.foreldrepenger.selvbetjening.oppslag.domain.AktørId;
 import no.nav.foreldrepenger.selvbetjening.oppslag.domain.AnnenForelder;
 import no.nav.foreldrepenger.selvbetjening.oppslag.domain.Arbeidsforhold;
 import no.nav.foreldrepenger.selvbetjening.oppslag.domain.Bankkonto;
@@ -40,11 +39,6 @@ public class OppslagTjenesteStub implements Oppslag {
     @Override
     public Søkerinfo hentSøkerinfo() {
         return new Søkerinfo(person(), arbeidsforhold());
-    }
-
-    @Override
-    public AktørId hentAktørId(String fnr) {
-        return new AktørId("1234567890");
     }
 
     private static Person person() {
