@@ -7,6 +7,7 @@ import org.springframework.web.bind.annotation.GetMapping;
 import no.nav.foreldrepenger.selvbetjening.http.ProtectedRestController;
 import no.nav.foreldrepenger.selvbetjening.oppslag.domain.Person;
 import no.nav.foreldrepenger.selvbetjening.oppslag.domain.Søkerinfo;
+import no.nav.security.token.support.core.api.Unprotected;
 
 @ProtectedRestController(OppslagController.OPPSLAG)
 public class OppslagController {
@@ -31,6 +32,7 @@ public class OppslagController {
     }
 
     @GetMapping("/ping")
+    @Unprotected
     public String ping() {
         return oppslag.ping();
     }
