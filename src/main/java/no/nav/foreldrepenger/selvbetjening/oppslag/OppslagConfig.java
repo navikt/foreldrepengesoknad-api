@@ -38,7 +38,9 @@ public class OppslagConfig extends AbstractConfig implements ZoneCrossingAware {
 
     @Override
     public URI zoneCrossingUri() {
-        return getUri();
+        // return getUri();
+        return pdlUri;
+
     }
 
     @Override
