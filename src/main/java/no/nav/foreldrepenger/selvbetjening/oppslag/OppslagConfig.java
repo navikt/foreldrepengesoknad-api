@@ -43,7 +43,7 @@ public class OppslagConfig extends AbstractConfig implements ZoneCrossingAware {
 
     @Override
     public URI pingURI() {
-        return uri(pdlUri, "/oppslag/" + PING);
+        return uri(pdlUri, PING);
     }
 
     URI personURI() {
