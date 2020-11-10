@@ -23,18 +23,12 @@ public class OppslagConfig extends AbstractConfig implements ZoneCrossingAware {
 
     private final String key;
     private final URI pdlUri;
-    private final boolean isUsePdl;
 
     @ConstructorBinding
-    public OppslagConfig(URI uri, URI pdlUri, String key, @DefaultValue("true") boolean enabled, @DefaultValue("false") boolean isUsePdl) {
+    public OppslagConfig(URI uri, URI pdlUri, String key, @DefaultValue("true") boolean enabled) {
         super(uri, enabled);
         this.key = key;
         this.pdlUri = pdlUri;
-        this.isUsePdl = isUsePdl;
-    }
-
-    public boolean isUsePdl() {
-        return isUsePdl;
     }
 
     @Override
@@ -49,15 +43,11 @@ public class OppslagConfig extends AbstractConfig implements ZoneCrossingAware {
 
     @Override
     public URI pingURI() {
-        return uri(getUri(), PING);
-    }
-
-    URI personPDLURI() {
-        return uri(pdlUri, PERSON);
+        return uri(pdlUri, "/oppslag/" + PING);
     }
 
     URI personURI() {
-        return uri(getUri(), PERSON);
+        return uri(pdlUri, "/oppslag/" + PERSON);
     }
 
     URI søkerInfoURI() {

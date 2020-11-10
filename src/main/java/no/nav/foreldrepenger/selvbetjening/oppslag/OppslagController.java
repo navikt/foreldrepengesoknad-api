@@ -30,6 +30,11 @@ public class OppslagController {
         return oppslag.hentSøkerinfo();
     }
 
+    @GetMapping("/ping")
+    public String ping() {
+        return oppslag.ping();
+    }
+
     @Override
     public String toString() {
         return getClass().getSimpleName() + " [oppslag=" + oppslag + "]";
