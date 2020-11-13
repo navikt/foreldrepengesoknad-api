@@ -21,7 +21,7 @@
     </springProfile>
 
     <springProfile name="dev,local,test">
-        <logger name="no.nav.security.token.support" level="trace"/>
+        <logger name="no.nav.security.token.support" level="info"/>
         <logger name="no.nav.foreldrepenger.selvbetjening" level="trace"/>
     </springProfile>
 
