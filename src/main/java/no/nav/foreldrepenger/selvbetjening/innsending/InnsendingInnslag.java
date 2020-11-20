@@ -14,6 +14,25 @@ public class InnsendingInnslag extends HistorikkInnslag {
 
     private final HendelseType hendelse;
     private List<String> vedlegg;
+    private List<String> opplastedeVedlegg;
+    private List<String> ikkeOpplastedeVedlegg;
+
+    public List<String> getOpplastedeVedlegg() {
+        return opplastedeVedlegg;
+    }
+
+    public void setOpplastedeVedlegg(List<String> opplastedeVedlegg) {
+        this.opplastedeVedlegg = opplastedeVedlegg;
+    }
+
+    public List<String> getIkkeOpplastedeVedlegg() {
+        return ikkeOpplastedeVedlegg;
+    }
+
+    public void setIkkeOpplastedeVedlegg(List<String> ikkeOpplastedeVedlegg) {
+        this.ikkeOpplastedeVedlegg = ikkeOpplastedeVedlegg;
+    }
+
     private LocalDate behandlingsdato;
 
     @JsonCreator
@@ -44,9 +63,7 @@ public class InnsendingInnslag extends HistorikkInnslag {
 
     @Override
     public String toString() {
-        return getClass().getSimpleName() + "[hendelse=" + hendelse + ", fnr=" + getFnr() + ", aktørId=" + getAktørId()
-                + ", journalpostId=" + getJournalpostId() + ", saksnr=" + getSaksnr() + ", opprettet=" + opprettet
-                + ", vedlegg=" + vedlegg + ", behandlingsdato=" + behandlingsdato + "]";
+        return getClass().getSimpleName() + " [hendelse=" + hendelse + ", vedlegg=" + vedlegg + ", opplastedeVedlegg=" + opplastedeVedlegg
+                + ", ikkeOpplastedeVedlegg=" + ikkeOpplastedeVedlegg + ", behandlingsdato=" + behandlingsdato + "]";
     }
-
 }
