@@ -1,28 +1,11 @@
 package no.nav.foreldrepenger.selvbetjening.historikk;
 
-import com.fasterxml.jackson.annotation.JsonCreator;
-import com.fasterxml.jackson.annotation.JsonProperty;
+import static com.fasterxml.jackson.annotation.JsonAutoDetect.Visibility.ANY;
 
-public class Arbeidsgiver {
-    private final String navn;
-    private final String orgnr;
+import com.fasterxml.jackson.annotation.JsonAutoDetect;
 
-    @JsonCreator
-    public Arbeidsgiver(@JsonProperty("navn") String navn, @JsonProperty("orgnr") String orgnr) {
-        this.navn = navn;
-        this.orgnr = orgnr;
-    }
+@JsonAutoDetect(fieldVisibility = ANY)
 
-    public String getNavn() {
-        return navn;
-    }
+public record Arbeidsgiver(String navn, String orgnr) {
 
-    public String getOrgnr() {
-        return orgnr;
-    }
-
-    @Override
-    public String toString() {
-        return getClass().getSimpleName() + "[navn=" + navn + ", orgnr=" + orgnr + "]";
-    }
 }

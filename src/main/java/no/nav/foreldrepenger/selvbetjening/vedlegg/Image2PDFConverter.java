@@ -1,7 +1,10 @@
 package no.nav.foreldrepenger.selvbetjening.vedlegg;
 
 import static java.util.Arrays.asList;
+import static no.nav.foreldrepenger.selvbetjening.vedlegg.ImageScaler.downToA4;
 import static no.nav.foreldrepenger.selvbetjening.vedlegg.VedleggUtil.mediaType;
+import static org.apache.pdfbox.pdmodel.common.PDRectangle.A4;
+import static org.apache.pdfbox.pdmodel.graphics.image.PDImageXObject.createFromByteArray;
 import static org.springframework.http.MediaType.APPLICATION_PDF;
 import static org.springframework.http.MediaType.IMAGE_JPEG;
 import static org.springframework.http.MediaType.IMAGE_PNG;
@@ -16,8 +19,6 @@ import javax.inject.Inject;
 import org.apache.pdfbox.pdmodel.PDDocument;
 import org.apache.pdfbox.pdmodel.PDPage;
 import org.apache.pdfbox.pdmodel.PDPageContentStream;
-import org.apache.pdfbox.pdmodel.common.PDRectangle;
-import org.apache.pdfbox.pdmodel.graphics.image.PDImageXObject;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.core.io.ClassPathResource;
@@ -33,8 +34,6 @@ import no.nav.foreldrepenger.selvbetjening.error.AttachmentTypeUnsupportedExcept
 public class Image2PDFConverter {
 
     private final List<MediaType> supportedMediaTypes;
-
-    private static final PDRectangle A4 = PDRectangle.A4;
 
     private static final Logger LOG = LoggerFactory.getLogger(Image2PDFConverter.class);
 
@@ -61,8 +60,8 @@ public class Image2PDFConverter {
         }
     }
 
-    byte[] convert(Resource resource) throws IOException {
-        return convert(copyToByteArray(resource.getInputStream()));
+    byte[] convert(Resource res) throws IOException {
+        return convert(copyToByteArray(res.getInputStream()));
     }
 
     public byte[] convert(byte[] bytes) {
@@ -96,13 +95,11 @@ public class Image2PDFConverter {
         return isValid;
     }
 
-    private static void addPDFPageFromImage(PDDocument doc, byte[] origImg, String imgFormat) {
+    private static void addPDFPageFromImage(PDDocument doc, byte[] orig, String fmt) {
         PDPage page = new PDPage(A4);
         doc.addPage(page);
-        byte[] scaledImg = ImageScaler.downToA4(origImg, imgFormat);
-        try (var contentStream = new PDPageContentStream(doc, page)) {
-            var ximage = PDImageXObject.createFromByteArray(doc, scaledImg, "img");
-            contentStream.drawImage(ximage, (int) A4.getLowerLeftX(), (int) A4.getLowerLeftY());
+        try (var cs = new PDPageContentStream(doc, page)) {
+            cs.drawImage(createFromByteArray(doc, downToA4(orig, fmt), "img"), (int) A4.getLowerLeftX(), (int) A4.getLowerLeftY());
         } catch (Exception e) {
             throw new AttachmentConversionException("Konvertering av vedlegg feilet", e);
         }

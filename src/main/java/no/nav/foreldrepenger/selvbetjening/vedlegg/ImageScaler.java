@@ -21,7 +21,7 @@ import org.slf4j.LoggerFactory;
 
 import no.nav.foreldrepenger.selvbetjening.error.AttachmentConversionException;
 
-public class ImageScaler {
+class ImageScaler {
 
     private static final Logger LOG = LoggerFactory.getLogger(ImageScaler.class);
 
@@ -29,7 +29,7 @@ public class ImageScaler {
 
     }
 
-    public static byte[] downToA4(byte[] origImage, String format) {
+    static byte[] downToA4(byte[] origImage, String format) {
         final PDRectangle A4 = PDRectangle.A4;
 
         try {
