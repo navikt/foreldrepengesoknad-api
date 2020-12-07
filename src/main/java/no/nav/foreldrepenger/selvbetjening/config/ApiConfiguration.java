@@ -50,9 +50,9 @@ public class ApiConfiguration implements WebMvcConfigurer {
     }
 
     @Bean
-    public RestOperations restTemplate(ClientHttpRequestInterceptor... interceptors) {
+    public RestOperations restTemplate(RestTemplateBuilder builder, ClientHttpRequestInterceptor... interceptors) {
         LOG.info("Registrerer interceptorer {}", Arrays.toString(interceptors));
-        return new RestTemplateBuilder()
+        return builder
                 .interceptors(interceptors)
                 .build();
     }
