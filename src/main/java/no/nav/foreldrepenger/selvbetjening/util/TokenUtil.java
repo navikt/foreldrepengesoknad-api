@@ -22,6 +22,14 @@ public class TokenUtil {
         this.ctxHolder = ctxHolder;
     }
 
+    public AuthenticationLevel getLevel() {
+        return Optional.ofNullable(claimSet())
+                .map(c -> c.get("acr"))
+                .map(String.class::cast)
+                .map(AuthenticationLevel::of)
+                .orElse(AuthenticationLevel.NONE);
+    }
+
     public boolean erUtløpt() {
         return Optional.ofNullable(getExpiryDate())
                 .filter(d -> d.before(Date.from(now())))
