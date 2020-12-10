@@ -1,5 +1,6 @@
 package no.nav.foreldrepenger.selvbetjening.error;
 
+import static no.nav.foreldrepenger.selvbetjening.util.StringUtil.maskFnr;
 import static org.springframework.http.HttpStatus.CONFLICT;
 import static org.springframework.http.HttpStatus.FORBIDDEN;
 import static org.springframework.http.HttpStatus.INTERNAL_SERVER_ERROR;
@@ -28,8 +29,8 @@ import org.springframework.web.multipart.MultipartException;
 import org.springframework.web.servlet.NoHandlerFoundException;
 import org.springframework.web.servlet.mvc.method.annotation.ResponseEntityExceptionHandler;
 
-import no.nav.foreldrepenger.selvbetjening.util.StringUtil;
 import no.nav.foreldrepenger.selvbetjening.util.TokenUtil;
+import no.nav.security.token.support.core.exceptions.JwtTokenInvalidClaimException;
 import no.nav.security.token.support.core.exceptions.JwtTokenValidatorException;
 import no.nav.security.token.support.spring.validation.interceptor.JwtTokenUnauthorizedException;
 
@@ -92,11 +93,18 @@ public class ApiExceptionHandler extends ResponseEntityExceptionHandler {
 
     @ExceptionHandler
     public ResponseEntity<Object> handleUnauthorizedJwt(JwtTokenUnauthorizedException e, WebRequest req) {
-        return logAndHandle(UNAUTHORIZED, e, req);
+
+        return Optional.ofNullable(e.getCause())
+                .filter(JwtTokenInvalidClaimException.class::isInstance)
+                .map(JwtTokenInvalidClaimException.class::cast)
+                .map(i -> logAndHandle(FORBIDDEN, e, req, new HttpHeaders(), i.getMessage()))
+                .orElse(logAndHandle(UNAUTHORIZED, e, req));
     }
 
     @ExceptionHandler
     public ResponseEntity<Object> handleForbiddenJwt(JwtTokenValidatorException e, WebRequest req) {
+        e.getMessage();
+        logAndHandle(FORBIDDEN, e, req, new HttpHeaders(), "");
         return logAndHandle(FORBIDDEN, e, req);
     }
 
@@ -126,7 +134,7 @@ public class ApiExceptionHandler extends ResponseEntityExceptionHandler {
     }
 
     private String subject() {
-        return Optional.ofNullable(StringUtil.maskFnr(tokenUtil.getSubject()))
+        return Optional.ofNullable(maskFnr(tokenUtil.getSubject()))
                 .orElse("Uautentisert");
     }
 
