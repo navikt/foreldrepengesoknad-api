@@ -24,6 +24,7 @@
         <logger name="no.nav.security.token.support" level="trace"/>
         <logger name="no.nav.foreldrepenger.selvbetjening" level="trace"/>
         <logger name="org.springframework.web.servlet.resource" level="trace" />
+        <logger name="no.nav.security.token.support.core.validation" level="info" />
     </springProfile>
 
     <!-- Turn off Spring's warning logs for already resolved exceptions -->
