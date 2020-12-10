@@ -103,8 +103,6 @@ public class ApiExceptionHandler extends ResponseEntityExceptionHandler {
 
     @ExceptionHandler
     public ResponseEntity<Object> handleForbiddenJwt(JwtTokenValidatorException e, WebRequest req) {
-        e.getMessage();
-        logAndHandle(FORBIDDEN, e, req, new HttpHeaders(), "");
         return logAndHandle(FORBIDDEN, e, req);
     }
 
