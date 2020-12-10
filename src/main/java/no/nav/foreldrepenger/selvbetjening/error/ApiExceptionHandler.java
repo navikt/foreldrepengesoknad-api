@@ -119,7 +119,8 @@ public class ApiExceptionHandler extends ResponseEntityExceptionHandler {
     private ResponseEntity<Object> logAndHandle(HttpStatus status, Exception e, WebRequest req, HttpHeaders headers,
             Object... messages) {
         ApiError apiError = apiErrorFra(status, e, messages);
-        if (erAutentisert()) {
+
+        if (tokenUtil.erAutentisert()) {
             LOG.warn("[{} ({})] {} {} ({})", req.getContextPath(), subject(), status, apiError.getMessages(),
                     status.value(), e);
         } else {
@@ -135,10 +136,6 @@ public class ApiExceptionHandler extends ResponseEntityExceptionHandler {
                 .stream()
                 .map(ApiExceptionHandler::errorMessage)
                 .toArray();
-    }
-
-    private boolean erAutentisert() {
-        return tokenUtil.getSubject() != null;
     }
 
     private String subject() {
