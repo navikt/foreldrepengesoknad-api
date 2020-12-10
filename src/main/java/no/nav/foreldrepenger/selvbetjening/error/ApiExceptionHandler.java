@@ -94,6 +94,7 @@ public class ApiExceptionHandler extends ResponseEntityExceptionHandler {
     @ExceptionHandler
     public ResponseEntity<Object> handleUnauthorizedJwt(JwtTokenUnauthorizedException e, WebRequest req) {
 
+        LOG.info("CAUSE " + e.getCause());
         return Optional.ofNullable(e.getCause())
                 .filter(JwtTokenInvalidClaimException.class::isInstance)
                 .map(JwtTokenInvalidClaimException.class::cast)
