@@ -97,7 +97,7 @@ public class ApiExceptionHandler extends ResponseEntityExceptionHandler {
         return Optional.ofNullable(e.getCause())
                 .filter(JwtTokenInvalidClaimException.class::isInstance)
                 .map(JwtTokenInvalidClaimException.class::cast)
-                .map(i -> logAndHandle(FORBIDDEN, e, req, new HttpHeaders(), i.getMessage()))
+                .map(i -> logAndHandle(FORBIDDEN, i, req))
                 .orElse(logAndHandle(UNAUTHORIZED, e, req));
     }
 
