@@ -2,5 +2,9 @@
 "ingresses": [
         "https://foreldrepengesoknad-api.dev.nav.no",
         "https://foreldrepengesoknad-api-q.nav.no"
-    ]
+    ],
+ "env": {
+     "loginservice.idporten.discovery.url" :"XXXXXXX",
+     "loginservice.idporten.audience" :"YYYYYYY"
+  }
 }
