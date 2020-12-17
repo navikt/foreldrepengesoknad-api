@@ -3,7 +3,7 @@
   "gw" : "api-gw-q1.oera.no",
   "gcp" : "true",
   "env": {
-     "loginservice.idporten.discovery.url" :"XXXXXXX",
-     "loginservice.idporten.audience" :"YYYYYYY"
+     "LOGINSERVICE_IDPORTEN_DISCOVERY_URL" :"http://XXXXXXX.yy.com",
+     "LOGINSERVICE_IDPORTEN_AUDIENCE" :"YYYYYYY"
   }
 }
