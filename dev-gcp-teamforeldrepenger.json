@@ -3,7 +3,7 @@
   "gw" : "api-gw-q1.oera.no",
   "gcp" : "true",
   "env": {
-     "LOGINSERVICE_IDPORTEN_DISCOVERY_URL" :"http://XXXXXXX.yy.com",
-     "LOGINSERVICE_IDPORTEN_AUDIENCE" :"YYYYYYY"
+     "LOGINSERVICE_IDPORTEN_DISCOVERY_URL" :"https://navtestb2c.b2clogin.com/navtestb2c.onmicrosoft.com/v2.0/.well-known/openid-configuration?p=B2C_1A_idporten_ver1",
+     "LOGINSERVICE_IDPORTEN_AUDIENCE" :"0090b6e1-ffcc-4c37-bc21-049f7d1f0fe5"
   }
 }

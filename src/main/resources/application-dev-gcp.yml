@@ -15,7 +15,4 @@ no.nav:
       selvbetjening:
          api:
             virus:
-               uri: http://clamav.clamav.svc.cluster.local
-
-loginservice.idporten.discovery.url: XXXXXXX
-loginservice.idporten.audience: YYYYYYY  
+               uri: http://clamav.clamav.svc.cluster.local 
