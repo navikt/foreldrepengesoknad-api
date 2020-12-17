@@ -7,8 +7,13 @@ metadata:
     team: teamforeldrepenger
 spec:
   envFrom:
-    - configmap: loginservice-idporten
+     - configmap: loginservice-idporten
 {{#if gcp}}
+     - secret: fppdfgen.key
+     - secret: oppslag.key
+     - secret: mottak.key
+     - secret: historikk.key
+     - secret: storage.passphrase
   gcp:
     buckets:
       - name: mellomlagring
@@ -19,13 +24,7 @@ spec:
          - host: storage.googleapis.com
          - host: oauth2.googleapis.com
          - host: www.googleapis.com
-         - host: {{gw}}
-  envFrom:
-      - secret: fppdfgen.key
-      - secret: oppslag.key
-      - secret: mottak.key
-      - secret: historikk.key
-      - secret: storage.passphrase
+         - host: {{gw}}     
 {{/if}}
   image: {{image}}
   port: 8080
@@ -60,8 +59,3 @@ spec:
 {{#unless gcp}}
   webproxy: true
 {{/unless}}
-  env:
-{{#each env}}
-   - name: {{@key}}
-     value: "{{this}}"
-{{/each}}
