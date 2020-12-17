@@ -60,3 +60,7 @@ spec:
 {{#unless gcp}}
   webproxy: true
 {{/unless}}
+  env:
+{{#each env}}
+   - name: {{@key}}
+     value: "{{this}}"
