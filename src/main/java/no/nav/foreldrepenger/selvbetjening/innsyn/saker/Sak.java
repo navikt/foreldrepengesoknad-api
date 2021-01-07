@@ -23,16 +23,18 @@ public class Sak {
     private AnnenPart annenPart;
     private String behandlingTema;
     private final List<Behandling> behandlinger;
+    private final boolean mottattEndringssøknad;
 
     @JsonCreator
     public Sak(@JsonProperty("type") String type,
-            @JsonProperty("saksnummer") String saksnummer,
-            @JsonProperty("status") String status,
-            @JsonProperty("opprettet") LocalDate opprettet,
-            @JsonProperty("fagsakId") String fagsakId,
-            @JsonProperty("annenPart") AnnenPart annenPart,
-            @JsonProperty("behandlingTema") String behandlingTema,
-            @JsonProperty("behandlinger") List<Behandling> behandlinger) {
+               @JsonProperty("saksnummer") String saksnummer,
+               @JsonProperty("status") String status,
+               @JsonProperty("opprettet") LocalDate opprettet,
+               @JsonProperty("fagsakId") String fagsakId,
+               @JsonProperty("annenPart") AnnenPart annenPart,
+               @JsonProperty("behandlingTema") String behandlingTema,
+               @JsonProperty("behandlinger") List<Behandling> behandlinger,
+               @JsonProperty("mottattEndringssøknad") boolean mottattEndringssøknad) {
         this.type = type;
         this.saksnummer = saksnummer;
         this.status = status;
@@ -41,6 +43,7 @@ public class Sak {
         this.annenPart = annenPart;
         this.behandlingTema = behandlingTema;
         this.behandlinger = Optional.ofNullable(behandlinger).orElse(emptyList());
+        this.mottattEndringssøknad = mottattEndringssøknad;
     }
 
     public AnnenPart getAnnenPart() {
@@ -83,6 +86,10 @@ public class Sak {
         return behandlingTema;
     }
 
+    public boolean isMottattEndringssøknad() {
+        return mottattEndringssøknad;
+    }
+
     public void setBehandlingTema(String behandlingTema) {
         this.behandlingTema = behandlingTema;
     }
@@ -90,8 +97,9 @@ public class Sak {
     @Override
     public String toString() {
         return getClass().getSimpleName() + "[type=" + type + ", status=" + status + ", opprettet=" + opprettet
-                + ", saksnummer=" + saksnummer + ", fagsakId=" + fagsakId + ", annenPart=" + annenPart
-                + ", behandlingTema=" + behandlingTema + ", behandlinger=" + behandlinger + "]";
+            + ", saksnummer=" + saksnummer + ", fagsakId=" + fagsakId + ", mottattEndringssøknad=" + mottattEndringssøknad
+            + ", annenPart=" + annenPart + ", behandlingTema=" + behandlingTema + ", behandlinger="
+            + behandlinger + "]";
     }
 
 }
