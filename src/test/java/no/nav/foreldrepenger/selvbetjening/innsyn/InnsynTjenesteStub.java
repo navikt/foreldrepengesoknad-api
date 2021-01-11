@@ -36,7 +36,7 @@ public class InnsynTjenesteStub implements Innsyn {
         LocalDateTime mottattdato = LocalDateTime.now().minusDays(7);
 
         Behandling behandling = new Behandling(mottattdato, mottattdato.plusHours(2), "AVSLU", "FP",
-                "FORP_FODS", null, null, "4869", "NAV Torrevieja", Collections.emptyList());
+                "FORP_FODS", null, "4869", "NAV Torrevieja", Collections.emptyList());
 
         return Arrays.asList(
                 new Sak("SAK", "123234545", "UBEH", now().minusYears(1), "LA8PV", null, "SVP", emptyList(), false),
