@@ -4,6 +4,7 @@ public final class Constants {
     public static final String CLAIMS = "acr=Level4";
     public static final String ISSUER = "selvbetjening";
     public static final String FNR_HEADER_VALUE = "fnr";
+    public static final String NAV_AUTH_LEVEL = "Nav-auth-level";
     public static final String NAV_CONSUMER_ID = "Nav-Consumer-Id";
     public static final String NAV_CALL_ID = "Nav-CallId";
     public static final String NAV_USER_ID = "Nav-User-Id";
