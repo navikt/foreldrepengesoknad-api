@@ -42,7 +42,7 @@ public final class StringUtil {
     }
 
     public static String maskFnr(String value) {
-        return (value != null) && (value.length() == 11) ? Strings.padEnd(value.substring(0, 6), 11, '*') : value;
+        return (value != null) && (value.trim().length() == 11) ? Strings.padEnd(value.substring(0, 6), 11, '*') : value;
     }
 
     public static String flertall(int n) {

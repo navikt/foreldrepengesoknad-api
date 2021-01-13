@@ -1,8 +1,6 @@
 package no.nav.foreldrepenger.selvbetjening.http.filters;
 
-import static no.nav.foreldrepenger.boot.conditionals.EnvUtil.isDevOrLocal;
 import static no.nav.foreldrepenger.selvbetjening.util.Constants.NAV_TOKEN_EXPIRY_ID;
-import static no.nav.foreldrepenger.selvbetjening.util.Constants.NAV_USER_ID;
 import static no.nav.foreldrepenger.selvbetjening.util.MDCUtil.toMDC;
 import static org.springframework.core.Ordered.HIGHEST_PRECEDENCE;
 
@@ -47,10 +45,6 @@ public class IDToMDCFilterBean extends GenericFilterBean {
 
     private void copyHeadersToMDC(String uri) {
         try {
-            String fnr = tokenUtil.getSubject();
-            if (isDevOrLocal(getEnvironment())) {
-                toMDC(NAV_USER_ID, fnr);
-            }
             if (tokenUtil.erAutentisert()) {
                 toMDC(NAV_TOKEN_EXPIRY_ID, tokenUtil.getExpiryDate());
             }
