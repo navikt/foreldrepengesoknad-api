@@ -13,6 +13,8 @@ import java.util.Optional;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.context.EnvironmentAware;
+import org.springframework.core.env.Environment;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -29,6 +31,7 @@ import org.springframework.web.multipart.MultipartException;
 import org.springframework.web.servlet.NoHandlerFoundException;
 import org.springframework.web.servlet.mvc.method.annotation.ResponseEntityExceptionHandler;
 
+import no.nav.foreldrepenger.boot.conditionals.EnvUtil;
 import no.nav.foreldrepenger.selvbetjening.util.TokenUtil;
 import no.nav.security.token.support.core.exceptions.JwtTokenInvalidClaimException;
 import no.nav.security.token.support.core.exceptions.JwtTokenValidatorException;
@@ -36,9 +39,10 @@ import no.nav.security.token.support.spring.validation.interceptor.JwtTokenUnaut
 
 @ControllerAdvice
 @ResponseBody
-public class ApiExceptionHandler extends ResponseEntityExceptionHandler {
+public class ApiExceptionHandler extends ResponseEntityExceptionHandler implements EnvironmentAware {
 
     private final TokenUtil tokenUtil;
+    private Environment env;
 
     public ApiExceptionHandler(TokenUtil tokenUtil) {
         this.tokenUtil = tokenUtil;
@@ -123,6 +127,9 @@ public class ApiExceptionHandler extends ResponseEntityExceptionHandler {
         if (tokenUtil.erAutentisert()) {
             LOG.warn("[{} ({})] {} {} ({})", req.getContextPath(), subject(), status, apiError.getMessages(),
                     status.value(), e);
+            if (EnvUtil.isDev(env)) {
+                LOG.warn("Token issuer {}", tokenUtil.getToken());
+            }
         } else {
             LOG.debug("[{}] {} {} ({})", req.getContextPath(), status, apiError.getMessages(),
                     status.value(), e);
@@ -154,5 +161,11 @@ public class ApiExceptionHandler extends ResponseEntityExceptionHandler {
     @Override
     public String toString() {
         return getClass().getSimpleName() + "[tokenUtil=" + tokenUtil + "]";
+    }
+
+    @Override
+    public void setEnvironment(Environment env) {
+        this.env = env;
+
     }
 }

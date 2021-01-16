@@ -4,6 +4,7 @@ import static java.time.Instant.now;
 import static no.nav.foreldrepenger.selvbetjening.util.Constants.ISSUER;
 
 import java.util.Date;
+import java.util.Objects;
 import java.util.Optional;
 
 import org.springframework.stereotype.Component;
@@ -11,6 +12,7 @@ import org.springframework.stereotype.Component;
 import no.nav.security.token.support.core.context.TokenValidationContext;
 import no.nav.security.token.support.core.context.TokenValidationContextHolder;
 import no.nav.security.token.support.core.exceptions.JwtTokenValidatorException;
+import no.nav.security.token.support.core.jwt.JwtToken;
 import no.nav.security.token.support.core.jwt.JwtTokenClaims;
 
 @Component
@@ -67,6 +69,14 @@ public class TokenUtil {
     private TokenValidationContext context() {
         return Optional.ofNullable(ctxHolder.getTokenValidationContext())
                 .orElse(null);
+    }
+
+    public String getToken() {
+        return Optional.ofNullable(context())
+                .map(c -> c.getJwtToken(ISSUER))
+                .filter(Objects::nonNull)
+                .map(JwtToken::getTokenAsString)
+                .orElseThrow();
     }
 
     public Date getDateClaim(Object value) {
