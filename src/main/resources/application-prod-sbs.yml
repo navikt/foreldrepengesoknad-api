@@ -1,0 +1,15 @@
+spring:
+   cloud:
+      vault:
+         enabled: true
+         uri: https://vault.adeo.no
+         authentication: KUBERNETES
+         kubernetes:
+              role: foreldrepengesoknad-api
+              kubernetes-path: kubernetes/prod/sbs
+              service-account-token-file: /var/run/secrets/kubernetes.io/serviceaccount/token
+         kv:
+             enabled: true
+             backend: kv/prod/sbs
+             application-name: foreldrepengesoknad-api/teamforeldrepenger
+             default-context: foreldrepengesoknad-api/teamforeldrepenger
