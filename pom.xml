@@ -21,6 +21,7 @@
     </licenses>
 
     <properties>
+        <nimbus-jose-jwt.version>8.20</nimbus-jose-jwt.version>
         <sonar.projectKey>navikt_foreldrepengesoknad-api</sonar.projectKey>
         <sonar.organization>navit</sonar.organization>
         <sonar.host.url>https://sonarcloud.io</sonar.host.url>
