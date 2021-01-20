@@ -31,7 +31,6 @@ import org.springframework.web.multipart.MultipartException;
 import org.springframework.web.servlet.NoHandlerFoundException;
 import org.springframework.web.servlet.mvc.method.annotation.ResponseEntityExceptionHandler;
 
-import no.nav.foreldrepenger.boot.conditionals.EnvUtil;
 import no.nav.foreldrepenger.selvbetjening.util.TokenUtil;
 import no.nav.security.token.support.core.exceptions.JwtTokenInvalidClaimException;
 import no.nav.security.token.support.core.exceptions.JwtTokenValidatorException;
@@ -127,9 +126,6 @@ public class ApiExceptionHandler extends ResponseEntityExceptionHandler implemen
         if (tokenUtil.erAutentisert()) {
             LOG.warn("[{} ({})] {} {} ({})", req.getContextPath(), subject(), status, apiError.getMessages(),
                     status.value(), e);
-            if (EnvUtil.isDev(env)) {
-                LOG.warn("Token issuer {}", tokenUtil.getToken());
-            }
         } else {
             LOG.debug("[{}] {} {} ({})", req.getContextPath(), status, apiError.getMessages(),
                     status.value(), e);
