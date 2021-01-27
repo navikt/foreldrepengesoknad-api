@@ -1,14 +1,12 @@
 allowed:
   origins:
-   https://engangsstonad.dev.nav.no,
-   https://foreldrepengesoknad.dev.nav.no,
-   https://foreldrepengesoknad.dev.adeo.no,
-   https://svangerskapspengesoknad.dev.nav.no,
-   https://foreldrepenger.dev.nav.no,
-   https://engangsstonad.dev.nav.no,
-   https://foreldrepengesoknad.dev.nav.no,
-   https://svangerskapspengesoknad.dev.nav.no,
-   https://foreldrepenger.dev.nav.no
+   https://foreldrepengesoknad.dev.intern.nav.no,
+   https://svangerskapspengesoknad.dev.intern.nav.no,
+   https://foreldrepenger.dev.intern.nav.no,
+   https://engangsstonad.dev.intern.nav.no,
+   https://foreldrepengesoknad.dev.intern.nav.no,
+   https://svangerskapspengesoknad.dev.intern.nav.no,
+   https://foreldrepenger.dev.intern.nav.no
 spring:
   cloud:
     vault:
