@@ -6,7 +6,7 @@
 * Kjør klassen ```ApiApplicationLocal``` fra din favoritteditor
 
 ## Bygg
-* Krever Java 11
+* Krever minst Java 11
     
 ---
 # Henvendelser
