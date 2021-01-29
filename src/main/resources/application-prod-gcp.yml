@@ -13,6 +13,13 @@ spring:
   cloud:
     vault:
       enabled: false
+      
+mellomlagring:
+  tmp:
+    navn: foreldrepengesoknad-prod
+  søknad:
+     navn: mellomlagring-prod   
+   
 no.nav:
    foreldrepenger:
       selvbetjening:
