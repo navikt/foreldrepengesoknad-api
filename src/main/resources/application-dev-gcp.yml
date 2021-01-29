@@ -17,4 +17,5 @@ no.nav:
       selvbetjening:
          api:
             virus:
-               uri: http://clamav.clamav.svc.cluster.local 
+               enabled: true
+               uri: http://clamav.clamav.svc.cluster.local
