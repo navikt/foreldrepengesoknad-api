@@ -9,11 +9,7 @@ spec:
   envFrom:
      - configmap: loginservice-idporten
 {{#if gcp}}
-     - secret: fppdfgen
-     - secret: oppslag
-     - secret: mottak
-     - secret: historikk
-     - secret: storage
+     - secret: apigw
   gcp:
     buckets:
       - name: mellomlagring
