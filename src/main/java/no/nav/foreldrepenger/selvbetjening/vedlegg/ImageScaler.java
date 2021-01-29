@@ -55,7 +55,7 @@ class ImageScaler {
             return image;
         }
         if (image.getType() == TYPE_CUSTOM) {
-            LOG.warn("Kan ikke rotere bilde med ukjent type");
+            LOG.info("Kan ikke rotere bilde med ukjent type");
             return image;
 
         }
