@@ -1,5 +1,5 @@
 {
-  "ingresses": ["https://foreldrepengesoknad-api.nav.no"],
+  "ingresses": ["foreldrepengesoknad.prod-gcp.nais.io","https://foreldrepengesoknad-api.nav.no"],
   "gw" : "api-gw.oera.no",
   "gcp" : "true"
 }
