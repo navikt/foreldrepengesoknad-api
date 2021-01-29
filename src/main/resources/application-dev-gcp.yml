@@ -12,10 +12,5 @@ spring:
   cloud:
     vault:
       enabled: false
-no.nav:
-   foreldrepenger:
-      selvbetjening:
-         api:
-            virus:
-               enabled: true
-               uri: http://clamav.clamav.svc.cluster.local
+virus:
+   uri: http://clamav.clamav.svc.cluster.local

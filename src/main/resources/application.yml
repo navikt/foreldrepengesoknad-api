@@ -13,11 +13,8 @@ no.nav:
            accepted_audience: ${loginservice.idporten.audience}  
            cookie_name: selvbetjening-idtoken
    
-   foreldrepenger:
-      selvbetjening:
-         api:
-            virus:
-               enabled: true
+virus:
+  enabled: true
        
 management:
    metrics:

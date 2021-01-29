@@ -20,9 +20,5 @@ mellomlagring:
   søknad:
      navn: mellomlagring-prod   
    
-no.nav:
-   foreldrepenger:
-      selvbetjening:
-         api:
-            virus:
-               uri: http://clamav.clamav.svc.cluster.local 
+virus:
+   uri: http://clamav.clamav.svc.cluster.local 
