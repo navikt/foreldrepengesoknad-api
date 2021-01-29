@@ -21,6 +21,7 @@ spec:
          - host: oauth2.googleapis.com
          - host: www.googleapis.com
          - host: {{gw}}     
+         - host: {{clam}}     
 {{/if}}
   image: {{image}}
   port: 8080
