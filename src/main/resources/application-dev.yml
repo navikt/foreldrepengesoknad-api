@@ -11,8 +11,6 @@ spring:
     mvc:
         log-request-details: true
 
-virus:
-  enabled: false
 oppslag:
   uri:  https://api-gw-q1.oera.no/fpsoknad-mottak/api/
 historikk:
