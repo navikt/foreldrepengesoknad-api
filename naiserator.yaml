@@ -16,12 +16,14 @@ spec:
       - name: {{tmpbucket}}
   accessPolicy:
      outbound:
+       rules:
+        application: clamav
+        namespace: clamav
        external:
          - host: storage.googleapis.com
          - host: oauth2.googleapis.com
          - host: www.googleapis.com
          - host: {{gw}}     
-         - host: {{clam}}     
 {{/if}}
   image: {{image}}
   port: 8080
