@@ -8,6 +8,8 @@ import java.util.Optional;
 
 import javax.inject.Inject;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 
@@ -19,6 +21,8 @@ import no.nav.foreldrepenger.selvbetjening.http.UnprotectedRestController;
 
 @UnprotectedRestController(UttakController.UTTAK)
 public class UttakController {
+
+    private static final Logger LOG = LoggerFactory.getLogger(UttakController.class);
 
     private final StønadskontoRegelOrkestrering kontoCalculator;
 
@@ -42,6 +46,7 @@ public class UttakController {
             @RequestParam(name = "startdatoUttak", required = false) LocalDate startdatoUttak,
             @RequestParam(name = "dekningsgrad", required = true) Dekningsgrad dekningsgrad) {
 
+        LOG.info("Beregner konti");
         var b = new BeregnKontoerGrunnlag.Builder()
                 .medAntallBarn(antallBarn)
                 .medDekningsgrad(dekningsgrad)
