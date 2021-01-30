@@ -4,7 +4,6 @@ import static no.nav.foreldrepenger.regler.uttak.konfig.StandardKonfigurasjon.S�
 
 import java.time.LocalDate;
 import java.util.Map;
-import java.util.Optional;
 
 import javax.inject.Inject;
 
@@ -31,13 +30,13 @@ public class UttakController {
 
     private static final Logger LOG = LoggerFactory.getLogger(UttakController.class);
 
-    private final StønadskontoRegelOrkestrering kontoCalculator;
+    private final StønadskontoRegelOrkestrering kalkulator;
 
     static final String UTTAK = "/rest/uttak";
 
     @Inject
     public UttakController() {
-        this.kontoCalculator = new StønadskontoRegelOrkestrering();
+        this.kalkulator = new StønadskontoRegelOrkestrering();
     }
 
     @GetMapping
@@ -60,15 +59,12 @@ public class UttakController {
                 .morAleneomsorg(morHarAleneomsorg)
                 .farAleneomsorg(farHarAleneomsorg)
                 .farRett(farHarRett)
-                .morRett(morHarRett);
-        Optional.ofNullable(fødselsdato)
-                .ifPresent(d -> b.medFødselsdato(d));
-        Optional.ofNullable(termindato)
-                .ifPresent(d -> b.medTermindato(d));
-        Optional.ofNullable(omsorgsovertakelseDato)
-                .ifPresent(d -> b.medOmsorgsovertakelseDato(d));
-        return kontoCalculator.beregnKontoer(b.build(), SØKNADSDIALOG).getStønadskontoer();
-
+                .morRett(morHarRett)
+                .medFødselsdato(fødselsdato)
+                .medOmsorgsovertakelseDato(omsorgsovertakelseDato)
+                .medTermindato(termindato)
+                .build();
+        return kalkulator.beregnKontoer(b, SØKNADSDIALOG).getStønadskontoer();
     }
 
     private Dekningsgrad dekningsgrad(String dekningsgrad) {
@@ -81,6 +77,6 @@ public class UttakController {
 
     @Override
     public String toString() {
-        return getClass().getSimpleName() + " [kontoCalculator=" + kontoCalculator + "]";
+        return getClass().getSimpleName() + " [kalkulator=" + kalkulator + "]";
     }
 }
