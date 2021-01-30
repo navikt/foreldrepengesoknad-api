@@ -22,6 +22,12 @@ public class DateUtilTest {
     }
 
     @Test
+    public void date() {
+        var d = DateTimeFormat.forPattern("yyyyMMdd").parseLocalDate("20201130");
+        System.out.println(d);
+    }
+
+    @Test
     public void testEtterLigningsårAvsluttet() {
         assertTrue(erNyopprettet(ETTER, LocalDate.of(LocalDate.now().minusYears(3).getYear(), Month.JUNE, 24)));
         assertFalse(erNyopprettet(ETTER, LocalDate.of(LocalDate.now().minusYears(4).getYear(), Month.JUNE, 24)));

@@ -51,12 +51,12 @@ public class UttakController {
             @DateTimeFormat(pattern = FMT) @RequestParam(name = "termindato", required = false) LocalDate termindato,
             @DateTimeFormat(pattern = FMT) @RequestParam(name = "omsorgsovertakelseDato", required = false) LocalDate omsorgsovertakelseDato,
             @DateTimeFormat(pattern = FMT) @RequestParam(name = "startdatoUttak", required = false) LocalDate startdatoUttak,
-            @DateTimeFormat(pattern = FMT) @RequestParam(name = "dekningsgrad", required = true) Dekningsgrad dekningsgrad) {
+            @DateTimeFormat(pattern = FMT) @RequestParam(name = "dekningsgrad", required = true) String dekningsgrad) {
 
         LOG.info("Beregner konti");
         var b = new BeregnKontoerGrunnlag.Builder()
                 .medAntallBarn(antallBarn)
-                .medDekningsgrad(dekningsgrad)
+                .medDekningsgrad(Dekningsgrad.valueOf(dekningsgrad))
                 .morAleneomsorg(morHarAleneomsorg)
                 .farAleneomsorg(farHarAleneomsorg)
                 .farRett(farHarRett)
