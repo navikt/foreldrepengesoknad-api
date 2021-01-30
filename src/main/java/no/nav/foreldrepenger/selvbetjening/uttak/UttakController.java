@@ -1,6 +1,7 @@
 package no.nav.foreldrepenger.selvbetjening.uttak;
 
-import static no.nav.foreldrepenger.regler.uttak.konfig.StandardKonfigurasjon.SØKNADSDIALOG;import static java.text.DateFormat.
+import static no.nav.foreldrepenger.regler.uttak.konfig.StandardKonfigurasjon.SØKNADSDIALOG;
+
 import java.time.LocalDate;
 import java.util.Map;
 import java.util.Optional;
