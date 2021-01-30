@@ -34,6 +34,12 @@ class VirusScanConnection extends AbstractRestConnection {
         return config.isEnabled();
     }
 
+    @Override
+    public String ping() {
+        scan(new byte[0], "ping");
+        return "OK";
+    }
+
     public void scan(byte[] bytes, String name) {
         if (isEnabled()) {
             if (bytes != null) {
