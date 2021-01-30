@@ -44,6 +44,7 @@ server:
       whitelabel:
          enabled: false
 spring:
+   cloud.discovery.enabled: false
    cache:
       cache-names: aktør
       caffeine:
