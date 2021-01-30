@@ -76,4 +76,9 @@ public class GCPMellomlagring extends AbstractMellomlagringTjeneste {
     public URI pingURI() {
         return STORAGE;
     }
+
+    @Override
+    public String name() {
+        return ("GCPMellomlagring");
+    }
 }
