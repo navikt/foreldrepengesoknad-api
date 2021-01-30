@@ -11,15 +11,19 @@ import javax.inject.Inject;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.RestController;
 
 import no.nav.foreldrepenger.regler.uttak.beregnkontoer.StønadskontoRegelOrkestrering;
 import no.nav.foreldrepenger.regler.uttak.beregnkontoer.grunnlag.BeregnKontoerGrunnlag;
 import no.nav.foreldrepenger.regler.uttak.beregnkontoer.grunnlag.Dekningsgrad;
 import no.nav.foreldrepenger.regler.uttak.felles.grunnlag.Stønadskontotype;
-import no.nav.foreldrepenger.selvbetjening.http.UnprotectedRestController;
+import no.nav.security.token.support.core.api.Unprotected;
 
-@UnprotectedRestController(UttakController.UTTAK)
+@RestController
+@RequestMapping(UttakController.UTTAK)
+@Unprotected
 public class UttakController {
 
     private static final Logger LOG = LoggerFactory.getLogger(UttakController.class);
