@@ -13,4 +13,4 @@ spring:
     vault:
       enabled: false
 virus:
-   uri: http://clamav.clamav.svc.cluster.local
+   uri: http://clamav.clamav/scan

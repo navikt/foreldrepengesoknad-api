@@ -1,4 +1,5 @@
 {
+  "clam": "clamav.clamav",
   "fpbucket": "foreldrepengesoknad-prod",
   "tmpbucket": "mellomlagring-prod",
   "ingresses": ["https://foreldrepengesoknad-api.prod-gcp.nais.io","https://foreldrepengesoknad-api.nav.no"],

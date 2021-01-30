@@ -17,8 +17,8 @@ spec:
   accessPolicy:
      outbound:
        rules:
-        application: clamav
-        namespace: clamav
+        - application: clamav
+          namespace: clamav
        external:
          - host: storage.googleapis.com
          - host: oauth2.googleapis.com
