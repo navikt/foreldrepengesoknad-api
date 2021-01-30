@@ -25,7 +25,7 @@ public abstract class AbstractPingableHealthIndicator implements HealthIndicator
             return up();
         } catch (Exception e) {
             return Health.down()
-                    .withDetail(pingable.getClass().getSimpleName(), pingable.pingURI())
+                    .withDetail(pingable.name(), pingable.pingURI())
                     .withException(e)
                     .build();
         }
@@ -33,7 +33,7 @@ public abstract class AbstractPingableHealthIndicator implements HealthIndicator
 
     private Health up() {
         return Health.up()
-                .withDetails(Map.of(pingable.getClass().getSimpleName(), pingable.pingURI(), "enabled", pingable.isEnabled()))
+                .withDetails(Map.of(pingable.name(), pingable.pingURI(), "enabled", pingable.isEnabled()))
                 .build();
     }
 
