@@ -56,7 +56,7 @@ public class UttakController {
         LOG.info("Beregner konti");
         var b = new BeregnKontoerGrunnlag.Builder()
                 .medAntallBarn(antallBarn)
-                .medDekningsgrad(Dekningsgrad.valueOf(dekningsgrad))
+                .medDekningsgrad(dekningsgrad(dekningsgrad))
                 .morAleneomsorg(morHarAleneomsorg)
                 .farAleneomsorg(farHarAleneomsorg)
                 .farRett(farHarRett)
@@ -69,6 +69,14 @@ public class UttakController {
                 .ifPresent(d -> b.medOmsorgsovertakelseDato(d));
         return kontoCalculator.beregnKontoer(b.build(), SØKNADSDIALOG).getStønadskontoer();
 
+    }
+
+    private Dekningsgrad dekningsgrad(String dekningsgrad) {
+        return switch (dekningsgrad) {
+            case "100" -> Dekningsgrad.DEKNINGSGRAD_100;
+            case "80" -> Dekningsgrad.DEKNINGSGRAD_80;
+            default -> throw new IllegalArgumentException(dekningsgrad);
+        };
     }
 
     @Override
