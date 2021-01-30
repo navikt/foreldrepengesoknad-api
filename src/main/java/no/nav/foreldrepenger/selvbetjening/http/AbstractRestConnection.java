@@ -63,7 +63,7 @@ public abstract class AbstractRestConnection implements PingEndpointAware, Toggl
 
     @Override
     public String name() {
-        return pingURI().getHost();
+        return getClass().getSimpleName();
     }
 
     @Override
