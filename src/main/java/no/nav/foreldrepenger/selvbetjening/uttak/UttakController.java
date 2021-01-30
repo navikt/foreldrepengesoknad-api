@@ -26,6 +26,8 @@ import no.nav.security.token.support.core.api.Unprotected;
 @Unprotected
 public class UttakController {
 
+    private static final String FMT = "yyyyMMdd";
+
     private static final Logger LOG = LoggerFactory.getLogger(UttakController.class);
 
     private final StønadskontoRegelOrkestrering kontoCalculator;
@@ -44,11 +46,11 @@ public class UttakController {
             @RequestParam(name = "farHarRett", required = true) boolean farHarRett,
             @RequestParam(name = "morHarAleneomsorg", required = false, defaultValue = "false") boolean morHarAleneomsorg,
             @RequestParam(name = "farHarAleneomsorg", required = false, defaultValue = "false") boolean farHarAleneomsorg,
-            @DateTimeFormat(pattern = "YYYYMMdd") @RequestParam(name = "fødselsdato", required = false) LocalDate fødselsdato,
-            @RequestParam(name = "termindato", required = false) LocalDate termindato,
-            @RequestParam(name = "omsorgsovertakelseDato", required = false) LocalDate omsorgsovertakelseDato,
-            @RequestParam(name = "startdatoUttak", required = false) LocalDate startdatoUttak,
-            @RequestParam(name = "dekningsgrad", required = true) Dekningsgrad dekningsgrad) {
+            @DateTimeFormat(pattern = FMT) @RequestParam(name = "fødselsdato", required = false) LocalDate fødselsdato,
+            @DateTimeFormat(pattern = FMT) @RequestParam(name = "termindato", required = false) LocalDate termindato,
+            @DateTimeFormat(pattern = FMT) @RequestParam(name = "omsorgsovertakelseDato", required = false) LocalDate omsorgsovertakelseDato,
+            @DateTimeFormat(pattern = FMT) @RequestParam(name = "startdatoUttak", required = false) LocalDate startdatoUttak,
+            @DateTimeFormat(pattern = FMT) @RequestParam(name = "dekningsgrad", required = true) Dekningsgrad dekningsgrad) {
 
         LOG.info("Beregner konti");
         var b = new BeregnKontoerGrunnlag.Builder()
