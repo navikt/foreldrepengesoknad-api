@@ -68,6 +68,11 @@
     </dependencyManagement>
     <dependencies>
         <dependency>
+            <groupId>no.nav.foreldrepenger</groupId>
+            <artifactId>uttak-regler</artifactId>
+            <version>2.1-20200121124755-f51f7d3</version>
+        </dependency>
+        <dependency>
             <groupId>org.springframework.boot</groupId>
             <artifactId>spring-boot-properties-migrator</artifactId>
             <scope>runtime</scope>
