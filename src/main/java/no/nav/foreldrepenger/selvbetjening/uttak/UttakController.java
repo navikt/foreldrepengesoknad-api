@@ -8,7 +8,6 @@ import java.util.Optional;
 
 import javax.inject.Inject;
 
-import org.springframework.lang.NonNull;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 
@@ -31,20 +30,23 @@ public class UttakController {
     }
 
     @GetMapping
-    public Map<Stønadskontotype, Integer> personinfo(@NonNull @RequestParam("antallBarn") int antallBarn,
-            @NonNull @RequestParam("morHarRett") boolean morHarRett,
-            @NonNull @RequestParam("farHarRett") boolean farHarRett,
-            @RequestParam(name = "morHarAleneomsorg", defaultValue = "false") boolean morHarAleneomsorg,
-            @RequestParam(name = "farHarAleneomsorg", defaultValue = "false") boolean farHarAleneomsorg,
-            @NonNull @RequestParam("fødselsdato") LocalDate fødselsdato,
-            @RequestParam("termindato") LocalDate termindato,
-            @RequestParam("omsorgsovertakelseDato") LocalDate omsorgsovertakelseDato,
-            @RequestParam("startdatoUttak") LocalDate startdatoUttak,
-            @NonNull @RequestParam("dekningsgrad") Dekningsgrad dekningsgrad) {
+    public Map<Stønadskontotype, Integer> kontoer(
+            @RequestParam(name = "antallBarn", required = true, defaultValue = "1") int antallBarn,
+            @RequestParam(name = "morHarRett", required = true) boolean morHarRett,
+            @RequestParam(name = "farHarRett", required = true) boolean farHarRett,
+            @RequestParam(name = "morHarAleneomsorg", required = false, defaultValue = "false") boolean morHarAleneomsorg,
+            @RequestParam(name = "farHarAleneomsorg", required = false, defaultValue = "false") boolean farHarAleneomsorg,
+            @RequestParam(name = "fødselsdato", required = false) LocalDate fødselsdato,
+            @RequestParam(name = "termindato", required = false) LocalDate termindato,
+            @RequestParam(name = "omsorgsovertakelseDato", required = false) LocalDate omsorgsovertakelseDato,
+            @RequestParam(name = "startdatoUttak", required = false) LocalDate startdatoUttak,
+            @RequestParam(name = "dekningsgrad", required = true) Dekningsgrad dekningsgrad) {
 
         var b = new BeregnKontoerGrunnlag.Builder()
                 .medAntallBarn(antallBarn)
                 .medDekningsgrad(dekningsgrad)
+                .morAleneomsorg(morHarAleneomsorg)
+                .farAleneomsorg(farHarAleneomsorg)
                 .farRett(farHarRett)
                 .morRett(morHarRett);
         Optional.ofNullable(fødselsdato)
