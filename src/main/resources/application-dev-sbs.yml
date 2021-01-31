@@ -2,6 +2,7 @@ allowed:
   origins:
     https://engangsstonad.nais.oera-q.local,
     https://engangsstonad-q.nav.no,
+    https://foreldepengeplanlegger-q.nav.no,
     https://foreldrepengesoknad.nais.oera-q.local,
     https://foreldrepengesoknad-q.nav.no,
     https://foreldrepengeoversikt.nais.oera-q.local,

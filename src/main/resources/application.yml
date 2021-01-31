@@ -2,6 +2,7 @@ allowed:
   origins:
    https://engangsstonad.nav.no,
    https://foreldrepengesoknad.nav.no,
+   https://foreldrepengeplanlegger.nav.no,
    https://svangerskapspengesoknad.nav.no,
    https://foreldrepenger.nav.no
 no.nav:
