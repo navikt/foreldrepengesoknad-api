@@ -32,7 +32,7 @@ public class UttakController {
 
     private final StønadskontoRegelOrkestrering kalkulator;
 
-    static final String UTTAK = "/rest/uttak";
+    static final String UTTAK = "/konto";
 
     @Inject
     public UttakController() {
