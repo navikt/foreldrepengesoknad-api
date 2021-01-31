@@ -39,16 +39,15 @@ public class UttakController {
 
     @GetMapping
     public Map<String, Map<Stønadskontotype, Integer>> kontoer(
-            @RequestParam(name = "antallBarn", required = true, defaultValue = "1") int antallBarn,
-            @RequestParam(name = "morHarRett", required = true) boolean morHarRett,
-            @RequestParam(name = "farHarRett", required = true) boolean farHarRett,
+            @RequestParam("antallBarn") int antallBarn,
+            @RequestParam("morHarRett") boolean morHarRett,
+            @RequestParam("farHarRett") boolean farHarRett,
             @RequestParam(name = "morHarAleneomsorg", required = false, defaultValue = "false") boolean morHarAleneomsorg,
             @RequestParam(name = "farHarAleneomsorg", required = false, defaultValue = "false") boolean farHarAleneomsorg,
             @DateTimeFormat(pattern = FMT) @RequestParam(name = "fødselsdato", required = false) LocalDate fødselsdato,
             @DateTimeFormat(pattern = FMT) @RequestParam(name = "termindato", required = false) LocalDate termindato,
             @DateTimeFormat(pattern = FMT) @RequestParam(name = "omsorgsovertakelseDato", required = false) LocalDate omsorgsovertakelseDato,
-            @DateTimeFormat(pattern = FMT) @RequestParam(name = "startdatoUttak", required = false) LocalDate startdatoUttak,
-            @DateTimeFormat(pattern = FMT) @RequestParam(name = "dekningsgrad", required = true) String dekningsgrad) {
+            @DateTimeFormat(pattern = FMT) @RequestParam("dekningsgrad") String dekningsgrad) {
 
         return Map.of("kontoer", kalkulator.beregnKontoer(new BeregnKontoerGrunnlag.Builder()
                 .medAntallBarn(antallBarn)
