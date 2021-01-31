@@ -40,7 +40,7 @@ public class UttakController {
     }
 
     @GetMapping
-    public Map<Stønadskontotype, Integer> kontoer(
+    public Map<String, Map<Stønadskontotype, Integer>> kontoer(
             @RequestParam(name = "antallBarn", required = true, defaultValue = "1") int antallBarn,
             @RequestParam(name = "morHarRett", required = true) boolean morHarRett,
             @RequestParam(name = "farHarRett", required = true) boolean farHarRett,
@@ -69,7 +69,7 @@ public class UttakController {
                 .build();
         var konti = kalkulator.beregnKontoer(b, SØKNADSDIALOG).getStønadskontoer();
         LOG.info("Beregnet konti {}", konti);
-        return konti;
+        return Map.of("kontoer", konti);
     }
 
     private Dekningsgrad dekningsgrad(String dekningsgrad) {
