@@ -52,7 +52,9 @@ public class UttakController {
             @DateTimeFormat(pattern = FMT) @RequestParam(name = "startdatoUttak", required = false) LocalDate startdatoUttak,
             @DateTimeFormat(pattern = FMT) @RequestParam(name = "dekningsgrad", required = true) String dekningsgrad) {
 
-        LOG.info("Beregner konti {},{},{},{},{},{},{}", antallBarn, dekningsgrad(dekningsgrad), morHarAleneomsorg, farHarAleneomsorg, morHarRett,
+        LOG.info(
+                "Beregner konti barn={},dekning={},morHarAlene={},farHarAlene={},morHarRett={},farHarRett={},fødselsdato={},termindato={},omsorgsdato={}",
+                antallBarn, dekningsgrad(dekningsgrad), morHarAleneomsorg, farHarAleneomsorg, morHarRett,
                 fødselsdato, termindato, omsorgsovertakelseDato);
         var b = new BeregnKontoerGrunnlag.Builder()
                 .medAntallBarn(antallBarn)
