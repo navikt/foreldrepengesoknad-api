@@ -64,7 +64,9 @@ public class UttakController {
                 .medOmsorgsovertakelseDato(omsorgsovertakelseDato)
                 .medTermindato(termindato)
                 .build();
-        return kalkulator.beregnKontoer(b, SØKNADSDIALOG).getStønadskontoer();
+        var konti = kalkulator.beregnKontoer(b, SØKNADSDIALOG).getStønadskontoer();
+        LOG.info("Beregnet konti {}", konti);
+        return konti;
     }
 
     private Dekningsgrad dekningsgrad(String dekningsgrad) {
