@@ -2,7 +2,7 @@
   "clam": "clamav.clamav",
   "fpbucket": "foreldrepengesoknad-prod",
   "tmpbucket": "mellomlagring-prod",
-  "ingresses": ["https://foreldrepengesoknad-api.intern.nav.no,"https://foreldrepengesoknad-api.nav.no"],
+  "ingresses": ["https://foreldrepengesoknad-api.intern.nav.no","https://foreldrepengesoknad-api.nav.no"],
   "gw" : "api-gw.oera.no",
   "gcp" : "true"
 }
