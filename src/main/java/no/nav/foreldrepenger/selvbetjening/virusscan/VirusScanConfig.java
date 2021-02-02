@@ -11,7 +11,7 @@ import no.nav.foreldrepenger.selvbetjening.http.AbstractConfig;
 @ConfigurationProperties(prefix = "virus")
 public class VirusScanConfig extends AbstractConfig {
 
-    private static final String DEFAULT_CLAM_URI = "http://clamav.nais/scan";
+    private static final String DEFAULT_CLAM_URI = "http://clamav.nais.svc.nais.local/scan";
 
     @ConstructorBinding
     public VirusScanConfig(@DefaultValue(DEFAULT_CLAM_URI) URI uri, @DefaultValue("true") boolean enabled) {
