@@ -100,7 +100,7 @@ public class KryptertMellomlagring {
 
     public void lagreKryptertKvittering(String type, String kvittering) {
         LOG.trace("Lagrer kryptert kvittering i {}", katalog());
-        mellomlagring.lagre(KORTTIDS, katalog(), type, krypto.encrypt(kvittering));
+        mellomlagring.lagre(LANGTIDS, katalog(), type, krypto.encrypt(kvittering));
         LOG.trace("Lagret kryptert kvittering i katalog {}", katalog());
     }
 
