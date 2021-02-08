@@ -24,7 +24,7 @@ jobs:
           echo 'EOF' >> $GITHUB_ENV
                 
       - name: Hent Maven cache
-        uses: actions/cache@v2
+        uses: actions/cache@v2.1.4
         with:
           path: ~/.m2/repository
           key: ${{ runner.os }}-maven-${{ hashFiles('**/pom.xml') }}
