@@ -7,6 +7,7 @@ allowed:
    https://foreldrepengeplanlegger.dev.nav.no,
    https://engangsstonadny.dev.nav.no,
    https://foreldrepengesoknad.dev.nav.no,
+   https://foreldrepengesoknad.ekstern.dev.nav.no,
    https://svangerskapspengesoknad.dev.nav.no,
    https://foreldrepenger.dev.nav.no
 spring:
