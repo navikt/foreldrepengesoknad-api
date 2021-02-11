@@ -45,7 +45,7 @@ jobs:
         run: |
           docker build --tag ${IMAGE} --tag ${IMAGE_BASE}:latest .
           echo  ${GITHUB_TOKEN} | docker login docker.pkg.github.com -u ${GITHUB_REPOSITORY} --password-stdin
-          docker push ${IMAGE_BASE}  
+          docker push ${IMAGE_BASE}:${TAG}  
           
       - name: Lukk gamle bygg-issues
         uses: actions/github-script@v3
