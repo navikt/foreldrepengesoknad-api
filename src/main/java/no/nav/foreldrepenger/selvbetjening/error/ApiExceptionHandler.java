@@ -130,7 +130,7 @@ public class ApiExceptionHandler extends ResponseEntityExceptionHandler implemen
             Object... messages) {
         ApiError apiError = apiErrorFra(status, e, messages);
 
-        if (tokenUtil.erAutentisert()) {
+        if (tokenUtil.erAutentisert() && !tokenUtil.erUtløpt()) {
             LOG.warn("[{} ({})] {} {} ({})", req.getContextPath(), subject(), status, apiError.getMessages(),
                     status.value(), e);
         } else {
