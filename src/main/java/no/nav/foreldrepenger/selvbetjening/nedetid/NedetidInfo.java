@@ -1,5 +1,12 @@
 package no.nav.foreldrepenger.selvbetjening.nedetid;
 
-public record NedetidInfo(String fra, String til, String melding) {
+import lombok.Data;
+
+@Data
+public class NedetidInfo {
+
+    private final String fra;
+    private final String til;
+    private final String msg;
 
 }
