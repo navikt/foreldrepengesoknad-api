@@ -44,7 +44,7 @@ class VirusScanConnection extends AbstractRestConnection {
         if (isEnabled()) {
             if (bytes != null) {
                 try {
-                    LOG.info("Scanner {}", name);
+                    LOG.trace("Scanner {}", name);
                     var scanResults = putForObject(config.getUri(), bytes, ScanResult[].class);
                     if (scanResults.length != 1) {
                         LOG.warn("Uventet respons med lengde {}, forventet lengde er 1", scanResults.length);
@@ -53,20 +53,20 @@ class VirusScanConnection extends AbstractRestConnection {
                     var scanResult = scanResults[0];
                     LOG.info("Fikk scan result {}", scanResult);
                     if (OK.equals(scanResult.getResult())) {
-                        LOG.info("Ingen virus i {}", name);
+                        LOG.trace("Ingen virus i {}", name);
                         return;
                     }
-                    LOG.warn("Fant virus i {}, status {}", name, scanResult.getResult());
+                    LOG.warn("Fant virus!, status {}", scanResult.getResult());
                     throw new AttachmentVirusException(name);
                 } catch (Exception e) {
-                    LOG.warn("Kunne ikke scanne {}", name, e);
+                    LOG.warn("Kunne ikke scanne", e);
                     return;
                 }
             }
             LOG.info("Ingen scanning av null bytes", bytes);
             return;
         }
-        LOG.warn("Scanning av {} er deaktivert", name);
+        LOG.warn("Scanning er deaktivert");
     }
 
     @Override
