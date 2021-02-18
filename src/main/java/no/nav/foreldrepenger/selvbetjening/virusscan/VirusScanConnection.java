@@ -51,7 +51,7 @@ class VirusScanConnection extends AbstractRestConnection {
                         return;
                     }
                     var scanResult = scanResults[0];
-                    LOG.info("Fikk scan result {}", scanResult);
+                    LOG.trace("Fikk scan result {}", scanResult);
                     if (OK.equals(scanResult.getResult())) {
                         LOG.trace("Ingen virus i {}", name);
                         return;
