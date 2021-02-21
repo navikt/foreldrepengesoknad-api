@@ -41,7 +41,7 @@ public class IdMismatchFilterBean extends GenericFilterBean {
     private void checkIds(ServletRequest request) {
         String fnr = HttpServletRequest.class.cast(request).getHeader(FNR_HEADER_VALUE);
         if ((fnr != null) && (tokenUtil.getSubject() != null) && !fnr.equals(tokenUtil.getSubject())) {
-            LOG.warn("ID Mismatch mellom {} og {}", fnr, tokenUtil.getSubject());
+            LOG.warn("ID Mismatch mellom {} og {}", maskFnr(fnr), maskFnr(tokenUtil.getSubject()));
             throw new IdMismatchException(maskFnr(fnr), maskFnr(tokenUtil.getSubject()));
         }
     }
