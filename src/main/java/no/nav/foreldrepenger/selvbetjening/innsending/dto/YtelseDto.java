@@ -161,9 +161,6 @@ public class YtelseDto {
         }
 
         private String type(Barn barn, String situasjon) {
-            if (barn.adopsjonsdato != null) {
-                return "adopsjon";
-            }
             if (isEmpty(situasjon) || situasjon.equals("fødsel")) {
                 return barn.erBarnetFødt ? "fødsel" : "termin";
             }
