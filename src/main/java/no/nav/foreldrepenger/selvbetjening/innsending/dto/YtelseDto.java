@@ -43,7 +43,7 @@ public class YtelseDto {
 
     public YtelseDto(Søknad søknad) {
         this.type = søknad.getType();
-        if (!søknad.getBarn().fødselsdatoer.isEmpty()) {
+        if (søknad.getBarn().fødselsdatoer != null && !søknad.getBarn().fødselsdatoer.isEmpty()) {
             søknad.getBarn().erBarnetFødt = true;
         }
         if (søknad instanceof Foreldrepengesøknad f) {
