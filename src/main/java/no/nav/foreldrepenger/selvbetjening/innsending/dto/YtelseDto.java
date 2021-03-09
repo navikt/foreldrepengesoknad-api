@@ -44,21 +44,21 @@ public class YtelseDto {
     public YtelseDto(Søknad søknad) {
         this.type = søknad.getType();
 
-        if (søknad instanceof Foreldrepengesøknad) {
-            Foreldrepengesøknad foreldrepengesøknad = (Foreldrepengesøknad) søknad;
+        if (søknad instanceof Foreldrepengesøknad f) {
             this.relasjonTilBarn = new RelasjonTilBarnDto(søknad.getBarn(), søknad.getSituasjon());
-            this.dekningsgrad = "GRAD" + foreldrepengesøknad.getDekningsgrad();
-            this.fordeling = new FordelingDto(foreldrepengesøknad.getUttaksplan(),
-                    foreldrepengesøknad.getAnnenForelder().getErInformertOmSøknaden());
-            this.rettigheter = new RettigheterDto(foreldrepengesøknad);
+            this.dekningsgrad = "GRAD" + f.getDekningsgrad();
+            this.fordeling = new FordelingDto(f.getUttaksplan(), f.getAnnenForelder().getErInformertOmSøknaden());
+            this.rettigheter = new RettigheterDto(f);
         }
 
-        if (søknad instanceof Engangsstønad) {
+        if (søknad instanceof Engangsstønad e) {
+            if (e.getBarn().adopsjonsdato != null) {
+                e.getBarn().erBarnetFødt = true;
+            }
             this.relasjonTilBarn = new RelasjonTilBarnDto(søknad.getBarn(), søknad.getSituasjon());
         }
 
-        if (søknad instanceof Svangerskapspengesøknad) {
-            Svangerskapspengesøknad svangerskapspengesøknad = (Svangerskapspengesøknad) søknad;
+        if (søknad instanceof Svangerskapspengesøknad svangerskapspengesøknad) {
             this.termindato = svangerskapspengesøknad.getBarn().termindato;
             if (!CollectionUtils.isEmpty(svangerskapspengesøknad.getBarn().fødselsdatoer)) {
                 this.fødselsdato = svangerskapspengesøknad.getBarn().fødselsdatoer.get(0);
@@ -161,12 +161,11 @@ public class YtelseDto {
             this.ektefellesBarn = barn.adopsjonAvEktefellesBarn;
         }
 
-        private String type(Boolean erBarnetFødt, String situasjon) {
+        private String type(boolean erBarnetFødt, String situasjon) {
             if (isEmpty(situasjon) || situasjon.equals("fødsel")) {
                 return erBarnetFødt ? "fødsel" : "termin";
-            } else {
-                return situasjon;
             }
+            return situasjon;
         }
 
         private LocalDate omsorgsovertakelsesdato(Barn barn) {
