@@ -43,7 +43,9 @@ public class YtelseDto {
 
     public YtelseDto(Søknad søknad) {
         this.type = søknad.getType();
-
+        if (!søknad.getBarn().fødselsdatoer.isEmpty()) {
+            søknad.getBarn().erBarnetFødt = true;
+        }
         if (søknad instanceof Foreldrepengesøknad f) {
             this.relasjonTilBarn = new RelasjonTilBarnDto(søknad.getBarn(), søknad.getSituasjon());
             this.dekningsgrad = "GRAD" + f.getDekningsgrad();
@@ -52,9 +54,6 @@ public class YtelseDto {
         }
 
         if (søknad instanceof Engangsstønad e) {
-            if (e.getBarn().adopsjonsdato != null) {
-                e.getBarn().erBarnetFødt = true;
-            }
             this.relasjonTilBarn = new RelasjonTilBarnDto(søknad.getBarn(), søknad.getSituasjon());
         }
 
@@ -150,7 +149,7 @@ public class YtelseDto {
         public Boolean ektefellesBarn;
 
         public RelasjonTilBarnDto(Barn barn, String situasjon) {
-            this.type = type(barn.erBarnetFødt, situasjon);
+            this.type = type(barn, situasjon);
             this.antallBarn = barn.antallBarn;
             this.vedlegg = barn.getAlleVedlegg();
             this.terminDato = barn.termindato;
@@ -161,9 +160,12 @@ public class YtelseDto {
             this.ektefellesBarn = barn.adopsjonAvEktefellesBarn;
         }
 
-        private String type(boolean erBarnetFødt, String situasjon) {
+        private String type(Barn barn, String situasjon) {
+            if (barn.adopsjonsdato != null) {
+                return "adopsjon";
+            }
             if (isEmpty(situasjon) || situasjon.equals("fødsel")) {
-                return erBarnetFødt ? "fødsel" : "termin";
+                return barn.erBarnetFødt ? "fødsel" : "termin";
             }
             return situasjon;
         }
@@ -171,11 +173,11 @@ public class YtelseDto {
         private LocalDate omsorgsovertakelsesdato(Barn barn) {
             if (barn.adopsjonsdato != null) {
                 return barn.adopsjonsdato;
-            } else if (barn.foreldreansvarsdato != null) {
-                return barn.foreldreansvarsdato;
-            } else {
-                return null;
             }
+            if (barn.foreldreansvarsdato != null) {
+                return barn.foreldreansvarsdato;
+            }
+            return null;
         }
     }
 
