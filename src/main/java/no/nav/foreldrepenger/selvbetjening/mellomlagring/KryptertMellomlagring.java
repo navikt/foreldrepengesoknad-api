@@ -62,6 +62,8 @@ public class KryptertMellomlagring {
         if (vedlegg.isPresent()) {
             LOG.trace("Lest kryptert vedlegg");
             LOG.info(CONFIDENTIAL, "Dekryptert vedlegg {}", vedlegg.get());
+        } else {
+            LOG.trace("Fant intet kryptert vedlegg");
         }
         return vedlegg;
     }
