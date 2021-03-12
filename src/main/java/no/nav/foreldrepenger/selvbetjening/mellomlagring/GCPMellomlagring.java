@@ -54,7 +54,7 @@ public class GCPMellomlagring extends AbstractMellomlagringTjeneste {
                 LOG.trace("Katalog {} ikke funnet, ({})", katalog, e);
                 return Optional.empty();
             }
-            LOG.warn("Katalog {} ikke funnet, ({})", katalog, e.getCode());
+            LOG.warn("Katalog {} ikke funnet, ({})", katalog, e.getCode(), e);
             throw e;
         }
     }
