@@ -25,7 +25,7 @@ public class Barn {
     public List<String> adopsjonsvedtak = new ArrayList<>();
     public LocalDate ankomstdato;
     public Boolean adopsjonAvEktefellesBarn;
-
+    public Boolean søkerAdopsjonAlene;
     public LocalDate foreldreansvarsdato;
     public List<String> omsorgsovertakelse = new ArrayList<>();
 
@@ -42,13 +42,12 @@ public class Barn {
 
     @Override
     public String toString() {
-        return getClass().getSimpleName() + " [erBarnetFødt=" + erBarnetFødt + ", fødselsdatoer=" + fødselsdatoer
-                + ", antallBarn=" + antallBarn
-                + ", terminbekreftelse=" + terminbekreftelse + ", termindato=" + termindato + ", terminbekreftelseDato="
-                + terminbekreftelseDato + ", adopsjonsdato=" + adopsjonsdato + ", adopsjonsvedtak=" + adopsjonsvedtak
-                + ", ankomstdato=" + ankomstdato + ", adopsjonAvEktefellesBarn=" + adopsjonAvEktefellesBarn
-                + ", foreldreansvarsdato=" + foreldreansvarsdato + ", omsorgsovertakelse=" + omsorgsovertakelse
-                + ", dokumentasjonAvAleneomsorg=" + dokumentasjonAvAleneomsorg + "]";
+        return getClass().getSimpleName() + " [erBarnetFødt=" + erBarnetFødt + ", fødselsdatoer=" + fødselsdatoer + ", antallBarn=" + antallBarn
+                + ", terminbekreftelse="
+                + terminbekreftelse + ", termindato=" + termindato + ", terminbekreftelseDato=" + terminbekreftelseDato + ", adopsjonsdato="
+                + adopsjonsdato + ", adopsjonsvedtak=" + adopsjonsvedtak + ", ankomstdato=" + ankomstdato + ", adopsjonAvEktefellesBarn="
+                + adopsjonAvEktefellesBarn + ", søkerAdopsjonAlene=" + søkerAdopsjonAlene + ", foreldreansvarsdato=" + foreldreansvarsdato
+                + ", omsorgsovertakelse=" + omsorgsovertakelse + ", dokumentasjonAvAleneomsorg=" + dokumentasjonAvAleneomsorg + "]";
     }
 
 }

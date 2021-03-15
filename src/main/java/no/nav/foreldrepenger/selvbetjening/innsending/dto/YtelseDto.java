@@ -147,6 +147,7 @@ public class YtelseDto {
         public LocalDate omsorgsovertakelsesdato;
         public LocalDate ankomstDato;
         public Boolean ektefellesBarn;
+        public Boolean søkerAdopsjonAlene;
 
         public RelasjonTilBarnDto(Barn barn, String situasjon) {
             this.type = type(barn, situasjon);
@@ -158,6 +159,7 @@ public class YtelseDto {
             this.omsorgsovertakelsesdato = omsorgsovertakelsesdato(barn);
             this.ankomstDato = barn.ankomstdato;
             this.ektefellesBarn = barn.adopsjonAvEktefellesBarn;
+            this.søkerAdopsjonAlene = barn.søkerAdopsjonAlene;
         }
 
         private String type(Barn barn, String situasjon) {
