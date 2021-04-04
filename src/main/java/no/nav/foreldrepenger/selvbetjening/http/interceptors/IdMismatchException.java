@@ -1,4 +1,4 @@
-package no.nav.foreldrepenger.selvbetjening.error;
+package no.nav.foreldrepenger.selvbetjening.http.interceptors;
 
 public class IdMismatchException extends RuntimeException {
 

@@ -52,8 +52,8 @@ public class FordelingDto {
             }
             this.ønskerFlerbarnsdager = u.ønskerFlerbarnsdager;
             this.uttaksperiodeType = u.getKonto();
-            this.fom = u.getTidsperiode().getFom();
-            this.tom = u.getTidsperiode().getTom();
+            this.fom = u.getTidsperiode().fom();
+            this.tom = u.getTidsperiode().tom();
             this.samtidigUttakProsent = u.getSamtidigUttakProsent();
             this.årsak = u.getÅrsak();
             this.virksomhetsnummer = u.getOrgnumre();

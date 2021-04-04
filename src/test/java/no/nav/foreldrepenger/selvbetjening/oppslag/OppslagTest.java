@@ -34,7 +34,7 @@ import no.nav.security.token.support.spring.SpringTokenValidationContextHolder;
 @ContextConfiguration(classes = { NotFoundException.class, TokenUtil.class,
         SpringTokenValidationContextHolder.class })
 @RestClientTest
-public class OppslagTest {
+class OppslagTest {
 
     @Mock
     TokenUtil tokenHandler;
@@ -54,14 +54,14 @@ public class OppslagTest {
     private OppslagTjeneste oppslag;
 
     @BeforeEach
-    public void restOperations() {
+    void restOperations() {
         oppslagConnection = new OppslagConnection(oppslagBuilder.build(), oppslagConfig);
         innsynConnection = new InnsynConnection(null, innsynConfig);
         oppslag = new OppslagTjeneste(oppslagConnection, innsynConnection);
     }
 
     @Test
-    public void ping() {
+    void ping() {
         server
                 .expect(ExpectedCount.once(), requestTo(oppslagConfig.pingURI()))
                 .andExpect(method(HttpMethod.GET))

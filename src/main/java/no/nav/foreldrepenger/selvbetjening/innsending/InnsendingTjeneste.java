@@ -54,7 +54,7 @@ public class InnsendingTjeneste implements Innsending {
         LOG.info("Ettersender for sak {}", ettersending.getSaksnummer());
         hentOgSjekk(ettersending.getVedlegg());
         if (ettersending.getDialogId() != null) {
-            LOG.info("Konverterer tekst til vedleggs-pdf {}", ettersending.getBrukerTekst().getDokumentType());
+            LOG.info("Konverterer tekst til vedleggs-pdf {}", ettersending.getBrukerTekst().dokumentType());
             ettersending.getVedlegg().add(vedleggFra(uttalelseFra(ettersending)));
         }
         Kvittering kvittering = connection.ettersend(ettersending);
@@ -83,7 +83,7 @@ public class InnsendingTjeneste implements Innsending {
         vedlegg.setBeskrivelse("Tekst fra bruker");
         vedlegg.setId(id());
         vedlegg.setContent(pdfGenerator.generate(uttalelse));
-        vedlegg.setSkjemanummer(uttalelse.getBrukerTekst().getDokumentType());
+        vedlegg.setSkjemanummer(uttalelse.brukerTekst().dokumentType());
         return vedlegg;
     }
 

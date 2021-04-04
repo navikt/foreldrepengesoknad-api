@@ -44,7 +44,7 @@ import no.nav.security.token.support.spring.SpringTokenValidationContextHolder;
 @RestClientTest
 
 @ActiveProfiles("test")
-public class InnsendingTest {
+class InnsendingTest {
 
     private static final DataSize MAX_TOTAL = DataSize.of(32, DataUnit.MEGABYTES);
     private static final DataSize MAX_ENKEL = DataSize.of(8, DataUnit.MEGABYTES);
@@ -76,7 +76,7 @@ public class InnsendingTest {
     private Image2PDFConverter converter;
 
     @BeforeEach
-    public void init() {
+    void init() {
         if (innsending == null) {
             innsending = new InnsendingTjeneste(new InnsendingConnection(builder
                     .build(), CFG, converter), storage,
@@ -85,7 +85,7 @@ public class InnsendingTest {
     }
 
     @Test
-    public void unknownType() {
+    void unknownType() {
         server.expect(ExpectedCount.once(), requestTo(CFG.innsendingURI()))
                 .andExpect(method(HttpMethod.GET))
                 .andRespond(withStatus(HttpStatus.OK));

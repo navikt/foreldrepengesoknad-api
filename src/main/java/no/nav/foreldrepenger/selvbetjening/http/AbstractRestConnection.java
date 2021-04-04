@@ -4,6 +4,7 @@ import static no.nav.foreldrepenger.selvbetjening.util.MDCUtil.CONFIDENTIAL;
 import static org.springframework.http.HttpStatus.NOT_FOUND;
 
 import java.net.URI;
+import java.util.Optional;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -31,10 +32,8 @@ public abstract class AbstractRestConnection implements PingEndpointAware, Toggl
                 LOG.info("Service er ikke aktiv, GETer ikke fra {}", uri);
                 return null;
             }
-            T respons = operations.getForObject(uri, responseType);
-            if (respons != null) {
-                LOG.trace(CONFIDENTIAL, "Respons: {}", respons);
-            }
+            var respons = operations.getForObject(uri, responseType);
+            Optional.ofNullable(respons).ifPresent(r -> LOG.trace(CONFIDENTIAL, "Respons: {}", r));
             return respons;
         } catch (HttpClientErrorException e) {
             if (!throwOnNotFound && NOT_FOUND.equals(e.getStatusCode())) {

@@ -24,7 +24,7 @@ public class TimingAndLoggingClientHttpRequestInterceptor implements ClientHttpR
     public ClientHttpResponse intercept(HttpRequest request, byte[] body, ClientHttpRequestExecution execution)
             throws IOException {
 
-        StopWatch timer = new StopWatch();
+        var timer = new StopWatch();
         timer.start();
         ClientHttpResponse respons = execution.execute(request, body);
         timer.stop();

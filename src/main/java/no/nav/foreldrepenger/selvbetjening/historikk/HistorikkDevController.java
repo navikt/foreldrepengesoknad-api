@@ -4,8 +4,6 @@ import static no.nav.foreldrepenger.selvbetjening.historikk.HistorikkController.
 
 import java.util.List;
 
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.cloud.client.discovery.DiscoveryClient;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 
@@ -19,9 +17,6 @@ public class HistorikkDevController {
 
     private final Historikk historikk;
 
-    @Autowired
-    private DiscoveryClient discoveryClient;
-
     public HistorikkDevController(Historikk historikk) {
         this.historikk = historikk;
     }
@@ -29,11 +24,6 @@ public class HistorikkDevController {
     @GetMapping
     public List<HistorikkInnslag> historikk(@RequestParam("fnr") Fødselsnummer fnr) {
         return historikk.historikkFor(fnr);
-    }
-
-    @GetMapping(path = "/discovery")
-    public List<String> discovery() {
-        return discoveryClient.getServices();
     }
 
     @GetMapping(path = "/vedlegg")

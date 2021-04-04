@@ -33,7 +33,7 @@ import no.nav.security.token.support.spring.SpringTokenValidationContextHolder;
         SpringTokenValidationContextHolder.class })
 @RestClientTest
 @ActiveProfiles("test")
-public class InnsynTest {
+class InnsynTest {
 
     @Mock
     TokenUtil tokenHandler;
@@ -52,13 +52,13 @@ public class InnsynTest {
     private InnsynTjeneste innsyn;
 
     @BeforeEach
-    public void init() {
+    void init() {
         innsyn = new InnsynTjeneste(new InnsynConnection(builder
                 .build(), CFG));
     }
 
     @Test
-    public void uttaksplan() {
+    void uttaksplan() {
         server
                 .expect(ExpectedCount.once(), requestTo(CFG.uttakURI("42")))
                 .andExpect(method(HttpMethod.GET))

@@ -1,4 +1,4 @@
-package no.nav.foreldrepenger.selvbetjening.error;
+package no.nav.foreldrepenger.selvbetjening.vedlegg;
 
 public class AttachmentPasswordProtectedException extends AttachmentException {
 

@@ -27,7 +27,7 @@ public class ZoneCrossingAwareClientInterceptor implements ClientHttpRequestInte
     @Override
     public ClientHttpResponse intercept(HttpRequest request, byte[] body, ClientHttpRequestExecution execution)
             throws IOException {
-        Optional<String> apiKey = apiKeyFor(request.getURI());
+        var apiKey = apiKeyFor(request.getURI());
         if (apiKey.isPresent()) {
             LOG.trace("Injisert API-key som header {} for {}", X_NAV_API_KEY, request.getURI());
             request.getHeaders().add(X_NAV_API_KEY, apiKey.get());

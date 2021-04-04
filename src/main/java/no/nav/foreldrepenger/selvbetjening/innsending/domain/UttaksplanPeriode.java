@@ -35,9 +35,7 @@ public class UttaksplanPeriode {
     }
 
     public UttaksplanPeriode(UttaksPeriode u) {
-        this.setTidsperiode(new Tidsperiode());
-        this.getTidsperiode().setFom(u.getPeriode().getFom());
-        this.getTidsperiode().setTom(u.getPeriode().getTom());
+        this.setTidsperiode(new Tidsperiode(u.getPeriode().getFom(), u.getPeriode().getTom()));
 
         this.setØnskerSamtidigUttak(u.getSamtidigUttak());
         this.setKonto(u.getStønadskontotype().toString());
