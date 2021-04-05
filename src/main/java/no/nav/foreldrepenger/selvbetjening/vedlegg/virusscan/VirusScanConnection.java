@@ -1,6 +1,6 @@
-package no.nav.foreldrepenger.selvbetjening.virusscan;
+package no.nav.foreldrepenger.selvbetjening.vedlegg.virusscan;
 
-import static no.nav.foreldrepenger.selvbetjening.virusscan.Result.OK;
+import static no.nav.foreldrepenger.selvbetjening.vedlegg.virusscan.Result.OK;
 
 import java.net.URI;
 

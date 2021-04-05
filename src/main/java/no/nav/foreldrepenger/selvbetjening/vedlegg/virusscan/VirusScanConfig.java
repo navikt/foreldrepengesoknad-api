@@ -1,4 +1,4 @@
-package no.nav.foreldrepenger.selvbetjening.virusscan;
+package no.nav.foreldrepenger.selvbetjening.vedlegg.virusscan;
 
 import java.net.URI;
 

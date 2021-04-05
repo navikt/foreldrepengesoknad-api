@@ -27,14 +27,14 @@ import org.springframework.test.web.client.MockRestServiceServer;
 import org.springframework.util.unit.DataSize;
 import org.springframework.util.unit.DataUnit;
 
-import no.nav.foreldrepenger.selvbetjening.error.UnexpectedInputException;
 import no.nav.foreldrepenger.selvbetjening.innsending.domain.Søknad;
 import no.nav.foreldrepenger.selvbetjening.mellomlagring.KryptertMellomlagring;
 import no.nav.foreldrepenger.selvbetjening.util.TokenUtil;
+import no.nav.foreldrepenger.selvbetjening.vedlegg.DelegerendeVedleggSjekker;
 import no.nav.foreldrepenger.selvbetjening.vedlegg.Image2PDFConverter;
 import no.nav.foreldrepenger.selvbetjening.vedlegg.PDFEncryptionChecker;
-import no.nav.foreldrepenger.selvbetjening.vedlegg.VedleggSjekker;
-import no.nav.foreldrepenger.selvbetjening.virusscan.VirusScanner;
+import no.nav.foreldrepenger.selvbetjening.vedlegg.StørrelseVedleggSjekker;
+import no.nav.foreldrepenger.selvbetjening.vedlegg.virusscan.ClamAvVirusScanner;
 import no.nav.security.token.support.spring.SpringTokenValidationContextHolder;
 
 @ExtendWith(SpringExtension.class)
@@ -55,7 +55,7 @@ class InnsendingTest {
     @Mock
     KryptertMellomlagring storage;
     @Mock
-    VirusScanner scanner;
+    ClamAvVirusScanner scanner;
 
     @Mock
     PDFEncryptionChecker encryptionChecker;
@@ -80,7 +80,7 @@ class InnsendingTest {
         if (innsending == null) {
             innsending = new InnsendingTjeneste(new InnsendingConnection(builder
                     .build(), CFG, converter), storage,
-                    new VedleggSjekker(MAX_TOTAL, MAX_ENKEL, scanner, encryptionChecker), null);
+                    new DelegerendeVedleggSjekker(new StørrelseVedleggSjekker(MAX_TOTAL, MAX_ENKEL), scanner, encryptionChecker), null);
         }
     }
 
@@ -89,7 +89,7 @@ class InnsendingTest {
         server.expect(ExpectedCount.once(), requestTo(CFG.innsendingURI()))
                 .andExpect(method(HttpMethod.GET))
                 .andRespond(withStatus(HttpStatus.OK));
-        assertThrows(UnexpectedInputException.class, () -> innsending.sendInn(new Søknad()));
+        assertThrows(IllegalArgumentException.class, () -> innsending.sendInn(new Søknad()));
 
     }
 }

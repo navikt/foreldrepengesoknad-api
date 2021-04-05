@@ -1,5 +1,6 @@
 package no.nav.foreldrepenger.selvbetjening.vedlegg;
 
+import static no.nav.foreldrepenger.selvbetjening.util.StreamUtil.safeStream;
 import static no.nav.foreldrepenger.selvbetjening.vedlegg.VedleggUtil.mediaType;
 import static org.springframework.http.MediaType.APPLICATION_PDF;
 
@@ -14,16 +15,18 @@ import no.nav.foreldrepenger.selvbetjening.mellomlagring.Attachment;
 import no.nav.foreldrepenger.selvbetjening.util.StringUtil;
 
 @Component
-public class PDFEncryptionChecker {
+public class PDFEncryptionChecker implements VedleggSjekker {
 
-    private static final Logger LOG = LoggerFactory.getLogger(VedleggSjekker.class);
+    private static final Logger LOG = LoggerFactory.getLogger(PDFEncryptionChecker.class);
 
-    public void checkEncrypted(Attachment v) {
-        check(v.bytes, v.filename);
+    @Override
+    public void sjekk(Attachment... vedlegg) {
+        safeStream(vedlegg).forEach(v -> check(v.bytes, v.filename));
     }
 
-    public void sjekkKryptert(Vedlegg v) {
-        check(v.getContent(), v.getBeskrivelse());
+    @Override
+    public void sjekk(Vedlegg... vedlegg) {
+        safeStream(vedlegg).forEach(v -> check(v.getContent(), v.getBeskrivelse()));
     }
 
     private static void check(byte[] bytes, String name) {

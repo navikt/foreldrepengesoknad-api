@@ -15,7 +15,6 @@ import org.springframework.web.client.RestOperations;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 
-import no.nav.foreldrepenger.selvbetjening.error.UnexpectedInputException;
 import no.nav.foreldrepenger.selvbetjening.http.AbstractRestConnection;
 import no.nav.foreldrepenger.selvbetjening.innsending.domain.Engangsstønad;
 import no.nav.foreldrepenger.selvbetjening.innsending.domain.Ettersending;
@@ -100,7 +99,7 @@ public class InnsendingConnection extends AbstractRestConnection {
             return new SvangerskapspengesøknadDto(s);
         }
         LOG.warn("Mottok en søknad av ukjent type {}", søknad.getClass().getSimpleName());
-        throw new UnexpectedInputException("Unknown application type " + søknad.getClass().getSimpleName());
+        throw new IllegalArgumentException("Ukjent søknadstype " + søknad.getClass().getSimpleName());
     }
 
     private EttersendingDto body(Ettersending ettersending) {

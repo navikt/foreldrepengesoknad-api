@@ -56,8 +56,8 @@ public class Krypto {
             return new SecretKeySpec(SecretKeyFactory.getInstance("PBKDF2WithHmacSHA256")
                     .generateSecret(new PBEKeySpec(passphrase.toCharArray(), salt.getBytes(), 10000, 256)).getEncoded(),
                     "AES");
-        } catch (Exception ex) {
-            throw new RuntimeException("Error while generating key", ex);
+        } catch (Exception e) {
+            throw new IllegalArgumentException("Error while generating key", e);
         }
     }
 

@@ -81,12 +81,6 @@ public class ApiExceptionHandler extends ResponseEntityExceptionHandler {
     }
 
     @ExceptionHandler
-    public ResponseEntity<Object> handleIncompleteException(UnexpectedInputException e,
-            WebRequest req) {
-        return logAndHandle(UNPROCESSABLE_ENTITY, e, req);
-    }
-
-    @ExceptionHandler
     public ResponseEntity<Object> handleHttpStatusCodeException(HttpStatusCodeException e, WebRequest request) {
         return logAndHandle(e.getStatusCode(), e, request);
     }

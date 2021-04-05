@@ -21,9 +21,10 @@ import com.google.gson.Gson;
 import no.nav.foreldrepenger.selvbetjening.innsending.domain.Kvittering;
 import no.nav.foreldrepenger.selvbetjening.innsending.pdf.PdfGeneratorStub;
 import no.nav.foreldrepenger.selvbetjening.util.TokenUtil;
+import no.nav.foreldrepenger.selvbetjening.vedlegg.DelegerendeVedleggSjekker;
 import no.nav.foreldrepenger.selvbetjening.vedlegg.PDFEncryptionChecker;
-import no.nav.foreldrepenger.selvbetjening.vedlegg.VedleggSjekker;
-import no.nav.foreldrepenger.selvbetjening.virusscan.VirusScanner;
+import no.nav.foreldrepenger.selvbetjening.vedlegg.StørrelseVedleggSjekker;
+import no.nav.foreldrepenger.selvbetjening.vedlegg.virusscan.ClamAvVirusScanner;
 
 @ExtendWith(MockitoExtension.class)
 @ExtendWith(SpringExtension.class)
@@ -31,7 +32,7 @@ class KryptertMellomlagringTest {
 
     private static final Gson MAPPER = new Gson();
     @Mock
-    VirusScanner scanner;
+    ClamAvVirusScanner scanner;
     @Mock
     TokenUtil util;
     @Mock
@@ -44,7 +45,7 @@ class KryptertMellomlagringTest {
         var mellomlagring = new InMemoryMellomlagring(b1, b2);
         km = new KryptertMellomlagring(mellomlagring,
                 new MellomlagringKrypto("passphrase", util),
-                new VedleggSjekker(DataSize.ofMegabytes(32), DataSize.ofMegabytes(8), scanner,
+                new DelegerendeVedleggSjekker(new StørrelseVedleggSjekker(DataSize.ofMegabytes(32), DataSize.ofMegabytes(8)), scanner,
                         new PDFEncryptionChecker()));
     }
 
