@@ -104,13 +104,13 @@ public class InnsendingConnection extends AbstractRestConnection {
     }
 
     private EttersendingDto body(Ettersending ettersending) {
-        EttersendingDto dto = new EttersendingDto(ettersending);
+        var dto = new EttersendingDto(ettersending);
         ettersending.getVedlegg().forEach(v -> dto.addVedlegg(convert(v)));
         return dto;
     }
 
     private Vedlegg convert(Vedlegg v) {
-        Vedlegg vedlegg = v.kopi();
+        var vedlegg = v.kopi();
         if ((v.getContent() != null) && (v.getContent().length > 0)) {
             vedlegg.setContent(converter.convert(v.getContent()));
         }

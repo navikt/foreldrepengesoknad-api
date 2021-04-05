@@ -19,12 +19,8 @@ public class EttersendingDto {
     }
 
     public void addVedlegg(Vedlegg vedlegg) {
-        VedleggDto vedleggDto = new VedleggDto();
-        vedleggDto.type = "påkrevd";
-        vedleggDto.metadata.id = vedlegg.getId();
-        vedleggDto.metadata.dokumentType = vedlegg.getSkjemanummer();
-        vedleggDto.metadata.beskrivelse = vedlegg.getBeskrivelse();
-        vedleggDto.vedlegg = vedlegg.getContent();
-        this.vedlegg.add(vedleggDto);
+        this.vedlegg.add(new VedleggDto("påkrevd",
+                new VedleggMetadataDto(vedlegg.getId(), vedlegg.getSkjemanummer(), vedlegg.getInnsendingsType(), vedlegg.getBeskrivelse()),
+                vedlegg.getContent()));
     }
 }
