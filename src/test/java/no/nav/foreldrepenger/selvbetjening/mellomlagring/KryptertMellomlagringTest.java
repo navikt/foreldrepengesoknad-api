@@ -22,7 +22,7 @@ import no.nav.foreldrepenger.selvbetjening.innsending.domain.Kvittering;
 import no.nav.foreldrepenger.selvbetjening.innsending.pdf.PdfGeneratorStub;
 import no.nav.foreldrepenger.selvbetjening.util.TokenUtil;
 import no.nav.foreldrepenger.selvbetjening.vedlegg.DelegerendeVedleggSjekker;
-import no.nav.foreldrepenger.selvbetjening.vedlegg.PDFEncryptionChecker;
+import no.nav.foreldrepenger.selvbetjening.vedlegg.PDFEncryptionVedleggSjekker;
 import no.nav.foreldrepenger.selvbetjening.vedlegg.StørrelseVedleggSjekker;
 import no.nav.foreldrepenger.selvbetjening.vedlegg.virusscan.ClamAvVirusScanner;
 
@@ -46,7 +46,7 @@ class KryptertMellomlagringTest {
         km = new KryptertMellomlagring(mellomlagring,
                 new MellomlagringKrypto("passphrase", util),
                 new DelegerendeVedleggSjekker(new StørrelseVedleggSjekker(DataSize.ofMegabytes(32), DataSize.ofMegabytes(8)), scanner,
-                        new PDFEncryptionChecker()));
+                        new PDFEncryptionVedleggSjekker()));
     }
 
     @Test

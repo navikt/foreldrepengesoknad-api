@@ -2,7 +2,7 @@ package no.nav.foreldrepenger.selvbetjening.vedlegg;
 
 import static no.nav.foreldrepenger.selvbetjening.util.StreamUtil.safeStream;
 
-import java.util.Arrays;
+import java.util.Objects;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -28,13 +28,15 @@ public class StørrelseVedleggSjekker implements VedleggSjekker {
 
     @Override
     public void sjekk(Vedlegg... vedlegg) {
-        Arrays.stream(vedlegg).forEach(this::sjekkStørrelse);
+        safeStream(vedlegg)
+                .forEach(this::sjekkStørrelse);
         sjekkTotalStørrelse(vedlegg);
     }
 
     @Override
     public void sjekk(Attachment... vedlegg) {
-        Arrays.stream(vedlegg).forEach(this::sjekkStørrelse);
+        safeStream(vedlegg)
+                .forEach(this::sjekkStørrelse);
         sjekkTotalStørrelse(vedlegg);
 
     }
@@ -49,8 +51,9 @@ public class StørrelseVedleggSjekker implements VedleggSjekker {
     private void sjekkTotalStørrelse(Vedlegg... vedlegg) {
         LOG.info("Sjekker total størrelse for {} vedlegg", vedlegg.length);
         long total = safeStream(vedlegg)
-                .filter(v -> v.getContent() != null)
-                .mapToLong(v -> v.getContent().length)
+                .map(Vedlegg::getContent)
+                .filter(Objects::nonNull)
+                .mapToLong(v -> v.length)
                 .sum();
         if (total > maxTotalSize.toBytes()) {
             throw new AttachmentsTooLargeException(total, maxTotalSize);
@@ -67,8 +70,9 @@ public class StørrelseVedleggSjekker implements VedleggSjekker {
     private void sjekkTotalStørrelse(Attachment... vedlegg) {
         LOG.info("Sjekker total størrelse for {} vedlegg", vedlegg.length);
         long total = safeStream(vedlegg)
-                .filter(v -> v.bytes != null)
-                .mapToLong(v -> v.bytes.length)
+                .map(v -> v.bytes)
+                .filter(Objects::nonNull)
+                .mapToLong(v -> v.length)
                 .sum();
         if (total > maxTotalSize.toBytes()) {
             throw new AttachmentsTooLargeException(total, maxTotalSize);

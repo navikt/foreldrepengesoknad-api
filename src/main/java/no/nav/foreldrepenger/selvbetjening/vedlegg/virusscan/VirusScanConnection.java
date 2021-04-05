@@ -40,7 +40,7 @@ class VirusScanConnection extends AbstractRestConnection {
         return "OK";
     }
 
-    public void scan(byte[] bytes, String name) {
+    void scan(byte[] bytes, String name) {
         if (isEnabled()) {
             if (bytes != null) {
                 try {

@@ -15,25 +15,25 @@ import no.nav.foreldrepenger.selvbetjening.mellomlagring.Attachment;
 import no.nav.foreldrepenger.selvbetjening.util.StringUtil;
 
 @Component
-public class PDFEncryptionChecker implements VedleggSjekker {
+public class PDFEncryptionVedleggSjekker implements VedleggSjekker {
 
-    private static final Logger LOG = LoggerFactory.getLogger(PDFEncryptionChecker.class);
+    private static final Logger LOG = LoggerFactory.getLogger(PDFEncryptionVedleggSjekker.class);
 
     @Override
     public void sjekk(Attachment... vedlegg) {
-        safeStream(vedlegg).forEach(v -> check(v.bytes, v.filename));
+        safeStream(vedlegg).forEach(v -> check(v.bytes));
     }
 
     @Override
     public void sjekk(Vedlegg... vedlegg) {
-        safeStream(vedlegg).forEach(v -> check(v.getContent(), v.getBeskrivelse()));
+        safeStream(vedlegg).forEach(v -> check(v.getContent()));
     }
 
-    private static void check(byte[] bytes, String name) {
+    private static void check(byte[] bytes) {
         if (bytes != null && APPLICATION_PDF.equals(mediaType(bytes))) {
             try (var doc = PDDocument.load(bytes)) {
             } catch (InvalidPasswordException e) {
-                throw new AttachmentPasswordProtectedException(name, e);
+                throw new AttachmentPasswordProtectedException(e);
             } catch (Exception e) {
                 LOG.warn("Kunne ikke sjekke {}", StringUtil.limit(bytes), e);
             }

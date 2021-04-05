@@ -32,7 +32,7 @@ import no.nav.foreldrepenger.selvbetjening.mellomlagring.KryptertMellomlagring;
 import no.nav.foreldrepenger.selvbetjening.util.TokenUtil;
 import no.nav.foreldrepenger.selvbetjening.vedlegg.DelegerendeVedleggSjekker;
 import no.nav.foreldrepenger.selvbetjening.vedlegg.Image2PDFConverter;
-import no.nav.foreldrepenger.selvbetjening.vedlegg.PDFEncryptionChecker;
+import no.nav.foreldrepenger.selvbetjening.vedlegg.PDFEncryptionVedleggSjekker;
 import no.nav.foreldrepenger.selvbetjening.vedlegg.StørrelseVedleggSjekker;
 import no.nav.foreldrepenger.selvbetjening.vedlegg.virusscan.ClamAvVirusScanner;
 import no.nav.security.token.support.spring.SpringTokenValidationContextHolder;
@@ -58,7 +58,7 @@ class InnsendingTest {
     ClamAvVirusScanner scanner;
 
     @Mock
-    PDFEncryptionChecker encryptionChecker;
+    PDFEncryptionVedleggSjekker encryptionChecker;
     private static final InnsendingConfig CFG = cfg();
 
     private static InnsendingConfig cfg() {

@@ -16,7 +16,7 @@ public class DelegerendeVedleggSjekker implements VedleggSjekker {
 
     public static final String DELEGERENDE = "Delegerende";
 
-    private VedleggSjekker[] sjekkere;
+    private final VedleggSjekker[] sjekkere;
 
     public DelegerendeVedleggSjekker(VedleggSjekker... sjekkere) {
         this.sjekkere = sjekkere;
