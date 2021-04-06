@@ -1,6 +1,6 @@
-package no.nav.foreldrepenger.selvbetjening.virusscan;
+package no.nav.foreldrepenger.selvbetjening.vedlegg.virusscan;
 
-import static no.nav.foreldrepenger.selvbetjening.virusscan.Result.OK;
+import static no.nav.foreldrepenger.selvbetjening.vedlegg.virusscan.Result.OK;
 
 import java.net.URI;
 
@@ -9,8 +9,8 @@ import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Component;
 import org.springframework.web.client.RestOperations;
 
-import no.nav.foreldrepenger.selvbetjening.error.AttachmentVirusException;
 import no.nav.foreldrepenger.selvbetjening.http.AbstractRestConnection;
+import no.nav.foreldrepenger.selvbetjening.vedlegg.AttachmentVirusException;
 
 @Component
 class VirusScanConnection extends AbstractRestConnection {
@@ -40,7 +40,7 @@ class VirusScanConnection extends AbstractRestConnection {
         return "OK";
     }
 
-    public void scan(byte[] bytes, String name) {
+    void scan(byte[] bytes, String name) {
         if (isEnabled()) {
             if (bytes != null) {
                 try {

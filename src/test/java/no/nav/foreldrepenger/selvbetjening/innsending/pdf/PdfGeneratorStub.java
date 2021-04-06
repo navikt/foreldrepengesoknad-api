@@ -7,7 +7,6 @@ import org.apache.pdfbox.pdmodel.PDPage;
 import org.apache.pdfbox.pdmodel.PDPageContentStream;
 import org.apache.pdfbox.pdmodel.font.PDType1Font;
 
-import no.nav.foreldrepenger.selvbetjening.error.UnexpectedInputException;
 import no.nav.foreldrepenger.selvbetjening.innsending.domain.tilbakebetaling.TilbakebetalingUttalelse;
 
 public class PdfGeneratorStub implements PdfGenerator {
@@ -30,13 +29,13 @@ public class PdfGeneratorStub implements PdfGenerator {
             document.save(baos);
             return baos.toByteArray();
         } catch (Exception e) {
-            throw new UnexpectedInputException("Kunne ikke lage PDF", e);
+            throw new IllegalStateException("Kunne ikke lage PDF", e);
         }
     }
 
     @Override
     public byte[] generate(TilbakebetalingUttalelse uttalelse) {
-        return generate(uttalelse.getBrukerTekst().getTekst());
+        return generate(uttalelse.brukerTekst().tekst());
     }
 
     @Override

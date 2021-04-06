@@ -19,8 +19,6 @@ import org.apache.pdfbox.pdmodel.common.PDRectangle;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import no.nav.foreldrepenger.selvbetjening.error.AttachmentConversionException;
-
 class ImageScaler {
 
     private static final Logger LOG = LoggerFactory.getLogger(ImageScaler.class);

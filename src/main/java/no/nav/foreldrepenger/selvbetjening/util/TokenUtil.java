@@ -1,6 +1,7 @@
 package no.nav.foreldrepenger.selvbetjening.util;
 
 import static java.time.Instant.now;
+import static no.nav.foreldrepenger.selvbetjening.util.AuthenticationLevel.NONE;
 import static no.nav.foreldrepenger.selvbetjening.util.Constants.ISSUER;
 
 import java.util.Date;
@@ -29,7 +30,7 @@ public class TokenUtil {
                 .map(c -> c.get("acr"))
                 .map(String.class::cast)
                 .map(AuthenticationLevel::of)
-                .orElse(AuthenticationLevel.NONE);
+                .orElse(NONE);
     }
 
     public boolean erUtløpt() {
@@ -45,7 +46,7 @@ public class TokenUtil {
     public Date getExpiryDate() {
         return Optional.ofNullable(claimSet())
                 .map(c -> c.get("exp"))
-                .map(this::getDateClaim)
+                .map(TokenUtil::getDateClaim)
                 .orElse(null);
     }
 
@@ -79,12 +80,12 @@ public class TokenUtil {
                 .orElseThrow();
     }
 
-    public Date getDateClaim(Object value) {
-        if (value instanceof Date) {
-            return Date.class.cast(value);
+    private static Date getDateClaim(Object value) {
+        if (value instanceof Date d) {
+            return d;
         }
-        if (value instanceof Number) {
-            return new Date(Number.class.cast(value).longValue() * 1000L);
+        if (value instanceof Number n) {
+            return new Date(n.longValue() * 1000L);
         }
         return null;
     }

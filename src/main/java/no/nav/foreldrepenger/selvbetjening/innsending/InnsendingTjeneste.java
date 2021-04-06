@@ -1,5 +1,6 @@
 package no.nav.foreldrepenger.selvbetjening.innsending;
 
+import static no.nav.foreldrepenger.selvbetjening.vedlegg.DelegerendeVedleggSjekker.DELEGERENDE;
 import static org.slf4j.LoggerFactory.getLogger;
 
 import java.security.SecureRandom;
@@ -7,6 +8,7 @@ import java.util.List;
 import java.util.Random;
 
 import org.slf4j.Logger;
+import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnProperty;
 import org.springframework.stereotype.Service;
 
@@ -32,7 +34,7 @@ public class InnsendingTjeneste implements Innsending {
     private final PdfGenerator pdfGenerator;
 
     public InnsendingTjeneste(InnsendingConnection connection, KryptertMellomlagring mellomlagring,
-            VedleggSjekker vedleggSjekker, PdfGenerator pdfGenerator) {
+            @Qualifier(DELEGERENDE) VedleggSjekker vedleggSjekker, PdfGenerator pdfGenerator) {
         this.connection = connection;
         this.mellomlagring = mellomlagring;
         this.vedleggSjekker = vedleggSjekker;
@@ -43,32 +45,32 @@ public class InnsendingTjeneste implements Innsending {
     public Kvittering sendInn(Søknad søknad) {
         LOG.info("Sender inn søknad av type {}", søknad.getType());
         hentOgSjekk(søknad.getVedlegg());
-        Kvittering kvittering = connection.sendInn(søknad);
+        var kvittering = connection.sendInn(søknad);
         slettMellomlagringOgSøknad(søknad);
         LOG.info(RETURNERER_KVITTERING, kvittering);
         return kvittering;
     }
 
     @Override
-    public Kvittering ettersend(Ettersending ettersending) {
-        LOG.info("Ettersender for sak {}", ettersending.getSaksnummer());
-        hentOgSjekk(ettersending.getVedlegg());
-        if (ettersending.getDialogId() != null) {
-            LOG.info("Konverterer tekst til vedleggs-pdf {}", ettersending.getBrukerTekst().getDokumentType());
-            ettersending.getVedlegg().add(vedleggFra(uttalelseFra(ettersending)));
+    public Kvittering ettersend(Ettersending e) {
+        LOG.info("Ettersender for sak {}", e.getSaksnummer());
+        hentOgSjekk(e.getVedlegg());
+        if (e.getDialogId() != null) {
+            LOG.info("Konverterer tekst til vedleggs-pdf {}", e.getBrukerTekst().dokumentType());
+            e.getVedlegg().add(vedleggFra(uttalelseFra(e)));
         }
-        Kvittering kvittering = connection.ettersend(ettersending);
-        ettersending.getVedlegg().forEach(mellomlagring::slettKryptertVedlegg);
+        var kvittering = connection.ettersend(e);
+        e.getVedlegg().forEach(mellomlagring::slettKryptertVedlegg);
         LOG.info(RETURNERER_KVITTERING, kvittering);
         return kvittering;
     }
 
     @Override
-    public Kvittering endre(Søknad endringssøknad) {
-        LOG.info("Endrer søknad av type {}", endringssøknad.getType());
-        hentOgSjekk(endringssøknad.getVedlegg());
-        Kvittering kvittering = connection.endre(endringssøknad);
-        slettMellomlagringOgSøknad(endringssøknad);
+    public Kvittering endre(Søknad es) {
+        LOG.info("Endrer søknad av type {}", es.getType());
+        hentOgSjekk(es.getVedlegg());
+        var kvittering = connection.endre(es);
+        slettMellomlagringOgSøknad(es);
         LOG.info(RETURNERER_KVITTERING, kvittering);
         return kvittering;
     }
@@ -78,20 +80,20 @@ public class InnsendingTjeneste implements Innsending {
         return connection.ping();
     }
 
-    private Vedlegg vedleggFra(TilbakebetalingUttalelse uttalelse) {
-        Vedlegg vedlegg = new Vedlegg();
+    private Vedlegg vedleggFra(TilbakebetalingUttalelse u) {
+        var vedlegg = new Vedlegg();
         vedlegg.setBeskrivelse("Tekst fra bruker");
         vedlegg.setId(id());
-        vedlegg.setContent(pdfGenerator.generate(uttalelse));
-        vedlegg.setSkjemanummer(uttalelse.getBrukerTekst().getDokumentType());
+        vedlegg.setContent(pdfGenerator.generate(u));
+        vedlegg.setSkjemanummer(u.brukerTekst().dokumentType());
         return vedlegg;
     }
 
-    private static TilbakebetalingUttalelse uttalelseFra(Ettersending ettersending) {
-        return new TilbakebetalingUttalelse(ettersending.getType(),
-                ettersending.getSaksnummer(),
-                ettersending.getDialogId(),
-                ettersending.getBrukerTekst());
+    private static TilbakebetalingUttalelse uttalelseFra(Ettersending e) {
+        return new TilbakebetalingUttalelse(e.getType(),
+                e.getSaksnummer(),
+                e.getDialogId(),
+                e.getBrukerTekst());
     }
 
     private static String id() {
@@ -102,7 +104,7 @@ public class InnsendingTjeneste implements Innsending {
         if (!vedlegg.isEmpty()) {
             LOG.info("Henter og sjekker mellomlagring for {} vedlegg", vedlegg.size());
             vedlegg.forEach(this::hentVedleggBytes);
-            vedleggSjekker.sjekk(vedlegg);
+            vedleggSjekker.sjekk(vedlegg.get(0));
             LOG.info("Hentet og sjekket mellomlagring OK for {} vedlegg", vedlegg.size());
         }
     }

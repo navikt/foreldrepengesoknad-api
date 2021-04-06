@@ -9,8 +9,6 @@ import javax.annotation.PostConstruct;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import no.nav.foreldrepenger.selvbetjening.error.UnexpectedInputException;
-
 public abstract class AbstractMellomlagringTjeneste implements Mellomlagring {
     private static final String DEAKIVERT = "Mellomlagringsoperasjoner er deaktivert";
     private static final Logger LOG = LoggerFactory.getLogger(AbstractMellomlagringTjeneste.class);
@@ -89,7 +87,7 @@ public abstract class AbstractMellomlagringTjeneste implements Mellomlagring {
         return switch (type) {
             case LANGTIDS -> søknadBøtte;
             case KORTTIDS -> mellomlagringBøtte;
-            default -> throw new UnexpectedInputException("Type " + type + " er ukjent");
+            default -> throw new IllegalArgumentException("Type " + type + " er ukjent");
         };
     }
 

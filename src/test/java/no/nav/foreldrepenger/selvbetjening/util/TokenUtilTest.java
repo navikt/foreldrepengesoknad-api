@@ -26,7 +26,7 @@ import no.nav.security.token.support.core.exceptions.JwtTokenValidatorException;
 import no.nav.security.token.support.core.jwt.JwtTokenClaims;
 
 @ExtendWith(MockitoExtension.class)
-public class TokenUtilTest {
+class TokenUtilTest {
 
     private static final String FNR = "42";
     @Mock
@@ -46,7 +46,7 @@ public class TokenUtilTest {
     }
 
     @Test
-    public void testTokenExpiry() {
+    void testTokenExpiry() {
         when(claims.get(eq("exp")))
                 .thenReturn(
                         toDate(LocalDateTime.now().minusSeconds(3)).toInstant().getEpochSecond());
@@ -58,7 +58,7 @@ public class TokenUtilTest {
     }
 
     @Test
-    public void testOK() {
+    void testOK() {
         when(claims.get(eq("exp"))).thenReturn(toDate(LocalDateTime.now().minusHours(1)).toInstant().getEpochSecond());
         when(claims.getSubject()).thenReturn(FNR);
         assertEquals(FNR, tokenHandler.autentisertBruker());
@@ -69,7 +69,7 @@ public class TokenUtilTest {
     }
 
     @Test
-    public void testNoContext() {
+    void testNoContext() {
         when(holder.getTokenValidationContext()).thenReturn(null);
         assertFalse(tokenHandler.erAutentisert());
         assertNull(tokenHandler.getSubject());
@@ -78,7 +78,7 @@ public class TokenUtilTest {
     }
 
     @Test
-    public void testNoClaims() {
+    void testNoClaims() {
         when(context.getClaims(eq(ISSUER))).thenReturn(null);
         assertFalse(tokenHandler.erAutentisert());
         assertNull(tokenHandler.getSubject());
@@ -86,14 +86,14 @@ public class TokenUtilTest {
     }
 
     @Test
-    public void testNoClaimset() {
+    void testNoClaimset() {
         assertNull(tokenHandler.getSubject());
         assertFalse(tokenHandler.erAutentisert());
         assertThrows(JwtTokenValidatorException.class, () -> tokenHandler.autentisertBruker());
     }
 
     @Test
-    public void testNoSubject() {
+    void testNoSubject() {
         when(claims.getSubject()).thenReturn(null);
         assertNull(tokenHandler.getSubject());
         assertFalse(tokenHandler.erAutentisert());

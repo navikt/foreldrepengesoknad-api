@@ -54,7 +54,7 @@ class ApiError {
     }
 
     private static List<String> messages(Throwable t, String destination, Object... objects) {
-        List<Object> messages = Lists.newArrayList(objects);
+        var messages = Lists.newArrayList(objects);
         messages.add(getMostSpecificCause(t).getMessage());
         messages.add(destination);
         return messages.stream()

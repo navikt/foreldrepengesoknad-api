@@ -14,7 +14,7 @@ import org.springframework.util.unit.DataUnit;
 import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 
-import no.nav.foreldrepenger.selvbetjening.error.AttachmentTooLargeException;
+import no.nav.foreldrepenger.selvbetjening.vedlegg.AttachmentTooLargeException;
 
 public class Attachment {
 
