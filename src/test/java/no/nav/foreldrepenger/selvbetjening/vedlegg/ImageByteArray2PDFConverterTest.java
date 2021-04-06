@@ -12,8 +12,6 @@ import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;
 import org.springframework.http.MediaType;
 
-import no.nav.foreldrepenger.selvbetjening.error.AttachmentTypeUnsupportedException;
-
 public class ImageByteArray2PDFConverterTest {
     private static final byte[] PDFSIGNATURE = { 0x25, 0x50, 0x44, 0x46 };
 
