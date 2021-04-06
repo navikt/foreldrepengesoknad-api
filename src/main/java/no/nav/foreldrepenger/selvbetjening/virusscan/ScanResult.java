@@ -1,4 +1,4 @@
-package no.nav.foreldrepenger.selvbetjening.vedlegg.virusscan;
+package no.nav.foreldrepenger.selvbetjening.virusscan;
 
 import com.fasterxml.jackson.annotation.JsonAlias;
 import com.fasterxml.jackson.annotation.JsonCreator;

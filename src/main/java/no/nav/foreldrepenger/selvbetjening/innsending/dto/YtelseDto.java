@@ -115,18 +115,24 @@ public class YtelseDto {
         public MedlemsskapDto(Utenlandsopphold opphold) {
             this.arbeidSiste12 = "IKKE_ARBEIDET";
 
-            for (UtenlandsoppholdPeriode tidligere : opphold.tidligereOpphold()) {
+            for (UtenlandsoppholdPeriode tidligere : opphold.getTidligereOpphold()) {
                 utenlandsopphold.add(new UtenlandsoppholdPeriodeDto(tidligere));
             }
-            for (UtenlandsoppholdPeriode senere : opphold.senereOpphold()) {
+            for (UtenlandsoppholdPeriode senere : opphold.getSenereOpphold()) {
                 framtidigUtenlandsopphold.add(new UtenlandsoppholdPeriodeDto(senere));
             }
         }
     }
 
-    public record UtenlandsoppholdPeriodeDto(String land, PeriodeDto varighet) {
-        public UtenlandsoppholdPeriodeDto(UtenlandsoppholdPeriode p) {
-            this(p.land(), new PeriodeDto(p.tidsperiode()));
+    public class UtenlandsoppholdPeriodeDto {
+
+        public String land;
+        public PeriodeDto varighet = new PeriodeDto();
+
+        public UtenlandsoppholdPeriodeDto(UtenlandsoppholdPeriode periode) {
+            this.land = periode.getLand();
+            this.varighet.fom = periode.getTidsperiode().getFom();
+            this.varighet.tom = periode.getTidsperiode().getTom();
         }
     }
 
@@ -178,6 +184,20 @@ public class YtelseDto {
     }
 
     @JsonInclude(NON_NULL)
+    public class RettigheterDto {
+
+        public Boolean harAnnenForelderRett;
+        public Boolean harAleneOmsorgForBarnet;
+        public LocalDate datoForAleneomsorg;
+
+        public RettigheterDto(Foreldrepengesøknad foreldrepengesøknad) {
+            this.harAleneOmsorgForBarnet = foreldrepengesøknad.getSøker().getErAleneOmOmsorg();
+            this.harAnnenForelderRett = foreldrepengesøknad.getAnnenForelder().getHarRettPåForeldrepenger();
+            this.datoForAleneomsorg = foreldrepengesøknad.getAnnenForelder().getDatoForAleneomsorg();
+        }
+    }
+
+    @JsonInclude(NON_NULL)
     public class TilretteleggingDto {
         public String type;
         public LocalDate behovForTilretteleggingFom;
@@ -188,13 +208,13 @@ public class YtelseDto {
         public List<String> vedlegg;
 
         public TilretteleggingDto(Tilrettelegging tilrettelegging) {
-            this.type = tilrettelegging.type();
-            this.arbeidsforhold = new ArbeidsforholdDto(tilrettelegging.arbeidsforhold());
-            this.behovForTilretteleggingFom = tilrettelegging.behovForTilretteleggingFom();
-            this.tilrettelagtArbeidFom = tilrettelegging.tilrettelagtArbeidFom();
-            this.stillingsprosent = tilrettelegging.stillingsprosent();
-            this.slutteArbeidFom = tilrettelegging.slutteArbeidFom();
-            this.vedlegg = tilrettelegging.vedlegg();
+            this.type = tilrettelegging.getType();
+            this.arbeidsforhold = new ArbeidsforholdDto(tilrettelegging.getArbeidsforhold());
+            this.behovForTilretteleggingFom = tilrettelegging.getBehovForTilretteleggingFom();
+            this.tilrettelagtArbeidFom = tilrettelegging.getTilrettelagtArbeidFom();
+            this.stillingsprosent = tilrettelegging.getStillingsprosent();
+            this.slutteArbeidFom = tilrettelegging.getSlutteArbeidFom();
+            this.vedlegg = tilrettelegging.getVedlegg();
         }
     }
 
@@ -207,14 +227,14 @@ public class YtelseDto {
         public String tilretteleggingstiltak;
 
         public ArbeidsforholdDto(Arbeidsforhold arbeidsforhold) {
-            this.type = arbeidsforhold.type();
-            this.risikoFaktorer = arbeidsforhold.risikofaktorer();
-            this.tilretteleggingstiltak = arbeidsforhold.tilretteleggingstiltak();
+            this.type = arbeidsforhold.getType();
+            this.risikoFaktorer = arbeidsforhold.getRisikofaktorer();
+            this.tilretteleggingstiltak = arbeidsforhold.getTilretteleggingstiltak();
 
-            if (arbeidsforhold.type().equals("virksomhet")) {
-                this.orgnr = arbeidsforhold.id();
+            if (arbeidsforhold.getType().equals("virksomhet")) {
+                this.orgnr = arbeidsforhold.getId();
             } else {
-                this.fnr = arbeidsforhold.id();
+                this.fnr = arbeidsforhold.getId();
             }
 
         }

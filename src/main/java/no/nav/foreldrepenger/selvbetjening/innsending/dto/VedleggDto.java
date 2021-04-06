@@ -5,6 +5,19 @@ import static com.fasterxml.jackson.annotation.JsonInclude.Include.NON_EMPTY;
 import com.fasterxml.jackson.annotation.JsonInclude;
 
 @JsonInclude(NON_EMPTY)
-public record VedleggDto(String type, VedleggMetadataDto metadata, byte[] vedlegg) {
+public class VedleggDto {
+    public String type;
+    public VedleggMetadataDto metadata;
+    public byte[] vedlegg;
 
+    public VedleggDto() {
+        metadata = new VedleggMetadataDto();
+    }
+
+    public class VedleggMetadataDto {
+        public String id;
+        public String dokumentType;
+        public String innsendingsType;
+        public String beskrivelse;
+    }
 }

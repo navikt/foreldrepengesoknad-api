@@ -1,5 +1,6 @@
 package no.nav.foreldrepenger.selvbetjening.config;
 
+import static java.util.Collections.singletonList;
 import static no.nav.foreldrepenger.selvbetjening.mellomlagring.Bøtte.SØKNAD;
 import static no.nav.foreldrepenger.selvbetjening.mellomlagring.Bøtte.TMP;
 import static no.nav.foreldrepenger.selvbetjening.util.Constants.FNR;
@@ -68,13 +69,13 @@ public class ApiConfiguration implements WebMvcConfigurer {
 
     @Bean
     public List<RetryListener> retryListeners() {
-        List<RetryListener> listener = List.of(new RetryListener() {
+        List<RetryListener> listener = singletonList(new RetryListener() {
 
             @Override
             public <T, E extends Throwable> void onError(RetryContext ctx, RetryCallback<T, E> cb,
-                    Throwable t) {
+                    Throwable throwable) {
                 LOG.warn("Metode {} kastet exception {} for {}. gang",
-                        ctx.getAttribute(NAME), t.toString(), ctx.getRetryCount());
+                        ctx.getAttribute(NAME), throwable.toString(), ctx.getRetryCount());
             }
 
             @Override

@@ -11,10 +11,10 @@ import no.nav.foreldrepenger.selvbetjening.innsending.domain.Engangsstønad;
 @JsonInclude(NON_EMPTY)
 public class EngangsstønadDto extends SøknadDto {
 
-    public final YtelseDto ytelse;
+    public YtelseDto ytelse;
 
     public EngangsstønadDto(Engangsstønad søknad) {
-        this.søker = new SøkerDto("MOR", søknad.getSøker().språkkode());
+        this.søker = new SøkerDto("MOR", søknad.getSøker().getSpråkkode());
         this.ytelse = new YtelseDto(søknad);
         this.vedlegg = new ArrayList<>();
     }
