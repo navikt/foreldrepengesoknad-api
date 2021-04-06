@@ -127,12 +127,11 @@ public class YtelseDto {
     public class UtenlandsoppholdPeriodeDto {
 
         public String land;
-        public PeriodeDto varighet = new PeriodeDto();
+        public PeriodeDto varighet;
 
         public UtenlandsoppholdPeriodeDto(UtenlandsoppholdPeriode periode) {
             this.land = periode.getLand();
-            this.varighet.fom = periode.getTidsperiode().getFom();
-            this.varighet.tom = periode.getTidsperiode().getTom();
+            this.varighet = new PeriodeDto(periode.getTidsperiode().getFom(), periode.getTidsperiode().getTom());
         }
     }
 
