@@ -1,13 +1,10 @@
 package no.nav.foreldrepenger.selvbetjening.innsending.dto;
 
-import static com.fasterxml.jackson.annotation.JsonInclude.Include.NON_NULL;
-
 import java.time.LocalDate;
 
-import com.fasterxml.jackson.annotation.JsonInclude;
+public record PeriodeDto(LocalDate fom, LocalDate tom) {
 
-@JsonInclude(NON_NULL)
-public class PeriodeDto {
-    public LocalDate fom;
-    public LocalDate tom;
+    public static PeriodeDto open(LocalDate fom) {
+        return new PeriodeDto(fom, null);
+    }
 }
