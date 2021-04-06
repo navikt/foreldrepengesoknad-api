@@ -26,7 +26,7 @@ import no.nav.security.token.support.core.exceptions.JwtTokenValidatorException;
 import no.nav.security.token.support.core.jwt.JwtTokenClaims;
 
 @ExtendWith(MockitoExtension.class)
-class TokenUtilTest {
+public class TokenUtilTest {
 
     private static final String FNR = "42";
     @Mock
@@ -46,7 +46,7 @@ class TokenUtilTest {
     }
 
     @Test
-    void testTokenExpiry() {
+    public void testTokenExpiry() {
         when(claims.get(eq("exp")))
                 .thenReturn(
                         toDate(LocalDateTime.now().minusSeconds(3)).toInstant().getEpochSecond());
@@ -58,7 +58,7 @@ class TokenUtilTest {
     }
 
     @Test
-    void testOK() {
+    public void testOK() {
         when(claims.get(eq("exp"))).thenReturn(toDate(LocalDateTime.now().minusHours(1)).toInstant().getEpochSecond());
         when(claims.getSubject()).thenReturn(FNR);
         assertEquals(FNR, tokenHandler.autentisertBruker());
@@ -69,7 +69,7 @@ class TokenUtilTest {
     }
 
     @Test
-    void testNoContext() {
+    public void testNoContext() {
         when(holder.getTokenValidationContext()).thenReturn(null);
         assertFalse(tokenHandler.erAutentisert());
         assertNull(tokenHandler.getSubject());
@@ -78,7 +78,7 @@ class TokenUtilTest {
     }
 
     @Test
-    void testNoClaims() {
+    public void testNoClaims() {
         when(context.getClaims(eq(ISSUER))).thenReturn(null);
         assertFalse(tokenHandler.erAutentisert());
         assertNull(tokenHandler.getSubject());
@@ -86,14 +86,14 @@ class TokenUtilTest {
     }
 
     @Test
-    void testNoClaimset() {
+    public void testNoClaimset() {
         assertNull(tokenHandler.getSubject());
         assertFalse(tokenHandler.erAutentisert());
         assertThrows(JwtTokenValidatorException.class, () -> tokenHandler.autentisertBruker());
     }
 
     @Test
-    void testNoSubject() {
+    public void testNoSubject() {
         when(claims.getSubject()).thenReturn(null);
         assertNull(tokenHandler.getSubject());
         assertFalse(tokenHandler.erAutentisert());

@@ -1,6 +1,5 @@
 package no.nav.foreldrepenger.selvbetjening.vedlegg;
 
-import static no.nav.foreldrepenger.selvbetjening.util.StreamUtil.safeStream;
 import static no.nav.foreldrepenger.selvbetjening.vedlegg.VedleggUtil.mediaType;
 import static org.springframework.http.MediaType.APPLICATION_PDF;
 
@@ -10,30 +9,29 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Component;
 
+import no.nav.foreldrepenger.selvbetjening.error.AttachmentPasswordProtectedException;
 import no.nav.foreldrepenger.selvbetjening.innsending.domain.Vedlegg;
 import no.nav.foreldrepenger.selvbetjening.mellomlagring.Attachment;
 import no.nav.foreldrepenger.selvbetjening.util.StringUtil;
 
 @Component
-public class PDFEncryptionVedleggSjekker implements VedleggSjekker {
+public class PDFEncryptionChecker {
 
-    private static final Logger LOG = LoggerFactory.getLogger(PDFEncryptionVedleggSjekker.class);
+    private static final Logger LOG = LoggerFactory.getLogger(VedleggSjekker.class);
 
-    @Override
-    public void sjekk(Attachment... vedlegg) {
-        safeStream(vedlegg).forEach(v -> check(v.bytes));
+    public void checkEncrypted(Attachment v) {
+        check(v.bytes, v.filename);
     }
 
-    @Override
-    public void sjekk(Vedlegg... vedlegg) {
-        safeStream(vedlegg).forEach(v -> check(v.getContent()));
+    public void sjekkKryptert(Vedlegg v) {
+        check(v.getContent(), v.getBeskrivelse());
     }
 
-    private static void check(byte[] bytes) {
+    private static void check(byte[] bytes, String name) {
         if (bytes != null && APPLICATION_PDF.equals(mediaType(bytes))) {
             try (var doc = PDDocument.load(bytes)) {
             } catch (InvalidPasswordException e) {
-                throw new AttachmentPasswordProtectedException(e);
+                throw new AttachmentPasswordProtectedException(name, e);
             } catch (Exception e) {
                 LOG.warn("Kunne ikke sjekke {}", StringUtil.limit(bytes), e);
             }

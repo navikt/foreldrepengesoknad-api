@@ -7,7 +7,7 @@ import no.nav.foreldrepenger.selvbetjening.health.AbstractPingableHealthIndicato
 @Component
 public class HistorikkHealthIndicator extends AbstractPingableHealthIndicator {
 
-    public HistorikkHealthIndicator(HistorikkConnection conn) {
-        super(conn);
+    public HistorikkHealthIndicator(HistorikkConnection tjeneste) {
+        super(tjeneste);
     }
 }

@@ -1,4 +1,4 @@
-package no.nav.foreldrepenger.selvbetjening.vedlegg;
+package no.nav.foreldrepenger.selvbetjening.error;
 
 import org.springframework.http.MediaType;
 

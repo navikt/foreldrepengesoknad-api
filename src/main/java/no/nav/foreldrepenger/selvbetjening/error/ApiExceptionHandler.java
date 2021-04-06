@@ -13,6 +13,8 @@ import java.util.Optional;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.context.EnvironmentAware;
+import org.springframework.core.env.Environment;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -30,20 +32,17 @@ import org.springframework.web.multipart.MultipartException;
 import org.springframework.web.servlet.NoHandlerFoundException;
 import org.springframework.web.servlet.mvc.method.annotation.ResponseEntityExceptionHandler;
 
-import no.nav.foreldrepenger.selvbetjening.http.interceptors.IdMismatchException;
 import no.nav.foreldrepenger.selvbetjening.util.TokenUtil;
-import no.nav.foreldrepenger.selvbetjening.vedlegg.AttachmentException;
-import no.nav.foreldrepenger.selvbetjening.vedlegg.AttachmentTooLargeException;
-import no.nav.foreldrepenger.selvbetjening.vedlegg.AttachmentsTooLargeException;
 import no.nav.security.token.support.core.exceptions.JwtTokenInvalidClaimException;
 import no.nav.security.token.support.core.exceptions.JwtTokenValidatorException;
 import no.nav.security.token.support.spring.validation.interceptor.JwtTokenUnauthorizedException;
 
 @ControllerAdvice
 @ResponseBody
-public class ApiExceptionHandler extends ResponseEntityExceptionHandler {
+public class ApiExceptionHandler extends ResponseEntityExceptionHandler implements EnvironmentAware {
 
     private final TokenUtil tokenUtil;
+    private Environment env;
 
     public ApiExceptionHandler(TokenUtil tokenUtil) {
         this.tokenUtil = tokenUtil;
@@ -78,6 +77,12 @@ public class ApiExceptionHandler extends ResponseEntityExceptionHandler {
     @ExceptionHandler
     public ResponseEntity<Object> handleIdMismatch(IdMismatchException e, WebRequest req) {
         return logAndHandle(CONFLICT, e, req);
+    }
+
+    @ExceptionHandler
+    public ResponseEntity<Object> handleIncompleteException(UnexpectedInputException e,
+            WebRequest req) {
+        return logAndHandle(UNPROCESSABLE_ENTITY, e, req);
     }
 
     @ExceptionHandler
@@ -159,5 +164,11 @@ public class ApiExceptionHandler extends ResponseEntityExceptionHandler {
     @Override
     public String toString() {
         return getClass().getSimpleName() + "[tokenUtil=" + tokenUtil + "]";
+    }
+
+    @Override
+    public void setEnvironment(Environment env) {
+        this.env = env;
+
     }
 }

@@ -3,13 +3,11 @@ package no.nav.foreldrepenger.selvbetjening.mellomlagring;
 import static no.nav.foreldrepenger.selvbetjening.mellomlagring.MellomlagringType.KORTTIDS;
 import static no.nav.foreldrepenger.selvbetjening.mellomlagring.MellomlagringType.LANGTIDS;
 import static no.nav.foreldrepenger.selvbetjening.util.MDCUtil.CONFIDENTIAL;
-import static no.nav.foreldrepenger.selvbetjening.vedlegg.DelegerendeVedleggSjekker.DELEGERENDE;
 
 import java.util.Optional;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.stereotype.Service;
 
 import com.google.gson.Gson;
@@ -27,8 +25,7 @@ public class KryptertMellomlagring {
     private final MellomlagringKrypto krypto;
     private final VedleggSjekker sjekker;
 
-    public KryptertMellomlagring(Mellomlagring mellomlagring, MellomlagringKrypto krypto,
-            @Qualifier(DELEGERENDE) VedleggSjekker sjekker) {
+    public KryptertMellomlagring(Mellomlagring mellomlagring, MellomlagringKrypto krypto, VedleggSjekker sjekker) {
         this.mellomlagring = mellomlagring;
         this.krypto = krypto;
         this.sjekker = sjekker;
@@ -73,7 +70,7 @@ public class KryptertMellomlagring {
 
     public void lagreKryptertVedlegg(Attachment vedlegg) {
         LOG.trace("Lagrer kryptert vedlegg i {}", katalog());
-        sjekker.sjekk(vedlegg);
+        sjekker.sjekkAttachments(vedlegg);
         mellomlagring.lagre(KORTTIDS, katalog(), vedlegg.getUuid(), krypto.encrypt(GSON.toJson(vedlegg)));
         LOG.info("Lagret kryptert vedlegg i {}", katalog());
     }

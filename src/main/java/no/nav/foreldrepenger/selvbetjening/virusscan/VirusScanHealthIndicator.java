@@ -1,4 +1,4 @@
-package no.nav.foreldrepenger.selvbetjening.vedlegg.virusscan;
+package no.nav.foreldrepenger.selvbetjening.virusscan;
 
 import org.springframework.stereotype.Component;
 

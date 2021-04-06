@@ -2,6 +2,7 @@ package no.nav.foreldrepenger.selvbetjening.mellomlagring;
 
 import static javax.crypto.Cipher.DECRYPT_MODE;
 import static javax.crypto.Cipher.ENCRYPT_MODE;
+import static org.springframework.util.StringUtils.isEmpty;
 
 import java.security.InvalidAlgorithmParameterException;
 import java.security.InvalidKeyException;
@@ -24,6 +25,9 @@ public class Krypto {
     private static final String ALGO = "AES/GCM/NoPadding";
 
     public Krypto(String passphrase, String fnr) {
+        if (isEmpty(passphrase) || isEmpty(fnr)) {
+            throw new IllegalArgumentException("Both passphrase and fnr must be provided");
+        }
         key = key(passphrase, fnr);
         iv = fnr;
     }
@@ -56,8 +60,8 @@ public class Krypto {
             return new SecretKeySpec(SecretKeyFactory.getInstance("PBKDF2WithHmacSHA256")
                     .generateSecret(new PBEKeySpec(passphrase.toCharArray(), salt.getBytes(), 10000, 256)).getEncoded(),
                     "AES");
-        } catch (Exception e) {
-            throw new IllegalArgumentException("Error while generating key", e);
+        } catch (Exception ex) {
+            throw new RuntimeException("Error while generating key", ex);
         }
     }
 

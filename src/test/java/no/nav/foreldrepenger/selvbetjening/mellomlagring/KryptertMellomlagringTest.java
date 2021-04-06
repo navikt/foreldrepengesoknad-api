@@ -1,8 +1,9 @@
 package no.nav.foreldrepenger.selvbetjening.mellomlagring;
 
-import static org.assertj.core.api.Assertions.assertThat;
 import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.mockito.Mockito.when;
+import static org.junit.jupiter.api.Assertions.assertFalse;
+import static org.junit.jupiter.api.Assertions.assertTrue;
+import static org.mockito.Mockito.lenient;
 
 import java.time.LocalDate;
 import java.time.LocalDateTime;
@@ -21,18 +22,17 @@ import com.google.gson.Gson;
 import no.nav.foreldrepenger.selvbetjening.innsending.domain.Kvittering;
 import no.nav.foreldrepenger.selvbetjening.innsending.pdf.PdfGeneratorStub;
 import no.nav.foreldrepenger.selvbetjening.util.TokenUtil;
-import no.nav.foreldrepenger.selvbetjening.vedlegg.DelegerendeVedleggSjekker;
-import no.nav.foreldrepenger.selvbetjening.vedlegg.PDFEncryptionVedleggSjekker;
-import no.nav.foreldrepenger.selvbetjening.vedlegg.StørrelseVedleggSjekker;
-import no.nav.foreldrepenger.selvbetjening.vedlegg.virusscan.ClamAvVirusScanner;
+import no.nav.foreldrepenger.selvbetjening.vedlegg.PDFEncryptionChecker;
+import no.nav.foreldrepenger.selvbetjening.vedlegg.VedleggSjekker;
+import no.nav.foreldrepenger.selvbetjening.virusscan.VirusScanner;
 
 @ExtendWith(MockitoExtension.class)
 @ExtendWith(SpringExtension.class)
-class KryptertMellomlagringTest {
+public class KryptertMellomlagringTest {
 
     private static final Gson MAPPER = new Gson();
     @Mock
-    ClamAvVirusScanner scanner;
+    VirusScanner scanner;
     @Mock
     TokenUtil util;
     @Mock
@@ -40,46 +40,48 @@ class KryptertMellomlagringTest {
     private KryptertMellomlagring km;
 
     @BeforeEach
-    void beforeEach() {
-        when(util.autentisertBruker()).thenReturn("01010111111");
-        var mellomlagring = new InMemoryMellomlagring(b1, b2);
+    public void beforeEach() {
+        lenient().when(b1.isEnabled()).thenReturn(true);
+        lenient().when(b2.isEnabled()).thenReturn(true);
+        lenient().when(util.autentisertBruker()).thenReturn("01010111111");
+        Mellomlagring mellomlagring = new InMemoryMellomlagring(b1, b2);
         km = new KryptertMellomlagring(mellomlagring,
                 new MellomlagringKrypto("passphrase", util),
-                new DelegerendeVedleggSjekker(new StørrelseVedleggSjekker(DataSize.ofMegabytes(32), DataSize.ofMegabytes(8)), scanner,
-                        new PDFEncryptionVedleggSjekker()));
+                new VedleggSjekker(DataSize.ofMegabytes(32), DataSize.ofMegabytes(8), scanner,
+                        new PDFEncryptionChecker()));
     }
 
     @Test
-    void TestKryptertSøknad() {
-        when(b2.isEnabled()).thenReturn(true);
+    public void TestKryptertSøknad() {
         km.lagreKryptertSøknad("Søknad");
         var lest = km.lesKryptertSøknad();
-        assertThat(lest).isPresent();
+        assertTrue(lest.isPresent());
         assertEquals(lest.get(), "Søknad");
         km.slettKryptertSøknad();
-        assertThat(km.lesKryptertSøknad()).isNotPresent();
+        lest = km.lesKryptertSøknad();
+        assertFalse(km.lesKryptertSøknad().isPresent());
     }
 
     @Test
-    void TestKryptertKvittering() throws Exception {
-        when(b1.isEnabled()).thenReturn(true);
-        var kvittering = new Kvittering(LocalDateTime.now(), "33", "OK", "id", "42", new byte[0], new byte[0], LocalDate.now(), LocalDate.now());
+    public void TestKryptertKvittering() throws Exception {
+        Kvittering kvittering = new Kvittering(LocalDateTime.now(), "33",
+                "OK", "id", "42", new byte[0], new byte[0], LocalDate.now(), LocalDate.now());
         km.lagreKryptertKvittering("kvittering", MAPPER.toJson(kvittering));
         var lest = km.lesKryptertKvittering("kvittering");
-        assertThat(lest).isPresent();
+        assertTrue(lest.isPresent());
         assertEquals(kvittering, MAPPER.fromJson(lest.get(), Kvittering.class));
     }
 
     @Test
-    void TestKryptertVedlegg() throws Exception {
-        when(b2.isEnabled()).thenReturn(true);
+    public void TestKryptertVedlegg() throws Exception {
         var pdf = new PdfGeneratorStub().generate("test");
-        var original = Attachment.of(new MockMultipartFile("vedlegg", "originalt vedlegg", "application/pdf", pdf));
+        Attachment original = Attachment
+                .of(new MockMultipartFile("vedlegg", "originalt vedlegg", "application/pdf", pdf));
         km.lagreKryptertVedlegg(original);
         var lest = km.lesKryptertVedlegg(original.getUuid());
-        assertThat(lest).isPresent();
+        assertTrue(lest.isPresent());
         assertEquals(original, lest.get());
         km.slettKryptertVedlegg(original.getUuid());
-        assertThat(km.lesKryptertSøknad()).isNotPresent();
+        assertFalse(km.lesKryptertVedlegg(original.getUuid()).isPresent());
     }
 }

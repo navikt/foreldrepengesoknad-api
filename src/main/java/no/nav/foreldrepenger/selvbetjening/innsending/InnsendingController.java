@@ -27,7 +27,7 @@ public class InnsendingController {
 
     @PostMapping
     public Kvittering sendInn(@RequestBody Søknad søknad) {
-        LOG.info("Mottok søknad med målform {} og {} vedlegg", søknad.getSøker().språkkode(), søknad.getVedlegg().size());
+        LOG.info("Mottok søknad med målform {} og {} vedlegg", søknad.getSøker().getSpråkkode(), søknad.getVedlegg().size());
         LOG.info(CONFIDENTIAL, "{}", søknad);
         LOG.info(CONFIDENTIAL, "Søker er {}", søknad.getSøker());
         return innsending.sendInn(søknad);
