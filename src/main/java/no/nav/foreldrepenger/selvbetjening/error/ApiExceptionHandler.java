@@ -33,6 +33,9 @@ import org.springframework.web.servlet.NoHandlerFoundException;
 import org.springframework.web.servlet.mvc.method.annotation.ResponseEntityExceptionHandler;
 
 import no.nav.foreldrepenger.selvbetjening.util.TokenUtil;
+import no.nav.foreldrepenger.selvbetjening.vedlegg.AttachmentException;
+import no.nav.foreldrepenger.selvbetjening.vedlegg.AttachmentTooLargeException;
+import no.nav.foreldrepenger.selvbetjening.vedlegg.AttachmentsTooLargeException;
 import no.nav.security.token.support.core.exceptions.JwtTokenInvalidClaimException;
 import no.nav.security.token.support.core.exceptions.JwtTokenValidatorException;
 import no.nav.security.token.support.spring.validation.interceptor.JwtTokenUnauthorizedException;

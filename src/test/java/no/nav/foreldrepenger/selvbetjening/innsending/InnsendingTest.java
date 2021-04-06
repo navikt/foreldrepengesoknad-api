@@ -27,6 +27,7 @@ import org.springframework.test.web.client.MockRestServiceServer;
 import org.springframework.util.unit.DataSize;
 import org.springframework.util.unit.DataUnit;
 
+import no.nav.foreldrepenger.selvbetjening.error.UnexpectedInputException;
 import no.nav.foreldrepenger.selvbetjening.innsending.domain.Søknad;
 import no.nav.foreldrepenger.selvbetjening.mellomlagring.KryptertMellomlagring;
 import no.nav.foreldrepenger.selvbetjening.util.TokenUtil;
@@ -89,7 +90,7 @@ class InnsendingTest {
         server.expect(ExpectedCount.once(), requestTo(CFG.innsendingURI()))
                 .andExpect(method(HttpMethod.GET))
                 .andRespond(withStatus(HttpStatus.OK));
-        assertThrows(IllegalArgumentException.class, () -> innsending.sendInn(new Søknad()));
+        assertThrows(UnexpectedInputException.class, () -> innsending.sendInn(new Søknad()));
 
     }
 }
