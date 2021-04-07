@@ -72,10 +72,10 @@ public class EgenNæringDto {
         }
 
         if (regnskapsfører != null) {
-            regnskapsførere.add(RegnskapsførerDto.from(regnskapsfører));
+            regnskapsførere.add(new RegnskapsførerDto(regnskapsfører));
             this.nærRelasjon = regnskapsfører.getErNærVennEllerFamilie();
         } else if (revisor != null) {
-            regnskapsførere.add(RegnskapsførerDto.from(revisor));
+            regnskapsførere.add(new RegnskapsførerDto(revisor));
             this.nærRelasjon = revisor.getErNærVennEllerFamilie();
         }
     }
