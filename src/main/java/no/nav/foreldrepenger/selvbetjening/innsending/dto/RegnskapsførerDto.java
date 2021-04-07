@@ -2,9 +2,17 @@ package no.nav.foreldrepenger.selvbetjening.innsending.dto;
 
 import no.nav.foreldrepenger.selvbetjening.innsending.domain.arbeid.TilknyttetPerson;
 
-record RegnskapsførerDto(String navn, String telefon) {
+public class RegnskapsførerDto {
+    @Override
+    public String toString() {
+        return "RegnskapsførerDto [navn=" + navn + ", telefon=" + telefon + "]";
+    }
 
-    static RegnskapsførerDto from(TilknyttetPerson p) {
-        return new RegnskapsførerDto(p.getNavn(), p.getTelefonnummer());
+    public String navn;
+    public String telefon;
+
+    public RegnskapsførerDto(TilknyttetPerson person) {
+        this.navn = person.getNavn();
+        this.telefon = person.getTelefonnummer();
     }
 }
