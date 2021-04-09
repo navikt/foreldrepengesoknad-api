@@ -21,6 +21,7 @@
     </licenses>
 
     <properties>
+        <lombok.version>1.18.20</lombok.version>
         <nimbus-jose-jwt.version>8.20</nimbus-jose-jwt.version>
         <sonar.projectKey>navikt_foreldrepengesoknad-api</sonar.projectKey>
         <sonar.organization>navit</sonar.organization>
@@ -229,10 +230,7 @@
             <groupId>org.springframework.boot</groupId>
             <artifactId>spring-boot-starter-validation</artifactId>
         </dependency>
-        <dependency>
-            <groupId>org.projectlombok</groupId>
-            <artifactId>lombok</artifactId>
-        </dependency>
+       
     </dependencies>
     <build>
         <plugins>
@@ -279,7 +277,7 @@
                 <configuration>
                     <compilerArgs>--enable-preview</compilerArgs>
                     <parameters>true</parameters>
-                    <release>15</release>
+                    <release>16</release>
                 </configuration>
             </plugin>
             <plugin>
