@@ -1,4 +1,4 @@
-name: Deployment pipeline dev
+name: Bygg og deploy
 
 on:
   push:
@@ -72,7 +72,7 @@ jobs:
             });
 
 
-      - name: Opprett issue, trigg deploy til dev-fss og dev-gcp
+      - name: Opprett issue, trigg deploy til  dev-gcp
         if: success()
         uses: actions/github-script@v4.0.2
         with:
@@ -87,10 +87,7 @@ jobs:
                       const issue = { owner: context.issue.owner,
                       repo: context.issue.repo,
                       issue_number: response.data.number }
-                     github.issues.createComment({...issue,
-                            title: 'Deploy av ${{ env.TAG }}',
-                            body: '/promote dev-sbs'})
-                     github.issues.createComment({...issue,
+                      github.issues.createComment({...issue,
                             title: 'Deploy av ${{ env.TAG }}',
                             body: '/promote dev-gcp'})
                });
