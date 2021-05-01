@@ -1,7 +1,0 @@
-{
- "fpbucket": "foreldrepengesoknad",
- "tmpbucket": "mellomlagring",
-"ingresses": [
-        "https://foreldrepengesoknad-api-q.nav.no"
-    ]
-}
