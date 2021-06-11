@@ -42,8 +42,12 @@ jobs:
           echo "IMAGE=$IMAGE_BASE:$TAG" >> $GITHUB_ENV
           mvn --settings .github/.m2/settings.xml --quiet jacoco:prepare-agent install jacoco:report sonar:sonar  -e --batch-mode   -Dsonar.login=${SONAR} -Djacoco.destFile=$(pwd)/target/jacoco.exec
 
-      - name: Log into ghcr registry
-        run: echo "${{ secrets.GITHUB_TOKEN }}" | docker login ghcr.io -u x-access-token --password-stdin
+      - name: Login to GitHub Packages Docker Registry
+        uses: docker/login-action@31f1bb4610792058145ecedb9770b0145e118a96 # Use commit-sha1 instead of tag for security concerns
+        with:
+          registry: ghcr.io
+          username: ${{ github.actor }}
+          password: ${{ secrets.GITHUB_TOKEN }}
 
       - name: Bygg, tag og push Docker image
         run: |
