@@ -23,6 +23,7 @@ import no.nav.foreldrepenger.regler.uttak.felles.grunnlag.Stønadskontotype;
 import no.nav.security.token.support.core.api.Unprotected;
 
 @RestController
+@CrossOrigin(origins = "*")
 @RequestMapping(UttakController.UTTAK)
 @Unprotected
 public class UttakController {
@@ -39,7 +40,6 @@ public class UttakController {
     }
 
     @GetMapping
-    @CrossOrigin(origins = "*", methods = "GET,POST", exposedHeaders = "Location")
     public Map<String, Map<Stønadskontotype, Integer>> kontoer(
             @RequestParam("antallBarn") int antallBarn,
             @RequestParam("morHarRett") boolean morHarRett,
