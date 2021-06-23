@@ -39,7 +39,7 @@ public class UttakController {
     }
 
     @GetMapping
-    @CrossOrigin
+    @CrossOrigin(origins = "*", allowedHeaders = "*")
     public Map<String, Map<Stønadskontotype, Integer>> kontoer(
             @RequestParam("antallBarn") int antallBarn,
             @RequestParam("morHarRett") boolean morHarRett,
