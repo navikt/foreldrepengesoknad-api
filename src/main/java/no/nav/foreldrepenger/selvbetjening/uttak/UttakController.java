@@ -39,7 +39,7 @@ public class UttakController {
     }
 
     @GetMapping
-    @CrossOrigin(origins = "*", methods ="GET,POST", exposedHeaders="Location")
+    @CrossOrigin(origins = "*", methods = "GET,POST", exposedHeaders = "Location")
     public Map<String, Map<Stønadskontotype, Integer>> kontoer(
             @RequestParam("antallBarn") int antallBarn,
             @RequestParam("morHarRett") boolean morHarRett,
