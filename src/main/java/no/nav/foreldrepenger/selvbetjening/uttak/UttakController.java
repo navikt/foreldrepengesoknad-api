@@ -23,7 +23,6 @@ import no.nav.foreldrepenger.regler.uttak.felles.grunnlag.Stønadskontotype;
 import no.nav.security.token.support.core.api.Unprotected;
 
 @RestController
-@CrossOrigin(origins = "*")
 @RequestMapping(UttakController.UTTAK)
 @Unprotected
 public class UttakController {
