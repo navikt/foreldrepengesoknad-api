@@ -52,15 +52,15 @@ public class UttakController {
             @DateTimeFormat(pattern = FMT) @RequestParam("dekningsgrad") String dekningsgrad) {
 
         return Map.of("kontoer", kalkulator.beregnKontoer(new BeregnKontoerGrunnlag.Builder()
-                .medAntallBarn(antallBarn)
-                .medDekningsgrad(dekningsgrad(dekningsgrad))
+                .antallBarn(antallBarn)
+                .dekningsgrad(dekningsgrad(dekningsgrad))
                 .morAleneomsorg(morHarAleneomsorg)
                 .farAleneomsorg(farHarAleneomsorg)
                 .morRett(morHarRett)
                 .farRett(farHarRett)
-                .medFødselsdato(fødselsdato)
-                .medOmsorgsovertakelseDato(omsorgsovertakelseDato)
-                .medTermindato(termindato)
+                .fødselsdato(fødselsdato)
+                .omsorgsovertakelseDato(omsorgsovertakelseDato)
+                .termindato(termindato)
                 .build(), SØKNADSDIALOG).getStønadskontoer());
     }
 
