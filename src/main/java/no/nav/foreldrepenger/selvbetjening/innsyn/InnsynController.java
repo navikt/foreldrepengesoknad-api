@@ -40,7 +40,6 @@ public class InnsynController {
 
     @GetMapping("/uttaksplanannen")
     public Uttaksplan uttaksplanAnnenPart(@RequestParam(name = "annenPart") @NotNull String annenPart) {
-        LOG.info("Henter uttaksplan annen part {}", annenPart);
         return innsynTjeneste.hentUttaksplanAnnenPart(annenPart);
     }
 

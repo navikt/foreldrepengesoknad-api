@@ -1,5 +1,7 @@
 package no.nav.foreldrepenger.selvbetjening.innsyn;
 
+import static no.nav.foreldrepenger.selvbetjening.util.StringUtil.maskFnr;
+
 import java.util.List;
 
 import org.slf4j.Logger;
@@ -31,7 +33,7 @@ public class InnsynTjeneste implements Innsyn {
 
     @Override
     public Uttaksplan hentUttaksplanAnnenPart(String annenPart) {
-        LOG.info("Henter uttaksplan for fødselsnummer {}", annenPart);
+        LOG.info("Henter uttaksplan for annen part {}", maskFnr(annenPart));
         return connection.hentUttaksplanAnnenPart(annenPart);
     }
 
