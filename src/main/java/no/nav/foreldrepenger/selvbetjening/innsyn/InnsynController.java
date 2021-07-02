@@ -8,6 +8,8 @@ import javax.validation.constraints.NotNull;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestParam;
 
 import no.nav.foreldrepenger.selvbetjening.http.ProtectedRestController;
@@ -40,6 +42,11 @@ public class InnsynController {
 
     @GetMapping("/uttaksplanannen")
     public Uttaksplan uttaksplanAnnenPart(@RequestParam(name = "annenPart") @NotNull String annenPart) {
+        return innsynTjeneste.hentUttaksplanAnnenPart(annenPart);
+    }
+
+    @PostMapping("/uttaksplanannen1")
+    public Uttaksplan uttaksplanAnnenPart1(@RequestBody @NotNull String annenPart) {
         return innsynTjeneste.hentUttaksplanAnnenPart(annenPart);
     }
 
