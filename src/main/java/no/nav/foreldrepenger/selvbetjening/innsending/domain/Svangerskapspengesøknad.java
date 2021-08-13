@@ -4,7 +4,7 @@ import java.util.List;
 
 import no.nav.foreldrepenger.selvbetjening.innsending.domain.tilrettelegging.Tilrettelegging;
 
-public class Svangerskapspengesøknad extends Søknad {
+public final class Svangerskapspengesøknad extends Søknad {
     private List<Tilrettelegging> tilrettelegging;
 
     public List<Tilrettelegging> getTilrettelegging() {

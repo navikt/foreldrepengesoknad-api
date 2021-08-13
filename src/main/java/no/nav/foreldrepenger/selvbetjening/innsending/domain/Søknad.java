@@ -19,7 +19,7 @@ import lombok.EqualsAndHashCode;
         @Type(value = Svangerskapspengesøknad.class, name = "svangerskapspenger")
 })
 @EqualsAndHashCode
-public class Søknad {
+public sealed class Søknad permits Engangsstønad,Foreldrepengesøknad,Svangerskapspengesøknad {
 
     private String type;
     private String saksnummer;

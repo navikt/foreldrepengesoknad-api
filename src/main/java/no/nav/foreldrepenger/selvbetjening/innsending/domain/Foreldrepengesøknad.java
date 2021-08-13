@@ -2,7 +2,7 @@ package no.nav.foreldrepenger.selvbetjening.innsending.domain;
 
 import java.util.List;
 
-public class Foreldrepengesøknad extends Søknad {
+public final class Foreldrepengesøknad extends Søknad {
 
     private String dekningsgrad;
     private List<UttaksplanPeriode> uttaksplan;

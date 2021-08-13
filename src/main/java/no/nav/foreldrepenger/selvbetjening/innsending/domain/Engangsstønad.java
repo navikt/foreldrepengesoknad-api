@@ -1,6 +1,6 @@
 package no.nav.foreldrepenger.selvbetjening.innsending.domain;
 
-public class Engangsstønad extends Søknad {
+public final class Engangsstønad extends Søknad {
 
     @Override
     public String toString() {
