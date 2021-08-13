@@ -7,5 +7,6 @@ public enum UtsettelsePeriodeType {
     SØKER_INNLAGT,
     BARN_INNLAGT,
     HV_OVELSE,
+    FRI,
     NAV_TILTAK
 }
