@@ -33,15 +33,15 @@ public class Barn {
     }
 
     public String getFornavn() {
-        return navn.getFornavn();
+        return navn.fornavn();
     }
 
     public String getMellomnavn() {
-        return navn.getMellomnavn();
+        return navn.mellomnavn();
     }
 
     public String getEtternavn() {
-        return navn.getEtternavn();
+        return navn.etternavn();
     }
 
     public String getFnr() {
@@ -49,7 +49,7 @@ public class Barn {
     }
 
     public String getKjønn() {
-        return navn.getKjønn().name();
+        return navn.kjønn().name();
     }
 
     public LocalDate getFødselsdato() {

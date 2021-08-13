@@ -70,8 +70,8 @@ public class OpptjeningDto {
             this.nyOppstartet = this.periode.fom().isAfter(treMånederFørFom);
 
             for (Frilansoppdrag o : frilansInformasjon.getOppdragForNæreVennerEllerFamilieSiste10Mnd()) {
-                frilansOppdrag.add(new FrilansoppdragDto(o.navnPåArbeidsgiver(), o.tidsperiode().getFom(),
-                        o.tidsperiode().getTom()));
+                frilansOppdrag.add(new FrilansoppdragDto(o.navnPåArbeidsgiver(), o.tidsperiode().fom(),
+                        o.tidsperiode().tom()));
             }
         }
     }
@@ -119,7 +119,7 @@ public class OpptjeningDto {
             this.stillingsprosent = selvstendig.getStillingsprosent();
             this.orgNummer = selvstendig.getRegistrertINorge() ? selvstendig.getOrganisasjonsnummer() : null;
             this.orgName = selvstendig.getNavnPåNæringen();
-            this.periode = new PeriodeDto(selvstendig.getTidsperiode().getFom(), selvstendig.getTidsperiode().getTom());
+            this.periode = new PeriodeDto(selvstendig.getTidsperiode().fom(), selvstendig.getTidsperiode().tom());
             this.registrertILand = selvstendig.getRegistrertILand();
             this.erNyIArbeidslivet = selvstendig.getHarBlittYrkesaktivILøpetAvDeTreSisteFerdigliknedeÅrene();
             this.erNyOpprettet = DateUtil.erNyopprettet(periode.fom());
@@ -154,15 +154,16 @@ public class OpptjeningDto {
 
     private record AnnenOpptjeningDto(String type, PeriodeDto periode, List<String> vedlegg) {
 
-        public AnnenOpptjeningDto(AnnenInntekt annenInntekt) {
-            this(annenInntekt.getType(), new PeriodeDto(annenInntekt.getTidsperiode().getFom(), annenInntekt.getTidsperiode().getTom()),
+        AnnenOpptjeningDto(AnnenInntekt annenInntekt) {
+            this(annenInntekt.getType(), new PeriodeDto(annenInntekt.getTidsperiode().fom(), annenInntekt.getTidsperiode().tom()),
                     annenInntekt.getVedlegg());
         }
     }
 
     private record ArbeidsforholdDto(String arbeidsgiverNavn, PeriodeDto periode, String land, List<String> vedlegg) {
         ArbeidsforholdDto(AnnenInntekt annenInntekt) {
-            this(annenInntekt.getArbeidsgiverNavn(), new PeriodeDto(annenInntekt.getTidsperiode().getFom(), annenInntekt.getTidsperiode().getTom()),
+            this(annenInntekt.getArbeidsgiverNavn(),
+                    new PeriodeDto(annenInntekt.getTidsperiode().fom(), annenInntekt.getTidsperiode().tom()),
                     annenInntekt.getLand(), annenInntekt.getVedlegg());
         }
     }

@@ -5,6 +5,7 @@ import static java.util.stream.Collectors.joining;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 import java.util.Objects;
+import java.util.function.Predicate;
 import java.util.stream.Stream;
 
 import org.springframework.stereotype.Component;
@@ -43,7 +44,7 @@ public class PdfGeneratorTjeneste implements PdfGenerator {
     private static String fulltnavn(Person person) {
         return Stream.of(person.fornavn, person.mellomnavn, person.etternavn)
                 .filter(Objects::nonNull)
-                .filter(s -> !s.isBlank())
+                .filter(Predicate.not(String::isBlank))
                 .collect(joining(" "));
     }
 

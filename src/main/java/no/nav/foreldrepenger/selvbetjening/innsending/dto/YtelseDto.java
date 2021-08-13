@@ -115,10 +115,10 @@ public class YtelseDto {
         public MedlemsskapDto(Utenlandsopphold opphold) {
             this.arbeidSiste12 = "IKKE_ARBEIDET";
 
-            for (UtenlandsoppholdPeriode tidligere : opphold.getTidligereOpphold()) {
+            for (UtenlandsoppholdPeriode tidligere : opphold.tidligereOpphold()) {
                 utenlandsopphold.add(new UtenlandsoppholdPeriodeDto(tidligere));
             }
-            for (UtenlandsoppholdPeriode senere : opphold.getSenereOpphold()) {
+            for (UtenlandsoppholdPeriode senere : opphold.senereOpphold()) {
                 framtidigUtenlandsopphold.add(new UtenlandsoppholdPeriodeDto(senere));
             }
         }
@@ -126,7 +126,7 @@ public class YtelseDto {
 
     private record UtenlandsoppholdPeriodeDto(String land, PeriodeDto varighet) {
         UtenlandsoppholdPeriodeDto(UtenlandsoppholdPeriode periode) {
-            this(periode.getLand(), new PeriodeDto(periode.getTidsperiode().getFom(), periode.getTidsperiode().getTom()));
+            this(periode.land(), new PeriodeDto(periode.tidsperiode().fom(), periode.tidsperiode().tom()));
         }
     }
 

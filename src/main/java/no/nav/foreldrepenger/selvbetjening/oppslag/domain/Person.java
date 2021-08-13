@@ -40,10 +40,10 @@ public class Person {
 
     public Person(PersonDto dto) {
         this.fnr = dto.fnr;
-        this.fornavn = Optional.ofNullable(dto.navn).map(Navn::getFornavn).orElse(null);
-        this.etternavn = Optional.ofNullable(dto.navn).map(Navn::getEtternavn).orElse(null);
-        this.mellomnavn = Optional.ofNullable(dto.navn).map(Navn::getMellomnavn).orElse(null);
-        this.kjønn = Optional.ofNullable(dto.navn).map(Navn::getKjønn).map(Kjønn::name).orElse(null);
+        this.fornavn = Optional.ofNullable(dto.navn).map(Navn::fornavn).orElse(null);
+        this.etternavn = Optional.ofNullable(dto.navn).map(Navn::etternavn).orElse(null);
+        this.mellomnavn = Optional.ofNullable(dto.navn).map(Navn::mellomnavn).orElse(null);
+        this.kjønn = Optional.ofNullable(dto.navn).map(Navn::kjønn).map(Kjønn::name).orElse(null);
         this.fødselsdato = dto.fødselsdato;
         this.land = dto.landKode;
         this.ikkeNordiskEøsLand = ikkeNordiskEøsLand(dto.landKode);

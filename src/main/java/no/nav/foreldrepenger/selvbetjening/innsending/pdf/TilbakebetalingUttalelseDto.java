@@ -3,7 +3,7 @@ package no.nav.foreldrepenger.selvbetjening.innsending.pdf;
 import lombok.Data;
 
 @Data
-public class TilbakebetalingUttalelseDto {
+class TilbakebetalingUttalelseDto {
     private final String navn;
     private final String fnr;
     private final String saksnummer;
