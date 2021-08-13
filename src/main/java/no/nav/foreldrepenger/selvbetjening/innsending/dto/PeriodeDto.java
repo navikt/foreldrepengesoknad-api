@@ -7,7 +7,9 @@ import java.time.LocalDate;
 import com.fasterxml.jackson.annotation.JsonInclude;
 
 @JsonInclude(NON_NULL)
-public class PeriodeDto {
-    public LocalDate fom;
-    public LocalDate tom;
+public record PeriodeDto(LocalDate fom, LocalDate tom) {
+    public PeriodeDto(LocalDate fom) {
+        this(fom, null);
+    }
+
 }

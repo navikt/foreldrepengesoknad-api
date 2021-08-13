@@ -124,15 +124,9 @@ public class YtelseDto {
         }
     }
 
-    public class UtenlandsoppholdPeriodeDto {
-
-        public String land;
-        public PeriodeDto varighet = new PeriodeDto();
-
-        public UtenlandsoppholdPeriodeDto(UtenlandsoppholdPeriode periode) {
-            this.land = periode.getLand();
-            this.varighet.fom = periode.getTidsperiode().getFom();
-            this.varighet.tom = periode.getTidsperiode().getTom();
+    private record UtenlandsoppholdPeriodeDto(String land, PeriodeDto varighet) {
+        UtenlandsoppholdPeriodeDto(UtenlandsoppholdPeriode periode) {
+            this(periode.getLand(), new PeriodeDto(periode.getTidsperiode().getFom(), periode.getTidsperiode().getTom()));
         }
     }
 

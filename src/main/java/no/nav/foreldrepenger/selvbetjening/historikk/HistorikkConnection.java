@@ -61,7 +61,7 @@ public class HistorikkConnection extends AbstractRestConnection {
 
     private List<String> hentManglendeVedlegg(URI uri) {
         LOG.trace("Henter manglende vedlegg fra {}", uri);
-        List<String> vedleggIds = Optional
+        var vedleggIds = Optional
                 .ofNullable(getForObject(uri, String[].class))
                 .map(Arrays::asList)
                 .orElse(emptyList());

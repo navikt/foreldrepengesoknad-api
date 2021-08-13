@@ -57,40 +57,26 @@ public class OpptjeningDto {
                     + ", frilansOppdrag=" + frilansOppdrag + "]";
         }
 
-        public PeriodeDto periode = new PeriodeDto();
+        public PeriodeDto periode;
         public Boolean harInntektFraFosterhjem;
         public Boolean nyOppstartet;
         public List<FrilansoppdragDto> frilansOppdrag = new ArrayList<>();
 
         public FrilansDto(FrilansInformasjon frilansInformasjon) {
-            this.periode.fom = frilansInformasjon.getOppstart();
+            this.periode = new PeriodeDto(frilansInformasjon.getOppstart());
             this.harInntektFraFosterhjem = frilansInformasjon.getDriverFosterhjem();
 
             LocalDate treMånederFørFom = now().minus(Period.ofDays(90));
-            this.nyOppstartet = this.periode.fom.isAfter(treMånederFørFom);
+            this.nyOppstartet = this.periode.fom().isAfter(treMånederFørFom);
 
             for (Frilansoppdrag o : frilansInformasjon.getOppdragForNæreVennerEllerFamilieSiste10Mnd()) {
-                frilansOppdrag.add(new FrilansoppdragDto(o.getNavnPåArbeidsgiver(), o.getTidsperiode().getFom(),
-                        o.getTidsperiode().getTom()));
+                frilansOppdrag.add(new FrilansoppdragDto(o.navnPåArbeidsgiver(), o.tidsperiode().getFom(),
+                        o.tidsperiode().getTom()));
             }
         }
     }
 
-    public class FrilansoppdragDto {
-        @Override
-        public String toString() {
-            return "FrilansoppdragDto [oppdragsgiver=" + oppdragsgiver + ", periode=" + periode + "]";
-        }
 
-        public String oppdragsgiver;
-        public PeriodeDto periode = new PeriodeDto();
-
-        public FrilansoppdragDto(String oppdragsgiver, LocalDate fom, LocalDate tom) {
-            this.oppdragsgiver = oppdragsgiver;
-            this.periode.fom = fom;
-            this.periode.tom = tom;
-        }
-    }
 
     @JsonInclude(NON_EMPTY)
     public class EgenNæringDto {
@@ -106,7 +92,7 @@ public class OpptjeningDto {
         }
 
         public String type;
-        public PeriodeDto periode = new PeriodeDto();
+        public PeriodeDto periode;
         public String orgName;
         public String orgNummer;
         public Double stillingsprosent;
@@ -133,85 +119,58 @@ public class OpptjeningDto {
             this.stillingsprosent = selvstendig.getStillingsprosent();
             this.orgNummer = selvstendig.getRegistrertINorge() ? selvstendig.getOrganisasjonsnummer() : null;
             this.orgName = selvstendig.getNavnPåNæringen();
-            this.periode.fom = selvstendig.getTidsperiode().getFom();
-            this.periode.tom = selvstendig.getTidsperiode().getTom();
+            this.periode = new PeriodeDto(selvstendig.getTidsperiode().getFom(), selvstendig.getTidsperiode().getTom());
             this.registrertILand = selvstendig.getRegistrertILand();
             this.erNyIArbeidslivet = selvstendig.getHarBlittYrkesaktivILøpetAvDeTreSisteFerdigliknedeÅrene();
-            this.erNyOpprettet = DateUtil.erNyopprettet(periode.fom);
+            this.erNyOpprettet = DateUtil.erNyopprettet(periode.fom());
             this.erVarigEndring = selvstendig.getHattVarigEndringAvNæringsinntektSiste4Kalenderår();
             this.vedlegg = selvstendig.getVedlegg();
             this.virksomhetsTyper.addAll(selvstendig.getNæringstyper());
             this.oppstartsDato = selvstendig.getOppstartsdato();
 
             if (næringsInfo != null) {
-                this.endringsDato = næringsInfo.getDato();
-                this.næringsinntektBrutto = næringsInfo.getNæringsinntektEtterEndring();
-                this.beskrivelseEndring = næringsInfo.getForklaring();
+                this.endringsDato = næringsInfo.dato();
+                this.næringsinntektBrutto = næringsInfo.næringsinntektEtterEndring();
+                this.beskrivelseEndring = næringsInfo.forklaring();
             } else {
                 this.næringsinntektBrutto = selvstendig.getNæringsinntekt();
             }
 
             if (regnskapsfører != null) {
                 regnskapsførere.add(new RegnskapsførerDto(regnskapsfører));
-                this.nærRelasjon = regnskapsfører.getErNærVennEllerFamilie();
+                this.nærRelasjon = regnskapsfører.erNærVennEllerFamilie();
             } else if (revisor != null) {
                 regnskapsførere.add(new RegnskapsførerDto(revisor));
-                this.nærRelasjon = revisor.getErNærVennEllerFamilie();
+                this.nærRelasjon = revisor.erNærVennEllerFamilie();
             }
         }
     }
 
-    public class RegnskapsførerDto {
-        @Override
-        public String toString() {
-            return "RegnskapsførerDto [navn=" + navn + ", telefon=" + telefon + "]";
-        }
-
-        public String navn;
-        public String telefon;
-
-        public RegnskapsførerDto(TilknyttetPerson person) {
-            this.navn = person.getNavn();
-            this.telefon = person.getTelefonnummer();
+    private record RegnskapsførerDto(String navn, String telefon) {
+        RegnskapsførerDto(TilknyttetPerson person) {
+            this(person.navn(), person.telefonnummer());
         }
     }
 
-    public class AnnenOpptjeningDto {
-        @Override
-        public String toString() {
-            return "AnnenOpptjeningDto [type=" + type + ", periode=" + periode + "]";
-        }
-
-        public String type;
-        public PeriodeDto periode = new PeriodeDto();
-        public List<String> vedlegg;
+    private record AnnenOpptjeningDto(String type, PeriodeDto periode, List<String> vedlegg) {
 
         public AnnenOpptjeningDto(AnnenInntekt annenInntekt) {
-            this.type = annenInntekt.getType();
-            this.periode.fom = annenInntekt.getTidsperiode().getFom();
-            this.periode.tom = annenInntekt.getTidsperiode().getTom();
-            this.vedlegg = annenInntekt.getVedlegg();
+            this(annenInntekt.getType(), new PeriodeDto(annenInntekt.getTidsperiode().getFom(), annenInntekt.getTidsperiode().getTom()),
+                    annenInntekt.getVedlegg());
         }
     }
 
-    public class ArbeidsforholdDto {
-        @Override
-        public String toString() {
-            return "ArbeidsforholdDto [arbeidsgiverNavn=" + arbeidsgiverNavn + ", periode=" + periode + ", land=" + land
-                    + ", vedlegg=" + vedlegg + "]";
+    private record ArbeidsforholdDto(String arbeidsgiverNavn, PeriodeDto periode, String land, List<String> vedlegg) {
+        ArbeidsforholdDto(AnnenInntekt annenInntekt) {
+            this(annenInntekt.getArbeidsgiverNavn(), new PeriodeDto(annenInntekt.getTidsperiode().getFom(), annenInntekt.getTidsperiode().getTom()),
+                    annenInntekt.getLand(), annenInntekt.getVedlegg());
         }
+    }
 
-        public String arbeidsgiverNavn;
-        public PeriodeDto periode = new PeriodeDto();
-        public String land;
-        public List<String> vedlegg;
+    private record FrilansoppdragDto(String oppdragsgiver, PeriodeDto periode) {
 
-        public ArbeidsforholdDto(AnnenInntekt annenInntekt) {
-            this.arbeidsgiverNavn = annenInntekt.getArbeidsgiverNavn();
-            this.land = annenInntekt.getLand();
-            this.periode.fom = annenInntekt.getTidsperiode().getFom();
-            this.periode.tom = annenInntekt.getTidsperiode().getTom();
-            this.vedlegg = annenInntekt.getVedlegg();
+        FrilansoppdragDto(String oppdragsgiver, LocalDate fom, LocalDate tom) {
+            this(oppdragsgiver, new PeriodeDto(fom, tom));
         }
     }
 }
