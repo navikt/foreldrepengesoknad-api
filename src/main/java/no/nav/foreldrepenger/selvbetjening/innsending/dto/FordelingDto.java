@@ -48,7 +48,7 @@ public class FordelingDto {
                 this.type = "gradert";
                 this.arbeidsForholdSomskalGraderes = true;
             } else {
-                this.type = u.getType();
+                this.type = type(u.getType());
             }
             this.ønskerFlerbarnsdager = u.ønskerFlerbarnsdager;
             this.uttaksperiodeType = u.getKonto();
@@ -64,6 +64,13 @@ public class FordelingDto {
             this.selvstendig = u.getErSelvstendig();
             this.morsAktivitetsType = u.getMorsAktivitetIPerioden();
             this.vedlegg = u.getVedlegg();
+        }
+
+        private static String type(String type) {
+            return switch (type) {
+                case "periodeUtenUttak" -> "utsettelse";
+                default -> type;
+            };
         }
     }
 }
