@@ -68,7 +68,7 @@ public class FordelingDto {
 
         private static String type(String type) {
             return switch (type) {
-                case "periodeUtenUttak" -> "utsettelse";
+                case "periodeUtenUttak" -> "fri";
                 default -> type;
             };
         }
