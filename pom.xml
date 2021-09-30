@@ -38,7 +38,7 @@
 		<pdfbox.version>2.0.24</pdfbox.version>
 		<aws.version>1.12.76</aws.version>
 		<jacoco.version>0.8.5</jacoco.version>
-		<gcp.version>0.161.0</gcp.version>
+		<gcp.version>0.162.0</gcp.version>
 		<spring.cloud.vault.version>3.0.4</spring.cloud.vault.version>
 		<simpleclient.version>0.12.0</simpleclient.version>
 	</properties>
