@@ -33,7 +33,7 @@
 		<springfox.version>3.0.0</springfox.version>
 		<token-validation-version>1.3.8</token-validation-version>
 		<tika.version>2.1.0</tika.version>
-		<logback.logstash.version>6.6</logback.logstash.version>
+		<logback.logstash.version>7.0.1</logback.logstash.version>
 		<nv.version>1.29</nv.version>
 		<pdfbox.version>2.0.24</pdfbox.version>
 		<aws.version>1.12.77</aws.version>
