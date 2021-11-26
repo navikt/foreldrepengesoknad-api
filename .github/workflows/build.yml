@@ -5,56 +5,39 @@ on:
     branches:
       - master
 env:
-  SONAR: ${{ secrets.SONAR }}
-  GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
   IMAGE_BASE: ghcr.io/${{ github.repository }}
 
 jobs:
   kompiler:
     runs-on: ubuntu-latest
     steps:
-
-      - name: Sjekk ut kode
-        uses: actions/checkout@v2
-
-      - name: Hent tag
-        run: |
-          echo 'TAG<<EOF' >> $GITHUB_ENV
-          git log -1 --pretty=%ad --date=format:%Y%m%d%H%M%S-`echo $GITHUB_SHA | cut -c1-7`  >> $GITHUB_ENV
-          echo 'EOF' >> $GITHUB_ENV
-
-      - name: Hent Maven cache
-        uses: actions/cache@v2.1.6
+      - uses: actions/checkout@v2
+      - uses: actions/setup-java@v2
         with:
-          path: ~/.m2/repository
-          key: ${{ runner.os }}-maven-${{ hashFiles('**/pom.xml') }}
-          restore-keys: ${{ runner.os }}-maven-
-
-      - name: Sett opp Java 16
-        uses: actions/setup-java@v2
-        with:
-          java-version: 16
+          java-version: 17
           distribution: 'adopt'
-
+          check-latest: true
+          cache: 'maven'
+      - name: Hent tag
+        run: echo "TAG=$(date +%Y.%m.%d.%H%M%S)-$(echo $GITHUB_SHA | cut -c1-7)" >> $GITHUB_ENV
       - name: Kompiler
         run: |
           mvn versions:set -DnewVersion=${TAG}
-          echo "IMAGE=$IMAGE_BASE:$TAG" >> $GITHUB_ENV
-          mvn --settings .github/.m2/settings.xml --quiet jacoco:prepare-agent install jacoco:report sonar:sonar  -e --batch-mode   -Dsonar.login=${SONAR} -Djacoco.destFile=$(pwd)/target/jacoco.exec
-
+          mvn jacoco:prepare-agent install jacoco:report sonar:sonar -e --batch-mode --settings .github/.m2/settings.xml -Dsonar.login=${SONAR_TOKEN}
+        env:
+            SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}
+            GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
       - name: Login to GitHub Packages Docker Registry
         uses: docker/login-action@f054a8b539a109f9f41c372932f1ae047eff08c9 # Use commit-sha1 instead of tag for security concerns
         with:
           registry: ghcr.io
           username: ${{ github.actor }}
           password: ${{ secrets.GITHUB_TOKEN }}
-
       - name: Bygg, tag og push Docker image
         run: |
           docker build --pull --tag ${IMAGE_BASE}:${TAG} --tag ${IMAGE_BASE}:latest .
           docker push ${IMAGE_BASE} --all-tags
-
-      - name: Lukk gamle bygg-issues
+      - name: Lukk gamle issues
         uses: actions/github-script@v5
         with:
           github-token: ${{ secrets.GITHUB_TOKEN }}
@@ -63,7 +46,7 @@ jobs:
               owner: context.repo.owner,
               repo: context.repo.repo,
               state: 'open',
-              labels: ['bygg']
+              labels: ['deployment']
             }).then(response => {
               response.data.forEach(issue => {
                 github.rest.issues.update({
@@ -74,24 +57,22 @@ jobs:
                 });
               });
             });
-
-
       - name: Opprett issue, trigg deploy til  dev-gcp
         if: success()
         uses: actions/github-script@v5
         with:
           github-token: ${{ secrets.NOTIFICATION }}
           script: |
-              github.rest.issues.create( {
-                owner: context.issue.owner,
-                repo: context.issue.repo,
-                labels: ['bygg'],
-                title: 'Deploy av ${{ env.TAG }}'})
-              .then(response => {
-                      const issue = { owner: context.issue.owner,
-                      repo: context.issue.repo,
-                      issue_number: response.data.number }
-                      github.rest.issues.createComment({...issue,
-                            title: 'Deploy av ${{ env.TAG }}',
-                            body: '/promote dev-gcp'})
-               });
+            github.rest.issues.create( {
+              owner: context.issue.owner,
+              repo: context.issue.repo,
+              labels: ['bygg'],
+              title: 'Deploy av ${{ env.TAG }}'})
+            .then(response => {
+                    const issue = { owner: context.issue.owner,
+                    repo: context.issue.repo,
+                    issue_number: response.data.number }
+                    github.rest.issues.createComment({...issue,
+                          title: 'Deploy av ${{ env.TAG }}',
+                          body: '/promote dev-gcp'})
+             });
