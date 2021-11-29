@@ -248,9 +248,6 @@
 			<plugin>
 				<groupId>org.apache.maven.plugins</groupId>
 				<artifactId>maven-failsafe-plugin</artifactId>
-				<configuration>
-					<excludedGroups>IntegrationTest</excludedGroups>
-				</configuration>
 			</plugin>
 			<plugin>
 				<groupId>org.codehaus.mojo</groupId>
@@ -276,7 +273,6 @@
                 <configuration>
                     <!-- Må ha @{argLine} ellers blir properties satt av jacoco-maven-plugin overkrevet -->
                     <argLine>@{argLine} --add-opens java.base/java.time=ALL-UNNAMED</argLine>
-                    <excludedGroups>IntegrationTest</excludedGroups>
                 </configuration>
 			</plugin>
 			<plugin>
