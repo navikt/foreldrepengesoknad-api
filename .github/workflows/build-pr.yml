@@ -2,9 +2,15 @@ name: Build PR or branch
 
 on:
   pull_request:
-  push:
-    branches-ignore:
+    branches:
       - master
+    paths-ignore:
+      - '**.md'
+      - '**.MD'
+      - '.gitignore'
+      - '.github/workflows/build.yml'
+      - '.github/workflows/promote.yml'
+      - '.github/dependabot.yml'
 env:
   GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
   IMAGE_BASE: ghcr.io/${{ github.repository }}
@@ -22,4 +28,7 @@ jobs:
           cache: 'maven'
       - name: Kompiler
         run: |
-          mvn install --batch-mode --quiet --settings .github/.m2/settings.xml
+          mvn jacoco:prepare-agent install jacoco:report sonar:sonar --quiet --batch-mode --settings .github/.m2/settings.xml -Dsonar.login=${SONAR_TOKEN}
+        env:
+          SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
