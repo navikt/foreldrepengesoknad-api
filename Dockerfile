@@ -1,4 +1,4 @@
-FROM navikt/java:16-appdynamics
+FROM navikt/java:17-appdynamics
 ENV APP_NAME=foreldrepengesoknad-api
 ENV APPD_ENABLED=true
 ENV APPDYNAMICS_CONTROLLER_HOST_NAME=appdynamics.adeo.no

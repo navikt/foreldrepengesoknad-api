@@ -13,23 +13,13 @@ jobs:
   kompiler:
     runs-on: ubuntu-latest
     steps:
-
-      - name: Sjekk ut kode
-        uses: actions/checkout@v2
-
-      - name: Hent Maven cache
-        uses: actions/cache@v2.1.6
+      - uses: actions/checkout@v2
+      - uses: actions/setup-java@v2
         with:
-          path: ~/.m2/repository
-          key: ${{ runner.os }}-maven-${{ hashFiles('**/pom.xml') }}
-          restore-keys: ${{ runner.os }}-maven-
-
-      - name: Sett opp Java 16
-        uses: actions/setup-java@v2
-        with:
-          java-version: 16
+          java-version: 17
           distribution: 'adopt'
-
+          check-latest: true
+          cache: 'maven'
       - name: Kompiler
         run: |
           mvn install --batch-mode --quiet --settings .github/.m2/settings.xml

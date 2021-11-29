@@ -22,7 +22,9 @@
 	</licenses>
 
 	<properties>
-		<nimbus-jose-jwt.version>8.20</nimbus-jose-jwt.version>
+        <java.version>17</java.version>
+        <maven.compiler.source>${java.version}</maven.compiler.source>
+        <maven.compiler.target>${java.version}</maven.compiler.target>
 		<sonar.projectKey>navikt_foreldrepengesoknad-api</sonar.projectKey>
 		<sonar.organization>navit</sonar.organization>
 		<sonar.host.url>https://sonarcloud.io</sonar.host.url>
@@ -30,14 +32,16 @@
 		<maven.build.timestamp.format>yyyy-MM-dd HH:mm</maven.build.timestamp.format>
 		<project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
 		<project.reporting.outputEncoding>UTF-8</project.reporting.outputEncoding>
+
 		<springfox.version>3.0.0</springfox.version>
 		<token-validation-version>1.3.8</token-validation-version>
+        <nimbus-jose-jwt.version>8.20</nimbus-jose-jwt.version>
 		<tika.version>2.1.0</tika.version>
 		<logback.logstash.version>6.6</logback.logstash.version>
 		<nv.version>1.29</nv.version>
 		<pdfbox.version>2.0.24</pdfbox.version>
 		<aws.version>1.12.77</aws.version>
-		<jacoco.version>0.8.5</jacoco.version>
+		<jacoco.version>0.8.7</jacoco.version>
 		<gcp.version>0.162.0</gcp.version>
 		<spring.cloud.vault.version>3.0.4</spring.cloud.vault.version>
 		<simpleclient.version>0.12.0</simpleclient.version>
@@ -243,14 +247,6 @@
 			</plugin>
 			<plugin>
 				<groupId>org.apache.maven.plugins</groupId>
-				<artifactId>maven-surefire-plugin</artifactId>
-				<configuration>
-					<argLine>--enable-preview</argLine>
-					<excludedGroups>IntegrationTest</excludedGroups>
-				</configuration>
-			</plugin>
-			<plugin>
-				<groupId>org.apache.maven.plugins</groupId>
 				<artifactId>maven-failsafe-plugin</artifactId>
 				<configuration>
 					<excludedGroups>IntegrationTest</excludedGroups>
@@ -277,36 +273,41 @@
 			<plugin>
 				<groupId>org.apache.maven.plugins</groupId>
 				<artifactId>maven-surefire-plugin</artifactId>
-				<configuration>
-					<argLine>
-					--enable-preview
-					--add-opens java.base/java.time=ALL-UNNAMED</argLine>
-				</configuration>
+                <configuration>
+                    <!-- Må ha @{argLine} ellers blir properties satt av jacoco-maven-plugin overkrevet -->
+                    <argLine>@{argLine} --add-opens java.base/java.time=ALL-UNNAMED</argLine>
+                    <excludedGroups>IntegrationTest</excludedGroups>
+                </configuration>
 			</plugin>
 			<plugin>
 				<groupId>org.apache.maven.plugins</groupId>
 				<artifactId>maven-compiler-plugin</artifactId>
 				<configuration>
-					<compilerArgs>--enable-preview</compilerArgs>
 					<parameters>true</parameters>
-					<release>16</release>
-                    <source>16</source>
-                    <target>16</target>
+                    <source>${java.version}</source>
+                    <target>${java.version}</target>
+                    <release>${java.version}</release>
                 </configuration>
 			</plugin>
-			<plugin>
-				<groupId>org.jacoco</groupId>
-				<artifactId>jacoco-maven-plugin</artifactId>
-				<executions>
-					<execution>
-						<id>report</id>
-						<goals>
-							<goal>report-aggregate</goal>
-						</goals>
-						<phase>verify</phase>
-					</execution>
-				</executions>
-			</plugin>
+            <plugin>
+                <groupId>org.jacoco</groupId>
+                <artifactId>jacoco-maven-plugin</artifactId>
+                <version>${jacoco.version}</version>
+                <executions>
+                    <execution>
+                        <goals>
+                            <goal>prepare-agent</goal>
+                        </goals>
+                    </execution>
+                    <execution>
+                        <id>report</id>
+                        <phase>verify</phase>
+                        <goals>
+                            <goal>report-aggregate</goal>
+                        </goals>
+                    </execution>
+                </executions>
+            </plugin>
 		</plugins>
 	</build>
 </project>
