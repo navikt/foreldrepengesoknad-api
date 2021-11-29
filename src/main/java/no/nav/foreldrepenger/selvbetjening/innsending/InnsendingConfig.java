@@ -22,6 +22,7 @@ public class InnsendingConfig extends AbstractConfig implements ZoneCrossingAwar
     private static final String SEND = "/mottak/send";
 
     private static final String PING = "mottak/ping";
+    private static final String PANG  = "mottak/ping";
 
     private final String key;
 
@@ -45,6 +46,10 @@ public class InnsendingConfig extends AbstractConfig implements ZoneCrossingAwar
     }
 
     URI ettersendingURI() {
+        return uri(getUri(), ETTERSEND);
+    }
+
+    URI ettersendingTesURI() {
         return uri(getUri(), ETTERSEND);
     }
 

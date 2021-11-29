@@ -28,11 +28,13 @@ public abstract class AbstractRestConnection implements PingEndpointAware, Toggl
     public <T> T getForObject(URI uri, Class<T> responseType, boolean throwOnNotFound) {
         try {
             if (!isEnabled()) {
+
                 LOG.info("Service er ikke aktiv, GETer ikke fra {}", uri);
                 return null;
             }
             T respons = operations.getForObject(uri, responseType);
             if (respons != null) {
+
                 LOG.trace(CONFIDENTIAL, "Respons: {}", respons);
             }
             return respons;
