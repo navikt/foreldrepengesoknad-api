@@ -247,14 +247,6 @@
 			</plugin>
 			<plugin>
 				<groupId>org.apache.maven.plugins</groupId>
-				<artifactId>maven-surefire-plugin</artifactId>
-				<configuration>
-					<argLine>--enable-preview</argLine>
-					<excludedGroups>IntegrationTest</excludedGroups>
-				</configuration>
-			</plugin>
-			<plugin>
-				<groupId>org.apache.maven.plugins</groupId>
 				<artifactId>maven-failsafe-plugin</artifactId>
 				<configuration>
 					<excludedGroups>IntegrationTest</excludedGroups>
@@ -282,7 +274,9 @@
 				<groupId>org.apache.maven.plugins</groupId>
 				<artifactId>maven-surefire-plugin</artifactId>
                 <configuration>
-                    <argLine>--add-opens java.base/java.time=ALL-UNNAMED</argLine>
+                    <!-- Må ha @{argLine} ellers blir properties satt av jacoco-maven-plugin overkrevet -->
+                    <argLine>@{argLine} --add-opens java.base/java.time=ALL-UNNAMED</argLine>
+                    <excludedGroups>IntegrationTest</excludedGroups>
                 </configuration>
 			</plugin>
 			<plugin>

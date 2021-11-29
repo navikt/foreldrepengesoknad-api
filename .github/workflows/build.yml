@@ -23,7 +23,7 @@ jobs:
       - name: Kompiler
         run: |
           mvn versions:set -DnewVersion=${TAG}
-          mvn jacoco:prepare-agent install jacoco:report sonar:sonar -e --batch-mode --settings .github/.m2/settings.xml -Dsonar.login=${SONAR_TOKEN}
+          mvn jacoco:prepare-agent install jacoco:report sonar:sonar --quiet --batch-mode --settings .github/.m2/settings.xml -Dsonar.login=${SONAR_TOKEN}
         env:
             SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}
             GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
