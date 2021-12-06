@@ -4,6 +4,7 @@ import static no.nav.foreldrepenger.selvbetjening.util.StringUtil.maskFnr;
 
 import java.util.List;
 
+import no.nav.foreldrepenger.selvbetjening.innsyn.sakerV2.Saker;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnProperty;
@@ -47,6 +48,12 @@ public class InnsynTjeneste implements Innsyn {
     public List<Sak> hentSaker() {
         LOG.info("Henter saker for pålogget bruker");
         return connection.hentSaker();
+    }
+
+    @Override
+    public Saker hentSakerV2() {
+        LOG.info("Henter sakerV2 for pålogget bruker");
+        return connection.hentSakerV2();
     }
 
     @Override

@@ -5,6 +5,7 @@ import java.util.List;
 import javax.inject.Inject;
 import javax.validation.constraints.NotNull;
 
+import no.nav.foreldrepenger.selvbetjening.innsyn.sakerV2.Saker;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -34,6 +35,12 @@ public class InnsynController {
     public List<Sak> saker() {
         return innsynTjeneste.hentSaker();
     }
+
+    @GetMapping("/v2/saker")
+    public Saker sakerV2() {
+        return innsynTjeneste.hentSakerV2();
+    }
+
 
     @GetMapping("/uttaksplan")
     public Uttaksplan uttaksplan(@RequestParam(name = "saksnummer") String saksnummer) {

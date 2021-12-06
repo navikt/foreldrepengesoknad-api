@@ -1,23 +1,20 @@
 package no.nav.foreldrepenger.selvbetjening;
 
-import static java.time.LocalDateTime.now;
-import static no.nav.foreldrepenger.selvbetjening.oppslag.OppslagTjenesteStub.personDto;
-import static org.junit.jupiter.api.Assertions.assertEquals;
-
-import java.io.IOException;
-
-import javax.inject.Inject;
-
+import com.fasterxml.jackson.core.JsonProcessingException;
+import com.fasterxml.jackson.databind.ObjectMapper;
+import no.nav.foreldrepenger.selvbetjening.innsending.domain.Barn;
+import no.nav.foreldrepenger.selvbetjening.innsending.domain.Engangsstønad;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.springframework.boot.test.autoconfigure.json.AutoConfigureJsonTesters;
 import org.springframework.test.context.junit.jupiter.SpringExtension;
 
-import com.fasterxml.jackson.core.JsonProcessingException;
-import com.fasterxml.jackson.databind.ObjectMapper;
+import javax.inject.Inject;
+import java.io.IOException;
 
-import no.nav.foreldrepenger.selvbetjening.innsending.domain.Barn;
-import no.nav.foreldrepenger.selvbetjening.innsending.domain.Engangsstønad;
+import static java.time.LocalDateTime.now;
+import static no.nav.foreldrepenger.selvbetjening.oppslag.OppslagTjenesteStub.personDto;
+import static org.junit.jupiter.api.Assertions.assertEquals;
 
 @ExtendWith(SpringExtension.class)
 @AutoConfigureJsonTesters
@@ -38,7 +35,6 @@ public class SerializationTest {
         Barn barn = new Barn();
         barn.erBarnetFødt = false;
         engangsstønad.setBarn(barn);
-
         test(engangsstønad);
     }
 

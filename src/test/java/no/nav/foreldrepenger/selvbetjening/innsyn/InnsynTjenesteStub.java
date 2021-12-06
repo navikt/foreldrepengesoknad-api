@@ -8,7 +8,9 @@ import java.time.LocalDateTime;
 import java.util.Arrays;
 import java.util.Collections;
 import java.util.List;
+import java.util.Set;
 
+import no.nav.foreldrepenger.selvbetjening.innsyn.sakerV2.Saker;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnProperty;
 import org.springframework.stereotype.Service;
 
@@ -52,6 +54,11 @@ public class InnsynTjenesteStub implements Innsyn {
     @Override
     public Uttaksplan hentUttaksplanAnnenPart(String annenPart) {
         return null;
+    }
+
+    @Override
+    public Saker hentSakerV2() {
+        return new Saker(Set.of(), Set.of(), Set.of());
     }
 
 }

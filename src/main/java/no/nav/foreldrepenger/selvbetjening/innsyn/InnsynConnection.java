@@ -8,6 +8,7 @@ import java.util.Arrays;
 import java.util.List;
 import java.util.Optional;
 
+import no.nav.foreldrepenger.selvbetjening.innsyn.sakerV2.Saker;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Component;
@@ -86,5 +87,9 @@ public class InnsynConnection extends AbstractRestConnection {
                 .ofNullable(getForObject(cfg.arbeidsforholdURI(), Arbeidsforhold[].class, false))
                 .map(Arrays::asList)
                 .orElse(emptyList());
+    }
+
+    public Saker hentSakerV2() {
+        return getForObject(cfg.fpsakV2URI(), Saker.class);
     }
 }

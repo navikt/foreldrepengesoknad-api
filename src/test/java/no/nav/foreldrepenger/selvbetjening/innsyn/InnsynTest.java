@@ -66,4 +66,5 @@ public class InnsynTest {
         innsyn.hentUttaksplan("42");
         server.verify();
     }
+
 }
