@@ -18,7 +18,7 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 
 @ExtendWith(SpringExtension.class)
 @AutoConfigureJsonTesters
-class SakerSerialiseringTest {
+class SakerV2SerialiseringTest {
 
     @Inject
     private ObjectMapper mapper;
@@ -51,7 +51,7 @@ class SakerSerialiseringTest {
         var åpenBehandling = new FpÅpenBehandling(BehandlingTilstand.UNDER_BEHANDLING, Set.of(new Søknadsperiode(LocalDate.of(2021, 11, 1),
             LocalDate.of(2021, 11, 13), KontoType.FORELDREPENGER)));
         var fpVedtak = new FpVedtak(List.of(vedtakPerioder));
-        var fpSak = new FpSak(saksnummer, false, false, false,
+        var fpSak = new FpSak(saksnummer, false, false, false, false,
             RettighetType.ALENEOMSORG, annenPart, familieHendelse, fpVedtak, åpenBehandling, Set.of(barn),
             Dekningsgrad.ÅTTI);
         var saker = new Saker(Set.of(fpSak), Set.of(), Set.of());
