@@ -1,0 +1,52 @@
+{
+    "barn": {
+        "erBarnetFødt": false,
+        "termindato": "2021-12-30T00:00:00.000Z"
+    },
+    "erEndringssøknad": false,
+    "informasjonOmUtenlandsopphold": {
+        "iNorgeNeste12Mnd": true,
+        "iNorgePåHendelsestidspunktet": true,
+        "iNorgeSiste12Mnd": true,
+        "jobbetINorgeSiste12Mnd": true,
+        "senereOpphold": [],
+        "tidligereOpphold": []
+    },
+    "søker": {
+        "harHattAnnenInntektSiste10Mnd": false,
+        "harJobbetSomFrilansSiste10Mnd": false,
+        "harJobbetSomSelvstendigNæringsdrivendeSiste10Mnd": false,
+        "rolle": "mor",
+        "språkkode": "NB"
+    },
+    "tilrettelegging": [
+        {
+            "arbeidsforhold": {
+                "id": "972674818",
+                "type": "virksomhet"
+            },
+            "behovForTilretteleggingFom": "2021-12-01T00:00:00.000Z",
+            "stillingsprosent": 50,
+            "tilrettelagtArbeidFom": "2021-12-02T00:00:00.000Z",
+            "type": "delvis",
+            "vedlegg": [
+                "V8419199561626166422394411330007013948"
+            ]
+        }
+    ],
+    "type": "svangerskapspenger",
+    "vedlegg": [
+        {
+            "file": {},
+            "filename": "nav-logo-black.png",
+            "filesize": 1529,
+            "id": "V8419199561626166422394411330007013948",
+            "pending": false,
+            "skjemanummer": "I000109",
+            "type": "tilrettelegging",
+            "uploaded": true,
+            "url": "https://foreldrepengesoknad-api.dev.nav.no/rest/storage/vedlegg/733de40c-1c57-4cbc-933f-dcd43ba8548b",
+            "uuid": "733de40c-1c57-4cbc-933f-dcd43ba8548b"
+        }
+    ]
+}

@@ -22,7 +22,7 @@ public class UttaksplanPeriode {
     private Boolean ønskerSamtidigUttak;
     private Boolean gradert;
     private String morsAktivitetIPerioden;
-    public Boolean ønskerFlerbarnsdager;
+    private Boolean ønskerFlerbarnsdager;
 
     private Tidsperiode tidsperiode;
     private String forelder;
@@ -141,6 +141,14 @@ public class UttaksplanPeriode {
 
     public void setMorsAktivitetIPerioden(String morsAktivitetIPerioden) {
         this.morsAktivitetIPerioden = morsAktivitetIPerioden;
+    }
+
+    public Boolean getØnskerFlerbarnsdager() {
+        return ønskerFlerbarnsdager;
+    }
+
+    public void setØnskerFlerbarnsdager(Boolean ønskerFlerbarnsdager) {
+        this.ønskerFlerbarnsdager = ønskerFlerbarnsdager;
     }
 
     public Tidsperiode getTidsperiode() {

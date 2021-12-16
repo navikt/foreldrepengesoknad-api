@@ -56,16 +56,12 @@ public class InnsendingTjenesteStub implements Innsending {
     }
 
     private Kvittering postStub(Søknad søknad) {
-        SøknadDto dto;
-        if (søknad instanceof Engangsstønad) {
-            dto = new EngangsstønadDto((Engangsstønad) søknad);
-        } else if (søknad instanceof Foreldrepengesøknad) {
-            dto = new ForeldrepengesøknadDto((Foreldrepengesøknad) søknad);
-        } else if (søknad instanceof Svangerskapspengesøknad) {
-            dto = new SvangerskapspengesøknadDto((Svangerskapspengesøknad) søknad);
-        } else {
-            throw new BadRequestException("Unknown application type");
-        }
+        SøknadDto dto = switch (søknad) {
+            case Engangsstønad engangsstønad -> new EngangsstønadDto(engangsstønad);
+            case Foreldrepengesøknad foreldrepengesøknad -> new ForeldrepengesøknadDto(foreldrepengesøknad);
+            case Svangerskapspengesøknad svangerskapspengesøknad -> new SvangerskapspengesøknadDto(svangerskapspengesøknad);
+            case null, default -> throw new BadRequestException("Unknown application type");
+        };
 
         dto.tilleggsopplysninger = søknad.getTilleggsopplysninger();
         søknad.getVedlegg().forEach(v -> {

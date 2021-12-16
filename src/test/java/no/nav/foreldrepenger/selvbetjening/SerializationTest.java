@@ -1,36 +1,43 @@
 package no.nav.foreldrepenger.selvbetjening;
 
-import com.fasterxml.jackson.core.JsonProcessingException;
-import com.fasterxml.jackson.databind.ObjectMapper;
-import no.nav.foreldrepenger.selvbetjening.innsending.domain.Barn;
-import no.nav.foreldrepenger.selvbetjening.innsending.domain.Engangsstønad;
-import org.junit.jupiter.api.Test;
-import org.junit.jupiter.api.extension.ExtendWith;
-import org.springframework.boot.test.autoconfigure.json.AutoConfigureJsonTesters;
-import org.springframework.test.context.junit.jupiter.SpringExtension;
-
-import javax.inject.Inject;
-import java.io.IOException;
-
 import static java.time.LocalDateTime.now;
 import static no.nav.foreldrepenger.selvbetjening.oppslag.OppslagTjenesteStub.personDto;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 
-@ExtendWith(SpringExtension.class)
-@AutoConfigureJsonTesters
-public class SerializationTest {
+import java.io.IOException;
 
-    @Inject
+import javax.inject.Inject;
+
+import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.extension.ExtendWith;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.boot.test.autoconfigure.json.AutoConfigureJsonTesters;
+import org.springframework.test.context.ContextConfiguration;
+import org.springframework.test.context.junit.jupiter.SpringExtension;
+
+import com.fasterxml.jackson.core.JsonProcessingException;
+import com.fasterxml.jackson.databind.ObjectMapper;
+
+import no.nav.foreldrepenger.selvbetjening.config.JacksonConfiguration;
+import no.nav.foreldrepenger.selvbetjening.innsending.domain.Barn;
+import no.nav.foreldrepenger.selvbetjening.innsending.domain.Engangsstønad;
+
+@ExtendWith(SpringExtension.class)
+@ContextConfiguration(classes = JacksonConfiguration.class)
+class SerializationTest {
+
+    @Autowired
     ObjectMapper mapper;
 
     @Test
-    public void person_serialiaztion() throws IOException {
+    void person_serialiaztion() throws IOException {
         test(personDto());
     }
 
     @Test
-    public void engangstonad_deserialisation() throws IOException {
+    void engangstonad_deserialisation() throws IOException {
         Engangsstønad engangsstønad = new Engangsstønad();
+        engangsstønad.setType("engangsstønad");
         engangsstønad.setOpprettet(now());
         Barn barn = new Barn();
         barn.erBarnetFødt = false;
