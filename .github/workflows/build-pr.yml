@@ -26,9 +26,16 @@ jobs:
           distribution: 'adopt'
           check-latest: true
           cache: 'maven'
-      - name: Kompiler
+      - name: Kompiler med sonar analyse
+        if: github.actor != 'dependabot[bot]'
         run: |
           mvn jacoco:prepare-agent install jacoco:report sonar:sonar --quiet --batch-mode --settings .github/.m2/settings.xml -Dsonar.login=${SONAR_TOKEN}
         env:
           SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+      - name: Kompiler uten sonar analyse
+        if: github.actor == 'dependabot[bot]'
+        run: |
+          mvn install --quiet --batch-mode --settings .github/.m2/settings.xml
+        env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
