@@ -33,6 +33,7 @@
 		<project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
 		<project.reporting.outputEncoding>UTF-8</project.reporting.outputEncoding>
 
+        <mottak-felles.version>0.3.3</mottak-felles.version>
 		<springfox.version>3.0.0</springfox.version>
 		<token-validation-version>1.3.8</token-validation-version>
         <nimbus-jose-jwt.version>8.20</nimbus-jose-jwt.version>
@@ -238,6 +239,11 @@
 			<groupId>org.projectlombok</groupId>
 			<artifactId>lombok</artifactId>
 		</dependency>
+        <dependency>
+            <groupId>no.nav.foreldrepenger</groupId>
+            <artifactId>fpsoknad-felles</artifactId>
+            <version>${mottak-felles.version}</version>
+        </dependency>
 	</dependencies>
 	<build>
 		<plugins>
@@ -272,7 +278,7 @@
 				<artifactId>maven-surefire-plugin</artifactId>
                 <configuration>
                     <!-- Må ha @{argLine} ellers blir properties satt av jacoco-maven-plugin overkrevet -->
-                    <argLine>@{argLine} --add-opens java.base/java.time=ALL-UNNAMED</argLine>
+                    <argLine>@{argLine} --enable-preview --add-opens java.base/java.time=ALL-UNNAMED</argLine>
                 </configuration>
 			</plugin>
 			<plugin>
@@ -280,9 +286,10 @@
 				<artifactId>maven-compiler-plugin</artifactId>
 				<configuration>
 					<parameters>true</parameters>
-                    <source>${java.version}</source>
-                    <target>${java.version}</target>
+                    <source>17</source>
+                    <target>17</target>
                     <release>${java.version}</release>
+                    <compilerArgs>--enable-preview</compilerArgs>
                 </configuration>
 			</plugin>
             <plugin>

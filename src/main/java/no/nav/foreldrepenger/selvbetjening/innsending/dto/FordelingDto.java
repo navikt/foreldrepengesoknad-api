@@ -50,7 +50,7 @@ public class FordelingDto {
             } else {
                 this.type = type(u.getType());
             }
-            this.ønskerFlerbarnsdager = u.ønskerFlerbarnsdager;
+            this.ønskerFlerbarnsdager = u.getØnskerFlerbarnsdager();
             this.uttaksperiodeType = u.getKonto();
             this.fom = u.getTidsperiode().getFom();
             this.tom = u.getTidsperiode().getTom();

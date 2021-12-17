@@ -1,0 +1,119 @@
+{
+    "søker": {
+        "erAleneOmOmsorg": false,
+        "rolle": "MOR",
+        "harJobbetSomFrilansSiste10Mnd": true,
+        "frilansInformasjon": {
+            "oppstart": "2019-12-10T00:00:00.000Z",
+            "jobberFremdelesSomFrilans": true,
+            "harJobbetForNærVennEllerFamilieSiste10Mnd": false,
+            "driverFosterhjem": false,
+            "oppdragForNæreVennerEllerFamilieSiste10Mnd": []
+        },
+        "harJobbetSomSelvstendigNæringsdrivendeSiste10Mnd": false,
+        "harHattAnnenInntektSiste10Mnd": false,
+        "språkkode": "NB"
+    },
+    "barn": {
+        "antallBarn": 1,
+        "erBarnetFødt": true,
+        "fødselsdatoer": [
+            "2021-12-05T00:00:00.000Z"
+        ],
+        "termindato": "2021-12-08T00:00:00.000Z"
+    },
+    "type": "foreldrepenger",
+    "annenForelder": {
+        "kanIkkeOppgis": false,
+        "fnr": "33333344444",
+        "fornavn": "DØLL",
+        "etternavn": "GYNGEHEST",
+        "erInformertOmSøknaden": true,
+        "harRettPåForeldrepenger": true
+    },
+    "informasjonOmUtenlandsopphold": {
+        "iNorgeNeste12Mnd": false,
+        "iNorgeSiste12Mnd": true,
+        "senereOpphold": [
+            {
+                "land": "GB",
+                "tidsperiode": {
+                    "fom": "2022-03-01T00:00:00.000Z",
+                    "tom": "2022-03-31T00:00:00.000Z"
+                }
+            }
+        ],
+        "tidligereOpphold": []
+    },
+    "harGodkjentVilkår": true,
+    "harGodkjentOppsummering": true,
+    "uttaksplan": [
+        {
+            "id": "269649000-11780-7229-13737-8102090313624",
+            "type": "uttak",
+            "forelder": "mor",
+            "konto": "FORELDREPENGER_FØR_FØDSEL",
+            "tidsperiode": {
+                "fom": "2021-11-15T00:00:00.000Z",
+                "tom": "2021-12-03T00:00:00.000Z"
+            }
+        },
+        {
+            "type": "utsettelse",
+            "id": "125871066-15620-1193-10966-030072902027781",
+            "årsak": "SYKDOM",
+            "tidsperiode": {
+                "fom": "2021-12-06T00:00:00.000Z",
+                "tom": "2021-12-10T00:00:00.000Z"
+            },
+            "forelder": "mor",
+            "erArbeidstaker": true,
+            "vedlegg": [
+                "V0477015220683470502664423844138226544"
+            ]
+        },
+        {
+            "type": "uttak",
+            "id": "63774026-29713-9656-29663-19773173765202",
+            "konto": "MØDREKVOTE",
+            "forelder": "mor",
+            "tidsperiode": {
+                "fom": "2021-12-13T00:00:00.000Z",
+                "tom": "2022-03-18T00:00:00.000Z"
+            },
+            "gradert": false,
+            "ønskerSamtidigUttak": false
+        },
+        {
+            "type": "uttak",
+            "id": "163646744-0537-5498-0256-04780804324456",
+            "konto": "FELLESPERIODE",
+            "forelder": "mor",
+            "tidsperiode": {
+                "fom": "2022-04-04T00:00:00.000Z",
+                "tom": "2022-05-27T00:00:00.000Z"
+            },
+            "gradert": false,
+            "ønskerSamtidigUttak": false
+        }
+    ],
+    "erEndringssøknad": false,
+    "situasjon": "fødsel",
+    "dekningsgrad": "100",
+    "vedlegg": [
+        {
+            "id": "V0477015220683470502664423844138226544",
+            "file": {
+                "name": "",
+                "size": ""
+            },
+            "filename": "",
+            "filesize": "",
+            "uploaded": false,
+            "pending": false,
+            "type": "utsettelseSykdomUttaksplan",
+            "skjemanummer": "I000023",
+            "innsendingsType": "SEND_SENERE"
+        }
+    ]
+}
