@@ -94,7 +94,7 @@ final class ForeldrepengerMapper {
         return Fordeling.builder()
             .perioder(tilLukketPeriodeMedVedlegg(f.getUttaksplan()))
             .erAnnenForelderInformert(toBoolean(f.getAnnenForelder().getErInformertOmSøknaden()))
-            .ønskerKvoteOverført(null) // TODO: Ikke satt av api. Ikke brukt? Hva er default i mottak?
+            // .ønskerKvoteOverført(null) // TODO: Ikke satt av api. Ikke brukt? Hva er default i mottak?
             .build();
     }
 

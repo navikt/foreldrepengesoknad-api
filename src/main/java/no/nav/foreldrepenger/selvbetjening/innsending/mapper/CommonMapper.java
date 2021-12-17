@@ -1,8 +1,10 @@
 package no.nav.foreldrepenger.selvbetjening.innsending.mapper;
 
-import static com.amazonaws.util.StringUtils.isNullOrEmpty;
 import static java.time.LocalDate.now;
 import static no.nav.foreldrepenger.common.util.StreamUtil.safeStream;
+import static no.nav.foreldrepenger.selvbetjening.innsending.mapper.MidlertidigUtils.land;
+import static no.nav.foreldrepenger.selvbetjening.innsending.mapper.MidlertidigUtils.tilInt;
+import static no.nav.foreldrepenger.selvbetjening.innsending.mapper.MidlertidigUtils.tilLong;
 import static no.nav.foreldrepenger.selvbetjening.util.DateUtil.erNyopprettet;
 import static org.apache.commons.lang3.BooleanUtils.toBoolean;
 import static org.apache.commons.lang3.StringUtils.isEmpty;
@@ -110,7 +112,7 @@ final class CommonMapper {
         return Fødsel.builder()
             .fødselsdato(barn.fødselsdatoer)
             .termindato(barn.termindato)
-            .antallBarn(barn.antallBarn)
+            .antallBarn(tilInt(barn.antallBarn))
             .vedlegg(barn.getAlleVedlegg())
             .build();
     }
@@ -120,7 +122,7 @@ final class CommonMapper {
             .omsorgsovertakelsesdato(barn.foreldreansvarsdato)
             .årsak(null) // TODO: Ikke satt av api, heller ikke sendt ned fra frontend
             .fødselsdato(barn.fødselsdatoer)
-            .antallBarn(barn.antallBarn)
+            .antallBarn(tilInt(barn.antallBarn))
             // .beskrivelse() ikke satt, ikke brukt?
             .vedlegg(barn.getAlleVedlegg())
             .build();
@@ -130,7 +132,7 @@ final class CommonMapper {
         return FremtidigFødsel.builder()
             .terminDato(barn.termindato)
             .utstedtDato(barn.terminbekreftelseDato)
-            .antallBarn(barn.antallBarn)
+            .antallBarn(tilInt(barn.antallBarn))
             .vedlegg(barn.getAlleVedlegg())
             .build();
     }
@@ -142,7 +144,7 @@ final class CommonMapper {
             .søkerAdopsjonAlene(toBoolean(barn.søkerAdopsjonAlene))
             .ankomstDato(barn.ankomstdato)
             .fødselsdato(barn.fødselsdatoer)
-            .antallBarn(barn.antallBarn)
+            .antallBarn(tilInt(barn.antallBarn))
             .vedlegg(barn.getAlleVedlegg())
             .build();
     }
@@ -210,10 +212,10 @@ final class CommonMapper {
         // Spesifikk
         var norskOrganisasjonBuilder = NorskOrganisasjon.builder()
             .orgName(selvstendig.getNavnPåNæringen())
-            .orgNummer(Orgnummer.valueOf(selvstendig.getOrganisasjonsnummer()));
+            .orgNummer(selvstendig.getOrganisasjonsnummer() != null ? Orgnummer.valueOf(selvstendig.getOrganisasjonsnummer()): null);
 
 
-        // Generelle TODO: Identisk til UtenlandskOrgansiasjon.. Mye duplisering... skrive om abstract class maybe?
+        // Generelle TODO: Identisk til UtenlandskOrgansiasjon.. Mye duplisering... skrive bort i fra abstract class maybe?
         norskOrganisasjonBuilder
             .stillingsprosent(selvstendig.getStillingsprosent() != null ? new ProsentAndel(selvstendig.getStillingsprosent()) : null)
             .periode(new ÅpenPeriode(selvstendig.getTidsperiode().getFom(), selvstendig.getTidsperiode().getTom()))
@@ -228,10 +230,10 @@ final class CommonMapper {
         if (næringsInfo != null) {
             norskOrganisasjonBuilder
                 .endringsDato(næringsInfo.getDato())
-                .næringsinntektBrutto(næringsInfo.getNæringsinntektEtterEndring())
+                .næringsinntektBrutto(tilLong(næringsInfo.getNæringsinntektEtterEndring()))
                 .beskrivelseEndring(næringsInfo.getForklaring());
         } else {
-            norskOrganisasjonBuilder.næringsinntektBrutto(selvstendig.getNæringsinntekt());
+            norskOrganisasjonBuilder.næringsinntektBrutto(tilLong(selvstendig.getNæringsinntekt()));
         }
 
         var regnskapsfører = selvstendig.getRegnskapsfører();
@@ -270,10 +272,10 @@ final class CommonMapper {
         if (næringsInfo != null) {
             utenlandskOrganisasjonBuilder
                 .endringsDato(næringsInfo.getDato())
-                .næringsinntektBrutto(næringsInfo.getNæringsinntektEtterEndring())
+                .næringsinntektBrutto(tilLong(næringsInfo.getNæringsinntektEtterEndring()))
                 .beskrivelseEndring(næringsInfo.getForklaring());
         } else {
-            utenlandskOrganisasjonBuilder.næringsinntektBrutto(selvstendig.getNæringsinntekt());
+            utenlandskOrganisasjonBuilder.næringsinntektBrutto(tilLong(selvstendig.getNæringsinntekt()));
         }
 
         var regnskapsfører = selvstendig.getRegnskapsfører();
@@ -341,7 +343,4 @@ final class CommonMapper {
         return new Utenlandsopphold(land(o.getLand()), new LukketPeriode(o.getTidsperiode().getFom(), o.getTidsperiode().getTom()));
     }
 
-    private static CountryCode land(String land) {
-        return isNullOrEmpty(land) ? null : CountryCode.valueOf(land);
-    }
 }
