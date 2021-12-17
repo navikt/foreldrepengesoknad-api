@@ -1,6 +1,6 @@
 package no.nav.foreldrepenger.selvbetjening.innsending.mapper;
 
-import static org.assertj.core.api.Assertions.assertThat;
+import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.fail;
 
 import org.junit.jupiter.api.Test;
@@ -42,25 +42,32 @@ class EttersendingTilDtoSeralizationTest {
     private InnsendingConnection connection;
 
     @Test
-    void testBody() {
+    void testEttersendingMapper() {
         var ettersending = new Ettersending();
         ettersending.setType("foreldrepenger");
         ettersending.setSaksnummer("352003131");
         testDeseraliseringProdusererSammeObjekt(ettersending);
     }
 
+    private void testDeseraliseringProdusererSammeObjekt(Ettersending ettersendingFraFrontend) {
+        testDeseraliseringProdusererSammeObjekt(ettersendingFraFrontend, false);
+    }
 
-
-    private void testDeseraliseringProdusererSammeObjekt(Ettersending ettersending) {
+    private void testDeseraliseringProdusererSammeObjekt(Ettersending ettersendingFraFrontend, boolean log) {
+        var ettersending = connection.body(ettersendingFraFrontend);
         try {
-            var søknadOLDDto = connection.body(ettersending);
-            var seralized_old = serialize(søknadOLDDto);
-            var deseralized_old = mapper.readValue(seralized_old, no.nav.foreldrepenger.common.domain.felles.Ettersending.class);
-
-            var søknadNY = connection.tilEttersendingNY(ettersending);
-            var seralized_ny = serialize(søknadNY);
-            var deseralized_ny = mapper.readValue(seralized_ny, no.nav.foreldrepenger.common.domain.felles.Ettersending.class);
-            assertThat(deseralized_old).isEqualTo(deseralized_ny);
+            if (log) {
+                LOG.info("{}", ettersending);
+            }
+            var serialized = serialize(ettersending);
+            if (log) {
+                LOG.info("Serialized as {}", serialized);
+            }
+            var deserialized = mapper.readValue(serialized, ettersending.getClass());
+            if (log) {
+                LOG.info("{}", deserialized);
+            }
+            assertEquals(ettersending, deserialized);
         } catch (Exception e) {
             LOG.error("Oops", e);
             fail(ettersending.getClass().getSimpleName() + " failed");

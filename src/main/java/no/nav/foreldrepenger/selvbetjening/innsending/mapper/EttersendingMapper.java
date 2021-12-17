@@ -24,12 +24,7 @@ public final class EttersendingMapper {
         return ettersendingDto;
     }
 
-    public static no.nav.foreldrepenger.common.domain.felles.Ettersending leggTilVedlegg(no.nav.foreldrepenger.common.domain.felles.Ettersending ettersending, Vedlegg vedlegg) {
-        ettersending.getVedlegg().add(tilVedlegg(vedlegg));
-        return ettersending;
-    }
-
-    private static no.nav.foreldrepenger.common.domain.felles.Vedlegg tilVedlegg(Vedlegg vedlegg) {
+    public static no.nav.foreldrepenger.common.domain.felles.Vedlegg tilVedlegg(Vedlegg vedlegg) {
         var vedleggMetadata = new VedleggMetaData(
             vedlegg.getBeskrivelse(),
             vedlegg.getId(),
