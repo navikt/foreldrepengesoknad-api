@@ -1,6 +1,5 @@
 package no.nav.foreldrepenger.selvbetjening.innsending.mapper;
 
-import static java.util.Collections.emptyList;
 import static no.nav.foreldrepenger.selvbetjening.innsending.mapper.CommonMapper.tilMedlemskap;
 import static no.nav.foreldrepenger.selvbetjening.innsending.mapper.CommonMapper.tilOpptjening;
 

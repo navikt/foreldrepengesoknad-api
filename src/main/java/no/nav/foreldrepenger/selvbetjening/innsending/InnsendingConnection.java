@@ -15,7 +15,6 @@ import org.springframework.stereotype.Component;
 import org.springframework.web.client.RestOperations;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
-import com.fasterxml.jackson.databind.JsonMappingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 
 import no.nav.foreldrepenger.selvbetjening.error.UnexpectedInputException;
@@ -116,7 +115,7 @@ public class InnsendingConnection extends AbstractRestConnection {
         logJSON(dto);
         dto.mottattdato = LocalDate.now();
         dto.tilleggsopplysninger = søknad.getTilleggsopplysninger();
-        LOG.info("{} vedlegg {}", søknad.getVedlegg().size(), søknad.getVedlegg());
+        LOG.trace("{} vedlegg {}", søknad.getVedlegg().size(), søknad.getVedlegg());
         søknad.getVedlegg().forEach(v -> dto.addVedlegg(convert(v)));
         return dto;
     }
@@ -146,7 +145,7 @@ public class InnsendingConnection extends AbstractRestConnection {
         logJSON(dto);
         dto.setMottattdato(LocalDate.now());
         dto.setTilleggsopplysninger(søknad.getTilleggsopplysninger());
-        LOG.info("{} vedlegg {}", søknad.getVedlegg().size(), søknad.getVedlegg());
+        LOG.trace("{} vedlegg {}", søknad.getVedlegg().size(), søknad.getVedlegg());
         søknad.getVedlegg().forEach(v -> SøknadMapper.leggTilVedlegg(dto, convert(v)));
         return dto;
     }

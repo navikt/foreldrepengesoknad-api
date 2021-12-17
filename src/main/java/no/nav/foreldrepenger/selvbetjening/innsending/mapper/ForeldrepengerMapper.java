@@ -1,6 +1,5 @@
 package no.nav.foreldrepenger.selvbetjening.innsending.mapper;
 
-import static java.util.Collections.emptyList;
 import static no.nav.foreldrepenger.selvbetjening.innsending.mapper.CommonMapper.tilAnnenForelder;
 import static no.nav.foreldrepenger.selvbetjening.innsending.mapper.CommonMapper.tilFødsel;
 import static no.nav.foreldrepenger.selvbetjening.innsending.mapper.CommonMapper.tilMedlemskap;
@@ -8,7 +7,6 @@ import static no.nav.foreldrepenger.selvbetjening.innsending.mapper.CommonMapper
 import static no.nav.foreldrepenger.selvbetjening.innsending.mapper.CommonMapper.tilRelasjonTilBarn;
 import static org.apache.commons.lang3.BooleanUtils.toBoolean;
 
-import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
 
