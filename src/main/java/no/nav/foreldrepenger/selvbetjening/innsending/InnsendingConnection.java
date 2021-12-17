@@ -17,6 +17,7 @@ import org.springframework.web.client.RestOperations;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 
+import no.nav.foreldrepenger.common.domain.foreldrepenger.Endringssøknad;
 import no.nav.foreldrepenger.selvbetjening.error.UnexpectedInputException;
 import no.nav.foreldrepenger.selvbetjening.http.AbstractRestConnection;
 import no.nav.foreldrepenger.selvbetjening.innsending.domain.Engangsstønad;
@@ -85,17 +86,41 @@ public class InnsendingConnection extends AbstractRestConnection {
 
     public SøknadDto body(Søknad søknad) {
         var dtoGammel = tilSøknadDto(søknad);
-        sammenlignNySøknadMedGammel(søknad);
+        if (Boolean.TRUE.equals(søknad.getErEndringssøknad())) {
+            sammenlignNyEndringsøknadMedGammel(søknad);
+        } else {
+            sammenlignNySøknadMedGammel(søknad);
+        }
         return dtoGammel;
     }
 
     private void sammenlignNySøknadMedGammel(Søknad søknad) {
         try {
-            var dtoGammel = tilSøknadDto(søknad); // Nytt instans her for å forsikre oss om at vi ikke endrer dto før innsending
+            var dtoGammel = tilSøknadDto(søknad); // Nytt instans her for å forsikre oss om vi ikke endrer dto før innsending
             var søknadGammel = mapper.readValue(serialize(dtoGammel), no.nav.foreldrepenger.common.domain.Søknad.class);
 
             var dtoNY = tilSøknadDtoNY(søknad);
             var søknadNY = mapper.readValue(serialize(dtoNY), no.nav.foreldrepenger.common.domain.Søknad.class);
+
+            if (søknadGammel.equals(søknadNY)) {
+                LOG.trace("Søknad er lik ");
+            } else {
+                LOG.trace("FEIL: Ulikheter mellom ny og gammel mappet søknadsobjet under innsending: \nNY: {}\nGAMMEL: {}",
+                    søknadNY, søknadGammel);
+                LOG.trace("FEIL: Opprinnelig innsendt søknadsobjekt: \n{}", søknad);
+            }
+        } catch (Exception e) {
+            LOG.trace("Uventet feil: Noe gikk feil under seralisering eller deseralisering av en av DTOene", e);
+        }
+    }
+
+    private void sammenlignNyEndringsøknadMedGammel(Søknad søknad) {
+        try {
+            var dtoGammel = tilSøknadDto(søknad); // Nytt instans her for å forsikre oss at vi ikke endrer dto før innsending
+            var søknadGammel = mapper.readValue(serialize(dtoGammel), Endringssøknad.class);
+
+            var dtoNY = tilSøknadDtoNY(søknad);
+            var søknadNY = mapper.readValue(serialize(dtoNY), Endringssøknad.class);
 
             if (søknadGammel.equals(søknadNY)) {
                 LOG.trace("Søknad er lik ");

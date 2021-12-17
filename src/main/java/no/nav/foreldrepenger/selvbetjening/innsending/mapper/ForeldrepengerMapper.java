@@ -1,7 +1,6 @@
 package no.nav.foreldrepenger.selvbetjening.innsending.mapper;
 
 import static no.nav.foreldrepenger.selvbetjening.innsending.mapper.CommonMapper.tilAnnenForelder;
-import static no.nav.foreldrepenger.selvbetjening.innsending.mapper.CommonMapper.tilFødsel;
 import static no.nav.foreldrepenger.selvbetjening.innsending.mapper.CommonMapper.tilMedlemskap;
 import static no.nav.foreldrepenger.selvbetjening.innsending.mapper.CommonMapper.tilOpptjening;
 import static no.nav.foreldrepenger.selvbetjening.innsending.mapper.CommonMapper.tilRelasjonTilBarn;
@@ -41,15 +40,12 @@ final class ForeldrepengerMapper {
 
     static no.nav.foreldrepenger.common.domain.Søknad tilForeldrepengesøknad(Foreldrepengesøknad foreldrepengesøknad) {
         if (Boolean.TRUE.equals(foreldrepengesøknad.getErEndringssøknad())) {
-            return Endringssøknad.EndringssøkandsBuilder()
-                .saksnr(foreldrepengesøknad.getSaksnummer())
-                .søker(tilSøker(foreldrepengesøknad))
-                .fordeling(tilFordeling(foreldrepengesøknad))
-                .annenForelder(tilAnnenForelder(foreldrepengesøknad))
-                .fødsel(tilFødsel(foreldrepengesøknad.getBarn()))
-                .rettigheter(tilRettigheter(foreldrepengesøknad))
-                .vedlegg(new ArrayList<>())  // Settes av InnsendingConnection etter logging
-                .build();
+            return new Endringssøknad(
+                foreldrepengesøknad.getSaksnummer(),
+                null, // Settes senere
+                tilSøker(foreldrepengesøknad),
+                tilYtelse(foreldrepengesøknad),
+                new ArrayList<>()); // Settes av InnsendingConnection etter logging
         }
         return no.nav.foreldrepenger.common.domain.Søknad.builder()
             .søker(tilSøker(foreldrepengesøknad))

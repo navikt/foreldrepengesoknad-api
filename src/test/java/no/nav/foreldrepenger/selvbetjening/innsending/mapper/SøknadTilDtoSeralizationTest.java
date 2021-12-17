@@ -182,6 +182,12 @@ class SøknadTilDtoSeralizationTest {
     }
 
     @Test
+    void endringssøknad_termin_mor_mapping_til_dto_test() throws IOException {
+        var sf = mapper.readValue(bytesFra("json/endringssøknad_termin_mor.json"), no.nav.foreldrepenger.selvbetjening.innsending.domain.Søknad.class);
+        testDeseraliseringProdusererSammeObjekt(sf);
+    }
+
+    @Test
     void svangerskapspenger_mapping_til_dto_test() throws IOException {
         var sf = mapper.readValue(bytesFra("json/svangerskapspengesøknad.json"), no.nav.foreldrepenger.selvbetjening.innsending.domain.Søknad.class);
 
