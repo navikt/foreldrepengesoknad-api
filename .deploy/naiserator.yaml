@@ -23,14 +23,13 @@ spec:
          - host: storage.googleapis.com
          - host: oauth2.googleapis.com
          - host: www.googleapis.com
-         - host: {{gw}}     
+         - host: {{gw}}
 {{/if}}
   image: {{image}}
   port: 8080
   replicas:
       min: 2
-      max: 2
-      cpuThresholdPercentage: 50
+      max: 3
   liveness:
       path: /internal/actuator/health/liveness
       initialDelay: 60
@@ -40,10 +39,6 @@ spec:
   prometheus:
       enabled: true
       path: /internal/actuator/prometheus
-  replicas:
-      min: 2
-      max: 2
-      cpuThresholdPercentage: 50
   ingresses:
 {{#each ingresses as |url|}}
     - {{url}}
@@ -53,8 +48,8 @@ spec:
          cpu: 1500m
          memory: 3072Mi
       requests:
-         cpu: 250m
-         memory: 1536Mi
+         cpu: 50m
+         memory: 1024Mi
 {{#unless gcp}}
   webproxy: true
 {{/unless}}
