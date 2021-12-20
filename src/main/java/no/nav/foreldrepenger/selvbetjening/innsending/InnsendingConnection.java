@@ -106,6 +106,7 @@ public class InnsendingConnection extends AbstractRestConnection {
                 LOG.info("FEIL: Ny søknad er ikke identisk til gammel søknad! Denne feilmeldingen kan ignoreres under daglig overvåking");
             }
         } catch (Exception e) {
+            LOG.info("FEIL: Seralisering eller deseralisering av ny søknad feilet!");
             LOG.trace("Uventet feil: Noe gikk feil under seralisering eller deseralisering av en av DTOene", e);
         }
     }
@@ -122,6 +123,7 @@ public class InnsendingConnection extends AbstractRestConnection {
                 LOG.info("FEIL: Ny søknad er ikke identisk til gammel endringssøknad! Denne feilmeldingen kan ignoreres under daglig overvåking");
             }
         } catch (Exception e) {
+            LOG.info("FEIL: Seralisering eller deseralisering av ny endringssøknad feilet!");
             LOG.trace("Uventet feil: Noe gikk feil under seralisering eller deseralisering av en av DTOene", e);
         }
     }
