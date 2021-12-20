@@ -102,12 +102,8 @@ public class InnsendingConnection extends AbstractRestConnection {
             var dtoNY = tilSøknadDtoNY(søknad);
             var søknadNY = mapper.readValue(serialize(dtoNY), no.nav.foreldrepenger.common.domain.Søknad.class);
 
-            if (søknadGammel.equals(søknadNY)) {
-                LOG.trace("Søknad er lik ");
-            } else {
-                LOG.trace("FEIL: Ulikheter mellom ny og gammel mappet søknadsobjet under innsending: \nNY: {}\nGAMMEL: {}",
-                    søknadNY, søknadGammel);
-                LOG.trace("FEIL: Opprinnelig innsendt søknadsobjekt: \n{}", søknad);
+            if (!søknadGammel.equals(søknadNY)) {
+                LOG.info("FEIL: Ny søknad er ikke identisk til gammel søknad! Denne feilmeldingen kan ignoreres under daglig overvåking");
             }
         } catch (Exception e) {
             LOG.trace("Uventet feil: Noe gikk feil under seralisering eller deseralisering av en av DTOene", e);
@@ -122,12 +118,8 @@ public class InnsendingConnection extends AbstractRestConnection {
             var dtoNY = tilSøknadDtoNY(søknad);
             var søknadNY = mapper.readValue(serialize(dtoNY), Endringssøknad.class);
 
-            if (søknadGammel.equals(søknadNY)) {
-                LOG.trace("Søknad er lik ");
-            } else {
-                LOG.trace("FEIL: Ulikheter mellom ny og gammel mappet søknadsobjet under innsending: \nNY: {}\nGAMMEL: {}",
-                    søknadNY, søknadGammel);
-                LOG.trace("FEIL: Opprinnelig innsendt søknadsobjekt: \n{}", søknad);
+            if (!søknadGammel.equals(søknadNY)) {
+                LOG.info("FEIL: Ny søknad er ikke identisk til gammel endringssøknad! Denne feilmeldingen kan ignoreres under daglig overvåking");
             }
         } catch (Exception e) {
             LOG.trace("Uventet feil: Noe gikk feil under seralisering eller deseralisering av en av DTOene", e);
