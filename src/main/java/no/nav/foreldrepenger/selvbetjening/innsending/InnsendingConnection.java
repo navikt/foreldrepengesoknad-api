@@ -128,7 +128,6 @@ public class InnsendingConnection extends AbstractRestConnection {
         }
     }
 
-
     public SøknadDto tilSøknadDto(Søknad søknad) {
         SøknadDto dto = ytelse(søknad);
         logJSON(dto);
@@ -136,6 +135,16 @@ public class InnsendingConnection extends AbstractRestConnection {
         dto.tilleggsopplysninger = søknad.getTilleggsopplysninger();
         LOG.trace("{} vedlegg {}", søknad.getVedlegg().size(), søknad.getVedlegg());
         søknad.getVedlegg().forEach(v -> dto.addVedlegg(convert(v)));
+        return dto;
+    }
+
+    public no.nav.foreldrepenger.common.domain.Søknad tilSøknadDtoNY(Søknad søknad) {
+        var dto = tilSøknad(søknad);
+        logJSON(dto);
+        dto.setMottattdato(LocalDate.now());
+        dto.setTilleggsopplysninger(søknad.getTilleggsopplysninger());
+        LOG.trace("{} vedlegg {}", søknad.getVedlegg().size(), søknad.getVedlegg());
+        søknad.getVedlegg().forEach(v -> SøknadMapper.leggTilVedlegg(dto, convert(v)));
         return dto;
     }
 
@@ -153,24 +162,36 @@ public class InnsendingConnection extends AbstractRestConnection {
         throw new UnexpectedInputException("Unknown application type " + søknad.getClass().getSimpleName());
     }
 
-    private EttersendingDto body(Ettersending ettersending) {
+    public EttersendingDto body(Ettersending ettersending) {
+        var dto = tilEttersendingDtoGammel(ettersending);
+        sammenlignEttersending(ettersending);
+        return dto;
+    }
+
+    public EttersendingDto tilEttersendingDtoGammel(Ettersending ettersending) {
         EttersendingDto dto = new EttersendingDto(ettersending);
         ettersending.getVedlegg().forEach(v -> dto.addVedlegg(convert(v)));
         return dto;
     }
 
-    public no.nav.foreldrepenger.common.domain.Søknad tilSøknadDtoNY(Søknad søknad) {
-        var dto = tilSøknad(søknad);
-        logJSON(dto);
-        dto.setMottattdato(LocalDate.now());
-        dto.setTilleggsopplysninger(søknad.getTilleggsopplysninger());
-        LOG.trace("{} vedlegg {}", søknad.getVedlegg().size(), søknad.getVedlegg());
-        søknad.getVedlegg().forEach(v -> SøknadMapper.leggTilVedlegg(dto, convert(v)));
-        return dto;
+    private void sammenlignEttersending(Ettersending ettersending) {
+        try {
+            var dtoGammel = tilEttersendingDtoGammel(ettersending); // Nytt instans her for å forsikre oss om vi ikke endrer dto før innsending
+            var ettersendingGammel = mapper.readValue(serialize(dtoGammel), no.nav.foreldrepenger.common.domain.felles.Ettersending.class);
+
+            var dtoNY = tilEttersendingNY(ettersending);
+            var ettersendingNY = mapper.readValue(serialize(dtoNY), no.nav.foreldrepenger.common.domain.felles.Ettersending.class);
+
+            if (!ettersendingGammel.equals(ettersendingNY)) {
+                LOG.info("FEIL: Ny ettersending er ikke identisk til gammel ettersending! Denne feilmeldingen kan ignoreres under daglig overvåking");
+            }
+        } catch (Exception e) {
+            LOG.info("FEIL: Seralisering eller deseralisering av ny ettersending feilet!");
+            LOG.trace("Uventet feil: Noe gikk feil under seralisering eller deseralisering av en av ettersending DTOene", e);
+        }
     }
 
-    // TODO: Implementer etter søknad
-    private no.nav.foreldrepenger.common.domain.felles.Ettersending tilEttersendingNY(Ettersending ettersending) {
+    public no.nav.foreldrepenger.common.domain.felles.Ettersending tilEttersendingNY(Ettersending ettersending) {
         var dto = tilEttersending(ettersending);
         ettersending.getVedlegg().forEach(v -> EttersendingMapper.leggTilVedlegg(dto, convert(v)));
         return dto;
