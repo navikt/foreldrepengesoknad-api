@@ -1,12 +1,14 @@
 package no.nav.foreldrepenger.selvbetjening.innsending;
 
 import static java.time.LocalDateTime.now;
+import static no.nav.foreldrepenger.selvbetjening.innsending.mapper.EttersendingMapper.tilEttersending;
+import static no.nav.foreldrepenger.selvbetjening.innsending.mapper.SøknadMapper.tilSøknad;
+import static no.nav.foreldrepenger.selvbetjening.innsending.mapper.SøknadMapper.tilVedlegg;
 import static org.slf4j.LoggerFactory.getLogger;
 
 import java.time.LocalDate;
 
 import javax.inject.Inject;
-import javax.ws.rs.BadRequestException;
 
 import org.slf4j.Logger;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnProperty;
@@ -15,17 +17,9 @@ import org.springframework.stereotype.Service;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 
-import no.nav.foreldrepenger.selvbetjening.innsending.domain.Engangsstønad;
 import no.nav.foreldrepenger.selvbetjening.innsending.domain.Ettersending;
-import no.nav.foreldrepenger.selvbetjening.innsending.domain.Foreldrepengesøknad;
 import no.nav.foreldrepenger.selvbetjening.innsending.domain.Kvittering;
-import no.nav.foreldrepenger.selvbetjening.innsending.domain.Svangerskapspengesøknad;
 import no.nav.foreldrepenger.selvbetjening.innsending.domain.Søknad;
-import no.nav.foreldrepenger.selvbetjening.innsending.dto.EngangsstønadDto;
-import no.nav.foreldrepenger.selvbetjening.innsending.dto.EttersendingDto;
-import no.nav.foreldrepenger.selvbetjening.innsending.dto.ForeldrepengesøknadDto;
-import no.nav.foreldrepenger.selvbetjening.innsending.dto.SvangerskapspengesøknadDto;
-import no.nav.foreldrepenger.selvbetjening.innsending.dto.SøknadDto;
 
 @Service
 @ConditionalOnProperty(name = "stub.mottak", havingValue = "true")
@@ -56,17 +50,11 @@ public class InnsendingTjenesteStub implements Innsending {
     }
 
     private Kvittering postStub(Søknad søknad) {
-        SøknadDto dto = switch (søknad) {
-            case Engangsstønad engangsstønad -> new EngangsstønadDto(engangsstønad);
-            case Foreldrepengesøknad foreldrepengesøknad -> new ForeldrepengesøknadDto(foreldrepengesøknad);
-            case Svangerskapspengesøknad svangerskapspengesøknad -> new SvangerskapspengesøknadDto(svangerskapspengesøknad);
-            case null, default -> throw new BadRequestException("Unknown application type");
-        };
-
-        dto.tilleggsopplysninger = søknad.getTilleggsopplysninger();
+        var dto = tilSøknad(søknad);
+        dto.setTilleggsopplysninger(søknad.getTilleggsopplysninger());
         søknad.getVedlegg().forEach(v -> {
             v.setContent(new byte[] {});
-            dto.addVedlegg(v);
+            dto.getVedlegg().add(tilVedlegg(v));
         });
 
         try {
@@ -78,8 +66,7 @@ public class InnsendingTjenesteStub implements Innsending {
     }
 
     private Kvittering postStub(Ettersending ettersending) {
-        EttersendingDto dto = new EttersendingDto(ettersending);
-        ettersending.getVedlegg().forEach(v -> v.setContent(new byte[] {}));
+        var dto = tilEttersending(ettersending);
 
         try {
             LOG.info("Posting JSON (stub): {}", mapper.writeValueAsString(dto));
