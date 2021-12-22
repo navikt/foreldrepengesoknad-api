@@ -53,14 +53,14 @@ public class InnsendingTjeneste implements Innsending {
 
     @Override
     public Kvittering ettersend(Ettersending e) {
-        LOG.info("Ettersender for sak {}", e.getSaksnummer());
-        hentOgSjekk(e.getVedlegg());
-        if (e.getDialogId() != null) {
-            LOG.info("Konverterer tekst til vedleggs-pdf {}", e.getBrukerTekst().getDokumentType());
-            e.getVedlegg().add(vedleggFra(uttalelseFra(e)));
+        LOG.info("Ettersender for sak {}", e.saksnummer());
+        hentOgSjekk(e.vedlegg());
+        if (e.dialogId() != null) {
+            LOG.info("Konverterer tekst til vedleggs-pdf {}", e.brukerTekst().dokumentType());
+            e.vedlegg().add(vedleggFra(uttalelseFra(e)));
         }
         var kvittering = connection.ettersend(e);
-        e.getVedlegg().forEach(mellomlagring::slettKryptertVedlegg);
+        e.vedlegg().forEach(mellomlagring::slettKryptertVedlegg);
         LOG.info(RETURNERER_KVITTERING, kvittering);
         return kvittering;
     }
@@ -81,19 +81,15 @@ public class InnsendingTjeneste implements Innsending {
     }
 
     private Vedlegg vedleggFra(TilbakebetalingUttalelse u) {
-        var vedlegg = new Vedlegg();
-        vedlegg.setBeskrivelse("Tekst fra bruker");
-        vedlegg.setId(id());
-        vedlegg.setContent(pdfGenerator.generate(u));
-        vedlegg.setSkjemanummer(u.getBrukerTekst().getDokumentType());
-        return vedlegg;
+        return new Vedlegg(pdfGenerator.generate(u), "Tekst fra bruker", id(), u.brukerTekst().dokumentType());
     }
 
     private static TilbakebetalingUttalelse uttalelseFra(Ettersending e) {
-        return new TilbakebetalingUttalelse(e.getType(),
-                e.getSaksnummer(),
-                e.getDialogId(),
-                e.getBrukerTekst());
+        return new TilbakebetalingUttalelse(
+                e.type(),
+                e.saksnummer(),
+                e.dialogId(),
+                e.brukerTekst());
     }
 
     private static String id() {

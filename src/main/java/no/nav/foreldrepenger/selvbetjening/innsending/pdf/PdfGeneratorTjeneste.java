@@ -34,10 +34,10 @@ public class PdfGeneratorTjeneste implements PdfGenerator {
         Søkerinfo person = oppslagTjeneste.hentSøkerinfo();
         return new TilbakebetalingUttalelseDto(fulltnavn(person.getSøker()),
                 person.getSøker().fnr,
-                uttalelse.getSaksnummer(),
-                uttalelse.getType(),
+                uttalelse.saksnummer(),
+                uttalelse.type(),
                 LocalDateTime.now().format(DateTimeFormatter.ISO_DATE_TIME),
-                uttalelse.getBrukerTekst().getTekst());
+                uttalelse.brukerTekst().tekst());
     }
 
     private static String fulltnavn(Person person) {

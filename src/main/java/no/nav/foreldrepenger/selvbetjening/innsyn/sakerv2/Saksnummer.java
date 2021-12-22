@@ -1,15 +1,15 @@
-package no.nav.foreldrepenger.selvbetjening.innsyn.sakerV2;
+package no.nav.foreldrepenger.selvbetjening.innsyn.sakerv2;
+
+import java.util.Objects;
 
 import com.fasterxml.jackson.annotation.JsonCreator;
 import com.fasterxml.jackson.annotation.JsonValue;
 
-import java.util.Objects;
-
-public record AktørId(@JsonValue String value) {
+record Saksnummer(@JsonValue String value) {
 
     @JsonCreator(mode = JsonCreator.Mode.DELEGATING)
-    public AktørId {
-        Objects.requireNonNull(value, "AktørId kan ikke være null");
+    Saksnummer {
+        Objects.requireNonNull(value, "saksnummer kan ikke være null");
     }
 
     @Override

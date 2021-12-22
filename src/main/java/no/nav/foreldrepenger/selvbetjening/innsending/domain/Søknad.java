@@ -1,67 +1,67 @@
 package no.nav.foreldrepenger.selvbetjening.innsending.domain;
 
 import static com.fasterxml.jackson.annotation.JsonTypeInfo.Id.NAME;
+import static java.util.Collections.emptyList;
 
 import java.time.LocalDateTime;
-import java.util.ArrayList;
 import java.util.List;
+import java.util.Optional;
 
+import com.fasterxml.jackson.annotation.JsonCreator;
 import com.fasterxml.jackson.annotation.JsonSubTypes;
 import com.fasterxml.jackson.annotation.JsonSubTypes.Type;
 import com.fasterxml.jackson.annotation.JsonTypeInfo;
 
 import lombok.EqualsAndHashCode;
 
+@EqualsAndHashCode
 @JsonTypeInfo(use = NAME, property = "type", visible = true)
 @JsonSubTypes({
         @Type(value = Engangsstønad.class, name = "engangsstønad"),
         @Type(value = Foreldrepengesøknad.class, name = "foreldrepenger"),
         @Type(value = Svangerskapspengesøknad.class, name = "svangerskapspenger")
 })
-@EqualsAndHashCode
-public sealed class Søknad permits Engangsstønad,Foreldrepengesøknad,Svangerskapspengesøknad {
+public abstract sealed class Søknad permits Engangsstønad,Foreldrepengesøknad,Svangerskapspengesøknad {
 
-    private String type;
-    private String saksnummer;
-    private Søker søker;
     private LocalDateTime opprettet;
+    private final String type;
+    private final String saksnummer;
+    private final Søker søker;
+    private final Barn barn;
+    private final AnnenForelder annenForelder;
+    private final Utenlandsopphold informasjonOmUtenlandsopphold;
+    private final String situasjon;
+    private final Boolean erEndringssøknad;
+    private final String tilleggsopplysninger;
+    private final List<Vedlegg> vedlegg;
 
-    private Barn barn;
-    private AnnenForelder annenForelder;
-    private Utenlandsopphold informasjonOmUtenlandsopphold;
-
-    private String situasjon;
-    private Boolean erEndringssøknad;
-    private String tilleggsopplysninger;
-
-    private List<Vedlegg> vedlegg;
-
-    public Søknad() {
-        setVedlegg(new ArrayList<>());
+    @JsonCreator
+    protected Søknad(LocalDateTime opprettet, String type, String saksnummer, Søker søker, Barn barn,
+                  AnnenForelder annenForelder, Utenlandsopphold informasjonOmUtenlandsopphold, String situasjon,
+                  Boolean erEndringssøknad, String tilleggsopplysninger, List<Vedlegg> vedlegg) {
+        this.opprettet = opprettet;
+        this.type = type;
+        this.saksnummer = saksnummer;
+        this.søker = søker;
+        this.barn = barn;
+        this.annenForelder = annenForelder;
+        this.informasjonOmUtenlandsopphold = informasjonOmUtenlandsopphold;
+        this.situasjon = situasjon;
+        this.erEndringssøknad = erEndringssøknad;
+        this.tilleggsopplysninger = tilleggsopplysninger;
+        this.vedlegg = Optional.ofNullable(vedlegg).orElse(emptyList());
     }
 
     public String getType() {
         return type;
     }
 
-    public void setType(String type) {
-        this.type = type;
-    }
-
     public String getSaksnummer() {
         return saksnummer;
     }
 
-    public void setSaksnummer(String saksnummer) {
-        this.saksnummer = saksnummer;
-    }
-
     public Søker getSøker() {
         return søker;
-    }
-
-    public void setSøker(Søker søker) {
-        this.søker = søker;
     }
 
     public LocalDateTime getOpprettet() {
@@ -76,64 +76,44 @@ public sealed class Søknad permits Engangsstønad,Foreldrepengesøknad,Svangers
         return barn;
     }
 
-    public void setBarn(Barn barn) {
-        this.barn = barn;
-    }
-
     public AnnenForelder getAnnenForelder() {
         return annenForelder;
-    }
-
-    public void setAnnenForelder(AnnenForelder annenForelder) {
-        this.annenForelder = annenForelder;
     }
 
     public Utenlandsopphold getInformasjonOmUtenlandsopphold() {
         return informasjonOmUtenlandsopphold;
     }
 
-    public void setInformasjonOmUtenlandsopphold(Utenlandsopphold informasjonOmUtenlandsopphold) {
-        this.informasjonOmUtenlandsopphold = informasjonOmUtenlandsopphold;
-    }
-
     public String getSituasjon() {
         return situasjon;
-    }
-
-    public void setSituasjon(String situasjon) {
-        this.situasjon = situasjon;
     }
 
     public Boolean getErEndringssøknad() {
         return erEndringssøknad;
     }
 
-    public void setErEndringssøknad(Boolean erEndringssøknad) {
-        this.erEndringssøknad = erEndringssøknad;
-    }
-
     public String getTilleggsopplysninger() {
         return tilleggsopplysninger;
-    }
-
-    public void setTilleggsopplysninger(String tilleggsopplysninger) {
-        this.tilleggsopplysninger = tilleggsopplysninger;
     }
 
     public List<Vedlegg> getVedlegg() {
         return vedlegg;
     }
 
-    public void setVedlegg(List<Vedlegg> vedlegg) {
-        this.vedlegg = vedlegg;
-    }
-
     @Override
     public String toString() {
-        return getClass().getSimpleName() + "[type=" + type + ", saksnummer=" + saksnummer + ", søker=" + søker
-                + ", opprettet=" + opprettet + ", barn=" + barn + ", annenForelder=" + annenForelder
-                + ", informasjonOmUtenlandsopphold=" + informasjonOmUtenlandsopphold + ", situasjon=" + situasjon
-                + ", erEndringssøknad=" + erEndringssøknad + ", tilleggsopplysninger=" + tilleggsopplysninger
-                + ", vedlegg=" + vedlegg + "]";
+        return "Søknad{" +
+            "type='" + type + '\'' +
+            ", saksnummer='" + saksnummer + '\'' +
+            ", søker=" + søker +
+            ", opprettet=" + opprettet +
+            ", barn=" + barn +
+            ", annenForelder=" + annenForelder +
+            ", informasjonOmUtenlandsopphold=" + informasjonOmUtenlandsopphold +
+            ", situasjon='" + situasjon + '\'' +
+            ", erEndringssøknad=" + erEndringssøknad +
+            ", tilleggsopplysninger='" + tilleggsopplysninger + '\'' +
+            ", vedlegg=" + vedlegg +
+            '}';
     }
 }

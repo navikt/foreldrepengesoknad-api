@@ -60,8 +60,8 @@ final class ForeldrepengerMapper {
             throw new IllegalStateException("Kan ikke ha tom søkerobjekt");
         }
         return new Søker(
-            søker.getRolle() != null ? BrukerRolle.valueOf(søker.getRolle()) : null,
-            søker.getSpråkkode() != null ? Målform.valueOf(søker.getSpråkkode()) : null);
+            søker.rolle() != null ? BrukerRolle.valueOf(søker.rolle()) : null,
+            søker.språkkode() != null ? Målform.valueOf(søker.språkkode()) : null);
     }
 
 
@@ -83,17 +83,17 @@ final class ForeldrepengerMapper {
 
     private static Rettigheter tilRettigheter(Foreldrepengesøknad f) {
         return new Rettigheter(
-            toBoolean(f.getAnnenForelder().getHarRettPåForeldrepenger()),
+            f.getAnnenForelder().harRettPåForeldrepenger(),
             false, // TODO: Ikke satt av api. Ikke brukt? Hva er default i mottak?
-            toBoolean(f.getSøker().getErAleneOmOmsorg()),
-            f.getAnnenForelder().getDatoForAleneomsorg());
+            toBoolean(f.getSøker().erAleneOmOmsorg()),
+            f.getAnnenForelder().datoForAleneomsorg());
     }
 
 
     private static Fordeling tilFordeling(Foreldrepengesøknad f) {
         return Fordeling.builder()
             .perioder(tilLukketPeriodeMedVedlegg(f.getUttaksplan()))
-            .erAnnenForelderInformert(toBoolean(f.getAnnenForelder().getErInformertOmSøknaden()))
+            .erAnnenForelderInformert(f.getAnnenForelder().erInformertOmSøknaden())
             // .ønskerKvoteOverført(null) // TODO: Ikke satt av api. Ikke brukt? Hva er default i mottak?
             .build();
     }
@@ -105,96 +105,96 @@ final class ForeldrepengerMapper {
     }
 
     private static LukketPeriodeMedVedlegg tilLukketPeriodeMedVedlegg(UttaksplanPeriode u) {
-        if (Boolean.TRUE.equals(u.getGradert()) || u.getType().equalsIgnoreCase("gradert")) {
+        if (u.gradert() || u.type().equalsIgnoreCase("gradert")) {
             return tilGradertUttaksperiode(u);
         }
-        return switch (u.getType()) {
+        return switch (u.type()) {
             case "uttak" -> tilUttaksPeriode(u);
             case "opphold" -> tilOppholdsPeriode(u);
             case "periodeUtenUttak" -> tilFriUtsettelsesPeriode(u); // periodeUtenUttak er ekvivalent med "fri" i mottak
             case "utsettelse" -> tilUtsettelsesPeriode(u);
             case "overføring" -> tilOverføringsPeriode(u);
-            default -> throw new IllegalStateException("Ikke støttet periodetype: " + u.getType());
+            default -> throw new IllegalStateException("Ikke støttet periodetype: " + u.type());
         };
     }
 
     private static OverføringsPeriode tilOverføringsPeriode(UttaksplanPeriode u) {
         return OverføringsPeriode.builder()
-            .årsak(u.getÅrsak() != null ? Overføringsårsak.valueOf(u.getÅrsak()) : null)
-            .uttaksperiodeType(u.getKonto() != null ? StønadskontoType.valueOf(u.getKonto()) : null)
-            .fom(u.getTidsperiode().getFom())
-            .tom(u.getTidsperiode().getTom())
-            .vedlegg(u.getVedlegg())
+            .årsak(u.årsak() != null ? Overføringsårsak.valueOf(u.årsak()) : null)
+            .uttaksperiodeType(u.konto() != null ? StønadskontoType.valueOf(u.konto()) : null)
+            .fom(u.tidsperiode().fom())
+            .tom(u.tidsperiode().tom())
+            .vedlegg(u.vedlegg())
             .build();
     }
 
     private static FriUtsettelsesPeriode tilFriUtsettelsesPeriode(UttaksplanPeriode u) {
         return FriUtsettelsesPeriode.FriUtsettelsesPeriodeBuilder()
-            .årsak(u.getÅrsak() != null ? UtsettelsesÅrsak.valueOf(u.getÅrsak()) : null)
-            .type(u.getKonto() != null ? StønadskontoType.valueOf(u.getKonto()) : null)
-            .erArbeidstaker(toBoolean(u.getErArbeidstaker()))
+            .årsak(u.årsak() != null ? UtsettelsesÅrsak.valueOf(u.årsak()) : null)
+            .type(u.konto() != null ? StønadskontoType.valueOf(u.konto()) : null)
+            .erArbeidstaker(u.erArbeidstaker())
             // .virksomhetsnummer() Ikke satt
-            .morsAktivitetsType(u.getMorsAktivitetIPerioden() != null ? MorsAktivitet.valueOf(u.getMorsAktivitetIPerioden()) : null)
-            .fom(u.getTidsperiode().getFom())
-            .tom(u.getTidsperiode().getTom())
-            .vedlegg(u.getVedlegg())
+            .morsAktivitetsType(u.morsAktivitetIPerioden() != null ? MorsAktivitet.valueOf(u.morsAktivitetIPerioden()) : null)
+            .fom(u.tidsperiode().fom())
+            .tom(u.tidsperiode().tom())
+            .vedlegg(u.vedlegg())
             .build();
 
     }
 
     private static UtsettelsesPeriode tilUtsettelsesPeriode(UttaksplanPeriode u) {
         return UtsettelsesPeriode.UtsettelsesPeriodeBuilder()
-            .årsak(u.getÅrsak() != null ? UtsettelsesÅrsak.valueOf(u.getÅrsak()) : null)
-            .uttaksperiodeType(u.getKonto() != null ? StønadskontoType.valueOf(u.getKonto()) : null)
-            .erArbeidstaker(toBoolean(u.getErArbeidstaker()))
-            .virksomhetsnummer(u.getOrgnumre())
-            .morsAktivitetsType(u.getMorsAktivitetIPerioden() != null ? MorsAktivitet.valueOf(u.getMorsAktivitetIPerioden()) : null)
-            .fom(u.getTidsperiode().getFom())
-            .tom(u.getTidsperiode().getTom())
-            .vedlegg(u.getVedlegg())
+            .årsak(u.årsak() != null ? UtsettelsesÅrsak.valueOf(u.årsak()) : null)
+            .uttaksperiodeType(u.konto() != null ? StønadskontoType.valueOf(u.konto()) : null)
+            .erArbeidstaker(u.erArbeidstaker())
+            .virksomhetsnummer(u.orgnumre())
+            .morsAktivitetsType(u.morsAktivitetIPerioden() != null ? MorsAktivitet.valueOf(u.morsAktivitetIPerioden()) : null)
+            .fom(u.tidsperiode().fom())
+            .tom(u.tidsperiode().tom())
+            .vedlegg(u.vedlegg())
             .build();
     }
 
     private static OppholdsPeriode tilOppholdsPeriode(UttaksplanPeriode u) {
         return OppholdsPeriode.builder()
-            .årsak(u.getÅrsak() != null ? Oppholdsårsak.valueOf(u.getÅrsak()) : null)
-            .fom(u.getTidsperiode().getFom())
-            .tom(u.getTidsperiode().getTom())
-            .vedlegg(u.getVedlegg())
+            .årsak(u.årsak() != null ? Oppholdsårsak.valueOf(u.årsak()) : null)
+            .fom(u.tidsperiode().fom())
+            .tom(u.tidsperiode().tom())
+            .vedlegg(u.vedlegg())
             .build();
     }
 
     private static UttaksPeriode tilUttaksPeriode(UttaksplanPeriode u) {
         return UttaksPeriode.UttaksPeriodeBuilder()
-            .uttaksperiodeType(u.getKonto() != null ? StønadskontoType.valueOf(u.getKonto()) : null)
-            .ønskerSamtidigUttak(toBoolean(u.getØnskerSamtidigUttak()))
-            .morsAktivitetsType(u.getMorsAktivitetIPerioden() != null ? MorsAktivitet.valueOf(u.getMorsAktivitetIPerioden()) : null)
-            .ønskerFlerbarnsdager(toBoolean(u.getØnskerFlerbarnsdager()))
-            .samtidigUttakProsent(u.getSamtidigUttakProsent() != null ? new ProsentAndel(u.getSamtidigUttakProsent()) : null)
-            .fom(u.getTidsperiode().getFom())
-            .tom(u.getTidsperiode().getTom())
-            .vedlegg(u.getVedlegg())
+            .uttaksperiodeType(u.konto() != null ? StønadskontoType.valueOf(u.konto()) : null)
+            .ønskerSamtidigUttak(u.ønskerSamtidigUttak())
+            .morsAktivitetsType(u.morsAktivitetIPerioden() != null ? MorsAktivitet.valueOf(u.morsAktivitetIPerioden()) : null)
+            .ønskerFlerbarnsdager(u.ønskerFlerbarnsdager())
+            .samtidigUttakProsent(u.samtidigUttakProsent() != null ? new ProsentAndel(u.samtidigUttakProsent()) : null)
+            .fom(u.tidsperiode().fom())
+            .tom(u.tidsperiode().tom())
+            .vedlegg(u.vedlegg())
             .build();
     }
 
     private static GradertUttaksPeriode tilGradertUttaksperiode(UttaksplanPeriode u) {
         return GradertUttaksPeriode.GradertUttaksPeriodeBuilder()
             .arbeidsForholdSomskalGraderes(true)
-            .arbeidstidProsent(u.getStillingsprosent() != null ? new ProsentAndel(u.getStillingsprosent()) : null)
-            .erArbeidstaker(toBoolean(u.getErArbeidstaker()))
-            .virksomhetsnummer(u.getOrgnumre())
-            .frilans(toBoolean(u.getErFrilanser()))
-            .selvstendig(toBoolean(u.getErSelvstendig()))
+            .arbeidstidProsent(u.stillingsprosent() != null ? new ProsentAndel(u.stillingsprosent()) : null)
+            .erArbeidstaker(u.erArbeidstaker())
+            .virksomhetsnummer(u.orgnumre())
+            .frilans(u.erFrilanser())
+            .selvstendig(u.erSelvstendig())
 
-            .uttaksperiodeType(u.getKonto() != null ? StønadskontoType.valueOf(u.getKonto()) : null)
-            .ønskerSamtidigUttak(toBoolean(u.getØnskerSamtidigUttak()))
-            .morsAktivitetsType(u.getMorsAktivitetIPerioden() != null ? MorsAktivitet.valueOf(u.getMorsAktivitetIPerioden()) : null)
-            .ønskerFlerbarnsdager(toBoolean(u.getØnskerFlerbarnsdager()))
-            .samtidigUttakProsent(u.getSamtidigUttakProsent() != null ? new ProsentAndel(u.getSamtidigUttakProsent()) : null)
+            .uttaksperiodeType(u.konto() != null ? StønadskontoType.valueOf(u.konto()) : null)
+            .ønskerSamtidigUttak(u.ønskerSamtidigUttak())
+            .morsAktivitetsType(u.morsAktivitetIPerioden() != null ? MorsAktivitet.valueOf(u.morsAktivitetIPerioden()) : null)
+            .ønskerFlerbarnsdager(u.ønskerFlerbarnsdager())
+            .samtidigUttakProsent(u.samtidigUttakProsent() != null ? new ProsentAndel(u.samtidigUttakProsent()) : null)
 
-            .fom(u.getTidsperiode().getFom())
-            .tom(u.getTidsperiode().getTom())
-            .vedlegg(u.getVedlegg())
+            .fom(u.tidsperiode().fom())
+            .tom(u.tidsperiode().tom())
+            .vedlegg(u.vedlegg())
             .build();
     }
 }

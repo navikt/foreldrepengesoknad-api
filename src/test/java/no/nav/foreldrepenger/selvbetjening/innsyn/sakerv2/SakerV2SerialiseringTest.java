@@ -1,20 +1,22 @@
-package no.nav.foreldrepenger.selvbetjening.innsyn.sakerV2;
+package no.nav.foreldrepenger.selvbetjening.innsyn.sakerv2;
 
-import com.fasterxml.jackson.core.JsonProcessingException;
-import com.fasterxml.jackson.databind.ObjectMapper;
-import org.junit.jupiter.api.Test;
-import org.junit.jupiter.api.extension.ExtendWith;
-import org.springframework.boot.test.autoconfigure.json.AutoConfigureJsonTesters;
-import org.springframework.test.context.junit.jupiter.SpringExtension;
+import static org.junit.jupiter.api.Assertions.assertEquals;
 
-import javax.inject.Inject;
 import java.io.IOException;
 import java.math.BigDecimal;
 import java.time.LocalDate;
 import java.util.List;
 import java.util.Set;
 
-import static org.junit.jupiter.api.Assertions.assertEquals;
+import javax.inject.Inject;
+
+import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.extension.ExtendWith;
+import org.springframework.boot.test.autoconfigure.json.AutoConfigureJsonTesters;
+import org.springframework.test.context.junit.jupiter.SpringExtension;
+
+import com.fasterxml.jackson.core.JsonProcessingException;
+import com.fasterxml.jackson.databind.ObjectMapper;
 
 @ExtendWith(SpringExtension.class)
 @AutoConfigureJsonTesters
@@ -28,12 +30,12 @@ class SakerV2SerialiseringTest {
 
 
     @Test
-    public void testSerialiseringAnnenPart() throws Exception {
+    void testSerialiseringAnnenPart() throws Exception {
         test(annenPart);
     }
 
     @Test
-    public void SakerMedForeldrepengesakRoundtrip() throws Exception {
+    void SakerMedForeldrepengesakRoundtrip() throws Exception {
         var saksnummer = new Saksnummer("123");
         var familieHendelse = new Familiehendelse(LocalDate.of(2021, 12, 6),
             LocalDate.of(2021, 12, 5), 1, LocalDate.of(2021, 12, 12));

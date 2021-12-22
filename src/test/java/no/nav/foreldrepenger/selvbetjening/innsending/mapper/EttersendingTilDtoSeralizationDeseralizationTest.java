@@ -1,15 +1,16 @@
 package no.nav.foreldrepenger.selvbetjening.innsending.mapper;
 
+import static no.nav.foreldrepenger.common.util.ResourceHandleUtil.bytesFra;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.fail;
+
+import java.io.IOException;
 
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.boot.test.context.TestConfiguration;
-import org.springframework.context.annotation.Bean;
 import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.junit.jupiter.SpringExtension;
 
@@ -19,21 +20,12 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import no.nav.foreldrepenger.selvbetjening.config.JacksonConfiguration;
 import no.nav.foreldrepenger.selvbetjening.innsending.InnsendingConnection;
 import no.nav.foreldrepenger.selvbetjening.innsending.domain.Ettersending;
-import no.nav.foreldrepenger.selvbetjening.vedlegg.Image2PDFConverter;
 
 
 @ExtendWith(SpringExtension.class)
-@ContextConfiguration(classes = { JacksonConfiguration.class, EttersendingTilDtoSeralizationTest.InnsendingConnectionConfiguration.class})
-class EttersendingTilDtoSeralizationTest {
-    private static final Logger LOG = LoggerFactory.getLogger(EttersendingTilDtoSeralizationTest.class);
-
-    @TestConfiguration
-    static class InnsendingConnectionConfiguration {
-        @Bean
-        InnsendingConnection mockInnsendingConnection() {
-            return new InnsendingConnection(null, null, new Image2PDFConverter());
-        }
-    }
+@ContextConfiguration(classes = { JacksonConfiguration.class, FrontendSøknadTilSøknaDtoSeralizationDeseraliseringTest.InnsendingConnectionConfiguration.class})
+class EttersendingTilDtoSeralizationDeseralizationTest {
+    private static final Logger LOG = LoggerFactory.getLogger(EttersendingTilDtoSeralizationDeseralizationTest.class);
 
     @Autowired
     private ObjectMapper mapper;
@@ -43,13 +35,17 @@ class EttersendingTilDtoSeralizationTest {
 
     @Test
     void testEttersendingMapper() {
-        var ettersending = new Ettersending();
-        ettersending.setType("foreldrepenger");
-        ettersending.setSaksnummer("352003131");
+        var ettersending = new Ettersending("foreldrepenger", "952003131", null, null, null);
         testDeseraliseringProdusererSammeObjekt(ettersending);
     }
 
-    private void testDeseraliseringProdusererSammeObjekt(Ettersending ettersendingFraFrontend) {
+    @Test
+    void ettersendelseSeraliseringDeseraliseringTest() throws IOException {
+        var ettersendelse = mapper.readValue(bytesFra("json/ettersendelse_I000044.json"), no.nav.foreldrepenger.selvbetjening.innsending.domain.Ettersending.class);
+        testDeseraliseringProdusererSammeObjekt(ettersendelse);
+    }
+
+        private void testDeseraliseringProdusererSammeObjekt(Ettersending ettersendingFraFrontend) {
         testDeseraliseringProdusererSammeObjekt(ettersendingFraFrontend, false);
     }
 

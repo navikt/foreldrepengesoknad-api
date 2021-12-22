@@ -76,13 +76,13 @@ class FrontendSøknadTilSøknaDtoSeralizationDeseraliseringTest {
         var svpSøknad = (Svangerskapspengesøknad) sf;
         assertThat(svpSøknad.getTilrettelegging()).hasSize(1);
         var tilrettelegging = svpSøknad.getTilrettelegging().get(0);
-        assertThat(tilrettelegging.getType()).isEqualTo("delvis");
-        assertThat(tilrettelegging.getStillingsprosent()).isEqualTo(50);
-        assertThat(tilrettelegging.getArbeidsforhold()).isNotNull();
-        assertThat(tilrettelegging.getBehovForTilretteleggingFom()).isNotNull();
-        assertThat(tilrettelegging.getTilrettelagtArbeidFom()).isNotNull();
+        assertThat(tilrettelegging.type()).isEqualTo("delvis");
+        assertThat(tilrettelegging.stillingsprosent()).isEqualTo(50);
+        assertThat(tilrettelegging.arbeidsforhold()).isNotNull();
+        assertThat(tilrettelegging.behovForTilretteleggingFom()).isNotNull();
+        assertThat(tilrettelegging.tilrettelagtArbeidFom()).isNotNull();
         assertThat(svpSøknad.getVedlegg()).isNotNull();
-        assertThat(svpSøknad.getVedlegg().get(0).getId()).isEqualTo(tilrettelegging.getVedlegg().get(0));
+        assertThat(svpSøknad.getVedlegg().get(0).getId()).isEqualTo(tilrettelegging.vedlegg().get(0));
 
         // Verifiser korrekt seralisering og deseralisering ned mot mottak
         testDeseraliseringProdusererSammeObjekt(sf);
@@ -96,15 +96,18 @@ class FrontendSøknadTilSøknaDtoSeralizationDeseraliseringTest {
         assertThat(engangsstønad.getType()).isEqualTo("engangsstønad");
         var barn = engangsstønad.getBarn();
         assertThat(barn).isNotNull();
-        assertThat(barn.antallBarn).isEqualTo(2);
-        assertThat(barn.erBarnetFødt).isFalse();
-        assertThat(barn.terminbekreftelse).isNotNull();
-        assertThat(barn.termindato).isNotNull();
+        assertThat(barn.fødselsdatoer()).isNull();
+        assertThat(barn.antallBarn()).isEqualTo(2);
+        assertThat(barn.termindato()).isNotNull();
+        assertThat(barn.terminbekreftelse()).isEmpty();
+        assertThat(barn.adopsjonsvedtak()).isEmpty();
+        assertThat(barn.omsorgsovertakelse()).isEmpty();
+        assertThat(barn.dokumentasjonAvAleneomsorg()).isEmpty();
 
         var informasjonOmUtenlandsopphold = engangsstønad.getInformasjonOmUtenlandsopphold();
         assertThat(informasjonOmUtenlandsopphold).isNotNull();
-        assertThat(informasjonOmUtenlandsopphold.getSenereOpphold()).isEmpty();
-        assertThat(informasjonOmUtenlandsopphold.getTidligereOpphold()).isEmpty();
+        assertThat(informasjonOmUtenlandsopphold.senereOpphold()).isEmpty();
+        assertThat(informasjonOmUtenlandsopphold.tidligereOpphold()).isEmpty();
 
         testDeseraliseringProdusererSammeObjekt(sf);
     }

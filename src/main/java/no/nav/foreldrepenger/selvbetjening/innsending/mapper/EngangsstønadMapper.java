@@ -29,7 +29,7 @@ final class EngangsstønadMapper {
         if (søker == null) {
             throw new IllegalStateException("Kan ikke ha tom søkerobjekt");
         }
-        return new Søker(BrukerRolle.MOR, søker.getSpråkkode() != null ? Målform.valueOf(søker.getSpråkkode().toUpperCase()) : null);
+        return new Søker(BrukerRolle.MOR, søker.språkkode() != null ? Målform.valueOf(søker.språkkode().toUpperCase()) : null);
     }
 
     private static Ytelse tilYtelse(Engangsstønad e) {

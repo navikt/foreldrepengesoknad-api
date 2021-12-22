@@ -1,12 +1,9 @@
 package no.nav.foreldrepenger.selvbetjening.innsending.mapper;
 
+import static com.amazonaws.util.StringUtils.isNullOrEmpty;
 import static java.time.LocalDate.now;
 import static no.nav.foreldrepenger.common.util.StreamUtil.safeStream;
-import static no.nav.foreldrepenger.selvbetjening.innsending.mapper.MidlertidigUtils.land;
-import static no.nav.foreldrepenger.selvbetjening.innsending.mapper.MidlertidigUtils.tilInt;
-import static no.nav.foreldrepenger.selvbetjening.innsending.mapper.MidlertidigUtils.tilLong;
 import static no.nav.foreldrepenger.selvbetjening.util.DateUtil.erNyopprettet;
-import static org.apache.commons.lang3.BooleanUtils.toBoolean;
 import static org.apache.commons.lang3.StringUtils.isEmpty;
 import static org.apache.commons.lang3.StringUtils.isNotBlank;
 
@@ -79,50 +76,50 @@ final class CommonMapper {
 
     static Medlemsskap tilMedlemskap(Søknad s) {
         var opphold = s.getInformasjonOmUtenlandsopphold();
-        var tidligereOppholdsInfo = tilTidligereOppholdsInfo(opphold.getTidligereOpphold());
-        var framtidigOppholdsInfo = tilFramtidigOppholdsinformasjon(opphold.getSenereOpphold());
+        var tidligereOppholdsInfo = tilTidligereOppholdsInfo(opphold.tidligereOpphold());
+        var framtidigOppholdsInfo = tilFramtidigOppholdsinformasjon(opphold.senereOpphold());
         return new Medlemsskap(tidligereOppholdsInfo, framtidigOppholdsInfo);
     }
 
     static Opptjening tilOpptjening(Søknad s) {
         var søker = s.getSøker();
         return Opptjening.builder()
-            .frilans(tilFrilans(søker.getFrilansInformasjon()))
-            .egenNæring(tilEgenNæring(søker.getSelvstendigNæringsdrivendeInformasjon()))
-            .utenlandskArbeidsforhold(tilUtenlandsArbeidsforhold(søker.getAndreInntekterSiste10Mnd()))
-            .annenOpptjening(tilAnnenOpptjening(søker.getAndreInntekterSiste10Mnd()))
+            .frilans(tilFrilans(søker.frilansInformasjon()))
+            .egenNæring(tilEgenNæring(søker.selvstendigNæringsdrivendeInformasjon()))
+            .utenlandskArbeidsforhold(tilUtenlandsArbeidsforhold(søker.andreInntekterSiste10Mnd()))
+            .annenOpptjening(tilAnnenOpptjening(søker.andreInntekterSiste10Mnd()))
             .build();
 
     }
 
     static RelasjonTilBarn tilRelasjonTilBarn(Søknad søknad) {
         var barn = søknad.getBarn();
-        if (barn.adopsjonsdato != null) {
+        if (barn.adopsjonsdato() != null) {
             return tilAdopsjon(barn);
         }
         var situasjon = søknad.getSituasjon();
         if (isEmpty(situasjon) || situasjon.equals("fødsel")) {
-            barn.erBarnetFødt = !CollectionUtils.isEmpty(søknad.getBarn().fødselsdatoer);
-            return Boolean.TRUE.equals(barn.erBarnetFødt) ? tilFødsel(barn) : tilFremtidigFødsel(barn);
+            var erBarnetFødt = !CollectionUtils.isEmpty(søknad.getBarn().fødselsdatoer());
+            return erBarnetFødt ? tilFødsel(barn) : tilFremtidigFødsel(barn);
         }
         return tilOmsorgsovertagelse(barn);
     }
 
     static Fødsel tilFødsel(Barn barn) {
         return Fødsel.builder()
-            .fødselsdato(barn.fødselsdatoer)
-            .termindato(barn.termindato)
-            .antallBarn(tilInt(barn.antallBarn))
+            .fødselsdato(barn.fødselsdatoer())
+            .termindato(barn.termindato())
+            .antallBarn(barn.antallBarn())
             .vedlegg(barn.getAlleVedlegg())
             .build();
     }
 
     private static Omsorgsovertakelse tilOmsorgsovertagelse(Barn barn) {
         return Omsorgsovertakelse.builder()
-            .omsorgsovertakelsesdato(barn.foreldreansvarsdato)
+            .omsorgsovertakelsesdato(barn.foreldreansvarsdato())
             .årsak(null) // TODO: Ikke satt av api, heller ikke sendt ned fra frontend
-            .fødselsdato(barn.fødselsdatoer)
-            .antallBarn(tilInt(barn.antallBarn))
+            .fødselsdato(barn.fødselsdatoer())
+            .antallBarn(barn.antallBarn())
             // .beskrivelse() ikke satt, ikke brukt?
             .vedlegg(barn.getAlleVedlegg())
             .build();
@@ -130,60 +127,60 @@ final class CommonMapper {
 
     private static FremtidigFødsel tilFremtidigFødsel(Barn barn) {
         return FremtidigFødsel.builder()
-            .terminDato(barn.termindato)
-            .utstedtDato(barn.terminbekreftelseDato)
-            .antallBarn(tilInt(barn.antallBarn))
+            .terminDato(barn.termindato())
+            .utstedtDato(barn.terminbekreftelseDato())
+            .antallBarn(barn.antallBarn())
             .vedlegg(barn.getAlleVedlegg())
             .build();
     }
 
     private static Adopsjon tilAdopsjon(Barn barn) {
         return Adopsjon.builder()
-            .omsorgsovertakelsesdato(barn.adopsjonsdato)
-            .ektefellesBarn(toBoolean(barn.adopsjonAvEktefellesBarn))
-            .søkerAdopsjonAlene(toBoolean(barn.søkerAdopsjonAlene))
-            .ankomstDato(barn.ankomstdato)
-            .fødselsdato(barn.fødselsdatoer)
-            .antallBarn(tilInt(barn.antallBarn))
+            .omsorgsovertakelsesdato(barn.adopsjonsdato())
+            .ektefellesBarn(barn.adopsjonAvEktefellesBarn())
+            .søkerAdopsjonAlene(barn.søkerAdopsjonAlene())
+            .ankomstDato(barn.ankomstdato())
+            .fødselsdato(barn.fødselsdatoer())
+            .antallBarn(barn.antallBarn())
             .vedlegg(barn.getAlleVedlegg())
             .build();
     }
 
     private static UtenlandskForelder tilUtenlandskForelder(no.nav.foreldrepenger.selvbetjening.innsending.domain.AnnenForelder annenForelder) {
         return new UtenlandskForelder(
-            annenForelder.getFnr(),
-            land(annenForelder.getBostedsland()),
+            annenForelder.fnr(),
+            land(annenForelder.bostedsland()),
             navn(annenForelder)
         );
     }
 
 
     private static NorskForelder tilNorskForelder(no.nav.foreldrepenger.selvbetjening.innsending.domain.AnnenForelder annenForelder) {
-        return new NorskForelder(Fødselsnummer.valueOf(annenForelder.getFnr()), navn(annenForelder));
+        return new NorskForelder(Fødselsnummer.valueOf(annenForelder.fnr()), navn(annenForelder));
     }
 
     private static String navn(no.nav.foreldrepenger.selvbetjening.innsending.domain.AnnenForelder annenForelder) {
-        return isNotBlank(annenForelder.getNavn()) ? annenForelder.getNavn() :
-            annenForelder.getFornavn() + " " + annenForelder.getEtternavn();
+        return isNotBlank(annenForelder.navn()) ? annenForelder.navn() :
+            annenForelder.fornavn() + " " + annenForelder.etternavn();
     }
 
     private static List<AnnenOpptjening> tilAnnenOpptjening(List<AnnenInntekt> andreInntekterSiste10Mnd) {
         return andreInntekterSiste10Mnd.stream()
-            .filter(annenInntekt -> !annenInntekt.getType().equals("JOBB_I_UTLANDET"))
+            .filter(annenInntekt -> !annenInntekt.type().equals("JOBB_I_UTLANDET"))
             .map(CommonMapper::tilAnnenOpptjening)
             .toList();
     }
 
     private static AnnenOpptjening tilAnnenOpptjening(AnnenInntekt annenInntekt) {
         return new AnnenOpptjening(
-            annenInntekt.getType() != null ? AnnenOpptjeningType.valueOf(annenInntekt.getType()) : null,
-            new ÅpenPeriode(annenInntekt.getTidsperiode().getFom(), annenInntekt.getTidsperiode().getTom()),
-            annenInntekt.getVedlegg());
+            annenInntekt.type() != null ? AnnenOpptjeningType.valueOf(annenInntekt.type()) : null,
+            new ÅpenPeriode(annenInntekt.tidsperiode().fom(), annenInntekt.tidsperiode().tom()),
+            annenInntekt.vedlegg());
     }
 
     private static List<UtenlandskArbeidsforhold> tilUtenlandsArbeidsforhold(List<AnnenInntekt> andreInntekterSiste10Mnd) {
         return andreInntekterSiste10Mnd.stream()
-            .filter(annenInntekt -> annenInntekt.getType().equals("JOBB_I_UTLANDET"))
+            .filter(annenInntekt -> annenInntekt.type().equals("JOBB_I_UTLANDET"))
             .map(CommonMapper::tilUtenlandsArbeidsforhold)
             .toList();
 
@@ -191,10 +188,10 @@ final class CommonMapper {
 
     private static UtenlandskArbeidsforhold tilUtenlandsArbeidsforhold(AnnenInntekt annenInntekt) {
         return UtenlandskArbeidsforhold.builder()
-            .arbeidsgiverNavn(annenInntekt.getArbeidsgiverNavn())
-            .land(land(annenInntekt.getLand()))
-            .periode(new ÅpenPeriode(annenInntekt.getTidsperiode().getFom(), annenInntekt.getTidsperiode().getTom()))
-            .vedlegg(annenInntekt.getVedlegg())
+            .arbeidsgiverNavn(annenInntekt.arbeidsgiverNavn())
+            .land(land(annenInntekt.land()))
+            .periode(new ÅpenPeriode(annenInntekt.tidsperiode().fom(), annenInntekt.tidsperiode().tom()))
+            .vedlegg(annenInntekt.vedlegg())
             .build();
     }
 
@@ -205,47 +202,47 @@ final class CommonMapper {
     }
 
     private static EgenNæring tilEgenNæring(SelvstendigNæringsdrivendeInformasjon selvstendig) {
-        return Boolean.TRUE.equals(selvstendig.getRegistrertINorge()) ? tilNorskNæring(selvstendig) : tilUtenlandskOrganisasjon(selvstendig);
+        return selvstendig.registrertINorge() ? tilNorskNæring(selvstendig) : tilUtenlandskOrganisasjon(selvstendig);
     }
 
     private static NorskOrganisasjon tilNorskNæring(SelvstendigNæringsdrivendeInformasjon selvstendig) {
         // Spesifikk
         var norskOrganisasjonBuilder = NorskOrganisasjon.builder()
-            .orgName(selvstendig.getNavnPåNæringen())
-            .orgNummer(selvstendig.getOrganisasjonsnummer() != null ? Orgnummer.valueOf(selvstendig.getOrganisasjonsnummer()): null);
+            .orgName(selvstendig.navnPåNæringen())
+            .orgNummer(selvstendig.organisasjonsnummer() != null ? Orgnummer.valueOf(selvstendig.organisasjonsnummer()): null);
 
 
         // Generelle TODO: Identisk til UtenlandskOrgansiasjon.. Mye duplisering... skrive bort i fra abstract class maybe?
         norskOrganisasjonBuilder
-            .stillingsprosent(selvstendig.getStillingsprosent() != null ? new ProsentAndel(selvstendig.getStillingsprosent()) : null)
-            .periode(new ÅpenPeriode(selvstendig.getTidsperiode().getFom(), selvstendig.getTidsperiode().getTom()))
-            .erNyIArbeidslivet(toBoolean(selvstendig.getHarBlittYrkesaktivILøpetAvDeTreSisteFerdigliknedeÅrene()))
-            .erNyOpprettet(erNyopprettet(selvstendig.getTidsperiode().getFom()))
-            .erVarigEndring(toBoolean(selvstendig.getHattVarigEndringAvNæringsinntektSiste4Kalenderår()))
-            .vedlegg(selvstendig.getVedlegg())
-            .virksomhetsTyper(tilVirksomhetsTyper(selvstendig.getNæringstyper()))
-            .oppstartsDato(selvstendig.getOppstartsdato());
+            .stillingsprosent(selvstendig.stillingsprosent() != null ? new ProsentAndel(selvstendig.stillingsprosent()) : null)
+            .periode(new ÅpenPeriode(selvstendig.tidsperiode().fom(), selvstendig.tidsperiode().tom()))
+            .erNyIArbeidslivet(selvstendig.harBlittYrkesaktivILøpetAvDeTreSisteFerdigliknedeÅrene())
+            .erNyOpprettet(erNyopprettet(selvstendig.tidsperiode().fom()))
+            .erVarigEndring(selvstendig.hattVarigEndringAvNæringsinntektSiste4Kalenderår())
+            .vedlegg(selvstendig.vedlegg())
+            .virksomhetsTyper(tilVirksomhetsTyper(selvstendig.næringstyper()))
+            .oppstartsDato(selvstendig.oppstartsdato());
 
-        var næringsInfo = selvstendig.getEndringAvNæringsinntektInformasjon();
+        var næringsInfo = selvstendig.endringAvNæringsinntektInformasjon();
         if (næringsInfo != null) {
             norskOrganisasjonBuilder
-                .endringsDato(næringsInfo.getDato())
-                .næringsinntektBrutto(tilLong(næringsInfo.getNæringsinntektEtterEndring()))
-                .beskrivelseEndring(næringsInfo.getForklaring());
+                .endringsDato(næringsInfo.dato())
+                .næringsinntektBrutto(næringsInfo.næringsinntektEtterEndring())
+                .beskrivelseEndring(næringsInfo.forklaring());
         } else {
-            norskOrganisasjonBuilder.næringsinntektBrutto(tilLong(selvstendig.getNæringsinntekt()));
+            norskOrganisasjonBuilder.næringsinntektBrutto(selvstendig.næringsinntekt());
         }
 
-        var regnskapsfører = selvstendig.getRegnskapsfører();
-        var revisor = selvstendig.getRevisor();
+        var regnskapsfører = selvstendig.regnskapsfører();
+        var revisor = selvstendig.revisor();
         if (regnskapsfører != null) {
             norskOrganisasjonBuilder
                 .regnskapsførere(List.of(tilRegnskapsfører(regnskapsfører)))
-                .nærRelasjon(toBoolean(regnskapsfører.getErNærVennEllerFamilie()));
+                .nærRelasjon(regnskapsfører.erNærVennEllerFamilie());
         } else if (revisor != null) {
             norskOrganisasjonBuilder
                 .regnskapsførere(List.of(tilRegnskapsfører(revisor)))
-                .nærRelasjon(toBoolean(revisor.getErNærVennEllerFamilie()));
+                .nærRelasjon(revisor.erNærVennEllerFamilie());
         }
 
         return norskOrganisasjonBuilder.build();
@@ -254,47 +251,47 @@ final class CommonMapper {
     private static UtenlandskOrganisasjon tilUtenlandskOrganisasjon(SelvstendigNæringsdrivendeInformasjon selvstendig) {
         // Spesifikk
         var utenlandskOrganisasjonBuilder = UtenlandskOrganisasjon.builder()
-            .orgName(selvstendig.getNavnPåNæringen())
-            .registrertILand(CountryCode.valueOf(selvstendig.getRegistrertILand()));
+            .orgName(selvstendig.navnPåNæringen())
+            .registrertILand(CountryCode.valueOf(selvstendig.registrertILand()));
 
         // Generelle
         utenlandskOrganisasjonBuilder
-            .stillingsprosent(selvstendig.getStillingsprosent() != null ? new ProsentAndel(selvstendig.getStillingsprosent()) : null)
-            .periode(new ÅpenPeriode(selvstendig.getTidsperiode().getFom(), selvstendig.getTidsperiode().getTom()))
-            .erNyIArbeidslivet(toBoolean(selvstendig.getHarBlittYrkesaktivILøpetAvDeTreSisteFerdigliknedeÅrene()))
-            .erNyOpprettet(erNyopprettet(selvstendig.getTidsperiode().getFom()))
-            .erVarigEndring(toBoolean(selvstendig.getHattVarigEndringAvNæringsinntektSiste4Kalenderår()))
-            .vedlegg(selvstendig.getVedlegg())
-            .virksomhetsTyper(tilVirksomhetsTyper(selvstendig.getNæringstyper()))
-            .oppstartsDato(selvstendig.getOppstartsdato());
+            .stillingsprosent(selvstendig.stillingsprosent() != null ? new ProsentAndel(selvstendig.stillingsprosent()) : null)
+            .periode(new ÅpenPeriode(selvstendig.tidsperiode().fom(), selvstendig.tidsperiode().tom()))
+            .erNyIArbeidslivet(selvstendig.harBlittYrkesaktivILøpetAvDeTreSisteFerdigliknedeÅrene())
+            .erNyOpprettet(erNyopprettet(selvstendig.tidsperiode().fom()))
+            .erVarigEndring(selvstendig.hattVarigEndringAvNæringsinntektSiste4Kalenderår())
+            .vedlegg(selvstendig.vedlegg())
+            .virksomhetsTyper(tilVirksomhetsTyper(selvstendig.næringstyper()))
+            .oppstartsDato(selvstendig.oppstartsdato());
 
-        var næringsInfo = selvstendig.getEndringAvNæringsinntektInformasjon();
+        var næringsInfo = selvstendig.endringAvNæringsinntektInformasjon();
         if (næringsInfo != null) {
             utenlandskOrganisasjonBuilder
-                .endringsDato(næringsInfo.getDato())
-                .næringsinntektBrutto(tilLong(næringsInfo.getNæringsinntektEtterEndring()))
-                .beskrivelseEndring(næringsInfo.getForklaring());
+                .endringsDato(næringsInfo.dato())
+                .næringsinntektBrutto(næringsInfo.næringsinntektEtterEndring())
+                .beskrivelseEndring(næringsInfo.forklaring());
         } else {
-            utenlandskOrganisasjonBuilder.næringsinntektBrutto(tilLong(selvstendig.getNæringsinntekt()));
+            utenlandskOrganisasjonBuilder.næringsinntektBrutto(selvstendig.næringsinntekt());
         }
 
-        var regnskapsfører = selvstendig.getRegnskapsfører();
-        var revisor = selvstendig.getRevisor();
+        var regnskapsfører = selvstendig.regnskapsfører();
+        var revisor = selvstendig.revisor();
         if (regnskapsfører != null) {
             utenlandskOrganisasjonBuilder
                 .regnskapsførere(List.of(tilRegnskapsfører(regnskapsfører)))
-                .nærRelasjon(toBoolean(regnskapsfører.getErNærVennEllerFamilie()));
+                .nærRelasjon(regnskapsfører.erNærVennEllerFamilie());
         } else if (revisor != null) {
             utenlandskOrganisasjonBuilder
                 .regnskapsførere(List.of(tilRegnskapsfører(revisor)))
-                .nærRelasjon(toBoolean(revisor.getErNærVennEllerFamilie()));
+                .nærRelasjon(revisor.erNærVennEllerFamilie());
         }
 
         return utenlandskOrganisasjonBuilder.build();
     }
 
     private static Regnskapsfører tilRegnskapsfører(TilknyttetPerson person) {
-        return new Regnskapsfører(person.getNavn(), person.getTelefonnummer());
+        return new Regnskapsfører(person.navn(), person.telefonnummer());
     }
 
     private static List<Virksomhetstype> tilVirksomhetsTyper(List<String> næringstyper) {
@@ -308,10 +305,10 @@ final class CommonMapper {
             return null;
         }
         return new Frilans(
-            new ÅpenPeriode(frilansInformasjon.getOppstart()),
-            toBoolean(frilansInformasjon.getDriverFosterhjem()),
-            frilansInformasjon.getOppstart().isAfter(TRE_MÅNEDER_FØR_FOM),
-            tilFrilansOppdrag(frilansInformasjon.getOppdragForNæreVennerEllerFamilieSiste10Mnd()),
+            new ÅpenPeriode(frilansInformasjon.oppstart()),
+            frilansInformasjon.driverFosterhjem(),
+            frilansInformasjon.oppstart().isAfter(TRE_MÅNEDER_FØR_FOM),
+            tilFrilansOppdrag(frilansInformasjon.oppdragForNæreVennerEllerFamilieSiste10Mnd()),
             null); // TODO: Fjern denne som ikke blir brukt
     }
 
@@ -322,7 +319,7 @@ final class CommonMapper {
     }
 
     private static FrilansOppdrag tilFrilansOppdrag(Frilansoppdrag o) {
-        return new FrilansOppdrag(o.getNavnPåArbeidsgiver(), new ÅpenPeriode(o.getTidsperiode().getFom(), o.getTidsperiode().getTom()));
+        return new FrilansOppdrag(o.navnPåArbeidsgiver(), new ÅpenPeriode(o.tidsperiode().fom(), o.tidsperiode().tom()));
     }
 
     private static FramtidigOppholdsInformasjon tilFramtidigOppholdsinformasjon(List<UtenlandsoppholdPeriode> senereOpphold) {
@@ -340,7 +337,11 @@ final class CommonMapper {
     }
 
     private static Utenlandsopphold tilUtenlandsopphold(UtenlandsoppholdPeriode o) {
-        return new Utenlandsopphold(land(o.getLand()), new LukketPeriode(o.getTidsperiode().getFom(), o.getTidsperiode().getTom()));
+        return new Utenlandsopphold(land(o.land()), new LukketPeriode(o.tidsperiode().fom(), o.tidsperiode().tom()));
+    }
+
+    public static CountryCode land(String land) {
+        return isNullOrEmpty(land) ? null : CountryCode.valueOf(land);
     }
 
 }

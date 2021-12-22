@@ -4,13 +4,13 @@ import static no.nav.foreldrepenger.selvbetjening.util.StringUtil.maskFnr;
 
 import java.util.List;
 
-import no.nav.foreldrepenger.selvbetjening.innsyn.sakerV2.Saker;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnProperty;
 import org.springframework.stereotype.Service;
 
 import no.nav.foreldrepenger.selvbetjening.innsyn.saker.Sak;
+import no.nav.foreldrepenger.selvbetjening.innsyn.sakerv2.Saker;
 import no.nav.foreldrepenger.selvbetjening.innsyn.uttaksplan.Uttaksplan;
 import no.nav.foreldrepenger.selvbetjening.innsyn.vedtak.Vedtak;
 

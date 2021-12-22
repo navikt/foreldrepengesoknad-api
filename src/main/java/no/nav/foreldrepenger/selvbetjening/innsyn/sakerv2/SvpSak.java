@@ -1,4 +1,4 @@
-package no.nav.foreldrepenger.selvbetjening.innsyn.sakerV2;
+package no.nav.foreldrepenger.selvbetjening.innsyn.sakerv2;
 
 import java.util.Set;
 

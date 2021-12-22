@@ -2,84 +2,77 @@ package no.nav.foreldrepenger.selvbetjening.innsending.domain;
 
 import java.net.URI;
 
+import com.fasterxml.jackson.annotation.JsonCreator;
+
+import lombok.EqualsAndHashCode;
 import no.nav.foreldrepenger.selvbetjening.util.StringUtil;
 
+@EqualsAndHashCode
 public class Vedlegg {
 
-    private String id;
-    private String skjemanummer;
-    private String uuid;
-    private URI url;
     private byte[] content;
-    private String innsendingsType;
-    private String beskrivelse;
+    private final String beskrivelse;
+    private final String id;
+    private final String innsendingsType;
+    private final String skjemanummer;
+    private final String uuid;
+    private final URI url;
+
+    public Vedlegg(byte[] content, String beskrivelse, String id, String skjemanummer) {
+        this(content, beskrivelse, id, null, skjemanummer, null, null);
+    }
+
+    @JsonCreator
+    public Vedlegg(byte[] content, String beskrivelse, String id, String innsendingsType, String skjemanummer, String uuid, URI url) {
+        this.content = content;
+        this.beskrivelse = beskrivelse;
+        this.id = id;
+        this.innsendingsType = innsendingsType;
+        this.skjemanummer = skjemanummer;
+        this.uuid = uuid;
+        this.url = url;
+    }
 
     public Vedlegg kopi() {
-        Vedlegg kopi = new Vedlegg();
-        kopi.setId(this.getId());
-        kopi.setSkjemanummer(this.getSkjemanummer());
-        kopi.setUuid(this.getUuid());
-        kopi.setUrl(this.getUrl());
-        kopi.setInnsendingsType(this.getInnsendingsType());
-        kopi.setBeskrivelse(this.getBeskrivelse());
-        return kopi;
-    }
-
-    public String getId() {
-        return id;
-    }
-
-    public void setId(String id) {
-        this.id = id;
-    }
-
-    public String getSkjemanummer() {
-        return skjemanummer;
-    }
-
-    public void setSkjemanummer(String skjemanummer) {
-        this.skjemanummer = skjemanummer;
-    }
-
-    public String getUuid() {
-        return uuid;
-    }
-
-    public void setUuid(String uuid) {
-        this.uuid = uuid;
-    }
-
-    public URI getUrl() {
-        return url;
-    }
-
-    public void setUrl(URI url) {
-        this.url = url;
+        return new Vedlegg(null,
+            this.getBeskrivelse(),
+            this.getId(),
+            this.getInnsendingsType(),
+            this.getSkjemanummer(),
+            this.getUuid(),
+            this.getUrl());
     }
 
     public byte[] getContent() {
         return content;
     }
 
-    public byte[] setContent(byte[] content) {
+    public void setContent(byte[] content) {
         this.content = content;
-        return content;
-    }
-
-    public String getInnsendingsType() {
-        return innsendingsType;
-    }
-
-    public void setInnsendingsType(String innsendingsType) {
-        this.innsendingsType = innsendingsType;
     }
 
     public String getBeskrivelse() {
         return beskrivelse;
     }
 
-    public void setBeskrivelse(String beskrivelse) {
-        this.beskrivelse = beskrivelse;
+    public String getId() {
+        return id;
+    }
+
+    public String getInnsendingsType() {
+        return innsendingsType;
+    }
+
+    public String getSkjemanummer() {
+        return skjemanummer;
+    }
+
+    public String getUuid() {
+        return uuid;
+    }
+
+    public URI getUrl() {
+        return url;
     }
 
     @Override

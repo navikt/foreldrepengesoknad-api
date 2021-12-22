@@ -8,7 +8,6 @@ import java.util.Arrays;
 import java.util.List;
 import java.util.Optional;
 
-import no.nav.foreldrepenger.selvbetjening.innsyn.sakerV2.Saker;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Component;
@@ -16,6 +15,7 @@ import org.springframework.web.client.RestOperations;
 
 import no.nav.foreldrepenger.selvbetjening.http.AbstractRestConnection;
 import no.nav.foreldrepenger.selvbetjening.innsyn.saker.Sak;
+import no.nav.foreldrepenger.selvbetjening.innsyn.sakerv2.Saker;
 import no.nav.foreldrepenger.selvbetjening.innsyn.uttaksplan.Uttaksplan;
 import no.nav.foreldrepenger.selvbetjening.innsyn.vedtak.Vedtak;
 import no.nav.foreldrepenger.selvbetjening.oppslag.domain.Arbeidsforhold;
