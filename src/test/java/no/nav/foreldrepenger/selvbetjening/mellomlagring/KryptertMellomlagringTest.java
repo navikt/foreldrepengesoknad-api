@@ -4,7 +4,6 @@ import static org.assertj.core.api.Assertions.assertThat;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.mockito.Mockito.when;
 
-import java.time.LocalDate;
 import java.time.LocalDateTime;
 
 import org.junit.jupiter.api.BeforeEach;
@@ -61,9 +60,9 @@ class KryptertMellomlagringTest {
     }
 
     @Test
-    void TestKryptertKvittering() throws Exception {
+    void TestKryptertKvittering() {
         when(b1.isEnabled()).thenReturn(true);
-        var kvittering = new Kvittering(LocalDateTime.now(), "33", "OK", "id", "42", new byte[0], new byte[0], LocalDate.now(), LocalDate.now());
+        var kvittering = new Kvittering(LocalDateTime.now(), "42", new byte[0], new byte[0]);
         km.lagreKryptertKvittering("kvittering", MAPPER.toJson(kvittering));
         var lest = km.lesKryptertKvittering("kvittering");
         assertThat(lest).isPresent();
@@ -71,7 +70,7 @@ class KryptertMellomlagringTest {
     }
 
     @Test
-    void TestKryptertVedlegg() throws Exception {
+    void TestKryptertVedlegg() {
         when(b2.isEnabled()).thenReturn(true);
         var pdf = new PdfGeneratorStub().generate("test");
         var original = Attachment.of(new MockMultipartFile("vedlegg", "originalt vedlegg", "application/pdf", pdf));

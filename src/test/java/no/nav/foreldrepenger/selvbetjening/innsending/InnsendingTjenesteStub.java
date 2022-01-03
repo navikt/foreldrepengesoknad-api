@@ -6,8 +6,6 @@ import static no.nav.foreldrepenger.selvbetjening.innsending.mapper.SøknadMappe
 import static no.nav.foreldrepenger.selvbetjening.innsending.mapper.SøknadMapper.tilVedlegg;
 import static org.slf4j.LoggerFactory.getLogger;
 
-import java.time.LocalDate;
-
 import javax.inject.Inject;
 
 import org.slf4j.Logger;
@@ -25,8 +23,7 @@ import no.nav.foreldrepenger.selvbetjening.innsending.domain.Søknad;
 @ConditionalOnProperty(name = "stub.mottak", havingValue = "true")
 public class InnsendingTjenesteStub implements Innsending {
 
-    public static final Kvittering STUB = new Kvittering(now(), "deadbeef-69-cafebabe-42", "PÅGÅR", "12345", "67890",
-            new byte[0], new byte[0], LocalDate.now(), LocalDate.now());
+    public static final Kvittering STUB = new Kvittering(now(), "12345", new byte[0], new byte[0]);
 
     private static final Logger LOG = getLogger(InnsendingTjenesteStub.class);
 
