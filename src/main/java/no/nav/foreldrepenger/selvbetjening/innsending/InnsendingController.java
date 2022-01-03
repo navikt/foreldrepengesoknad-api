@@ -27,7 +27,7 @@ public class InnsendingController {
 
     @PostMapping
     public Kvittering sendInn(@RequestBody Søknad søknad) {
-        LOG.info("Mottok søknad med målform {} og {} vedlegg", søknad.getSøker().getSpråkkode(), søknad.getVedlegg().size());
+        LOG.info("Mottok søknad med målform {} og {} vedlegg", søknad.getSøker().språkkode(), søknad.getVedlegg().size());
         LOG.info(CONFIDENTIAL, "{}", søknad);
         LOG.info(CONFIDENTIAL, "Søker er {}", søknad.getSøker());
         return innsending.sendInn(søknad);
@@ -35,7 +35,7 @@ public class InnsendingController {
 
     @PostMapping("/ettersend")
     public Kvittering sendInn(@RequestBody Ettersending ettersending) {
-        LOG.info("Mottok ettersending av {} vedlegg", ettersending.getVedlegg().size());
+        LOG.info("Mottok ettersending av {} vedlegg", ettersending.vedlegg().size());
         LOG.info(CONFIDENTIAL, "{}", ettersending);
         return innsending.ettersend(ettersending);
     }

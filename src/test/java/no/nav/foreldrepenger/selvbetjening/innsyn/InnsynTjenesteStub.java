@@ -10,12 +10,12 @@ import java.util.Collections;
 import java.util.List;
 import java.util.Set;
 
-import no.nav.foreldrepenger.selvbetjening.innsyn.sakerV2.Saker;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnProperty;
 import org.springframework.stereotype.Service;
 
 import no.nav.foreldrepenger.selvbetjening.innsyn.saker.Behandling;
 import no.nav.foreldrepenger.selvbetjening.innsyn.saker.Sak;
+import no.nav.foreldrepenger.selvbetjening.innsyn.sakerv2.Saker;
 import no.nav.foreldrepenger.selvbetjening.innsyn.uttaksplan.Uttaksplan;
 import no.nav.foreldrepenger.selvbetjening.innsyn.vedtak.Vedtak;
 

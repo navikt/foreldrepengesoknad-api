@@ -1,30 +1,18 @@
 package no.nav.foreldrepenger.selvbetjening.innsending.domain;
 
+import static java.util.Collections.emptyList;
+
 import java.util.List;
+import java.util.Optional;
 
-public class Utenlandsopphold {
-    private List<UtenlandsoppholdPeriode> tidligereOpphold;
-    private List<UtenlandsoppholdPeriode> senereOpphold;
+import com.fasterxml.jackson.annotation.JsonCreator;
 
-    public List<UtenlandsoppholdPeriode> getTidligereOpphold() {
-        return tidligereOpphold;
-    }
+public record Utenlandsopphold(List<UtenlandsoppholdPeriode> tidligereOpphold,
+                               List<UtenlandsoppholdPeriode> senereOpphold){
 
-    public void setTidligereOpphold(List<UtenlandsoppholdPeriode> tidligereOpphold) {
-        this.tidligereOpphold = tidligereOpphold;
-    }
-
-    public List<UtenlandsoppholdPeriode> getSenereOpphold() {
-        return senereOpphold;
-    }
-
-    public void setSenereOpphold(List<UtenlandsoppholdPeriode> senereOpphold) {
-        this.senereOpphold = senereOpphold;
-    }
-
-    @Override
-    public String toString() {
-        return getClass().getSimpleName() + "[tidligereOpphold=" + tidligereOpphold + ", senereOpphold="
-                + senereOpphold + "]";
+    @JsonCreator
+    public Utenlandsopphold(List<UtenlandsoppholdPeriode> tidligereOpphold, List<UtenlandsoppholdPeriode> senereOpphold) {
+        this.tidligereOpphold = Optional.ofNullable(tidligereOpphold).orElse(emptyList());
+        this.senereOpphold = Optional.ofNullable(senereOpphold).orElse(emptyList());
     }
 }

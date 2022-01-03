@@ -1,48 +1,21 @@
 package no.nav.foreldrepenger.selvbetjening.innsending.domain.arbeid;
 
+import static java.util.Collections.emptyList;
+
 import java.time.LocalDate;
-import java.util.ArrayList;
 import java.util.List;
+import java.util.Optional;
 
-import lombok.EqualsAndHashCode;
+import com.fasterxml.jackson.annotation.JsonCreator;
 
-@EqualsAndHashCode
-public class FrilansInformasjon {
+public record FrilansInformasjon(LocalDate oppstart,
+                                 boolean driverFosterhjem,
+                                 List<Frilansoppdrag> oppdragForNæreVennerEllerFamilieSiste10Mnd) {
 
-    private LocalDate oppstart;
-    private Boolean driverFosterhjem;
-    private List<Frilansoppdrag> oppdragForNæreVennerEllerFamilieSiste10Mnd = new ArrayList<>();
-
-    public LocalDate getOppstart() {
-        return oppstart;
-    }
-
-    public void setOppstart(LocalDate oppstart) {
+    @JsonCreator
+    public FrilansInformasjon(LocalDate oppstart, boolean driverFosterhjem, List<Frilansoppdrag> oppdragForNæreVennerEllerFamilieSiste10Mnd) {
         this.oppstart = oppstart;
-    }
-
-    public Boolean getDriverFosterhjem() {
-        return driverFosterhjem;
-    }
-
-    public void setDriverFosterhjem(Boolean driverFosterhjem) {
         this.driverFosterhjem = driverFosterhjem;
-    }
-
-    @Override
-    public String toString() {
-        return getClass().getSimpleName() + " [oppstart=" + getOppstart() + ", driverFosterhjem="
-                + getDriverFosterhjem()
-                + ", oppdragForNæreVennerEllerFamilieSiste10Mnd=" + getOppdragForNæreVennerEllerFamilieSiste10Mnd()
-                + "]";
-    }
-
-    public List<Frilansoppdrag> getOppdragForNæreVennerEllerFamilieSiste10Mnd() {
-        return oppdragForNæreVennerEllerFamilieSiste10Mnd;
-    }
-
-    public void setOppdragForNæreVennerEllerFamilieSiste10Mnd(
-            List<Frilansoppdrag> oppdragForNæreVennerEllerFamilieSiste10Mnd) {
-        this.oppdragForNæreVennerEllerFamilieSiste10Mnd = oppdragForNæreVennerEllerFamilieSiste10Mnd;
+        this.oppdragForNæreVennerEllerFamilieSiste10Mnd = Optional.ofNullable(oppdragForNæreVennerEllerFamilieSiste10Mnd).orElse(emptyList());
     }
 }

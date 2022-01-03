@@ -46,7 +46,7 @@ final class SvangerskapspengerMapper {
         if (søker == null) {
             throw new IllegalStateException("Kan ikke ha tom søkerobjekt");
         }
-        return new Søker(BrukerRolle.MOR, søker.getSpråkkode() != null ? Målform.valueOf(søker.getSpråkkode()) : null);
+        return new Søker(BrukerRolle.MOR, søker.språkkode() != null ? Målform.valueOf(søker.språkkode()) : null);
     }
 
     public static Svangerskapspenger tilYtelse(Svangerskapspengesøknad s) {
@@ -57,15 +57,15 @@ final class SvangerskapspengerMapper {
                 .opptjening(tilOpptjening(s));
         }
         return svangerskapspengerBuilder
-            .termindato(s.getBarn().termindato)
+            .termindato(s.getBarn().termindato())
             .fødselsdato(tilFødselsdato(s))
             .tilrettelegging(tilTilrettelegging(s))
             .build();
     }
 
     private static LocalDate tilFødselsdato(Svangerskapspengesøknad s) {
-        if (!CollectionUtils.isEmpty(s.getBarn().fødselsdatoer)) {
-            return s.getBarn().fødselsdatoer.get(0);
+        if (!CollectionUtils.isEmpty(s.getBarn().fødselsdatoer())) {
+            return s.getBarn().fødselsdatoer().get(0);
         }
         return null;
     }
@@ -77,65 +77,65 @@ final class SvangerskapspengerMapper {
     }
 
     private static Tilrettelegging tilTilretteleggings(no.nav.foreldrepenger.selvbetjening.innsending.domain.tilrettelegging.Tilrettelegging tilrettelegging) {
-        return switch (tilrettelegging.getType()) {
+        return switch (tilrettelegging.type()) {
             case "hel" -> tilHelTilrettelegging(tilrettelegging);
             case "delvis" -> tilDelvisTilrettelegging(tilrettelegging);
             case "ingen" -> tilIngenTilrettelegging(tilrettelegging);
-            default -> throw new IllegalStateException("Ukjent tilretteleggingstype: " + tilrettelegging.getType());
+            default -> throw new IllegalStateException("Ukjent tilretteleggingstype: " + tilrettelegging.type());
         };
     }
 
     private static IngenTilrettelegging tilIngenTilrettelegging(no.nav.foreldrepenger.selvbetjening.innsending.domain.tilrettelegging.Tilrettelegging tilrettelegging) {
         return new IngenTilrettelegging(
-            tilArbeidsforhold(tilrettelegging.getArbeidsforhold()),
-            tilrettelegging.getBehovForTilretteleggingFom(),
-            tilrettelegging.getSlutteArbeidFom(),
-            tilrettelegging.getVedlegg()
+            tilArbeidsforhold(tilrettelegging.arbeidsforhold()),
+            tilrettelegging.behovForTilretteleggingFom(),
+            tilrettelegging.slutteArbeidFom(),
+            tilrettelegging.vedlegg()
         );
     }
 
     private static DelvisTilrettelegging tilDelvisTilrettelegging(no.nav.foreldrepenger.selvbetjening.innsending.domain.tilrettelegging.Tilrettelegging tilrettelegging) {
         return new DelvisTilrettelegging(
-            tilArbeidsforhold(tilrettelegging.getArbeidsforhold()),
-            tilrettelegging.getBehovForTilretteleggingFom(),
-            tilrettelegging.getTilrettelagtArbeidFom(),
-            tilrettelegging.getStillingsprosent() != null ? new ProsentAndel(tilrettelegging.getStillingsprosent()) : null,
-            tilrettelegging.getVedlegg()
+            tilArbeidsforhold(tilrettelegging.arbeidsforhold()),
+            tilrettelegging.behovForTilretteleggingFom(),
+            tilrettelegging.tilrettelagtArbeidFom(),
+            tilrettelegging.stillingsprosent() != null ? new ProsentAndel(tilrettelegging.stillingsprosent()) : null,
+            tilrettelegging.vedlegg()
         );
     }
 
     private static HelTilrettelegging tilHelTilrettelegging(no.nav.foreldrepenger.selvbetjening.innsending.domain.tilrettelegging.Tilrettelegging tilrettelegging) {
         return new HelTilrettelegging(
-            tilArbeidsforhold(tilrettelegging.getArbeidsforhold()),
-            tilrettelegging.getBehovForTilretteleggingFom(),
-            tilrettelegging.getTilrettelagtArbeidFom(),
-            tilrettelegging.getVedlegg()
+            tilArbeidsforhold(tilrettelegging.arbeidsforhold()),
+            tilrettelegging.behovForTilretteleggingFom(),
+            tilrettelegging.tilrettelagtArbeidFom(),
+            tilrettelegging.vedlegg()
         );
     }
 
     private static Arbeidsforhold tilArbeidsforhold(no.nav.foreldrepenger.selvbetjening.innsending.domain.tilrettelegging.Arbeidsforhold arbeidsforhold) {
-        return switch (arbeidsforhold.getType()) {
+        return switch (arbeidsforhold.type()) {
             case "virksomhet" -> tilVirksomhet(arbeidsforhold);
             case "privat" -> tilPrivatArbeidsgiver(arbeidsforhold);
             case "selvstendig" -> tilSelvstendigNæringsdrivende(arbeidsforhold);
             case "frilanser" -> tilFrilanser(arbeidsforhold);
-            default -> throw new IllegalStateException("Ikke støttet arbeidsforholdtype: " + arbeidsforhold.getType());
+            default -> throw new IllegalStateException("Ikke støttet arbeidsforholdtype: " + arbeidsforhold.type());
         };
     }
 
     private static Frilanser tilFrilanser(no.nav.foreldrepenger.selvbetjening.innsending.domain.tilrettelegging.Arbeidsforhold arbeidsforhold) {
-        return new Frilanser(arbeidsforhold.getRisikofaktorer(), arbeidsforhold.getTilretteleggingstiltak());
+        return new Frilanser(arbeidsforhold.risikofaktorer(), arbeidsforhold.tilretteleggingstiltak());
     }
 
     private static SelvstendigNæringsdrivende tilSelvstendigNæringsdrivende(no.nav.foreldrepenger.selvbetjening.innsending.domain.tilrettelegging.Arbeidsforhold arbeidsforhold) {
-        return new SelvstendigNæringsdrivende(arbeidsforhold.getRisikofaktorer(), arbeidsforhold.getTilretteleggingstiltak());
+        return new SelvstendigNæringsdrivende(arbeidsforhold.risikofaktorer(), arbeidsforhold.tilretteleggingstiltak());
     }
 
     private static PrivatArbeidsgiver tilPrivatArbeidsgiver(no.nav.foreldrepenger.selvbetjening.innsending.domain.tilrettelegging.Arbeidsforhold arbeidsforhold) {
-        return new PrivatArbeidsgiver(Fødselsnummer.valueOf(arbeidsforhold.getId()));
+        return new PrivatArbeidsgiver(Fødselsnummer.valueOf(arbeidsforhold.id()));
     }
 
     private static Virksomhet tilVirksomhet(no.nav.foreldrepenger.selvbetjening.innsending.domain.tilrettelegging.Arbeidsforhold arbeidsforhold) {
-        return new Virksomhet(Orgnummer.valueOf(arbeidsforhold.getId()));
+        return new Virksomhet(Orgnummer.valueOf(arbeidsforhold.id()));
     }
 }

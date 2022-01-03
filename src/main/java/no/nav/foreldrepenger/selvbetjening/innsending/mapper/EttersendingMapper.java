@@ -17,10 +17,10 @@ public final class EttersendingMapper {
 
     public static no.nav.foreldrepenger.common.domain.felles.Ettersending tilEttersending(Ettersending ettersending) {
         var ettersendingDto = new no.nav.foreldrepenger.common.domain.felles.Ettersending(
-            ettersending.getType() != null ? EttersendingsType.valueOf(ettersending.getType()) : null,
-            ettersending.getSaksnummer(),
+            ettersending.type() != null ? EttersendingsType.valueOf(ettersending.type()) : null,
+            ettersending.saksnummer(),
             new ArrayList<>());
-        ettersendingDto.setDialogId(ettersending.getDialogId());
+        ettersendingDto.setDialogId(ettersending.dialogId());
         return ettersendingDto;
     }
 

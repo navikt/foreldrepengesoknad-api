@@ -1,8 +1,8 @@
-package no.nav.foreldrepenger.selvbetjening.innsyn.sakerV2;
-
-import com.fasterxml.jackson.annotation.JsonCreator;
+package no.nav.foreldrepenger.selvbetjening.innsyn.sakerv2;
 
 import java.util.Objects;
+
+import com.fasterxml.jackson.annotation.JsonCreator;
 
 public record AnnenPart(AktørId aktørId) {
 

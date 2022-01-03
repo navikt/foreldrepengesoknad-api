@@ -5,13 +5,12 @@ import static no.nav.foreldrepenger.selvbetjening.oppslag.OppslagTjenesteStub.pe
 import static org.junit.jupiter.api.Assertions.assertEquals;
 
 import java.io.IOException;
-
-import javax.inject.Inject;
+import java.time.LocalDate;
+import java.util.List;
 
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.boot.test.autoconfigure.json.AutoConfigureJsonTesters;
 import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.junit.jupiter.SpringExtension;
 
@@ -36,12 +35,15 @@ class SerializationTest {
 
     @Test
     void engangstonad_deserialisation() throws IOException {
-        Engangsstønad engangsstønad = new Engangsstønad();
-        engangsstønad.setType("engangsstønad");
-        engangsstønad.setOpprettet(now());
-        Barn barn = new Barn();
-        barn.erBarnetFødt = false;
-        engangsstønad.setBarn(barn);
+        var barn = new Barn(null, 2,
+            List.of(LocalDate.now().minusWeeks(6).toString()), LocalDate.now().minusWeeks(1), null,
+            null, null, null, false, false,
+            null, null, null);
+        var engangsstønad = Engangsstønad.builder()
+            .type("engangsstønad")
+            .opprettet(now())
+            .barn(barn)
+            .build();
         test(engangsstønad);
     }
 

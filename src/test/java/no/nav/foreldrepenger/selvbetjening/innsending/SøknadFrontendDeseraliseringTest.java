@@ -37,91 +37,115 @@ class SøknadFrontendDeseraliseringTest {
 
         assertThat(fs.getUttaksplan()).hasSize(3);
         var uttaksperiode1 = fs.getUttaksplan().get(0);
-        assertThat(uttaksperiode1.getForelder()).isEqualTo("mor");
-        assertThat(uttaksperiode1.getType()).isEqualTo("uttak");
-        assertThat(uttaksperiode1.getKonto()).isEqualTo("FORELDREPENGER_FØR_FØDSEL");
-        assertThat(uttaksperiode1.getGradert()).isNull();
-        assertThat(uttaksperiode1.getØnskerSamtidigUttak()).isFalse();
-        assertThat(uttaksperiode1.getTidsperiode()).isNotNull();
-        assertThat(uttaksperiode1.getTidsperiode().getFom()).isNotNull();
-        assertThat(uttaksperiode1.getTidsperiode().getTom()).isNotNull();
-        assertThat(uttaksperiode1.getForelder()).isEqualTo("mor");
+        assertThat(uttaksperiode1.forelder()).isEqualTo("mor");
+        assertThat(uttaksperiode1.type()).isEqualTo("uttak");
+        assertThat(uttaksperiode1.konto()).isEqualTo("FORELDREPENGER_FØR_FØDSEL");
+        assertThat(uttaksperiode1.gradert()).isFalse();
+        assertThat(uttaksperiode1.ønskerSamtidigUttak()).isFalse();
+        assertThat(uttaksperiode1.tidsperiode()).isNotNull();
+        assertThat(uttaksperiode1.tidsperiode().fom()).isNotNull();
+        assertThat(uttaksperiode1.tidsperiode().tom()).isNotNull()
+            .isAfter(uttaksperiode1.tidsperiode().fom());
+        assertThat(uttaksperiode1.forelder()).isEqualTo("mor");
 
         var uttaksperiode2 = fs.getUttaksplan().get(1);
-        assertThat(uttaksperiode2.getForelder()).isEqualTo("mor");
-        assertThat(uttaksperiode2.getType()).isEqualTo("uttak");
-        assertThat(uttaksperiode2.getKonto()).isEqualTo("FORELDREPENGER");
-        assertThat(uttaksperiode2.getGradert()).isFalse();
-        assertThat(uttaksperiode2.getTidsperiode()).isNotNull();
-        assertThat(uttaksperiode2.getTidsperiode().getFom()).isNotNull();
-        assertThat(uttaksperiode2.getTidsperiode().getTom()).isNotNull();
+        assertThat(uttaksperiode2.forelder()).isEqualTo("mor");
+        assertThat(uttaksperiode2.type()).isEqualTo("uttak");
+        assertThat(uttaksperiode2.konto()).isEqualTo("FORELDREPENGER");
+        assertThat(uttaksperiode2.gradert()).isFalse();
+        assertThat(uttaksperiode2.tidsperiode()).isNotNull();
+        assertThat(uttaksperiode2.tidsperiode().fom()).isNotNull();
+        assertThat(uttaksperiode2.tidsperiode().tom()).isNotNull()
+            .isAfter(uttaksperiode2.tidsperiode().fom());
 
         var uttaksperiode3 = fs.getUttaksplan().get(2);
-        assertThat(uttaksperiode3.getForelder()).isEqualTo("mor");
-        assertThat(uttaksperiode3.getType()).isEqualTo("uttak");
-        assertThat(uttaksperiode3.getKonto()).isEqualTo("FORELDREPENGER");
-        assertThat(uttaksperiode3.getTidsperiode()).isNotNull();
-        assertThat(uttaksperiode3.getTidsperiode().getFom()).isNotNull();
-        assertThat(uttaksperiode3.getTidsperiode().getTom()).isNotNull();
-        assertThat(uttaksperiode3.getErArbeidstaker()).isTrue();
-        assertThat(uttaksperiode3.getErFrilanser()).isFalse();
-        assertThat(uttaksperiode3.getØnskerSamtidigUttak()).isFalse();
-        assertThat(uttaksperiode3.getGradert()).isTrue();
-        assertThat(uttaksperiode3.getOrgnumre()).hasSize(1);
-        assertThat(uttaksperiode3.getStillingsprosent()).isEqualTo(45.0);
+        assertThat(uttaksperiode3.forelder()).isEqualTo("mor");
+        assertThat(uttaksperiode3.type()).isEqualTo("uttak");
+        assertThat(uttaksperiode3.konto()).isEqualTo("FORELDREPENGER");
+        assertThat(uttaksperiode3.tidsperiode()).isNotNull();
+        assertThat(uttaksperiode3.tidsperiode().fom()).isNotNull();
+        assertThat(uttaksperiode3.tidsperiode().tom()).isNotNull();
+        assertThat(uttaksperiode3.tidsperiode().tom()).isNotNull()
+            .isAfter(uttaksperiode3.tidsperiode().fom());
+        assertThat(uttaksperiode3.erArbeidstaker()).isTrue();
+        assertThat(uttaksperiode3.erFrilanser()).isFalse();
+        assertThat(uttaksperiode3.ønskerSamtidigUttak()).isFalse();
+        assertThat(uttaksperiode3.gradert()).isTrue();
+        assertThat(uttaksperiode3.orgnumre()).hasSize(1);
+        assertThat(uttaksperiode3.stillingsprosent()).isEqualTo(45.0);
 
 
         var søker = fs.getSøker();
         assertThat(søker).isNotNull();
-        assertThat(søker.getRolle()).isEqualTo("MOR");
-        assertThat(søker.getSpråkkode()).isEqualTo("NB");
-        assertThat(søker.getErAleneOmOmsorg()).isTrue();
-        var frilansInformasjon = søker.getFrilansInformasjon();
+        assertThat(søker.rolle()).isEqualTo("MOR");
+        assertThat(søker.språkkode()).isEqualTo("NB");
+        assertThat(søker.erAleneOmOmsorg()).isTrue();
+        var frilansInformasjon = søker.frilansInformasjon();
         assertThat(frilansInformasjon).isNotNull();
-        assertThat(frilansInformasjon.getOppstart()).isNotNull();
-        assertThat(frilansInformasjon.getDriverFosterhjem()).isFalse();
-        assertThat(frilansInformasjon.getOppdragForNæreVennerEllerFamilieSiste10Mnd()).hasSize(1);
-        var frilansoppdrag = frilansInformasjon.getOppdragForNæreVennerEllerFamilieSiste10Mnd().get(0);
-        assertThat(frilansoppdrag.getNavnPåArbeidsgiver()).isEqualTo("Klara Klukk");
-        assertThat(frilansoppdrag.getTidsperiode()).isNotNull();
-        assertThat(frilansoppdrag.getTidsperiode().getFom()).isNotNull();
-        assertThat(frilansoppdrag.getTidsperiode().getTom()).isNotNull();
-        var selvstendigNæringsdrivendeInfo = søker.getSelvstendigNæringsdrivendeInformasjon();
+        assertThat(frilansInformasjon.oppstart()).isNotNull();
+        assertThat(frilansInformasjon.driverFosterhjem()).isFalse();
+        assertThat(frilansInformasjon.oppdragForNæreVennerEllerFamilieSiste10Mnd()).hasSize(1);
+        var frilansoppdrag = frilansInformasjon.oppdragForNæreVennerEllerFamilieSiste10Mnd().get(0);
+        assertThat(frilansoppdrag.navnPåArbeidsgiver()).isEqualTo("Klara Klukk");
+        assertThat(frilansoppdrag.tidsperiode()).isNotNull();
+        assertThat(frilansoppdrag.tidsperiode().fom()).isNotNull();
+        assertThat(frilansoppdrag.tidsperiode().tom()).isNotNull()
+            .isAfter(frilansoppdrag.tidsperiode().fom());
+
+        var selvstendigNæringsdrivendeInfo = søker.selvstendigNæringsdrivendeInformasjon();
         assertThat(selvstendigNæringsdrivendeInfo).hasSize(1);
         var selvstendigNæringsdrivendeInformasjon = selvstendigNæringsdrivendeInfo.get(0);
-        assertThat(selvstendigNæringsdrivendeInformasjon.getNæringstyper()).hasSize(1);
-        assertThat(selvstendigNæringsdrivendeInformasjon.getTidsperiode()).isNotNull();
-        assertThat(selvstendigNæringsdrivendeInformasjon.getTidsperiode().getFom()).isNotNull();
-        assertThat(selvstendigNæringsdrivendeInformasjon.getTidsperiode().getTom()).isNull();
-        assertThat(selvstendigNæringsdrivendeInformasjon.getOrganisasjonsnummer()).isEqualTo("999999999");
-        assertThat(selvstendigNæringsdrivendeInformasjon.getHarBlittYrkesaktivILøpetAvDeTreSisteFerdigliknedeÅrene()).isFalse();
-        assertThat(selvstendigNæringsdrivendeInformasjon.getRegnskapsfører()).isNotNull();
-        assertThat(selvstendigNæringsdrivendeInformasjon.getNæringsinntekt()).isEqualTo(220_000);
-        assertThat(selvstendigNæringsdrivendeInformasjon.getNæringstyper()).hasSize(1).contains("DAGMAMMA");
+        assertThat(selvstendigNæringsdrivendeInformasjon.næringstyper()).hasSize(1);
+        assertThat(selvstendigNæringsdrivendeInformasjon.tidsperiode()).isNotNull();
+        assertThat(selvstendigNæringsdrivendeInformasjon.tidsperiode().fom()).isNotNull();
+        assertThat(selvstendigNæringsdrivendeInformasjon.tidsperiode().tom()).isNull();
+        assertThat(selvstendigNæringsdrivendeInformasjon.organisasjonsnummer()).isEqualTo("999999999");
+        assertThat(selvstendigNæringsdrivendeInformasjon.harBlittYrkesaktivILøpetAvDeTreSisteFerdigliknedeÅrene()).isFalse();
+        assertThat(selvstendigNæringsdrivendeInformasjon.regnskapsfører()).isNotNull();
+        assertThat(selvstendigNæringsdrivendeInformasjon.næringsinntekt()).isEqualTo(220_000);
+        assertThat(selvstendigNæringsdrivendeInformasjon.næringstyper()).hasSize(1).contains("DAGMAMMA");
 
         var barn = sf.getBarn();
         assertThat(barn).isNotNull();
-        assertThat(barn.erBarnetFødt).isTrue();
-        assertThat(barn.fødselsdatoer).hasSize(1);
-        assertThat(barn.antallBarn).isEqualTo(1);
-        assertThat(barn.termindato).isNotNull();
-        assertThat(barn.terminbekreftelse).isEmpty();
+        assertThat(barn.fødselsdatoer()).hasSize(1);
+        assertThat(barn.antallBarn()).isEqualTo(1);
+        assertThat(barn.termindato()).isNotNull();
+        assertThat(barn.terminbekreftelse()).isEmpty();
+        assertThat(barn.adopsjonsvedtak()).isEmpty();
+        assertThat(barn.omsorgsovertakelse()).isEmpty();
+        assertThat(barn.dokumentasjonAvAleneomsorg()).isEmpty();
 
         var annenForelder = sf.getAnnenForelder();
         assertThat(annenForelder).isNotNull();
-        assertThat(annenForelder.getKanIkkeOppgis()).isFalse();
-        assertThat(annenForelder.getFornavn()).isNotNull();
-        assertThat(annenForelder.getEtternavn()).isNotNull();
-        assertThat(annenForelder.getFnr()).isEqualTo("11111122222");
+        assertThat(annenForelder.kanIkkeOppgis()).isFalse();
+        assertThat(annenForelder.fornavn()).isNotNull();
+        assertThat(annenForelder.etternavn()).isNotNull();
+        assertThat(annenForelder.fnr()).isEqualTo("11111122222");
 
         var informasjonOmUtenlandsopphold = sf.getInformasjonOmUtenlandsopphold();
         assertThat(informasjonOmUtenlandsopphold).isNotNull();
-        assertThat(informasjonOmUtenlandsopphold.getTidligereOpphold()).isEmpty();
-        assertThat(informasjonOmUtenlandsopphold.getSenereOpphold()).hasSize(1);
-        assertThat(informasjonOmUtenlandsopphold.getSenereOpphold().get(0).getLand()).isEqualTo("FI");
-        assertThat(informasjonOmUtenlandsopphold.getSenereOpphold().get(0).getTidsperiode().getFom()).isNotNull();
-        assertThat(informasjonOmUtenlandsopphold.getSenereOpphold().get(0).getTidsperiode().getTom()).isNotNull();
+        assertThat(informasjonOmUtenlandsopphold.tidligereOpphold()).isEmpty();
+        assertThat(informasjonOmUtenlandsopphold.senereOpphold()).hasSize(1);
+        assertThat(informasjonOmUtenlandsopphold.senereOpphold().get(0).land()).isEqualTo("FI");
+        assertThat(informasjonOmUtenlandsopphold.senereOpphold().get(0).tidsperiode().fom()).isNotNull();
+        assertThat(informasjonOmUtenlandsopphold.senereOpphold().get(0).tidsperiode().tom()).isNotNull()
+            .isAfter(informasjonOmUtenlandsopphold.senereOpphold().get(0).tidsperiode().fom());
 
         assertThat(sf.getVedlegg()).isEmpty();
+    }
+
+    @Test
+    void ettersendelseSeraliseringVirkerTest() throws IOException {
+        var ettersendelse = mapper.readValue(bytesFra("json/ettersendelse_I000044.json"), no.nav.foreldrepenger.selvbetjening.innsending.domain.Ettersending.class);
+
+        assertThat(ettersendelse.type()).isEqualTo("foreldrepenger");
+        assertThat(ettersendelse.saksnummer()).isEqualTo("352003201");
+
+        assertThat(ettersendelse.vedlegg()).hasSize(1);
+        var vedlegg = ettersendelse.vedlegg().get(0);
+        assertThat(vedlegg.getId()).isEqualTo("V090740687265315217194125674862219730");
+        assertThat(vedlegg.getSkjemanummer()).isEqualTo("I000044");
+        assertThat(vedlegg.getContent()).isNull();
+        assertThat(vedlegg.getInnsendingsType()).isNull();
     }
 }

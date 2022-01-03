@@ -86,7 +86,7 @@ public class InnsendingConnection extends AbstractRestConnection {
 
     public no.nav.foreldrepenger.common.domain.felles.Ettersending body(Ettersending ettersending) {
         var dto = tilEttersending(ettersending);
-        ettersending.getVedlegg().forEach(v -> dto.getVedlegg().add(tilVedlegg(convert(v))));
+        ettersending.vedlegg().forEach(v -> dto.getVedlegg().add(tilVedlegg(convert(v))));
         return dto;
     }
 

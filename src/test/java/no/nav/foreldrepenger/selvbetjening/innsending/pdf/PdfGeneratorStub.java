@@ -36,7 +36,7 @@ public class PdfGeneratorStub implements PdfGenerator {
 
     @Override
     public byte[] generate(TilbakebetalingUttalelse uttalelse) {
-        return generate(uttalelse.getBrukerTekst().getTekst());
+        return generate(uttalelse.brukerTekst().tekst());
     }
 
     @Override
