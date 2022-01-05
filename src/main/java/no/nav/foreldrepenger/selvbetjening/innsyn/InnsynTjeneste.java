@@ -12,7 +12,6 @@ import org.springframework.stereotype.Service;
 import no.nav.foreldrepenger.selvbetjening.innsyn.saker.Sak;
 import no.nav.foreldrepenger.selvbetjening.innsyn.sakerv2.Saker;
 import no.nav.foreldrepenger.selvbetjening.innsyn.uttaksplan.Uttaksplan;
-import no.nav.foreldrepenger.selvbetjening.innsyn.vedtak.Vedtak;
 
 @Service
 @ConditionalOnProperty(name = "stub.oppslag", havingValue = "false", matchIfMissing = true)
@@ -36,12 +35,6 @@ public class InnsynTjeneste implements Innsyn {
     public Uttaksplan hentUttaksplanAnnenPart(String annenPart) {
         LOG.info("Henter uttaksplan for annen part {}", maskFnr(annenPart));
         return connection.hentUttaksplanAnnenPart(annenPart);
-    }
-
-    @Override
-    public Vedtak hentVedtak(String saksnummer) {
-        LOG.info("Henter vedtak for sak {}", saksnummer);
-        return connection.hentVedtak(saksnummer);
     }
 
     @Override

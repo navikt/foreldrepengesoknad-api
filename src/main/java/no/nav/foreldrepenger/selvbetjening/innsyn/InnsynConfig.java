@@ -20,7 +20,6 @@ public class InnsynConfig extends AbstractConfig {
     private static final String ANNENPART = "annenPart";
     private static final String UTTAKSPLAN = "innsyn/uttaksplan";
     private static final String UTTAKSPLANANNEN = "innsyn/uttaksplanannen";
-    private static final String VEDTAK = "innsyn/vedtak";
 
     private static final String FPSAK_SAKER_V2 = "innsyn/v2/saker";
 
@@ -52,10 +51,6 @@ public class InnsynConfig extends AbstractConfig {
 
     URI fpsakV2URI() {
         return uri(getUri(), FPSAK_SAKER_V2);
-    }
-
-    public URI vedtakURI(String saksnummer) {
-        return uri(getUri(), VEDTAK, queryParams(SAKSNUMMER, saksnummer));
     }
 
     public URI arbeidsforholdURI() {
