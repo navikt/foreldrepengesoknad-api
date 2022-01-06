@@ -17,7 +17,6 @@ import no.nav.foreldrepenger.selvbetjening.http.AbstractRestConnection;
 import no.nav.foreldrepenger.selvbetjening.innsyn.saker.Sak;
 import no.nav.foreldrepenger.selvbetjening.innsyn.sakerv2.Saker;
 import no.nav.foreldrepenger.selvbetjening.innsyn.uttaksplan.Uttaksplan;
-import no.nav.foreldrepenger.selvbetjening.innsyn.vedtak.Vedtak;
 import no.nav.foreldrepenger.selvbetjening.oppslag.domain.Arbeidsforhold;
 
 @Component
@@ -47,10 +46,6 @@ public class InnsynConnection extends AbstractRestConnection {
 
     public Uttaksplan hentUttaksplanAnnenPart(String annenPart) {
         return getIfEnabled(cfg.uttakURIForAnnenPart(annenPart), Uttaksplan.class, false);
-    }
-
-    public Vedtak hentVedtak(String saksnummer) {
-        return getIfEnabled(cfg.vedtakURI(saksnummer), Vedtak.class, false);
     }
 
     private <T> T getIfEnabled(URI uri, Class<T> clazz, boolean shouldThrow) {

@@ -17,7 +17,6 @@ import no.nav.foreldrepenger.selvbetjening.innsyn.saker.Behandling;
 import no.nav.foreldrepenger.selvbetjening.innsyn.saker.Sak;
 import no.nav.foreldrepenger.selvbetjening.innsyn.sakerv2.Saker;
 import no.nav.foreldrepenger.selvbetjening.innsyn.uttaksplan.Uttaksplan;
-import no.nav.foreldrepenger.selvbetjening.innsyn.vedtak.Vedtak;
 
 @Service
 @ConditionalOnProperty(name = "stub.oppslag", havingValue = "true")
@@ -44,11 +43,6 @@ public class InnsynTjenesteStub implements Innsyn {
                 new Sak("SAK", "123234545", "UBEH", now().minusYears(1), "LA8PV", null, "SVP", emptyList(), false),
                 new Sak("FPSAK", "424242424", "LOP", mottattdato.toLocalDate(), null, null, "SVP",
                         singletonList(behandling), true));
-    }
-
-    @Override
-    public Vedtak hentVedtak(String saksnummer) {
-        return null;
     }
 
     @Override

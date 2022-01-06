@@ -7,7 +7,6 @@ import no.nav.foreldrepenger.selvbetjening.http.RetryAware;
 import no.nav.foreldrepenger.selvbetjening.innsyn.saker.Sak;
 import no.nav.foreldrepenger.selvbetjening.innsyn.sakerv2.Saker;
 import no.nav.foreldrepenger.selvbetjening.innsyn.uttaksplan.Uttaksplan;
-import no.nav.foreldrepenger.selvbetjening.innsyn.vedtak.Vedtak;
 
 public interface Innsyn extends Pingable, RetryAware {
 
@@ -18,7 +17,5 @@ public interface Innsyn extends Pingable, RetryAware {
     Saker hentSakerV2();
 
     List<Sak> hentSaker();
-
-    Vedtak hentVedtak(String saksnummer);
 
 }
