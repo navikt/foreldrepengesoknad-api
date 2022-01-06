@@ -10,6 +10,7 @@ import java.util.Set;
 
 import javax.inject.Inject;
 
+import no.nav.foreldrepenger.selvbetjening.innsyn.sakerv2.persondetaljer.AktørId;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.springframework.boot.test.autoconfigure.json.AutoConfigureJsonTesters;

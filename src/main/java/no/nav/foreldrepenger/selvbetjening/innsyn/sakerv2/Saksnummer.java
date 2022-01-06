@@ -1,9 +1,9 @@
 package no.nav.foreldrepenger.selvbetjening.innsyn.sakerv2;
 
-import java.util.Objects;
-
 import com.fasterxml.jackson.annotation.JsonCreator;
 import com.fasterxml.jackson.annotation.JsonValue;
+
+import java.util.Objects;
 
 record Saksnummer(@JsonValue String value) {
 

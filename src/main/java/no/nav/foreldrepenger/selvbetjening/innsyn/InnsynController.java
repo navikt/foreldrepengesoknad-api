@@ -12,7 +12,6 @@ import org.springframework.web.bind.annotation.RequestParam;
 
 import no.nav.foreldrepenger.selvbetjening.http.ProtectedRestController;
 import no.nav.foreldrepenger.selvbetjening.innsyn.saker.Sak;
-import no.nav.foreldrepenger.selvbetjening.innsyn.sakerv2.Saker;
 import no.nav.foreldrepenger.selvbetjening.innsyn.uttaksplan.Uttaksplan;
 
 @ProtectedRestController(InnsynController.INNSYN)
@@ -31,12 +30,6 @@ public class InnsynController {
     public List<Sak> saker() {
         return innsynTjeneste.hentSaker();
     }
-
-    @GetMapping("/v2/saker")
-    public Saker sakerV2() {
-        return innsynTjeneste.hentSakerV2();
-    }
-
 
     @GetMapping("/uttaksplan")
     public Uttaksplan uttaksplan(@RequestParam(name = "saksnummer") String saksnummer) {

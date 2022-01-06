@@ -8,7 +8,7 @@ interface Sak {
 
     Familiehendelse familiehendelse();
 
-    Set<AktørId> barn();
+    Set<PersonDetaljer> barn();
 
     boolean gjelderAdopsjon();
 
