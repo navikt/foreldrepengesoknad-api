@@ -52,15 +52,6 @@ spring:
          spec: maximumSize=100,expireAfterAccess=3600s
    application:
       name: foreldrepengesoknad-api
-   jackson:
-      default-property-inclusion: non-absent
-      mapper:
-         accept-case-insensitive-properties: true
-      deserialization:
-         accept-single-value-as-array: true
-         fail-on-unknown-properties: false
-      serialization:
-         fail-on-empty-beans: false
    main:
       banner-mode: 'off'
    servlet:

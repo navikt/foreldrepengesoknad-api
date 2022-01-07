@@ -1,4 +1,4 @@
-package no.nav.foreldrepenger.selvbetjening.oppslag.domain;
+package no.nav.foreldrepenger.selvbetjening.innsyn.saker;
 
 import java.util.Objects;
 

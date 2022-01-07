@@ -3,7 +3,6 @@ package no.nav.foreldrepenger.selvbetjening.innsyn.saker;
 import com.fasterxml.jackson.annotation.JsonCreator;
 import com.fasterxml.jackson.annotation.JsonProperty;
 
-import no.nav.foreldrepenger.selvbetjening.oppslag.domain.AktørId;
 import no.nav.foreldrepenger.selvbetjening.util.StringUtil;
 
 public class AnnenPart {

@@ -1,7 +1,6 @@
 package no.nav.foreldrepenger.selvbetjening;
 
 import static java.time.LocalDateTime.now;
-import static no.nav.foreldrepenger.selvbetjening.oppslag.OppslagTjenesteStub.personDto;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 
 import java.io.IOException;
@@ -27,11 +26,6 @@ class SerializationTest {
 
     @Autowired
     ObjectMapper mapper;
-
-    @Test
-    void person_serialiaztion() throws IOException {
-        test(personDto());
-    }
 
     @Test
     void engangstonad_deserialisation() throws IOException {
