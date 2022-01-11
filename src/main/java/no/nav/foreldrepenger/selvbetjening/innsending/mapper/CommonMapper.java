@@ -7,7 +7,6 @@ import static no.nav.foreldrepenger.selvbetjening.util.DateUtil.erNyopprettet;
 import static org.apache.commons.lang3.StringUtils.isEmpty;
 import static org.apache.commons.lang3.StringUtils.isNotBlank;
 
-import java.time.LocalDate;
 import java.util.List;
 
 import org.springframework.util.CollectionUtils;
@@ -54,8 +53,6 @@ import no.nav.foreldrepenger.selvbetjening.innsending.domain.arbeid.SelvstendigN
 import no.nav.foreldrepenger.selvbetjening.innsending.domain.arbeid.TilknyttetPerson;
 
 final class CommonMapper {
-
-    private static final LocalDate TRE_MÅNEDER_FØR_FOM = now().minusMonths(3);
 
     private CommonMapper() {
     }
@@ -307,7 +304,7 @@ final class CommonMapper {
         return new Frilans(
             new ÅpenPeriode(frilansInformasjon.oppstart()),
             frilansInformasjon.driverFosterhjem(),
-            frilansInformasjon.oppstart().isAfter(TRE_MÅNEDER_FØR_FOM),
+            frilansInformasjon.oppstart().isAfter(now().minusMonths(3)),
             tilFrilansOppdrag(frilansInformasjon.oppdragForNæreVennerEllerFamilieSiste10Mnd()),
             null); // TODO: Fjern denne som ikke blir brukt
     }
