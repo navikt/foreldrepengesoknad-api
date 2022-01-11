@@ -1,30 +1,30 @@
 package no.nav.foreldrepenger.selvbetjening.oppslag.domain;
 
 import static com.fasterxml.jackson.annotation.JsonInclude.Include.NON_NULL;
+import static no.nav.foreldrepenger.common.util.StringUtil.mask;
+import static no.nav.foreldrepenger.selvbetjening.util.StringUtil.maskFnr;
 
 import java.time.LocalDate;
 
 import com.fasterxml.jackson.annotation.JsonInclude;
 
-import no.nav.foreldrepenger.selvbetjening.util.StringUtil;
-
 @JsonInclude(NON_NULL)
-public record BarnFrontend(String fornavn,
+public record BarnFrontend(String fnr,
+                           String fornavn,
                            String mellomnavn,
                            String etternavn,
                            String kjønn,
-                           String fnr,
                            LocalDate fødselsdato,
                            AnnenForelderFrontend annenForelder) {
 
     @Override
     public String toString() {
-        return "Barn{" +
-            "fornavn='" + fornavn + '\'' +
-            ", mellomnavn='" + mellomnavn + '\'' +
-            ", etternavn='" + etternavn + '\'' +
-            ", kjønn=" + kjønn +
-            ", fnr='" + StringUtil.maskFnr(fnr) + '\'' +
+        return "BarnFrontend{" +
+            "fnr='" + maskFnr(fnr) + '\'' +
+            ", fornavn='" + fornavn + '\'' +
+            ", mellomnavn='" + mask(mellomnavn) + '\'' +
+            ", etternavn='" + mask(etternavn) + '\'' +
+            ", kjønn='" + kjønn + '\'' +
             ", fødselsdato=" + fødselsdato +
             ", annenForelder=" + annenForelder +
             '}';

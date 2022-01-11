@@ -1,5 +1,7 @@
 package no.nav.foreldrepenger.selvbetjening.oppslag.domain;
 
+import static no.nav.foreldrepenger.selvbetjening.util.StringUtil.maskFnr;
+
 import java.util.Objects;
 
 import com.fasterxml.jackson.annotation.JsonValue;
@@ -36,6 +38,6 @@ public class Fødselsnummer {
 
     @Override
     public String toString() {
-        return getClass().getSimpleName() + " [fnr=" + fnr + "]";
+        return getClass().getSimpleName() + " [fnr=" + maskFnr(fnr) + "]";
     }
 }

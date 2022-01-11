@@ -1,13 +1,13 @@
 package no.nav.foreldrepenger.selvbetjening.oppslag.domain;
 
 import static com.fasterxml.jackson.annotation.JsonInclude.Include.NON_EMPTY;
+import static no.nav.foreldrepenger.common.util.StringUtil.mask;
+import static no.nav.foreldrepenger.selvbetjening.util.StringUtil.maskFnr;
 
 import java.time.LocalDate;
 import java.util.List;
 
 import com.fasterxml.jackson.annotation.JsonInclude;
-
-import no.nav.foreldrepenger.selvbetjening.util.StringUtil;
 
 // TODO: Konsolider modell her med Person i sakerV2 og/eller Person fra mottak/felles
 @JsonInclude(NON_EMPTY)
@@ -23,10 +23,10 @@ public record PersonFrontend(String fnr,
     @Override
     public String toString() {
         return "Person{" +
-            "fnr='" + StringUtil.maskFnr(fnr) + '\'' +
+            "fnr='" + maskFnr(fnr) + '\'' +
             ", fornavn='" + fornavn + '\'' +
-            ", mellomnavn='" + mellomnavn + '\'' +
-            ", etternavn='" + etternavn + '\'' +
+            ", mellomnavn='" + mask(mellomnavn) + '\'' +
+            ", etternavn='" + mask(etternavn) + '\'' +
             ", kjønn='" + kjønn + '\'' +
             ", fødselsdato=" + fødselsdato +
             ", ikkeNordiskEøsLand=" + ikkeNordiskEøsLand +

@@ -45,11 +45,12 @@ public final class PersonMapper {
 
     private static BarnFrontend tilBarn(no.nav.foreldrepenger.common.domain.Barn barn) {
         return new BarnFrontend(
+            barn.fnr().getFnr(),
             Optional.ofNullable(barn.navn()).map(no.nav.foreldrepenger.common.domain.Navn::fornavn).orElse(null),
             Optional.ofNullable(barn.navn()).map(no.nav.foreldrepenger.common.domain.Navn::mellomnavn).orElse(null),
             Optional.ofNullable(barn.navn()).map(no.nav.foreldrepenger.common.domain.Navn::etternavn).orElse(null),
             Optional.ofNullable(barn.kjønn()).map(Enum::name).orElse(null),
-            barn.fnr().getFnr(), barn.fødselsdato(), tilAnnenforelder(barn.annenPart()));
+            barn.fødselsdato(), tilAnnenforelder(barn.annenPart()));
     }
 
     private static AnnenForelderFrontend tilAnnenforelder(AnnenPart annenPart) {

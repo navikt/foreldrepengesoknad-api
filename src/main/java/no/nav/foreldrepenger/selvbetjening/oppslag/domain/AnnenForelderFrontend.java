@@ -1,12 +1,12 @@
 package no.nav.foreldrepenger.selvbetjening.oppslag.domain;
 
 import static com.fasterxml.jackson.annotation.JsonInclude.Include.NON_NULL;
+import static no.nav.foreldrepenger.common.util.StringUtil.mask;
+import static no.nav.foreldrepenger.selvbetjening.util.StringUtil.maskFnr;
 
 import java.time.LocalDate;
 
 import com.fasterxml.jackson.annotation.JsonInclude;
-
-import no.nav.foreldrepenger.selvbetjening.util.StringUtil;
 
 @JsonInclude(NON_NULL)
 public record AnnenForelderFrontend(String fnr,
@@ -18,10 +18,10 @@ public record AnnenForelderFrontend(String fnr,
     @Override
     public String toString() {
         return "AnnenForelder{" +
-            "fnr='" + StringUtil.maskFnr(fnr) + '\'' +
+            "fnr='" + maskFnr(fnr) + '\'' +
             ", fornavn='" + fornavn + '\'' +
-            ", mellomnavn='" + mellomnavn + '\'' +
-            ", etternavn='" + etternavn + '\'' +
+            ", mellomnavn='" + mask(mellomnavn) + '\'' +
+            ", etternavn='" + mask(etternavn) + '\'' +
             ", fødselsdato=" + fødselsdato +
             '}';
     }
