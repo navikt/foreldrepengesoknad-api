@@ -15,6 +15,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.junit.jupiter.SpringExtension;
 
+import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.neovisionaries.i18n.CountryCode;
 
@@ -36,6 +37,12 @@ import no.nav.foreldrepenger.selvbetjening.oppslag.domain.Søkerinfo;
 @ContextConfiguration(classes = { JacksonConfiguration.class})
 class OppslagSeraliseringTest {
 
+    private static final String ARBEIDSGIVER_ID = "123456789";
+    private static final String ARBEIDSGIVER_ID_TYPE = "orgnr";
+    private static final String ARBEIDSGIVER_NAVN = "KJELL T. RINGS SYKKELVERKSTED";
+    private static final Double STILLINGSPROSENT = 100d;
+    private static final LocalDate FOM_ARBEIDSFORHOLD = now().minusYears(2);
+    private static final LocalDate TOM_ARBEIDSFORHOLD = null;
     @Autowired
     private ObjectMapper mapper;
 
@@ -66,6 +73,24 @@ class OppslagSeraliseringTest {
         assertThat(annenforelder.etternavn()).isEqualTo(annenPartFelles.navn().etternavn());
 
         testDeseraliseringProdusererSammeObjekt(person, mapper, true);
+    }
+
+    @Test
+    void testArbeidsforholdDeseraliseringMedAlias() throws JsonProcessingException {
+
+        var arbeidsforholdSeralized = String.format("""
+            {
+                "arbeidsgiverId" : "%s",
+                "arbeidsgiverIdType" : "%s",
+                "arbeidsgiverNavn" : "%s",
+                "stillingsprosent" : %d,
+                "from" : "%s"
+            }
+            """,
+            ARBEIDSGIVER_ID, ARBEIDSGIVER_ID_TYPE, ARBEIDSGIVER_NAVN, STILLINGSPROSENT.intValue(), FOM_ARBEIDSFORHOLD);
+
+        var deserialized = mapper.readValue(arbeidsforholdSeralized, Arbeidsforhold.class);
+        assertThat(deserialized.fom()).isEqualTo(FOM_ARBEIDSFORHOLD);
     }
 
     @Test
@@ -100,7 +125,7 @@ class OppslagSeraliseringTest {
     }
 
     public static List<Arbeidsforhold> arbeidsforhold() {
-        return List.of(new Arbeidsforhold("123456789", "orgnr", "KJELL T. RINGS SYKKELVERKSTED", 100d,
-            now().minusYears(2), null));
+        return List.of(new Arbeidsforhold(ARBEIDSGIVER_ID, ARBEIDSGIVER_ID_TYPE, ARBEIDSGIVER_NAVN, STILLINGSPROSENT,
+            FOM_ARBEIDSFORHOLD, TOM_ARBEIDSFORHOLD));
     }
 }
