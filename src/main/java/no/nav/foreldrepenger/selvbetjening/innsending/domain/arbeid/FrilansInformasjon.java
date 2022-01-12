@@ -9,12 +9,14 @@ import java.util.Optional;
 import com.fasterxml.jackson.annotation.JsonCreator;
 
 public record FrilansInformasjon(LocalDate oppstart,
+                                 boolean jobberFremdelesSomFrilans,
                                  boolean driverFosterhjem,
                                  List<Frilansoppdrag> oppdragForNæreVennerEllerFamilieSiste10Mnd) {
 
     @JsonCreator
-    public FrilansInformasjon(LocalDate oppstart, boolean driverFosterhjem, List<Frilansoppdrag> oppdragForNæreVennerEllerFamilieSiste10Mnd) {
+    public FrilansInformasjon(LocalDate oppstart, boolean jobberFremdelesSomFrilans, boolean driverFosterhjem, List<Frilansoppdrag> oppdragForNæreVennerEllerFamilieSiste10Mnd) {
         this.oppstart = oppstart;
+        this.jobberFremdelesSomFrilans = jobberFremdelesSomFrilans;
         this.driverFosterhjem = driverFosterhjem;
         this.oppdragForNæreVennerEllerFamilieSiste10Mnd = Optional.ofNullable(oppdragForNæreVennerEllerFamilieSiste10Mnd).orElse(emptyList());
     }
