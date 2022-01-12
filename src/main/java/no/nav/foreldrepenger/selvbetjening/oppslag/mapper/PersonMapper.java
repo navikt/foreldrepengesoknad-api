@@ -54,6 +54,9 @@ public final class PersonMapper {
     }
 
     private static AnnenForelderFrontend tilAnnenforelder(AnnenPart annenPart) {
+        if (annenPart == null) {
+            return null;
+        }
         return new AnnenForelderFrontend(annenPart.fnr().getFnr(),
             Optional.ofNullable(annenPart.navn()).map(no.nav.foreldrepenger.common.domain.Navn::fornavn).orElse(null),
             Optional.ofNullable(annenPart.navn()).map(no.nav.foreldrepenger.common.domain.Navn::mellomnavn).orElse(null),
