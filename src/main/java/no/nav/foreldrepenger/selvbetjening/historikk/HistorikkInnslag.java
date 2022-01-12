@@ -12,7 +12,7 @@ import com.fasterxml.jackson.annotation.JsonSubTypes.Type;
 import com.fasterxml.jackson.annotation.JsonTypeInfo;
 
 import no.nav.foreldrepenger.selvbetjening.innsending.InnsendingInnslag;
-import no.nav.foreldrepenger.selvbetjening.oppslag.domain.AktørId;
+import no.nav.foreldrepenger.selvbetjening.innsyn.saker.AktørId;
 import no.nav.foreldrepenger.selvbetjening.oppslag.domain.Fødselsnummer;
 
 @JsonTypeInfo(use = NAME, include = PROPERTY, property = "type")
@@ -30,7 +30,7 @@ public abstract class HistorikkInnslag {
     protected LocalDateTime opprettet;
     private String referanseId;
 
-    public HistorikkInnslag(Fødselsnummer fnr) {
+    protected HistorikkInnslag(Fødselsnummer fnr) {
         this.fnr = fnr;
     }
 

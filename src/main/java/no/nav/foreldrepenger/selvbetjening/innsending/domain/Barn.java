@@ -26,7 +26,6 @@ public record Barn(List<LocalDate> fødselsdatoer,
                    List<String> omsorgsovertakelse,
                    List<String> dokumentasjonAvAleneomsorg) {
 
-    // TODO: Skriv om til subklasses
     public Barn(List<LocalDate> fødselsdatoer, int antallBarn, List<String> terminbekreftelse, LocalDate termindato,
                 LocalDate terminbekreftelseDato, LocalDate adopsjonsdato, List<String> adopsjonsvedtak,
                 LocalDate ankomstdato, boolean adopsjonAvEktefellesBarn, boolean søkerAdopsjonAlene,
