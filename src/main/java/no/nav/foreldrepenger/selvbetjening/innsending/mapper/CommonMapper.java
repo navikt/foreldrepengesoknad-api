@@ -303,9 +303,9 @@ final class CommonMapper {
         }
         return new Frilans(
             new ÅpenPeriode(frilansInformasjon.oppstart()),
-            frilansInformasjon.jobberFremdelesSomFrilans(),
             frilansInformasjon.driverFosterhjem(),
             frilansInformasjon.oppstart().isAfter(now().minusMonths(3)),
+            frilansInformasjon.jobberFremdelesSomFrilans(),
             tilFrilansOppdrag(frilansInformasjon.oppdragForNæreVennerEllerFamilieSiste10Mnd()),
             null); // TODO: Fjern denne som ikke blir brukt
     }
