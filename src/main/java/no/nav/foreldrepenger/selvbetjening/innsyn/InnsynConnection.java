@@ -57,24 +57,12 @@ public class InnsynConnection extends AbstractRestConnection {
     }
 
     public List<Sak> hentSaker() {
-        List<Sak> saker = saker(cfg.fpsakURI(), "FPSAK");
-        if (saker.isEmpty()) {
-            saker = saker(cfg.infotrygdSakerURI(), "SAK");
-        }
-
-        return saker;
-    }
-
-    private List<Sak> saker(URI uri, String fra) {
-        List<Sak> saker = Optional.ofNullable(getForObject(uri, Sak[].class, false))
+        var uri = cfg.fpsakURI();
+        var saker = Optional.ofNullable(getForObject(uri, Sak[].class, false))
                 .map(Arrays::asList)
                 .orElse(emptyList());
-
-        saker.forEach(sak -> sak.setType(fra));
-
         LOG.info("Hentet {} sak{} fra {}", saker.size(), flertall(saker.size()), uri);
         return saker;
-
     }
 
     public List<Arbeidsforhold> hentArbeidsForhold() {

@@ -1,12 +1,8 @@
 package no.nav.foreldrepenger.selvbetjening.innsyn;
 
 import static java.time.LocalDate.now;
-import static java.util.Collections.emptyList;
-import static java.util.Collections.singletonList;
 
 import java.time.LocalDateTime;
-import java.util.Arrays;
-import java.util.Collections;
 import java.util.List;
 import java.util.Set;
 
@@ -34,15 +30,14 @@ public class InnsynTjenesteStub implements Innsyn {
 
     @Override
     public List<Sak> hentSaker() {
-        LocalDateTime mottattdato = LocalDateTime.now().minusDays(7);
+        var mottattdato = LocalDateTime.now().minusDays(7);
 
-        Behandling behandling = new Behandling(mottattdato, mottattdato.plusHours(2), "AVSLU", "FP",
-                "FORP_FODS", null, "4869", "NAV Torrevieja", Collections.emptyList());
+        var behandling = new Behandling(mottattdato, mottattdato.plusHours(2), "AVSLU", "FP",
+                "FORP_FODS", null, "4869", "NAV Torrevieja", List.of());
 
-        return Arrays.asList(
-                new Sak("SAK", "123234545", "UBEH", now().minusYears(1), "LA8PV", null, "SVP", emptyList(), false),
-                new Sak("FPSAK", "424242424", "LOP", mottattdato.toLocalDate(), null, null, "SVP",
-                        singletonList(behandling), true));
+        return List.of(
+                new Sak("123234545", "UBEH", now().minusYears(1), "LA8PV", null, "SVP", List.of(), false),
+                new Sak("424242424", "LOP", mottattdato.toLocalDate(), null, null, "SVP", List.of(behandling), true));
     }
 
     @Override

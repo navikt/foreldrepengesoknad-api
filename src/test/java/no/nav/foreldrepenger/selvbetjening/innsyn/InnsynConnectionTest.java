@@ -37,40 +37,16 @@ public class InnsynConnectionTest {
     }
 
     @Test
-    public void testUthentingAvSakerMedKunSakerFraFpsak() {
-        lenient().when(rest.getForObject(any(), eq(Sak[].class))).thenReturn(sakerFraFpsak());
+    public void testUthentingAvSaker() {
+        lenient().when(rest.getForObject(any(), eq(Sak[].class))).thenReturn(saker());
         List<Sak> saker = connection.hentSaker();
         assertThat(saker).hasSize(1);
         Sak sak = saker.get(0);
         assertThat(sak.getType()).isEqualTo("FPSAK");
     }
 
-    @Test
-    public void testUthentingAvSakerMedKunSakerFraInfotrygd() {
-        lenient().when(rest.getForObject(any(), eq(Sak[].class))).thenReturn(new Sak[0])
-                .thenReturn(sakerFraInfotrygd());
-        List<Sak> saker = connection.hentSaker();
-        assertThat(saker).hasSize(1);
-        Sak sak = saker.get(0);
-        assertThat(sak.getType()).isEqualTo("SAK");
-    }
-
-    @Test
-    public void testUthentingAvSakerMedSakerFraFpsakOgInfotrygd() {
-        lenient().when(rest.getForObject(any(), eq(Sak[].class))).thenReturn(sakerFraFpsak())
-                .thenReturn(sakerFraInfotrygd());
-        List<Sak> saker = connection.hentSaker();
-        assertThat(saker).hasSize(1);
-        Sak sak = saker.get(0);
-        assertThat(sak.getType()).isEqualTo("FPSAK");
-    }
-
-    private static Sak[] sakerFraFpsak() {
-        return new Sak[] { new Sak("FPSAK", "1", "UBEH", now().minusMonths(1), null, null, "FORP", emptyList(), true) };
-    }
-
-    private static Sak[] sakerFraInfotrygd() {
-        return new Sak[] { new Sak("SAK", "9", null, now().minusMonths(2), "LA8PV", null, "FORP", emptyList(), false) };
+    private static Sak[] saker() {
+        return new Sak[] { new Sak("1", "UBEH", now().minusMonths(1), null, null, "FORP", emptyList(), true) };
     }
 
 }
