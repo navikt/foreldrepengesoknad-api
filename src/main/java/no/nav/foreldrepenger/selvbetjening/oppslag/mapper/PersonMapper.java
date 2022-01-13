@@ -32,6 +32,7 @@ public final class PersonMapper {
             Optional.ofNullable(dto.kjønn()).map(Enum::name).orElse(null),
             dto.fødselsdato(),
             ikkeNordiskEøsLand(dto.land()),
+            dto.bankkonto(),
             sort(tilBarn(dto.barn()))
         );
 
