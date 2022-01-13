@@ -12,6 +12,7 @@ import org.springframework.boot.autoconfigure.condition.ConditionalOnProperty;
 import org.springframework.stereotype.Service;
 
 import no.nav.foreldrepenger.selvbetjening.innsyn.InnsynConnection;
+import no.nav.foreldrepenger.selvbetjening.oppslag.domain.PersonFrontend;
 import no.nav.foreldrepenger.selvbetjening.oppslag.domain.Søkerinfo;
 
 @Service
@@ -26,6 +27,11 @@ public class OppslagTjeneste implements Oppslag {
     public OppslagTjeneste(OppslagConnection oppslag, InnsynConnection innsyn) {
         this.oppslag = oppslag;
         this.innsyn = innsyn;
+    }
+
+    @Override
+    public PersonFrontend hentPerson() {
+        return tilPersonFrontend(oppslag.hentPerson());
     }
 
     @Override
