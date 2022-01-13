@@ -19,6 +19,12 @@ public class OppslagTjenesteStub implements Oppslag {
         return "hello earthlings";
     }
 
+
+    @Override
+    public PersonFrontend hentPerson() {
+        return person();
+    }
+
     @Override
     public Søkerinfo hentSøkerinfo() {
         return new Søkerinfo(person(), arbeidsforhold());
