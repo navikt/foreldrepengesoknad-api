@@ -1,6 +1,6 @@
 package no.nav.foreldrepenger.selvbetjening.innsending;
 
-import static no.nav.foreldrepenger.selvbetjening.util.StringUtil.limit;
+import static no.nav.foreldrepenger.common.util.StringUtil.limit;
 import static org.apache.commons.lang3.StringUtils.reverse;
 
 import java.net.URI;

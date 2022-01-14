@@ -1,7 +1,7 @@
 package no.nav.foreldrepenger.selvbetjening.http.filters;
 
-import static no.nav.foreldrepenger.selvbetjening.util.Constants.FNR_HEADER_VALUE;
-import static no.nav.foreldrepenger.selvbetjening.util.StringUtil.maskFnr;
+import static no.nav.foreldrepenger.common.util.Constants.FNR;
+import static no.nav.foreldrepenger.common.util.StringUtil.partialMask;
 
 import java.io.IOException;
 
@@ -39,10 +39,10 @@ public class IdMismatchFilterBean extends GenericFilterBean {
     }
 
     private void checkIds(ServletRequest request) {
-        String fnr = HttpServletRequest.class.cast(request).getHeader(FNR_HEADER_VALUE);
+        String fnr = HttpServletRequest.class.cast(request).getHeader(FNR);
         if ((fnr != null) && (tokenUtil.getSubject() != null) && !fnr.equals(tokenUtil.getSubject())) {
-            LOG.warn("ID Mismatch mellom {} og {}", maskFnr(fnr), maskFnr(tokenUtil.getSubject()));
-            throw new IdMismatchException(maskFnr(fnr), maskFnr(tokenUtil.getSubject()));
+            LOG.warn("ID Mismatch mellom {} og {}", partialMask(fnr), partialMask(tokenUtil.getSubject()));
+            throw new IdMismatchException(partialMask(fnr), partialMask(tokenUtil.getSubject()));
         }
     }
 

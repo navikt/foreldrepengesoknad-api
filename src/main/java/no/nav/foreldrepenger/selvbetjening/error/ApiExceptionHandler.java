@@ -1,6 +1,6 @@
 package no.nav.foreldrepenger.selvbetjening.error;
 
-import static no.nav.foreldrepenger.selvbetjening.util.StringUtil.maskFnr;
+import static no.nav.foreldrepenger.common.util.StringUtil.partialMask;
 import static org.springframework.http.HttpStatus.BAD_REQUEST;
 import static org.springframework.http.HttpStatus.CONFLICT;
 import static org.springframework.http.HttpStatus.FORBIDDEN;
@@ -160,7 +160,7 @@ public class ApiExceptionHandler extends ResponseEntityExceptionHandler implemen
     }
 
     private String subject() {
-        return Optional.ofNullable(maskFnr(tokenUtil.getSubject()))
+        return Optional.ofNullable(partialMask(tokenUtil.getSubject()))
                 .orElse("Uautentisert");
     }
 

@@ -33,7 +33,7 @@
 		<project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
 		<project.reporting.outputEncoding>UTF-8</project.reporting.outputEncoding>
 
-        <mottak-felles.version>0.3.10</mottak-felles.version>
+        <mottak-felles.version>0.4.0</mottak-felles.version>
 		<springfox.version>3.0.0</springfox.version>
 		<token-validation-version>1.3.9</token-validation-version>
         <nimbus-jose-jwt.version>8.20</nimbus-jose-jwt.version>

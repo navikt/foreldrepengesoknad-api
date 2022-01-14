@@ -4,17 +4,17 @@ import java.time.LocalDate;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
 
-public record AnnenForelder(boolean kanIkkeOppgis,
-                            String fornavn,
-                            String etternavn,
-                            String navn,
-                            String fnr,
-                            boolean utenlandskFnr,
-                            String bostedsland,
-                            boolean harRettPåForeldrepenger,
-                            boolean erInformertOmSøknaden,
-                            boolean erForSyk,
-                            LocalDate datoForAleneomsorg) {
+public record AnnenForelderFrontend(boolean kanIkkeOppgis,
+                                    String fornavn,
+                                    String etternavn,
+                                    String navn,
+                                    String fnr,
+                                    boolean utenlandskFnr,
+                                    String bostedsland,
+                                    boolean harRettPåForeldrepenger,
+                                    boolean erInformertOmSøknaden,
+                                    boolean erForSyk,
+                                    LocalDate datoForAleneomsorg) {
 
     @JsonIgnore
     public String type() {

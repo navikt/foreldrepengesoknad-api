@@ -1,8 +1,8 @@
 package no.nav.foreldrepenger.selvbetjening.oppslag;
 
+import static no.nav.foreldrepenger.boot.conditionals.EnvUtil.CONFIDENTIAL;
+import static no.nav.foreldrepenger.common.util.StringUtil.partialMask;
 import static no.nav.foreldrepenger.selvbetjening.oppslag.mapper.PersonMapper.tilPersonFrontend;
-import static no.nav.foreldrepenger.selvbetjening.util.MDCUtil.CONFIDENTIAL;
-import static no.nav.foreldrepenger.selvbetjening.util.StringUtil.maskFnr;
 
 import javax.inject.Inject;
 
@@ -42,7 +42,7 @@ public class OppslagTjeneste implements Oppslag {
     private Søkerinfo søkerinfo() {
         LOG.info("Henter søkerinfo");
         var info = new Søkerinfo(tilPersonFrontend(oppslag.hentPerson()), innsyn.hentArbeidsForhold());
-        LOG.info("Hentet søkerinfo for {} med {} arbeidsforhold OK", maskFnr(info.søker().fnr()), info.arbeidsforhold().size());
+        LOG.info("Hentet søkerinfo for {} med {} arbeidsforhold OK", partialMask(info.søker().fnr()), info.arbeidsforhold().size());
         LOG.trace(CONFIDENTIAL, "Hentet søkerinfo {}", info);
         return info;
     }

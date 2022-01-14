@@ -1,6 +1,7 @@
 package no.nav.foreldrepenger.selvbetjening.mellomlagring;
 
 import static java.util.stream.Collectors.joining;
+import static no.nav.foreldrepenger.common.util.StringUtil.flertall;
 import static org.apache.http.HttpStatus.SC_NOT_FOUND;
 
 import java.io.BufferedReader;
@@ -19,8 +20,6 @@ import com.amazonaws.services.s3.model.BucketLifecycleConfiguration.Rule;
 import com.amazonaws.services.s3.model.CannedAccessControlList;
 import com.amazonaws.services.s3.model.CreateBucketRequest;
 import com.amazonaws.services.s3.model.lifecycle.LifecycleFilter;
-
-import no.nav.foreldrepenger.selvbetjening.util.StringUtil;
 
 public class S3Mellomlagring extends AbstractMellomlagringTjeneste {
 
@@ -62,8 +61,6 @@ public class S3Mellomlagring extends AbstractMellomlagringTjeneste {
     @Override
     public URI pingURI() {
         return URI.create("http://www.vg.no");
-        // return URI.create(s3.getUrl(getMellomlagringBøtte().getNavn(),
-        // "42").toString());
     }
 
     @Override
@@ -79,9 +76,7 @@ public class S3Mellomlagring extends AbstractMellomlagringTjeneste {
     }
 
     private static void visRegler(List<Rule> rules) {
-        rules.stream()
-                .forEach(r -> LOG.info("Regel har expiry om {} dag{}", r.getExpirationInDays(), StringUtil.flertall(r.getExpirationInDays())));
-
+        rules.forEach(r -> LOG.info("Regel har expiry om {} dag{}", r.getExpirationInDays(), flertall(r.getExpirationInDays())));
     }
 
     private void lagBøtte(Bøtte bøtte) {

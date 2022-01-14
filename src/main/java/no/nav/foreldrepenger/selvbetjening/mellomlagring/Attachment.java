@@ -1,7 +1,5 @@
 package no.nav.foreldrepenger.selvbetjening.mellomlagring;
 
-import static no.nav.foreldrepenger.selvbetjening.util.StringUtil.limit;
-
 import java.io.IOException;
 import java.net.URI;
 import java.util.Arrays;
@@ -14,6 +12,7 @@ import org.springframework.util.unit.DataUnit;
 import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 
+import no.nav.foreldrepenger.common.util.StringUtil;
 import no.nav.foreldrepenger.selvbetjening.vedlegg.AttachmentTooLargeException;
 
 public class Attachment {
@@ -104,7 +103,7 @@ public class Attachment {
 
     @Override
     public String toString() {
-        return getClass().getSimpleName() + " [filename=" + filename + ", bytes=" + limit(bytes) + ", contentType="
+        return getClass().getSimpleName() + " [filename=" + filename + ", bytes=" + StringUtil.limit(bytes) + ", contentType="
                 + contentType + ", size=" + size + ", uuid=" + uuid + "]";
     }
 }

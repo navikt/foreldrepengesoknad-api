@@ -14,8 +14,8 @@ import org.springframework.stereotype.Service;
 
 import no.nav.foreldrepenger.selvbetjening.innsending.domain.Ettersending;
 import no.nav.foreldrepenger.selvbetjening.innsending.domain.Kvittering;
-import no.nav.foreldrepenger.selvbetjening.innsending.domain.Søknad;
-import no.nav.foreldrepenger.selvbetjening.innsending.domain.Vedlegg;
+import no.nav.foreldrepenger.selvbetjening.innsending.domain.SøknadFrontend;
+import no.nav.foreldrepenger.selvbetjening.innsending.domain.VedleggFrontend;
 import no.nav.foreldrepenger.selvbetjening.innsending.domain.tilbakebetaling.TilbakebetalingUttalelse;
 import no.nav.foreldrepenger.selvbetjening.innsending.pdf.PdfGenerator;
 import no.nav.foreldrepenger.selvbetjening.mellomlagring.KryptertMellomlagring;
@@ -42,7 +42,7 @@ public class InnsendingTjeneste implements Innsending {
     }
 
     @Override
-    public Kvittering sendInn(Søknad søknad) {
+    public Kvittering sendInn(SøknadFrontend søknad) {
         LOG.info("Sender inn søknad av type {}", søknad.getType());
         hentOgSjekk(søknad.getVedlegg());
         var kvittering = connection.sendInn(søknad);
@@ -66,7 +66,7 @@ public class InnsendingTjeneste implements Innsending {
     }
 
     @Override
-    public Kvittering endre(Søknad es) {
+    public Kvittering endre(SøknadFrontend es) {
         LOG.info("Endrer søknad av type {}", es.getType());
         hentOgSjekk(es.getVedlegg());
         var kvittering = connection.endre(es);
@@ -80,8 +80,8 @@ public class InnsendingTjeneste implements Innsending {
         return connection.ping();
     }
 
-    private Vedlegg vedleggFra(TilbakebetalingUttalelse u) {
-        return new Vedlegg(pdfGenerator.generate(u), "Tekst fra bruker", id(), u.brukerTekst().dokumentType());
+    private VedleggFrontend vedleggFra(TilbakebetalingUttalelse u) {
+        return new VedleggFrontend(pdfGenerator.generate(u), "Tekst fra bruker", id(), u.brukerTekst().dokumentType());
     }
 
     private static TilbakebetalingUttalelse uttalelseFra(Ettersending e) {
@@ -96,7 +96,7 @@ public class InnsendingTjeneste implements Innsending {
         return "V" + IDGENERATOR.nextLong();
     }
 
-    private void hentOgSjekk(List<Vedlegg> vedlegg) {
+    private void hentOgSjekk(List<VedleggFrontend> vedlegg) {
         if (!vedlegg.isEmpty()) {
             LOG.info("Henter og sjekker mellomlagring for {} vedlegg", vedlegg.size());
             vedlegg.forEach(this::hentVedleggBytes);
@@ -105,14 +105,14 @@ public class InnsendingTjeneste implements Innsending {
         }
     }
 
-    private void slettMellomlagringOgSøknad(Søknad søknad) {
+    private void slettMellomlagringOgSøknad(SøknadFrontend søknad) {
         LOG.info("Sletter mellomlagret søknad og vedlegg");
         søknad.getVedlegg().forEach(mellomlagring::slettKryptertVedlegg);
         mellomlagring.slettKryptertSøknad();
         LOG.info("Slettet mellomlagret søknad og vedlegg OK");
     }
 
-    private void hentVedleggBytes(Vedlegg vedlegg) {
+    private void hentVedleggBytes(VedleggFrontend vedlegg) {
         if (vedlegg.getUrl() != null) {
             vedlegg.setContent(mellomlagring.lesKryptertVedlegg(vedlegg.getUuid())
                     .map(a -> a.bytes)

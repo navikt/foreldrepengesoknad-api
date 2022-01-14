@@ -1,7 +1,7 @@
 package no.nav.foreldrepenger.selvbetjening.util;
 
 import static java.time.Instant.now;
-import static no.nav.foreldrepenger.selvbetjening.util.Constants.ISSUER;
+import static no.nav.foreldrepenger.common.util.Constants.ISSUER;
 
 import java.util.Date;
 import java.util.Objects;
@@ -9,6 +9,7 @@ import java.util.Optional;
 
 import org.springframework.stereotype.Component;
 
+import no.nav.foreldrepenger.common.util.AuthenticationLevel;
 import no.nav.security.token.support.core.context.TokenValidationContext;
 import no.nav.security.token.support.core.context.TokenValidationContextHolder;
 import no.nav.security.token.support.core.exceptions.JwtTokenValidatorException;

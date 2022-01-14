@@ -8,13 +8,13 @@ import java.util.Optional;
 
 import com.fasterxml.jackson.annotation.JsonCreator;
 
-public record FrilansInformasjon(LocalDate oppstart,
-                                 boolean jobberFremdelesSomFrilans,
-                                 boolean driverFosterhjem,
-                                 List<Frilansoppdrag> oppdragForNæreVennerEllerFamilieSiste10Mnd) {
+public record FrilansInformasjonFrontend(LocalDate oppstart,
+                                         boolean jobberFremdelesSomFrilans,
+                                         boolean driverFosterhjem,
+                                         List<FrilansoppdragFrontend> oppdragForNæreVennerEllerFamilieSiste10Mnd) {
 
     @JsonCreator
-    public FrilansInformasjon(LocalDate oppstart, boolean jobberFremdelesSomFrilans, boolean driverFosterhjem, List<Frilansoppdrag> oppdragForNæreVennerEllerFamilieSiste10Mnd) {
+    public FrilansInformasjonFrontend(LocalDate oppstart, boolean jobberFremdelesSomFrilans, boolean driverFosterhjem, List<FrilansoppdragFrontend> oppdragForNæreVennerEllerFamilieSiste10Mnd) {
         this.oppstart = oppstart;
         this.jobberFremdelesSomFrilans = jobberFremdelesSomFrilans;
         this.driverFosterhjem = driverFosterhjem;

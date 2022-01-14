@@ -1,6 +1,7 @@
 package no.nav.foreldrepenger.selvbetjening.vedlegg;
 
-import static no.nav.foreldrepenger.selvbetjening.util.StreamUtil.safeStream;
+import static no.nav.foreldrepenger.common.util.StreamUtil.safeStream;
+import static no.nav.foreldrepenger.common.util.StringUtil.limit;
 import static no.nav.foreldrepenger.selvbetjening.vedlegg.VedleggUtil.mediaType;
 import static org.springframework.http.MediaType.APPLICATION_PDF;
 
@@ -10,9 +11,8 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Component;
 
-import no.nav.foreldrepenger.selvbetjening.innsending.domain.Vedlegg;
+import no.nav.foreldrepenger.selvbetjening.innsending.domain.VedleggFrontend;
 import no.nav.foreldrepenger.selvbetjening.mellomlagring.Attachment;
-import no.nav.foreldrepenger.selvbetjening.util.StringUtil;
 
 @Component
 public class PDFEncryptionVedleggSjekker implements VedleggSjekker {
@@ -25,7 +25,7 @@ public class PDFEncryptionVedleggSjekker implements VedleggSjekker {
     }
 
     @Override
-    public void sjekk(Vedlegg... vedlegg) {
+    public void sjekk(VedleggFrontend... vedlegg) {
         safeStream(vedlegg).forEach(v -> check(v.getContent()));
     }
 
@@ -35,7 +35,7 @@ public class PDFEncryptionVedleggSjekker implements VedleggSjekker {
             } catch (InvalidPasswordException e) {
                 throw new AttachmentPasswordProtectedException(e);
             } catch (Exception e) {
-                LOG.warn("Kunne ikke sjekke {}", StringUtil.limit(bytes), e);
+                LOG.warn("Kunne ikke sjekke {}", limit(bytes), e);
             }
         }
     }

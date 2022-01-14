@@ -45,7 +45,7 @@ class OppslagSeraliseringTest {
         var annenPartFelles = barnFelles.annenPart();
 
         var person = tilPersonFrontend(personFelles);
-        assertThat(person.fnr()).isEqualTo(personFelles.fnr().getFnr());
+        assertThat(person.fnr()).isEqualTo(personFelles.fnr().value());
         assertThat(person.fornavn()).isEqualTo(personFelles.navn().fornavn());
         assertThat(person.etternavn()).isEqualTo(personFelles.navn().etternavn());
         assertThat(person.kjønn()).isEqualTo(personFelles.kjønn().name());
@@ -53,12 +53,12 @@ class OppslagSeraliseringTest {
         assertThat(person.barn()).hasSize(1);
         var barn = person.barn().get(0);
 
-        assertThat(barn.fnr()).isEqualTo(barnFelles.fnr().getFnr());
+        assertThat(barn.fnr()).isEqualTo(barnFelles.fnr().value());
         assertThat(barn.fødselsdato()).isEqualTo(barnFelles.fødselsdato());
         assertThat(barn.kjønn()).isEqualTo(Kjønn.K.name());
         var annenforelder = barn.annenForelder();
         assertThat(annenforelder).isNotNull();
-        assertThat(annenforelder.fnr()).isEqualTo(annenPartFelles.fnr().getFnr());
+        assertThat(annenforelder.fnr()).isEqualTo(annenPartFelles.fnr().value());
         assertThat(annenforelder.fødselsdato()).isEqualTo(annenPartFelles.fødselsdato());
         assertThat(annenforelder.fornavn()).isEqualTo(annenPartFelles.navn().fornavn());
         assertThat(annenforelder.mellomnavn()).isEqualTo(annenPartFelles.navn().mellomnavn());

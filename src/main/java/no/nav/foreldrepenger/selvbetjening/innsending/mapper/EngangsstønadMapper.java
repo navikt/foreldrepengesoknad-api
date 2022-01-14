@@ -9,14 +9,14 @@ import no.nav.foreldrepenger.common.domain.BrukerRolle;
 import no.nav.foreldrepenger.common.domain.Søker;
 import no.nav.foreldrepenger.common.domain.Ytelse;
 import no.nav.foreldrepenger.common.oppslag.dkif.Målform;
-import no.nav.foreldrepenger.selvbetjening.innsending.domain.Engangsstønad;
+import no.nav.foreldrepenger.selvbetjening.innsending.domain.EngangsstønadFrontend;
 
 final class EngangsstønadMapper {
 
     private EngangsstønadMapper() {
     }
 
-    static no.nav.foreldrepenger.common.domain.Søknad tilEngangsstønad(Engangsstønad e) {
+    static no.nav.foreldrepenger.common.domain.Søknad tilEngangsstønad(EngangsstønadFrontend e) {
         return no.nav.foreldrepenger.common.domain.Søknad.builder()
             .søker(tilSøker(e))
             .ytelse(tilYtelse(e))
@@ -24,7 +24,7 @@ final class EngangsstønadMapper {
             .build();
     }
 
-    private static Søker tilSøker(Engangsstønad e) {
+    private static Søker tilSøker(EngangsstønadFrontend e) {
         var søker = e.getSøker();
         if (søker == null) {
             throw new IllegalStateException("Kan ikke ha tom søkerobjekt");
@@ -32,7 +32,7 @@ final class EngangsstønadMapper {
         return new Søker(BrukerRolle.MOR, søker.språkkode() != null ? Målform.valueOf(søker.språkkode().toUpperCase()) : null);
     }
 
-    private static Ytelse tilYtelse(Engangsstønad e) {
+    private static Ytelse tilYtelse(EngangsstønadFrontend e) {
         var engangsstønadBuilder = no.nav.foreldrepenger.common.domain.engangsstønad.Engangsstønad.builder();
         if (Boolean.FALSE.equals(e.getErEndringssøknad())) {
             engangsstønadBuilder.medlemsskap(tilMedlemskap(e));

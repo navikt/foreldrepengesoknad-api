@@ -1,9 +1,11 @@
-package no.nav.foreldrepenger.selvbetjening.innsending;
+package no.nav.foreldrepenger.selvbetjening.innsending.deseralisering;
 
 import static no.nav.foreldrepenger.common.util.ResourceHandleUtil.bytesFra;
 import static org.assertj.core.api.Assertions.assertThat;
 
 import java.io.IOException;
+import java.net.URI;
+import java.net.URISyntaxException;
 
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -14,7 +16,8 @@ import org.springframework.test.context.junit.jupiter.SpringExtension;
 import com.fasterxml.jackson.databind.ObjectMapper;
 
 import no.nav.foreldrepenger.selvbetjening.config.JacksonConfiguration;
-import no.nav.foreldrepenger.selvbetjening.innsending.domain.Foreldrepengesøknad;
+import no.nav.foreldrepenger.selvbetjening.innsending.domain.ForeldrepengesøknadFrontend;
+import no.nav.foreldrepenger.selvbetjening.innsending.domain.SøknadFrontend;
 
 @ExtendWith(SpringExtension.class)
 @ContextConfiguration(classes = JacksonConfiguration.class)
@@ -23,13 +26,14 @@ class SøknadFrontendDeseraliseringTest {
     @Autowired
     private ObjectMapper mapper;
 
+    // TODO: Legg til en for SVP, ES og FP endring
     @Test
     void innsendtSøknadFraFrontendDeseraliseresKorrektTest() throws IOException {
-        var sf = mapper.readValue(bytesFra("json/foreldrepenger_mor_gradering.json"), no.nav.foreldrepenger.selvbetjening.innsending.domain.Søknad.class);
+        var søknadFrontend = mapper.readValue(bytesFra("json/foreldrepenger_mor_gradering_egenNæring_og_frilans.json"), SøknadFrontend.class);
 
         // Verifiser korrekt seralisering fra frontend
-        assertThat(sf).isInstanceOf(Foreldrepengesøknad.class);
-        var fs = (Foreldrepengesøknad) sf;
+        assertThat(søknadFrontend).isInstanceOf(ForeldrepengesøknadFrontend.class);
+        var fs = (ForeldrepengesøknadFrontend) søknadFrontend;
         assertThat(fs.getType()).isEqualTo("foreldrepenger");
         assertThat(fs.getSituasjon()).isEqualTo("fødsel");
         assertThat(fs.getErEndringssøknad()).isFalse();
@@ -105,7 +109,7 @@ class SøknadFrontendDeseraliseringTest {
         assertThat(selvstendigNæringsdrivendeInformasjon.næringsinntekt()).isEqualTo(220_000);
         assertThat(selvstendigNæringsdrivendeInformasjon.næringstyper()).hasSize(1).contains("DAGMAMMA");
 
-        var barn = sf.getBarn();
+        var barn = søknadFrontend.getBarn();
         assertThat(barn).isNotNull();
         assertThat(barn.fødselsdatoer()).hasSize(1);
         assertThat(barn.antallBarn()).isEqualTo(1);
@@ -115,14 +119,14 @@ class SøknadFrontendDeseraliseringTest {
         assertThat(barn.omsorgsovertakelse()).isEmpty();
         assertThat(barn.dokumentasjonAvAleneomsorg()).isEmpty();
 
-        var annenForelder = sf.getAnnenForelder();
+        var annenForelder = søknadFrontend.getAnnenForelder();
         assertThat(annenForelder).isNotNull();
         assertThat(annenForelder.kanIkkeOppgis()).isFalse();
         assertThat(annenForelder.fornavn()).isNotNull();
         assertThat(annenForelder.etternavn()).isNotNull();
         assertThat(annenForelder.fnr()).isEqualTo("11111122222");
 
-        var informasjonOmUtenlandsopphold = sf.getInformasjonOmUtenlandsopphold();
+        var informasjonOmUtenlandsopphold = søknadFrontend.getInformasjonOmUtenlandsopphold();
         assertThat(informasjonOmUtenlandsopphold).isNotNull();
         assertThat(informasjonOmUtenlandsopphold.tidligereOpphold()).isEmpty();
         assertThat(informasjonOmUtenlandsopphold.senereOpphold()).hasSize(1);
@@ -131,21 +135,20 @@ class SøknadFrontendDeseraliseringTest {
         assertThat(informasjonOmUtenlandsopphold.senereOpphold().get(0).tidsperiode().tom()).isNotNull()
             .isAfter(informasjonOmUtenlandsopphold.senereOpphold().get(0).tidsperiode().fom());
 
-        assertThat(sf.getVedlegg()).isEmpty();
+        assertThat(søknadFrontend.getVedlegg()).isEmpty();
     }
 
-    @Test
-    void ettersendelseSeraliseringVirkerTest() throws IOException {
-        var ettersendelse = mapper.readValue(bytesFra("json/ettersendelse_I000044.json"), no.nav.foreldrepenger.selvbetjening.innsending.domain.Ettersending.class);
+    void ettersendelseDeraliseringTest() throws IOException, URISyntaxException {
+        var ettersendelse = mapper.readValue(bytesFra("json/ettersendelse_I000044.json"), SøknadFrontend.class);
+        assertThat(ettersendelse).isNotNull();
+        assertThat(ettersendelse.getSaksnummer()).isEqualTo("352003201");
+        assertThat(ettersendelse.getType()).isEqualTo("foreldrepenger");
 
-        assertThat(ettersendelse.type()).isEqualTo("foreldrepenger");
-        assertThat(ettersendelse.saksnummer()).isEqualTo("352003201");
-
-        assertThat(ettersendelse.vedlegg()).hasSize(1);
-        var vedlegg = ettersendelse.vedlegg().get(0);
-        assertThat(vedlegg.getId()).isEqualTo("V090740687265315217194125674862219730");
+        var vedleggListe = ettersendelse.getVedlegg();
+        assertThat(vedleggListe).hasSize(1);
+        var vedlegg = vedleggListe.get(0);
         assertThat(vedlegg.getSkjemanummer()).isEqualTo("I000044");
-        assertThat(vedlegg.getContent()).isNull();
-        assertThat(vedlegg.getInnsendingsType()).isNull();
+        assertThat(vedlegg.getId()).isEqualTo("V090740687265315217194125674862219730");
+        assertThat(vedlegg.getUrl()).isEqualTo(new URI("V090740687265315217194125674862219730"));
     }
 }

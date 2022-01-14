@@ -1,8 +1,8 @@
 package no.nav.foreldrepenger.selvbetjening.oppslag.mapper;
 
 import static java.util.Comparator.comparing;
+import static no.nav.foreldrepenger.common.util.StreamUtil.safeStream;
 import static no.nav.foreldrepenger.selvbetjening.util.IkkeNordiskEØSLand.ikkeNordiskEøsLand;
-import static no.nav.foreldrepenger.selvbetjening.util.StreamUtil.safeStream;
 
 import java.util.List;
 import java.util.Optional;
@@ -25,7 +25,7 @@ public final class PersonMapper {
 
     public static PersonFrontend tilPersonFrontend(no.nav.foreldrepenger.common.domain.felles.Person dto) {
         return new PersonFrontend(
-            dto.fnr().getFnr(),
+            dto.fnr().value(),
             Optional.ofNullable(dto.navn()).map(no.nav.foreldrepenger.common.domain.Navn::fornavn).orElse(null),
             Optional.ofNullable(dto.navn()).map(no.nav.foreldrepenger.common.domain.Navn::mellomnavn).orElse(null),
             Optional.ofNullable(dto.navn()).map(no.nav.foreldrepenger.common.domain.Navn::etternavn).orElse(null),
@@ -46,7 +46,7 @@ public final class PersonMapper {
 
     private static BarnFrontend tilBarn(no.nav.foreldrepenger.common.domain.Barn barn) {
         return new BarnFrontend(
-            barn.fnr().getFnr(),
+            barn.fnr().value(),
             Optional.ofNullable(barn.navn()).map(no.nav.foreldrepenger.common.domain.Navn::fornavn).orElse(null),
             Optional.ofNullable(barn.navn()).map(no.nav.foreldrepenger.common.domain.Navn::mellomnavn).orElse(null),
             Optional.ofNullable(barn.navn()).map(no.nav.foreldrepenger.common.domain.Navn::etternavn).orElse(null),
@@ -58,7 +58,7 @@ public final class PersonMapper {
         if (annenPart == null) {
             return null;
         }
-        return new AnnenForelderFrontend(annenPart.fnr().getFnr(),
+        return new AnnenForelderFrontend(annenPart.fnr().value(),
             Optional.ofNullable(annenPart.navn()).map(no.nav.foreldrepenger.common.domain.Navn::fornavn).orElse(null),
             Optional.ofNullable(annenPart.navn()).map(no.nav.foreldrepenger.common.domain.Navn::mellomnavn).orElse(null),
             Optional.ofNullable(annenPart.navn()).map(no.nav.foreldrepenger.common.domain.Navn::etternavn).orElse(null),

@@ -9,13 +9,13 @@ import lombok.Builder;
 import lombok.EqualsAndHashCode;
 
 @EqualsAndHashCode(callSuper = true)
-public final class Engangsstønad extends Søknad {
+public final class EngangsstønadFrontend extends SøknadFrontend {
 
     @Builder
     @JsonCreator
-    public Engangsstønad(LocalDateTime opprettet, String type, String saksnummer, Søker søker, Barn barn,
-                         AnnenForelder annenForelder, Utenlandsopphold informasjonOmUtenlandsopphold, String situasjon,
-                         Boolean erEndringssøknad, String tilleggsopplysninger, List<Vedlegg> vedlegg) {
+    public EngangsstønadFrontend(LocalDateTime opprettet, String type, String saksnummer, SøkerFrontend søker, BarnFrontend barn,
+                                 AnnenForelderFrontend annenForelder, UtenlandsoppholdFrontend informasjonOmUtenlandsopphold, String situasjon,
+                                 Boolean erEndringssøknad, String tilleggsopplysninger, List<VedleggFrontend> vedlegg) {
         super(opprettet, type, saksnummer, søker, barn, annenForelder, informasjonOmUtenlandsopphold, situasjon,
             erEndringssøknad, tilleggsopplysninger, vedlegg);
     }

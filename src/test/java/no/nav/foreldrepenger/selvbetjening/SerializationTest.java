@@ -17,8 +17,8 @@ import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 
 import no.nav.foreldrepenger.selvbetjening.config.JacksonConfiguration;
-import no.nav.foreldrepenger.selvbetjening.innsending.domain.Barn;
-import no.nav.foreldrepenger.selvbetjening.innsending.domain.Engangsstønad;
+import no.nav.foreldrepenger.selvbetjening.innsending.domain.BarnFrontend;
+import no.nav.foreldrepenger.selvbetjening.innsending.domain.EngangsstønadFrontend;
 
 @ExtendWith(SpringExtension.class)
 @ContextConfiguration(classes = JacksonConfiguration.class)
@@ -29,11 +29,11 @@ class SerializationTest {
 
     @Test
     void engangstonad_deserialisation() throws IOException {
-        var barn = new Barn(null, 2,
+        var barn = new BarnFrontend(null, 2,
             List.of(LocalDate.now().minusWeeks(6).toString()), LocalDate.now().minusWeeks(1), null,
             null, null, null, false, false,
             null, null, null);
-        var engangsstønad = Engangsstønad.builder()
+        var engangsstønad = EngangsstønadFrontend.builder()
             .type("engangsstønad")
             .opprettet(now())
             .barn(barn)

@@ -2,8 +2,8 @@ package no.nav.foreldrepenger.selvbetjening.http;
 
 import static java.lang.annotation.ElementType.TYPE;
 import static java.lang.annotation.RetentionPolicy.RUNTIME;
-import static no.nav.foreldrepenger.selvbetjening.util.Constants.CLAIMS;
-import static no.nav.foreldrepenger.selvbetjening.util.Constants.ISSUER;
+import static no.nav.foreldrepenger.common.util.Constants.CLAIMS;
+import static no.nav.foreldrepenger.common.util.Constants.ISSUER;
 
 import java.lang.annotation.Documented;
 import java.lang.annotation.Retention;

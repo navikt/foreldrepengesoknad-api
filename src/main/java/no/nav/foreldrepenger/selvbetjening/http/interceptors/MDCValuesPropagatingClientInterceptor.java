@@ -1,7 +1,7 @@
 package no.nav.foreldrepenger.selvbetjening.http.interceptors;
 
-import static no.nav.foreldrepenger.selvbetjening.util.Constants.NAV_CALL_ID;
-import static no.nav.foreldrepenger.selvbetjening.util.Constants.NAV_CONSUMER_ID;
+import static no.nav.foreldrepenger.common.util.Constants.NAV_CALL_ID;
+import static no.nav.foreldrepenger.common.util.Constants.NAV_CONSUMER_ID;
 
 import java.io.IOException;
 

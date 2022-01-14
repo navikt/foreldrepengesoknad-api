@@ -30,7 +30,7 @@ import no.nav.foreldrepenger.common.domain.foreldrepenger.fordeling.UtsettelsesP
 import no.nav.foreldrepenger.common.domain.foreldrepenger.fordeling.UtsettelsesÅrsak;
 import no.nav.foreldrepenger.common.domain.foreldrepenger.fordeling.UttaksPeriode;
 import no.nav.foreldrepenger.common.oppslag.dkif.Målform;
-import no.nav.foreldrepenger.selvbetjening.innsending.domain.Foreldrepengesøknad;
+import no.nav.foreldrepenger.selvbetjening.innsending.domain.ForeldrepengesøknadFrontend;
 import no.nav.foreldrepenger.selvbetjening.innsending.domain.UttaksplanPeriode;
 
 final class ForeldrepengerMapper {
@@ -38,7 +38,7 @@ final class ForeldrepengerMapper {
     private ForeldrepengerMapper() {
     }
 
-    static no.nav.foreldrepenger.common.domain.Søknad tilForeldrepengesøknad(Foreldrepengesøknad foreldrepengesøknad) {
+    static no.nav.foreldrepenger.common.domain.Søknad tilForeldrepengesøknad(ForeldrepengesøknadFrontend foreldrepengesøknad) {
         if (Boolean.TRUE.equals(foreldrepengesøknad.getErEndringssøknad())) {
             return new Endringssøknad(
                 foreldrepengesøknad.getSaksnummer(),
@@ -54,7 +54,7 @@ final class ForeldrepengerMapper {
             .build();
     }
 
-    private static Søker tilSøker(Foreldrepengesøknad f) {
+    private static Søker tilSøker(ForeldrepengesøknadFrontend f) {
         var søker = f.getSøker();
         if (søker == null) {
             throw new IllegalStateException("Kan ikke ha tom søkerobjekt");
@@ -65,7 +65,7 @@ final class ForeldrepengerMapper {
     }
 
 
-    private static Foreldrepenger tilYtelse(Foreldrepengesøknad f) {
+    private static Foreldrepenger tilYtelse(ForeldrepengesøknadFrontend f) {
         var foreldrepengerBuilder = Foreldrepenger.builder();
         if (Boolean.FALSE.equals(f.getErEndringssøknad())) {
             foreldrepengerBuilder
@@ -81,7 +81,7 @@ final class ForeldrepengerMapper {
             .build();
     }
 
-    private static Rettigheter tilRettigheter(Foreldrepengesøknad f) {
+    private static Rettigheter tilRettigheter(ForeldrepengesøknadFrontend f) {
         return new Rettigheter(
             f.getAnnenForelder().harRettPåForeldrepenger(),
             false, // TODO: Ikke satt av api. Ikke brukt? Hva er default i mottak?
@@ -90,7 +90,7 @@ final class ForeldrepengerMapper {
     }
 
 
-    private static Fordeling tilFordeling(Foreldrepengesøknad f) {
+    private static Fordeling tilFordeling(ForeldrepengesøknadFrontend f) {
         return Fordeling.builder()
             .perioder(tilLukketPeriodeMedVedlegg(f.getUttaksplan()))
             .erAnnenForelderInformert(f.getAnnenForelder().erInformertOmSøknaden())

@@ -1,7 +1,7 @@
 package no.nav.foreldrepenger.selvbetjening.http.filters;
 
-import static no.nav.foreldrepenger.selvbetjening.util.Constants.NAV_TOKEN_EXPIRY_ID;
-import static no.nav.foreldrepenger.selvbetjening.util.MDCUtil.toMDC;
+import static no.nav.foreldrepenger.common.util.Constants.NAV_TOKEN_EXPIRY_ID;
+import static no.nav.foreldrepenger.common.util.MDCUtil.toMDC;
 import static org.springframework.core.Ordered.HIGHEST_PRECEDENCE;
 
 import java.io.IOException;
