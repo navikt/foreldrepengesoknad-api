@@ -13,7 +13,6 @@ public class InnsynConfig extends AbstractConfig {
 
     private static final String PING = "actuator/health/liveness";
     private static final String FPSAK_SAKER = "innsyn/saker";
-    private static final String INFOTRYGD_SAKER = "innsyn/sak1";
 
     private static final String ARBEIDSFORHOLD = "innsyn/arbeidsforhold";
     private static final String SAKSNUMMER = "saksnummer";
@@ -35,10 +34,6 @@ public class InnsynConfig extends AbstractConfig {
 
     URI fpsakURI() {
         return uri(getUri(), FPSAK_SAKER);
-    }
-
-    URI infotrygdSakerURI() {
-        return uri(getUri(), INFOTRYGD_SAKER);
     }
 
     URI uttakURI(String saksnummer) {

@@ -14,7 +14,7 @@ import com.fasterxml.jackson.annotation.JsonProperty;
 @JsonInclude(NON_EMPTY)
 public class Sak {
 
-    private String type;
+    private static final String TYPE = "FPSAK"; //TODO denne kan fjernes når frontend ikke bryr seg om type sak
 
     private final String status;
     private final LocalDate opprettet;
@@ -26,8 +26,7 @@ public class Sak {
     private final boolean mottattEndringssøknad;
 
     @JsonCreator
-    public Sak(@JsonProperty("type") String type,
-               @JsonProperty("saksnummer") String saksnummer,
+    public Sak(@JsonProperty("saksnummer") String saksnummer,
                @JsonProperty("status") String status,
                @JsonProperty("opprettet") LocalDate opprettet,
                @JsonProperty("fagsakId") String fagsakId,
@@ -35,7 +34,6 @@ public class Sak {
                @JsonProperty("behandlingTema") String behandlingTema,
                @JsonProperty("behandlinger") List<Behandling> behandlinger,
                @JsonProperty("mottattEndringssøknad") boolean mottattEndringssøknad) {
-        this.type = type;
         this.saksnummer = saksnummer;
         this.status = status;
         this.opprettet = opprettet;
@@ -55,11 +53,7 @@ public class Sak {
     }
 
     public String getType() {
-        return type;
-    }
-
-    public void setType(String type) {
-        this.type = type;
+        return TYPE;
     }
 
     public String getStatus() {
@@ -96,7 +90,7 @@ public class Sak {
 
     @Override
     public String toString() {
-        return getClass().getSimpleName() + "[type=" + type + ", status=" + status + ", opprettet=" + opprettet
+        return getClass().getSimpleName() + "[type=" + TYPE + ", status=" + status + ", opprettet=" + opprettet
             + ", saksnummer=" + saksnummer + ", fagsakId=" + fagsakId + ", mottattEndringssøknad=" + mottattEndringssøknad
             + ", annenPart=" + annenPart + ", behandlingTema=" + behandlingTema + ", behandlinger="
             + behandlinger + "]";
