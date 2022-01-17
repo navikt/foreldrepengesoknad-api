@@ -51,6 +51,8 @@ public class UttakController {
             @DateTimeFormat(pattern = FMT) @RequestParam(name = "omsorgsovertakelseDato", required = false) LocalDate omsorgsovertakelseDato,
             @DateTimeFormat(pattern = FMT) @RequestParam("dekningsgrad") String dekningsgrad) {
 
+        guardFamiliehendelse(fødselsdato, termindato, omsorgsovertakelseDato);
+
         return Map.of("kontoer", kalkulator.beregnKontoer(new BeregnKontoerGrunnlag.Builder()
                 .antallBarn(antallBarn)
                 .dekningsgrad(dekningsgrad(dekningsgrad))
@@ -62,6 +64,12 @@ public class UttakController {
                 .omsorgsovertakelseDato(omsorgsovertakelseDato)
                 .termindato(termindato)
                 .build(), SØKNADSDIALOG).getStønadskontoer());
+    }
+
+    private void guardFamiliehendelse(LocalDate fødselsdato, LocalDate termindato, LocalDate omsorgsovertakelseDato) {
+        if (fødselsdato == null && termindato == null && omsorgsovertakelseDato == null) {
+            throw new ManglendeFamiliehendelseException("Mangler dato for familiehendelse");
+        }
     }
 
     private static Dekningsgrad dekningsgrad(String dekningsgrad) {

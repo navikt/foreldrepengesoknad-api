@@ -1,6 +1,7 @@
 package no.nav.foreldrepenger.selvbetjening.error;
 
 import static no.nav.foreldrepenger.selvbetjening.util.StringUtil.maskFnr;
+import static org.springframework.http.HttpStatus.BAD_REQUEST;
 import static org.springframework.http.HttpStatus.CONFLICT;
 import static org.springframework.http.HttpStatus.FORBIDDEN;
 import static org.springframework.http.HttpStatus.INTERNAL_SERVER_ERROR;
@@ -33,6 +34,7 @@ import org.springframework.web.servlet.NoHandlerFoundException;
 import org.springframework.web.servlet.mvc.method.annotation.ResponseEntityExceptionHandler;
 
 import no.nav.foreldrepenger.selvbetjening.util.TokenUtil;
+import no.nav.foreldrepenger.selvbetjening.uttak.ManglendeFamiliehendelseException;
 import no.nav.foreldrepenger.selvbetjening.vedlegg.AttachmentException;
 import no.nav.foreldrepenger.selvbetjening.vedlegg.AttachmentTooLargeException;
 import no.nav.foreldrepenger.selvbetjening.vedlegg.AttachmentsTooLargeException;
@@ -117,6 +119,12 @@ public class ApiExceptionHandler extends ResponseEntityExceptionHandler implemen
     @ExceptionHandler
     public ResponseEntity<Object> handleForbiddenJwt(JwtTokenValidatorException e, WebRequest req) {
         return logAndHandle(FORBIDDEN, e, req);
+    }
+
+    @ExceptionHandler
+    public ResponseEntity<Object> handleManglendeFamiliehendelse(ManglendeFamiliehendelseException e, WebRequest req) {
+        LOG.info("{} Mangler familiehendelse", req.getContextPath(), e);
+        return new ResponseEntity<>("Mangler fødselsdato/termindato/omsorgsovertakelse", new HttpHeaders(), BAD_REQUEST);
     }
 
     @ExceptionHandler
