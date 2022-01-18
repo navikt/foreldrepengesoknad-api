@@ -1,7 +1,5 @@
 package no.nav.foreldrepenger.selvbetjening.innsending.domain;
 
-import static no.nav.foreldrepenger.common.util.StringUtil.limit;
-
 import java.net.URI;
 
 import com.fasterxml.jackson.annotation.JsonCreator;
@@ -79,7 +77,6 @@ public class VedleggFrontend {
     @Override
     public String toString() {
         return getClass().getSimpleName() + "[id=" + id + ", skjemanummer=" + skjemanummer + ", uuid=" + uuid
-                + ", url=" + url + ", content=" + limit(content) + ", innsendingsType=" + innsendingsType
-                + ", beskrivelse=" + beskrivelse + "]";
+                + ", url=" + url + ", innsendingsType=" + innsendingsType + "]";
     }
 }

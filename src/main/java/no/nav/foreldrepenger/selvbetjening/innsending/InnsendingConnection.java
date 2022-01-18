@@ -80,7 +80,7 @@ public class InnsendingConnection extends AbstractRestConnection {
         logJSON(dto);
         dto.setMottattdato(LocalDate.now());
         dto.setTilleggsopplysninger(søknad.getTilleggsopplysninger());
-        LOG.trace("{} vedlegg {}", søknad.getVedlegg().size(), søknad.getVedlegg());
+        LOG.trace("{} vedlegg", søknad.getVedlegg().size());
         søknad.getVedlegg().forEach(v -> dto.getVedlegg().add(SøknadMapper.tilVedlegg(convert(v))));
         return dto;
     }
