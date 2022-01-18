@@ -1,6 +1,6 @@
 package no.nav.foreldrepenger.selvbetjening.mellomlagring;
 
-import static no.nav.foreldrepenger.selvbetjening.util.StreamUtil.safeStream;
+import static no.nav.foreldrepenger.common.util.StreamUtil.safeStream;
 
 import java.util.Optional;
 
@@ -8,8 +8,6 @@ import javax.annotation.PostConstruct;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-
-import no.nav.foreldrepenger.selvbetjening.error.UnexpectedInputException;
 
 public abstract class AbstractMellomlagringTjeneste implements Mellomlagring {
     private static final String DEAKIVERT = "Mellomlagringsoperasjoner er deaktivert";
@@ -26,7 +24,7 @@ public abstract class AbstractMellomlagringTjeneste implements Mellomlagring {
     private final Bøtte søknadBøtte;
     private final Bøtte mellomlagringBøtte;
 
-    public AbstractMellomlagringTjeneste(Bøtte søknadBøtte, Bøtte mellomlagringBøtte) {
+    protected AbstractMellomlagringTjeneste(Bøtte søknadBøtte, Bøtte mellomlagringBøtte) {
         this.søknadBøtte = søknadBøtte;
         this.mellomlagringBøtte = mellomlagringBøtte;
     }
@@ -89,7 +87,6 @@ public abstract class AbstractMellomlagringTjeneste implements Mellomlagring {
         return switch (type) {
             case LANGTIDS -> søknadBøtte;
             case KORTTIDS -> mellomlagringBøtte;
-            default -> throw new UnexpectedInputException("Type " + type + " er ukjent");
         };
     }
 

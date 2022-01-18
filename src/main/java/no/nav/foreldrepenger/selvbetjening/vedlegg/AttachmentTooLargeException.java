@@ -4,11 +4,11 @@ import static java.lang.String.format;
 
 import org.springframework.util.unit.DataSize;
 
-import no.nav.foreldrepenger.selvbetjening.innsending.domain.Vedlegg;
+import no.nav.foreldrepenger.selvbetjening.innsending.domain.VedleggFrontend;
 
 public class AttachmentTooLargeException extends AttachmentException {
 
-    public AttachmentTooLargeException(Vedlegg vedlegg, DataSize max) {
+    public AttachmentTooLargeException(VedleggFrontend vedlegg, DataSize max) {
         this(DataSize.ofBytes(vedlegg.getContent().length), max);
     }
 

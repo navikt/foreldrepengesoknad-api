@@ -1,6 +1,6 @@
 package no.nav.foreldrepenger.selvbetjening.innsyn;
 
-import static no.nav.foreldrepenger.selvbetjening.util.StringUtil.maskFnr;
+import static no.nav.foreldrepenger.common.util.StringUtil.partialMask;
 
 import java.util.List;
 
@@ -33,7 +33,7 @@ public class InnsynTjeneste implements Innsyn {
 
     @Override
     public Uttaksplan hentUttaksplanAnnenPart(String annenPart) {
-        LOG.info("Henter uttaksplan for annen part {}", maskFnr(annenPart));
+        LOG.info("Henter uttaksplan for annen part {}", partialMask(annenPart));
         return connection.hentUttaksplanAnnenPart(annenPart);
     }
 

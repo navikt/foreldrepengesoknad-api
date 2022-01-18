@@ -1,6 +1,6 @@
 package no.nav.foreldrepenger.selvbetjening.historikk;
 
-import static no.nav.foreldrepenger.selvbetjening.util.StringUtil.limit;
+import static no.nav.foreldrepenger.common.util.StringUtil.limit;
 import static org.apache.commons.lang3.StringUtils.reverse;
 
 import java.net.URI;
@@ -9,10 +9,10 @@ import org.springframework.boot.context.properties.ConfigurationProperties;
 import org.springframework.boot.context.properties.ConstructorBinding;
 import org.springframework.boot.context.properties.bind.DefaultValue;
 
+import no.nav.foreldrepenger.common.util.Pair;
 import no.nav.foreldrepenger.selvbetjening.http.AbstractConfig;
 import no.nav.foreldrepenger.selvbetjening.http.interceptors.ZoneCrossingAware;
 import no.nav.foreldrepenger.selvbetjening.oppslag.domain.Fødselsnummer;
-import no.nav.foreldrepenger.selvbetjening.util.Pair;
 
 @ConfigurationProperties("historikk")
 public class HistorikkConfig extends AbstractConfig implements ZoneCrossingAware {

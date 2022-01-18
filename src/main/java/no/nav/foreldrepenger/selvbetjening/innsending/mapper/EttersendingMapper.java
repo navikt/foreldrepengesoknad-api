@@ -8,7 +8,7 @@ import no.nav.foreldrepenger.common.domain.felles.InnsendingsType;
 import no.nav.foreldrepenger.common.domain.felles.PåkrevdVedlegg;
 import no.nav.foreldrepenger.common.domain.felles.VedleggMetaData;
 import no.nav.foreldrepenger.selvbetjening.innsending.domain.Ettersending;
-import no.nav.foreldrepenger.selvbetjening.innsending.domain.Vedlegg;
+import no.nav.foreldrepenger.selvbetjening.innsending.domain.VedleggFrontend;
 
 public final class EttersendingMapper {
 
@@ -24,7 +24,7 @@ public final class EttersendingMapper {
         return ettersendingDto;
     }
 
-    public static no.nav.foreldrepenger.common.domain.felles.Vedlegg tilVedlegg(Vedlegg vedlegg) {
+    public static no.nav.foreldrepenger.common.domain.felles.Vedlegg tilVedlegg(VedleggFrontend vedlegg) {
         var vedleggMetadata = new VedleggMetaData(
             vedlegg.getBeskrivelse(),
             vedlegg.getId(),

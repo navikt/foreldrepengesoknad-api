@@ -1,8 +1,8 @@
 package no.nav.foreldrepenger.selvbetjening.mellomlagring;
 
+import static no.nav.foreldrepenger.boot.conditionals.EnvUtil.CONFIDENTIAL;
 import static no.nav.foreldrepenger.selvbetjening.mellomlagring.MellomlagringType.KORTTIDS;
 import static no.nav.foreldrepenger.selvbetjening.mellomlagring.MellomlagringType.LANGTIDS;
-import static no.nav.foreldrepenger.selvbetjening.util.MDCUtil.CONFIDENTIAL;
 import static no.nav.foreldrepenger.selvbetjening.vedlegg.DelegerendeVedleggSjekker.DELEGERENDE;
 
 import java.util.Optional;
@@ -14,7 +14,7 @@ import org.springframework.stereotype.Service;
 
 import com.google.gson.Gson;
 
-import no.nav.foreldrepenger.selvbetjening.innsending.domain.Vedlegg;
+import no.nav.foreldrepenger.selvbetjening.innsending.domain.VedleggFrontend;
 import no.nav.foreldrepenger.selvbetjening.vedlegg.VedleggSjekker;
 
 @Service
@@ -78,7 +78,7 @@ public class KryptertMellomlagring {
         LOG.info("Lagret kryptert vedlegg i {}", katalog());
     }
 
-    public void slettKryptertVedlegg(Vedlegg vedlegg) {
+    public void slettKryptertVedlegg(VedleggFrontend vedlegg) {
         if (vedlegg.getUrl() != null) {
             slettKryptertVedlegg(vedlegg.getUuid());
         }

@@ -1,6 +1,6 @@
 package no.nav.foreldrepenger.selvbetjening.http.interceptors;
 
-import static no.nav.foreldrepenger.selvbetjening.util.Constants.X_NAV_API_KEY;
+import static no.nav.foreldrepenger.common.util.Constants.X_NAV_API_KEY;
 import static org.slf4j.LoggerFactory.getLogger;
 
 import java.io.IOException;

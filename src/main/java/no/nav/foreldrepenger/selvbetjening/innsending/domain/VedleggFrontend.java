@@ -1,14 +1,15 @@
 package no.nav.foreldrepenger.selvbetjening.innsending.domain;
 
+import static no.nav.foreldrepenger.common.util.StringUtil.limit;
+
 import java.net.URI;
 
 import com.fasterxml.jackson.annotation.JsonCreator;
 
 import lombok.EqualsAndHashCode;
-import no.nav.foreldrepenger.selvbetjening.util.StringUtil;
 
 @EqualsAndHashCode
-public class Vedlegg {
+public class VedleggFrontend {
 
     private byte[] content;
     private final String beskrivelse;
@@ -18,12 +19,12 @@ public class Vedlegg {
     private final String uuid;
     private final URI url;
 
-    public Vedlegg(byte[] content, String beskrivelse, String id, String skjemanummer) {
+    public VedleggFrontend(byte[] content, String beskrivelse, String id, String skjemanummer) {
         this(content, beskrivelse, id, null, skjemanummer, null, null);
     }
 
     @JsonCreator
-    public Vedlegg(byte[] content, String beskrivelse, String id, String innsendingsType, String skjemanummer, String uuid, URI url) {
+    public VedleggFrontend(byte[] content, String beskrivelse, String id, String innsendingsType, String skjemanummer, String uuid, URI url) {
         this.content = content;
         this.beskrivelse = beskrivelse;
         this.id = id;
@@ -33,8 +34,8 @@ public class Vedlegg {
         this.url = url;
     }
 
-    public Vedlegg kopi() {
-        return new Vedlegg(null,
+    public VedleggFrontend kopi() {
+        return new VedleggFrontend(null,
             this.getBeskrivelse(),
             this.getId(),
             this.getInnsendingsType(),
@@ -78,7 +79,7 @@ public class Vedlegg {
     @Override
     public String toString() {
         return getClass().getSimpleName() + "[id=" + id + ", skjemanummer=" + skjemanummer + ", uuid=" + uuid
-                + ", url=" + url + ", content=" + StringUtil.limit(content) + ", innsendingsType=" + innsendingsType
+                + ", url=" + url + ", content=" + limit(content) + ", innsendingsType=" + innsendingsType
                 + ", beskrivelse=" + beskrivelse + "]";
     }
 }

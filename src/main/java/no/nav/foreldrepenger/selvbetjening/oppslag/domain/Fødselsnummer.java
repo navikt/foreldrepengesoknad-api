@@ -1,11 +1,12 @@
 package no.nav.foreldrepenger.selvbetjening.oppslag.domain;
 
-import static no.nav.foreldrepenger.selvbetjening.util.StringUtil.maskFnr;
+import static no.nav.foreldrepenger.common.util.StringUtil.partialMask;
 
 import java.util.Objects;
 
 import com.fasterxml.jackson.annotation.JsonValue;
 
+// TODO: Erstatt denne med den i felles!
 public class Fødselsnummer {
 
     private final String fnr;
@@ -38,6 +39,6 @@ public class Fødselsnummer {
 
     @Override
     public String toString() {
-        return getClass().getSimpleName() + " [fnr=" + maskFnr(fnr) + "]";
+        return getClass().getSimpleName() + " [fnr=" + partialMask(fnr) + "]";
     }
 }

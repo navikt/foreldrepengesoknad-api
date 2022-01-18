@@ -9,27 +9,27 @@ import no.nav.foreldrepenger.common.domain.felles.InnsendingsType;
 import no.nav.foreldrepenger.common.domain.felles.PåkrevdVedlegg;
 import no.nav.foreldrepenger.common.domain.felles.VedleggMetaData;
 import no.nav.foreldrepenger.selvbetjening.error.UnexpectedInputException;
-import no.nav.foreldrepenger.selvbetjening.innsending.domain.Engangsstønad;
-import no.nav.foreldrepenger.selvbetjening.innsending.domain.Foreldrepengesøknad;
-import no.nav.foreldrepenger.selvbetjening.innsending.domain.Svangerskapspengesøknad;
-import no.nav.foreldrepenger.selvbetjening.innsending.domain.Søknad;
-import no.nav.foreldrepenger.selvbetjening.innsending.domain.Vedlegg;
+import no.nav.foreldrepenger.selvbetjening.innsending.domain.EngangsstønadFrontend;
+import no.nav.foreldrepenger.selvbetjening.innsending.domain.ForeldrepengesøknadFrontend;
+import no.nav.foreldrepenger.selvbetjening.innsending.domain.SvangerskapspengesøknadFrontend;
+import no.nav.foreldrepenger.selvbetjening.innsending.domain.SøknadFrontend;
+import no.nav.foreldrepenger.selvbetjening.innsending.domain.VedleggFrontend;
 
 public final class SøknadMapper {
 
     private SøknadMapper() {
     }
 
-    public static no.nav.foreldrepenger.common.domain.Søknad tilSøknad(Søknad søknad) {
+    public static no.nav.foreldrepenger.common.domain.Søknad tilSøknad(SøknadFrontend søknad) {
         return switch (søknad) {
-            case Engangsstønad e -> tilEngangsstønad(e);
-            case Foreldrepengesøknad f -> tilForeldrepengesøknad(f);
-            case Svangerskapspengesøknad s -> tilSvangerskapspengesøknad(s);
+            case EngangsstønadFrontend e -> tilEngangsstønad(e);
+            case ForeldrepengesøknadFrontend f -> tilForeldrepengesøknad(f);
+            case SvangerskapspengesøknadFrontend s -> tilSvangerskapspengesøknad(s);
             default -> throw new UnexpectedInputException("Unknown application type " + søknad.getClass().getSimpleName());
         };
     }
 
-    public static no.nav.foreldrepenger.common.domain.felles.Vedlegg tilVedlegg(Vedlegg vedlegg) {
+    public static no.nav.foreldrepenger.common.domain.felles.Vedlegg tilVedlegg(VedleggFrontend vedlegg) {
         var vedleggMetadata = new VedleggMetaData(
             vedlegg.getBeskrivelse(),
             vedlegg.getId(),

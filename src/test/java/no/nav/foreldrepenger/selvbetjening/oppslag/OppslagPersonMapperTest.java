@@ -44,7 +44,7 @@ class OppslagPersonMapperTest {
         var annenPartFelles = barnFelles.annenPart();
 
         var person = tilPersonFrontend(personFelles);
-        assertThat(person.fnr()).isEqualTo(personFelles.fnr().getFnr());
+        assertThat(person.fnr()).isEqualTo(personFelles.fnr().value());
         assertThat(person.fornavn()).isEqualTo(personFelles.navn().fornavn());
         assertThat(person.etternavn()).isEqualTo(personFelles.navn().etternavn());
         assertThat(person.kjønn()).isEqualTo(personFelles.kjønn().name());
@@ -52,12 +52,12 @@ class OppslagPersonMapperTest {
         assertThat(person.barn()).hasSize(1);
         var barn = person.barn().get(0);
 
-        assertThat(barn.fnr()).isEqualTo(barnFelles.fnr().getFnr());
+        assertThat(barn.fnr()).isEqualTo(barnFelles.fnr().value());
         assertThat(barn.fødselsdato()).isEqualTo(barnFelles.fødselsdato());
         assertThat(barn.kjønn()).isEqualTo(Kjønn.K.name());
         var annenforelder = barn.annenForelder();
         assertThat(annenforelder).isNotNull();
-        assertThat(annenforelder.fnr()).isEqualTo(annenPartFelles.fnr().getFnr());
+        assertThat(annenforelder.fnr()).isEqualTo(annenPartFelles.fnr().value());
         assertThat(annenforelder.fødselsdato()).isEqualTo(annenPartFelles.fødselsdato());
         assertThat(annenforelder.fornavn()).isEqualTo(annenPartFelles.navn().fornavn());
         assertThat(annenforelder.mellomnavn()).isEqualTo(annenPartFelles.navn().mellomnavn());
@@ -69,7 +69,7 @@ class OppslagPersonMapperTest {
         var personFelles = personUtenAnnenpart();
 
         var person = tilPersonFrontend(personFelles);
-        assertThat(person.fnr()).isEqualTo(personFelles.fnr().getFnr());
+        assertThat(person.fnr()).isEqualTo(personFelles.fnr().value());
         assertThat(person.fornavn()).isEqualTo(personFelles.navn().fornavn());
         assertThat(person.etternavn()).isEqualTo(personFelles.navn().etternavn());
         assertThat(person.kjønn()).isEqualTo(personFelles.kjønn().name());
@@ -87,7 +87,7 @@ class OppslagPersonMapperTest {
 
 
     public static Person personMedAnnenpart() {
-        var annenpartFnr = Fødselsnummer.valueOf("33333344444");
+        var annenpartFnr = new Fødselsnummer("33333344444");
         var annenpartAktørId = AktørId.valueOf("9999999999");
         var annenpartFødselsdato = LocalDate.now().minusYears(23);
         var annenpartFornavn = "Guro";
@@ -100,7 +100,7 @@ class OppslagPersonMapperTest {
         var barnFødselsdato = LocalDate.now().minusMonths(5);
         var barnFelles = new Barn(barnFnr, barnFødselsdato, null, Kjønn.K, annenPartFelles);
 
-        var søkerFnr = Fødselsnummer.valueOf("12345612345");
+        var søkerFnr = new Fødselsnummer("12345612345");
         var søkerAktørId = AktørId.valueOf("9988888877777");
         var søkerFornavn = "Kvikk";
         var søkerEtternavn = "Flakk";
@@ -117,7 +117,7 @@ class OppslagPersonMapperTest {
         var barnFelles1 = new Barn(barnFnr1, barnFødselsdato1, null, Kjønn.K, null);
         var barnFelles2 = new Barn(barnFnr2, barnFødselsdato2, null, Kjønn.M, null);
 
-        var søkerFnr = Fødselsnummer.valueOf("12345612345");
+        var søkerFnr = new Fødselsnummer("12345612345");
         var søkerAktørId = AktørId.valueOf("9988888877777");
         var søkerFornavn = "Kvikk";
         var søkerEtternavn = "Flakk";

@@ -7,11 +7,11 @@ import java.util.Optional;
 
 import com.fasterxml.jackson.annotation.JsonCreator;
 
-public record Utenlandsopphold(List<UtenlandsoppholdPeriode> tidligereOpphold,
-                               List<UtenlandsoppholdPeriode> senereOpphold){
+public record UtenlandsoppholdFrontend(List<UtenlandsoppholdPeriodeFrontend> tidligereOpphold,
+                                       List<UtenlandsoppholdPeriodeFrontend> senereOpphold){
 
     @JsonCreator
-    public Utenlandsopphold(List<UtenlandsoppholdPeriode> tidligereOpphold, List<UtenlandsoppholdPeriode> senereOpphold) {
+    public UtenlandsoppholdFrontend(List<UtenlandsoppholdPeriodeFrontend> tidligereOpphold, List<UtenlandsoppholdPeriodeFrontend> senereOpphold) {
         this.tidligereOpphold = Optional.ofNullable(tidligereOpphold).orElse(emptyList());
         this.senereOpphold = Optional.ofNullable(senereOpphold).orElse(emptyList());
     }

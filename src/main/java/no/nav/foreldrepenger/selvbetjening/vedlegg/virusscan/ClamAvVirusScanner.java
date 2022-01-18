@@ -1,11 +1,11 @@
 package no.nav.foreldrepenger.selvbetjening.vedlegg.virusscan;
 
-import static no.nav.foreldrepenger.selvbetjening.util.StreamUtil.safeStream;
+import static no.nav.foreldrepenger.common.util.StreamUtil.safeStream;
 
 import org.springframework.stereotype.Service;
 
 import no.nav.foreldrepenger.selvbetjening.http.Pingable;
-import no.nav.foreldrepenger.selvbetjening.innsending.domain.Vedlegg;
+import no.nav.foreldrepenger.selvbetjening.innsending.domain.VedleggFrontend;
 import no.nav.foreldrepenger.selvbetjening.mellomlagring.Attachment;
 import no.nav.foreldrepenger.selvbetjening.vedlegg.VedleggSjekker;
 
@@ -19,7 +19,7 @@ public class ClamAvVirusScanner implements VedleggSjekker, Pingable {
     }
 
     @Override
-    public void sjekk(Vedlegg... vedlegg) {
+    public void sjekk(VedleggFrontend... vedlegg) {
         safeStream(vedlegg)
                 .forEach(v -> connection.scan(v.getContent(), v.getUuid()));
     }

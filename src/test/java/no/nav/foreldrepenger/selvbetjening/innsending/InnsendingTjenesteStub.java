@@ -17,7 +17,7 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 
 import no.nav.foreldrepenger.selvbetjening.innsending.domain.Ettersending;
 import no.nav.foreldrepenger.selvbetjening.innsending.domain.Kvittering;
-import no.nav.foreldrepenger.selvbetjening.innsending.domain.Søknad;
+import no.nav.foreldrepenger.selvbetjening.innsending.domain.SøknadFrontend;
 
 @Service
 @ConditionalOnProperty(name = "stub.mottak", havingValue = "true")
@@ -31,7 +31,7 @@ public class InnsendingTjenesteStub implements Innsending {
     private ObjectMapper mapper;
 
     @Override
-    public Kvittering sendInn(Søknad søknad) {
+    public Kvittering sendInn(SøknadFrontend søknad) {
         søknad.setOpprettet(now());
         return postStub(søknad);
     }
@@ -42,11 +42,11 @@ public class InnsendingTjenesteStub implements Innsending {
     }
 
     @Override
-    public Kvittering endre(Søknad søknad) {
+    public Kvittering endre(SøknadFrontend søknad) {
         return postStub(søknad);
     }
 
-    private Kvittering postStub(Søknad søknad) {
+    private Kvittering postStub(SøknadFrontend søknad) {
         var dto = tilSøknad(søknad);
         dto.setTilleggsopplysninger(søknad.getTilleggsopplysninger());
         søknad.getVedlegg().forEach(v -> {

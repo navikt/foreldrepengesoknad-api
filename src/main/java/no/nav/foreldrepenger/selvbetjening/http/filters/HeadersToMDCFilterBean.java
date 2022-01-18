@@ -1,10 +1,10 @@
 package no.nav.foreldrepenger.selvbetjening.http.filters;
 
-import static no.nav.foreldrepenger.selvbetjening.util.Constants.NAV_AUTH_LEVEL;
-import static no.nav.foreldrepenger.selvbetjening.util.Constants.NAV_CALL_ID;
-import static no.nav.foreldrepenger.selvbetjening.util.Constants.NAV_CONSUMER_ID;
-import static no.nav.foreldrepenger.selvbetjening.util.Constants.NAV_USER_ID;
-import static no.nav.foreldrepenger.selvbetjening.util.MDCUtil.toMDC;
+import static no.nav.foreldrepenger.common.util.Constants.NAV_AUTH_LEVEL;
+import static no.nav.foreldrepenger.common.util.Constants.NAV_CALL_ID;
+import static no.nav.foreldrepenger.common.util.Constants.NAV_CONSUMER_ID;
+import static no.nav.foreldrepenger.common.util.Constants.NAV_USER_ID;
+import static no.nav.foreldrepenger.common.util.MDCUtil.toMDC;
 
 import java.io.IOException;
 import java.util.Optional;
@@ -23,9 +23,9 @@ import org.springframework.core.annotation.Order;
 import org.springframework.stereotype.Component;
 import org.springframework.web.filter.GenericFilterBean;
 
-import no.nav.foreldrepenger.selvbetjening.util.AuthenticationLevel;
+import no.nav.foreldrepenger.common.util.AuthenticationLevel;
+import no.nav.foreldrepenger.common.util.StringUtil;
 import no.nav.foreldrepenger.selvbetjening.util.CallIdGenerator;
-import no.nav.foreldrepenger.selvbetjening.util.StringUtil;
 import no.nav.foreldrepenger.selvbetjening.util.TokenUtil;
 
 @Component
@@ -57,7 +57,7 @@ public class HeadersToMDCFilterBean extends GenericFilterBean {
     private void putValues(HttpServletRequest request, String uri) {
         try {
             toMDC(NAV_CONSUMER_ID, request.getHeader(NAV_CONSUMER_ID), applicationName);
-            toMDC(NAV_USER_ID, Optional.ofNullable(tokenUtil.getSubject()).map(StringUtil::maskFnr).orElse("Uautentisert"));
+            toMDC(NAV_USER_ID, Optional.ofNullable(tokenUtil.getSubject()).map(StringUtil::partialMask).orElse("Uautentisert"));
             toMDC(NAV_AUTH_LEVEL, Optional.ofNullable(tokenUtil.getLevel()).map(AuthenticationLevel::name).orElse(AuthenticationLevel.NONE.name()));
             toMDC(NAV_CALL_ID, request.getHeader(NAV_CALL_ID), generator.create());
         } catch (Exception e) {

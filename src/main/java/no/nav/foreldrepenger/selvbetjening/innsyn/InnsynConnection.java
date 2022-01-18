@@ -1,7 +1,7 @@
 package no.nav.foreldrepenger.selvbetjening.innsyn;
 
 import static java.util.Collections.emptyList;
-import static no.nav.foreldrepenger.selvbetjening.util.StringUtil.flertall;
+import static no.nav.foreldrepenger.common.util.StringUtil.flertall;
 
 import java.net.URI;
 import java.util.Arrays;

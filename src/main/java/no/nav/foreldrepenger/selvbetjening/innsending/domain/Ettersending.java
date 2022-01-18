@@ -7,11 +7,11 @@ import java.util.Optional;
 
 public record Ettersending(String type,
                            String saksnummer,
-                           List<Vedlegg> vedlegg,
+                           List<VedleggFrontend> vedlegg,
                            BrukerTekst brukerTekst,
                            String dialogId) {
 
-    public Ettersending(String type, String saksnummer, List<Vedlegg> vedlegg, BrukerTekst brukerTekst, String dialogId) {
+    public Ettersending(String type, String saksnummer, List<VedleggFrontend> vedlegg, BrukerTekst brukerTekst, String dialogId) {
         this.type = type;
         this.saksnummer = saksnummer;
         this.vedlegg = Optional.ofNullable(vedlegg).orElse(emptyList());

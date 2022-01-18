@@ -12,24 +12,24 @@ import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonInclude;
 
 @JsonInclude(NON_EMPTY)
-public record Barn(List<LocalDate> fødselsdatoer,
-                   int antallBarn,
-                   List<String> terminbekreftelse,
-                   LocalDate termindato,
-                   LocalDate terminbekreftelseDato,
-                   LocalDate adopsjonsdato,
-                   List<String> adopsjonsvedtak,
-                   LocalDate ankomstdato,
-                   boolean adopsjonAvEktefellesBarn,
-                   boolean søkerAdopsjonAlene,
-                   LocalDate foreldreansvarsdato,
-                   List<String> omsorgsovertakelse,
-                   List<String> dokumentasjonAvAleneomsorg) {
+public record BarnFrontend(List<LocalDate> fødselsdatoer,
+                           int antallBarn,
+                           List<String> terminbekreftelse,
+                           LocalDate termindato,
+                           LocalDate terminbekreftelseDato,
+                           LocalDate adopsjonsdato,
+                           List<String> adopsjonsvedtak,
+                           LocalDate ankomstdato,
+                           boolean adopsjonAvEktefellesBarn,
+                           boolean søkerAdopsjonAlene,
+                           LocalDate foreldreansvarsdato,
+                           List<String> omsorgsovertakelse,
+                           List<String> dokumentasjonAvAleneomsorg) {
 
-    public Barn(List<LocalDate> fødselsdatoer, int antallBarn, List<String> terminbekreftelse, LocalDate termindato,
-                LocalDate terminbekreftelseDato, LocalDate adopsjonsdato, List<String> adopsjonsvedtak,
-                LocalDate ankomstdato, boolean adopsjonAvEktefellesBarn, boolean søkerAdopsjonAlene,
-                LocalDate foreldreansvarsdato, List<String> omsorgsovertakelse, List<String> dokumentasjonAvAleneomsorg) {
+    public BarnFrontend(List<LocalDate> fødselsdatoer, int antallBarn, List<String> terminbekreftelse, LocalDate termindato,
+                        LocalDate terminbekreftelseDato, LocalDate adopsjonsdato, List<String> adopsjonsvedtak,
+                        LocalDate ankomstdato, boolean adopsjonAvEktefellesBarn, boolean søkerAdopsjonAlene,
+                        LocalDate foreldreansvarsdato, List<String> omsorgsovertakelse, List<String> dokumentasjonAvAleneomsorg) {
         this.fødselsdatoer = fødselsdatoer;
         this.antallBarn = antallBarn;
         this.terminbekreftelse = Optional.ofNullable(terminbekreftelse).orElse(emptyList());

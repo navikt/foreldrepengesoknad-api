@@ -5,7 +5,7 @@ import java.net.URI;
 import org.springframework.http.HttpHeaders;
 import org.springframework.web.util.UriComponentsBuilder;
 
-import no.nav.foreldrepenger.selvbetjening.util.Pair;
+import no.nav.foreldrepenger.common.util.Pair;
 
 public abstract class AbstractConfig {
 
@@ -14,7 +14,7 @@ public abstract class AbstractConfig {
     private final URI uri;
     private final boolean enabled;
 
-    public AbstractConfig(URI uri, boolean enabled) {
+    protected AbstractConfig(URI uri, boolean enabled) {
         this.enabled = enabled;
         this.uri = uri;
     }

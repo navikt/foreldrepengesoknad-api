@@ -17,28 +17,28 @@ import lombok.EqualsAndHashCode;
 @EqualsAndHashCode
 @JsonTypeInfo(use = NAME, property = "type", visible = true)
 @JsonSubTypes({
-        @Type(value = Engangsstønad.class, name = "engangsstønad"),
-        @Type(value = Foreldrepengesøknad.class, name = "foreldrepenger"),
-        @Type(value = Svangerskapspengesøknad.class, name = "svangerskapspenger")
+        @Type(value = EngangsstønadFrontend.class, name = "engangsstønad"),
+        @Type(value = ForeldrepengesøknadFrontend.class, name = "foreldrepenger"),
+        @Type(value = SvangerskapspengesøknadFrontend.class, name = "svangerskapspenger")
 })
-public abstract sealed class Søknad permits Engangsstønad,Foreldrepengesøknad,Svangerskapspengesøknad {
+public abstract sealed class SøknadFrontend permits EngangsstønadFrontend, ForeldrepengesøknadFrontend, SvangerskapspengesøknadFrontend {
 
     private LocalDateTime opprettet;
     private final String type;
     private final String saksnummer;
-    private final Søker søker;
-    private final Barn barn;
-    private final AnnenForelder annenForelder;
-    private final Utenlandsopphold informasjonOmUtenlandsopphold;
+    private final SøkerFrontend søker;
+    private final BarnFrontend barn;
+    private final AnnenForelderFrontend annenForelder;
+    private final UtenlandsoppholdFrontend informasjonOmUtenlandsopphold;
     private final String situasjon;
     private final Boolean erEndringssøknad;
     private final String tilleggsopplysninger;
-    private final List<Vedlegg> vedlegg;
+    private final List<VedleggFrontend> vedlegg;
 
     @JsonCreator
-    protected Søknad(LocalDateTime opprettet, String type, String saksnummer, Søker søker, Barn barn,
-                  AnnenForelder annenForelder, Utenlandsopphold informasjonOmUtenlandsopphold, String situasjon,
-                  Boolean erEndringssøknad, String tilleggsopplysninger, List<Vedlegg> vedlegg) {
+    protected SøknadFrontend(LocalDateTime opprettet, String type, String saksnummer, SøkerFrontend søker, BarnFrontend barn,
+                             AnnenForelderFrontend annenForelder, UtenlandsoppholdFrontend informasjonOmUtenlandsopphold, String situasjon,
+                             Boolean erEndringssøknad, String tilleggsopplysninger, List<VedleggFrontend> vedlegg) {
         this.opprettet = opprettet;
         this.type = type;
         this.saksnummer = saksnummer;
@@ -60,7 +60,7 @@ public abstract sealed class Søknad permits Engangsstønad,Foreldrepengesøknad
         return saksnummer;
     }
 
-    public Søker getSøker() {
+    public SøkerFrontend getSøker() {
         return søker;
     }
 
@@ -72,15 +72,15 @@ public abstract sealed class Søknad permits Engangsstønad,Foreldrepengesøknad
         this.opprettet = opprettet;
     }
 
-    public Barn getBarn() {
+    public BarnFrontend getBarn() {
         return barn;
     }
 
-    public AnnenForelder getAnnenForelder() {
+    public AnnenForelderFrontend getAnnenForelder() {
         return annenForelder;
     }
 
-    public Utenlandsopphold getInformasjonOmUtenlandsopphold() {
+    public UtenlandsoppholdFrontend getInformasjonOmUtenlandsopphold() {
         return informasjonOmUtenlandsopphold;
     }
 
@@ -96,7 +96,7 @@ public abstract sealed class Søknad permits Engangsstønad,Foreldrepengesøknad
         return tilleggsopplysninger;
     }
 
-    public List<Vedlegg> getVedlegg() {
+    public List<VedleggFrontend> getVedlegg() {
         return vedlegg;
     }
 

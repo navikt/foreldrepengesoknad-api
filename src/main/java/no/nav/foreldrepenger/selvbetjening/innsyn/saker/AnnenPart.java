@@ -1,9 +1,9 @@
 package no.nav.foreldrepenger.selvbetjening.innsyn.saker;
 
+import static no.nav.foreldrepenger.common.util.StringUtil.partialMask;
+
 import com.fasterxml.jackson.annotation.JsonCreator;
 import com.fasterxml.jackson.annotation.JsonProperty;
-
-import no.nav.foreldrepenger.selvbetjening.util.StringUtil;
 
 public class AnnenPart {
     private final String fnr;
@@ -32,7 +32,7 @@ public class AnnenPart {
 
     @Override
     public String toString() {
-        return getClass().getSimpleName() + " [fnr=" + StringUtil.maskFnr(fnr) + ", aktørId=" + aktørId + ", navn="
+        return getClass().getSimpleName() + " [fnr=" + partialMask(fnr) + ", aktørId=" + aktørId + ", navn="
                 + navn + "]";
     }
 }

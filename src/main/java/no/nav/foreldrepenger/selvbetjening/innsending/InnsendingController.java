@@ -1,6 +1,6 @@
 package no.nav.foreldrepenger.selvbetjening.innsending;
 
-import static no.nav.foreldrepenger.selvbetjening.util.MDCUtil.CONFIDENTIAL;
+import static no.nav.foreldrepenger.boot.conditionals.EnvUtil.CONFIDENTIAL;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -10,7 +10,7 @@ import org.springframework.web.bind.annotation.RequestBody;
 import no.nav.foreldrepenger.selvbetjening.http.ProtectedRestController;
 import no.nav.foreldrepenger.selvbetjening.innsending.domain.Ettersending;
 import no.nav.foreldrepenger.selvbetjening.innsending.domain.Kvittering;
-import no.nav.foreldrepenger.selvbetjening.innsending.domain.Søknad;
+import no.nav.foreldrepenger.selvbetjening.innsending.domain.SøknadFrontend;
 
 @ProtectedRestController(InnsendingController.REST_SOKNAD)
 public class InnsendingController {
@@ -26,7 +26,7 @@ public class InnsendingController {
     }
 
     @PostMapping
-    public Kvittering sendInn(@RequestBody Søknad søknad) {
+    public Kvittering sendInn(@RequestBody SøknadFrontend søknad) {
         LOG.info("Mottok søknad med målform {} og {} vedlegg", søknad.getSøker().språkkode(), søknad.getVedlegg().size());
         LOG.info(CONFIDENTIAL, "{}", søknad);
         LOG.info(CONFIDENTIAL, "Søker er {}", søknad.getSøker());
@@ -41,7 +41,7 @@ public class InnsendingController {
     }
 
     @PostMapping("/endre")
-    public Kvittering endre(@RequestBody Søknad søknad) {
+    public Kvittering endre(@RequestBody SøknadFrontend søknad) {
         LOG.info("Mottok endringssøknad med {} vedlegg", søknad.getVedlegg().size());
         LOG.info(CONFIDENTIAL, "{}", søknad);
         return innsending.endre(søknad);

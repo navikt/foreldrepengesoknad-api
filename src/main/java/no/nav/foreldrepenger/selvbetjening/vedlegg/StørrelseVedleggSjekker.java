@@ -1,6 +1,6 @@
 package no.nav.foreldrepenger.selvbetjening.vedlegg;
 
-import static no.nav.foreldrepenger.selvbetjening.util.StreamUtil.safeStream;
+import static no.nav.foreldrepenger.common.util.StreamUtil.safeStream;
 
 import java.util.Objects;
 
@@ -10,7 +10,7 @@ import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 import org.springframework.util.unit.DataSize;
 
-import no.nav.foreldrepenger.selvbetjening.innsending.domain.Vedlegg;
+import no.nav.foreldrepenger.selvbetjening.innsending.domain.VedleggFrontend;
 import no.nav.foreldrepenger.selvbetjening.mellomlagring.Attachment;
 
 @Service
@@ -27,7 +27,7 @@ public class StørrelseVedleggSjekker implements VedleggSjekker {
     }
 
     @Override
-    public void sjekk(Vedlegg... vedlegg) {
+    public void sjekk(VedleggFrontend... vedlegg) {
         safeStream(vedlegg)
                 .forEach(this::sjekkStørrelse);
         sjekkTotalStørrelse(vedlegg);
@@ -41,17 +41,17 @@ public class StørrelseVedleggSjekker implements VedleggSjekker {
 
     }
 
-    private void sjekkStørrelse(Vedlegg vedlegg) {
+    private void sjekkStørrelse(VedleggFrontend vedlegg) {
         LOG.info("Sjekker størrelse for {}", vedlegg);
         if ((vedlegg.getContent() != null) && (vedlegg.getContent().length > maxEnkelSize.toBytes())) {
             throw new AttachmentTooLargeException(vedlegg, maxEnkelSize);
         }
     }
 
-    private void sjekkTotalStørrelse(Vedlegg... vedlegg) {
+    private void sjekkTotalStørrelse(VedleggFrontend... vedlegg) {
         LOG.info("Sjekker total størrelse for {} vedlegg", vedlegg.length);
         long total = safeStream(vedlegg)
-                .map(Vedlegg::getContent)
+                .map(VedleggFrontend::getContent)
                 .filter(Objects::nonNull)
                 .mapToLong(v -> v.length)
                 .sum();

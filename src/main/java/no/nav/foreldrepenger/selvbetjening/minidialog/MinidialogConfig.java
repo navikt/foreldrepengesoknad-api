@@ -6,8 +6,8 @@ import org.springframework.boot.context.properties.ConfigurationProperties;
 import org.springframework.boot.context.properties.ConstructorBinding;
 import org.springframework.boot.context.properties.bind.DefaultValue;
 
+import no.nav.foreldrepenger.common.util.Pair;
 import no.nav.foreldrepenger.selvbetjening.http.AbstractConfig;
-import no.nav.foreldrepenger.selvbetjening.util.Pair;
 
 @ConfigurationProperties(MinidialogConfig.MINIDIALOG)
 public class MinidialogConfig extends AbstractConfig {

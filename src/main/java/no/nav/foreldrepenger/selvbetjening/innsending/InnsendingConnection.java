@@ -18,11 +18,12 @@ import org.springframework.web.client.RestOperations;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 
+import no.nav.foreldrepenger.common.domain.Søknad;
 import no.nav.foreldrepenger.selvbetjening.http.AbstractRestConnection;
 import no.nav.foreldrepenger.selvbetjening.innsending.domain.Ettersending;
 import no.nav.foreldrepenger.selvbetjening.innsending.domain.Kvittering;
-import no.nav.foreldrepenger.selvbetjening.innsending.domain.Søknad;
-import no.nav.foreldrepenger.selvbetjening.innsending.domain.Vedlegg;
+import no.nav.foreldrepenger.selvbetjening.innsending.domain.SøknadFrontend;
+import no.nav.foreldrepenger.selvbetjening.innsending.domain.VedleggFrontend;
 import no.nav.foreldrepenger.selvbetjening.innsending.mapper.SøknadMapper;
 import no.nav.foreldrepenger.selvbetjening.vedlegg.Image2PDFConverter;
 
@@ -53,7 +54,7 @@ public class InnsendingConnection extends AbstractRestConnection {
         return config.pingURI();
     }
 
-    public Kvittering sendInn(Søknad søknad) {
+    public Kvittering sendInn(SøknadFrontend søknad) {
         søknad.setOpprettet(now());
         return postIfEnabled(config.innsendingURI(), body(søknad));
     }
@@ -62,7 +63,7 @@ public class InnsendingConnection extends AbstractRestConnection {
         return postIfEnabled(config.ettersendingURI(), body(ettersending));
     }
 
-    public Kvittering endre(Søknad søknad) {
+    public Kvittering endre(SøknadFrontend søknad) {
         return postIfEnabled(config.endringURI(), body(søknad));
     }
 
@@ -74,7 +75,7 @@ public class InnsendingConnection extends AbstractRestConnection {
         return null;
     }
 
-    public no.nav.foreldrepenger.common.domain.Søknad body(Søknad søknad) {
+    public Søknad body(SøknadFrontend søknad) {
         var dto = tilSøknad(søknad);
         logJSON(dto);
         dto.setMottattdato(LocalDate.now());
@@ -90,8 +91,8 @@ public class InnsendingConnection extends AbstractRestConnection {
         return dto;
     }
 
-    private Vedlegg convert(Vedlegg v) {
-        Vedlegg vedlegg = v.kopi();
+    private VedleggFrontend convert(VedleggFrontend v) {
+        VedleggFrontend vedlegg = v.kopi();
         if ((v.getContent() != null) && (v.getContent().length > 0)) {
             vedlegg.setContent(converter.convert(v.getContent()));
         }

@@ -11,15 +11,15 @@ import com.fasterxml.jackson.annotation.JsonInclude;
 import no.nav.foreldrepenger.selvbetjening.innsending.domain.Tidsperiode;
 
 @JsonInclude(NON_NULL)
-public record AnnenInntekt(String type,
-                           String land,
-                           String arbeidsgiverNavn,
-                           Tidsperiode tidsperiode,
-                           boolean erNærVennEllerFamilieMedArbeisdgiver,
-                           List<String> vedlegg) {
+public record AnnenInntektFrontend(String type,
+                                   String land,
+                                   String arbeidsgiverNavn,
+                                   Tidsperiode tidsperiode,
+                                   boolean erNærVennEllerFamilieMedArbeisdgiver,
+                                   List<String> vedlegg) {
 
-    public AnnenInntekt(String type, String land, String arbeidsgiverNavn, Tidsperiode tidsperiode,
-                        boolean erNærVennEllerFamilieMedArbeisdgiver, List<String> vedlegg) {
+    public AnnenInntektFrontend(String type, String land, String arbeidsgiverNavn, Tidsperiode tidsperiode,
+                                boolean erNærVennEllerFamilieMedArbeisdgiver, List<String> vedlegg) {
         this.type = type;
         this.land = land;
         this.arbeidsgiverNavn = arbeidsgiverNavn;

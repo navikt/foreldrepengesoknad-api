@@ -1,13 +1,13 @@
 package no.nav.foreldrepenger.selvbetjening.vedlegg;
 
-import static no.nav.foreldrepenger.selvbetjening.util.StreamUtil.safeStream;
+import static no.nav.foreldrepenger.common.util.StreamUtil.safeStream;
 
 import java.util.Arrays;
 
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.stereotype.Component;
 
-import no.nav.foreldrepenger.selvbetjening.innsending.domain.Vedlegg;
+import no.nav.foreldrepenger.selvbetjening.innsending.domain.VedleggFrontend;
 import no.nav.foreldrepenger.selvbetjening.mellomlagring.Attachment;
 
 @Component
@@ -23,7 +23,7 @@ public class DelegerendeVedleggSjekker implements VedleggSjekker {
     }
 
     @Override
-    public void sjekk(Vedlegg... vedlegg) {
+    public void sjekk(VedleggFrontend... vedlegg) {
         safeStream(sjekkere).forEach(s -> s.sjekk(vedlegg));
     }
 

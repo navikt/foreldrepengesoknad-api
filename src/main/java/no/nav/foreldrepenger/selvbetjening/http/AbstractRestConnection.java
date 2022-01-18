@@ -1,6 +1,6 @@
 package no.nav.foreldrepenger.selvbetjening.http;
 
-import static no.nav.foreldrepenger.selvbetjening.util.MDCUtil.CONFIDENTIAL;
+import static no.nav.foreldrepenger.boot.conditionals.EnvUtil.CONFIDENTIAL;
 import static org.springframework.http.HttpStatus.NOT_FOUND;
 
 import java.net.URI;
@@ -17,7 +17,7 @@ public abstract class AbstractRestConnection implements PingEndpointAware, Toggl
 
     private final RestOperations operations;
 
-    public AbstractRestConnection(RestOperations operations) {
+    protected AbstractRestConnection(RestOperations operations) {
         this.operations = operations;
     }
 
