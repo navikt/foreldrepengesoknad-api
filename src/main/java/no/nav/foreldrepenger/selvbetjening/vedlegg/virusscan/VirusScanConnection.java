@@ -43,25 +43,20 @@ class VirusScanConnection extends AbstractRestConnection {
     void scan(byte[] bytes, String name) {
         if (isEnabled()) {
             if (bytes != null) {
-                try {
-                    LOG.trace("Scanner {}", name);
-                    var scanResults = putForObject(config.getUri(), bytes, ScanResult[].class);
-                    if (scanResults.length != 1) {
-                        LOG.warn("Uventet respons med lengde {}, forventet lengde er 1", scanResults.length);
-                        return;
-                    }
-                    var scanResult = scanResults[0];
-                    LOG.trace("Fikk scan result {}", scanResult);
-                    if (OK.equals(scanResult.getResult())) {
-                        LOG.trace("Ingen virus i {}", name);
-                        return;
-                    }
-                    LOG.warn("Fant virus!, status {}", scanResult.getResult());
+                LOG.trace("Scanner {}", name);
+                var scanResults = putForObject(config.getUri(), bytes, ScanResult[].class);
+                if (scanResults.length != 1) {
+                    LOG.warn("Uventet respons med lengde {}, forventet lengde er 1", scanResults.length);
                     throw new AttachmentVirusException(name);
-                } catch (Exception e) {
-                    LOG.warn("Kunne ikke scanne", e);
+                }
+                var scanResult = scanResults[0];
+                LOG.trace("Fikk scan result {}", scanResult);
+                if (OK.equals(scanResult.getResult())) {
+                    LOG.trace("Ingen virus i {}", name);
                     return;
                 }
+                LOG.warn("Fant virus!, status {}", scanResult.getResult());
+                throw new AttachmentVirusException(name);
             }
             LOG.info("Ingen scanning av null bytes", bytes);
             return;
