@@ -4,7 +4,11 @@ allowed:
    https://foreldrepengesoknad.nav.no,
    https://foreldrepengeplanlegger.nav.no,
    https://svangerskapspengesoknad.nav.no,
-   https://foreldrepenger.nav.no
+   https://foreldrepenger.nav.no,
+   https://foreldrepengesoknad.intern.nav.no,
+   https://svangerskapspengesoknad.intern.nav.no,
+   https://foreldrepenger.intern.nav.no
+
 no.nav:
    security:
     jwt:
