@@ -84,9 +84,8 @@ final class ForeldrepengerMapper {
     private static Rettigheter tilRettigheter(ForeldrepengesøknadFrontend f) {
         return new Rettigheter(
             f.getAnnenForelder().harRettPåForeldrepenger(),
-            false, // TODO: Ikke satt av api. Ikke brukt? Hva er default i mottak?
             toBoolean(f.getSøker().erAleneOmOmsorg()),
-            f.getAnnenForelder().datoForAleneomsorg());
+            f.getAnnenForelder().harMorUføretrygd());
     }
 
 

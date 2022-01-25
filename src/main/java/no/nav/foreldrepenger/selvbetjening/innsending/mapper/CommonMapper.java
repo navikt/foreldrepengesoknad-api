@@ -5,7 +5,6 @@ import static java.time.LocalDate.now;
 import static no.nav.foreldrepenger.common.util.StreamUtil.safeStream;
 import static no.nav.foreldrepenger.selvbetjening.util.DateUtil.erNyopprettet;
 import static org.apache.commons.lang3.StringUtils.isEmpty;
-import static org.apache.commons.lang3.StringUtils.isNotBlank;
 
 import java.util.List;
 
@@ -158,8 +157,7 @@ final class CommonMapper {
     }
 
     private static String navn(AnnenForelderFrontend annenForelder) {
-        return isNotBlank(annenForelder.navn()) ? annenForelder.navn() :
-            annenForelder.fornavn() + " " + annenForelder.etternavn();
+        return annenForelder.fornavn() + " " + annenForelder.etternavn();
     }
 
     private static List<AnnenOpptjening> tilAnnenOpptjening(List<AnnenInntektFrontend> andreInntekterSiste10Mnd) {

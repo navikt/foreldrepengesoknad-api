@@ -33,6 +33,7 @@ import org.springframework.web.multipart.MultipartException;
 import org.springframework.web.servlet.NoHandlerFoundException;
 import org.springframework.web.servlet.mvc.method.annotation.ResponseEntityExceptionHandler;
 
+import no.nav.foreldrepenger.common.error.UnexpectedInputException;
 import no.nav.foreldrepenger.selvbetjening.util.TokenUtil;
 import no.nav.foreldrepenger.selvbetjening.uttak.ManglendeFamiliehendelseException;
 import no.nav.foreldrepenger.selvbetjening.vedlegg.AttachmentException;
@@ -85,8 +86,7 @@ public class ApiExceptionHandler extends ResponseEntityExceptionHandler implemen
     }
 
     @ExceptionHandler
-    public ResponseEntity<Object> handleIncompleteException(UnexpectedInputException e,
-            WebRequest req) {
+    public ResponseEntity<Object> handleIncompleteException(UnexpectedInputException e, WebRequest req) {
         return logAndHandle(UNPROCESSABLE_ENTITY, e, req);
     }
 
