@@ -5,7 +5,6 @@ allowed:
    https://foreldrepenger.intern.nav.no,
    https://engangsstonad.intern.nav.no,
    https://foreldrepengeplanlegger.intern.nav.no,
-   https://engangsstonadny.intern.nav.no,
    https://foreldrepengesoknad.intern.nav.no,
    https://svangerskapspengesoknad.intern.nav.no,
    https://foreldrepenger.intern.nav.no
@@ -13,12 +12,12 @@ spring:
   cloud:
     vault:
       enabled: false
-      
+
 mellomlagring:
   tmp:
     navn: foreldrepengesoknad-prod
   søknad:
-     navn: mellomlagring-prod   
-   
+     navn: mellomlagring-prod
+
 virus:
    uri: http://clamav.clamav/scan
