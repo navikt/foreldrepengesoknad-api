@@ -8,7 +8,6 @@ import no.nav.foreldrepenger.common.domain.felles.DokumentType;
 import no.nav.foreldrepenger.common.domain.felles.InnsendingsType;
 import no.nav.foreldrepenger.common.domain.felles.PåkrevdVedlegg;
 import no.nav.foreldrepenger.common.domain.felles.VedleggMetaData;
-import no.nav.foreldrepenger.selvbetjening.error.UnexpectedInputException;
 import no.nav.foreldrepenger.selvbetjening.innsending.domain.EngangsstønadFrontend;
 import no.nav.foreldrepenger.selvbetjening.innsending.domain.ForeldrepengesøknadFrontend;
 import no.nav.foreldrepenger.selvbetjening.innsending.domain.SvangerskapspengesøknadFrontend;
@@ -25,7 +24,6 @@ public final class SøknadMapper {
             case EngangsstønadFrontend e -> tilEngangsstønad(e);
             case ForeldrepengesøknadFrontend f -> tilForeldrepengesøknad(f);
             case SvangerskapspengesøknadFrontend s -> tilSvangerskapspengesøknad(s);
-            default -> throw new UnexpectedInputException("Unknown application type " + søknad.getClass().getSimpleName());
         };
     }
 
