@@ -8,6 +8,7 @@ import org.springframework.boot.context.properties.ConfigurationPropertiesScan;
 import org.springframework.cache.annotation.EnableCaching;
 import org.springframework.retry.annotation.EnableRetry;
 
+import no.nav.security.token.support.client.spring.oauth2.EnableOAuth2Client;
 import no.nav.security.token.support.spring.api.EnableJwtTokenValidation;
 import springfox.documentation.oas.annotations.EnableOpenApi;
 
@@ -15,6 +16,7 @@ import springfox.documentation.oas.annotations.EnableOpenApi;
 @EnableOpenApi
 @EnableCaching
 @EnableRetry
+@EnableOAuth2Client(cacheEnabled = true)
 @ConfigurationPropertiesScan("no.nav.foreldrepenger.selvbetjening")
 @EnableJwtTokenValidation(ignore = { "org.springframework", "springfox.documentation" })
 public class ApiApplication {
