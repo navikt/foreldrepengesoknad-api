@@ -6,12 +6,12 @@ metadata:
   labels:
     team: teamforeldrepenger
 spec:
-  envFrom:
-     - configmap: loginservice-idporten
 {{#if tokenx}}
   tokenx:
     enabled: true
 {{/if}}
+  envFrom:
+     - configmap: loginservice-idporten
 {{#if gcp}}
      - secret: apigw
   gcp:
