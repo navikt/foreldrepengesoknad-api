@@ -27,7 +27,9 @@ spec:
          - host: storage.googleapis.com
          - host: oauth2.googleapis.com
          - host: www.googleapis.com
+{{#if gw}}
          - host: {{gw}}
+{{/if}}
 {{#each tokenxurl as |url|}}
          - host: {{url}}
 {{/each}}
