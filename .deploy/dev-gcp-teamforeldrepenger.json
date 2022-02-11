@@ -3,7 +3,7 @@
   "fpbucket": "foreldrepengesoknad",
   "tmpbucket": "mellomlagring",
   "ingresses": ["https://foreldrepengesoknad-api.dev.nav.no","https://foreldrepengesoknad-api.dev.intern.nav.no"],
-  "gw" : "api-gw-q1.oera.no",
-  "gcp" : "true"
+  "gcp" : "true",
+  "tokenx" : "true",
+  "tokenxurl": ["fpsoknad-mottak.dev-fss-pub.nais.io", "fpinfo-historikk.dev-fss-pub.nais.io"]
 }
-

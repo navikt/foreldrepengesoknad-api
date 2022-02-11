@@ -4,5 +4,6 @@
   "tmpbucket": "mellomlagring-prod",
   "ingresses": ["https://foreldrepengesoknad-api.intern.nav.no","https://foreldrepengesoknad-api.nav.no"],
   "gw" : "api-gw.oera.no",
-  "gcp" : "true"
+  "gcp" : "true",
+  "tokenx" : "false"
 }

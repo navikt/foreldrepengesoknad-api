@@ -8,6 +8,10 @@ metadata:
 spec:
   envFrom:
      - configmap: loginservice-idporten
+{{#if tokenx}}
+  tokenx:
+    enabled: true
+{{/if}}
 {{#if gcp}}
      - secret: apigw
   gcp:
@@ -24,6 +28,9 @@ spec:
          - host: oauth2.googleapis.com
          - host: www.googleapis.com
          - host: {{gw}}
+{{#each tokenxurl as |url|}}
+         - host: {{url}}
+{{/each}}
 {{/if}}
   image: {{image}}
   port: 8080

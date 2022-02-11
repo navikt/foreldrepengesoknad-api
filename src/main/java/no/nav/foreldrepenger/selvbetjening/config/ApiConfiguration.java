@@ -1,6 +1,7 @@
 package no.nav.foreldrepenger.selvbetjening.config;
 
 import static java.util.Collections.singletonList;
+import static java.util.function.Predicate.not;
 import static no.nav.foreldrepenger.common.util.Constants.FNR;
 import static no.nav.foreldrepenger.selvbetjening.mellomlagring.Bøtte.SØKNAD;
 import static no.nav.foreldrepenger.selvbetjening.mellomlagring.Bøtte.TMP;
@@ -21,9 +22,11 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.boot.autoconfigure.condition.ConditionalOnMissingBean;
 import org.springframework.boot.web.client.RestTemplateBuilder;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.context.annotation.Primary;
 import org.springframework.http.client.ClientHttpRequestInterceptor;
 import org.springframework.retry.RetryCallback;
 import org.springframework.retry.RetryContext;
@@ -33,11 +36,15 @@ import org.springframework.web.client.RestOperations;
 import org.springframework.web.servlet.config.annotation.CorsRegistry;
 import org.springframework.web.servlet.config.annotation.WebMvcConfigurer;
 
+import com.google.common.base.Splitter;
 import com.google.common.collect.ImmutableMap;
 
+import no.nav.foreldrepenger.boot.conditionals.ConditionalOnProd;
+import no.nav.foreldrepenger.selvbetjening.http.interceptors.TokenXConfigFinder;
 import no.nav.foreldrepenger.selvbetjening.http.interceptors.ZoneCrossingAware;
 import no.nav.foreldrepenger.selvbetjening.http.interceptors.ZoneCrossingAwareClientInterceptor;
 import no.nav.foreldrepenger.selvbetjening.mellomlagring.Bøtte;
+import no.nav.security.token.support.spring.validation.interceptor.BearerTokenClientHttpRequestInterceptor;
 
 @Configuration
 public class ApiConfiguration implements WebMvcConfigurer {
@@ -50,11 +57,31 @@ public class ApiConfiguration implements WebMvcConfigurer {
     }
 
     @Bean
+    @Primary
+    @ConditionalOnProd
     public RestOperations restTemplate(RestTemplateBuilder builder, ClientHttpRequestInterceptor... interceptors) {
         LOG.info("Registrerer interceptorer {}", Arrays.toString(interceptors));
         return builder
                 .interceptors(interceptors)
                 .build();
+    }
+
+    @Bean
+    @ConditionalOnMissingBean
+    public RestOperations tokenXTemplate(RestTemplateBuilder b, ClientHttpRequestInterceptor... interceptors) {
+        var filtered = filtrerBortZoneCrossingOgBearerTokenInterceptor(interceptors);
+        return b
+            .interceptors(filtered)
+            .build();
+    }
+
+    private static List<ClientHttpRequestInterceptor> filtrerBortZoneCrossingOgBearerTokenInterceptor(ClientHttpRequestInterceptor... interceptors) {
+        var filtered = Arrays.stream(interceptors)
+            .filter(not(i -> i.getClass().equals(BearerTokenClientHttpRequestInterceptor.class)))
+            .filter(not(i -> i.getClass().equals(ZoneCrossingAwareClientInterceptor.class)))
+            .toList();
+        LOG.trace("Filtered message interceptors er {}", filtered);
+        return filtered;
     }
 
     @Bean
@@ -65,6 +92,20 @@ public class ApiConfiguration implements WebMvcConfigurer {
         Arrays.stream(zoneCrossers)
                 .forEach(c -> builder.put(c.zoneCrossingUri(), c.getKey()));
         return new ZoneCrossingAwareClientInterceptor(builder.build());
+    }
+
+    @Bean
+    public TokenXConfigFinder configFinder() {
+        return (cfgs, req) -> {
+            LOG.trace("Oppslag token X konfig for {}", req.getHost());
+            var cfg = cfgs.getRegistration().get(Splitter.on(".").splitToList(req.getHost()).get(0));
+            if (cfg != null) {
+                LOG.trace("Oppslag token X konfig for {} OK", req.getHost());
+            } else {
+                LOG.trace("Oppslag token X konfig for {} fant ingenting", req.getHost());
+            }
+            return cfg;
+        };
     }
 
     @Bean
