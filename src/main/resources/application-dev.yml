@@ -17,6 +17,8 @@ no.nav:
             client:
                 registration:
                     fpsoknad-mottak:
+                        token-exchange:
+                            audience: dev-fss:teamforeldrepenger:fpsoknad-mottak
                         well-known-url: ${token.x.well.known.url}
                         grant-type: urn:ietf:params:oauth:grant-type:token-exchange
                         authentication:
@@ -24,6 +26,8 @@ no.nav:
                             client-jwk: ${token.x.private.jwk}
                             client-auth-method: private_key_jwt
                     fpinfo-historikk:
+                        token-exchange:
+                            audience: dev-fss:teamforeldrepenger:fpinfo-historikk
                         well-known-url: ${token.x.well.known.url}
                         grant-type: urn:ietf:params:oauth:grant-type:token-exchange
                         authentication:
