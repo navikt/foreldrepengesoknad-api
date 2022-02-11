@@ -26,7 +26,6 @@ import org.springframework.boot.autoconfigure.condition.ConditionalOnMissingBean
 import org.springframework.boot.web.client.RestTemplateBuilder;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
-import org.springframework.context.annotation.Primary;
 import org.springframework.http.client.ClientHttpRequestInterceptor;
 import org.springframework.retry.RetryCallback;
 import org.springframework.retry.RetryContext;
@@ -57,7 +56,6 @@ public class ApiConfiguration implements WebMvcConfigurer {
     }
 
     @Bean
-    @Primary
     @ConditionalOnProd
     public RestOperations restTemplate(RestTemplateBuilder builder, ClientHttpRequestInterceptor... interceptors) {
         LOG.info("Registrerer interceptorer {}", Arrays.toString(interceptors));
@@ -69,6 +67,7 @@ public class ApiConfiguration implements WebMvcConfigurer {
     @Bean
     @ConditionalOnMissingBean
     public RestOperations tokenXTemplate(RestTemplateBuilder b, ClientHttpRequestInterceptor... interceptors) {
+        LOG.info("Bruker Tokenx client");
         var filtered = filtrerBortZoneCrossingOgBearerTokenInterceptor(interceptors);
         return b
             .interceptors(filtered)
