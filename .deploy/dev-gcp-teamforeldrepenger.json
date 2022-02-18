@@ -1,6 +1,5 @@
 {
   "clam": "clamav.clamav",
-  "fpbucket": "foreldrepengesoknad",
   "tmpbucket": "mellomlagring",
   "ingresses": ["https://foreldrepengesoknad-api.dev.nav.no","https://foreldrepengesoknad-api.dev.intern.nav.no"],
   "gcp" : "true",
