@@ -16,8 +16,9 @@ spec:
      - secret: apigw
   gcp:
     buckets:
-      - name: {{fpbucket}}
       - name: {{tmpbucket}}
+        lifecycleCondition:
+          age: 1
   accessPolicy:
      outbound:
        rules:

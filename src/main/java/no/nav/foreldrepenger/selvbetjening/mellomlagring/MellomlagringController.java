@@ -72,15 +72,13 @@ public class MellomlagringController {
 
     @GetMapping("kvittering/{type}")
     public ResponseEntity<String> lesKvittering(@PathVariable("type") String type) {
-        return mellomlagring.lesKryptertKvittering(type)
-                .map(kvittering -> ok().body(kvittering))
-                .orElse(noContent().build());
+        return noContent().build();
     }
 
     @PostMapping(value = "kvittering/{type}", consumes = APPLICATION_JSON_VALUE)
     @ResponseStatus(NO_CONTENT)
     public void lagreKvittering(@PathVariable("type") String type, @RequestBody String kvittering) {
-        mellomlagring.lagreKryptertKvittering(type, kvittering);
+        // gjør ingenting, kan fjernes når frontend har fjernet kall
     }
 
     private ResponseEntity<byte[]> found(Attachment att) {
