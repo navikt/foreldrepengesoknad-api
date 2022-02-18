@@ -6,6 +6,8 @@ public class IdMismatchException extends RuntimeException {
     private final String authenticatedUser;
 
     public IdMismatchException(String headerFnr, String authenticatedUser) {
+        super("Fødselsnummer i søknad matcher ikke innlogget bruker. Forekommer typisk når søker og annenpart " +
+            "søker på samme maskin. Enkelttilfeller av denne kan ignoreres!");
         this.headerFnr = headerFnr;
         this.authenticatedUser = authenticatedUser;
     }
