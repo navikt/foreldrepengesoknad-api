@@ -14,6 +14,9 @@ import org.springframework.http.client.ClientHttpRequestExecution;
 import org.springframework.http.client.ClientHttpRequestInterceptor;
 import org.springframework.http.client.ClientHttpResponse;
 
+import no.nav.foreldrepenger.boot.conditionals.ConditionalOnSBS;
+
+@ConditionalOnSBS
 public class ZoneCrossingAwareClientInterceptor implements ClientHttpRequestInterceptor {
 
     private static final Logger LOG = getLogger(ZoneCrossingAwareClientInterceptor.class);

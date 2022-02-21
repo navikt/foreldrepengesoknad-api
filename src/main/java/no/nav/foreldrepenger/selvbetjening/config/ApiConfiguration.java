@@ -84,6 +84,7 @@ public class ApiConfiguration implements WebMvcConfigurer {
     }
 
     @Bean
+    @ConditionalOnSBS
     public ClientHttpRequestInterceptor zoneCrossingAwareRequestInterceptor(ZoneCrossingAware... zoneCrossers) {
         LOG.info("Registrerer zone crossers {}", Arrays.toString(zoneCrossers));
 
