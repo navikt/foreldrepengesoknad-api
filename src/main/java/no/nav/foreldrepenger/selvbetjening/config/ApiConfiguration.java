@@ -77,7 +77,6 @@ public class ApiConfiguration implements WebMvcConfigurer {
     private static List<ClientHttpRequestInterceptor> filtrerBortZoneCrossingOgBearerTokenInterceptor(ClientHttpRequestInterceptor... interceptors) {
         var filtered = Arrays.stream(interceptors)
             .filter(not(i -> i.getClass().equals(BearerTokenClientHttpRequestInterceptor.class)))
-            .filter(not(i -> i.getClass().equals(ZoneCrossingAwareClientInterceptor.class)))
             .toList();
         LOG.trace("Filtered message interceptors er {}", filtered);
         return filtered;
