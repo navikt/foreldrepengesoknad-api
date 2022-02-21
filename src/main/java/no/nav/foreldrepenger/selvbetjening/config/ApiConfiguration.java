@@ -38,7 +38,7 @@ import org.springframework.web.servlet.config.annotation.WebMvcConfigurer;
 import com.google.common.base.Splitter;
 import com.google.common.collect.ImmutableMap;
 
-import no.nav.foreldrepenger.boot.conditionals.ConditionalOnProd;
+import no.nav.foreldrepenger.boot.conditionals.ConditionalOnSBS;
 import no.nav.foreldrepenger.selvbetjening.http.interceptors.TokenXConfigFinder;
 import no.nav.foreldrepenger.selvbetjening.http.interceptors.ZoneCrossingAware;
 import no.nav.foreldrepenger.selvbetjening.http.interceptors.ZoneCrossingAwareClientInterceptor;
@@ -56,7 +56,7 @@ public class ApiConfiguration implements WebMvcConfigurer {
     }
 
     @Bean
-    @ConditionalOnProd
+    @ConditionalOnSBS
     public RestOperations restTemplate(RestTemplateBuilder builder, ClientHttpRequestInterceptor... interceptors) {
         LOG.info("Registrerer interceptorer {}", Arrays.toString(interceptors));
         return builder
@@ -67,8 +67,8 @@ public class ApiConfiguration implements WebMvcConfigurer {
     @Bean
     @ConditionalOnMissingBean
     public RestOperations tokenXTemplate(RestTemplateBuilder b, ClientHttpRequestInterceptor... interceptors) {
-        LOG.info("Bruker Tokenx client");
         var filtered = filtrerBortZoneCrossingOgBearerTokenInterceptor(interceptors);
+        LOG.info("Registrerer interceptorer med TokenX interceptor {}", filtered);
         return b
             .interceptors(filtered)
             .build();

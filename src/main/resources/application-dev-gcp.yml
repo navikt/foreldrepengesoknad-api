@@ -13,3 +13,40 @@ spring:
       enabled: false
 virus:
    uri: http://clamav.clamav/scan
+
+no.nav:
+    security:
+        jwt:
+            client:
+                registration:
+                    fpsoknad-mottak:
+                        token-exchange:
+                            audience: dev-fss:teamforeldrepenger:fpsoknad-mottak
+                        well-known-url: ${token.x.well.known.url}
+                        grant-type: urn:ietf:params:oauth:grant-type:token-exchange
+                        authentication:
+                            client-id: ${token.x.client.id}
+                            client-jwk: ${token.x.private.jwk}
+                            client-auth-method: private_key_jwt
+                    fpinfo-historikk:
+                        token-exchange:
+                            audience: dev-fss:teamforeldrepenger:fpinfo-historikk
+                        well-known-url: ${token.x.well.known.url}
+                        grant-type: urn:ietf:params:oauth:grant-type:token-exchange
+                        authentication:
+                            client-id: ${token.x.client.id}
+                            client-jwk: ${token.x.private.jwk}
+                            client-auth-method: private_key_jwt
+
+oppslag:
+    uri: https://fpsoknad-mottak.dev-fss-pub.nais.io/api/
+historikk:
+    uri: https://fpinfo-historikk.dev-fss-pub.nais.io/api/
+mottak:
+    uri: https://fpsoknad-mottak.dev-fss-pub.nais.io/api/
+innsyn:
+    uri: https://fpsoknad-mottak.dev-fss-pub.nais.io/api/
+minidialog:
+    uri: https://fpsoknad-mottak.dev-fss-pub.nais.io/api/
+fppdfgen:
+    uri: http://fppdfgen
