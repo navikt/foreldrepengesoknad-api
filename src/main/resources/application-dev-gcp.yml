@@ -47,6 +47,6 @@ mottak:
 innsyn:
     uri: https://fpsoknad-mottak.dev-fss-pub.nais.io/api/
 minidialog:
-    uri: https://fpsoknad-mottak.dev-fss-pub.nais.io/api/
+    uri: https://fpinfo-historikk.dev-fss-pub.nais.io/api/
 fppdfgen:
     uri: http://fppdfgen
