@@ -22,13 +22,14 @@ spec:
   accessPolicy:
      outbound:
        rules:
+        - application: fppdfgen
         - application: clamav
           namespace: clamav
        external:
          - host: storage.googleapis.com
          - host: oauth2.googleapis.com
          - host: www.googleapis.com
-        {{#each tokenxurl as |url|}}
+        {{#each external as |url|}}
          - host: {{url}}
         {{/each}}
 {{/if}}

@@ -4,5 +4,5 @@
   "ingresses": ["https://foreldrepengesoknad-api.intern.nav.no","https://foreldrepengesoknad-api.nav.no"],
   "gcp" : "true",
   "tokenx" : "true",
-  "tokenxurl": ["fpsoknad-mottak.prod-fss-pub.nais.io", "fpinfo-historikk.prod-fss-pub.nais.io"]
+  "external": ["fpsoknad-mottak.prod-fss-pub.nais.io", "fpinfo-historikk.prod-fss-pub.nais.io"]
 }
