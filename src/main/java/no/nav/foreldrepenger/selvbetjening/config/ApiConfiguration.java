@@ -67,19 +67,17 @@ public class ApiConfiguration implements WebMvcConfigurer {
     @Bean
     @ConditionalOnMissingBean
     public RestOperations tokenXTemplate(RestTemplateBuilder b, ClientHttpRequestInterceptor... interceptors) {
-        var filtered = filtrerBortZoneCrossingOgBearerTokenInterceptor(interceptors);
+        var filtered = filtrerBortBearerTokenInterceptor(interceptors);
         LOG.info("Registrerer interceptorer med TokenX interceptor {}", filtered);
         return b
             .interceptors(filtered)
             .build();
     }
 
-    private static List<ClientHttpRequestInterceptor> filtrerBortZoneCrossingOgBearerTokenInterceptor(ClientHttpRequestInterceptor... interceptors) {
-        var filtered = Arrays.stream(interceptors)
+    private static List<ClientHttpRequestInterceptor> filtrerBortBearerTokenInterceptor(ClientHttpRequestInterceptor... interceptors) {
+        return Arrays.stream(interceptors)
             .filter(not(i -> i.getClass().equals(BearerTokenClientHttpRequestInterceptor.class)))
             .toList();
-        LOG.trace("Filtered message interceptors er {}", filtered);
-        return filtered;
     }
 
     @Bean
