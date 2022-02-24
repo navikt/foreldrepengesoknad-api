@@ -18,7 +18,7 @@ spring:
 
 mellomlagring:
   tmp:
-    navn: foreldrepengesoknad-prod
+    navn: mellomlagring-prod
   søknad:
      navn: mellomlagring-prod
 
