@@ -61,3 +61,7 @@ spring:
          max-request-size: 100MB
    mvc:
       throw-exception-if-no-handler-found: true
+springdoc:
+    packages-to-scan: no.nav.foreldrepenger.selvbetjening
+    swagger-ui:
+        disable-swagger-default-url: true
