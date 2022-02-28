@@ -10,15 +10,13 @@ import org.springframework.retry.annotation.EnableRetry;
 
 import no.nav.security.token.support.client.spring.oauth2.EnableOAuth2Client;
 import no.nav.security.token.support.spring.api.EnableJwtTokenValidation;
-import springfox.documentation.oas.annotations.EnableOpenApi;
 
 @SpringBootApplication
-@EnableOpenApi
 @EnableCaching
 @EnableRetry
 @EnableOAuth2Client(cacheEnabled = true)
 @ConfigurationPropertiesScan("no.nav.foreldrepenger.selvbetjening")
-@EnableJwtTokenValidation(ignore = { "org.springframework", "springfox.documentation" })
+@EnableJwtTokenValidation(ignore = { "org.springframework", "org.springdoc" })
 public class ApiApplication {
 
     public static void main(String[] args) {
