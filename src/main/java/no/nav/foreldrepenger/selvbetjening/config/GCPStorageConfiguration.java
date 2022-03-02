@@ -24,7 +24,8 @@ public class GCPStorageConfiguration {
     RetrySettings retrySettings(@Value("${mellomlagring.timeout:3000}") int timeoutMs) {
         return RetrySettings.newBuilder()
             .setInitialRetryDelay(Duration.ofMillis(400))
-            .setRetryDelayMultiplier(2)
+            .setMaxRetryDelay(Duration.ofMillis(900))
+            .setRetryDelayMultiplier(1.5)
             .setMaxAttempts(5)
             .setTotalTimeout(Duration.ofMillis(timeoutMs))
             .build();
