@@ -3,8 +3,6 @@ package no.nav.foreldrepenger.selvbetjening.config;
 import static java.util.Collections.singletonList;
 import static java.util.function.Predicate.not;
 import static no.nav.foreldrepenger.common.util.Constants.FNR;
-import static no.nav.foreldrepenger.selvbetjening.mellomlagring.Bøtte.SØKNAD;
-import static no.nav.foreldrepenger.selvbetjening.mellomlagring.Bøtte.TMP;
 import static org.springframework.http.HttpHeaders.CONTENT_TYPE;
 import static org.springframework.http.HttpHeaders.LOCATION;
 import static org.springframework.http.HttpMethod.DELETE;
@@ -13,16 +11,13 @@ import static org.springframework.http.HttpMethod.OPTIONS;
 import static org.springframework.http.HttpMethod.POST;
 import static org.springframework.retry.RetryContext.NAME;
 
-import java.net.URI;
 import java.time.Duration;
 import java.util.Arrays;
 import java.util.List;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.beans.factory.annotation.Value;
-import org.springframework.boot.autoconfigure.condition.ConditionalOnMissingBean;
 import org.springframework.boot.web.client.RestTemplateBuilder;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -36,12 +31,8 @@ import org.springframework.web.servlet.config.annotation.CorsRegistry;
 import org.springframework.web.servlet.config.annotation.WebMvcConfigurer;
 
 import com.google.common.base.Splitter;
-import com.google.common.collect.ImmutableMap;
 
-import no.nav.foreldrepenger.boot.conditionals.ConditionalOnSBS;
 import no.nav.foreldrepenger.selvbetjening.http.interceptors.TokenXConfigFinder;
-import no.nav.foreldrepenger.selvbetjening.http.interceptors.ZoneCrossingAware;
-import no.nav.foreldrepenger.selvbetjening.http.interceptors.ZoneCrossingAwareClientInterceptor;
 import no.nav.foreldrepenger.selvbetjening.mellomlagring.Bøtte;
 import no.nav.security.token.support.spring.validation.interceptor.BearerTokenClientHttpRequestInterceptor;
 
@@ -56,16 +47,6 @@ public class ApiConfiguration implements WebMvcConfigurer {
     }
 
     @Bean
-    @ConditionalOnSBS
-    public RestOperations restTemplate(RestTemplateBuilder builder, ClientHttpRequestInterceptor... interceptors) {
-        LOG.info("Registrerer interceptorer {}", Arrays.toString(interceptors));
-        return builder
-                .interceptors(interceptors)
-                .build();
-    }
-
-    @Bean
-    @ConditionalOnMissingBean
     public RestOperations tokenXTemplate(RestTemplateBuilder b, ClientHttpRequestInterceptor... interceptors) {
         var filtered = filtrerBortBearerTokenInterceptor(interceptors);
         LOG.info("Registrerer interceptorer med TokenX interceptor {}", filtered);
@@ -78,17 +59,6 @@ public class ApiConfiguration implements WebMvcConfigurer {
         return Arrays.stream(interceptors)
             .filter(not(i -> i.getClass().equals(BearerTokenClientHttpRequestInterceptor.class)))
             .toList();
-    }
-
-    @Bean
-    @ConditionalOnSBS
-    public ClientHttpRequestInterceptor zoneCrossingAwareRequestInterceptor(ZoneCrossingAware... zoneCrossers) {
-        LOG.info("Registrerer zone crossers {}", Arrays.toString(zoneCrossers));
-
-        var builder = ImmutableMap.<URI, String>builder();
-        Arrays.stream(zoneCrossers)
-                .forEach(c -> builder.put(c.zoneCrossingUri(), c.getKey()));
-        return new ZoneCrossingAwareClientInterceptor(builder.build());
     }
 
     @Bean
@@ -144,16 +114,6 @@ public class ApiConfiguration implements WebMvcConfigurer {
     }
 
     @Bean
-    @Qualifier(SØKNAD)
-    public Bøtte søknadsBøtte(
-            @Value("${mellomlagring.søknad.navn:foreldrepengesoknad}") String navn,
-            @Value("${mellomlagring.søknad.levetid:365d}") Duration levetid,
-            @Value("${mellomlagring.søknad.enabled:true}") boolean enabled) {
-        return new Bøtte(navn, levetid, enabled);
-    }
-
-    @Bean
-    @Qualifier(TMP)
     public Bøtte tmpBøtte(
             @Value("${mellomlagring.tmp.navn:mellomlagring}") String navn,
             @Value("${mellomlagring.tmp.levetid:1d}") Duration levetid,

@@ -6,8 +6,6 @@ import no.nav.foreldrepenger.selvbetjening.http.Togglable;
 
 public class Bøtte implements Togglable {
 
-    public static final String TMP = "tmp";
-    public static final String SØKNAD = "søknad";
     private final String navn;
     private final Duration levetid;
     private final boolean enabled;

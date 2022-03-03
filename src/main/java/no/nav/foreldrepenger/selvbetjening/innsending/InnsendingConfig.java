@@ -1,8 +1,5 @@
 package no.nav.foreldrepenger.selvbetjening.innsending;
 
-import static no.nav.foreldrepenger.common.util.StringUtil.limit;
-import static org.apache.commons.lang3.StringUtils.reverse;
-
 import java.net.URI;
 
 import org.springframework.boot.context.properties.ConfigurationProperties;
@@ -10,10 +7,9 @@ import org.springframework.boot.context.properties.ConstructorBinding;
 import org.springframework.boot.context.properties.bind.DefaultValue;
 
 import no.nav.foreldrepenger.selvbetjening.http.AbstractConfig;
-import no.nav.foreldrepenger.selvbetjening.http.interceptors.ZoneCrossingAware;
 
 @ConfigurationProperties(prefix = "mottak")
-public class InnsendingConfig extends AbstractConfig implements ZoneCrossingAware {
+public class InnsendingConfig extends AbstractConfig {
 
     private static final String ENDRE = "/mottak/endre";
 
@@ -23,12 +19,9 @@ public class InnsendingConfig extends AbstractConfig implements ZoneCrossingAwar
 
     private static final String PING = "mottak/ping";
 
-    private final String key;
-
     @ConstructorBinding
-    public InnsendingConfig(URI uri, String key, @DefaultValue("true") boolean enabled) {
+    public InnsendingConfig(URI uri, @DefaultValue("true") boolean enabled) {
         super(uri, enabled);
-        this.key = key;
     }
 
     @Override
@@ -48,19 +41,4 @@ public class InnsendingConfig extends AbstractConfig implements ZoneCrossingAwar
         return uri(getUri(), ETTERSEND);
     }
 
-    @Override
-    public String getKey() {
-        return key;
-    }
-
-    @Override
-    public URI zoneCrossingUri() {
-        return getUri();
-    }
-
-    @Override
-    public String toString() {
-        return getClass().getSimpleName() + "[key=" + limit(reverse(key), 3)
-                + ", zoneCrossingUri=" + zoneCrossingUri() + "]";
-    }
 }

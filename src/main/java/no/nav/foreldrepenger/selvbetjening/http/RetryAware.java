@@ -7,10 +7,9 @@ import org.springframework.web.client.HttpServerErrorException;
 import org.springframework.web.client.RestClientException;
 import org.springframework.web.multipart.MultipartException;
 
-import com.amazonaws.SdkClientException;
 
 @Retryable(include = {
-        RestClientException.class, MultipartException.class, SdkClientException.class, HttpClientErrorException.BadRequest.class, }, exclude = {
+        RestClientException.class, MultipartException.class, HttpClientErrorException.BadRequest.class, }, exclude = {
                 HttpServerErrorException.class,
                 HttpClientErrorException.NotFound.class,
                 HttpClientErrorException.Forbidden.class,

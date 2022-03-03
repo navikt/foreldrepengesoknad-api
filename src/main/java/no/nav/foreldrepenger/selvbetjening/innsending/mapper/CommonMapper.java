@@ -1,6 +1,5 @@
 package no.nav.foreldrepenger.selvbetjening.innsending.mapper;
 
-import static com.amazonaws.util.StringUtils.isNullOrEmpty;
 import static java.time.LocalDate.now;
 import static no.nav.foreldrepenger.common.util.StreamUtil.safeStream;
 import static no.nav.foreldrepenger.selvbetjening.util.DateUtil.erNyopprettet;
@@ -338,7 +337,7 @@ final class CommonMapper {
     }
 
     public static CountryCode land(String land) {
-        return isNullOrEmpty(land) ? CountryCode.UNDEFINED : CountryCode.valueOf(land);
+        return isEmpty(land) ? CountryCode.UNDEFINED : CountryCode.valueOf(land);
     }
 
 }

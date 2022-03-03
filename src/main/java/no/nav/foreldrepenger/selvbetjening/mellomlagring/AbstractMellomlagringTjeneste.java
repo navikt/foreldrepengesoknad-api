@@ -21,37 +21,35 @@ public abstract class AbstractMellomlagringTjeneste implements Mellomlagring {
 
     protected abstract void doSlett(String bøtte, String katalog, String key);
 
-    private final Bøtte søknadBøtte;
     private final Bøtte mellomlagringBøtte;
 
-    protected AbstractMellomlagringTjeneste(Bøtte søknadBøtte, Bøtte mellomlagringBøtte) {
-        this.søknadBøtte = søknadBøtte;
+    protected AbstractMellomlagringTjeneste(Bøtte mellomlagringBøtte) {
         this.mellomlagringBøtte = mellomlagringBøtte;
     }
 
     @PostConstruct
     void valider() {
-        validerBøtter(søknadBøtte, mellomlagringBøtte);
+        validerBøtter(mellomlagringBøtte);
     }
 
     @Override
     public boolean isEnabled() {
-        return søknadBøtte.isEnabled() && mellomlagringBøtte.isEnabled();
+        return mellomlagringBøtte.isEnabled();
     }
 
     @Override
     public void lagre(MellomlagringType type, String katalog, String key, String value) {
-        lagreI(bøtteFor(type), katalog, key, value);
+        lagreI(mellomlagringBøtte, katalog, key, value);
     }
 
     @Override
     public Optional<String> les(MellomlagringType type, String katalog, String key) {
-        return lesFra(bøtteFor(type), katalog, key);
+        return lesFra(mellomlagringBøtte, katalog, key);
     }
 
     @Override
     public void slett(MellomlagringType type, String katalog, String key) {
-        slettFra(bøtteFor(type), katalog, key);
+        slettFra(mellomlagringBøtte, katalog, key);
     }
 
     private Optional<String> lesFra(Bøtte bøtte, String katalog, String key) {
@@ -81,13 +79,6 @@ public abstract class AbstractMellomlagringTjeneste implements Mellomlagring {
         safeStream(bøtter)
                 .filter(Bøtte::isEnabled)
                 .forEach(this::validerBøtte);
-    }
-
-    private Bøtte bøtteFor(MellomlagringType type) {
-        return switch (type) {
-            case LANGTIDS -> søknadBøtte;
-            case KORTTIDS -> mellomlagringBøtte;
-        };
     }
 
     private static Optional<String> disabled() {

@@ -1,9 +1,5 @@
 package no.nav.foreldrepenger.selvbetjening.config;
 
-import static no.nav.foreldrepenger.selvbetjening.mellomlagring.Bøtte.SØKNAD;
-import static no.nav.foreldrepenger.selvbetjening.mellomlagring.Bøtte.TMP;
-
-import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -32,9 +28,7 @@ public class GCPStorageConfiguration {
     }
 
     @Bean
-    public Mellomlagring gcpMellomlagring(
-            @Qualifier(SØKNAD) Bøtte søknad,
-            @Qualifier(TMP) Bøtte mellomlagring, RetrySettings retrySettings) {
-        return new GCPMellomlagring(søknad, mellomlagring, retrySettings);
+    public Mellomlagring gcpMellomlagring(Bøtte mellomlagring, RetrySettings retrySettings) {
+        return new GCPMellomlagring(mellomlagring, retrySettings);
     }
 }

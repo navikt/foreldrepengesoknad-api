@@ -6,58 +6,51 @@ metadata:
   labels:
     team: teamforeldrepenger
 spec:
-{{#if tokenx}}
   tokenx:
     enabled: true
-{{/if}}
   envFrom:
-     - configmap: loginservice-idporten
-{{#if gcp}}
-     - secret: apigw # Brukes av MellomlagringKrypto og Zonekryssing interceptor
+    - configmap: loginservice-idporten
+    - secret: apigw # Brukes av MellomlagringKrypto og Zonekryssing interceptor
   gcp:
     buckets:
       - name: {{tmpbucket}}
         lifecycleCondition:
           age: 1
   accessPolicy:
-     outbound:
-       rules:
+    outbound:
+      rules:
         - application: fppdfgen
         - application: clamav
           namespace: clamav
-       external:
-         - host: storage.googleapis.com
-         - host: oauth2.googleapis.com
-         - host: www.googleapis.com
-        {{#each external as |url|}}
-         - host: {{url}}
+      external:
+        - host: storage.googleapis.com
+        - host: oauth2.googleapis.com
+        - host: www.googleapis.com
+        { { #each external as |url|}}
+            - host: {{url } }
         {{/each}}
-{{/if}}
   image: {{image}}
   port: 8080
   replicas:
-      min: 2
-      max: 3
+    min: 2
+    max: 3
   liveness:
-      path: /internal/actuator/health/liveness
-      initialDelay: 60
+    path: /internal/actuator/health/liveness
+    initialDelay: 60
   readiness:
-      path: /internal/actuator/health/readiness
-      initialDelay: 60
+    path: /internal/actuator/health/readiness
+    initialDelay: 60
   prometheus:
-      enabled: true
-      path: /internal/actuator/prometheus
+    enabled: true
+    path: /internal/actuator/prometheus
   ingresses:
-{{#each ingresses as |url|}}
-    - {{url}}
-{{/each}}
-  resources:
-      limits:
-         cpu: 1500m
-         memory: 3072Mi
-      requests:
-         cpu: 50m
-         memory: 1024Mi
-{{#unless gcp}}
-  webproxy: true
-{{/unless}}
+  { { #each ingresses as |url|}}
+      - {{url } }
+  {{/each}}
+resources:
+  limits:
+    cpu: 1500m
+    memory: 3072Mi
+  requests:
+    cpu: 50m
+    memory: 1024Mi

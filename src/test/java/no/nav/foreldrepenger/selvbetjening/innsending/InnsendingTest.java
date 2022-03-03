@@ -60,7 +60,7 @@ class InnsendingTest {
     private static final InnsendingConfig CFG = cfg();
 
     private static InnsendingConfig cfg() {
-        return new InnsendingConfig(URI.create("http://www.innsending.no"), "key", true);
+        return new InnsendingConfig(URI.create("http://www.innsending.no"), true);
     }
 
     @Autowired

@@ -2,7 +2,6 @@ package no.nav.foreldrepenger.selvbetjening.mellomlagring;
 
 import static no.nav.foreldrepenger.boot.conditionals.EnvUtil.CONFIDENTIAL;
 import static no.nav.foreldrepenger.selvbetjening.mellomlagring.MellomlagringType.KORTTIDS;
-import static no.nav.foreldrepenger.selvbetjening.mellomlagring.MellomlagringType.LANGTIDS;
 import static no.nav.foreldrepenger.selvbetjening.vedlegg.DelegerendeVedleggSjekker.DELEGERENDE;
 
 import java.util.Optional;
@@ -90,23 +89,6 @@ public class KryptertMellomlagring {
             mellomlagring.slett(KORTTIDS, katalog(), uuid);
             LOG.trace("Slettet kryptert vedlegg med uuid {} fra {}", uuid, katalog());
         }
-    }
-
-    public Optional<String> lesKryptertKvittering(String type) {
-        LOG.trace("Leser kryptert kvittering fra {}", katalog());
-        var kvittering = mellomlagring.les(LANGTIDS, katalog(), type)
-                .map(krypto::decrypt);
-        if (kvittering.isPresent()) {
-            LOG.trace("Lest kryptert kvittering fra {}", katalog());
-            LOG.info(CONFIDENTIAL, "Dekryptert kvittering {}", kvittering.get());
-        }
-        return kvittering;
-    }
-
-    public void lagreKryptertKvittering(String type, String kvittering) {
-        LOG.trace("Lagrer kryptert kvittering i {}", katalog());
-        mellomlagring.lagre(LANGTIDS, katalog(), type, krypto.encrypt(kvittering));
-        LOG.trace("Lagret kryptert kvittering i katalog {}", katalog());
     }
 
     private String katalog() {

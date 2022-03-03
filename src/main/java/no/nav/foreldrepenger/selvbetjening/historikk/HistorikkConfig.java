@@ -1,8 +1,5 @@
 package no.nav.foreldrepenger.selvbetjening.historikk;
 
-import static no.nav.foreldrepenger.common.util.StringUtil.limit;
-import static org.apache.commons.lang3.StringUtils.reverse;
-
 import java.net.URI;
 
 import org.springframework.boot.context.properties.ConfigurationProperties;
@@ -11,11 +8,10 @@ import org.springframework.boot.context.properties.bind.DefaultValue;
 
 import no.nav.foreldrepenger.common.util.Pair;
 import no.nav.foreldrepenger.selvbetjening.http.AbstractConfig;
-import no.nav.foreldrepenger.selvbetjening.http.interceptors.ZoneCrossingAware;
 import no.nav.foreldrepenger.selvbetjening.oppslag.domain.Fødselsnummer;
 
 @ConfigurationProperties("historikk")
-public class HistorikkConfig extends AbstractConfig implements ZoneCrossingAware {
+public class HistorikkConfig extends AbstractConfig {
     private static final String HISTORIKK = "historikk";
 
     private static final String FNR = "fnr";
@@ -24,12 +20,10 @@ public class HistorikkConfig extends AbstractConfig implements ZoneCrossingAware
 
     private static final String DEFAULT_PING_PATH = "actuator/health/liveness";
 
-    private final String key;
 
     @ConstructorBinding
-    public HistorikkConfig(URI uri, String key, @DefaultValue("true") boolean enabled) {
+    public HistorikkConfig(URI uri, @DefaultValue("true") boolean enabled) {
         super(uri, enabled);
-        this.key = key;
     }
 
     public URI historikkURI() {
@@ -54,25 +48,10 @@ public class HistorikkConfig extends AbstractConfig implements ZoneCrossingAware
         return uri(getUri(), DEFAULT_PING_PATH);
     }
 
-    @Override
-    public String getKey() {
-        return key;
-    }
 
     public URI minidialogURI() {
         return uri(getUri(), "/me/minidialoger/spm");
 
-    }
-
-    @Override
-    public URI zoneCrossingUri() {
-        return getUri();
-    }
-
-    @Override
-    public String toString() {
-        return getClass().getSimpleName() + "[key=" + limit(reverse(key), 3)
-                + ", zoneCrossingUri=" + zoneCrossingUri() + "]";
     }
 
 }

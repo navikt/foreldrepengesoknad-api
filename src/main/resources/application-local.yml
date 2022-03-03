@@ -30,17 +30,14 @@ fppdfgen:
   enabled: false
 
 historikk:
-  key: foreldrepengesoknad-api-historikk
   uri: http://localhost:9000/api
   enabled: false
 
 mottak:
-  key: foreldrepengesoknad-api-mottak
   uri: http://localhost:9000/api/mottak
   enabled: false
 
 oppslag:
-  key: foreldrepengesoknad-ap-oppslag
   uri: http://localhost:9000/api/oppslag
   enabled: false
 
@@ -52,9 +49,5 @@ innsyn:
   mottak: http://localhost:9000/api/mottak
   enabled: false
 
-s3:
-  username: user
-  password: pwd
-  url: some.host.somewhere
 storage:
   passphrase: tullogtøys

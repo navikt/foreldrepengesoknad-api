@@ -1,14 +1,10 @@
 package no.nav.foreldrepenger.selvbetjening.mellomlagring;
 
-import static no.nav.foreldrepenger.selvbetjening.mellomlagring.Bøtte.SØKNAD;
-import static no.nav.foreldrepenger.selvbetjening.mellomlagring.Bøtte.TMP;
-
 import java.net.URI;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.Optional;
 
-import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.stereotype.Service;
 
 import no.nav.foreldrepenger.boot.conditionals.ConditionalOnLocal;
@@ -19,8 +15,8 @@ public class InMemoryMellomlagring extends AbstractMellomlagringTjeneste {
 
     private final Map<String, String> store;
 
-    public InMemoryMellomlagring(@Qualifier(SØKNAD) Bøtte b1, @Qualifier(TMP) Bøtte b2) {
-        super(b1, b2);
+    public InMemoryMellomlagring(Bøtte bøtte) {
+        super(bøtte);
         store = new HashMap<>();
     }
 

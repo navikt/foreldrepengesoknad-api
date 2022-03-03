@@ -4,8 +4,6 @@ import static org.assertj.core.api.Assertions.assertThat;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.mockito.Mockito.when;
 
-import java.time.LocalDateTime;
-
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -17,7 +15,6 @@ import org.springframework.util.unit.DataSize;
 
 import com.google.gson.Gson;
 
-import no.nav.foreldrepenger.selvbetjening.innsending.domain.Kvittering;
 import no.nav.foreldrepenger.selvbetjening.innsending.pdf.PdfGeneratorStub;
 import no.nav.foreldrepenger.selvbetjening.util.TokenUtil;
 import no.nav.foreldrepenger.selvbetjening.vedlegg.DelegerendeVedleggSjekker;
@@ -35,13 +32,13 @@ class KryptertMellomlagringTest {
     @Mock
     TokenUtil util;
     @Mock
-    Bøtte b1, b2;
+    Bøtte bøtte;
     private KryptertMellomlagring km;
 
     @BeforeEach
     void beforeEach() {
         when(util.autentisertBruker()).thenReturn("01010111111");
-        var mellomlagring = new InMemoryMellomlagring(b1, b2);
+        var mellomlagring = new InMemoryMellomlagring(bøtte);
         km = new KryptertMellomlagring(mellomlagring,
                 new MellomlagringKrypto("passphrase", util),
                 new DelegerendeVedleggSjekker(new StørrelseVedleggSjekker(DataSize.ofMegabytes(32), DataSize.ofMegabytes(8)), scanner,
@@ -50,7 +47,7 @@ class KryptertMellomlagringTest {
 
     @Test
     void TestKryptertSøknad() {
-        when(b2.isEnabled()).thenReturn(true);
+        when(bøtte.isEnabled()).thenReturn(true);
         km.lagreKryptertSøknad("Søknad");
         var lest = km.lesKryptertSøknad();
         assertThat(lest).isPresent();
@@ -60,18 +57,8 @@ class KryptertMellomlagringTest {
     }
 
     @Test
-    void TestKryptertKvittering() {
-        when(b1.isEnabled()).thenReturn(true);
-        var kvittering = new Kvittering(LocalDateTime.now(), "42", new byte[0], new byte[0]);
-        km.lagreKryptertKvittering("kvittering", MAPPER.toJson(kvittering));
-        var lest = km.lesKryptertKvittering("kvittering");
-        assertThat(lest).isPresent();
-        assertEquals(kvittering, MAPPER.fromJson(lest.get(), Kvittering.class));
-    }
-
-    @Test
     void TestKryptertVedlegg() {
-        when(b2.isEnabled()).thenReturn(true);
+        when(bøtte.isEnabled()).thenReturn(true);
         var pdf = new PdfGeneratorStub().generate("test");
         var original = Attachment.of(new MockMultipartFile("vedlegg", "originalt vedlegg", "application/pdf", pdf));
         km.lagreKryptertVedlegg(original);

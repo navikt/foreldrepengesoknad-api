@@ -27,8 +27,8 @@ public class GCPMellomlagring extends AbstractMellomlagringTjeneste {
 
     private final Storage storage;
 
-    public GCPMellomlagring(Bøtte søknadBøtte, Bøtte mellomlagringBøtte, RetrySettings retrySettings) {
-        super(søknadBøtte, mellomlagringBøtte);
+    public GCPMellomlagring(Bøtte mellomlagringBøtte, RetrySettings retrySettings) {
+        super(mellomlagringBøtte);
         this.storage = StorageOptions
                 .newBuilder()
                 .setRetrySettings(retrySettings)

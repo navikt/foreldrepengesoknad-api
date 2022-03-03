@@ -19,8 +19,6 @@ spring:
 mellomlagring:
   tmp:
     navn: mellomlagring-prod
-  søknad:
-    navn: mellomlagring-prod
 
 virus:
   uri: http://clamav.clamav/scan

@@ -2,7 +2,5 @@
   "clam": "clamav.clamav",
   "tmpbucket": "mellomlagring",
   "ingresses": ["https://foreldrepengesoknad-api.dev.nav.no","https://foreldrepengesoknad-api.dev.intern.nav.no"],
-  "gcp" : "true",
-  "tokenx" : "true",
   "external": ["fpsoknad-mottak.dev-fss-pub.nais.io", "fpinfo-historikk.dev-fss-pub.nais.io"]
 }
