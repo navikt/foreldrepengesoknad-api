@@ -26,9 +26,9 @@ spec:
         - host: storage.googleapis.com
         - host: oauth2.googleapis.com
         - host: www.googleapis.com
-        { { #each external as |url|}}
-            - host: {{url } }
-        {{/each}}
+{{ #each external as |url|}}
+        - host: {{url } }
+{{/each}}
   image: {{image}}
   port: 8080
   replicas:
@@ -44,9 +44,9 @@ spec:
     enabled: true
     path: /internal/actuator/prometheus
   ingresses:
-  { { #each ingresses as |url|}}
-      - {{url } }
-  {{/each}}
+{{ #each ingresses as |url|}}
+    - {{url } }
+{{/each}}
 resources:
   limits:
     cpu: 1500m
