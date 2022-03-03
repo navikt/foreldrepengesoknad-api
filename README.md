@@ -6,15 +6,14 @@
 * Kjør klassen ```ApiApplicationLocal``` fra din favoritteditor
 
 ## Bygg
-* Krever minst Java 11
-    
----
-# Henvendelser
+* Java 17
+
+## Henvendelser
 
 Spørsmål knyttet til kode eller prosjektet kan rettes til:
 
-* teamforeldrepenger@nav.no
+* nav.team.foreldrepenger@nav.no
 
 ## For NAV-ansatte
 
-Interne henvendelser kan sendes via Slack i kanalen #fp-teknisk.
+Interne henvendelser kan sendes via Slack i kanalen #teamforeldrepenger.
