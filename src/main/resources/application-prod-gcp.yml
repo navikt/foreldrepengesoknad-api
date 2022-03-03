@@ -20,44 +20,44 @@ mellomlagring:
   tmp:
     navn: mellomlagring-prod
   søknad:
-     navn: mellomlagring-prod
+    navn: mellomlagring-prod
 
 virus:
-   uri: http://clamav.clamav/scan
+  uri: http://clamav.clamav/scan
 
 no.nav:
-    security:
-        jwt:
-            client:
-                registration:
-                    fpsoknad-mottak:
-                        token-exchange:
-                            audience: prod-fss:teamforeldrepenger:fpsoknad-mottak
-                        well-known-url: ${token.x.well.known.url}
-                        grant-type: urn:ietf:params:oauth:grant-type:token-exchange
-                        authentication:
-                            client-id: ${token.x.client.id}
-                            client-jwk: ${token.x.private.jwk}
-                            client-auth-method: private_key_jwt
-                    fpinfo-historikk:
-                        token-exchange:
-                            audience: prod-fss:teamforeldrepenger:fpinfo-historikk
-                        well-known-url: ${token.x.well.known.url}
-                        grant-type: urn:ietf:params:oauth:grant-type:token-exchange
-                        authentication:
-                            client-id: ${token.x.client.id}
-                            client-jwk: ${token.x.private.jwk}
-                            client-auth-method: private_key_jwt
+  security:
+    jwt:
+      client:
+        registration:
+          fpsoknad-mottak:
+            token-exchange:
+              audience: prod-fss:teamforeldrepenger:fpsoknad-mottak
+            well-known-url: ${token.x.well.known.url}
+            grant-type: urn:ietf:params:oauth:grant-type:token-exchange
+            authentication:
+              client-id: ${token.x.client.id}
+              client-jwk: ${token.x.private.jwk}
+              client-auth-method: private_key_jwt
+          fpinfo-historikk:
+            token-exchange:
+              audience: prod-fss:teamforeldrepenger:fpinfo-historikk
+            well-known-url: ${token.x.well.known.url}
+            grant-type: urn:ietf:params:oauth:grant-type:token-exchange
+            authentication:
+              client-id: ${token.x.client.id}
+              client-jwk: ${token.x.private.jwk}
+              client-auth-method: private_key_jwt
 
 oppslag:
-    uri: https://fpsoknad-mottak.prod-fss-pub.nais.io/api/
+  uri: https://fpsoknad-mottak.prod-fss-pub.nais.io/api/
 historikk:
-    uri: https://fpinfo-historikk.prod-fss-pub.nais.io/api/
+  uri: https://fpinfo-historikk.prod-fss-pub.nais.io/api/
 mottak:
-    uri: https://fpsoknad-mottak.prod-fss-pub.nais.io/api/
+  uri: https://fpsoknad-mottak.prod-fss-pub.nais.io/api/
 innsyn:
-    uri: https://fpsoknad-mottak.prod-fss-pub.nais.io/api/
+  uri: https://fpsoknad-mottak.prod-fss-pub.nais.io/api/
 minidialog:
-    uri: https://fpinfo-historikk.prod-fss-pub.nais.io/api/
+  uri: https://fpinfo-historikk.prod-fss-pub.nais.io/api/
 fppdfgen:
-    uri: http://fppdfgen
+  uri: http://fppdfgen

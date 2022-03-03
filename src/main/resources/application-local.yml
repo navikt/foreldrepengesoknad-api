@@ -1,35 +1,35 @@
 allowed.origins: '*'
 debug: false
-management :
-   endpoints:
-     web:
-       exposure:
-         include:  '*'
-   endpoint:
-     health:
-       show-details : always
+management:
+  endpoints:
+    web:
+      exposure:
+        include: '*'
+  endpoint:
+    health:
+      show-details: always
 no.nav.security.jwt:
-  issuer.selvbetjening :
-     discoveryurl: http://metadata
-     accepted_audience: aud-localhost
-     cookie_name: localhost-idtoken
+  issuer.selvbetjening:
+    discoveryurl: http://metadata
+    accepted_audience: aud-localhost
+    cookie_name: localhost-idtoken
 
-spring :
-   mvc:
-     log-request-details : true
+spring:
+  mvc:
+    log-request-details: true
 
 no.nav:
   foreldrepenger:
     selvbetjening:
       api:
         virus:
-          enabled : false
-        
+          enabled: false
+
 fppdfgen:
-   uri: http://localhost:8080/api/v1/genpdf
-   enabled: false
-          
-historikk :
+  uri: http://localhost:8080/api/v1/genpdf
+  enabled: false
+
+historikk:
   key: foreldrepengesoknad-api-historikk
   uri: http://localhost:9000/api
   enabled: false
@@ -48,13 +48,13 @@ minidialog:
   uri: http://localhost:9000/api
   enabled: false
 innsyn:
-  oppslag:  http://localhost:9000/api/oppslag
-  mottak:  http://localhost:9000/api/mottak
+  oppslag: http://localhost:9000/api/oppslag
+  mottak: http://localhost:9000/api/mottak
   enabled: false
 
-s3 :
-  username : user
-  password : pwd
-  url : some.host.somewhere
-storage :
+s3:
+  username: user
+  password: pwd
+  url: some.host.somewhere
+storage:
   passphrase: tullogtøys

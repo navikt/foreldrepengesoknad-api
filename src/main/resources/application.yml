@@ -1,67 +1,67 @@
 allowed:
   origins:
-      https://engangsstonad.nav.no,
-      https://foreldrepenger.nav.no,
-      https://foreldrepengesoknad.nav.no,
-      https://foreldrepengeplanlegger.nav.no,
-      https://svangerskapspengesoknad.nav.no
+    https://engangsstonad.nav.no,
+    https://foreldrepenger.nav.no,
+    https://foreldrepengesoknad.nav.no,
+    https://foreldrepengeplanlegger.nav.no,
+    https://svangerskapspengesoknad.nav.no
 
 no.nav:
-   security:
+  security:
     jwt:
       issuer:
         selvbetjening:
-           discoveryurl: ${loginservice.idporten.discovery.url}
-           accepted_audience: ${loginservice.idporten.audience}
-           cookie_name: selvbetjening-idtoken
+          discoveryurl: ${loginservice.idporten.discovery.url}
+          accepted_audience: ${loginservice.idporten.audience}
+          cookie_name: selvbetjening-idtoken
 
 virus:
   enabled: true
 
 management:
-   metrics:
-      web:
-        server:
-           request:
-             autotime:
-                 enabled: true
-   health :
-      refresh:
-         enabled: false
-      diskspace:
-         enabled: false
-   endpoint:
-      health:
-         show-details : never
-   endpoints:
-      web:
-         exposure:
-            include: info, health, metrics, prometheus
-         base-path: /internal/actuator
+  metrics:
+    web:
+      server:
+        request:
+          autotime:
+            enabled: true
+  health:
+    refresh:
+      enabled: false
+    diskspace:
+      enabled: false
+  endpoint:
+    health:
+      show-details: never
+  endpoints:
+    web:
+      exposure:
+        include: info, health, metrics, prometheus
+      base-path: /internal/actuator
 server:
-   servlet:
-      context-path: /
-   forward-headers-strategy: native
-   error:
-      whitelabel:
-         enabled: false
+  servlet:
+    context-path: /
+  forward-headers-strategy: native
+  error:
+    whitelabel:
+      enabled: false
 spring:
-   cloud.discovery.enabled: false
-   cache:
-      cache-names: aktør
-      caffeine:
-         spec: maximumSize=100,expireAfterAccess=3600s
-   application:
-      name: foreldrepengesoknad-api
-   main:
-      banner-mode: 'off'
-   servlet:
-      multipart:
-         max-file-size: 100MB
-         max-request-size: 100MB
-   mvc:
-      throw-exception-if-no-handler-found: true
+  cloud.discovery.enabled: false
+  cache:
+    cache-names: aktør
+    caffeine:
+      spec: maximumSize=100,expireAfterAccess=3600s
+  application:
+    name: foreldrepengesoknad-api
+  main:
+    banner-mode: 'off'
+  servlet:
+    multipart:
+      max-file-size: 100MB
+      max-request-size: 100MB
+  mvc:
+    throw-exception-if-no-handler-found: true
 springdoc:
-    packages-to-scan: no.nav.foreldrepenger.selvbetjening
-    swagger-ui:
-        disable-swagger-default-url: true
+  packages-to-scan: no.nav.foreldrepenger.selvbetjening
+  swagger-ui:
+    disable-swagger-default-url: true
