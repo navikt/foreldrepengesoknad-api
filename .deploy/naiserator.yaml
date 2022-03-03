@@ -10,7 +10,7 @@ spec:
     enabled: true
   envFrom:
     - configmap: loginservice-idporten
-    - secret: apigw # Brukes av MellomlagringKrypto og Zonekryssing interceptor
+    - secret: api-storage
   gcp:
     buckets:
       - name: {{tmpbucket}}
