@@ -37,6 +37,7 @@ spec:
   replicas:
     min: 2
     max: 3
+    cpuThresholdPercentage: 80
   liveness:
     path: /internal/actuator/health/liveness
     initialDelay: 60
@@ -56,4 +57,4 @@ resources:
     memory: 3072Mi
   requests:
     cpu: 50m
-    memory: 1024Mi
+    memory: 2048Mi
