@@ -42,7 +42,7 @@
 		<nv.version>1.29</nv.version>
 		<pdfbox.version>2.0.25</pdfbox.version>
 		<jacoco.version>0.8.7</jacoco.version>
-		<gcp.version>0.167.0</gcp.version>
+		<gcp.version>0.169.0</gcp.version>
 		<spring.cloud.vault.version>3.1.0</spring.cloud.vault.version>
 		<simpleclient.version>0.15.0</simpleclient.version>
 	</properties>
