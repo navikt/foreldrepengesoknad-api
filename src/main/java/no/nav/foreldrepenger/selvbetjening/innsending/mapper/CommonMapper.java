@@ -304,8 +304,7 @@ final class CommonMapper {
             frilansInformasjon.driverFosterhjem(),
             frilansInformasjon.oppstart().isAfter(now().minusMonths(3)),
             frilansInformasjon.jobberFremdelesSomFrilans(),
-            tilFrilansOppdrag(frilansInformasjon.oppdragForNæreVennerEllerFamilieSiste10Mnd()),
-            null); // TODO: Fjern denne som ikke blir brukt
+            tilFrilansOppdrag(frilansInformasjon.oppdragForNæreVennerEllerFamilieSiste10Mnd()));
     }
 
     private static List<FrilansOppdrag> tilFrilansOppdrag(List<FrilansoppdragFrontend> oppdragForNæreVennerEllerFamilieSiste10Mnd) {

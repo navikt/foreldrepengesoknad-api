@@ -107,11 +107,11 @@ class ForeldrepengeSøknadTilDtoMapperTest {
 
         var frilans = ytelse.getOpptjening().getFrilans();
         assertThat(frilans).isNotNull();
-        assertThat(frilans.isHarInntektFraFosterhjem()).isFalse();
-        assertThat(frilans.isJobberFremdelesSomFrilans()).isTrue();
-        assertThat(frilans.getPeriode().fom()).isNotNull();
-        assertThat(frilans.getPeriode().tom()).isNull();
-        assertThat(frilans.getFrilansOppdrag()).isEmpty();
+        assertThat(frilans.harInntektFraFosterhjem()).isFalse();
+        assertThat(frilans.jobberFremdelesSomFrilans()).isTrue();
+        assertThat(frilans.periode().fom()).isNotNull();
+        assertThat(frilans.periode().tom()).isNull();
+        assertThat(frilans.frilansOppdrag()).isEmpty();
 
     }
 
@@ -140,12 +140,12 @@ class ForeldrepengeSøknadTilDtoMapperTest {
 
         var frilans = ytelse.getOpptjening().getFrilans();
         assertThat(frilans).isNotNull();
-        assertThat(frilans.isHarInntektFraFosterhjem()).isFalse();
-        assertThat(frilans.isJobberFremdelesSomFrilans()).isTrue();
-        assertThat(frilans.getPeriode().fom()).isNotNull();
-        assertThat(frilans.getPeriode().tom()).isNull();
-        assertThat(frilans.getFrilansOppdrag()).hasSize(1);
-        var frilansoppdrag = frilans.getFrilansOppdrag().get(0);
+        assertThat(frilans.harInntektFraFosterhjem()).isFalse();
+        assertThat(frilans.jobberFremdelesSomFrilans()).isTrue();
+        assertThat(frilans.periode().fom()).isNotNull();
+        assertThat(frilans.periode().tom()).isNull();
+        assertThat(frilans.frilansOppdrag()).hasSize(1);
+        var frilansoppdrag = frilans.frilansOppdrag().get(0);
         assertThat(frilansoppdrag.oppdragsgiver()).isEqualTo("Klara Klukk");
         assertThat(frilansoppdrag.periode().fom()).isNotNull();
         assertThat(frilansoppdrag.periode().tom()).isNotNull();
@@ -189,11 +189,11 @@ class ForeldrepengeSøknadTilDtoMapperTest {
 
         var frilans = ytelse.getOpptjening().getFrilans();
         assertThat(frilans).isNotNull();
-        assertThat(frilans.isHarInntektFraFosterhjem()).isFalse();
-        assertThat(frilans.isJobberFremdelesSomFrilans()).isTrue();
-        assertThat(frilans.getPeriode().fom()).isNotNull();
-        assertThat(frilans.getPeriode().tom()).isNull();
-        assertThat(frilans.getFrilansOppdrag()).isEmpty();
+        assertThat(frilans.harInntektFraFosterhjem()).isFalse();
+        assertThat(frilans.jobberFremdelesSomFrilans()).isTrue();
+        assertThat(frilans.periode().fom()).isNotNull();
+        assertThat(frilans.periode().tom()).isNull();
+        assertThat(frilans.frilansOppdrag()).isEmpty();
 
         assertThat(ytelse.getOpptjening().getEgenNæring()).isEmpty();
         assertThat(ytelse.getOpptjening().getUtenlandskArbeidsforhold()).isEmpty();
