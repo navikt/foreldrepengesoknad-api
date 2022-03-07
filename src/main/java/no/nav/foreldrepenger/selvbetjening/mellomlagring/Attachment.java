@@ -16,7 +16,7 @@ import no.nav.foreldrepenger.selvbetjening.vedlegg.AttachmentTooLargeException;
 
 public class Attachment {
 
-    public static final DataSize MAX_VEDLEGG_SIZE = DataSize.of(8, DataUnit.MEGABYTES);
+    public static final DataSize MAX_VEDLEGG_SIZE = DataSize.of(16, DataUnit.MEGABYTES);
 
     public final String filename;
     public final byte[] bytes;

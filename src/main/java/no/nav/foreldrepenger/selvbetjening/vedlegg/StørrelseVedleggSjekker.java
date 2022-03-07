@@ -15,13 +15,12 @@ import no.nav.foreldrepenger.selvbetjening.mellomlagring.Attachment;
 
 @Service
 public class StørrelseVedleggSjekker implements VedleggSjekker {
-
     private static final Logger LOG = LoggerFactory.getLogger(StørrelseVedleggSjekker.class);
     private final DataSize maxTotalSize;
     private final DataSize maxEnkelSize;
 
-    public StørrelseVedleggSjekker(@Value("${vedlegg.maxtotal:32MB}") DataSize maxTotal,
-            @Value("${vedlegg.maxenkel:8MB}") DataSize maxEnkel) {
+    public StørrelseVedleggSjekker(@Value("${vedlegg.maxtotal:64MB}") DataSize maxTotal,
+                                   @Value("${vedlegg.maxenkel:16MB}")  DataSize maxEnkel) {
         this.maxTotalSize = maxTotal;
         this.maxEnkelSize = maxEnkel;
     }
@@ -71,7 +70,6 @@ public class StørrelseVedleggSjekker implements VedleggSjekker {
         LOG.info("Sjekker total størrelse for {} vedlegg", vedlegg.length);
         long total = safeStream(vedlegg)
                 .map(v -> v.bytes)
-                .filter(Objects::nonNull)
                 .mapToLong(v -> v.length)
                 .sum();
         if (total > maxTotalSize.toBytes()) {
