@@ -27,15 +27,13 @@ public class StørrelseVedleggSjekker implements VedleggSjekker {
 
     @Override
     public void sjekk(VedleggFrontend... vedlegg) {
-        safeStream(vedlegg)
-                .forEach(this::sjekkStørrelse);
+        safeStream(vedlegg).forEach(this::sjekkStørrelse);
         sjekkTotalStørrelse(vedlegg);
     }
 
     @Override
     public void sjekk(Attachment... vedlegg) {
-        safeStream(vedlegg)
-                .forEach(this::sjekkStørrelse);
+        safeStream(vedlegg).forEach(this::sjekkStørrelse);
         sjekkTotalStørrelse(vedlegg);
 
     }
@@ -50,10 +48,10 @@ public class StørrelseVedleggSjekker implements VedleggSjekker {
     private void sjekkTotalStørrelse(VedleggFrontend... vedlegg) {
         LOG.info("Sjekker total størrelse for {} vedlegg", vedlegg.length);
         long total = safeStream(vedlegg)
-                .map(VedleggFrontend::getContent)
-                .filter(Objects::nonNull)
-                .mapToLong(v -> v.length)
-                .sum();
+            .map(VedleggFrontend::getContent)
+            .filter(Objects::nonNull)
+            .mapToLong(v -> v.length)
+            .sum();
         if (total > maxTotalSize.toBytes()) {
             throw new AttachmentsTooLargeException(total, maxTotalSize);
         }
@@ -69,9 +67,9 @@ public class StørrelseVedleggSjekker implements VedleggSjekker {
     private void sjekkTotalStørrelse(Attachment... vedlegg) {
         LOG.info("Sjekker total størrelse for {} vedlegg", vedlegg.length);
         long total = safeStream(vedlegg)
-                .map(v -> v.bytes)
-                .mapToLong(v -> v.length)
-                .sum();
+            .map(v -> v.bytes)
+            .mapToLong(v -> v.length)
+            .sum();
         if (total > maxTotalSize.toBytes()) {
             throw new AttachmentsTooLargeException(total, maxTotalSize);
         }
