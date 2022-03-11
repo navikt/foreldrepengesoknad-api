@@ -55,8 +55,8 @@ public class RestClientConfiguration implements WebMvcConfigurer {
     @Bean
     public RestOperations customRestTemplate(RestTemplateBuilder b, ClientHttpRequestInterceptor... interceptors) {
         return b.interceptors(interceptors)
-            .setConnectTimeout(CONNECT_TIMEOUT)
-            .setReadTimeout(READ_TIMEOUT)
+//            .setConnectTimeout(CONNECT_TIMEOUT)
+//            .setReadTimeout(READ_TIMEOUT)
             .build();
     }
 
