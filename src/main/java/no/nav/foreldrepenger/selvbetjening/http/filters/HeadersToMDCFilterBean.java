@@ -6,6 +6,7 @@ import static no.nav.foreldrepenger.common.util.Constants.NAV_CALL_ID;
 import static no.nav.foreldrepenger.common.util.Constants.NAV_CONSUMER_ID;
 import static no.nav.foreldrepenger.common.util.Constants.NAV_USER_ID;
 import static no.nav.foreldrepenger.common.util.MDCUtil.toMDC;
+import static org.springframework.core.Ordered.HIGHEST_PRECEDENCE;
 
 import java.io.IOException;
 import java.util.Optional;
@@ -30,7 +31,7 @@ import no.nav.foreldrepenger.selvbetjening.util.CallIdGenerator;
 import no.nav.foreldrepenger.selvbetjening.util.TokenUtil;
 
 @Component
-@Order
+@Order(HIGHEST_PRECEDENCE)
 public class HeadersToMDCFilterBean extends GenericFilterBean {
     private static final Logger LOG = LoggerFactory.getLogger(HeadersToMDCFilterBean.class);
     private final TokenUtil tokenUtil;
