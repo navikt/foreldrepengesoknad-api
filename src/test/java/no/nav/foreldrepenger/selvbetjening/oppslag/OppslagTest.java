@@ -6,12 +6,9 @@ import static org.springframework.test.web.client.response.MockRestResponseCreat
 
 import java.net.URI;
 
-import javax.ws.rs.NotFoundException;
-
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
-import org.mockito.Mock;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.client.RestClientTest;
 import org.springframework.boot.web.client.RestTemplateBuilder;
@@ -29,15 +26,14 @@ import no.nav.foreldrepenger.selvbetjening.util.TokenUtil;
 import no.nav.security.token.support.spring.SpringTokenValidationContextHolder;
 
 @ExtendWith(SpringExtension.class)
-@TestPropertySource(properties = { "oppslag.uri: http://www.oppslag.no",
-        "spring.cloud.vault.enabled=false" })
-@ContextConfiguration(classes = { NotFoundException.class, TokenUtil.class,
-        SpringTokenValidationContextHolder.class })
+@TestPropertySource(properties = {
+    "oppslag.uri: http://www.oppslag.no",
+    "spring.cloud.vault.enabled=false" })
+@ContextConfiguration(classes = {
+    TokenUtil.class,
+    SpringTokenValidationContextHolder.class })
 @RestClientTest
-public class OppslagTest {
-
-    @Mock
-    TokenUtil tokenHandler;
+class OppslagTest {
 
     private OppslagConfig oppslagConfig = new OppslagConfig(URI.create("http://www.vg.no"), true);
     private InnsynConfig innsynConfig = new InnsynConfig(URI.create("http://www.vg.no"), true);
@@ -61,7 +57,7 @@ public class OppslagTest {
     }
 
     @Test
-    public void ping() {
+    void ping() {
         server
                 .expect(ExpectedCount.once(), requestTo(oppslagConfig.pingURI()))
                 .andExpect(method(HttpMethod.GET))

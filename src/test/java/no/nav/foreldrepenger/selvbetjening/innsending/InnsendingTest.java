@@ -6,8 +6,6 @@ import static org.springframework.test.web.client.response.MockRestResponseCreat
 
 import java.net.URI;
 
-import javax.ws.rs.NotFoundException;
-
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -37,18 +35,13 @@ import no.nav.security.token.support.spring.SpringTokenValidationContextHolder;
 
 @ExtendWith(SpringExtension.class)
 @TestPropertySource(properties = { "spring.cloud.vault.enabled=false" })
-@ContextConfiguration(classes = { NotFoundException.class, Image2PDFConverter.class,
-        TokenUtil.class, SpringTokenValidationContextHolder.class })
+@ContextConfiguration(classes = { Image2PDFConverter.class, TokenUtil.class, SpringTokenValidationContextHolder.class })
 @RestClientTest
-
 @ActiveProfiles("test")
 class InnsendingTest {
 
     private static final DataSize MAX_TOTAL = DataSize.of(32, DataUnit.MEGABYTES);
     private static final DataSize MAX_ENKEL = DataSize.of(8, DataUnit.MEGABYTES);
-
-    @Mock
-    TokenUtil tokenHandler;
 
     @Mock
     KryptertMellomlagring storage;

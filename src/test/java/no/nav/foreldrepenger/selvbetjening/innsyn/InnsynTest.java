@@ -6,12 +6,9 @@ import static org.springframework.test.web.client.response.MockRestResponseCreat
 
 import java.net.URI;
 
-import javax.ws.rs.NotFoundException;
-
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
-import org.mockito.Mock;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.client.RestClientTest;
 import org.springframework.boot.web.client.RestTemplateBuilder;
@@ -29,14 +26,10 @@ import no.nav.security.token.support.spring.SpringTokenValidationContextHolder;
 
 @ExtendWith(SpringExtension.class)
 @TestPropertySource(properties = { "spring.cloud.vault.enabled=false" })
-@ContextConfiguration(classes = { NotFoundException.class, TokenUtil.class,
-        SpringTokenValidationContextHolder.class })
+@ContextConfiguration(classes = { TokenUtil.class, SpringTokenValidationContextHolder.class })
 @RestClientTest
 @ActiveProfiles("test")
-public class InnsynTest {
-
-    @Mock
-    TokenUtil tokenHandler;
+class InnsynTest {
     private static final InnsynConfig CFG = innsynCfg();
 
     private static InnsynConfig innsynCfg() {
@@ -58,7 +51,7 @@ public class InnsynTest {
     }
 
     @Test
-    public void uttaksplan() {
+    void uttaksplan() {
         server
                 .expect(ExpectedCount.once(), requestTo(CFG.uttakURI("42")))
                 .andExpect(method(HttpMethod.GET))

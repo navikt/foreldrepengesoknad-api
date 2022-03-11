@@ -31,21 +31,9 @@ no.nav:
           fpsoknad-mottak:
             token-exchange:
               audience: prod-fss:teamforeldrepenger:fpsoknad-mottak
-            well-known-url: ${token.x.well.known.url}
-            grant-type: urn:ietf:params:oauth:grant-type:token-exchange
-            authentication:
-              client-id: ${token.x.client.id}
-              client-jwk: ${token.x.private.jwk}
-              client-auth-method: private_key_jwt
           fpinfo-historikk:
             token-exchange:
               audience: prod-fss:teamforeldrepenger:fpinfo-historikk
-            well-known-url: ${token.x.well.known.url}
-            grant-type: urn:ietf:params:oauth:grant-type:token-exchange
-            authentication:
-              client-id: ${token.x.client.id}
-              client-jwk: ${token.x.private.jwk}
-              client-auth-method: private_key_jwt
 
 oppslag:
   uri: https://fpsoknad-mottak.prod-fss-pub.nais.io/api/
