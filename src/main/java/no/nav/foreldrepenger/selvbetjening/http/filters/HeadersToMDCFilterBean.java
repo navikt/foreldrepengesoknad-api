@@ -1,5 +1,6 @@
 package no.nav.foreldrepenger.selvbetjening.http.filters;
 
+import static no.nav.foreldrepenger.boot.conditionals.EnvUtil.CONFIDENTIAL;
 import static no.nav.foreldrepenger.common.util.Constants.NAV_AUTH_LEVEL;
 import static no.nav.foreldrepenger.common.util.Constants.NAV_CALL_ID;
 import static no.nav.foreldrepenger.common.util.Constants.NAV_CONSUMER_ID;
@@ -48,6 +49,7 @@ public class HeadersToMDCFilterBean extends GenericFilterBean {
     @Override
     public void doFilter(ServletRequest req, ServletResponse response, FilterChain chain)
             throws IOException, ServletException {
+        LOG.info(CONFIDENTIAL, "HeadersToMDCFilterBean er i sving");
         String uri = ((HttpServletRequest) req).getRequestURI();
         putValues((HttpServletRequest) req, uri);
         chain.doFilter(req, response);
