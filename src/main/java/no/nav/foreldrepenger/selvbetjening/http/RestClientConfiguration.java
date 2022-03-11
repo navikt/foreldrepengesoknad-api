@@ -42,7 +42,7 @@ import no.nav.security.token.support.client.spring.oauth2.OAuth2ClientRequestInt
 
 @Configuration
 public class RestClientConfiguration implements WebMvcConfigurer {
-    private static final Duration READ_TIMEOUT = Duration.ofSeconds(30);
+    private static final Duration READ_TIMEOUT = Duration.ofSeconds(40);
     private static final Duration CONNECT_TIMEOUT = Duration.ofSeconds(10);
     private static final Logger LOG = LoggerFactory.getLogger(RestClientConfiguration.class);
 
