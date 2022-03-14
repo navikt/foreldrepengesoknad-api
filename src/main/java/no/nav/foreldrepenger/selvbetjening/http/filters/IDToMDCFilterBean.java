@@ -2,7 +2,6 @@ package no.nav.foreldrepenger.selvbetjening.http.filters;
 
 import static no.nav.foreldrepenger.common.util.Constants.NAV_TOKEN_EXPIRY_ID;
 import static no.nav.foreldrepenger.common.util.MDCUtil.toMDC;
-import static org.springframework.core.Ordered.HIGHEST_PRECEDENCE;
 
 import java.io.IOException;
 
@@ -21,8 +20,8 @@ import org.springframework.web.filter.GenericFilterBean;
 import no.nav.foreldrepenger.selvbetjening.oppslag.Oppslag;
 import no.nav.foreldrepenger.selvbetjening.util.TokenUtil;
 
-@Order(HIGHEST_PRECEDENCE)
 @Component
+@Order(100)
 public class IDToMDCFilterBean extends GenericFilterBean {
 
     private static final Logger LOG = LoggerFactory.getLogger(IDToMDCFilterBean.class);
