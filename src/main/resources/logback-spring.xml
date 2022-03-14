@@ -21,10 +21,10 @@
     </springProfile>
 
     <springProfile name="dev,local,test">
-        <logger name="no.nav.security.token.support" level="trace"/>
+        <logger name="no.nav.security.token.support" level="debug"/>
         <logger name="no.nav.foreldrepenger.selvbetjening" level="trace"/>
         <logger name="org.springframework.web.servlet.resource" level="trace" />
-        <logger name="no.nav.security.token.support.core.validation" level="info" />
+        <logger name="no.nav.security.token.support.core.validation" level="debug" />
     </springProfile>
 
     <!-- Turn off Spring's warning logs for already resolved exceptions -->
