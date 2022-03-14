@@ -16,6 +16,7 @@ public class IdMismatchFilterRegistrationBean extends FilterRegistrationBean<IdM
 
     public IdMismatchFilterRegistrationBean(IdMismatchFilterBean requestFilter) {
         setFilter(requestFilter);
+        setOrder(10);
         setUrlPatterns(urlPatternsFor(REST_SOKNAD, REST_STORAGE, INNSYN));
         LOG.trace("Registrert filter {}", this);
     }
