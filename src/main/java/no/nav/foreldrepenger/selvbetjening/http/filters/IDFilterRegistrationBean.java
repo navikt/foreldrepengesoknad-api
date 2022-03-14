@@ -13,6 +13,7 @@ public class IDFilterRegistrationBean extends FilterRegistrationBean<IDToMDCFilt
 
     public IDFilterRegistrationBean(IDToMDCFilterBean idFilter) {
         setFilter(idFilter);
+        setOrder(100);
         setUrlPatterns(urlPatternsFor("/rest"));
         LOG.trace("Registrert filter {}", this);
     }

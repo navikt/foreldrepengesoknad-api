@@ -1,6 +1,5 @@
 package no.nav.foreldrepenger.selvbetjening.http.filters;
 
-import static no.nav.foreldrepenger.boot.conditionals.EnvUtil.CONFIDENTIAL;
 import static no.nav.foreldrepenger.common.util.Constants.NAV_AUTH_LEVEL;
 import static no.nav.foreldrepenger.common.util.Constants.NAV_CALL_ID;
 import static no.nav.foreldrepenger.common.util.Constants.NAV_CONSUMER_ID;
@@ -19,7 +18,6 @@ import javax.servlet.http.HttpServletRequest;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Value;
-import org.springframework.core.annotation.Order;
 import org.springframework.stereotype.Component;
 import org.springframework.web.filter.GenericFilterBean;
 
@@ -29,7 +27,6 @@ import no.nav.foreldrepenger.selvbetjening.util.CallIdGenerator;
 import no.nav.foreldrepenger.selvbetjening.util.TokenUtil;
 
 @Component
-@Order(10)
 public class HeadersToMDCFilterBean extends GenericFilterBean {
     private static final Logger LOG = LoggerFactory.getLogger(HeadersToMDCFilterBean.class);
 
@@ -47,7 +44,7 @@ public class HeadersToMDCFilterBean extends GenericFilterBean {
 
     @Override
     public void doFilter(ServletRequest req, ServletResponse response, FilterChain chain) throws IOException, ServletException {
-        String uri = ((HttpServletRequest) req).getRequestURI();
+        var uri = ((HttpServletRequest) req).getRequestURI();
         putValues((HttpServletRequest) req, uri);
         chain.doFilter(req, response);
 
@@ -55,7 +52,6 @@ public class HeadersToMDCFilterBean extends GenericFilterBean {
 
     private void putValues(HttpServletRequest request, String uri) {
         try {
-            LOG.info(CONFIDENTIAL, "Subject på token er {}", tokenUtil.getSubject());
             toMDC(NAV_CONSUMER_ID, request.getHeader(NAV_CONSUMER_ID), applicationName);
             toMDC(NAV_USER_ID, Optional.ofNullable(tokenUtil.getSubject()).map(StringUtil::partialMask).orElse("Uautentisert"));
             toMDC(NAV_AUTH_LEVEL, Optional.ofNullable(tokenUtil.getLevel()).map(AuthenticationLevel::name).orElse(AuthenticationLevel.NONE.name()));

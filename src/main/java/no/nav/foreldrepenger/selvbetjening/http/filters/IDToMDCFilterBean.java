@@ -13,7 +13,6 @@ import javax.servlet.http.HttpServletRequest;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.springframework.core.annotation.Order;
 import org.springframework.stereotype.Component;
 import org.springframework.web.filter.GenericFilterBean;
 
@@ -21,7 +20,6 @@ import no.nav.foreldrepenger.selvbetjening.oppslag.Oppslag;
 import no.nav.foreldrepenger.selvbetjening.util.TokenUtil;
 
 @Component
-@Order(100)
 public class IDToMDCFilterBean extends GenericFilterBean {
 
     private static final Logger LOG = LoggerFactory.getLogger(IDToMDCFilterBean.class);
@@ -35,9 +33,8 @@ public class IDToMDCFilterBean extends GenericFilterBean {
     }
 
     @Override
-    public void doFilter(ServletRequest req, ServletResponse res, FilterChain chain)
-            throws IOException, ServletException {
-        String uri = HttpServletRequest.class.cast(req).getRequestURI();
+    public void doFilter(ServletRequest req, ServletResponse res, FilterChain chain) throws IOException, ServletException {
+        var uri = HttpServletRequest.class.cast(req).getRequestURI();
         copyHeadersToMDC(uri);
         chain.doFilter(req, res);
     }
