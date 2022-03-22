@@ -17,7 +17,7 @@ import no.nav.foreldrepenger.common.domain.felles.DokumentType;
 import no.nav.foreldrepenger.common.domain.felles.EttersendingsType;
 import no.nav.foreldrepenger.selvbetjening.config.JacksonConfiguration;
 import no.nav.foreldrepenger.selvbetjening.innsending.InnsendingConnection;
-import no.nav.foreldrepenger.selvbetjening.innsending.domain.Ettersending;
+import no.nav.foreldrepenger.selvbetjening.innsending.domain.EttersendingFrontend;
 
 
 @ExtendWith(SpringExtension.class)
@@ -34,7 +34,7 @@ class EttersendingTilDtoMapperTest {
     void testEttersendingMapper() {
         var type = "foreldrepenger";
         var saksnummer = "952003131";
-        var ettersendelseFraFrontend = new Ettersending(type, saksnummer, null, null, null);
+        var ettersendelseFraFrontend = new EttersendingFrontend(type, saksnummer, null, null, null);
         var ettersendelse = connection.body(ettersendelseFraFrontend);
         assertThat(ettersendelse.getType().name()).isEqualTo(type);
         assertThat(ettersendelse.getSaksnr()).isEqualTo(saksnummer);
@@ -43,7 +43,7 @@ class EttersendingTilDtoMapperTest {
 
     @Test
     void ettersendelseSeraliseringDeseraliseringTest() throws IOException {
-        var ettersendelseFraFrontend = mapper.readValue(bytesFra("json/ettersendelse_I000044.json"), no.nav.foreldrepenger.selvbetjening.innsending.domain.Ettersending.class);
+        var ettersendelseFraFrontend = mapper.readValue(bytesFra("json/ettersendelse_I000044.json"), EttersendingFrontend.class);
         var ettersendelse = connection.body(ettersendelseFraFrontend);
 
         assertThat(ettersendelse.getType()).isEqualTo(EttersendingsType.foreldrepenger);

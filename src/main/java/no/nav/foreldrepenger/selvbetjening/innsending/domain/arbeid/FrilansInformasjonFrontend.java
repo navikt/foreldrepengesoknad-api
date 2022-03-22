@@ -6,12 +6,14 @@ import java.time.LocalDate;
 import java.util.List;
 import java.util.Optional;
 
+import javax.validation.Valid;
+
 import com.fasterxml.jackson.annotation.JsonCreator;
 
 public record FrilansInformasjonFrontend(LocalDate oppstart,
                                          boolean jobberFremdelesSomFrilans,
                                          boolean driverFosterhjem,
-                                         List<FrilansoppdragFrontend> oppdragForNæreVennerEllerFamilieSiste10Mnd) {
+                                         @Valid List<FrilansoppdragFrontend> oppdragForNæreVennerEllerFamilieSiste10Mnd) {
 
     @JsonCreator
     public FrilansInformasjonFrontend(LocalDate oppstart, boolean jobberFremdelesSomFrilans, boolean driverFosterhjem, List<FrilansoppdragFrontend> oppdragForNæreVennerEllerFamilieSiste10Mnd) {

@@ -14,7 +14,6 @@ import java.util.Optional;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.springframework.context.EnvironmentAware;
 import org.springframework.core.env.Environment;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
@@ -45,10 +44,9 @@ import no.nav.security.token.support.spring.validation.interceptor.JwtTokenUnaut
 
 @ControllerAdvice
 @ResponseBody
-public class ApiExceptionHandler extends ResponseEntityExceptionHandler implements EnvironmentAware {
+public class ApiExceptionHandler extends ResponseEntityExceptionHandler {
 
     private final TokenUtil tokenUtil;
-    private Environment env;
 
     public ApiExceptionHandler(TokenUtil tokenUtil) {
         this.tokenUtil = tokenUtil;
@@ -140,8 +138,10 @@ public class ApiExceptionHandler extends ResponseEntityExceptionHandler implemen
     private ResponseEntity<Object> logAndHandle(HttpStatus status, Exception e, WebRequest req, HttpHeaders headers,
             Object... messages) {
         ApiError apiError = apiErrorFra(status, e, messages);
-
-        if (tokenUtil.erAutentisert() && !tokenUtil.erUtløpt()) {
+        if (e instanceof MethodArgumentNotValidException) {
+            //quickfix, ikke log rejected value
+            LOG.warn("[{} ({})] {}", req.getContextPath(), status, messages);
+        } else if (tokenUtil.erAutentisert() && !tokenUtil.erUtløpt()) {
             LOG.warn("[{} ({})] {} {} ({})", req.getContextPath(), subject(), status, apiError.getMessages(),
                     status.value(), e);
         } else {

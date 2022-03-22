@@ -1,7 +1,11 @@
 package no.nav.foreldrepenger.selvbetjening.innsending.domain.tilrettelegging;
 
-public record Arbeidsforhold(String type,
-                             String id,
-                             String risikofaktorer,
-                             String tilretteleggingstiltak) {
+import static no.nav.foreldrepenger.common.domain.validation.InputValideringRegex.FRITEKST;
+
+import javax.validation.constraints.Pattern;
+
+public record Arbeidsforhold(@Pattern(regexp = FRITEKST) String type,
+                             @Pattern(regexp = FRITEKST) String id,
+                             @Pattern(regexp = FRITEKST) String risikofaktorer,
+                             @Pattern(regexp = FRITEKST) String tilretteleggingstiltak) {
 }

@@ -2,10 +2,14 @@ package no.nav.foreldrepenger.selvbetjening.innsending.domain;
 
 import static com.fasterxml.jackson.annotation.JsonTypeInfo.Id.NAME;
 import static java.util.Collections.emptyList;
+import static no.nav.foreldrepenger.common.domain.validation.InputValideringRegex.FRITEKST;
 
 import java.time.LocalDateTime;
 import java.util.List;
 import java.util.Optional;
+
+import javax.validation.Valid;
+import javax.validation.constraints.Pattern;
 
 import com.fasterxml.jackson.annotation.JsonCreator;
 import com.fasterxml.jackson.annotation.JsonSubTypes;
@@ -24,15 +28,24 @@ import lombok.EqualsAndHashCode;
 public abstract sealed class SøknadFrontend permits EngangsstønadFrontend, ForeldrepengesøknadFrontend, SvangerskapspengesøknadFrontend {
 
     private LocalDateTime opprettet;
+    @Pattern(regexp = FRITEKST)
     private final String type;
+    @Pattern(regexp = FRITEKST)
     private final String saksnummer;
+    @Valid
     private final SøkerFrontend søker;
+    @Valid
     private final BarnFrontend barn;
+    @Valid
     private final AnnenForelderFrontend annenForelder;
+    @Valid
     private final UtenlandsoppholdFrontend informasjonOmUtenlandsopphold;
+    @Pattern(regexp = FRITEKST)
     private final String situasjon;
     private final Boolean erEndringssøknad;
+    @Pattern(regexp = FRITEKST)
     private final String tilleggsopplysninger;
+    @Valid
     private final List<VedleggFrontend> vedlegg;
 
     @JsonCreator

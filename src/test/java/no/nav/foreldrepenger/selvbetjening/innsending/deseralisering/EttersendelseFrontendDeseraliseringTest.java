@@ -14,6 +14,7 @@ import org.springframework.test.context.junit.jupiter.SpringExtension;
 import com.fasterxml.jackson.databind.ObjectMapper;
 
 import no.nav.foreldrepenger.selvbetjening.config.JacksonConfiguration;
+import no.nav.foreldrepenger.selvbetjening.innsending.domain.EttersendingFrontend;
 
 @ExtendWith(SpringExtension.class)
 @ContextConfiguration(classes = JacksonConfiguration.class)
@@ -24,7 +25,7 @@ class EttersendelseFrontendDeseraliseringTest {
 
     @Test
     void ettersendelseSeraliseringVirkerTest() throws IOException {
-        var ettersendelse = mapper.readValue(bytesFra("json/ettersendelse_I000044.json"), no.nav.foreldrepenger.selvbetjening.innsending.domain.Ettersending.class);
+        var ettersendelse = mapper.readValue(bytesFra("json/ettersendelse_I000044.json"), EttersendingFrontend.class);
 
         assertThat(ettersendelse.type()).isEqualTo("foreldrepenger");
         assertThat(ettersendelse.saksnummer()).isEqualTo("352003201");

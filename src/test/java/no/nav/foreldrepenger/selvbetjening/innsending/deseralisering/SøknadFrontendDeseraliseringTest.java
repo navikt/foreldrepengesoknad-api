@@ -15,6 +15,8 @@ import org.springframework.test.context.junit.jupiter.SpringExtension;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 
+import no.nav.foreldrepenger.common.domain.BrukerRolle;
+import no.nav.foreldrepenger.common.oppslag.dkif.Målform;
 import no.nav.foreldrepenger.selvbetjening.config.JacksonConfiguration;
 import no.nav.foreldrepenger.selvbetjening.innsending.domain.ForeldrepengesøknadFrontend;
 import no.nav.foreldrepenger.selvbetjening.innsending.domain.SøknadFrontend;
@@ -81,8 +83,8 @@ class SøknadFrontendDeseraliseringTest {
 
         var søker = fs.getSøker();
         assertThat(søker).isNotNull();
-        assertThat(søker.rolle()).isEqualTo("MOR");
-        assertThat(søker.språkkode()).isEqualTo("NB");
+        assertThat(søker.rolle()).isEqualTo(BrukerRolle.MOR);
+        assertThat(søker.språkkode()).isEqualTo(Målform.NB);
         assertThat(søker.erAleneOmOmsorg()).isTrue();
         var frilansInformasjon = søker.frilansInformasjon();
         assertThat(frilansInformasjon).isNotNull();

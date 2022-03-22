@@ -9,8 +9,8 @@ import org.springframework.cloud.client.discovery.DiscoveryClient;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 
+import no.nav.foreldrepenger.common.domain.Fødselsnummer;
 import no.nav.foreldrepenger.selvbetjening.http.UnprotectedRestController;
-import no.nav.foreldrepenger.selvbetjening.oppslag.domain.Fødselsnummer;
 
 @UnprotectedRestController(HistorikkDevController.DEVPATH)
 public class HistorikkDevController {

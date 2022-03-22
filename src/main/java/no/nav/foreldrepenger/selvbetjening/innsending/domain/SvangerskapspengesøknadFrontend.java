@@ -3,6 +3,8 @@ package no.nav.foreldrepenger.selvbetjening.innsending.domain;
 import java.time.LocalDateTime;
 import java.util.List;
 
+import javax.validation.Valid;
+
 import com.fasterxml.jackson.annotation.JsonCreator;
 
 import lombok.EqualsAndHashCode;
@@ -10,6 +12,7 @@ import no.nav.foreldrepenger.selvbetjening.innsending.domain.tilrettelegging.Til
 
 @EqualsAndHashCode(callSuper = true)
 public final class SvangerskapspengesøknadFrontend extends SøknadFrontend {
+    @Valid
     private final List<Tilrettelegging> tilrettelegging;
 
     @JsonCreator

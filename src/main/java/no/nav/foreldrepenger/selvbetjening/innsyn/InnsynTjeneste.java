@@ -1,7 +1,5 @@
 package no.nav.foreldrepenger.selvbetjening.innsyn;
 
-import static no.nav.foreldrepenger.common.util.StringUtil.partialMask;
-
 import java.util.List;
 
 import org.slf4j.Logger;
@@ -9,6 +7,7 @@ import org.slf4j.LoggerFactory;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnProperty;
 import org.springframework.stereotype.Service;
 
+import no.nav.foreldrepenger.common.domain.Fødselsnummer;
 import no.nav.foreldrepenger.selvbetjening.innsyn.saker.Sak;
 import no.nav.foreldrepenger.selvbetjening.innsyn.sakerv2.Saker;
 import no.nav.foreldrepenger.selvbetjening.innsyn.uttaksplan.Uttaksplan;
@@ -32,8 +31,8 @@ public class InnsynTjeneste implements Innsyn {
     }
 
     @Override
-    public Uttaksplan hentUttaksplanAnnenPart(String annenPart) {
-        LOG.info("Henter uttaksplan for annen part {}", partialMask(annenPart));
+    public Uttaksplan hentUttaksplanAnnenPart(Fødselsnummer annenPart) {
+        LOG.info("Henter uttaksplan for annen part {}", annenPart);
         return connection.hentUttaksplanAnnenPart(annenPart);
     }
 

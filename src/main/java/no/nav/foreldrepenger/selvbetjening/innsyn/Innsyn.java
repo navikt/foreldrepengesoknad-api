@@ -2,6 +2,7 @@ package no.nav.foreldrepenger.selvbetjening.innsyn;
 
 import java.util.List;
 
+import no.nav.foreldrepenger.common.domain.Fødselsnummer;
 import no.nav.foreldrepenger.selvbetjening.http.Pingable;
 import no.nav.foreldrepenger.selvbetjening.http.RetryAware;
 import no.nav.foreldrepenger.selvbetjening.innsyn.saker.Sak;
@@ -12,7 +13,7 @@ public interface Innsyn extends Pingable, RetryAware {
 
     Uttaksplan hentUttaksplan(String saksnummer);
 
-    Uttaksplan hentUttaksplanAnnenPart(String annenPart);
+    Uttaksplan hentUttaksplanAnnenPart(Fødselsnummer annenPart);
 
     Saker hentSakerV2();
 

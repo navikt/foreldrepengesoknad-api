@@ -8,7 +8,6 @@ import java.util.ArrayList;
 import no.nav.foreldrepenger.common.domain.BrukerRolle;
 import no.nav.foreldrepenger.common.domain.Søker;
 import no.nav.foreldrepenger.common.domain.Ytelse;
-import no.nav.foreldrepenger.common.oppslag.dkif.Målform;
 import no.nav.foreldrepenger.selvbetjening.innsending.domain.EngangsstønadFrontend;
 
 final class EngangsstønadMapper {
@@ -29,7 +28,7 @@ final class EngangsstønadMapper {
         if (søker == null) {
             throw new IllegalStateException("Kan ikke ha tom søkerobjekt");
         }
-        return new Søker(BrukerRolle.MOR, søker.språkkode() != null ? Målform.valueOf(søker.språkkode().toUpperCase()) : null);
+        return new Søker(BrukerRolle.MOR, søker.språkkode());
     }
 
     private static Ytelse tilYtelse(EngangsstønadFrontend e) {

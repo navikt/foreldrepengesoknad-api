@@ -6,6 +6,7 @@ import org.springframework.boot.context.properties.ConfigurationProperties;
 import org.springframework.boot.context.properties.ConstructorBinding;
 import org.springframework.boot.context.properties.bind.DefaultValue;
 
+import no.nav.foreldrepenger.common.domain.Fødselsnummer;
 import no.nav.foreldrepenger.selvbetjening.http.AbstractConfig;
 
 @ConfigurationProperties(prefix = "innsyn")
@@ -40,8 +41,8 @@ public class InnsynConfig extends AbstractConfig {
         return uri(getUri(), UTTAKSPLAN, queryParams(SAKSNUMMER, saksnummer));
     }
 
-    URI uttakURIForAnnenPart(String annenPart) {
-        return uri(getUri(), UTTAKSPLANANNEN, queryParams(ANNENPART, annenPart));
+    URI uttakURIForAnnenPart(Fødselsnummer annenPart) {
+        return uri(getUri(), UTTAKSPLANANNEN, queryParams(ANNENPART, annenPart.value()));
     }
 
     URI fpsakV2URI() {

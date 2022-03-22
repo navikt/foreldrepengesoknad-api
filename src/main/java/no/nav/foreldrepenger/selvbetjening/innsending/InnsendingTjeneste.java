@@ -12,8 +12,8 @@ import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnProperty;
 import org.springframework.stereotype.Service;
 
-import no.nav.foreldrepenger.selvbetjening.innsending.domain.Ettersending;
-import no.nav.foreldrepenger.selvbetjening.innsending.domain.Kvittering;
+import no.nav.foreldrepenger.common.domain.Kvittering;
+import no.nav.foreldrepenger.selvbetjening.innsending.domain.EttersendingFrontend;
 import no.nav.foreldrepenger.selvbetjening.innsending.domain.SøknadFrontend;
 import no.nav.foreldrepenger.selvbetjening.innsending.domain.VedleggFrontend;
 import no.nav.foreldrepenger.selvbetjening.innsending.domain.tilbakebetaling.TilbakebetalingUttalelse;
@@ -52,7 +52,7 @@ public class InnsendingTjeneste implements Innsending {
     }
 
     @Override
-    public Kvittering ettersend(Ettersending e) {
+    public Kvittering ettersend(EttersendingFrontend e) {
         LOG.info("Ettersender for sak {}", e.saksnummer());
         hentOgSjekk(e.vedlegg());
         if (e.dialogId() != null) {
@@ -84,7 +84,7 @@ public class InnsendingTjeneste implements Innsending {
         return new VedleggFrontend(pdfGenerator.generate(u), "Tekst fra bruker", id(), u.brukerTekst().dokumentType());
     }
 
-    private static TilbakebetalingUttalelse uttalelseFra(Ettersending e) {
+    private static TilbakebetalingUttalelse uttalelseFra(EttersendingFrontend e) {
         return new TilbakebetalingUttalelse(
                 e.type(),
                 e.saksnummer(),
