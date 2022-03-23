@@ -9,8 +9,8 @@ import org.springframework.context.EnvironmentAware;
 import org.springframework.core.env.Environment;
 import org.springframework.stereotype.Service;
 
+import no.nav.foreldrepenger.common.domain.Fødselsnummer;
 import no.nav.foreldrepenger.selvbetjening.historikk.MinidialogInnslag;
-import no.nav.foreldrepenger.selvbetjening.oppslag.domain.Fødselsnummer;
 
 @Service
 @ConditionalOnProperty(name = "stub.minidialog", havingValue = "false", matchIfMissing = true)

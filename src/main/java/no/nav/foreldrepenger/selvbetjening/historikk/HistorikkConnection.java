@@ -10,8 +10,8 @@ import java.util.Optional;
 import org.springframework.stereotype.Component;
 import org.springframework.web.client.RestOperations;
 
+import no.nav.foreldrepenger.common.domain.Fødselsnummer;
 import no.nav.foreldrepenger.selvbetjening.http.AbstractRestConnection;
-import no.nav.foreldrepenger.selvbetjening.oppslag.domain.Fødselsnummer;
 
 @Component
 public class HistorikkConnection extends AbstractRestConnection {
@@ -38,7 +38,7 @@ public class HistorikkConnection extends AbstractRestConnection {
     }
 
     public List<HistorikkInnslag> hentHistorikk(Fødselsnummer fnr) {
-        return hentHistorikk(config.historikkPreprodURI(fnr.getFnr()));
+        return hentHistorikk(config.historikkPreprodURI(fnr.value()));
     }
 
     private List<HistorikkInnslag> hentHistorikk(URI uri) {

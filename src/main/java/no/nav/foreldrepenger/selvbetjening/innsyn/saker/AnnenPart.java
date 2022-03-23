@@ -1,38 +1,19 @@
 package no.nav.foreldrepenger.selvbetjening.innsyn.saker;
 
-import static no.nav.foreldrepenger.common.util.StringUtil.partialMask;
+import javax.validation.Valid;
 
-import com.fasterxml.jackson.annotation.JsonCreator;
-import com.fasterxml.jackson.annotation.JsonProperty;
+import no.nav.foreldrepenger.common.domain.AktørId;
+import no.nav.foreldrepenger.common.domain.Fødselsnummer;
 
-public class AnnenPart {
-    private final String fnr;
-    private final AktørId aktørId;
-    private final Navn navn;
-
-    @JsonCreator
-    public AnnenPart(@JsonProperty("fnr") String fnr, @JsonProperty("aktørId") AktørId aktørId,
-            @JsonProperty("navn") Navn navn) {
-        this.fnr = fnr;
-        this.aktørId = aktørId;
-        this.navn = navn;
-    }
-
-    public String getFnr() {
-        return fnr;
-    }
-
-    public AktørId getAktørId() {
-        return aktørId;
-    }
-
-    public Navn getNavn() {
-        return navn;
-    }
-
+public record AnnenPart(@Valid Fødselsnummer fnr,
+                        @Valid AktørId aktørId,
+                        @Valid Navn navn) {
     @Override
     public String toString() {
-        return getClass().getSimpleName() + " [fnr=" + partialMask(fnr) + ", aktørId=" + aktørId + ", navn="
-                + navn + "]";
+        return "AnnenPart{" +
+            "fnr='" + fnr + '\'' +
+            ", aktørId=" + aktørId +
+            ", navn=" + navn +
+            '}';
     }
 }

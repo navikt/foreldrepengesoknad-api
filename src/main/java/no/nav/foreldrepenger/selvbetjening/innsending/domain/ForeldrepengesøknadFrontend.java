@@ -1,7 +1,12 @@
 package no.nav.foreldrepenger.selvbetjening.innsending.domain;
 
+import static no.nav.foreldrepenger.common.domain.validation.InputValideringRegex.FRITEKST;
+
 import java.time.LocalDateTime;
 import java.util.List;
+
+import javax.validation.Valid;
+import javax.validation.constraints.Pattern;
 
 import com.fasterxml.jackson.annotation.JsonCreator;
 
@@ -11,7 +16,9 @@ import lombok.EqualsAndHashCode;
 @EqualsAndHashCode(callSuper = true)
 public final class ForeldrepengesøknadFrontend extends SøknadFrontend {
 
+    @Pattern(regexp = FRITEKST)
     private final String dekningsgrad;
+    @Valid
     private final List<UttaksplanPeriode> uttaksplan;
 
     @Builder

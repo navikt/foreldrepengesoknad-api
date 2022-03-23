@@ -9,6 +9,7 @@ import java.util.Set;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnProperty;
 import org.springframework.stereotype.Service;
 
+import no.nav.foreldrepenger.common.domain.Fødselsnummer;
 import no.nav.foreldrepenger.selvbetjening.innsyn.saker.Behandling;
 import no.nav.foreldrepenger.selvbetjening.innsyn.saker.Sak;
 import no.nav.foreldrepenger.selvbetjening.innsyn.sakerv2.Saker;
@@ -41,7 +42,7 @@ public class InnsynTjenesteStub implements Innsyn {
     }
 
     @Override
-    public Uttaksplan hentUttaksplanAnnenPart(String annenPart) {
+    public Uttaksplan hentUttaksplanAnnenPart(Fødselsnummer annenPart) {
         return null;
     }
 

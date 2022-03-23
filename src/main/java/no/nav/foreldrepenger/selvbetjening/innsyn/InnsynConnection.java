@@ -13,6 +13,7 @@ import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Component;
 import org.springframework.web.client.RestOperations;
 
+import no.nav.foreldrepenger.common.domain.Fødselsnummer;
 import no.nav.foreldrepenger.selvbetjening.http.AbstractRestConnection;
 import no.nav.foreldrepenger.selvbetjening.innsyn.saker.Sak;
 import no.nav.foreldrepenger.selvbetjening.innsyn.sakerv2.Saker;
@@ -44,7 +45,7 @@ public class InnsynConnection extends AbstractRestConnection {
         return getIfEnabled(cfg.uttakURI(saksnummer), Uttaksplan.class, false);
     }
 
-    public Uttaksplan hentUttaksplanAnnenPart(String annenPart) {
+    public Uttaksplan hentUttaksplanAnnenPart(Fødselsnummer annenPart) {
         return getIfEnabled(cfg.uttakURIForAnnenPart(annenPart), Uttaksplan.class, false);
     }
 

@@ -6,9 +6,9 @@ import org.springframework.boot.context.properties.ConfigurationProperties;
 import org.springframework.boot.context.properties.ConstructorBinding;
 import org.springframework.boot.context.properties.bind.DefaultValue;
 
+import no.nav.foreldrepenger.common.domain.Fødselsnummer;
 import no.nav.foreldrepenger.common.util.Pair;
 import no.nav.foreldrepenger.selvbetjening.http.AbstractConfig;
-import no.nav.foreldrepenger.selvbetjening.oppslag.domain.Fødselsnummer;
 
 @ConfigurationProperties("historikk")
 public class HistorikkConfig extends AbstractConfig {
@@ -40,7 +40,7 @@ public class HistorikkConfig extends AbstractConfig {
 
     public URI vedleggPreprodURI(Fødselsnummer fnr, String saksnr) {
         return uri(getUri(), HISTORIKK + "/dev/vedlegg",
-                queryParams(Pair.of(SAKSNUMMER, saksnr), Pair.of(FNR, fnr.getFnr())));
+                queryParams(Pair.of(SAKSNUMMER, saksnr), Pair.of(FNR, fnr.value())));
     }
 
     @Override

@@ -7,7 +7,7 @@ import no.nav.foreldrepenger.common.domain.felles.EttersendingsType;
 import no.nav.foreldrepenger.common.domain.felles.InnsendingsType;
 import no.nav.foreldrepenger.common.domain.felles.PåkrevdVedlegg;
 import no.nav.foreldrepenger.common.domain.felles.VedleggMetaData;
-import no.nav.foreldrepenger.selvbetjening.innsending.domain.Ettersending;
+import no.nav.foreldrepenger.selvbetjening.innsending.domain.EttersendingFrontend;
 import no.nav.foreldrepenger.selvbetjening.innsending.domain.VedleggFrontend;
 
 public final class EttersendingMapper {
@@ -15,7 +15,7 @@ public final class EttersendingMapper {
     private EttersendingMapper() {
     }
 
-    public static no.nav.foreldrepenger.common.domain.felles.Ettersending tilEttersending(Ettersending ettersending) {
+    public static no.nav.foreldrepenger.common.domain.felles.Ettersending tilEttersending(EttersendingFrontend ettersending) {
         var ettersendingDto = new no.nav.foreldrepenger.common.domain.felles.Ettersending(
             ettersending.type() != null ? EttersendingsType.valueOf(ettersending.type()) : null,
             ettersending.saksnummer(),

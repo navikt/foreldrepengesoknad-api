@@ -9,7 +9,6 @@ import static org.apache.commons.lang3.BooleanUtils.toBoolean;
 import java.util.ArrayList;
 import java.util.List;
 
-import no.nav.foreldrepenger.common.domain.BrukerRolle;
 import no.nav.foreldrepenger.common.domain.Søker;
 import no.nav.foreldrepenger.common.domain.felles.ProsentAndel;
 import no.nav.foreldrepenger.common.domain.foreldrepenger.Dekningsgrad;
@@ -29,7 +28,6 @@ import no.nav.foreldrepenger.common.domain.foreldrepenger.fordeling.Stønadskont
 import no.nav.foreldrepenger.common.domain.foreldrepenger.fordeling.UtsettelsesPeriode;
 import no.nav.foreldrepenger.common.domain.foreldrepenger.fordeling.UtsettelsesÅrsak;
 import no.nav.foreldrepenger.common.domain.foreldrepenger.fordeling.UttaksPeriode;
-import no.nav.foreldrepenger.common.oppslag.dkif.Målform;
 import no.nav.foreldrepenger.selvbetjening.innsending.domain.ForeldrepengesøknadFrontend;
 import no.nav.foreldrepenger.selvbetjening.innsending.domain.UttaksplanPeriode;
 
@@ -59,9 +57,7 @@ final class ForeldrepengerMapper {
         if (søker == null) {
             throw new IllegalStateException("Kan ikke ha tom søkerobjekt");
         }
-        return new Søker(
-            søker.rolle() != null ? BrukerRolle.valueOf(søker.rolle()) : null,
-            søker.språkkode() != null ? Målform.valueOf(søker.språkkode()) : null);
+        return new Søker(søker.rolle(), søker.språkkode());
     }
 
 

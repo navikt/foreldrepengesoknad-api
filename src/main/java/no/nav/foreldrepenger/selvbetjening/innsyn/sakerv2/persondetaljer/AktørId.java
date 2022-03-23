@@ -1,12 +1,17 @@
 package no.nav.foreldrepenger.selvbetjening.innsyn.sakerv2.persondetaljer;
 
-import com.fasterxml.jackson.annotation.JsonCreator;
-import com.fasterxml.jackson.annotation.JsonProperty;
-import no.nav.foreldrepenger.selvbetjening.innsyn.sakerv2.PersonDetaljer;
+import static no.nav.foreldrepenger.common.domain.validation.InputValideringRegex.FRITEKST;
 
 import java.util.Objects;
 
-public record AktørId(String value) implements PersonDetaljer {
+import javax.validation.constraints.Pattern;
+
+import com.fasterxml.jackson.annotation.JsonCreator;
+import com.fasterxml.jackson.annotation.JsonProperty;
+
+import no.nav.foreldrepenger.selvbetjening.innsyn.sakerv2.PersonDetaljer;
+
+public record AktørId(@Pattern(regexp = FRITEKST) String value) implements PersonDetaljer {
 
     @JsonCreator
     public AktørId {

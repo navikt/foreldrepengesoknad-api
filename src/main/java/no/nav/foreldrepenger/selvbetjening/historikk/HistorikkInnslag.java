@@ -11,9 +11,9 @@ import com.fasterxml.jackson.annotation.JsonSubTypes;
 import com.fasterxml.jackson.annotation.JsonSubTypes.Type;
 import com.fasterxml.jackson.annotation.JsonTypeInfo;
 
+import no.nav.foreldrepenger.common.domain.AktørId;
+import no.nav.foreldrepenger.common.domain.Fødselsnummer;
 import no.nav.foreldrepenger.selvbetjening.innsending.InnsendingInnslag;
-import no.nav.foreldrepenger.selvbetjening.innsyn.saker.AktørId;
-import no.nav.foreldrepenger.selvbetjening.oppslag.domain.Fødselsnummer;
 
 @JsonTypeInfo(use = NAME, include = PROPERTY, property = "type")
 @JsonSubTypes({

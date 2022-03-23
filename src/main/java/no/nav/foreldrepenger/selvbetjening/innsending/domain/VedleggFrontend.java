@@ -1,6 +1,10 @@
 package no.nav.foreldrepenger.selvbetjening.innsending.domain;
 
+import static no.nav.foreldrepenger.common.domain.validation.InputValideringRegex.FRITEKST;
+
 import java.net.URI;
+
+import javax.validation.constraints.Pattern;
 
 import com.fasterxml.jackson.annotation.JsonCreator;
 
@@ -10,10 +14,15 @@ import lombok.EqualsAndHashCode;
 public class VedleggFrontend {
 
     private byte[] content;
+    @Pattern(regexp = FRITEKST)
     private final String beskrivelse;
+    @Pattern(regexp = FRITEKST)
     private final String id;
+    @Pattern(regexp = FRITEKST)
     private final String innsendingsType;
+    @Pattern(regexp = FRITEKST)
     private final String skjemanummer;
+    @Pattern(regexp = FRITEKST)
     private final String uuid;
     private final URI url;
 

@@ -3,7 +3,7 @@ package no.nav.foreldrepenger.selvbetjening.historikk;
 import com.fasterxml.jackson.annotation.JsonCreator;
 import com.fasterxml.jackson.annotation.JsonProperty;
 
-import no.nav.foreldrepenger.selvbetjening.oppslag.domain.Fødselsnummer;
+import no.nav.foreldrepenger.common.domain.Fødselsnummer;
 
 public class InntektsmeldingInnslag extends HistorikkInnslag {
 

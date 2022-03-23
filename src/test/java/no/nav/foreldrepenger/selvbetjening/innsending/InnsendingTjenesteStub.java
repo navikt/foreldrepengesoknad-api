@@ -15,8 +15,8 @@ import org.springframework.stereotype.Service;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 
-import no.nav.foreldrepenger.selvbetjening.innsending.domain.Ettersending;
-import no.nav.foreldrepenger.selvbetjening.innsending.domain.Kvittering;
+import no.nav.foreldrepenger.common.domain.Kvittering;
+import no.nav.foreldrepenger.selvbetjening.innsending.domain.EttersendingFrontend;
 import no.nav.foreldrepenger.selvbetjening.innsending.domain.SøknadFrontend;
 
 @Service
@@ -37,7 +37,7 @@ public class InnsendingTjenesteStub implements Innsending {
     }
 
     @Override
-    public Kvittering ettersend(Ettersending ettersending) {
+    public Kvittering ettersend(EttersendingFrontend ettersending) {
         return postStub(ettersending);
     }
 
@@ -62,7 +62,7 @@ public class InnsendingTjenesteStub implements Innsending {
         return STUB;
     }
 
-    private Kvittering postStub(Ettersending ettersending) {
+    private Kvittering postStub(EttersendingFrontend ettersending) {
         var dto = tilEttersending(ettersending);
 
         try {

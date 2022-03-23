@@ -1,26 +1,29 @@
 package no.nav.foreldrepenger.selvbetjening.innsending.domain;
 
 import static com.fasterxml.jackson.annotation.JsonInclude.Include.NON_EMPTY;
+import static no.nav.foreldrepenger.common.domain.validation.InputValideringRegex.FRITEKST;
 
 import java.util.Collections;
 import java.util.List;
 import java.util.Optional;
+
+import javax.validation.constraints.Pattern;
 
 import com.fasterxml.jackson.annotation.JsonCreator;
 import com.fasterxml.jackson.annotation.JsonInclude;
 
 // TODO: Skriv om til superklasse og subklasser basert på type
 @JsonInclude(NON_EMPTY)
-public record UttaksplanPeriode(String type,
+public record UttaksplanPeriode(@Pattern(regexp = FRITEKST) String type,
                                 Double samtidigUttakProsent,
                                 Double stillingsprosent,
-                                List<String> orgnumre,
-                                List<String> vedlegg,
-                                String forelder,
-                                String konto,
-                                String morsAktivitetIPerioden,
-                                String status,
-                                String årsak,
+                                List<@Pattern(regexp = FRITEKST) String> orgnumre,
+                                List<@Pattern(regexp = FRITEKST) String> vedlegg,
+                                @Pattern(regexp = FRITEKST) String forelder,
+                                @Pattern(regexp = FRITEKST) String konto,
+                                @Pattern(regexp = FRITEKST) String morsAktivitetIPerioden,
+                                @Pattern(regexp = FRITEKST) String status,
+                                @Pattern(regexp = FRITEKST) String årsak,
                                 Tidsperiode tidsperiode,
                                 boolean erArbeidstaker,
                                 boolean erFrilanser,

@@ -6,7 +6,7 @@ import java.util.List;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnProperty;
 import org.springframework.stereotype.Service;
 
-import no.nav.foreldrepenger.selvbetjening.oppslag.domain.Fødselsnummer;
+import no.nav.foreldrepenger.common.domain.Fødselsnummer;
 
 @Service
 @ConditionalOnProperty(name = "stub.historikk", havingValue = "true")

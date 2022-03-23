@@ -5,7 +5,7 @@ import java.time.LocalDate;
 import com.fasterxml.jackson.annotation.JsonCreator;
 import com.fasterxml.jackson.annotation.JsonProperty;
 
-import no.nav.foreldrepenger.selvbetjening.oppslag.domain.Fødselsnummer;
+import no.nav.foreldrepenger.common.domain.Fødselsnummer;
 
 public class MinidialogInnslag extends HistorikkInnslag {
 

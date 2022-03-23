@@ -18,10 +18,10 @@ import org.springframework.web.client.RestOperations;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 
+import no.nav.foreldrepenger.common.domain.Kvittering;
 import no.nav.foreldrepenger.common.domain.Søknad;
 import no.nav.foreldrepenger.selvbetjening.http.AbstractRestConnection;
-import no.nav.foreldrepenger.selvbetjening.innsending.domain.Ettersending;
-import no.nav.foreldrepenger.selvbetjening.innsending.domain.Kvittering;
+import no.nav.foreldrepenger.selvbetjening.innsending.domain.EttersendingFrontend;
 import no.nav.foreldrepenger.selvbetjening.innsending.domain.SøknadFrontend;
 import no.nav.foreldrepenger.selvbetjening.innsending.domain.VedleggFrontend;
 import no.nav.foreldrepenger.selvbetjening.innsending.mapper.SøknadMapper;
@@ -59,7 +59,7 @@ public class InnsendingConnection extends AbstractRestConnection {
         return postIfEnabled(config.innsendingURI(), body(søknad));
     }
 
-    public Kvittering ettersend(Ettersending ettersending) {
+    public Kvittering ettersend(EttersendingFrontend ettersending) {
         return postIfEnabled(config.ettersendingURI(), body(ettersending));
     }
 
@@ -85,7 +85,7 @@ public class InnsendingConnection extends AbstractRestConnection {
         return dto;
     }
 
-    public no.nav.foreldrepenger.common.domain.felles.Ettersending body(Ettersending ettersending) {
+    public no.nav.foreldrepenger.common.domain.felles.Ettersending body(EttersendingFrontend ettersending) {
         var dto = tilEttersending(ettersending);
         ettersending.vedlegg().forEach(v -> dto.getVedlegg().add(tilVedlegg(convert(v))));
         return dto;

@@ -2,11 +2,14 @@ package no.nav.foreldrepenger.selvbetjening.innsending.domain;
 
 import static com.fasterxml.jackson.annotation.JsonInclude.Include.NON_EMPTY;
 import static java.util.Collections.emptyList;
+import static no.nav.foreldrepenger.common.domain.validation.InputValideringRegex.FRITEKST;
 
 import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
+
+import javax.validation.constraints.Pattern;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonInclude;
@@ -14,17 +17,17 @@ import com.fasterxml.jackson.annotation.JsonInclude;
 @JsonInclude(NON_EMPTY)
 public record BarnFrontend(List<LocalDate> fødselsdatoer,
                            int antallBarn,
-                           List<String> terminbekreftelse,
+                           List<@Pattern(regexp = FRITEKST) String> terminbekreftelse,
                            LocalDate termindato,
                            LocalDate terminbekreftelseDato,
                            LocalDate adopsjonsdato,
-                           List<String> adopsjonsvedtak,
+                           List<@Pattern(regexp = FRITEKST) String> adopsjonsvedtak,
                            LocalDate ankomstdato,
                            boolean adopsjonAvEktefellesBarn,
                            boolean søkerAdopsjonAlene,
                            LocalDate foreldreansvarsdato,
-                           List<String> omsorgsovertakelse,
-                           List<String> dokumentasjonAvAleneomsorg) {
+                           List<@Pattern(regexp = FRITEKST) String> omsorgsovertakelse,
+                           List<@Pattern(regexp = FRITEKST) String> dokumentasjonAvAleneomsorg) {
 
     public BarnFrontend(List<LocalDate> fødselsdatoer, int antallBarn, List<String> terminbekreftelse, LocalDate termindato,
                         LocalDate terminbekreftelseDato, LocalDate adopsjonsdato, List<String> adopsjonsvedtak,

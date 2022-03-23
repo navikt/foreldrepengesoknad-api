@@ -1,46 +1,25 @@
 package no.nav.foreldrepenger.selvbetjening.innsyn.saker;
 
-import com.fasterxml.jackson.annotation.JsonCreator;
-import com.fasterxml.jackson.annotation.JsonProperty;
+import static no.nav.foreldrepenger.common.domain.validation.InputValideringRegex.FRITEKST;
+import static no.nav.foreldrepenger.common.util.StringUtil.mask;
 
-import lombok.EqualsAndHashCode;
+import javax.validation.constraints.Pattern;
 
-@EqualsAndHashCode
-public class Navn {
-    private final String fornavn;
-    private final String mellomnavn;
-    private final String etternavn;
-    private final Kjønn kjønn;
+import com.fasterxml.jackson.annotation.JsonPropertyOrder;
 
-    @JsonCreator
-    public Navn(@JsonProperty("fornavn") String fornavn, @JsonProperty("mellomnavn") String mellomnavn,
-            @JsonProperty("etternavn") String etternavn, @JsonProperty("kjønn") Kjønn kjønn) {
-        this.fornavn = fornavn;
-        this.mellomnavn = mellomnavn;
-        this.etternavn = etternavn;
-        this.kjønn = kjønn;
-    }
-
-    public Kjønn getKjønn() {
-        return kjønn;
-    }
-
-    public String getFornavn() {
-        return fornavn;
-    }
-
-    public String getMellomnavn() {
-        return mellomnavn;
-    }
-
-    public String getEtternavn() {
-        return etternavn;
-    }
+@JsonPropertyOrder({"fornavn", "mellomnavn", "etternavn", "kjønn"})
+public record Navn(@Pattern(regexp = FRITEKST) String fornavn,
+                   @Pattern(regexp = FRITEKST) String mellomnavn,
+                   @Pattern(regexp = FRITEKST) String etternavn,
+                   Kjønn kjønn) {
 
     @Override
     public String toString() {
-        return getClass().getSimpleName() + " [fornavn=" + fornavn + ", mellomnavn=" + mellomnavn + ", etternavn=" + etternavn + ", kjønn=" + kjønn
-                + "]";
+        return "Navn{" +
+            "fornavn='" + mask(fornavn) + '\'' +
+            ", mellomnavn='" +  mask(mellomnavn) + '\'' +
+            ", etternavn='" +  mask(etternavn) + '\'' +
+            ", kjønn=" + kjønn +
+            '}';
     }
-
 }

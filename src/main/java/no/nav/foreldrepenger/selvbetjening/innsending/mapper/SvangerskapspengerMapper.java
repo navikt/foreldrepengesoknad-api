@@ -25,7 +25,6 @@ import no.nav.foreldrepenger.common.domain.svangerskapspenger.tilrettelegging.ar
 import no.nav.foreldrepenger.common.domain.svangerskapspenger.tilrettelegging.arbeidsforhold.PrivatArbeidsgiver;
 import no.nav.foreldrepenger.common.domain.svangerskapspenger.tilrettelegging.arbeidsforhold.SelvstendigNæringsdrivende;
 import no.nav.foreldrepenger.common.domain.svangerskapspenger.tilrettelegging.arbeidsforhold.Virksomhet;
-import no.nav.foreldrepenger.common.oppslag.dkif.Målform;
 import no.nav.foreldrepenger.selvbetjening.innsending.domain.SvangerskapspengesøknadFrontend;
 
 final class SvangerskapspengerMapper {
@@ -46,7 +45,7 @@ final class SvangerskapspengerMapper {
         if (søker == null) {
             throw new IllegalStateException("Kan ikke ha tom søkerobjekt");
         }
-        return new Søker(BrukerRolle.MOR, søker.språkkode() != null ? Målform.valueOf(søker.språkkode()) : null);
+        return new Søker(BrukerRolle.MOR, søker.språkkode());
     }
 
     public static Svangerskapspenger tilYtelse(SvangerskapspengesøknadFrontend s) {

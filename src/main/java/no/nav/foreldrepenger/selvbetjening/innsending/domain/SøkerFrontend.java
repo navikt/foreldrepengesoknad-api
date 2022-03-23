@@ -5,18 +5,22 @@ import static java.util.Collections.emptyList;
 import java.util.List;
 import java.util.Optional;
 
+import javax.validation.Valid;
+
+import no.nav.foreldrepenger.common.domain.BrukerRolle;
+import no.nav.foreldrepenger.common.oppslag.dkif.Målform;
 import no.nav.foreldrepenger.selvbetjening.innsending.domain.arbeid.AnnenInntektFrontend;
 import no.nav.foreldrepenger.selvbetjening.innsending.domain.arbeid.FrilansInformasjonFrontend;
 import no.nav.foreldrepenger.selvbetjening.innsending.domain.arbeid.SelvstendigNæringsdrivendeInformasjonFrontend;
 
-public record SøkerFrontend(String rolle,
-                            String språkkode,
+public record SøkerFrontend(BrukerRolle rolle,
+                            Målform språkkode,
                             Boolean erAleneOmOmsorg,
-                            FrilansInformasjonFrontend frilansInformasjon,
-                            List<SelvstendigNæringsdrivendeInformasjonFrontend> selvstendigNæringsdrivendeInformasjon,
-                            List<AnnenInntektFrontend> andreInntekterSiste10Mnd) {
+                            @Valid FrilansInformasjonFrontend frilansInformasjon,
+                            @Valid List<SelvstendigNæringsdrivendeInformasjonFrontend> selvstendigNæringsdrivendeInformasjon,
+                            @Valid List<AnnenInntektFrontend> andreInntekterSiste10Mnd) {
 
-    public SøkerFrontend(String rolle, String språkkode, Boolean erAleneOmOmsorg, FrilansInformasjonFrontend frilansInformasjon,
+    public SøkerFrontend(BrukerRolle rolle, Målform språkkode, Boolean erAleneOmOmsorg, FrilansInformasjonFrontend frilansInformasjon,
                          List<SelvstendigNæringsdrivendeInformasjonFrontend> selvstendigNæringsdrivendeInformasjon,
                          List<AnnenInntektFrontend> andreInntekterSiste10Mnd) {
         this.rolle = rolle;
