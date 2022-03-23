@@ -14,9 +14,9 @@ import org.springframework.stereotype.Component;
 import org.springframework.web.client.RestOperations;
 
 import no.nav.foreldrepenger.common.domain.Fødselsnummer;
+import no.nav.foreldrepenger.common.innsyn.v2.Saker;
 import no.nav.foreldrepenger.selvbetjening.http.AbstractRestConnection;
 import no.nav.foreldrepenger.selvbetjening.innsyn.saker.Sak;
-import no.nav.foreldrepenger.selvbetjening.innsyn.sakerv2.Saker;
 import no.nav.foreldrepenger.selvbetjening.innsyn.uttaksplan.Uttaksplan;
 import no.nav.foreldrepenger.selvbetjening.oppslag.domain.Arbeidsforhold;
 

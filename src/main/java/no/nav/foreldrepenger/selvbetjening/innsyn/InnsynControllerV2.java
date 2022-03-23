@@ -1,13 +1,14 @@
 package no.nav.foreldrepenger.selvbetjening.innsyn;
 
-import no.nav.foreldrepenger.boot.conditionals.ConditionalOnNotProd;
-import no.nav.foreldrepenger.selvbetjening.http.ProtectedRestController;
-import no.nav.foreldrepenger.selvbetjening.innsyn.sakerv2.Saker;
-import org.springframework.web.bind.annotation.GetMapping;
+import static no.nav.foreldrepenger.selvbetjening.innsyn.InnsynControllerV2.INNSYN;
 
 import javax.inject.Inject;
 
-import static no.nav.foreldrepenger.selvbetjening.innsyn.InnsynControllerV2.INNSYN;
+import org.springframework.web.bind.annotation.GetMapping;
+
+import no.nav.foreldrepenger.boot.conditionals.ConditionalOnNotProd;
+import no.nav.foreldrepenger.common.innsyn.v2.Saker;
+import no.nav.foreldrepenger.selvbetjening.http.ProtectedRestController;
 
 @ConditionalOnNotProd
 @ProtectedRestController(INNSYN)
