@@ -8,8 +8,8 @@ import org.springframework.boot.autoconfigure.condition.ConditionalOnProperty;
 import org.springframework.stereotype.Service;
 
 import no.nav.foreldrepenger.common.domain.Fødselsnummer;
+import no.nav.foreldrepenger.common.innsyn.v2.Saker;
 import no.nav.foreldrepenger.selvbetjening.innsyn.saker.Sak;
-import no.nav.foreldrepenger.selvbetjening.innsyn.sakerv2.Saker;
 import no.nav.foreldrepenger.selvbetjening.innsyn.uttaksplan.Uttaksplan;
 
 @Service
