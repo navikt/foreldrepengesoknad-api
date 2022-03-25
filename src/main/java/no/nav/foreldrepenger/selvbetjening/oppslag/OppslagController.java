@@ -12,10 +12,10 @@ import no.nav.foreldrepenger.selvbetjening.oppslag.domain.Søkerinfo;
 import no.nav.foreldrepenger.selvbetjening.util.TokenUtil;
 import no.nav.security.token.support.core.api.Unprotected;
 
-@ProtectedRestController(OppslagController.OPPSLAG)
+@ProtectedRestController(OppslagController.OPPSLAG_PATH)
 public class OppslagController {
 
-    public static final String OPPSLAG = "/rest";
+    public static final String OPPSLAG_PATH = "/rest";
     private static final Logger LOG = LoggerFactory.getLogger(OppslagController.class);
 
     private final Oppslag oppslag;

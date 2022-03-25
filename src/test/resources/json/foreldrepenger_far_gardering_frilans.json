@@ -1,9 +1,9 @@
 {
     "annenForelder": {
         "erInformertOmSøknaden": true,
+        "fornavn": "LUR",
         "etternavn": "BAMSE",
         "fnr": "11111122222",
-        "fornavn": "LUR",
         "harRettPåForeldrepenger": true,
         "kanIkkeOppgis": false
     },
@@ -32,7 +32,14 @@
             "driverFosterhjem": false,
             "harJobbetForNærVennEllerFamilieSiste10Mnd": false,
             "jobberFremdelesSomFrilans": true,
-            "oppdragForNæreVennerEllerFamilieSiste10Mnd": [],
+            "oppdragForNæreVennerEllerFamilieSiste10Mnd": [
+                {
+                    "navnPåArbeidsgiver": "frilanser AS",
+                    "tidsperiode": {
+                        "fom": "2021-12-07T00:00:00.000Z"
+                    }
+                }
+            ],
             "oppstart": "2020-08-01T00:00:00.000Z"
         },
         "harHattAnnenInntektSiste10Mnd": false,

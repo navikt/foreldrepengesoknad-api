@@ -9,10 +9,10 @@ import org.springframework.web.bind.annotation.GetMapping;
 import no.nav.foreldrepenger.selvbetjening.historikk.MinidialogInnslag;
 import no.nav.foreldrepenger.selvbetjening.http.ProtectedRestController;
 
-@ProtectedRestController(MinidialogController.MINIDIALOG)
+@ProtectedRestController(MinidialogController.MINIDIALOG_PATH)
 public class MinidialogController {
 
-    static final String MINIDIALOG = "/rest/minidialog";
+    static final String MINIDIALOG_PATH = "/rest/minidialog";
 
     private final Minidialog minidialog;
 

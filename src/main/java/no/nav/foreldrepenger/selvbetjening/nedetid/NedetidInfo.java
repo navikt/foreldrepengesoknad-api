@@ -1,12 +1,11 @@
 package no.nav.foreldrepenger.selvbetjening.nedetid;
 
-import lombok.Data;
+import static no.nav.foreldrepenger.common.domain.validation.InputValideringRegex.FRITEKST;
 
-@Data
-public class NedetidInfo {
+import javax.validation.constraints.Pattern;
 
-    private final String fra;
-    private final String til;
-    private final String msg;
+public record NedetidInfo(@Pattern(regexp = FRITEKST) String fra,
+                          @Pattern(regexp = FRITEKST) String til,
+                          @Pattern(regexp = FRITEKST) String msg) {
 
 }

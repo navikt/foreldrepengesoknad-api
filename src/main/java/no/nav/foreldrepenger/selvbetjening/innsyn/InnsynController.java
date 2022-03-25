@@ -44,7 +44,7 @@ public class InnsynController {
     }
 
     @GetMapping("/uttaksplanannen")
-    public Uttaksplan uttaksplanAnnenPart(@RequestParam(name = "annenPart") @NotNull Fødselsnummer annenPart) {
+    public Uttaksplan uttaksplanAnnenPart(@Valid @RequestParam(name = "annenPart") @NotNull Fødselsnummer annenPart) {
         return innsynTjeneste.hentUttaksplanAnnenPart(annenPart);
     }
 

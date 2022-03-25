@@ -111,7 +111,11 @@ class ForeldrepengeSøknadTilDtoMapperTest {
         assertThat(frilans.jobberFremdelesSomFrilans()).isTrue();
         assertThat(frilans.periode().fom()).isNotNull();
         assertThat(frilans.periode().tom()).isNull();
-        assertThat(frilans.frilansOppdrag()).isEmpty();
+        assertThat(frilans.frilansOppdrag()).isNotNull();
+        var frilansOppdrag = frilans.frilansOppdrag().get(0);
+        assertThat(frilansOppdrag.oppdragsgiver()).isNotNull();
+        assertThat(frilansOppdrag.periode().fom()).isNotNull();
+        assertThat(frilansOppdrag.periode().tom()).isNull();
 
     }
 
