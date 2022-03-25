@@ -105,7 +105,7 @@ class SøknadFrontendDeseraliseringTest {
         assertThat(selvstendigNæringsdrivendeInformasjon.tidsperiode()).isNotNull();
         assertThat(selvstendigNæringsdrivendeInformasjon.tidsperiode().fom()).isNotNull();
         assertThat(selvstendigNæringsdrivendeInformasjon.tidsperiode().tom()).isNull();
-        assertThat(selvstendigNæringsdrivendeInformasjon.organisasjonsnummer()).isEqualTo("999999999");
+        assertThat(selvstendigNæringsdrivendeInformasjon.organisasjonsnummer()).isNotNull();
         assertThat(selvstendigNæringsdrivendeInformasjon.harBlittYrkesaktivILøpetAvDeTreSisteFerdigliknedeÅrene()).isFalse();
         assertThat(selvstendigNæringsdrivendeInformasjon.regnskapsfører()).isNotNull();
         assertThat(selvstendigNæringsdrivendeInformasjon.næringsinntekt()).isEqualTo(220_000);
