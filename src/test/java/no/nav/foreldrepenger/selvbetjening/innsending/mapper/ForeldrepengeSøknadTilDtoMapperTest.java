@@ -155,7 +155,7 @@ class ForeldrepengeSøknadTilDtoMapperTest {
         var egennæring = egennæringer.get(0);
         assertThat(egennæring).isInstanceOf(NorskOrganisasjon.class);
         var norskOrganisasjon = (NorskOrganisasjon) egennæring;
-        assertThat(norskOrganisasjon.getOrgName()).isEqualTo("Barnehage V2");
+        assertThat(norskOrganisasjon.getOrgName()).isNotNull();
         assertThat(norskOrganisasjon.getOrgNummer()).isNotNull();
         assertThat(norskOrganisasjon.getRegnskapsførere()).hasSize(1);
         assertThat(norskOrganisasjon.isNærRelasjon()).isTrue();
