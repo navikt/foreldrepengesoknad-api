@@ -5,6 +5,7 @@ import static org.springframework.http.HttpStatus.BAD_REQUEST;
 import static org.springframework.http.HttpStatus.CONFLICT;
 import static org.springframework.http.HttpStatus.FORBIDDEN;
 import static org.springframework.http.HttpStatus.INTERNAL_SERVER_ERROR;
+import static org.springframework.http.HttpStatus.NOT_ACCEPTABLE;
 import static org.springframework.http.HttpStatus.NOT_FOUND;
 import static org.springframework.http.HttpStatus.PAYLOAD_TOO_LARGE;
 import static org.springframework.http.HttpStatus.UNAUTHORIZED;
@@ -55,25 +56,29 @@ public class ApiExceptionHandler extends ResponseEntityExceptionHandler {
 
     @Override
     protected ResponseEntity<Object> handleMethodArgumentNotValid(MethodArgumentNotValidException e,
-            HttpHeaders headers, HttpStatus status, WebRequest req) {
+                                                                  HttpHeaders headers, HttpStatus status,
+                                                                  WebRequest req) {
         return logAndHandle(UNPROCESSABLE_ENTITY, e, req, headers, validationErrors(e));
     }
 
     @Override
     protected ResponseEntity<Object> handleHttpMessageNotReadable(HttpMessageNotReadableException e,
-            HttpHeaders headers, HttpStatus status, WebRequest req) {
+                                                                  HttpHeaders headers, HttpStatus status,
+                                                                  WebRequest req) {
         return logAndHandle(UNPROCESSABLE_ENTITY, e, req, headers);
     }
 
     @Override
-    protected ResponseEntity<Object> handleHttpMediaTypeNotAcceptable(HttpMediaTypeNotAcceptableException e, HttpHeaders headers, HttpStatus status,
-            WebRequest req) {
-        return logAndHandle(UNPROCESSABLE_ENTITY, e, req, headers);
+    protected ResponseEntity<Object> handleHttpMediaTypeNotAcceptable(HttpMediaTypeNotAcceptableException e,
+                                                                      HttpHeaders headers, HttpStatus status,
+                                                                      WebRequest req) {
+        return logAndHandle(NOT_ACCEPTABLE, e, req, headers);
     }
 
     @Override
-    protected ResponseEntity<Object> handleNoHandlerFoundException(NoHandlerFoundException e, HttpHeaders headers,
-            HttpStatus status, WebRequest req) {
+    protected ResponseEntity<Object> handleNoHandlerFoundException(NoHandlerFoundException e,
+                                                                   HttpHeaders headers, HttpStatus status,
+                                                                   WebRequest req) {
         return logAndHandle(NOT_FOUND, e, req, headers);
     }
 
