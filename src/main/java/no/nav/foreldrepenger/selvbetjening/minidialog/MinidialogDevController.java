@@ -1,9 +1,10 @@
 package no.nav.foreldrepenger.selvbetjening.minidialog;
 
-import static no.nav.foreldrepenger.selvbetjening.minidialog.MinidialogController.MINIDIALOG;
+import static no.nav.foreldrepenger.selvbetjening.minidialog.MinidialogController.MINIDIALOG_PATH;
 
 import java.util.List;
 
+import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 
@@ -11,10 +12,11 @@ import no.nav.foreldrepenger.common.domain.Fødselsnummer;
 import no.nav.foreldrepenger.selvbetjening.historikk.MinidialogInnslag;
 import no.nav.foreldrepenger.selvbetjening.http.UnprotectedRestController;
 
+@Validated
 @UnprotectedRestController(MinidialogDevController.DEVPATH)
 public class MinidialogDevController {
 
-    static final String DEVPATH = MINIDIALOG + "/dev";
+    static final String DEVPATH = MINIDIALOG_PATH + "/dev";
 
     private final Minidialog minidialog;
 
@@ -24,7 +26,7 @@ public class MinidialogDevController {
 
     @GetMapping
     public List<MinidialogInnslag> minidialoger(@RequestParam("fnr") Fødselsnummer fnr,
-            @RequestParam(defaultValue = "true") boolean activeOnly) {
+                                                @RequestParam(defaultValue = "true") boolean activeOnly) {
         return minidialog.hentMinidialoger(fnr, activeOnly);
     }
 

@@ -1,14 +1,16 @@
 package no.nav.foreldrepenger.selvbetjening.nedetid;
 
+import javax.validation.Valid;
+
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 
 import no.nav.foreldrepenger.selvbetjening.http.UnprotectedRestController;
 
-@UnprotectedRestController(value = NedetidController.NEDETID)
+@UnprotectedRestController(value = NedetidController.NEDETID_PATH)
 public class NedetidController {
 
-    static final String NEDETID = "/rest/nedetid";
+    static final String NEDETID_PATH = "/rest/nedetid";
     private final Nedetid nedetid;
 
     public NedetidController(Nedetid nedetid) {
@@ -16,7 +18,7 @@ public class NedetidController {
     }
 
     @PostMapping("/registrer")
-    public void FPsøknad(@RequestBody NedetidInfo info) {
+    public void FPsøknad(@Valid @RequestBody NedetidInfo info) {
         nedetid.registrer(info);
     }
 

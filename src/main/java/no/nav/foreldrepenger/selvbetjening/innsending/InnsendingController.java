@@ -14,12 +14,11 @@ import no.nav.foreldrepenger.selvbetjening.http.ProtectedRestController;
 import no.nav.foreldrepenger.selvbetjening.innsending.domain.EttersendingFrontend;
 import no.nav.foreldrepenger.selvbetjening.innsending.domain.SøknadFrontend;
 
-@ProtectedRestController(InnsendingController.REST_SOKNAD)
+@ProtectedRestController(InnsendingController.INNSENDING_CONTROLLER_PATH)
 public class InnsendingController {
-
     private static final Logger LOG = LoggerFactory.getLogger(InnsendingController.class);
 
-    public static final String REST_SOKNAD = "/rest/soknad";
+    public static final String INNSENDING_CONTROLLER_PATH = "/rest/soknad";
 
     private final Innsending innsending;
 

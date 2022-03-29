@@ -1,7 +1,7 @@
 package no.nav.foreldrepenger.selvbetjening.http.filters;
 
 import static no.nav.foreldrepenger.selvbetjening.http.filters.FilterRegistrationUtil.urlPatternsFor;
-import static no.nav.foreldrepenger.selvbetjening.innsending.InnsendingController.REST_SOKNAD;
+import static no.nav.foreldrepenger.selvbetjening.innsending.InnsendingController.INNSENDING_CONTROLLER_PATH;
 import static no.nav.foreldrepenger.selvbetjening.innsyn.InnsynController.INNSYN;
 import static no.nav.foreldrepenger.selvbetjening.mellomlagring.MellomlagringController.REST_STORAGE;
 
@@ -17,7 +17,7 @@ public class IdMismatchFilterRegistrationBean extends FilterRegistrationBean<IdM
     public IdMismatchFilterRegistrationBean(IdMismatchFilterBean requestFilter) {
         setFilter(requestFilter);
         setOrder(10);
-        setUrlPatterns(urlPatternsFor(REST_SOKNAD, REST_STORAGE, INNSYN));
+        setUrlPatterns(urlPatternsFor(INNSENDING_CONTROLLER_PATH, REST_STORAGE, INNSYN));
         LOG.trace("Registrert filter {}", this);
     }
 }

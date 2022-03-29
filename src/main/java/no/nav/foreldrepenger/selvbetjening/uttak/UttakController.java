@@ -1,5 +1,6 @@
 package no.nav.foreldrepenger.selvbetjening.uttak;
 
+import static no.nav.foreldrepenger.common.domain.validation.InputValideringRegex.FRITEKST;
 import static no.nav.foreldrepenger.regler.uttak.beregnkontoer.grunnlag.Dekningsgrad.DEKNINGSGRAD_100;
 import static no.nav.foreldrepenger.regler.uttak.beregnkontoer.grunnlag.Dekningsgrad.DEKNINGSGRAD_80;
 import static no.nav.foreldrepenger.regler.uttak.konfig.StandardKonfigurasjon.SØKNADSDIALOG;
@@ -8,8 +9,10 @@ import java.time.LocalDate;
 import java.util.Map;
 
 import javax.inject.Inject;
+import javax.validation.constraints.Pattern;
 
 import org.springframework.format.annotation.DateTimeFormat;
+import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -22,16 +25,17 @@ import no.nav.foreldrepenger.regler.uttak.beregnkontoer.grunnlag.Dekningsgrad;
 import no.nav.foreldrepenger.regler.uttak.felles.grunnlag.Stønadskontotype;
 import no.nav.security.token.support.core.api.Unprotected;
 
-@RestController
-@RequestMapping(UttakController.UTTAK)
+@Validated
 @Unprotected
+@RestController
+@RequestMapping(UttakController.UTTAK_PATH)
 public class UttakController {
 
-    private static final String FMT = "yyyyMMdd";
+    static final String UTTAK_PATH = "/konto";
 
+    private static final String FMT = "yyyyMMdd";
     private final StønadskontoRegelOrkestrering kalkulator;
 
-    static final String UTTAK = "/konto";
 
     @Inject
     public UttakController() {
@@ -49,21 +53,20 @@ public class UttakController {
             @DateTimeFormat(pattern = FMT) @RequestParam(name = "fødselsdato", required = false) LocalDate fødselsdato,
             @DateTimeFormat(pattern = FMT) @RequestParam(name = "termindato", required = false) LocalDate termindato,
             @DateTimeFormat(pattern = FMT) @RequestParam(name = "omsorgsovertakelseDato", required = false) LocalDate omsorgsovertakelseDato,
-            @DateTimeFormat(pattern = FMT) @RequestParam("dekningsgrad") String dekningsgrad) {
+            @Pattern(regexp = FRITEKST) @DateTimeFormat(pattern = FMT) @RequestParam("dekningsgrad") String dekningsgrad) {
 
         guardFamiliehendelse(fødselsdato, termindato, omsorgsovertakelseDato);
-
         return Map.of("kontoer", kalkulator.beregnKontoer(new BeregnKontoerGrunnlag.Builder()
-                .antallBarn(antallBarn)
-                .dekningsgrad(dekningsgrad(dekningsgrad))
-                .morAleneomsorg(morHarAleneomsorg)
-                .farAleneomsorg(farHarAleneomsorg)
-                .morRett(morHarRett)
-                .farRett(farHarRett)
-                .fødselsdato(fødselsdato)
-                .omsorgsovertakelseDato(omsorgsovertakelseDato)
-                .termindato(termindato)
-                .build(), SØKNADSDIALOG).getStønadskontoer());
+            .antallBarn(antallBarn)
+            .dekningsgrad(dekningsgrad(dekningsgrad))
+            .morAleneomsorg(morHarAleneomsorg)
+            .farAleneomsorg(farHarAleneomsorg)
+            .morRett(morHarRett)
+            .farRett(farHarRett)
+            .fødselsdato(fødselsdato)
+            .omsorgsovertakelseDato(omsorgsovertakelseDato)
+            .termindato(termindato)
+            .build(), SØKNADSDIALOG).getStønadskontoer());
     }
 
     private void guardFamiliehendelse(LocalDate fødselsdato, LocalDate termindato, LocalDate omsorgsovertakelseDato) {
