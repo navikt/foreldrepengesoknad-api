@@ -16,11 +16,11 @@ public class VedleggFrontend {
     private byte[] content;
     @Pattern(regexp = FRITEKST)
     private final String beskrivelse;
-    @Pattern(regexp = FRITEKST)
+    @Pattern(regexp = "^[\\p{Digit}\\p{L}]*$")
     private final String id;
-    @Pattern(regexp = FRITEKST)
+    @Pattern(regexp = "^[\\p{Digit}\\p{L}_]*$")
     private final String innsendingsType;
-    @Pattern(regexp = FRITEKST)
+    @Pattern(regexp = "^[\\p{Digit}\\p{L}]*$")
     private final String skjemanummer;
     @Pattern(regexp = FRITEKST)
     private final String uuid;

@@ -1,6 +1,6 @@
 package no.nav.foreldrepenger.selvbetjening.innsyn;
 
-import static no.nav.foreldrepenger.common.domain.validation.InputValideringRegex.FRITEKST;
+import static no.nav.foreldrepenger.common.domain.validation.InputValideringRegex.BARE_TALL;
 
 import java.util.List;
 
@@ -39,7 +39,7 @@ public class InnsynController {
     }
 
     @GetMapping("/uttaksplan")
-    public Uttaksplan uttaksplan(@RequestParam(name = "saksnummer") @Pattern(regexp = FRITEKST) String saksnummer) {
+    public Uttaksplan uttaksplan(@RequestParam(name = "saksnummer") @Pattern(regexp = BARE_TALL) String saksnummer) {
         return innsynTjeneste.hentUttaksplan(saksnummer);
     }
 

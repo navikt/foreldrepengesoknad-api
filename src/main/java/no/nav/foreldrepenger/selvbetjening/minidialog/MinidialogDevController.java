@@ -4,6 +4,8 @@ import static no.nav.foreldrepenger.selvbetjening.minidialog.MinidialogControlle
 
 import java.util.List;
 
+import javax.validation.Valid;
+
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestParam;
@@ -25,7 +27,7 @@ public class MinidialogDevController {
     }
 
     @GetMapping
-    public List<MinidialogInnslag> minidialoger(@RequestParam("fnr") Fødselsnummer fnr,
+    public List<MinidialogInnslag> minidialoger(@Valid @RequestParam("fnr") Fødselsnummer fnr,
                                                 @RequestParam(defaultValue = "true") boolean activeOnly) {
         return minidialog.hentMinidialoger(fnr, activeOnly);
     }

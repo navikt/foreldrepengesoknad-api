@@ -1,5 +1,6 @@
 package no.nav.foreldrepenger.selvbetjening.innsending.domain;
 
+import static no.nav.foreldrepenger.common.domain.validation.InputValideringRegex.BARE_BOKSTAVER;
 import static no.nav.foreldrepenger.common.domain.validation.InputValideringRegex.FRITEKST;
 
 import javax.validation.constraints.Pattern;
@@ -9,9 +10,9 @@ import com.fasterxml.jackson.annotation.JsonIgnore;
 public record AnnenForelderFrontend(boolean kanIkkeOppgis,
                                     @Pattern(regexp = FRITEKST) String fornavn,
                                     @Pattern(regexp = FRITEKST) String etternavn,
-                                    @Pattern(regexp = FRITEKST) String fnr,
+                                    @Pattern(regexp = "^[\\p{Digit}\\p{L}\\p{Blank}\\-.]*$") String fnr,
                                     boolean utenlandskFnr,
-                                    @Pattern(regexp = FRITEKST) String bostedsland,
+                                    @Pattern(regexp = BARE_BOKSTAVER) String bostedsland,
                                     boolean harRettPåForeldrepenger,
                                     boolean erInformertOmSøknaden,
                                     boolean harMorUføretrygd) {

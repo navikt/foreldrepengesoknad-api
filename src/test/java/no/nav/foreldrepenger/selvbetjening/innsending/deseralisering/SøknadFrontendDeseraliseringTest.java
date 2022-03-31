@@ -16,6 +16,7 @@ import org.springframework.test.context.junit.jupiter.SpringExtension;
 import com.fasterxml.jackson.databind.ObjectMapper;
 
 import no.nav.foreldrepenger.common.domain.BrukerRolle;
+import no.nav.foreldrepenger.common.domain.felles.opptjening.Virksomhetstype;
 import no.nav.foreldrepenger.common.oppslag.dkif.Målform;
 import no.nav.foreldrepenger.selvbetjening.config.JacksonConfiguration;
 import no.nav.foreldrepenger.selvbetjening.innsending.domain.ForeldrepengesøknadFrontend;
@@ -109,7 +110,7 @@ class SøknadFrontendDeseraliseringTest {
         assertThat(selvstendigNæringsdrivendeInformasjon.harBlittYrkesaktivILøpetAvDeTreSisteFerdigliknedeÅrene()).isFalse();
         assertThat(selvstendigNæringsdrivendeInformasjon.regnskapsfører()).isNotNull();
         assertThat(selvstendigNæringsdrivendeInformasjon.næringsinntekt()).isEqualTo(220_000);
-        assertThat(selvstendigNæringsdrivendeInformasjon.næringstyper()).hasSize(1).contains("DAGMAMMA");
+        assertThat(selvstendigNæringsdrivendeInformasjon.næringstyper()).hasSize(1).contains(Virksomhetstype.DAGMAMMA);
 
         var barn = søknadFrontend.getBarn();
         assertThat(barn).isNotNull();

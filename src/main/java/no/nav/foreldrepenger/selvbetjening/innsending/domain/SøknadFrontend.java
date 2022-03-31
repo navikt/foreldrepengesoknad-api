@@ -2,6 +2,8 @@ package no.nav.foreldrepenger.selvbetjening.innsending.domain;
 
 import static com.fasterxml.jackson.annotation.JsonTypeInfo.Id.NAME;
 import static java.util.Collections.emptyList;
+import static no.nav.foreldrepenger.common.domain.validation.InputValideringRegex.BARE_BOKSTAVER;
+import static no.nav.foreldrepenger.common.domain.validation.InputValideringRegex.BARE_TALL;
 import static no.nav.foreldrepenger.common.domain.validation.InputValideringRegex.FRITEKST;
 
 import java.time.LocalDateTime;
@@ -28,9 +30,9 @@ import lombok.EqualsAndHashCode;
 public abstract sealed class SøknadFrontend permits EngangsstønadFrontend, ForeldrepengesøknadFrontend, SvangerskapspengesøknadFrontend {
 
     private LocalDateTime opprettet;
-    @Pattern(regexp = FRITEKST)
+    @Pattern(regexp = BARE_BOKSTAVER)
     private final String type;
-    @Pattern(regexp = FRITEKST)
+    @Pattern(regexp = BARE_TALL)
     private final String saksnummer;
     @Valid
     private final SøkerFrontend søker;
@@ -40,7 +42,7 @@ public abstract sealed class SøknadFrontend permits EngangsstønadFrontend, For
     private final AnnenForelderFrontend annenForelder;
     @Valid
     private final UtenlandsoppholdFrontend informasjonOmUtenlandsopphold;
-    @Pattern(regexp = FRITEKST)
+    @Pattern(regexp = BARE_BOKSTAVER)
     private final String situasjon;
     private final Boolean erEndringssøknad;
     @Pattern(regexp = FRITEKST)
