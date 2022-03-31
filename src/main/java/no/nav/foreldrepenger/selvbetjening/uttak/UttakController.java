@@ -1,6 +1,5 @@
 package no.nav.foreldrepenger.selvbetjening.uttak;
 
-import static no.nav.foreldrepenger.common.domain.validation.InputValideringRegex.FRITEKST;
 import static no.nav.foreldrepenger.regler.uttak.beregnkontoer.grunnlag.Dekningsgrad.DEKNINGSGRAD_100;
 import static no.nav.foreldrepenger.regler.uttak.beregnkontoer.grunnlag.Dekningsgrad.DEKNINGSGRAD_80;
 import static no.nav.foreldrepenger.regler.uttak.konfig.StandardKonfigurasjon.SØKNADSDIALOG;
@@ -53,7 +52,7 @@ public class UttakController {
             @RequestParam(name = "fødselsdato", required = false) @DateTimeFormat(pattern = FMT) LocalDate fødselsdato,
             @RequestParam(name = "termindato", required = false) @DateTimeFormat(pattern = FMT) LocalDate termindato,
             @RequestParam(name = "omsorgsovertakelseDato", required = false) @DateTimeFormat(pattern = FMT) LocalDate omsorgsovertakelseDato,
-            @RequestParam("dekningsgrad") @Pattern(regexp = FRITEKST)  String dekningsgrad) {
+            @RequestParam("dekningsgrad") @Pattern(regexp = "^[\\p{Digit}\\p{L}]*$")  String dekningsgrad) {
 
         guardFamiliehendelse(fødselsdato, termindato, omsorgsovertakelseDato);
         return Map.of("kontoer", kalkulator.beregnKontoer(new BeregnKontoerGrunnlag.Builder()
