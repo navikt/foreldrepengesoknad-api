@@ -246,7 +246,7 @@ final class CommonMapper {
         // Spesifikk
         var utenlandskOrganisasjonBuilder = UtenlandskOrganisasjon.builder()
             .orgName(selvstendig.navnPåNæringen())
-            .registrertILand(CountryCode.valueOf(selvstendig.registrertILand()));
+            .registrertILand(land(selvstendig.registrertILand()));
 
         // Generelle
         utenlandskOrganisasjonBuilder
