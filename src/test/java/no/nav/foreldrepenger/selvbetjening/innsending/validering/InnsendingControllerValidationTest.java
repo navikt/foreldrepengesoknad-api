@@ -47,7 +47,7 @@ class InnsendingControllerValidationTest {
                 .contentType(MediaType.APPLICATION_JSON)
                 .content(mapper.writeValueAsString(sf)
                     .replace(fpSøknad.getAnnenForelder().fornavn(), "Ulovlig tegn [≈≈|£©≈[™")
-                    .replace(fpSøknad.getSøker().frilansInformasjon().oppdragForNæreVennerEllerFamilieSiste10Mnd().get(0).navnPåArbeidsgiver(), "<scri>sp 2020")
+                    .replace(fpSøknad.getSøker().frilansInformasjon().oppdragForNæreVennerEllerFamilieSiste10Mnd().get(0).navnPåArbeidsgiver(), "Matematiske tegn er ikke lov ∪")
                     .replaceFirst(fpSøknad.getVedlegg().get(0).getSkjemanummer(), "<scri>sp 202≈≈|0")
                 ))
             .andExpect(status().isBadRequest())
@@ -90,9 +90,7 @@ class InnsendingControllerValidationTest {
                 .contentType(MediaType.APPLICATION_JSON)
                 .content(mapper.writeValueAsString(sf)
                     .replace(egennæring.navnPåNæringen(), "Ulovlig tegn [≈≈|£©≈[™")
-                    .replace(egennæring.næringstyper().get(0), "Also ILLEGA @¨¨¨¨ö~~π<>")
-                    .replace(egennæring.regnskapsfører().navn(), "+47 IkkeGyldig<z2103-")
-                    .replace(egennæring.regnskapsfører().telefonnummer(), "Also ILLEGA @¨¨¨¨ö~~π<>")
+                    .replace(egennæring.regnskapsfører().navn(), "Also ILLEGA @¨¨¨¨ö~~π<>")
                 ))
             .andExpect(status().isBadRequest())
             .andReturn();
@@ -100,7 +98,7 @@ class InnsendingControllerValidationTest {
         assertThat(result.getResolvedException()).isInstanceOf(MethodArgumentNotValidException.class);
         var error = (MethodArgumentNotValidException) result.getResolvedException();
         assertThat(error).isNotNull();
-        assertThat(error.getBindingResult().getFieldErrors()).hasSize(4);
+        assertThat(error.getBindingResult().getFieldErrors()).hasSize(2);
     }
 
 
@@ -114,7 +112,7 @@ class InnsendingControllerValidationTest {
                 .content(mapper.writeValueAsString(sf)
                     .replace(tilrettelegging.type(), "Ulovlig tegn [≈≈|£©≈[™")
                     .replaceFirst(tilrettelegging.vedlegg().get(0), "Also ILLEGA @¨¨¨¨ö~~π<>")
-                    .replace(tilrettelegging.arbeidsforhold().id(), "tegn [≈≈| öä˙[")
+                    .replace(tilrettelegging.arbeidsforhold().id(), "Ikke lovlig \u0085")
                 ))
             .andExpect(status().isBadRequest())
             .andReturn();

@@ -34,7 +34,6 @@ import no.nav.foreldrepenger.common.domain.felles.opptjening.Opptjening;
 import no.nav.foreldrepenger.common.domain.felles.opptjening.Regnskapsfører;
 import no.nav.foreldrepenger.common.domain.felles.opptjening.UtenlandskArbeidsforhold;
 import no.nav.foreldrepenger.common.domain.felles.opptjening.UtenlandskOrganisasjon;
-import no.nav.foreldrepenger.common.domain.felles.opptjening.Virksomhetstype;
 import no.nav.foreldrepenger.common.domain.felles.relasjontilbarn.Adopsjon;
 import no.nav.foreldrepenger.common.domain.felles.relasjontilbarn.FremtidigFødsel;
 import no.nav.foreldrepenger.common.domain.felles.relasjontilbarn.Fødsel;
@@ -215,7 +214,7 @@ final class CommonMapper {
             .erNyOpprettet(erNyopprettet(selvstendig.tidsperiode().fom()))
             .erVarigEndring(selvstendig.hattVarigEndringAvNæringsinntektSiste4Kalenderår())
             .vedlegg(selvstendig.vedlegg())
-            .virksomhetsTyper(tilVirksomhetsTyper(selvstendig.næringstyper()))
+            .virksomhetsTyper(selvstendig.næringstyper())
             .oppstartsDato(selvstendig.oppstartsdato());
 
         var næringsInfo = selvstendig.endringAvNæringsinntektInformasjon();
@@ -257,7 +256,7 @@ final class CommonMapper {
             .erNyOpprettet(erNyopprettet(selvstendig.tidsperiode().fom()))
             .erVarigEndring(selvstendig.hattVarigEndringAvNæringsinntektSiste4Kalenderår())
             .vedlegg(selvstendig.vedlegg())
-            .virksomhetsTyper(tilVirksomhetsTyper(selvstendig.næringstyper()))
+            .virksomhetsTyper(selvstendig.næringstyper())
             .oppstartsDato(selvstendig.oppstartsdato());
 
         var næringsInfo = selvstendig.endringAvNæringsinntektInformasjon();
@@ -287,12 +286,6 @@ final class CommonMapper {
 
     private static Regnskapsfører tilRegnskapsfører(TilknyttetPerson person) {
         return new Regnskapsfører(person.navn(), person.telefonnummer());
-    }
-
-    private static List<Virksomhetstype> tilVirksomhetsTyper(List<String> næringstyper) {
-        return safeStream(næringstyper)
-            .map(Virksomhetstype::valueOf)
-            .toList();
     }
 
     private static Frilans tilFrilans(FrilansInformasjonFrontend frilansInformasjon) {

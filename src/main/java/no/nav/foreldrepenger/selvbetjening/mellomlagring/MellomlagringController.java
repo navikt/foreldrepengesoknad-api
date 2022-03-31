@@ -1,7 +1,6 @@
 package no.nav.foreldrepenger.selvbetjening.mellomlagring;
 
 import static no.nav.foreldrepenger.common.domain.validation.InputValideringRegex.FRITEKST;
-import static no.nav.foreldrepenger.common.domain.validation.InputValideringRegex.JSON_MED_FRITEKST;
 import static org.springframework.http.HttpStatus.NO_CONTENT;
 import static org.springframework.http.MediaType.APPLICATION_JSON_VALUE;
 import static org.springframework.http.MediaType.MULTIPART_FORM_DATA_VALUE;
@@ -47,7 +46,7 @@ public class MellomlagringController {
 
     @PostMapping(consumes = APPLICATION_JSON_VALUE)
     @ResponseStatus(NO_CONTENT)
-    public void lagreSøknad(@RequestBody @Pattern(regexp = JSON_MED_FRITEKST) String soknad) {
+    public void lagreSøknad(@RequestBody @Pattern(regexp = FRITEKST) String soknad) {
         mellomlagring.lagreKryptertSøknad(soknad);
     }
 

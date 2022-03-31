@@ -50,10 +50,10 @@ public class UttakController {
             @RequestParam("farHarRett") boolean farHarRett,
             @RequestParam(name = "morHarAleneomsorg", required = false, defaultValue = "false") boolean morHarAleneomsorg,
             @RequestParam(name = "farHarAleneomsorg", required = false, defaultValue = "false") boolean farHarAleneomsorg,
-            @DateTimeFormat(pattern = FMT) @RequestParam(name = "fødselsdato", required = false) LocalDate fødselsdato,
-            @DateTimeFormat(pattern = FMT) @RequestParam(name = "termindato", required = false) LocalDate termindato,
-            @DateTimeFormat(pattern = FMT) @RequestParam(name = "omsorgsovertakelseDato", required = false) LocalDate omsorgsovertakelseDato,
-            @Pattern(regexp = FRITEKST) @DateTimeFormat(pattern = FMT) @RequestParam("dekningsgrad") String dekningsgrad) {
+            @RequestParam(name = "fødselsdato", required = false) @DateTimeFormat(pattern = FMT) LocalDate fødselsdato,
+            @RequestParam(name = "termindato", required = false) @DateTimeFormat(pattern = FMT) LocalDate termindato,
+            @RequestParam(name = "omsorgsovertakelseDato", required = false) @DateTimeFormat(pattern = FMT) LocalDate omsorgsovertakelseDato,
+            @RequestParam("dekningsgrad") @Pattern(regexp = FRITEKST)  String dekningsgrad) {
 
         guardFamiliehendelse(fødselsdato, termindato, omsorgsovertakelseDato);
         return Map.of("kontoer", kalkulator.beregnKontoer(new BeregnKontoerGrunnlag.Builder()
