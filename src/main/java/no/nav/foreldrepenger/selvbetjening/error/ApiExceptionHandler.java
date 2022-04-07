@@ -1,5 +1,6 @@
 package no.nav.foreldrepenger.selvbetjening.error;
 
+import static no.nav.foreldrepenger.common.util.StreamUtil.safeStream;
 import static no.nav.foreldrepenger.common.util.StringUtil.partialMask;
 import static org.springframework.http.HttpStatus.BAD_REQUEST;
 import static org.springframework.http.HttpStatus.CONFLICT;
@@ -12,6 +13,9 @@ import static org.springframework.http.HttpStatus.UNAUTHORIZED;
 import static org.springframework.http.HttpStatus.UNPROCESSABLE_ENTITY;
 
 import java.util.Optional;
+
+import javax.validation.ConstraintViolation;
+import javax.validation.ConstraintViolationException;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -27,6 +31,7 @@ import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.client.HttpStatusCodeException;
 import org.springframework.web.context.request.WebRequest;
+import org.springframework.web.method.annotation.MethodArgumentTypeMismatchException;
 import org.springframework.web.multipart.MaxUploadSizeExceededException;
 import org.springframework.web.multipart.MultipartException;
 import org.springframework.web.servlet.NoHandlerFoundException;
@@ -46,39 +51,38 @@ import no.nav.security.token.support.spring.validation.interceptor.JwtTokenUnaut
 @ResponseBody
 public class ApiExceptionHandler extends ResponseEntityExceptionHandler {
 
+    private static final Logger LOG = LoggerFactory.getLogger(ApiExceptionHandler.class);
+    private static final Logger SECURE_LOGGER = LoggerFactory.getLogger("secureLogger");
     private final TokenUtil tokenUtil;
 
     public ApiExceptionHandler(TokenUtil tokenUtil) {
         this.tokenUtil = tokenUtil;
     }
 
-    private static final Logger LOG = LoggerFactory.getLogger(ApiExceptionHandler.class);
-
     @Override
-    protected ResponseEntity<Object> handleMethodArgumentNotValid(MethodArgumentNotValidException e,
-                                                                  HttpHeaders headers, HttpStatus status,
-                                                                  WebRequest req) {
-        return logAndHandle(UNPROCESSABLE_ENTITY, e, req, headers, validationErrors(e));
+    protected ResponseEntity<Object> handleMethodArgumentNotValid(MethodArgumentNotValidException e, HttpHeaders headers, HttpStatus status, WebRequest req) {
+        var felterMedValideringsFeilOgTilhørendeAvvisteVerdi = safeStream(e.getBindingResult().getFieldErrors())
+            .map(ApiExceptionHandler::errorMessageMedAvvisteVerdier)
+            .toList();
+        SECURE_LOGGER.warn("[{} ({})] Valideringsfeil: {}", req.getContextPath(), status, felterMedValideringsFeilOgTilhørendeAvvisteVerdi, e);
+        var feltMedValideringsFeil = safeStream(e.getBindingResult().getFieldErrors())
+            .map(ApiExceptionHandler::errorMessage)
+            .toList();
+        return logAndHandle(BAD_REQUEST, e, req, headers, feltMedValideringsFeil);
     }
 
     @Override
-    protected ResponseEntity<Object> handleHttpMessageNotReadable(HttpMessageNotReadableException e,
-                                                                  HttpHeaders headers, HttpStatus status,
-                                                                  WebRequest req) {
+    protected ResponseEntity<Object> handleHttpMessageNotReadable(HttpMessageNotReadableException e, HttpHeaders headers, HttpStatus status, WebRequest req) {
         return logAndHandle(UNPROCESSABLE_ENTITY, e, req, headers);
     }
 
     @Override
-    protected ResponseEntity<Object> handleHttpMediaTypeNotAcceptable(HttpMediaTypeNotAcceptableException e,
-                                                                      HttpHeaders headers, HttpStatus status,
-                                                                      WebRequest req) {
+    protected ResponseEntity<Object> handleHttpMediaTypeNotAcceptable(HttpMediaTypeNotAcceptableException e, HttpHeaders headers, HttpStatus status, WebRequest req) {
         return logAndHandle(NOT_ACCEPTABLE, e, req, headers);
     }
 
     @Override
-    protected ResponseEntity<Object> handleNoHandlerFoundException(NoHandlerFoundException e,
-                                                                   HttpHeaders headers, HttpStatus status,
-                                                                   WebRequest req) {
+    protected ResponseEntity<Object> handleNoHandlerFoundException(NoHandlerFoundException e, HttpHeaders headers, HttpStatus status, WebRequest req) {
         return logAndHandle(NOT_FOUND, e, req, headers);
     }
 
@@ -90,6 +94,24 @@ public class ApiExceptionHandler extends ResponseEntityExceptionHandler {
     @ExceptionHandler
     public ResponseEntity<Object> handleIncompleteException(UnexpectedInputException e, WebRequest req) {
         return logAndHandle(UNPROCESSABLE_ENTITY, e, req);
+    }
+
+    @ExceptionHandler
+    public ResponseEntity<Object> handleConstraintViolationException(ConstraintViolationException e, WebRequest req) {
+        var felterMedValideringsFeilOgTilhørendeAvvisteVerdi = safeStream(e.getConstraintViolations())
+            .map(ApiExceptionHandler::errorMessageMedAvvisteVerdier)
+            .toList();
+        SECURE_LOGGER.warn("[{} ({})] Valideringsfeil: {}", req.getContextPath(),  e.getLocalizedMessage(), felterMedValideringsFeilOgTilhørendeAvvisteVerdi, e);
+        var feltMedValideringsFeil = safeStream(e.getConstraintViolations())
+            .map(ApiExceptionHandler::errorMessage)
+            .toList();
+        return logAndHandle(BAD_REQUEST, e, req, feltMedValideringsFeil);
+    }
+
+    @ExceptionHandler
+    protected ResponseEntity<Object> handleTypeMismatch(MethodArgumentTypeMismatchException e, WebRequest req) {
+        var error = e.getName() + " should be of type " + e.getRequiredType().getName();
+        return logAndHandle(BAD_REQUEST, e, req, error);
     }
 
     @ExceptionHandler
@@ -110,12 +132,11 @@ public class ApiExceptionHandler extends ResponseEntityExceptionHandler {
 
     @ExceptionHandler
     public ResponseEntity<Object> handleUnauthorizedJwt(JwtTokenUnauthorizedException e, WebRequest req) {
-
         return Optional.ofNullable(e.getCause())
-                .filter(JwtTokenInvalidClaimException.class::isInstance)
-                .map(JwtTokenInvalidClaimException.class::cast)
-                .map(i -> logAndHandle(FORBIDDEN, i, req))
-                .orElse(logAndHandle(UNAUTHORIZED, e, req));
+            .filter(JwtTokenInvalidClaimException.class::isInstance)
+            .map(JwtTokenInvalidClaimException.class::cast)
+            .map(i -> logAndHandle(FORBIDDEN, i, req))
+            .orElse(logAndHandle(UNAUTHORIZED, e, req));
     }
 
     @ExceptionHandler
@@ -139,37 +160,54 @@ public class ApiExceptionHandler extends ResponseEntityExceptionHandler {
         return logAndHandle(status, e, req, new HttpHeaders());
     }
 
+    private ResponseEntity<Object> logAndHandle(HttpStatus status, Exception e, WebRequest req, Object... messages) {
+        return logAndHandle(status, e, req, new HttpHeaders(), messages);
+    }
+
     private ResponseEntity<Object> logAndHandle(HttpStatus status, Exception e, WebRequest req, HttpHeaders headers,
             Object... messages) {
         ApiError apiError = apiErrorFra(status, e, messages);
-        if (e instanceof MethodArgumentNotValidException) {
-            //quickfix, ikke log rejected value
-            LOG.warn("[{} ({})] {}", req.getContextPath(), status, messages);
+        if (e instanceof MethodArgumentNotValidException || e instanceof ConstraintViolationException) {
+            LOG.warn("[{} ({})] {}", req.getContextPath(), status, apiError.getMessages());
         } else if (tokenUtil.erAutentisert() && !tokenUtil.erUtløpt()) {
-            LOG.warn("[{} ({})] {} {} ({})", req.getContextPath(), subject(), status, apiError.getMessages(),
-                    status.value(), e);
+            LOG.warn("[{} ({})] {} {} ({})", req.getContextPath(), subject(), status, apiError.getMessages(), status.value(), e);
         } else {
-            LOG.debug("[{}] {} {} ({})", req.getContextPath(), status, apiError.getMessages(),
-                    status.value(), e);
+            LOG.debug("[{}] {} {} ({})", req.getContextPath(), status, apiError.getMessages(), status.value(), e);
         }
-
         return handleExceptionInternal(e, apiError, headers, status, req);
     }
 
-    private static Object[] validationErrors(MethodArgumentNotValidException e) {
-        return e.getBindingResult().getFieldErrors()
-                .stream()
-                .map(ApiExceptionHandler::errorMessage)
-                .toArray();
-    }
 
     private String subject() {
         return Optional.ofNullable(partialMask(tokenUtil.getSubject()))
-                .orElse("Uautentisert");
+            .orElse("Uautentisert");
     }
 
     private static String errorMessage(FieldError error) {
         return error.getDefaultMessage() + " (" + error.getField() + ")";
+    }
+
+    private static String errorMessageMedAvvisteVerdier(FieldError error) {
+        return String.format("%s (%s) %s. Avvist verdi er: %s",
+            error.getObjectName(),
+            error.getField(),
+            error.getDefaultMessage(),
+            error.getRejectedValue());
+    }
+
+    private static String errorMessage(ConstraintViolation<?> violation) {
+        return String.format("%s (%s) %s",
+            violation.getRootBeanClass().getName(),
+            violation.getPropertyPath(),
+            violation.getMessage());
+    }
+
+    private static String errorMessageMedAvvisteVerdier(ConstraintViolation<?> violation) {
+        return String.format("%s (%s) %s. Avvist verdi er: %s",
+            violation.getRootBeanClass().getName(),
+            violation.getPropertyPath(),
+            violation.getMessage(),
+            violation.getInvalidValue());
     }
 
     private static ApiError apiErrorFra(HttpStatus status, Exception e, Object... messages) {

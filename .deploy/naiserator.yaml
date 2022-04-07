@@ -58,3 +58,5 @@ spec:
     requests:
       cpu: 100m
       memory: 2560Mi
+  secureLogs:
+    enabled: true
