@@ -18,10 +18,10 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
+import no.nav.foreldrepenger.regler.uttak.beregnkontoer.StønadskontoBeregningStønadskontotype;
 import no.nav.foreldrepenger.regler.uttak.beregnkontoer.StønadskontoRegelOrkestrering;
 import no.nav.foreldrepenger.regler.uttak.beregnkontoer.grunnlag.BeregnKontoerGrunnlag;
 import no.nav.foreldrepenger.regler.uttak.beregnkontoer.grunnlag.Dekningsgrad;
-import no.nav.foreldrepenger.regler.uttak.felles.grunnlag.Stønadskontotype;
 import no.nav.security.token.support.core.api.Unprotected;
 
 @Validated
@@ -43,7 +43,7 @@ public class UttakController {
 
     @GetMapping
     @CrossOrigin(origins = "*", allowCredentials = "false")
-    public Map<String, Map<Stønadskontotype, Integer>> kontoer(
+    public Map<String, Map<StønadskontoBeregningStønadskontotype, Integer>> kontoer(
             @RequestParam("antallBarn") int antallBarn,
             @RequestParam("morHarRett") boolean morHarRett,
             @RequestParam("farHarRett") boolean farHarRett,
