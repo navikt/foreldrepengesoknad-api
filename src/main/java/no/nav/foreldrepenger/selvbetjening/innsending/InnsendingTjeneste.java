@@ -44,7 +44,7 @@ public class InnsendingTjeneste implements Innsending {
     @Override
     public Kvittering sendInn(SøknadFrontend søknad) {
         LOG.info("Sender inn søknad av type {}", søknad.getType());
-        hentOgSjekk(søknad.getVedlegg());
+        hentKryptertVedleggOgSjekkerVedlegg(søknad.getVedlegg());
         var kvittering = connection.sendInn(søknad);
         slettMellomlagringOgSøknad(søknad);
         LOG.info(RETURNERER_KVITTERING, kvittering);
@@ -54,7 +54,7 @@ public class InnsendingTjeneste implements Innsending {
     @Override
     public Kvittering ettersend(EttersendingFrontend e) {
         LOG.info("Ettersender for sak {}", e.saksnummer());
-        hentOgSjekk(e.vedlegg());
+        hentKryptertVedleggOgSjekkerVedlegg(e.vedlegg());
         if (e.dialogId() != null) {
             LOG.info("Konverterer tekst til vedleggs-pdf {}", e.brukerTekst().dokumentType());
             e.vedlegg().add(vedleggFra(uttalelseFra(e)));
@@ -68,7 +68,7 @@ public class InnsendingTjeneste implements Innsending {
     @Override
     public Kvittering endre(SøknadFrontend es) {
         LOG.info("Endrer søknad av type {}", es.getType());
-        hentOgSjekk(es.getVedlegg());
+        hentKryptertVedleggOgSjekkerVedlegg(es.getVedlegg());
         var kvittering = connection.endre(es);
         slettMellomlagringOgSøknad(es);
         LOG.info(RETURNERER_KVITTERING, kvittering);
@@ -86,21 +86,21 @@ public class InnsendingTjeneste implements Innsending {
 
     private static TilbakebetalingUttalelse uttalelseFra(EttersendingFrontend e) {
         return new TilbakebetalingUttalelse(
-                e.type(),
-                e.saksnummer(),
-                e.dialogId(),
-                e.brukerTekst());
+            e.type(),
+            e.saksnummer(),
+            e.dialogId(),
+            e.brukerTekst());
     }
 
     private static String id() {
         return "V" + IDGENERATOR.nextLong();
     }
 
-    private void hentOgSjekk(List<VedleggFrontend> vedlegg) {
+    private void hentKryptertVedleggOgSjekkerVedlegg(List<VedleggFrontend> vedlegg) {
         if (!vedlegg.isEmpty()) {
             LOG.info("Henter og sjekker mellomlagring for {} vedlegg", vedlegg.size());
             vedlegg.forEach(this::hentVedleggBytes);
-            vedleggSjekker.sjekk(vedlegg.get(0));
+            vedlegg.forEach(vedleggSjekker::sjekk);
             LOG.info("Hentet og sjekket mellomlagring OK for {} vedlegg", vedlegg.size());
         }
     }
@@ -115,8 +115,8 @@ public class InnsendingTjeneste implements Innsending {
     private void hentVedleggBytes(VedleggFrontend vedlegg) {
         if (vedlegg.getUrl() != null) {
             vedlegg.setContent(mellomlagring.lesKryptertVedlegg(vedlegg.getUuid())
-                    .map(a -> a.bytes)
-                    .orElse(new byte[] {}));
+                .map(a -> a.bytes)
+                .orElse(new byte[] {}));
         }
     }
 
