@@ -1,7 +1,6 @@
 package no.nav.foreldrepenger.selvbetjening.mellomlagring;
 
 import static org.assertj.core.api.Assertions.assertThat;
-import static org.junit.Assert.assertThrows;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
@@ -18,13 +17,14 @@ import org.springframework.context.annotation.Import;
 import org.springframework.http.MediaType;
 import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.web.servlet.MockMvc;
-import org.springframework.web.util.NestedServletException;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 
 import no.nav.foreldrepenger.selvbetjening.config.JacksonConfiguration;
+import no.nav.foreldrepenger.selvbetjening.error.ApiExceptionHandler;
+import no.nav.foreldrepenger.selvbetjening.util.TokenUtil;
 
-@Import(MellomlagringController.class)
+@Import({MellomlagringController.class, ApiExceptionHandler.class})
 @WebMvcTest(controllers = MellomlagringController.class)
 @ContextConfiguration(classes = JacksonConfiguration.class)
 class MellomlagringControllerInputValideringTest {
@@ -37,6 +37,9 @@ class MellomlagringControllerInputValideringTest {
 
     @MockBean
     private KryptertMellomlagring kryptertMellomlagring;
+
+    @MockBean
+    private TokenUtil tokenUtil;
 
     @Test
     void gyldigInputFraSøknadGårIgjennomValideringen() throws Exception {
@@ -54,16 +57,17 @@ class MellomlagringControllerInputValideringTest {
 
 
     @Test
-    void valideringBlokkererUgyldigeStrenger() {
+    void valideringBlokkererUgyldigeStrenger() throws Exception {
         var soknadRawString = """
             {"søknad": "Inkludere et ulovlig teg her ¡®"}
             """;
-        var exception = assertThrows(NestedServletException.class, () ->
-            mvc.perform(post(MellomlagringController.REST_STORAGE)
+        var result = mvc.perform(post(MellomlagringController.REST_STORAGE)
                 .contentType(MediaType.APPLICATION_JSON)
-                .content(soknadRawString)));
-        assertThat(exception.getCause()).isInstanceOf(ConstraintViolationException.class);
+                .content(soknadRawString))
+                .andExpect(status().isBadRequest())
+                .andReturn();
 
+        assertThat(result.getResolvedException()).isInstanceOf(ConstraintViolationException.class);
     }
 
     @Test
@@ -77,12 +81,14 @@ class MellomlagringControllerInputValideringTest {
     }
 
     @Test
-    void hentVedleggHiverExceptionMedUlovligKey() {
+    void hentVedleggHiverExceptionMedUlovligKey() throws Exception {
         var key = "<Special=key∁\uD835\uDD4A>";
-        var exception = assertThrows(NestedServletException.class, () ->
-            mvc.perform(get(MellomlagringController.REST_STORAGE + "/vedlegg/{key}", key)
-                .contentType(MediaType.APPLICATION_JSON)));
-        assertThat(exception.getCause()).isInstanceOf(ConstraintViolationException.class);
+        var result = mvc.perform(get(MellomlagringController.REST_STORAGE + "/vedlegg/{key}", key)
+            .contentType(MediaType.APPLICATION_JSON))
+            .andExpect(status().isBadRequest())
+            .andReturn();
+
+        assertThat(result.getResolvedException()).isInstanceOf(ConstraintViolationException.class);
     }
 
 }

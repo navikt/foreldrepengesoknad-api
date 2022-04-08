@@ -3,7 +3,6 @@ package no.nav.foreldrepenger.selvbetjening.http;
 import org.springframework.retry.annotation.Backoff;
 import org.springframework.retry.annotation.Retryable;
 import org.springframework.web.client.HttpClientErrorException;
-import org.springframework.web.client.HttpServerErrorException;
 import org.springframework.web.client.RestClientException;
 import org.springframework.web.multipart.MultipartException;
 
@@ -12,15 +11,18 @@ import no.nav.security.token.support.spring.validation.interceptor.JwtTokenUnaut
 
 
 @Retryable(
-    include = {RestClientException.class, MultipartException.class, HttpClientErrorException.BadRequest.class, },
+    include = {
+        RestClientException.class,
+        MultipartException.class },
     exclude = {
         JwtTokenUnauthorizedException.class,
         JwtTokenInvalidClaimException.class,
-        HttpServerErrorException.class,
-        HttpClientErrorException.NotFound.class,
+        HttpClientErrorException.BadRequest.class,
+        HttpClientErrorException.Unauthorized.class,
         HttpClientErrorException.Forbidden.class,
-        HttpClientErrorException.Unauthorized.class }, maxAttemptsExpression = "#{${rest.retry.attempts:3}}", backoff = @Backoff(delayExpression = "#{${rest.retry.delay:1000}}"))
-
+        HttpClientErrorException.NotFound.class },
+    maxAttemptsExpression = "#{${rest.retry.attempts:3}}",
+    backoff = @Backoff(delayExpression = "#{${rest.retry.delay:1000}}"))
 public interface RetryAware {
 
 }

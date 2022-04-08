@@ -9,7 +9,10 @@ import java.time.LocalDateTime;
 import java.util.List;
 import java.util.Objects;
 
+import javax.validation.ConstraintViolationException;
+
 import org.springframework.http.HttpStatus;
+import org.springframework.web.bind.MethodArgumentNotValidException;
 
 import com.fasterxml.jackson.annotation.JsonFormat;
 import com.fasterxml.jackson.annotation.JsonInclude;
@@ -53,8 +56,11 @@ class ApiError {
     }
 
     private static List<String> messages(Throwable t, String destination, Object... objects) {
-        List<Object> messages = Lists.newArrayList(objects);
-        messages.add(getMostSpecificCause(t).getMessage());
+        var messages = Lists.newArrayList(objects);
+        var cause = getMostSpecificCause(t);
+        if (!(cause instanceof MethodArgumentNotValidException || cause instanceof ConstraintViolationException)) {
+            messages.add(cause.getMessage());
+        }
         messages.add(destination);
         return messages.stream()
                 .filter(Objects::nonNull)
