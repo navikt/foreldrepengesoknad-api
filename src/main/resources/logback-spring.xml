@@ -4,7 +4,7 @@
         <encoder class="net.logstash.logback.encoder.LogstashEncoder"/>
     </appender>
 
-    <appender name="secureLog" class="ch.qos.logback.core.rolling.RollingFileAppender">
+    <appender name="secureLogger" class="ch.qos.logback.core.rolling.RollingFileAppender">
         <file>/secure-logs/secure.log</file>
         <rollingPolicy class="ch.qos.logback.core.rolling.FixedWindowRollingPolicy">
             <fileNamePattern>/secure-logs/secure.log.%i</fileNamePattern>
@@ -39,6 +39,10 @@
         <logger name="org.springframework.web.servlet.resource" level="trace" />
         <logger name="no.nav.security.token.support.core.validation" level="info" />
     </springProfile>
+
+    <logger name="secureLogger" level="INFO" additivity="false">
+        <appender-ref ref="secureLogger" />
+    </logger>
 
     <!-- Turn off Spring's warning logs for already resolved exceptions -->
     <logger name="org.apache.pdfbox.pdfparser.XrefTrailerResolver" level="ERROR" />
