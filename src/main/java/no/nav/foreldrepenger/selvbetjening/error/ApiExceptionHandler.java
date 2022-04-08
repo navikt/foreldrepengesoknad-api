@@ -31,7 +31,6 @@ import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.client.HttpStatusCodeException;
 import org.springframework.web.context.request.WebRequest;
-import org.springframework.web.method.annotation.MethodArgumentTypeMismatchException;
 import org.springframework.web.multipart.MaxUploadSizeExceededException;
 import org.springframework.web.multipart.MultipartException;
 import org.springframework.web.servlet.NoHandlerFoundException;
@@ -106,12 +105,6 @@ public class ApiExceptionHandler extends ResponseEntityExceptionHandler {
             .map(ApiExceptionHandler::errorMessage)
             .toList();
         return logAndHandle(BAD_REQUEST, e, req, feltMedValideringsFeil);
-    }
-
-    @ExceptionHandler
-    protected ResponseEntity<Object> handleTypeMismatch(MethodArgumentTypeMismatchException e, WebRequest req) {
-        var error = e.getName() + " should be of type " + e.getRequiredType().getName();
-        return logAndHandle(BAD_REQUEST, e, req, error);
     }
 
     @ExceptionHandler
