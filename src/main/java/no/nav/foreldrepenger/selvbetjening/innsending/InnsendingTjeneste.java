@@ -44,7 +44,7 @@ public class InnsendingTjeneste implements Innsending {
     @Override
     public Kvittering sendInn(SøknadFrontend søknad) {
         LOG.info("Sender inn søknad av type {}", søknad.getType());
-        hentKryptertVedleggOgSjekk(søknad.getVedlegg());
+        hentKryptertVedleggOgSjekkerVedlegg(søknad.getVedlegg());
         var kvittering = connection.sendInn(søknad);
         slettMellomlagringOgSøknad(søknad);
         LOG.info(RETURNERER_KVITTERING, kvittering);
@@ -54,7 +54,7 @@ public class InnsendingTjeneste implements Innsending {
     @Override
     public Kvittering ettersend(EttersendingFrontend e) {
         LOG.info("Ettersender for sak {}", e.saksnummer());
-        hentKryptertVedleggOgSjekk(e.vedlegg());
+        hentKryptertVedleggOgSjekkerVedlegg(e.vedlegg());
         if (e.dialogId() != null) {
             LOG.info("Konverterer tekst til vedleggs-pdf {}", e.brukerTekst().dokumentType());
             e.vedlegg().add(vedleggFra(uttalelseFra(e)));
@@ -68,7 +68,7 @@ public class InnsendingTjeneste implements Innsending {
     @Override
     public Kvittering endre(SøknadFrontend es) {
         LOG.info("Endrer søknad av type {}", es.getType());
-        hentKryptertVedleggOgSjekk(es.getVedlegg());
+        hentKryptertVedleggOgSjekkerVedlegg(es.getVedlegg());
         var kvittering = connection.endre(es);
         slettMellomlagringOgSøknad(es);
         LOG.info(RETURNERER_KVITTERING, kvittering);
@@ -96,7 +96,7 @@ public class InnsendingTjeneste implements Innsending {
         return "V" + IDGENERATOR.nextLong();
     }
 
-    private void hentKryptertVedleggOgSjekk(List<VedleggFrontend> vedlegg) {
+    private void hentKryptertVedleggOgSjekkerVedlegg(List<VedleggFrontend> vedlegg) {
         if (!vedlegg.isEmpty()) {
             LOG.info("Henter og sjekker mellomlagring for {} vedlegg", vedlegg.size());
             vedlegg.forEach(this::hentVedleggBytes);
