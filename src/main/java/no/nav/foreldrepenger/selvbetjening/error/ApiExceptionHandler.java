@@ -59,18 +59,6 @@ public class ApiExceptionHandler extends ResponseEntityExceptionHandler {
     }
 
     @Override
-    protected ResponseEntity<Object> handleMethodArgumentNotValid(MethodArgumentNotValidException e, HttpHeaders headers, HttpStatus status, WebRequest req) {
-        var felterMedValideringsFeilOgTilhørendeAvvisteVerdi = safeStream(e.getBindingResult().getFieldErrors())
-            .map(ApiExceptionHandler::errorMessageMedAvvisteVerdier)
-            .toList();
-        SECURE_LOGGER.warn("[{} ({})] Valideringsfeil: {}", req.getContextPath(), status, felterMedValideringsFeilOgTilhørendeAvvisteVerdi, e);
-        var feltMedValideringsFeil = safeStream(e.getBindingResult().getFieldErrors())
-            .map(ApiExceptionHandler::errorMessage)
-            .toList();
-        return logAndHandle(BAD_REQUEST, e, req, headers, feltMedValideringsFeil);
-    }
-
-    @Override
     protected ResponseEntity<Object> handleHttpMessageNotReadable(HttpMessageNotReadableException e, HttpHeaders headers, HttpStatus status, WebRequest req) {
         return logAndHandle(UNPROCESSABLE_ENTITY, e, req, headers);
     }
@@ -85,14 +73,16 @@ public class ApiExceptionHandler extends ResponseEntityExceptionHandler {
         return logAndHandle(NOT_FOUND, e, req, headers);
     }
 
-    @ExceptionHandler
-    public ResponseEntity<Object> handleIdMismatch(IdMismatchException e, WebRequest req) {
-        return logAndHandle(CONFLICT, e, req);
-    }
-
-    @ExceptionHandler
-    public ResponseEntity<Object> handleIncompleteException(UnexpectedInputException e, WebRequest req) {
-        return logAndHandle(UNPROCESSABLE_ENTITY, e, req);
+    @Override
+    protected ResponseEntity<Object> handleMethodArgumentNotValid(MethodArgumentNotValidException e, HttpHeaders headers, HttpStatus status, WebRequest req) {
+        var felterMedValideringsFeilOgTilhørendeAvvisteVerdi = safeStream(e.getBindingResult().getFieldErrors())
+            .map(ApiExceptionHandler::errorMessageMedAvvisteVerdier)
+            .toList();
+        SECURE_LOGGER.warn("[{} ({})] Valideringsfeil: {}", req.getContextPath(), status, felterMedValideringsFeilOgTilhørendeAvvisteVerdi, e);
+        var feltMedValideringsFeil = safeStream(e.getBindingResult().getFieldErrors())
+            .map(ApiExceptionHandler::errorMessage)
+            .toList();
+        return logAndHandle(BAD_REQUEST, e, req, headers, feltMedValideringsFeil);
     }
 
     @ExceptionHandler
@@ -105,6 +95,16 @@ public class ApiExceptionHandler extends ResponseEntityExceptionHandler {
             .map(ApiExceptionHandler::errorMessage)
             .toList();
         return logAndHandle(BAD_REQUEST, e, req, feltMedValideringsFeil);
+    }
+
+    @ExceptionHandler
+    public ResponseEntity<Object> handleIdMismatch(IdMismatchException e, WebRequest req) {
+        return logAndHandle(CONFLICT, e, req);
+    }
+
+    @ExceptionHandler
+    public ResponseEntity<Object> handleIncompleteException(UnexpectedInputException e, WebRequest req) {
+        return logAndHandle(UNPROCESSABLE_ENTITY, e, req);
     }
 
     @ExceptionHandler
