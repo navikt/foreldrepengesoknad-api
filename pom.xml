@@ -38,7 +38,7 @@
 		<token-validation-version>2.0.14</token-validation-version>
         <nimbus-jose-jwt.version>8.23</nimbus-jose-jwt.version>
 		<tika.version>2.3.0</tika.version>
-		<logback.logstash.version>7.0.1</logback.logstash.version>
+		<logback.logstash.version>7.1</logback.logstash.version>
 		<nv.version>1.29</nv.version>
 		<pdfbox.version>2.0.25</pdfbox.version>
 		<jacoco.version>0.8.8</jacoco.version>
