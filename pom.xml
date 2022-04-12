@@ -32,8 +32,8 @@
 		<maven.build.timestamp.format>yyyy-MM-dd HH:mm</maven.build.timestamp.format>
 		<project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
 		<project.reporting.outputEncoding>UTF-8</project.reporting.outputEncoding>
-       
-    <selvbetjening-felles.version>0.6.9</selvbetjening-felles.version>
+
+    <selvbetjening-felles.version>0.6.10</selvbetjening-felles.version>
     <springdoc.version>1.6.7</springdoc.version>
 		<token-validation-version>2.0.14</token-validation-version>
         <nimbus-jose-jwt.version>8.23</nimbus-jose-jwt.version>
