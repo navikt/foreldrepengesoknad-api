@@ -1,12 +1,14 @@
 package no.nav.foreldrepenger.selvbetjening.innsending;
 
 import static java.time.LocalDateTime.now;
+import static no.nav.foreldrepenger.common.util.StreamUtil.safeStream;
+import static no.nav.foreldrepenger.selvbetjening.innsending.mapper.CommonMapper.tilVedlegg;
 import static no.nav.foreldrepenger.selvbetjening.innsending.mapper.EttersendingMapper.tilEttersending;
-import static no.nav.foreldrepenger.selvbetjening.innsending.mapper.EttersendingMapper.tilVedlegg;
 import static no.nav.foreldrepenger.selvbetjening.innsending.mapper.SøknadMapper.tilSøknad;
 
 import java.net.URI;
 import java.time.LocalDate;
+import java.util.List;
 
 import javax.inject.Inject;
 
@@ -20,11 +22,11 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 
 import no.nav.foreldrepenger.common.domain.Kvittering;
 import no.nav.foreldrepenger.common.domain.Søknad;
+import no.nav.foreldrepenger.common.domain.felles.Vedlegg;
 import no.nav.foreldrepenger.selvbetjening.http.AbstractRestConnection;
 import no.nav.foreldrepenger.selvbetjening.innsending.domain.EttersendingFrontend;
 import no.nav.foreldrepenger.selvbetjening.innsending.domain.SøknadFrontend;
 import no.nav.foreldrepenger.selvbetjening.innsending.domain.VedleggFrontend;
-import no.nav.foreldrepenger.selvbetjening.innsending.mapper.SøknadMapper;
 import no.nav.foreldrepenger.selvbetjening.vedlegg.Image2PDFConverter;
 
 @Component
@@ -75,20 +77,38 @@ public class InnsendingConnection extends AbstractRestConnection {
         return null;
     }
 
-    public Søknad body(SøknadFrontend søknad) {
-        var dto = tilSøknad(søknad);
+    public Søknad body(SøknadFrontend søknadFrontend) {
+        var dto = tilSøknad(søknadFrontend);
         logJSON(dto);
         dto.setMottattdato(LocalDate.now());
-        dto.setTilleggsopplysninger(søknad.getTilleggsopplysninger());
-        LOG.trace("{} vedlegg", søknad.getVedlegg().size());
-        søknad.getVedlegg().forEach(v -> dto.getVedlegg().add(SøknadMapper.tilVedlegg(convert(v))));
+        dto.setTilleggsopplysninger(søknadFrontend.getTilleggsopplysninger());
+
+        var unikeVedleggMedInnhold = getUnikeVedleggMedInnhold(søknadFrontend.getVedlegg());
+        dto.getVedlegg().addAll(unikeVedleggMedInnhold);
+
+        if (søknadFrontend.getVedlegg().size() > unikeVedleggMedInnhold.size()) {
+            LOG.warn("Mottatt duplikate vedlegg fra frontend ved innsending av søknad. Fjerner duplikate vedlegg.");
+        }
         return dto;
     }
 
     public no.nav.foreldrepenger.common.domain.felles.Ettersending body(EttersendingFrontend ettersending) {
         var dto = tilEttersending(ettersending);
-        ettersending.vedlegg().forEach(v -> dto.getVedlegg().add(tilVedlegg(convert(v))));
+
+        var unikeVedleggMedInnhold = getUnikeVedleggMedInnhold(ettersending.vedlegg());
+        dto.getVedlegg().addAll(unikeVedleggMedInnhold);
+
+        if (ettersending.vedlegg().size() > unikeVedleggMedInnhold.size()) {
+            LOG.warn("Mottatt duplikate vedlegg under ettersending. Fjerner duplikate vedlegg.");
+        }
         return dto;
+    }
+
+    private List<Vedlegg> getUnikeVedleggMedInnhold(List<VedleggFrontend> vedleggFrontend) {
+        return safeStream(vedleggFrontend)
+            .distinct()
+            .map(v -> tilVedlegg(convert(v)))
+            .toList();
     }
 
     private VedleggFrontend convert(VedleggFrontend v) {

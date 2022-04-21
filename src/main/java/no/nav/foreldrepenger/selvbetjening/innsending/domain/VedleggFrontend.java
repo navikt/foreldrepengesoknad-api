@@ -3,14 +3,12 @@ package no.nav.foreldrepenger.selvbetjening.innsending.domain;
 import static no.nav.foreldrepenger.common.domain.validation.InputValideringRegex.FRITEKST;
 
 import java.net.URI;
+import java.util.Objects;
 
 import javax.validation.constraints.Pattern;
 
 import com.fasterxml.jackson.annotation.JsonCreator;
 
-import lombok.EqualsAndHashCode;
-
-@EqualsAndHashCode
 public class VedleggFrontend {
 
     private byte[] content;
@@ -81,6 +79,19 @@ public class VedleggFrontend {
 
     public URI getUrl() {
         return url;
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        VedleggFrontend that = (VedleggFrontend) o;
+        return Objects.equals(id, that.id);
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(id);
     }
 
     @Override

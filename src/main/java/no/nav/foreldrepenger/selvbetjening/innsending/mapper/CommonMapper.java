@@ -13,8 +13,12 @@ import com.neovisionaries.i18n.CountryCode;
 
 import no.nav.foreldrepenger.common.domain.Fødselsnummer;
 import no.nav.foreldrepenger.common.domain.Orgnummer;
+import no.nav.foreldrepenger.common.domain.felles.DokumentType;
+import no.nav.foreldrepenger.common.domain.felles.InnsendingsType;
 import no.nav.foreldrepenger.common.domain.felles.LukketPeriode;
 import no.nav.foreldrepenger.common.domain.felles.ProsentAndel;
+import no.nav.foreldrepenger.common.domain.felles.PåkrevdVedlegg;
+import no.nav.foreldrepenger.common.domain.felles.VedleggMetaData;
 import no.nav.foreldrepenger.common.domain.felles.annenforelder.AnnenForelder;
 import no.nav.foreldrepenger.common.domain.felles.annenforelder.NorskForelder;
 import no.nav.foreldrepenger.common.domain.felles.annenforelder.UkjentForelder;
@@ -44,17 +48,27 @@ import no.nav.foreldrepenger.selvbetjening.innsending.domain.AnnenForelderFronte
 import no.nav.foreldrepenger.selvbetjening.innsending.domain.BarnFrontend;
 import no.nav.foreldrepenger.selvbetjening.innsending.domain.SøknadFrontend;
 import no.nav.foreldrepenger.selvbetjening.innsending.domain.UtenlandsoppholdPeriodeFrontend;
+import no.nav.foreldrepenger.selvbetjening.innsending.domain.VedleggFrontend;
 import no.nav.foreldrepenger.selvbetjening.innsending.domain.arbeid.AnnenInntektFrontend;
 import no.nav.foreldrepenger.selvbetjening.innsending.domain.arbeid.FrilansInformasjonFrontend;
 import no.nav.foreldrepenger.selvbetjening.innsending.domain.arbeid.FrilansoppdragFrontend;
 import no.nav.foreldrepenger.selvbetjening.innsending.domain.arbeid.SelvstendigNæringsdrivendeInformasjonFrontend;
 import no.nav.foreldrepenger.selvbetjening.innsending.domain.arbeid.TilknyttetPerson;
 
-final class CommonMapper {
+public final class CommonMapper {
 
     private CommonMapper() {
     }
 
+    public static no.nav.foreldrepenger.common.domain.felles.Vedlegg tilVedlegg(VedleggFrontend vedlegg) {
+        var vedleggMetadata = new VedleggMetaData(
+            vedlegg.getBeskrivelse(),
+            vedlegg.getId(),
+            vedlegg.getInnsendingsType() != null ? InnsendingsType.valueOf(vedlegg.getInnsendingsType()) : null,
+            vedlegg.getSkjemanummer() != null ? DokumentType.valueOf(vedlegg.getSkjemanummer()) : null
+        );
+        return new PåkrevdVedlegg(vedleggMetadata, vedlegg.getContent());
+    }
 
     static AnnenForelder tilAnnenForelder(SøknadFrontend søknad) {
         var annenForelder = søknad.getAnnenForelder();
