@@ -10,6 +10,7 @@ import java.util.Optional;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.stereotype.Component;
 
 import com.google.api.gax.retrying.RetrySettings;
 import com.google.cloud.storage.Blob;
@@ -19,6 +20,7 @@ import com.google.cloud.storage.Storage;
 import com.google.cloud.storage.StorageException;
 import com.google.cloud.storage.StorageOptions;
 
+@Component
 public class GCPMellomlagring extends AbstractMellomlagringTjeneste {
 
     private static final URI STORAGE = URI.create("https://storage.googleapis.com");
