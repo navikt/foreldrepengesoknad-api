@@ -6,6 +6,7 @@ import org.springframework.context.annotation.Configuration;
 import org.threeten.bp.Duration;
 
 import com.google.api.gax.retrying.RetrySettings;
+import com.google.cloud.ServiceOptions;
 
 import no.nav.foreldrepenger.boot.conditionals.ConditionalOnGCP;
 
@@ -14,8 +15,8 @@ import no.nav.foreldrepenger.boot.conditionals.ConditionalOnGCP;
 public class GCPStorageConfiguration {
 
     @Bean
-    RetrySettings retrySettings(@Value("${mellomlagring.timeout:3000}") int timeoutMs) {
-        return RetrySettings.newBuilder()
+    RetrySettings retrySettings(@Value("${mellomlagring.timeout:5000}") int timeoutMs) {
+        return ServiceOptions.getDefaultRetrySettings().toBuilder()
             .setInitialRetryDelay(Duration.ofMillis(400))
             .setMaxRetryDelay(Duration.ofMillis(900))
             .setRetryDelayMultiplier(1.5)
