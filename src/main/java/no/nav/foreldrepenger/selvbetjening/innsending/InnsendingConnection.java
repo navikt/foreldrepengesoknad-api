@@ -1,6 +1,7 @@
 package no.nav.foreldrepenger.selvbetjening.innsending;
 
 import static java.time.LocalDateTime.now;
+import static no.nav.foreldrepenger.boot.conditionals.EnvUtil.CONFIDENTIAL;
 import static no.nav.foreldrepenger.common.util.StreamUtil.safeStream;
 import static no.nav.foreldrepenger.selvbetjening.innsending.mapper.CommonMapper.tilVedlegg;
 import static no.nav.foreldrepenger.selvbetjening.innsending.mapper.EttersendingMapper.tilEttersending;
@@ -31,8 +32,8 @@ import no.nav.foreldrepenger.selvbetjening.vedlegg.Image2PDFConverter;
 
 @Component
 public class InnsendingConnection extends AbstractRestConnection {
-
     private static final Logger LOG = LoggerFactory.getLogger(InnsendingConnection.class);
+    private static final Logger SECURE_LOGGER = LoggerFactory.getLogger("secureLogger");
 
     private final InnsendingConfig config;
     private final Image2PDFConverter converter;
@@ -78,16 +79,18 @@ public class InnsendingConnection extends AbstractRestConnection {
     }
 
     public Søknad body(SøknadFrontend søknadFrontend) {
+        SECURE_LOGGER.info("{} mottatt fra frontend med følende innhold: {}", søknadFrontend.getType(), søknadFrontend);
         var dto = tilSøknad(søknadFrontend);
         logJSON(dto);
         dto.setMottattdato(LocalDate.now());
         dto.setTilleggsopplysninger(søknadFrontend.getTilleggsopplysninger());
 
-        var unikeVedleggMedInnhold = getUnikeVedleggMedInnhold(søknadFrontend.getVedlegg());
+        var unikeVedleggMedInnhold = hentUnikeVedleggMedInnhold(søknadFrontend.getVedlegg());
         dto.getVedlegg().addAll(unikeVedleggMedInnhold);
 
         if (søknadFrontend.getVedlegg().size() > unikeVedleggMedInnhold.size()) {
-            LOG.warn("Mottatt duplikate vedlegg fra frontend ved innsending av søknad. Fjerner duplikate vedlegg.");
+            LOG.warn("Mottatt duplikate vedlegg fra frontend ved innsending av søknad. Fjerner duplikate vedlegg." +
+                "Sjekk secure logg for mer info.");
         }
         return dto;
     }
@@ -95,16 +98,17 @@ public class InnsendingConnection extends AbstractRestConnection {
     public no.nav.foreldrepenger.common.domain.felles.Ettersending body(EttersendingFrontend ettersending) {
         var dto = tilEttersending(ettersending);
 
-        var unikeVedleggMedInnhold = getUnikeVedleggMedInnhold(ettersending.vedlegg());
+        var unikeVedleggMedInnhold = hentUnikeVedleggMedInnhold(ettersending.vedlegg());
         dto.getVedlegg().addAll(unikeVedleggMedInnhold);
 
         if (ettersending.vedlegg().size() > unikeVedleggMedInnhold.size()) {
-            LOG.warn("Mottatt duplikate vedlegg under ettersending. Fjerner duplikate vedlegg.");
+            LOG.warn("Mottatt duplikate vedlegg under ettersending. Fjerner duplikate vedlegg. Sjekk secure logg for mer info.");
+            SECURE_LOGGER.info("Ettersendte vedlegg fra frontend før vasking er {}", ettersending.vedlegg());
         }
         return dto;
     }
 
-    private List<Vedlegg> getUnikeVedleggMedInnhold(List<VedleggFrontend> vedleggFrontend) {
+    private List<Vedlegg> hentUnikeVedleggMedInnhold(List<VedleggFrontend> vedleggFrontend) {
         return safeStream(vedleggFrontend)
             .distinct()
             .map(v -> tilVedlegg(convert(v)))
@@ -122,9 +126,9 @@ public class InnsendingConnection extends AbstractRestConnection {
     private void logJSON(no.nav.foreldrepenger.common.domain.Søknad søknad) {
         try {
             var seralizedSøknad = serialize(søknad);
-            LOG.trace("JSON er {}", seralizedSøknad);
+            LOG.trace(CONFIDENTIAL, "JSON er {}", seralizedSøknad);
         } catch (JsonProcessingException e) {
-            LOG.trace("Klarte ikke å seralisere søknad! Vil feile ved innsending mot mottak!");
+            LOG.trace(CONFIDENTIAL, "Klarte ikke å seralisere søknad! Vil feile ved innsending mot mottak!");
         }
     }
 
