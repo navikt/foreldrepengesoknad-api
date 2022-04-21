@@ -8,9 +8,6 @@ import org.threeten.bp.Duration;
 import com.google.api.gax.retrying.RetrySettings;
 
 import no.nav.foreldrepenger.boot.conditionals.ConditionalOnGCP;
-import no.nav.foreldrepenger.selvbetjening.mellomlagring.Bøtte;
-import no.nav.foreldrepenger.selvbetjening.mellomlagring.GCPMellomlagring;
-import no.nav.foreldrepenger.selvbetjening.mellomlagring.Mellomlagring;
 
 @Configuration
 @ConditionalOnGCP
@@ -25,10 +22,5 @@ public class GCPStorageConfiguration {
             .setMaxAttempts(5)
             .setTotalTimeout(Duration.ofMillis(timeoutMs))
             .build();
-    }
-
-    @Bean
-    public Mellomlagring gcpMellomlagring(Bøtte mellomlagring, RetrySettings retrySettings) {
-        return new GCPMellomlagring(mellomlagring, retrySettings);
     }
 }
