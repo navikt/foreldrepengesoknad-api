@@ -1,9 +1,9 @@
 package no.nav.foreldrepenger.selvbetjening.innsending;
 
 import static java.time.LocalDateTime.now;
+import static no.nav.foreldrepenger.selvbetjening.innsending.mapper.CommonMapper.tilVedlegg;
 import static no.nav.foreldrepenger.selvbetjening.innsending.mapper.EttersendingMapper.tilEttersending;
 import static no.nav.foreldrepenger.selvbetjening.innsending.mapper.SøknadMapper.tilSøknad;
-import static no.nav.foreldrepenger.selvbetjening.innsending.mapper.SøknadMapper.tilVedlegg;
 import static org.slf4j.LoggerFactory.getLogger;
 
 import javax.inject.Inject;
@@ -46,6 +46,7 @@ public class InnsendingTjenesteStub implements Innsending {
         return postStub(søknad);
     }
 
+    // TODO: Fiks/fjern denne
     private Kvittering postStub(SøknadFrontend søknad) {
         var dto = tilSøknad(søknad);
         dto.setTilleggsopplysninger(søknad.getTilleggsopplysninger());

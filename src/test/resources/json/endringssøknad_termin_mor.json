@@ -44,6 +44,9 @@
                 "fom": "2022-03-04T00:00:00.000Z",
                 "tom": "2022-04-21T00:00:00.000Z"
             },
+            "vedlegg": [
+                "V2898513808905600871912527163003030700"
+            ],
             "type": "utsettelse",
             "årsak": "FRI"
         },
@@ -61,5 +64,18 @@
             "ønskerSamtidigUttak": false
         }
     ],
-    "vedlegg": []
+    "vedlegg": [
+        {
+            "file": {},
+            "filename": "logo_mwg.png.png",
+            "filesize": 10130,
+            "id": "V2898513808905600871912527163003030700",
+            "pending": false,
+            "skjemanummer": "I000042",
+            "type": "omsorgsovertakelse",
+            "uploaded": true,
+            "url": "https://foreldrepengesoknad-api.dev.nav.no/rest/storage/vedlegg/7005c937-8114-4af4-b19c-18143db92025",
+            "uuid": "7005c937-8114-4af4-b19c-18143db92025"
+        }
+    ]
 }
