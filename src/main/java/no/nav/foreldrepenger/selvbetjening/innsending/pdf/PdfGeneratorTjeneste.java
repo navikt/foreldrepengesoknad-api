@@ -33,18 +33,18 @@ public class PdfGeneratorTjeneste implements PdfGenerator {
     private TilbakebetalingUttalelseDto fra(TilbakebetalingUttalelse uttalelse) {
         Søkerinfo person = oppslagTjeneste.hentSøkerinfo();
         return new TilbakebetalingUttalelseDto(fulltnavn(person.søker()),
-                person.søker().fnr(),
-                uttalelse.saksnummer(),
-                uttalelse.type(),
-                LocalDateTime.now().format(DateTimeFormatter.ISO_DATE_TIME),
-                uttalelse.brukerTekst().tekst());
+            person.søker().fnr(),
+            uttalelse.saksnummer(),
+            uttalelse.type(),
+            LocalDateTime.now().format(DateTimeFormatter.ISO_DATE_TIME),
+            uttalelse.brukerTekst().tekst());
     }
 
     private static String fulltnavn(PersonFrontend person) {
         return Stream.of(person.fornavn(), person.mellomnavn(), person.etternavn())
-                .filter(Objects::nonNull)
-                .filter(s -> !s.isBlank())
-                .collect(joining(" "));
+            .filter(Objects::nonNull)
+            .filter(s -> !s.isBlank())
+            .collect(joining(" "));
     }
 
     @Override

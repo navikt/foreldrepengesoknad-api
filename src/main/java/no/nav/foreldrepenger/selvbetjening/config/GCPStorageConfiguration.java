@@ -8,10 +8,9 @@ import org.threeten.bp.Duration;
 import com.google.api.gax.retrying.RetrySettings;
 import com.google.cloud.ServiceOptions;
 
-import no.nav.foreldrepenger.boot.conditionals.ConditionalOnGCP;
+import no.nav.foreldrepenger.selvbetjening.mellomlagring.Bøtte;
 
 @Configuration
-@ConditionalOnGCP
 public class GCPStorageConfiguration {
 
     @Bean
@@ -23,5 +22,13 @@ public class GCPStorageConfiguration {
             .setMaxAttempts(5)
             .setTotalTimeout(Duration.ofMillis(timeoutMs))
             .build();
+    }
+
+    @Bean
+    public Bøtte tmpBøtte(
+        @Value("${mellomlagring.tmp.navn:mellomlagring}") String navn,
+        @Value("${mellomlagring.tmp.levetid:1d}") java.time.Duration levetid,
+        @Value("${mellomlagring.tmp.enabled:true}") boolean enabled) {
+        return new Bøtte(navn, levetid, enabled);
     }
 }

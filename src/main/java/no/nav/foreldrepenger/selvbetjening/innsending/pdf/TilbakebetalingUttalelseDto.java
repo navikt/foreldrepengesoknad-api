@@ -1,13 +1,11 @@
 package no.nav.foreldrepenger.selvbetjening.innsending.pdf;
 
-import lombok.Data;
+import no.nav.foreldrepenger.common.domain.Fødselsnummer;
 
-@Data
-public class TilbakebetalingUttalelseDto {
-    private final String navn;
-    private final String fnr;
-    private final String saksnummer;
-    private final String ytelse;
-    private final String innsendtDato;
-    private final String tilsvar;
+public record TilbakebetalingUttalelseDto(String navn,
+                                          Fødselsnummer fnr,
+                                          String saksnummer,
+                                          String ytelse,
+                                          String innsendtDato,
+                                          String tilsvar) {
 }

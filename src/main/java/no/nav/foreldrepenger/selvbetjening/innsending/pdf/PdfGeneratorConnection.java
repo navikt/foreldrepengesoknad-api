@@ -2,15 +2,10 @@ package no.nav.foreldrepenger.selvbetjening.innsending.pdf;
 
 import java.net.URI;
 
-import javax.inject.Inject;
-
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Component;
 import org.springframework.web.client.RestOperations;
-
-import com.fasterxml.jackson.core.JsonProcessingException;
-import com.fasterxml.jackson.databind.ObjectMapper;
 
 import no.nav.foreldrepenger.selvbetjening.http.AbstractRestConnection;
 
@@ -19,9 +14,6 @@ public class PdfGeneratorConnection extends AbstractRestConnection {
 
     private static final Logger LOG = LoggerFactory.getLogger(PdfGeneratorConnection.class);
     private final PdfGeneratorConfig config;
-
-    @Inject
-    private ObjectMapper mapper;
 
     public PdfGeneratorConnection(RestOperations operations, PdfGeneratorConfig config) {
         super(operations);
@@ -34,7 +26,7 @@ public class PdfGeneratorConnection extends AbstractRestConnection {
     }
 
     public byte[] genererPdf(TilbakebetalingUttalelseDto dto) {
-        logJSON(dto);
+        LOG.trace("Uttalelse for tilbakebetaling er {}", dto);
         return postIfEnabled(config.tilbakebetalingURI(), dto);
     }
 
@@ -48,15 +40,7 @@ public class PdfGeneratorConnection extends AbstractRestConnection {
             return postForObject(uri, body, byte[].class);
         }
         LOG.info("PdfGenerator er ikke aktivert");
-        return null;
-    }
-
-    private void logJSON(TilbakebetalingUttalelseDto dto) {
-        try {
-            LOG.trace("JSON er {}", mapper.writerWithDefaultPrettyPrinter().writeValueAsString(dto));
-        } catch (JsonProcessingException e) {
-
-        }
+        return new byte[0];
     }
 
     @Override

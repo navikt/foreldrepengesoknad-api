@@ -1,7 +1,6 @@
 package no.nav.foreldrepenger.selvbetjening.innsending;
 
 import static java.time.LocalDateTime.now;
-import static no.nav.foreldrepenger.boot.conditionals.EnvUtil.CONFIDENTIAL;
 import static no.nav.foreldrepenger.common.util.StreamUtil.safeStream;
 import static no.nav.foreldrepenger.selvbetjening.innsending.mapper.CommonMapper.tilVedlegg;
 import static no.nav.foreldrepenger.selvbetjening.innsending.mapper.EttersendingMapper.tilEttersending;
@@ -11,15 +10,10 @@ import java.net.URI;
 import java.time.LocalDate;
 import java.util.List;
 
-import javax.inject.Inject;
-
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Component;
 import org.springframework.web.client.RestOperations;
-
-import com.fasterxml.jackson.core.JsonProcessingException;
-import com.fasterxml.jackson.databind.ObjectMapper;
 
 import no.nav.foreldrepenger.common.domain.Kvittering;
 import no.nav.foreldrepenger.common.domain.Søknad;
@@ -37,9 +31,6 @@ public class InnsendingConnection extends AbstractRestConnection {
 
     private final InnsendingConfig config;
     private final Image2PDFConverter converter;
-
-    @Inject
-    private ObjectMapper mapper;
 
     public InnsendingConnection(RestOperations operations, InnsendingConfig config, Image2PDFConverter converter) {
         super(operations);
@@ -81,7 +72,6 @@ public class InnsendingConnection extends AbstractRestConnection {
     public Søknad body(SøknadFrontend søknadFrontend) {
         SECURE_LOGGER.info("{} mottatt fra frontend med følende innhold: {}", søknadFrontend.getType(), søknadFrontend);
         var dto = tilSøknad(søknadFrontend);
-        logJSON(dto);
         dto.setMottattdato(LocalDate.now());
         dto.setTilleggsopplysninger(søknadFrontend.getTilleggsopplysninger());
 
@@ -89,8 +79,7 @@ public class InnsendingConnection extends AbstractRestConnection {
         dto.getVedlegg().addAll(unikeVedleggMedInnhold);
 
         if (søknadFrontend.getVedlegg().size() > unikeVedleggMedInnhold.size()) {
-            LOG.warn("Mottatt duplikate vedlegg fra frontend ved innsending av søknad. Fjerner duplikate vedlegg." +
-                "Sjekk secure logg for mer info.");
+            LOG.warn("Mottatt duplikate vedlegg fra frontend ved innsending av søknad. Fjerner duplikate vedlegg. Sjekk secure logg for mer info.");
         }
         return dto;
     }
@@ -99,7 +88,7 @@ public class InnsendingConnection extends AbstractRestConnection {
         var dto = tilEttersending(ettersending);
 
         var unikeVedleggMedInnhold = hentUnikeVedleggMedInnhold(ettersending.vedlegg());
-        dto.getVedlegg().addAll(unikeVedleggMedInnhold);
+        dto.getVedlegg().addAll(hentUnikeVedleggMedInnhold(ettersending.vedlegg()));
 
         if (ettersending.vedlegg().size() > unikeVedleggMedInnhold.size()) {
             LOG.warn("Mottatt duplikate vedlegg under ettersending. Fjerner duplikate vedlegg. Sjekk secure logg for mer info.");
@@ -121,19 +110,6 @@ public class InnsendingConnection extends AbstractRestConnection {
             vedlegg.setContent(converter.convert(v.getContent()));
         }
         return vedlegg;
-    }
-
-    private void logJSON(no.nav.foreldrepenger.common.domain.Søknad søknad) {
-        try {
-            var seralizedSøknad = serialize(søknad);
-            LOG.trace(CONFIDENTIAL, "JSON er {}", seralizedSøknad);
-        } catch (JsonProcessingException e) {
-            LOG.trace(CONFIDENTIAL, "Klarte ikke å seralisere søknad! Vil feile ved innsending mot mottak!");
-        }
-    }
-
-    private String serialize(Object obj) throws JsonProcessingException {
-        return mapper.writerWithDefaultPrettyPrinter().writeValueAsString(obj);
     }
 
     @Override
