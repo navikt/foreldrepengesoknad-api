@@ -2,7 +2,7 @@ package no.nav.foreldrepenger.selvbetjening.mellomlagring;
 
 import static javax.crypto.Cipher.DECRYPT_MODE;
 import static javax.crypto.Cipher.ENCRYPT_MODE;
-import static org.apache.commons.lang3.StringUtils.isEmpty;
+import static org.springframework.util.ObjectUtils.isEmpty;
 
 import java.security.InvalidAlgorithmParameterException;
 import java.security.InvalidKeyException;
