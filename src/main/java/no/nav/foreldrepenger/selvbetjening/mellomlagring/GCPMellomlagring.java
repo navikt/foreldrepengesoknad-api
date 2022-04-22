@@ -5,7 +5,6 @@ import static org.apache.http.HttpStatus.SC_NOT_FOUND;
 import static org.springframework.http.MediaType.APPLICATION_JSON_VALUE;
 
 import java.net.URI;
-import java.util.Objects;
 import java.util.Optional;
 
 import org.slf4j.Logger;
@@ -20,10 +19,13 @@ import com.google.cloud.storage.Storage;
 import com.google.cloud.storage.StorageException;
 import com.google.cloud.storage.StorageOptions;
 
+import no.nav.foreldrepenger.boot.conditionals.ConditionalOnGCP;
+
 @Component
+@ConditionalOnGCP
 public class GCPMellomlagring extends AbstractMellomlagringTjeneste {
 
-    private static final URI STORAGE = URI.create("https://storage.googleapis.com");
+    private static final URI STORAGE_URI = URI.create("https://storage.googleapis.com");
 
     private static final Logger LOG = LoggerFactory.getLogger(GCPMellomlagring.class);
 
@@ -49,7 +51,6 @@ public class GCPMellomlagring extends AbstractMellomlagringTjeneste {
         try {
             return Optional.ofNullable(storage.get(bøtte, key(katalog, key)))
                     .map(Blob::getContent)
-                    .filter(Objects::nonNull)
                     .map(b -> new String(b, UTF_8));
         } catch (StorageException e) {
             if (SC_NOT_FOUND == e.getCode()) {
@@ -77,7 +78,7 @@ public class GCPMellomlagring extends AbstractMellomlagringTjeneste {
 
     @Override
     public URI pingURI() {
-        return STORAGE;
+        return STORAGE_URI;
     }
 
     @Override

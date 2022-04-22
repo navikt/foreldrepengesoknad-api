@@ -44,7 +44,7 @@ class OppslagPersonMapperTest {
         var annenPartFelles = barnFelles.annenPart();
 
         var person = tilPersonFrontend(personFelles);
-        assertThat(person.fnr()).isEqualTo(personFelles.fnr().value());
+        assertThat(person.fnr()).isEqualTo(personFelles.fnr());
         assertThat(person.fornavn()).isEqualTo(personFelles.navn().fornavn());
         assertThat(person.etternavn()).isEqualTo(personFelles.navn().etternavn());
         assertThat(person.kjønn()).isEqualTo(personFelles.kjønn().name());
@@ -69,7 +69,7 @@ class OppslagPersonMapperTest {
         var personFelles = personUtenAnnenpart();
 
         var person = tilPersonFrontend(personFelles);
-        assertThat(person.fnr()).isEqualTo(personFelles.fnr().value());
+        assertThat(person.fnr()).isEqualTo(personFelles.fnr());
         assertThat(person.fornavn()).isEqualTo(personFelles.navn().fornavn());
         assertThat(person.etternavn()).isEqualTo(personFelles.navn().etternavn());
         assertThat(person.kjønn()).isEqualTo(personFelles.kjønn().name());

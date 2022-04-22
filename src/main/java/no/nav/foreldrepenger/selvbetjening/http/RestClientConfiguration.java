@@ -34,7 +34,6 @@ import org.springframework.web.servlet.config.annotation.WebMvcConfigurer;
 
 import com.google.common.base.Splitter;
 
-import no.nav.foreldrepenger.selvbetjening.mellomlagring.Bøtte;
 import no.nav.security.token.support.client.core.oauth2.OAuth2AccessTokenService;
 import no.nav.security.token.support.client.spring.ClientConfigurationProperties;
 import no.nav.security.token.support.client.spring.oauth2.ClientConfigurationPropertiesMatcher;
@@ -115,14 +114,6 @@ public class RestClientConfiguration implements WebMvcConfigurer {
                 return true;
             }
         });
-    }
-
-    @Bean
-    public Bøtte tmpBøtte(
-            @Value("${mellomlagring.tmp.navn:mellomlagring}") String navn,
-            @Value("${mellomlagring.tmp.levetid:1d}") Duration levetid,
-            @Value("${mellomlagring.tmp.enabled:true}") boolean enabled) {
-        return new Bøtte(navn, levetid, enabled);
     }
 
     @Override

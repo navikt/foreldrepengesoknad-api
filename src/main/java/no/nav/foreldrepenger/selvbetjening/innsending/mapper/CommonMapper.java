@@ -3,11 +3,9 @@ package no.nav.foreldrepenger.selvbetjening.innsending.mapper;
 import static java.time.LocalDate.now;
 import static no.nav.foreldrepenger.common.util.StreamUtil.safeStream;
 import static no.nav.foreldrepenger.selvbetjening.util.DateUtil.erNyopprettet;
-import static org.apache.commons.lang3.StringUtils.isEmpty;
+import static org.springframework.util.ObjectUtils.isEmpty;
 
 import java.util.List;
-
-import org.springframework.util.CollectionUtils;
 
 import com.neovisionaries.i18n.CountryCode;
 
@@ -108,7 +106,7 @@ public final class CommonMapper {
         }
         var situasjon = søknad.getSituasjon();
         if (isEmpty(situasjon) || situasjon.equals("fødsel")) {
-            var erBarnetFødt = !CollectionUtils.isEmpty(barn.fødselsdatoer());
+            var erBarnetFødt = !isEmpty(barn.fødselsdatoer());
             return erBarnetFødt ? tilFødsel(barn) : tilFremtidigFødsel(barn);
         }
         return tilOmsorgsovertagelse(barn);

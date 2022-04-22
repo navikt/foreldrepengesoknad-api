@@ -1,5 +1,6 @@
 package no.nav.foreldrepenger.selvbetjening.vedlegg;
 
+import static org.assertj.core.api.Assertions.assertThat;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.junit.jupiter.api.Assertions.assertTrue;
@@ -59,7 +60,7 @@ public class ImageByteArray2PDFConverterTest {
 
     @Test
     public void pdfManyPages() {
-        converter.convert("pdf/spring-framework-reference.pdf");
-
+        var content = converter.convert("pdf/spring-framework-reference.pdf");
+        assertThat(content).isNotEmpty();
     }
 }

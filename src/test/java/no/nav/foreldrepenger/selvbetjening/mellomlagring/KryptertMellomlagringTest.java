@@ -51,7 +51,7 @@ class KryptertMellomlagringTest {
         km.lagreKryptertSøknad("Søknad");
         var lest = km.lesKryptertSøknad();
         assertThat(lest).isPresent();
-        assertEquals(lest.get(), "Søknad");
+        assertThat(lest.get()).contains("Søknad");
         km.slettKryptertSøknad();
         assertThat(km.lesKryptertSøknad()).isNotPresent();
     }

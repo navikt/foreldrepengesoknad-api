@@ -25,7 +25,7 @@ public final class PersonMapper {
 
     public static PersonFrontend tilPersonFrontend(no.nav.foreldrepenger.common.domain.felles.Person dto) {
         return new PersonFrontend(
-            dto.fnr().value(),
+            dto.fnr(),
             Optional.ofNullable(dto.navn()).map(no.nav.foreldrepenger.common.domain.Navn::fornavn).orElse(null),
             Optional.ofNullable(dto.navn()).map(no.nav.foreldrepenger.common.domain.Navn::mellomnavn).orElse(null),
             Optional.ofNullable(dto.navn()).map(no.nav.foreldrepenger.common.domain.Navn::etternavn).orElse(null),

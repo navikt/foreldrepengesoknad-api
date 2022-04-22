@@ -27,54 +27,42 @@ public class KryptertMellomlagring {
     private final VedleggSjekker sjekker;
 
     public KryptertMellomlagring(Mellomlagring mellomlagring, MellomlagringKrypto krypto,
-            @Qualifier(DELEGERENDE) VedleggSjekker sjekker) {
+                                 @Qualifier(DELEGERENDE) VedleggSjekker sjekker) {
         this.mellomlagring = mellomlagring;
         this.krypto = krypto;
         this.sjekker = sjekker;
     }
 
     public Optional<String> lesKryptertSøknad() {
-        LOG.trace("Leser kryptert søknad fra {}", katalog());
         var søknad = mellomlagring.les(KORTTIDS, katalog(), SØKNAD)
-                .map(krypto::decrypt);
+            .map(krypto::decrypt);
         if (søknad.isPresent()) {
-            LOG.trace("Lest kryptert søknad fra {}", katalog());
             LOG.info(CONFIDENTIAL, "Dekryptert søknad {}", søknad.get());
         }
         return søknad;
     }
 
     public void lagreKryptertSøknad(String søknad) {
-        LOG.trace("Lagrer kryptert søknad i {}", katalog());
         mellomlagring.lagre(KORTTIDS, katalog(), SØKNAD, krypto.encrypt(søknad));
-        LOG.trace("Lagret kryptert søknad i {}", katalog());
     }
 
     public void slettKryptertSøknad() {
-        LOG.trace("Sletter kryptert søknad fra {}", katalog());
         mellomlagring.slett(KORTTIDS, katalog(), SØKNAD);
-        LOG.trace("Slettet kryptert søknad fra {}", katalog());
     }
 
     public Optional<Attachment> lesKryptertVedlegg(String key) {
-        LOG.trace("Leser kryptert vedlegg fra {}", katalog());
         var vedlegg = mellomlagring.les(KORTTIDS, katalog(), key)
-                .map(krypto::decrypt)
-                .map(v -> GSON.fromJson(v, Attachment.class));
+            .map(krypto::decrypt)
+            .map(v -> GSON.fromJson(v, Attachment.class));
         if (vedlegg.isPresent()) {
-            LOG.trace("Lest kryptert vedlegg");
             LOG.info(CONFIDENTIAL, "Dekryptert vedlegg {}", vedlegg.get());
-        } else {
-            LOG.trace("Fant intet kryptert vedlegg");
         }
         return vedlegg;
     }
 
     public void lagreKryptertVedlegg(Attachment vedlegg) {
-        LOG.trace("Lagrer kryptert vedlegg i {}", katalog());
         sjekker.sjekk(vedlegg);
         mellomlagring.lagre(KORTTIDS, katalog(), vedlegg.getUuid(), krypto.encrypt(GSON.toJson(vedlegg)));
-        LOG.info("Lagret kryptert vedlegg i {}", katalog());
     }
 
     public void slettKryptertVedlegg(VedleggFrontend vedlegg) {
@@ -85,9 +73,7 @@ public class KryptertMellomlagring {
 
     public void slettKryptertVedlegg(String uuid) {
         if (uuid != null) {
-            LOG.trace("Sletter kryptert vedlegg med uuid {} fra {}", uuid, katalog());
             mellomlagring.slett(KORTTIDS, katalog(), uuid);
-            LOG.trace("Slettet kryptert vedlegg med uuid {} fra {}", uuid, katalog());
         }
     }
 
@@ -97,7 +83,6 @@ public class KryptertMellomlagring {
 
     @Override
     public String toString() {
-        return getClass().getSimpleName() + "[storage=" + mellomlagring + ", crypto=" + krypto + ", sjekker=" + sjekker
-                + "]";
+        return getClass().getSimpleName() + "[storage=" + mellomlagring + ", crypto=" + krypto + ", sjekker=" + sjekker + "]";
     }
 }
