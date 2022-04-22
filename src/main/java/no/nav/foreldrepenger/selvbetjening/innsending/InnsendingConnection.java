@@ -88,7 +88,7 @@ public class InnsendingConnection extends AbstractRestConnection {
         var dto = tilEttersending(ettersending);
 
         var unikeVedleggMedInnhold = hentUnikeVedleggMedInnhold(ettersending.vedlegg());
-        dto.getVedlegg().addAll(hentUnikeVedleggMedInnhold(ettersending.vedlegg()));
+        dto.getVedlegg().addAll(unikeVedleggMedInnhold);
 
         if (ettersending.vedlegg().size() > unikeVedleggMedInnhold.size()) {
             LOG.warn("Mottatt duplikate vedlegg under ettersending. Fjerner duplikate vedlegg. Sjekk secure logg for mer info.");
