@@ -1,24 +1,9 @@
 package no.nav.foreldrepenger.selvbetjening.innsyn.uttaksplan;
 
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
-
-public enum GraderingAvslagÅrsak {
-
+enum GraderingAvslagÅrsak {
     GRADERING_FØR_UKE_7,
     FOR_SEN_SØKNAD,
     MOR_OPPFYLLER_IKKE_AKTIVITETSKRAV,
     MANGLENDE_GRADERINGSAVTALE,
-    AVSLAG_PGA_100_PROSENT_ARBEID;
-
-    private static final Logger LOG = LoggerFactory.getLogger(GraderingAvslagÅrsak.class);
-
-    public static GraderingAvslagÅrsak valueSafelyOf(String årsak) {
-        try {
-            return GraderingAvslagÅrsak.valueOf(årsak);
-        } catch (Exception e) {
-            LOG.warn("Ingen enum verdi for {}", årsak);
-            return null;
-        }
-    }
+    AVSLAG_PGA_100_PROSENT_ARBEID
 }

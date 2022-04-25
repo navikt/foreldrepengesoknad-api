@@ -1,6 +1,6 @@
 package no.nav.foreldrepenger.selvbetjening.innsyn.uttaksplan;
 
-public enum UtsettelsePeriodeType {
+enum UtsettelsePeriodeType {
     ARBEID,
     FERIE,
     SYKDOM_SKADE,
