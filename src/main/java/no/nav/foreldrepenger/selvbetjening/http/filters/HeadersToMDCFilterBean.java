@@ -4,6 +4,7 @@ import static no.nav.foreldrepenger.common.util.Constants.NAV_AUTH_LEVEL;
 import static no.nav.foreldrepenger.common.util.Constants.NAV_CALL_ID;
 import static no.nav.foreldrepenger.common.util.Constants.NAV_CONSUMER_ID;
 import static no.nav.foreldrepenger.common.util.Constants.NAV_USER_ID;
+import static no.nav.foreldrepenger.common.util.MDCUtil.callId;
 import static no.nav.foreldrepenger.common.util.MDCUtil.toMDC;
 
 import java.io.IOException;
@@ -29,6 +30,7 @@ import no.nav.foreldrepenger.selvbetjening.util.TokenUtil;
 @Component
 public class HeadersToMDCFilterBean extends GenericFilterBean {
     private static final Logger LOG = LoggerFactory.getLogger(HeadersToMDCFilterBean.class);
+    private static final Logger SECURE_LOGGER = LoggerFactory.getLogger("secureLogger");
 
     private final String applicationName;
     private final CallIdGenerator generator;
@@ -56,7 +58,9 @@ public class HeadersToMDCFilterBean extends GenericFilterBean {
             toMDC(NAV_USER_ID, Optional.ofNullable(tokenUtil.getSubject()).map(StringUtil::partialMask).orElse("Uautentisert"));
             toMDC(NAV_AUTH_LEVEL, Optional.ofNullable(tokenUtil.getLevel()).map(AuthenticationLevel::name).orElse(AuthenticationLevel.NONE.name()));
             toMDC(NAV_CALL_ID, request.getHeader(NAV_CALL_ID), generator.create());
-
+            if (tokenUtil.erAutentisert()) {
+                SECURE_LOGGER.info("Bruker med fødselsnummer {} er koblet til følgende Nav-CallId {}", tokenUtil.getSubject(), callId());
+            }
         } catch (Exception e) {
             LOG.warn("Noe gikk galt ved setting av MDC-verdier for request {}, MDC-verdier er inkomplette", uri, e);
         }
