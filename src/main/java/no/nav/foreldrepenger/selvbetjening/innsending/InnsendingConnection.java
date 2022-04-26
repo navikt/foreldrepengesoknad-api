@@ -79,7 +79,7 @@ public class InnsendingConnection extends AbstractRestConnection {
         dto.getVedlegg().addAll(unikeVedleggMedInnhold);
 
         if (søknadFrontend.getVedlegg().size() > unikeVedleggMedInnhold.size()) {
-            LOG.warn("Mottatt duplikate vedlegg fra frontend ved innsending av søknad. Fjerner duplikate vedlegg. Sjekk secure logg for mer info.");
+            LOG.info("Mottatt duplikate vedlegg fra frontend ved innsending av søknad. Fjerner duplikate vedlegg. Sjekk secure logg for mer info.");
         }
         return dto;
     }
@@ -91,7 +91,7 @@ public class InnsendingConnection extends AbstractRestConnection {
         dto.getVedlegg().addAll(unikeVedleggMedInnhold);
 
         if (ettersending.vedlegg().size() > unikeVedleggMedInnhold.size()) {
-            LOG.warn("Mottatt duplikate vedlegg under ettersending. Fjerner duplikate vedlegg. Sjekk secure logg for mer info.");
+            LOG.info("Mottatt duplikate vedlegg under ettersending. Fjerner duplikate vedlegg. Sjekk secure logg for mer info.");
             SECURE_LOGGER.info("Ettersendte vedlegg fra frontend før vasking er {}", ettersending.vedlegg());
         }
         return dto;

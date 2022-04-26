@@ -16,9 +16,9 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestParam;
 
 import no.nav.foreldrepenger.common.domain.Fødselsnummer;
+import no.nav.foreldrepenger.common.innsyn.uttaksplan.UttaksplanDto;
 import no.nav.foreldrepenger.selvbetjening.http.ProtectedRestController;
 import no.nav.foreldrepenger.selvbetjening.innsyn.saker.Sak;
-import no.nav.foreldrepenger.selvbetjening.innsyn.uttaksplan.Uttaksplan;
 
 @Validated
 @ProtectedRestController(InnsynController.INNSYN)
@@ -39,17 +39,17 @@ public class InnsynController {
     }
 
     @GetMapping("/uttaksplan")
-    public Uttaksplan uttaksplan(@RequestParam(name = "saksnummer") @Pattern(regexp = BARE_TALL) String saksnummer) {
+    public UttaksplanDto uttaksplan(@RequestParam(name = "saksnummer") @Pattern(regexp = BARE_TALL) String saksnummer) {
         return innsynTjeneste.hentUttaksplan(saksnummer);
     }
 
     @GetMapping("/uttaksplanannen")
-    public Uttaksplan uttaksplanAnnenPart(@Valid @RequestParam(name = "annenPart") @NotNull Fødselsnummer annenPart) {
+    public UttaksplanDto uttaksplanAnnenPart(@Valid @RequestParam(name = "annenPart") @NotNull Fødselsnummer annenPart) {
         return innsynTjeneste.hentUttaksplanAnnenPart(annenPart);
     }
 
     @PostMapping("/uttaksplanannen1")
-    public Uttaksplan uttaksplanAnnenPart1(@Valid @RequestBody @NotNull Fødselsnummer annenPart) {
+    public UttaksplanDto uttaksplanAnnenPart1(@Valid @RequestBody @NotNull Fødselsnummer annenPart) {
         return innsynTjeneste.hentUttaksplanAnnenPart(annenPart);
     }
 

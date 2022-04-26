@@ -10,10 +10,10 @@ import org.springframework.boot.autoconfigure.condition.ConditionalOnProperty;
 import org.springframework.stereotype.Service;
 
 import no.nav.foreldrepenger.common.domain.Fødselsnummer;
+import no.nav.foreldrepenger.common.innsyn.uttaksplan.UttaksplanDto;
 import no.nav.foreldrepenger.common.innsyn.v2.Saker;
 import no.nav.foreldrepenger.selvbetjening.innsyn.saker.Behandling;
 import no.nav.foreldrepenger.selvbetjening.innsyn.saker.Sak;
-import no.nav.foreldrepenger.selvbetjening.innsyn.uttaksplan.Uttaksplan;
 
 @Service
 @ConditionalOnProperty(name = "stub.oppslag", havingValue = "true")
@@ -25,7 +25,7 @@ public class InnsynTjenesteStub implements Innsyn {
     }
 
     @Override
-    public Uttaksplan hentUttaksplan(String saksnummer) {
+    public UttaksplanDto hentUttaksplan(String saksnummer) {
         return null;
     }
 
@@ -42,7 +42,7 @@ public class InnsynTjenesteStub implements Innsyn {
     }
 
     @Override
-    public Uttaksplan hentUttaksplanAnnenPart(Fødselsnummer annenPart) {
+    public UttaksplanDto hentUttaksplanAnnenPart(Fødselsnummer annenPart) {
         return null;
     }
 
