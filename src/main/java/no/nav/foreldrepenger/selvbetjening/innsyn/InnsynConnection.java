@@ -14,10 +14,10 @@ import org.springframework.stereotype.Component;
 import org.springframework.web.client.RestOperations;
 
 import no.nav.foreldrepenger.common.domain.Fødselsnummer;
+import no.nav.foreldrepenger.common.innsyn.uttaksplan.UttaksplanDto;
 import no.nav.foreldrepenger.common.innsyn.v2.Saker;
 import no.nav.foreldrepenger.selvbetjening.http.AbstractRestConnection;
 import no.nav.foreldrepenger.selvbetjening.innsyn.saker.Sak;
-import no.nav.foreldrepenger.selvbetjening.innsyn.uttaksplan.Uttaksplan;
 import no.nav.foreldrepenger.selvbetjening.oppslag.domain.Arbeidsforhold;
 
 @Component
@@ -41,12 +41,12 @@ public class InnsynConnection extends AbstractRestConnection {
         return cfg.pingURI();
     }
 
-    public Uttaksplan hentUttaksplan(String saksnummer) {
-        return getIfEnabled(cfg.uttakURI(saksnummer), Uttaksplan.class, false);
+    public UttaksplanDto hentUttaksplan(String saksnummer) {
+        return getIfEnabled(cfg.uttakURI(saksnummer), UttaksplanDto.class, false);
     }
 
-    public Uttaksplan hentUttaksplanAnnenPart(Fødselsnummer annenPart) {
-        return getIfEnabled(cfg.uttakURIForAnnenPart(annenPart), Uttaksplan.class, false);
+    public UttaksplanDto hentUttaksplanAnnenPart(Fødselsnummer annenPart) {
+        return getIfEnabled(cfg.uttakURIForAnnenPart(annenPart), UttaksplanDto.class, false);
     }
 
     private <T> T getIfEnabled(URI uri, Class<T> clazz, boolean shouldThrow) {
