@@ -46,7 +46,7 @@ public class MellomlagringController {
 
     @PostMapping(consumes = APPLICATION_JSON_VALUE)
     @ResponseStatus(NO_CONTENT)
-    public void lagreSøknad(@RequestBody @Pattern(regexp = FRITEKST) String soknad) {
+    public void lagreSøknad(@RequestBody String soknad) {
         mellomlagring.lagreKryptertSøknad(soknad);
     }
 
