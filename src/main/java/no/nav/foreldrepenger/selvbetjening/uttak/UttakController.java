@@ -5,7 +5,6 @@ import static no.nav.foreldrepenger.regler.uttak.beregnkontoer.grunnlag.Deknings
 import static no.nav.foreldrepenger.regler.uttak.konfig.StandardKonfigurasjon.SØKNADSDIALOG;
 
 import java.time.LocalDate;
-import java.util.Map;
 
 import javax.inject.Inject;
 import javax.validation.constraints.Pattern;
@@ -18,9 +17,10 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
-import no.nav.foreldrepenger.regler.uttak.beregnkontoer.StønadskontoBeregningStønadskontotype;
+import no.nav.foreldrepenger.regler.uttak.beregnkontoer.Minsterett;
 import no.nav.foreldrepenger.regler.uttak.beregnkontoer.StønadskontoRegelOrkestrering;
 import no.nav.foreldrepenger.regler.uttak.beregnkontoer.grunnlag.BeregnKontoerGrunnlag;
+import no.nav.foreldrepenger.regler.uttak.beregnkontoer.grunnlag.BeregnMinsterettGrunnlag;
 import no.nav.foreldrepenger.regler.uttak.beregnkontoer.grunnlag.Dekningsgrad;
 import no.nav.security.token.support.core.api.Unprotected;
 
@@ -33,31 +33,34 @@ public class UttakController {
     static final String UTTAK_PATH = "/konto";
 
     private static final String FMT = "yyyyMMdd";
-    private final StønadskontoRegelOrkestrering kalkulator;
+    private final StønadskontoRegelOrkestrering regelOrkestrering;
 
 
     @Inject
     public UttakController() {
-        this.kalkulator = new StønadskontoRegelOrkestrering();
+        this.regelOrkestrering = new StønadskontoRegelOrkestrering();
     }
 
     @GetMapping
     @CrossOrigin(origins = "*", allowCredentials = "false")
-    public Map<String, Map<StønadskontoBeregningStønadskontotype, Integer>> kontoer(
-            @RequestParam("antallBarn") int antallBarn,
-            @RequestParam("morHarRett") boolean morHarRett,
-            @RequestParam("farHarRett") boolean farHarRett,
-            @RequestParam(name = "morHarAleneomsorg", required = false, defaultValue = "false") boolean morHarAleneomsorg,
-            @RequestParam(name = "farHarAleneomsorg", required = false, defaultValue = "false") boolean farHarAleneomsorg,
-            @RequestParam(name = "fødselsdato", required = false) @DateTimeFormat(pattern = FMT) LocalDate fødselsdato,
-            @RequestParam(name = "termindato", required = false) @DateTimeFormat(pattern = FMT) LocalDate termindato,
-            @RequestParam(name = "omsorgsovertakelseDato", required = false) @DateTimeFormat(pattern = FMT) LocalDate omsorgsovertakelseDato,
-            @RequestParam("dekningsgrad") @Pattern(regexp = "^[\\p{Digit}\\p{L}]*$")  String dekningsgrad) {
+    public KontoBeregning beregn(@RequestParam("antallBarn") int antallBarn,
+                                 @RequestParam("morHarRett") boolean morHarRett,
+                                 @RequestParam("farHarRett") boolean farHarRett,
+                                 @RequestParam(name = "morHarAleneomsorg", required = false, defaultValue = "false") boolean morHarAleneomsorg,
+                                 @RequestParam(name = "farHarAleneomsorg", required = false, defaultValue = "false") boolean farHarAleneomsorg,
+                                 @RequestParam(name = "fødselsdato", required = false) @DateTimeFormat(pattern = FMT) LocalDate fødselsdato,
+                                 @RequestParam(name = "termindato", required = false) @DateTimeFormat(pattern = FMT) LocalDate termindato,
+                                 @RequestParam(name = "omsorgsovertakelseDato", required = false) @DateTimeFormat(pattern = FMT) LocalDate omsorgsovertakelseDato,
+                                 @RequestParam("dekningsgrad") @Pattern(regexp = "^[\\p{Digit}\\p{L}]*$") String dekningsgrad,
+                                 @RequestParam("erMor") boolean erMor,
+                                 @RequestParam("minsterett") boolean minsterett,
+                                 @RequestParam("morHarUføretrygd") boolean morHarUføretrygd,
+                                 @RequestParam("familieHendelseDatoNesteSak") LocalDate familieHendelseDatoNesteSak) {
 
         guardFamiliehendelse(fødselsdato, termindato, omsorgsovertakelseDato);
-        return Map.of("kontoer", kalkulator.beregnKontoer(new BeregnKontoerGrunnlag.Builder()
-            .antallBarn(antallBarn)
-            .dekningsgrad(dekningsgrad(dekningsgrad))
+        var dekningsgradOversatt = dekningsgrad(dekningsgrad);
+        var grunnlag = new BeregnKontoerGrunnlag.Builder().antallBarn(antallBarn)
+            .dekningsgrad(dekningsgradOversatt)
             .morAleneomsorg(morHarAleneomsorg)
             .farAleneomsorg(farHarAleneomsorg)
             .morRett(morHarRett)
@@ -65,7 +68,31 @@ public class UttakController {
             .fødselsdato(fødselsdato)
             .omsorgsovertakelseDato(omsorgsovertakelseDato)
             .termindato(termindato)
-            .build(), SØKNADSDIALOG).getStønadskontoer());
+            .build();
+        var stønadskontoer = regelOrkestrering.beregnKontoer(grunnlag, SØKNADSDIALOG).getStønadskontoer();
+        var bareFarHarRett = farHarRett && !morHarRett;
+        var aleneomsorg = erMor && morHarAleneomsorg || !erMor && farHarAleneomsorg;
+        var minsterettGrunnlag = new BeregnMinsterettGrunnlag.Builder()
+            .minsterett(minsterett)
+            .mor(erMor)
+            .bareFarHarRett(bareFarHarRett)
+            .aleneomsorg(aleneomsorg)
+            .dekningsgrad(dekningsgradOversatt)
+            .familieHendelseDato(familiehendelse(fødselsdato, termindato, omsorgsovertakelseDato))
+            .familieHendelseDatoNesteSak(familieHendelseDatoNesteSak)
+            .build();
+        var minsteretter = Minsterett.finnMinsterett(minsterettGrunnlag);
+        return new KontoBeregning(stønadskontoer, Minsteretter.from(minsteretter));
+    }
+
+    private LocalDate familiehendelse(LocalDate fødselsdato, LocalDate termindato, LocalDate omsorgsovertakelseDato) {
+        if (omsorgsovertakelseDato != null) {
+            return omsorgsovertakelseDato;
+        }
+        if (fødselsdato != null) {
+            return fødselsdato;
+        }
+        return termindato;
     }
 
     private void guardFamiliehendelse(LocalDate fødselsdato, LocalDate termindato, LocalDate omsorgsovertakelseDato) {
@@ -84,6 +111,6 @@ public class UttakController {
 
     @Override
     public String toString() {
-        return getClass().getSimpleName() + " [kalkulator=" + kalkulator + "]";
+        return getClass().getSimpleName() + " [regelOrkestrering=" + regelOrkestrering + "]";
     }
 }
