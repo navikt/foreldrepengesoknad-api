@@ -56,6 +56,7 @@ public class HeadersToMDCFilterBean extends GenericFilterBean {
             toMDC(NAV_USER_ID, Optional.ofNullable(tokenUtil.getSubject()).map(StringUtil::partialMask).orElse("Uautentisert"));
             toMDC(NAV_AUTH_LEVEL, Optional.ofNullable(tokenUtil.getLevel()).map(AuthenticationLevel::name).orElse(AuthenticationLevel.NONE.name()));
             toMDC(NAV_CALL_ID, request.getHeader(NAV_CALL_ID), generator.create());
+            toMDC("JTI", tokenUtil.getJti());
             if (tokenUtil.erAutentisert()) {
                 SECURE_LOGGER.info("FNR {} - {} {}", tokenUtil.getSubject(), request.getMethod(), request.getRequestURI());
             }
