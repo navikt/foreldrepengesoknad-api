@@ -1,0 +1,43 @@
+allowed.origins: '*'
+debug: false
+management:
+  endpoints:
+    web:
+      exposure:
+        include: '*'
+  endpoint:
+    health:
+      show-details: always
+server:
+  port: 9002
+spring:
+  cloud:
+    vault:
+      enabled: false
+  mvc:
+    log-request-details: true
+
+no.nav.security.jwt:
+  client:
+    registration:
+      fpsoknad-mottak:
+        token-exchange:
+          audience: lokal
+      fpinfo-historikk:
+        token-exchange:
+          audience: lokal
+
+fppdfgen:
+  enabled: false
+historikk:
+  enabled: false
+minidialog:
+  enabled: false
+innsyn:
+  uri: ${fpsoknad-mottak.url}
+mottak:
+  uri: ${fpsoknad-mottak.url}
+oppslag:
+  uri: ${fpsoknad-mottak.url}
+storage:
+  passphrase: tullogtøys

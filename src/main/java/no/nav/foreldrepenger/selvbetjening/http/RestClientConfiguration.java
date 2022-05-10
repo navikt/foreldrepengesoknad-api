@@ -123,6 +123,6 @@ public class RestClientConfiguration implements WebMvcConfigurer {
                 .allowCredentials(true)
                 .exposedHeaders(LOCATION)
                 .allowedHeaders(FNR, CONTENT_TYPE)
-                .allowedOrigins(allowedOrigins);
+                .allowedOriginPatterns(allowedOrigins);
     }
 }

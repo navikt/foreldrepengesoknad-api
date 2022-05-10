@@ -8,46 +8,57 @@ management:
   endpoint:
     health:
       show-details: always
-no.nav.security.jwt:
-  issuer.selvbetjening:
-    discoveryurl: http://metadata
-    accepted_audience: aud-localhost
-    cookie_name: localhost-idtoken
-
+server:
+  port: 9002
 spring:
+  cloud:
+    vault:
+      enabled: false
   mvc:
     log-request-details: true
 
-no.nav:
-  foreldrepenger:
+no.nav.security.jwt:
+  client:
+    registration:
+      fpsoknad-mottak:
+        well-known-url: http://localhost:8060/rest/tokenx/.well-known/oauth-authorization-server
+        token-exchange:
+          audience: local:teamforeldrepenger:fpsoknad-mottak
+        authentication:
+          client-id: foreldrepengesoknad-api
+          client-jwk: src/test/resources/tokenx/jwk.json
+      fpinfo-historikk:
+        well-known-url: http://localhost:8060/rest/tokenx/.well-known/oauth-authorization-server
+        token-exchange:
+          audience: local:teamforeldrepenger:fpinfo-historikk
+        authentication:
+          client-id: foreldrepengesoknad-api
+          client-jwk: src/test/resources/tokenx/jwk.json
+      localhost:
+        well-known-url: http://localhost:8060/rest/tokenx/.well-known/oauth-authorization-server
+        grant-type: urn:ietf:params:oauth:grant-type:token-exchange
+        token-exchange:
+          audience: lokal
+        authentication:
+          client-id: foreldrepengesoknad-api
+          client-jwk: src/test/resources/tokenx/jwk.json
+          client-auth-method: private_key_jwt
+  issuer:
     selvbetjening:
-      api:
-        virus:
-          enabled: false
+      discovery-url: http://vtp:8060/rest/AzureAd/aadb2c/v2.0/.well-known/openid-configuration
+      accepted-audience: OIDC
 
 fppdfgen:
-  uri: http://localhost:8080/api/v1/genpdf
   enabled: false
-
 historikk:
-  uri: http://localhost:9000/api
   enabled: false
-
-mottak:
-  uri: http://localhost:9000/api/mottak
-  enabled: false
-
-oppslag:
-  uri: http://localhost:9000/api/oppslag
-  enabled: false
-
 minidialog:
-  uri: http://localhost:9000/api
   enabled: false
 innsyn:
-  oppslag: http://localhost:9000/api/oppslag
-  mottak: http://localhost:9000/api/mottak
-  enabled: false
-
+  uri: http://localhost:9001/api/
+mottak:
+  uri: http://localhost:9001/api/
+oppslag:
+  uri: http://localhost:9001/api/
 storage:
   passphrase: tullogtøys

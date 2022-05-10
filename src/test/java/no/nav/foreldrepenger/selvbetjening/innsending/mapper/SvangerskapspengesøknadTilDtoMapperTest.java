@@ -25,17 +25,17 @@ import no.nav.foreldrepenger.selvbetjening.config.JacksonConfiguration;
 import no.nav.foreldrepenger.selvbetjening.innsending.InnsendingConnection;
 import no.nav.foreldrepenger.selvbetjening.innsending.domain.SvangerskapspengesøknadFrontend;
 import no.nav.foreldrepenger.selvbetjening.innsending.domain.SøknadFrontend;
+import no.nav.foreldrepenger.selvbetjening.vedlegg.Image2PDFConverter;
 
 
 @ExtendWith(SpringExtension.class)
-@ContextConfiguration(classes = { JacksonConfiguration.class, ForeldrepengeSøknadTilDtoMapperTest.InnsendingConnectionConfiguration.class})
+@ContextConfiguration(classes = JacksonConfiguration.class)
 class SvangerskapspengesøknadTilDtoMapperTest {
+
+    private final InnsendingConnection connection = new InnsendingConnection(null, null, new Image2PDFConverter());
 
     @Autowired
     private ObjectMapper mapper;
-
-    @Autowired
-    private InnsendingConnection connection;
 
 
     @Test
