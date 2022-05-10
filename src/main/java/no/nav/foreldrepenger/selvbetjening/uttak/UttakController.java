@@ -52,10 +52,10 @@ public class UttakController {
                                  @RequestParam(name = "termindato", required = false) @DateTimeFormat(pattern = FMT) LocalDate termindato,
                                  @RequestParam(name = "omsorgsovertakelseDato", required = false) @DateTimeFormat(pattern = FMT) LocalDate omsorgsovertakelseDato,
                                  @RequestParam("dekningsgrad") @Pattern(regexp = "^[\\p{Digit}\\p{L}]*$") String dekningsgrad,
-                                 @RequestParam("erMor") boolean erMor,
-                                 @RequestParam("minsterett") boolean minsterett,
-                                 @RequestParam("morHarUføretrygd") boolean morHarUføretrygd,
-                                 @RequestParam("familieHendelseDatoNesteSak") LocalDate familieHendelseDatoNesteSak) {
+                                 @RequestParam(value = "erMor", required = false) boolean erMor,
+                                 @RequestParam(value = "minsterett", required = false) boolean minsterett,
+                                 @RequestParam(value = "morHarUføretrygd", required = false) boolean morHarUføretrygd,
+                                 @RequestParam(value = "familieHendelseDatoNesteSak", required = false) LocalDate familieHendelseDatoNesteSak) {
 
         guardFamiliehendelse(fødselsdato, termindato, omsorgsovertakelseDato);
         var dekningsgradOversatt = dekningsgrad(dekningsgrad);
@@ -77,6 +77,7 @@ public class UttakController {
             .mor(erMor)
             .bareFarHarRett(bareFarHarRett)
             .aleneomsorg(aleneomsorg)
+            .morHarUføretrygd(morHarUføretrygd)
             .dekningsgrad(dekningsgradOversatt)
             .familieHendelseDato(familiehendelse(fødselsdato, termindato, omsorgsovertakelseDato))
             .familieHendelseDatoNesteSak(familieHendelseDatoNesteSak)
