@@ -66,6 +66,12 @@ public class TokenUtil {
                 .orElseThrow(() -> new JwtTokenValidatorException("Fant ikke subject", getExpiryDate(), null));
     }
 
+    public String getJti() {
+        return Optional.ofNullable(claimSet())
+            .map(c -> c.getStringClaim("jti"))
+            .orElse("");
+    }
+
     private JwtTokenClaims claimSet() {
         return Optional.ofNullable(context())
                 .map(s -> s.getClaims(ISSUER))
