@@ -9,8 +9,6 @@ import java.util.List;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.boot.test.context.TestConfiguration;
-import org.springframework.context.annotation.Bean;
 import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.junit.jupiter.SpringExtension;
 
@@ -34,24 +32,14 @@ import no.nav.foreldrepenger.selvbetjening.innsending.domain.Foreldrepengesøkna
 import no.nav.foreldrepenger.selvbetjening.innsending.domain.SøknadFrontend;
 import no.nav.foreldrepenger.selvbetjening.vedlegg.Image2PDFConverter;
 
-
 @ExtendWith(SpringExtension.class)
-@ContextConfiguration(classes = { JacksonConfiguration.class, ForeldrepengeSøknadTilDtoMapperTest.InnsendingConnectionConfiguration.class})
+@ContextConfiguration(classes = JacksonConfiguration.class)
 class ForeldrepengeSøknadTilDtoMapperTest {
 
-    @TestConfiguration
-    static class InnsendingConnectionConfiguration {
-        @Bean
-        InnsendingConnection mockInnsendingConnection() {
-            return new InnsendingConnection(null, null, new Image2PDFConverter());
-        }
-    }
+    private final InnsendingConnection connection = new InnsendingConnection(null, null, new Image2PDFConverter());
 
     @Autowired
     private ObjectMapper mapper;
-
-    @Autowired
-    private InnsendingConnection connection;
 
 
     @Test
