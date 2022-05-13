@@ -10,7 +10,7 @@ import com.fasterxml.jackson.annotation.JsonIgnore;
 public record AnnenForelderFrontend(boolean kanIkkeOppgis,
                                     @Pattern(regexp = FRITEKST) String fornavn,
                                     @Pattern(regexp = FRITEKST) String etternavn,
-                                    @Pattern(regexp = "^[\\p{Digit}\\p{L}\\p{Blank}\\-.]*$") String fnr,
+                                    @Pattern(regexp = FRITEKST) String fnr,
                                     boolean utenlandskFnr,
                                     @Pattern(regexp = BARE_BOKSTAVER) String bostedsland,
                                     boolean harRettPåForeldrepenger,
