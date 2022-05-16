@@ -1,7 +1,6 @@
 package no.nav.foreldrepenger.selvbetjening.error;
 
 import static no.nav.foreldrepenger.common.util.StreamUtil.safeStream;
-import static no.nav.foreldrepenger.common.util.StringUtil.partialMask;
 import static org.springframework.http.HttpStatus.BAD_REQUEST;
 import static org.springframework.http.HttpStatus.CONFLICT;
 import static org.springframework.http.HttpStatus.FORBIDDEN;
@@ -30,6 +29,7 @@ import org.springframework.web.bind.annotation.ControllerAdvice;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.client.HttpStatusCodeException;
+import org.springframework.web.context.request.ServletWebRequest;
 import org.springframework.web.context.request.WebRequest;
 import org.springframework.web.multipart.MaxUploadSizeExceededException;
 import org.springframework.web.multipart.MultipartException;
@@ -75,10 +75,7 @@ public class ApiExceptionHandler extends ResponseEntityExceptionHandler {
 
     @Override
     protected ResponseEntity<Object> handleMethodArgumentNotValid(MethodArgumentNotValidException e, HttpHeaders headers, HttpStatus status, WebRequest req) {
-        var felterMedValideringsFeilOgTilhørendeAvvisteVerdi = safeStream(e.getBindingResult().getFieldErrors())
-            .map(ApiExceptionHandler::errorMessageMedAvvisteVerdier)
-            .toList();
-        SECURE_LOGGER.warn("[{} ({})] Valideringsfeil: {}", req.getContextPath(), status, felterMedValideringsFeilOgTilhørendeAvvisteVerdi, e);
+        SECURE_LOGGER.warn("[{} ({})] Bruker har sendt med felter som inneholder ugyldig verdier.", req.getContextPath(), status, e);
         var feltMedValideringsFeil = safeStream(e.getBindingResult().getFieldErrors())
             .map(ApiExceptionHandler::errorMessage)
             .toList();
@@ -87,14 +84,11 @@ public class ApiExceptionHandler extends ResponseEntityExceptionHandler {
 
     @ExceptionHandler
     public ResponseEntity<Object> handleConstraintViolationException(ConstraintViolationException e, WebRequest req) {
-        var felterMedValideringsFeilOgTilhørendeAvvisteVerdi = safeStream(e.getConstraintViolations())
-            .map(ApiExceptionHandler::errorMessageMedAvvisteVerdier)
+        var avvisteVerdier = safeStream(e.getConstraintViolations())
+            .map(ConstraintViolation::getInvalidValue)
             .toList();
-        SECURE_LOGGER.warn("[{} ({})] Valideringsfeil: {}", req.getContextPath(),  e.getLocalizedMessage(), felterMedValideringsFeilOgTilhørendeAvvisteVerdi, e);
-        var feltMedValideringsFeil = safeStream(e.getConstraintViolations())
-            .map(ApiExceptionHandler::errorMessage)
-            .toList();
-        return logAndHandle(BAD_REQUEST, e, req, feltMedValideringsFeil);
+        SECURE_LOGGER.warn("[{} ({})] Valideringsfeil: {}", req.getContextPath(),  e.getLocalizedMessage(), avvisteVerdier, e);
+        return logAndHandle(BAD_REQUEST, e, req);
     }
 
     @ExceptionHandler
@@ -113,7 +107,7 @@ public class ApiExceptionHandler extends ResponseEntityExceptionHandler {
     }
 
     @ExceptionHandler
-    protected ResponseEntity<Object> handleAttachmentException(AttachmentException e, WebRequest req) {
+    public ResponseEntity<Object> handleAttachmentException(AttachmentException e, WebRequest req) {
         return logAndHandle(UNPROCESSABLE_ENTITY, e, req);
     }
 
@@ -153,62 +147,33 @@ public class ApiExceptionHandler extends ResponseEntityExceptionHandler {
         return logAndHandle(status, e, req, new HttpHeaders());
     }
 
-    private ResponseEntity<Object> logAndHandle(HttpStatus status, Exception e, WebRequest req, Object... messages) {
-        return logAndHandle(status, e, req, new HttpHeaders(), messages);
-    }
-
     private ResponseEntity<Object> logAndHandle(HttpStatus status, Exception e, WebRequest req, HttpHeaders headers,
             Object... messages) {
-        ApiError apiError = apiErrorFra(status, e, messages);
-        if (e instanceof MethodArgumentNotValidException || e instanceof ConstraintViolationException) {
-            LOG.warn("[{} ({})] {}", req.getContextPath(), status, apiError.getMessages());
+        var apiError = apiErrorFra(status, e, messages);
+        var path = fullPathTilKaltEndepunkt(req);
+        if (e instanceof MethodArgumentNotValidException) {
+            LOG.warn("[{} ({})] {}", path, status, apiError.getMessages());
         } else if (tokenUtil.erAutentisert() && !tokenUtil.erUtløpt()) {
-            LOG.warn("[{} ({})] {} {} ({})", req.getContextPath(), subject(), status, apiError.getMessages(), status.value(), e);
+            LOG.warn("[{}] {} {}", path, status, apiError.getMessages(), e);
         } else {
-            LOG.debug("[{}] {} {} ({})", req.getContextPath(), status, apiError.getMessages(), status.value(), e);
+            LOG.debug("[{}] {} {}", path, status, apiError.getMessages(),e);
         }
         return handleExceptionInternal(e, apiError, headers, status, req);
     }
 
-
-    private String subject() {
-        return Optional.ofNullable(partialMask(tokenUtil.getSubject()))
-            .orElse("Uautentisert");
-    }
-
     private static String errorMessage(FieldError error) {
-        return error.getDefaultMessage() + " (" + error.getField() + ")";
-    }
-
-    private static String errorMessageMedAvvisteVerdier(FieldError error) {
-        return String.format("%s (%s) %s. Avvist verdi er: %s",
-            error.getObjectName(),
-            error.getField(),
-            error.getDefaultMessage(),
-            error.getRejectedValue());
-    }
-
-    private static String errorMessage(ConstraintViolation<?> violation) {
-        return String.format("%s (%s) %s",
-            violation.getRootBeanClass().getName(),
-            violation.getPropertyPath(),
-            violation.getMessage());
-    }
-
-    private static String errorMessageMedAvvisteVerdier(ConstraintViolation<?> violation) {
-        return String.format("%s (%s) %s. Avvist verdi er: %s",
-            violation.getRootBeanClass().getName(),
-            violation.getPropertyPath(),
-            violation.getMessage(),
-            violation.getInvalidValue());
+        return "(" + error.getField() + ") " + error.getDefaultMessage();
     }
 
     private static ApiError apiErrorFra(HttpStatus status, Exception e, Object... messages) {
         return new ApiError(status, e, messages);
     }
 
-    @Override
-    public String toString() {
-        return getClass().getSimpleName() + "[tokenUtil=" + tokenUtil + "]";
+    private static String fullPathTilKaltEndepunkt(WebRequest req) {
+        try {
+            return ((ServletWebRequest)req).getRequest().getRequestURI();
+        } catch (Exception e) {
+            return req.getContextPath();
+        }
     }
 }
