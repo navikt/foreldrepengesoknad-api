@@ -81,7 +81,8 @@ final class ForeldrepengerMapper {
         return new Rettigheter(
             f.getAnnenForelder().harRettPåForeldrepenger(),
             toBoolean(f.getSøker().erAleneOmOmsorg()),
-            f.getAnnenForelder().harMorUføretrygd());
+            f.getAnnenForelder().harMorUføretrygd(),
+            f.getAnnenForelder().harMorForeldrepengerEØS());
     }
 
 

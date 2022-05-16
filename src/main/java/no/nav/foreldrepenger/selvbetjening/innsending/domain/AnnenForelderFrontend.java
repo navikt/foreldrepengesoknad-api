@@ -2,6 +2,7 @@ package no.nav.foreldrepenger.selvbetjening.innsending.domain;
 
 import static no.nav.foreldrepenger.common.domain.validation.InputValideringRegex.BARE_BOKSTAVER;
 import static no.nav.foreldrepenger.common.domain.validation.InputValideringRegex.FRITEKST;
+import static no.nav.foreldrepenger.common.util.StringUtil.mask;
 
 import javax.validation.constraints.Pattern;
 
@@ -15,7 +16,8 @@ public record AnnenForelderFrontend(boolean kanIkkeOppgis,
                                     @Pattern(regexp = BARE_BOKSTAVER) String bostedsland,
                                     boolean harRettPåForeldrepenger,
                                     boolean erInformertOmSøknaden,
-                                    boolean harMorUføretrygd) {
+                                    boolean harMorUføretrygd,
+                                    boolean harMorForeldrepengerEØS) {
 
     @JsonIgnore
     public String type() {
@@ -32,14 +34,15 @@ public record AnnenForelderFrontend(boolean kanIkkeOppgis,
     public String toString() {
         return "AnnenForelderFrontend{" +
             "kanIkkeOppgis=" + kanIkkeOppgis +
-            ", fornavn='" + '\'' +
-            ", etternavn='" + '\'' +
-            ", fnr='" + '\'' +
+            ", fornavn='" + mask(fornavn) + '\'' +
+            ", etternavn='" + mask(etternavn) + '\'' +
+            ", fnr='" + mask(fnr) + '\'' +
             ", utenlandskFnr=" + utenlandskFnr +
             ", bostedsland='" + bostedsland + '\'' +
             ", harRettPåForeldrepenger=" + harRettPåForeldrepenger +
             ", erInformertOmSøknaden=" + erInformertOmSøknaden +
-            ", harMorUforetrygd=" + harMorUføretrygd +
+            ", harMorUføretrygd=" + harMorUføretrygd +
+            ", harMorForeldrepengerEØS=" + harMorForeldrepengerEØS +
             '}';
     }
 }
