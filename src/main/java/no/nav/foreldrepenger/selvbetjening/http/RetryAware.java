@@ -6,6 +6,7 @@ import org.springframework.web.client.HttpClientErrorException;
 import org.springframework.web.client.RestClientException;
 import org.springframework.web.multipart.MultipartException;
 
+import no.nav.foreldrepenger.selvbetjening.error.IdMismatchException;
 import no.nav.security.token.support.core.exceptions.JwtTokenInvalidClaimException;
 import no.nav.security.token.support.spring.validation.interceptor.JwtTokenUnauthorizedException;
 
@@ -15,12 +16,10 @@ import no.nav.security.token.support.spring.validation.interceptor.JwtTokenUnaut
         RestClientException.class,
         MultipartException.class },
     exclude = {
+        IdMismatchException.class,
         JwtTokenUnauthorizedException.class,
         JwtTokenInvalidClaimException.class,
-        HttpClientErrorException.BadRequest.class,
-        HttpClientErrorException.Unauthorized.class,
-        HttpClientErrorException.Forbidden.class,
-        HttpClientErrorException.NotFound.class },
+        HttpClientErrorException.class},
     maxAttemptsExpression = "#{${rest.retry.attempts:3}}",
     backoff = @Backoff(delayExpression = "#{${rest.retry.delay:1000}}"))
 public interface RetryAware {

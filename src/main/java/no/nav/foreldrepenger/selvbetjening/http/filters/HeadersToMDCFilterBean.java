@@ -53,7 +53,7 @@ public class HeadersToMDCFilterBean extends GenericFilterBean {
     private void putValues(HttpServletRequest request, String uri) {
         try {
             toMDC(NAV_CONSUMER_ID, request.getHeader(NAV_CONSUMER_ID), applicationName);
-            toMDC(NAV_USER_ID, Optional.ofNullable(tokenUtil.getSubject()).map(StringUtil::partialMask).orElse("Uautentisert"));
+            toMDC(NAV_USER_ID, Optional.ofNullable(tokenUtil.getSubject()).map(StringUtil::mask).orElse("Uautentisert"));
             toMDC(NAV_AUTH_LEVEL, Optional.ofNullable(tokenUtil.getLevel()).map(AuthenticationLevel::name).orElse(AuthenticationLevel.NONE.name()));
             toMDC(NAV_CALL_ID, request.getHeader(NAV_CALL_ID), generator.create());
             toMDC("JTI", tokenUtil.getJti());

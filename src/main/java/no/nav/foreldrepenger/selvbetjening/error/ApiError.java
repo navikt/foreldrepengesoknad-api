@@ -9,8 +9,6 @@ import java.time.LocalDateTime;
 import java.util.List;
 import java.util.Objects;
 
-import javax.validation.ConstraintViolationException;
-
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.MethodArgumentNotValidException;
 
@@ -58,7 +56,7 @@ class ApiError {
     private static List<String> messages(Throwable t, String destination, Object... objects) {
         var messages = Lists.newArrayList(objects);
         var cause = getMostSpecificCause(t);
-        if (!(cause instanceof MethodArgumentNotValidException || cause instanceof ConstraintViolationException)) {
+        if (!(cause instanceof MethodArgumentNotValidException)) {
             messages.add(cause.getMessage());
         }
         messages.add(destination);
