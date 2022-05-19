@@ -57,11 +57,11 @@ class ForeldrepengeSøknadTilDtoMapperTest {
 
         assertThat(søknad.getYtelse()).isInstanceOf(Foreldrepenger.class);
         var ytelse = (Foreldrepenger) søknad.getYtelse();
-        assertThat(ytelse.getRelasjonTilBarn()).isInstanceOf(Adopsjon.class);
-        var annenOpptjening = ytelse.getOpptjening().getAnnenOpptjening();
+        assertThat(ytelse.relasjonTilBarn()).isInstanceOf(Adopsjon.class);
+        var annenOpptjening = ytelse.opptjening().annenOpptjening();
         assertThat(annenOpptjening).hasSize(1);
-        assertThat(annenOpptjening.get(0).getType().name()).isEqualTo(sf.getSøker().andreInntekterSiste10Mnd().get(0).type());
-        var periode = annenOpptjening.get(0).getPeriode();
+        assertThat(annenOpptjening.get(0).type().name()).isEqualTo(sf.getSøker().andreInntekterSiste10Mnd().get(0).type());
+        var periode = annenOpptjening.get(0).periode();
         assertThat(periode.fom()).isNotNull();
         assertThat(periode.tom()).isNotNull();
         assertThat(periode.fom()).isBefore(periode.tom());
@@ -83,17 +83,17 @@ class ForeldrepengeSøknadTilDtoMapperTest {
 
         assertThat(søknad.getYtelse()).isInstanceOf(Foreldrepenger.class);
         var ytelse = (Foreldrepenger) søknad.getYtelse();
-        assertThat(ytelse.getRelasjonTilBarn()).isInstanceOf(Fødsel.class);
-        var uttaksperioder = ytelse.getFordeling().getPerioder();
+        assertThat(ytelse.relasjonTilBarn()).isInstanceOf(Fødsel.class);
+        var uttaksperioder = ytelse.fordeling().perioder();
 
         var gradertUttaksperioder = getGradertUttaksperioder(uttaksperioder);
         assertThat(gradertUttaksperioder).hasSize(1);
         var gradertUttaksPeriode = gradertUttaksperioder.get(0);
-        assertThat(gradertUttaksPeriode.getArbeidstidProsent()).isEqualTo(new ProsentAndel(50));
+        assertThat(gradertUttaksPeriode.getArbeidstidProsent()).isEqualTo(ProsentAndel.valueOf(50));
         assertThat(gradertUttaksPeriode.getUttaksperiodeType().name()).isEqualToIgnoringCase("FEDREKVOTE");
         assertThat(gradertUttaksPeriode.getFrilans()).isTrue();
 
-        var frilans = ytelse.getOpptjening().getFrilans();
+        var frilans = ytelse.opptjening().frilans();
         assertThat(frilans).isNotNull();
         assertThat(frilans.harInntektFraFosterhjem()).isFalse();
         assertThat(frilans.jobberFremdelesSomFrilans()).isTrue();
@@ -118,19 +118,19 @@ class ForeldrepengeSøknadTilDtoMapperTest {
         assertThat(søknad.getSøker().getSøknadsRolle()).isEqualTo(BrukerRolle.MOR);
         assertThat(søknad.getYtelse()).isInstanceOf(Foreldrepenger.class);
         var ytelse = (Foreldrepenger) søknad.getYtelse();
-        assertThat(ytelse.getRelasjonTilBarn()).isInstanceOf(Fødsel.class);
-        var uttaksperioder = ytelse.getFordeling().getPerioder();
+        assertThat(ytelse.relasjonTilBarn()).isInstanceOf(Fødsel.class);
+        var uttaksperioder = ytelse.fordeling().perioder();
 
         var gradertUttaksperioder = getGradertUttaksperioder(uttaksperioder);
         assertThat(gradertUttaksperioder).hasSize(1);
         var gradertUttaksPeriode = gradertUttaksperioder.get(0);
-        assertThat(gradertUttaksPeriode.getArbeidstidProsent()).isEqualTo(new ProsentAndel(45));
+        assertThat(gradertUttaksPeriode.getArbeidstidProsent()).isEqualTo(ProsentAndel.valueOf(45));
         assertThat(gradertUttaksPeriode.getUttaksperiodeType().name()).isEqualToIgnoringCase("FORELDREPENGER");
         assertThat(gradertUttaksPeriode.getFrilans()).isFalse();
         assertThat(gradertUttaksPeriode.getSelvstendig()).isFalse();
         assertThat(gradertUttaksPeriode.isErArbeidstaker()).isTrue();
 
-        var frilans = ytelse.getOpptjening().getFrilans();
+        var frilans = ytelse.opptjening().frilans();
         assertThat(frilans).isNotNull();
         assertThat(frilans.harInntektFraFosterhjem()).isFalse();
         assertThat(frilans.jobberFremdelesSomFrilans()).isTrue();
@@ -142,7 +142,7 @@ class ForeldrepengeSøknadTilDtoMapperTest {
         assertThat(frilansoppdrag.periode().fom()).isNotNull();
         assertThat(frilansoppdrag.periode().tom()).isNotNull();
 
-        var egennæringer = ytelse.getOpptjening().getEgenNæring();
+        var egennæringer = ytelse.opptjening().egenNæring();
         assertThat(egennæringer).hasSize(1);
         var egennæring = egennæringer.get(0);
         assertThat(egennæring).isInstanceOf(NorskOrganisasjon.class);
@@ -167,8 +167,8 @@ class ForeldrepengeSøknadTilDtoMapperTest {
         assertThat(søknad.getSøker().getSøknadsRolle()).isEqualTo(BrukerRolle.MOR);
         assertThat(søknad.getYtelse()).isInstanceOf(Foreldrepenger.class);
         var ytelse = (Foreldrepenger) søknad.getYtelse();
-        assertThat(ytelse.getRelasjonTilBarn()).isInstanceOf(Fødsel.class);
-        var uttaksperioder = ytelse.getFordeling().getPerioder();
+        assertThat(ytelse.relasjonTilBarn()).isInstanceOf(Fødsel.class);
+        var uttaksperioder = ytelse.fordeling().perioder();
 
         var utsettelsesPerioder = getUtsettelsesPeriode(uttaksperioder);
         assertThat(utsettelsesPerioder).hasSize(1);
@@ -179,7 +179,8 @@ class ForeldrepengeSøknadTilDtoMapperTest {
         assertThat(utsettelseperiode.getFom()).isNotNull();
         assertThat(utsettelseperiode.getTom()).isNotNull();
 
-        var frilans = ytelse.getOpptjening().getFrilans();
+        var opptjening = ytelse.opptjening();
+        var frilans = opptjening.frilans();
         assertThat(frilans).isNotNull();
         assertThat(frilans.harInntektFraFosterhjem()).isFalse();
         assertThat(frilans.jobberFremdelesSomFrilans()).isTrue();
@@ -187,9 +188,9 @@ class ForeldrepengeSøknadTilDtoMapperTest {
         assertThat(frilans.periode().tom()).isNull();
         assertThat(frilans.frilansOppdrag()).isEmpty();
 
-        assertThat(ytelse.getOpptjening().getEgenNæring()).isEmpty();
-        assertThat(ytelse.getOpptjening().getUtenlandskArbeidsforhold()).isEmpty();
-        assertThat(ytelse.getOpptjening().getAnnenOpptjening()).isEmpty();
+        assertThat(opptjening.egenNæring()).isEmpty();
+        assertThat(opptjening.utenlandskArbeidsforhold()).isEmpty();
+        assertThat(opptjening.annenOpptjening()).isEmpty();
     }
 
     @Test
@@ -205,7 +206,7 @@ class ForeldrepengeSøknadTilDtoMapperTest {
 
         assertThat(søknad.getYtelse()).isInstanceOf(Foreldrepenger.class);
         var ytelse = (Foreldrepenger) søknad.getYtelse();
-        assertThat(ytelse.getRelasjonTilBarn()).isInstanceOf(FremtidigFødsel.class);
+        assertThat(ytelse.relasjonTilBarn()).isInstanceOf(FremtidigFødsel.class);
     }
 
 

@@ -7,7 +7,6 @@ import static no.nav.foreldrepenger.selvbetjening.innsending.mapper.Ettersending
 import static no.nav.foreldrepenger.selvbetjening.innsending.mapper.SøknadMapper.tilSøknad;
 
 import java.net.URI;
-import java.time.LocalDate;
 import java.util.List;
 
 import org.slf4j.Logger;
@@ -72,8 +71,6 @@ public class InnsendingConnection extends AbstractRestConnection {
     public Søknad body(SøknadFrontend søknadFrontend) {
         SECURE_LOGGER.info("{} mottatt fra frontend med følende innhold: {}", søknadFrontend.getType(), søknadFrontend);
         var dto = tilSøknad(søknadFrontend);
-        dto.setMottattdato(LocalDate.now());
-        dto.setTilleggsopplysninger(søknadFrontend.getTilleggsopplysninger());
 
         var unikeVedleggMedInnhold = hentUnikeVedleggMedInnhold(søknadFrontend.getVedlegg());
         dto.getVedlegg().addAll(unikeVedleggMedInnhold);
@@ -88,7 +85,7 @@ public class InnsendingConnection extends AbstractRestConnection {
         var dto = tilEttersending(ettersending);
 
         var unikeVedleggMedInnhold = hentUnikeVedleggMedInnhold(ettersending.vedlegg());
-        dto.getVedlegg().addAll(unikeVedleggMedInnhold);
+        dto.vedlegg().addAll(unikeVedleggMedInnhold);
 
         if (ettersending.vedlegg().size() > unikeVedleggMedInnhold.size()) {
             LOG.info("Mottatt duplikate vedlegg under ettersending. Fjerner duplikate vedlegg. Sjekk secure logg for mer info.");

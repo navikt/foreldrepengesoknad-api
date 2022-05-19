@@ -21,10 +21,7 @@ import no.nav.foreldrepenger.common.domain.felles.annenforelder.AnnenForelder;
 import no.nav.foreldrepenger.common.domain.felles.annenforelder.NorskForelder;
 import no.nav.foreldrepenger.common.domain.felles.annenforelder.UkjentForelder;
 import no.nav.foreldrepenger.common.domain.felles.annenforelder.UtenlandskForelder;
-import no.nav.foreldrepenger.common.domain.felles.medlemskap.ArbeidsInformasjon;
-import no.nav.foreldrepenger.common.domain.felles.medlemskap.FramtidigOppholdsInformasjon;
 import no.nav.foreldrepenger.common.domain.felles.medlemskap.Medlemsskap;
-import no.nav.foreldrepenger.common.domain.felles.medlemskap.TidligereOppholdsInformasjon;
 import no.nav.foreldrepenger.common.domain.felles.medlemskap.Utenlandsopphold;
 import no.nav.foreldrepenger.common.domain.felles.opptjening.AnnenOpptjening;
 import no.nav.foreldrepenger.common.domain.felles.opptjening.AnnenOpptjeningType;
@@ -83,9 +80,9 @@ public final class CommonMapper {
 
     static Medlemsskap tilMedlemskap(SøknadFrontend s) {
         var opphold = s.getInformasjonOmUtenlandsopphold();
-        var tidligereOppholdsInfo = tilTidligereOppholdsInfo(opphold.tidligereOpphold());
-        var framtidigOppholdsInfo = tilFramtidigOppholdsinformasjon(opphold.senereOpphold());
-        return new Medlemsskap(tidligereOppholdsInfo, framtidigOppholdsInfo);
+        return new Medlemsskap(
+            tilUtenlandsoppholdsliste(opphold.tidligereOpphold()),
+            tilUtenlandsoppholdsliste(opphold.senereOpphold()));
     }
 
     static Opptjening tilOpptjening(SøknadFrontend s) {
@@ -124,10 +121,8 @@ public final class CommonMapper {
     private static Omsorgsovertakelse tilOmsorgsovertagelse(BarnFrontend barn) {
         return Omsorgsovertakelse.builder()
             .omsorgsovertakelsesdato(barn.foreldreansvarsdato())
-            .årsak(null) // TODO: Ikke satt av api, heller ikke sendt ned fra frontend
             .fødselsdato(barn.fødselsdatoer())
             .antallBarn(barn.antallBarn())
-            // .beskrivelse() ikke satt, ikke brukt?
             .vedlegg(barn.getAlleVedlegg())
             .build();
     }
@@ -160,7 +155,6 @@ public final class CommonMapper {
             navn(annenForelder)
         );
     }
-
 
     private static NorskForelder tilNorskForelder(AnnenForelderFrontend annenForelder) {
         return new NorskForelder(new Fødselsnummer(annenForelder.fnr()), navn(annenForelder));
@@ -220,7 +214,7 @@ public final class CommonMapper {
 
         // Generelle TODO: Identisk til UtenlandskOrgansiasjon.. Mye duplisering... skrive bort i fra abstract class maybe?
         norskOrganisasjonBuilder
-            .stillingsprosent(selvstendig.stillingsprosent() != null ? new ProsentAndel(selvstendig.stillingsprosent()) : null)
+            .stillingsprosent(selvstendig.stillingsprosent() != null ? ProsentAndel.valueOf(selvstendig.stillingsprosent()) : null)
             .periode(new ÅpenPeriode(selvstendig.tidsperiode().fom(), selvstendig.tidsperiode().tom()))
             .erNyIArbeidslivet(selvstendig.harBlittYrkesaktivILøpetAvDeTreSisteFerdigliknedeÅrene())
             .erNyOpprettet(erNyopprettet(selvstendig.tidsperiode().fom()))
@@ -262,7 +256,7 @@ public final class CommonMapper {
 
         // Generelle
         utenlandskOrganisasjonBuilder
-            .stillingsprosent(selvstendig.stillingsprosent() != null ? new ProsentAndel(selvstendig.stillingsprosent()) : null)
+            .stillingsprosent(selvstendig.stillingsprosent() != null ? ProsentAndel.valueOf(selvstendig.stillingsprosent()) : null)
             .periode(new ÅpenPeriode(selvstendig.tidsperiode().fom(), selvstendig.tidsperiode().tom()))
             .erNyIArbeidslivet(selvstendig.harBlittYrkesaktivILøpetAvDeTreSisteFerdigliknedeÅrene())
             .erNyOpprettet(erNyopprettet(selvstendig.tidsperiode().fom()))
@@ -320,14 +314,6 @@ public final class CommonMapper {
 
     private static FrilansOppdrag tilFrilansOppdrag(FrilansoppdragFrontend o) {
         return new FrilansOppdrag(o.navnPåArbeidsgiver(), new ÅpenPeriode(o.tidsperiode().fom(), o.tidsperiode().tom()));
-    }
-
-    private static FramtidigOppholdsInformasjon tilFramtidigOppholdsinformasjon(List<UtenlandsoppholdPeriodeFrontend> senereOpphold) {
-        return new FramtidigOppholdsInformasjon(tilUtenlandsoppholdsliste(senereOpphold));
-    }
-
-    private static TidligereOppholdsInformasjon tilTidligereOppholdsInfo(List<UtenlandsoppholdPeriodeFrontend> tidligereOpphold) {
-        return new TidligereOppholdsInformasjon(ArbeidsInformasjon.IKKE_ARBEIDET, tilUtenlandsoppholdsliste(tidligereOpphold));
     }
 
     private static List<Utenlandsopphold> tilUtenlandsoppholdsliste(List<UtenlandsoppholdPeriodeFrontend> tidligereOpphold) {

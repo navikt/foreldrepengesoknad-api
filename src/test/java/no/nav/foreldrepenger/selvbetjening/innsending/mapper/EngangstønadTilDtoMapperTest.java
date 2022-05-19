@@ -14,7 +14,6 @@ import org.springframework.test.context.junit.jupiter.SpringExtension;
 import com.fasterxml.jackson.databind.ObjectMapper;
 
 import no.nav.foreldrepenger.common.domain.engangsstønad.Engangsstønad;
-import no.nav.foreldrepenger.common.domain.felles.medlemskap.ArbeidsInformasjon;
 import no.nav.foreldrepenger.common.domain.felles.relasjontilbarn.FremtidigFødsel;
 import no.nav.foreldrepenger.common.oppslag.dkif.Målform;
 import no.nav.foreldrepenger.selvbetjening.config.JacksonConfiguration;
@@ -46,20 +45,17 @@ class EngangstønadTilDtoMapperTest {
         assertThat(søknad.getYtelse()).isInstanceOf(Engangsstønad.class);
         var ytelse = (Engangsstønad) søknad.getYtelse();
 
-        assertThat(ytelse.getRelasjonTilBarn()).isInstanceOf(FremtidigFødsel.class);
-        var barn = (FremtidigFødsel) ytelse.getRelasjonTilBarn();
+        assertThat(ytelse.relasjonTilBarn()).isInstanceOf(FremtidigFødsel.class);
+        var barn = (FremtidigFødsel) ytelse.relasjonTilBarn();
         assertThat(barn.getAntallBarn()).isEqualTo(2);
         assertThat(barn.getTerminDato()).isNotNull();
         assertThat(barn.getUtstedtDato()).isNotNull();
 
         // Medlemsskap
-        var medlemsskap = ytelse.getMedlemsskap();
+        var medlemsskap = ytelse.medlemsskap();
         assertThat(medlemsskap).isNotNull();
-        assertThat(medlemsskap.getFramtidigOppholdsInfo()).isNotNull();
-        assertThat(medlemsskap.getFramtidigOppholdsInfo().getUtenlandsOpphold()).isEmpty();
-        assertThat(medlemsskap.getTidligereOppholdsInfo()).isNotNull();
-        assertThat(medlemsskap.getTidligereOppholdsInfo().getUtenlandsOpphold()).isEmpty();
-        assertThat(medlemsskap.getTidligereOppholdsInfo().getArbeidSiste12()).isEqualTo(ArbeidsInformasjon.IKKE_ARBEIDET);
+        assertThat(medlemsskap.framtidigUtenlandsopphold()).isEmpty();
+        assertThat(medlemsskap.tidligereUtenlandsopphold()).isEmpty();
     }
 
 }

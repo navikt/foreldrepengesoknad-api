@@ -36,9 +36,9 @@ class EttersendingTilDtoMapperTest {
         var saksnummer = "952003131";
         var ettersendelseFraFrontend = new EttersendingFrontend(type, saksnummer, null, null, null);
         var ettersendelse = connection.body(ettersendelseFraFrontend);
-        assertThat(ettersendelse.getType().name()).isEqualTo(type);
-        assertThat(ettersendelse.getSaksnr()).isEqualTo(saksnummer);
-        assertThat(ettersendelse.getVedlegg()).isEmpty();
+        assertThat(ettersendelse.type().name()).isEqualTo(type);
+        assertThat(ettersendelse.saksnr()).isEqualTo(saksnummer);
+        assertThat(ettersendelse.vedlegg()).isEmpty();
     }
 
     @Test
@@ -46,10 +46,10 @@ class EttersendingTilDtoMapperTest {
         var ettersendelseFraFrontend = mapper.readValue(bytesFra("json/ettersendelse_I000044.json"), EttersendingFrontend.class);
         var ettersendelse = connection.body(ettersendelseFraFrontend);
 
-        assertThat(ettersendelse.getType()).isEqualTo(EttersendingsType.foreldrepenger);
-        assertThat(ettersendelse.getSaksnr()).isEqualTo("352003201");
-        assertThat(ettersendelse.getVedlegg()).hasSize(1);
-        var vedlegg = ettersendelse.getVedlegg().get(0);
+        assertThat(ettersendelse.type()).isEqualTo(EttersendingsType.foreldrepenger);
+        assertThat(ettersendelse.saksnr()).isEqualTo("352003201");
+        assertThat(ettersendelse.vedlegg()).hasSize(1);
+        var vedlegg = ettersendelse.vedlegg().get(0);
         assertThat(vedlegg.getId()).isEqualTo("V090740687265315217194125674862219730");
         assertThat(vedlegg.getDokumentType()).isEqualTo(DokumentType.I000044);
     }
