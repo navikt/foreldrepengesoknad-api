@@ -37,7 +37,6 @@ final class EngangsstønadMapper {
             engangsstønadBuilder.medlemsskap(tilMedlemskap(e));
         }
         return engangsstønadBuilder
-            // .annenForelder() // Sendes ikke ned fra frontend
             .relasjonTilBarn(tilRelasjonTilBarn(e))
             .build();
     }

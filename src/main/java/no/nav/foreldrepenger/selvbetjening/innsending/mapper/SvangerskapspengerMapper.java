@@ -98,7 +98,7 @@ final class SvangerskapspengerMapper {
             tilArbeidsforhold(tilrettelegging.arbeidsforhold()),
             tilrettelegging.behovForTilretteleggingFom(),
             tilrettelegging.tilrettelagtArbeidFom(),
-            tilrettelegging.stillingsprosent() != null ? new ProsentAndel(tilrettelegging.stillingsprosent()) : null,
+            tilrettelegging.stillingsprosent() != null ? ProsentAndel.valueOf(tilrettelegging.stillingsprosent()) : null,
             tilrettelegging.vedlegg()
         );
     }

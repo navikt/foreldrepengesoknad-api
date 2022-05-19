@@ -9,6 +9,9 @@ import static org.apache.commons.lang3.BooleanUtils.toBoolean;
 import java.util.ArrayList;
 import java.util.List;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
 import no.nav.foreldrepenger.common.domain.Søker;
 import no.nav.foreldrepenger.common.domain.felles.ProsentAndel;
 import no.nav.foreldrepenger.common.domain.foreldrepenger.Dekningsgrad;
@@ -32,6 +35,8 @@ import no.nav.foreldrepenger.selvbetjening.innsending.domain.Foreldrepengesøkna
 import no.nav.foreldrepenger.selvbetjening.innsending.domain.UttaksplanPeriode;
 
 final class ForeldrepengerMapper {
+
+    private static final Logger LOG = LoggerFactory.getLogger(ForeldrepengerMapper.class);
 
     private ForeldrepengerMapper() {
     }
@@ -90,7 +95,6 @@ final class ForeldrepengerMapper {
         return Fordeling.builder()
             .perioder(tilLukketPeriodeMedVedlegg(f.getUttaksplan()))
             .erAnnenForelderInformert(f.getAnnenForelder().erInformertOmSøknaden())
-            // .ønskerKvoteOverført(null) // TODO: Ikke satt av api. Ikke brukt? Hva er default i mottak?
             .build();
     }
 
@@ -125,11 +129,11 @@ final class ForeldrepengerMapper {
     }
 
     private static FriUtsettelsesPeriode tilFriUtsettelsesPeriode(UttaksplanPeriode u) {
+        loggHvisKontoErSatt(u);
         return FriUtsettelsesPeriode.FriUtsettelsesPeriodeBuilder()
-            .årsak(u.årsak() != null ? UtsettelsesÅrsak.valueOf(u.årsak()) : null)
+            .årsak(UtsettelsesÅrsak.valueOf(u.årsak()))
             .type(u.konto() != null ? StønadskontoType.valueOf(u.konto()) : null)
             .erArbeidstaker(u.erArbeidstaker())
-            // .virksomhetsnummer() Ikke satt
             .morsAktivitetsType(u.morsAktivitetIPerioden() != null ? MorsAktivitet.valueOf(u.morsAktivitetIPerioden()) : null)
             .fom(u.tidsperiode().fom())
             .tom(u.tidsperiode().tom())
@@ -139,8 +143,9 @@ final class ForeldrepengerMapper {
     }
 
     private static UtsettelsesPeriode tilUtsettelsesPeriode(UttaksplanPeriode u) {
+        loggHvisKontoErSatt(u);
         return UtsettelsesPeriode.UtsettelsesPeriodeBuilder()
-            .årsak(u.årsak() != null ? UtsettelsesÅrsak.valueOf(u.årsak()) : null)
+            .årsak(UtsettelsesÅrsak.valueOf(u.årsak()))
             .uttaksperiodeType(u.konto() != null ? StønadskontoType.valueOf(u.konto()) : null)
             .erArbeidstaker(u.erArbeidstaker())
             .virksomhetsnummer(u.orgnumre())
@@ -149,6 +154,12 @@ final class ForeldrepengerMapper {
             .tom(u.tidsperiode().tom())
             .vedlegg(u.vedlegg())
             .build();
+    }
+
+    private static void loggHvisKontoErSatt(UttaksplanPeriode u) {
+        if (u.konto() != null) {
+            LOG.info("Utsettelsesperiode av typen {} har kontotype satt til {}", u.type(), u.konto());
+        }
     }
 
     private static OppholdsPeriode tilOppholdsPeriode(UttaksplanPeriode u) {
@@ -166,7 +177,7 @@ final class ForeldrepengerMapper {
             .ønskerSamtidigUttak(u.ønskerSamtidigUttak())
             .morsAktivitetsType(u.morsAktivitetIPerioden() != null ? MorsAktivitet.valueOf(u.morsAktivitetIPerioden()) : null)
             .ønskerFlerbarnsdager(u.ønskerFlerbarnsdager())
-            .samtidigUttakProsent(u.samtidigUttakProsent() != null ? new ProsentAndel(u.samtidigUttakProsent()) : null)
+            .samtidigUttakProsent(u.samtidigUttakProsent() != null ? ProsentAndel.valueOf(u.samtidigUttakProsent()) : null)
             .fom(u.tidsperiode().fom())
             .tom(u.tidsperiode().tom())
             .vedlegg(u.vedlegg())
@@ -176,7 +187,7 @@ final class ForeldrepengerMapper {
     private static GradertUttaksPeriode tilGradertUttaksperiode(UttaksplanPeriode u) {
         return GradertUttaksPeriode.GradertUttaksPeriodeBuilder()
             .arbeidsForholdSomskalGraderes(true)
-            .arbeidstidProsent(u.stillingsprosent() != null ? new ProsentAndel(u.stillingsprosent()) : null)
+            .arbeidstidProsent(u.stillingsprosent() != null ? ProsentAndel.valueOf(u.stillingsprosent()) : null)
             .erArbeidstaker(u.erArbeidstaker())
             .virksomhetsnummer(u.orgnumre())
             .frilans(u.erFrilanser())
@@ -186,7 +197,7 @@ final class ForeldrepengerMapper {
             .ønskerSamtidigUttak(u.ønskerSamtidigUttak())
             .morsAktivitetsType(u.morsAktivitetIPerioden() != null ? MorsAktivitet.valueOf(u.morsAktivitetIPerioden()) : null)
             .ønskerFlerbarnsdager(u.ønskerFlerbarnsdager())
-            .samtidigUttakProsent(u.samtidigUttakProsent() != null ? new ProsentAndel(u.samtidigUttakProsent()) : null)
+            .samtidigUttakProsent(u.samtidigUttakProsent() != null ? ProsentAndel.valueOf(u.samtidigUttakProsent()) : null)
 
             .fom(u.tidsperiode().fom())
             .tom(u.tidsperiode().tom())

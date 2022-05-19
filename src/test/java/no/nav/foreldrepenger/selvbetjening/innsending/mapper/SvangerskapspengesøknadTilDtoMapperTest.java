@@ -16,7 +16,6 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 
 import no.nav.foreldrepenger.common.domain.BrukerRolle;
 import no.nav.foreldrepenger.common.domain.felles.ProsentAndel;
-import no.nav.foreldrepenger.common.domain.felles.medlemskap.ArbeidsInformasjon;
 import no.nav.foreldrepenger.common.domain.svangerskapspenger.Svangerskapspenger;
 import no.nav.foreldrepenger.common.domain.svangerskapspenger.tilrettelegging.DelvisTilrettelegging;
 import no.nav.foreldrepenger.common.domain.svangerskapspenger.tilrettelegging.arbeidsforhold.Virksomhet;
@@ -46,39 +45,36 @@ class SvangerskapspengesøknadTilDtoMapperTest {
         var søknad = connection.body(sf);
         assertThat(søknad.getYtelse()).isInstanceOf(Svangerskapspenger.class);
         var ytelse = (Svangerskapspenger) søknad.getYtelse();
-        assertThat(ytelse.getFødselsdato()).isNull();
-        assertThat(ytelse.getTermindato()).isNotNull();
+        assertThat(ytelse.fødselsdato()).isNull();
+        assertThat(ytelse.termindato()).isNotNull();
 
         var søker = søknad.getSøker();
         assertThat(søker.getSøknadsRolle()).isEqualTo(BrukerRolle.MOR);
         assertThat(søker.getMålform()).isEqualTo(Målform.NB);
 
         // Medlemsskap
-        var medlemsskap = ytelse.getMedlemsskap();
+        var medlemsskap = ytelse.medlemsskap();
         assertThat(medlemsskap).isNotNull();
-        assertThat(medlemsskap.getFramtidigOppholdsInfo()).isNotNull();
-        assertThat(medlemsskap.getFramtidigOppholdsInfo().getUtenlandsOpphold()).isEmpty();
-        assertThat(medlemsskap.getTidligereOppholdsInfo()).isNotNull();
-        assertThat(medlemsskap.getTidligereOppholdsInfo().getUtenlandsOpphold()).isEmpty();
-        assertThat(medlemsskap.getTidligereOppholdsInfo().getArbeidSiste12()).isEqualTo(ArbeidsInformasjon.IKKE_ARBEIDET);
+        assertThat(medlemsskap.framtidigUtenlandsopphold()).isEmpty();
+        assertThat(medlemsskap.tidligereUtenlandsopphold()).isEmpty();
 
         // Opptjening
-        var opptjening = ytelse.getOpptjening();
-        assertThat(opptjening.getUtenlandskArbeidsforhold()).isEmpty();
-        assertThat(opptjening.getEgenNæring()).isEmpty();
-        assertThat(opptjening.getAnnenOpptjening()).isEmpty();
-        assertThat(opptjening.getFrilans()).isNull();
+        var opptjening = ytelse.opptjening();
+        assertThat(opptjening.utenlandskArbeidsforhold()).isEmpty();
+        assertThat(opptjening.egenNæring()).isEmpty();
+        assertThat(opptjening.annenOpptjening()).isEmpty();
+        assertThat(opptjening.frilans()).isNull();
 
         // Tilrettelegging
-        var tilrettelegginger = ytelse.getTilrettelegging();
+        var tilrettelegginger = ytelse.tilrettelegging();
         assertThat(tilrettelegginger).hasSize(1);
         assertThat(tilrettelegginger.get(0)).isInstanceOf(DelvisTilrettelegging.class);
         var tilrettelegging = (DelvisTilrettelegging) tilrettelegginger.get(0);
         assertThat(tilrettelegging.getArbeidsforhold()).isInstanceOf(Virksomhet.class);
         assertThat(tilrettelegging.getTilrettelagtArbeidFom()).isEqualTo(LocalDate.of(2021, 12, 2));
         assertThat(tilrettelegging.getBehovForTilretteleggingFom()).isEqualTo(LocalDate.of(2021, 12, 1));
-        assertThat(tilrettelegging.getStillingsprosent()).isEqualTo(new ProsentAndel(50));
-        assertThat(tilrettelegging.getStillingsprosent()).isEqualTo(new ProsentAndel(50));
+        assertThat(tilrettelegging.getStillingsprosent()).isEqualTo(ProsentAndel.valueOf(50));
+        assertThat(tilrettelegging.getStillingsprosent()).isEqualTo(ProsentAndel.valueOf(50));
         assertThat(tilrettelegging.getVedlegg()).hasSize(1);
     }
 

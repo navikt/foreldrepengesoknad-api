@@ -11,11 +11,10 @@ public final class EttersendingMapper {
     }
 
     public static no.nav.foreldrepenger.common.domain.felles.Ettersending tilEttersending(EttersendingFrontend ettersending) {
-        var ettersendingDto = new no.nav.foreldrepenger.common.domain.felles.Ettersending(
-            ettersending.type() != null ? EttersendingsType.valueOf(ettersending.type()) : null,
+        return new no.nav.foreldrepenger.common.domain.felles.Ettersending(
             ettersending.saksnummer(),
-            new ArrayList<>());
-        ettersendingDto.setDialogId(ettersending.dialogId());
-        return ettersendingDto;
+            EttersendingsType.valueOf(ettersending.type()),
+            new ArrayList<>(),
+            ettersending.dialogId());
     }
 }
