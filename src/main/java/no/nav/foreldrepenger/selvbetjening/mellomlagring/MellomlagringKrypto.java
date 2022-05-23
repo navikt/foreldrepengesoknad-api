@@ -3,7 +3,7 @@ package no.nav.foreldrepenger.selvbetjening.mellomlagring;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Component;
 
-import no.nav.foreldrepenger.selvbetjening.util.TokenUtil;
+import no.nav.foreldrepenger.common.util.TokenUtil;
 
 @Component
 public class MellomlagringKrypto {
@@ -18,15 +18,15 @@ public class MellomlagringKrypto {
     }
 
     public String katalognavn() {
-        return hexBinary(encrypt(tokenUtil.autentisertBruker()).getBytes());
+        return hexBinary(encrypt(tokenUtil.autentisertBruker().value()).getBytes());
     }
 
     public String encrypt(String plaintext) {
-        return new Krypto(passphrase, tokenUtil.autentisertBruker()).encrypt(plaintext);
+        return new Krypto(passphrase, tokenUtil.autentisertBruker().value()).encrypt(plaintext);
     }
 
     public String decrypt(String encrypted) {
-        return new Krypto(passphrase, tokenUtil.autentisertBruker()).decrypt(encrypted);
+        return new Krypto(passphrase, tokenUtil.autentisertBruker().value()).decrypt(encrypted);
     }
 
     public String hexBinary(byte[] data) {

@@ -121,7 +121,7 @@ final class ForeldrepengerMapper {
     private static OverføringsPeriode tilOverføringsPeriode(UttaksplanPeriode u) {
         return OverføringsPeriode.builder()
             .årsak(u.årsak() != null ? Overføringsårsak.valueOf(u.årsak()) : null)
-            .uttaksperiodeType(u.konto() != null ? StønadskontoType.valueOf(u.konto()) : null)
+            .uttaksperiodeType(StønadskontoType.valueSafelyOf(u.konto()))
             .fom(u.tidsperiode().fom())
             .tom(u.tidsperiode().tom())
             .vedlegg(u.vedlegg())
@@ -173,7 +173,7 @@ final class ForeldrepengerMapper {
 
     private static UttaksPeriode tilUttaksPeriode(UttaksplanPeriode u) {
         return UttaksPeriode.UttaksPeriodeBuilder()
-            .uttaksperiodeType(u.konto() != null ? StønadskontoType.valueOf(u.konto()) : null)
+            .uttaksperiodeType(StønadskontoType.valueSafelyOf(u.konto()))
             .ønskerSamtidigUttak(u.ønskerSamtidigUttak())
             .morsAktivitetsType(u.morsAktivitetIPerioden() != null ? MorsAktivitet.valueOf(u.morsAktivitetIPerioden()) : null)
             .ønskerFlerbarnsdager(u.ønskerFlerbarnsdager())
@@ -193,7 +193,7 @@ final class ForeldrepengerMapper {
             .frilans(u.erFrilanser())
             .selvstendig(u.erSelvstendig())
 
-            .uttaksperiodeType(u.konto() != null ? StønadskontoType.valueOf(u.konto()) : null)
+            .uttaksperiodeType(StønadskontoType.valueSafelyOf(u.konto()))
             .ønskerSamtidigUttak(u.ønskerSamtidigUttak())
             .morsAktivitetsType(u.morsAktivitetIPerioden() != null ? MorsAktivitet.valueOf(u.morsAktivitetIPerioden()) : null)
             .ønskerFlerbarnsdager(u.ønskerFlerbarnsdager())

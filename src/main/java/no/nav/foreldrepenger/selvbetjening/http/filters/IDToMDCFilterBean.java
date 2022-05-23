@@ -1,7 +1,7 @@
 package no.nav.foreldrepenger.selvbetjening.http.filters;
 
-import static no.nav.foreldrepenger.common.util.Constants.NAV_TOKEN_EXPIRY_ID;
 import static no.nav.foreldrepenger.common.util.MDCUtil.toMDC;
+import static no.nav.foreldrepenger.common.util.TokenUtil.NAV_TOKEN_EXPIRY_ID;
 
 import java.io.IOException;
 
@@ -16,8 +16,8 @@ import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Component;
 import org.springframework.web.filter.GenericFilterBean;
 
+import no.nav.foreldrepenger.common.util.TokenUtil;
 import no.nav.foreldrepenger.selvbetjening.oppslag.Oppslag;
-import no.nav.foreldrepenger.selvbetjening.util.TokenUtil;
 
 @Component
 public class IDToMDCFilterBean extends GenericFilterBean {
@@ -34,7 +34,7 @@ public class IDToMDCFilterBean extends GenericFilterBean {
 
     @Override
     public void doFilter(ServletRequest req, ServletResponse res, FilterChain chain) throws IOException, ServletException {
-        var uri = HttpServletRequest.class.cast(req).getRequestURI();
+        var uri = ((HttpServletRequest) req).getRequestURI();
         copyHeadersToMDC(uri);
         chain.doFilter(req, res);
     }
@@ -42,7 +42,7 @@ public class IDToMDCFilterBean extends GenericFilterBean {
     private void copyHeadersToMDC(String uri) {
         try {
             if (tokenUtil.erAutentisert()) {
-                toMDC(NAV_TOKEN_EXPIRY_ID, tokenUtil.getExpiryDate());
+                toMDC(NAV_TOKEN_EXPIRY_ID, tokenUtil.getExpiration());
             }
         } catch (Exception e) {
             LOG.warn("Noe gikk galt ved setting av MDC-verdier for request {}, MDC-verdier er inkomplette", uri, e);

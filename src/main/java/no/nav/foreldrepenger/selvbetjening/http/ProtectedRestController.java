@@ -2,8 +2,8 @@ package no.nav.foreldrepenger.selvbetjening.http;
 
 import static java.lang.annotation.ElementType.TYPE;
 import static java.lang.annotation.RetentionPolicy.RUNTIME;
-import static no.nav.foreldrepenger.common.util.Constants.CLAIMS;
-import static no.nav.foreldrepenger.common.util.Constants.ISSUER;
+import static no.nav.foreldrepenger.common.util.TokenUtil.CLAIMS;
+import static no.nav.foreldrepenger.common.util.TokenUtil.SELVBETJENING;
 
 import java.lang.annotation.Documented;
 import java.lang.annotation.Retention;
@@ -17,7 +17,7 @@ import no.nav.security.token.support.core.api.ProtectedWithClaims;
 
 @RestController
 @Documented
-@ProtectedWithClaims(issuer = ISSUER)
+@ProtectedWithClaims(issuer = SELVBETJENING)
 @Target(TYPE)
 @Retention(RUNTIME)
 @RequestMapping

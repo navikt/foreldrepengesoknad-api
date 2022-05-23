@@ -1,10 +1,11 @@
 package no.nav.foreldrepenger.selvbetjening.http.filters;
 
-import static no.nav.foreldrepenger.common.util.Constants.NAV_AUTH_LEVEL;
 import static no.nav.foreldrepenger.common.util.Constants.NAV_CALL_ID;
 import static no.nav.foreldrepenger.common.util.Constants.NAV_CONSUMER_ID;
 import static no.nav.foreldrepenger.common.util.Constants.NAV_USER_ID;
 import static no.nav.foreldrepenger.common.util.MDCUtil.toMDC;
+import static no.nav.foreldrepenger.common.util.StringUtil.mask;
+import static no.nav.foreldrepenger.common.util.TokenUtil.NAV_AUTH_LEVEL;
 
 import java.io.IOException;
 import java.util.Optional;
@@ -22,9 +23,8 @@ import org.springframework.stereotype.Component;
 import org.springframework.web.filter.GenericFilterBean;
 
 import no.nav.foreldrepenger.common.util.AuthenticationLevel;
-import no.nav.foreldrepenger.common.util.StringUtil;
+import no.nav.foreldrepenger.common.util.TokenUtil;
 import no.nav.foreldrepenger.selvbetjening.util.CallIdGenerator;
-import no.nav.foreldrepenger.selvbetjening.util.TokenUtil;
 
 @Component
 public class HeadersToMDCFilterBean extends GenericFilterBean {
@@ -53,12 +53,12 @@ public class HeadersToMDCFilterBean extends GenericFilterBean {
     private void putValues(HttpServletRequest request, String uri) {
         try {
             toMDC(NAV_CONSUMER_ID, request.getHeader(NAV_CONSUMER_ID), applicationName);
-            toMDC(NAV_USER_ID, Optional.ofNullable(tokenUtil.getSubject()).map(StringUtil::mask).orElse("Uautentisert"));
+            toMDC(NAV_USER_ID, Optional.ofNullable(tokenUtil.autentisertBruker()).map(fødselsnummer -> mask(fødselsnummer.value())).orElse("Uautentisert"));
             toMDC(NAV_AUTH_LEVEL, Optional.ofNullable(tokenUtil.getLevel()).map(AuthenticationLevel::name).orElse(AuthenticationLevel.NONE.name()));
             toMDC(NAV_CALL_ID, request.getHeader(NAV_CALL_ID), generator.create());
             toMDC("JTI", tokenUtil.getJti());
             if (tokenUtil.erAutentisert()) {
-                SECURE_LOGGER.info("FNR {} - {} {}", tokenUtil.getSubject(), request.getMethod(), request.getRequestURI());
+                SECURE_LOGGER.info("FNR {} - {} {}", tokenUtil.autentisertBruker(), request.getMethod(), request.getRequestURI());
             }
         } catch (Exception e) {
             LOG.warn("Noe gikk galt ved setting av MDC-verdier for request {}, MDC-verdier er inkomplette", uri, e);

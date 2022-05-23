@@ -16,8 +16,8 @@ import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Component;
 import org.springframework.web.filter.GenericFilterBean;
 
+import no.nav.foreldrepenger.common.util.TokenUtil;
 import no.nav.foreldrepenger.selvbetjening.error.IdMismatchException;
-import no.nav.foreldrepenger.selvbetjening.util.TokenUtil;
 
 @Component
 public class IdMismatchFilterBean extends GenericFilterBean {
@@ -36,10 +36,10 @@ public class IdMismatchFilterBean extends GenericFilterBean {
 
     private void checkIds(ServletRequest request) {
         var fnr = ((HttpServletRequest) request).getHeader(FNR);
-        if ((fnr != null) && (tokenUtil.getSubject() != null) && !fnr.equals(tokenUtil.getSubject())) {
+        if ((fnr != null) && tokenUtil.erAutentisert() && !fnr.equals(tokenUtil.autentisertBruker().value())) {
             LOG.warn("ID Mismatch. Fødselsnummer i søknad matcher ikke innlogget bruker. Forekommer typisk når søker og annenpart " +
                 "søker i samme browser om hverandre. Enkelttilfeller kan ignoreres.");
-            throw new IdMismatchException(partialMask(fnr), partialMask(tokenUtil.getSubject()));
+            throw new IdMismatchException(partialMask(fnr), partialMask(tokenUtil.autentisertBruker().value()));
         }
     }
 

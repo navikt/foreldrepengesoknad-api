@@ -15,8 +15,9 @@ import org.springframework.util.unit.DataSize;
 
 import com.google.gson.Gson;
 
+import no.nav.foreldrepenger.common.domain.Fødselsnummer;
+import no.nav.foreldrepenger.common.util.TokenUtil;
 import no.nav.foreldrepenger.selvbetjening.innsending.pdf.PdfGeneratorStub;
-import no.nav.foreldrepenger.selvbetjening.util.TokenUtil;
 import no.nav.foreldrepenger.selvbetjening.vedlegg.DelegerendeVedleggSjekker;
 import no.nav.foreldrepenger.selvbetjening.vedlegg.PDFEncryptionVedleggSjekker;
 import no.nav.foreldrepenger.selvbetjening.vedlegg.StørrelseVedleggSjekker;
@@ -37,7 +38,7 @@ class KryptertMellomlagringTest {
 
     @BeforeEach
     void beforeEach() {
-        when(util.autentisertBruker()).thenReturn("01010111111");
+        when(util.autentisertBruker()).thenReturn(new Fødselsnummer("01010111111"));
         var mellomlagring = new InMemoryMellomlagring(bøtte);
         km = new KryptertMellomlagring(mellomlagring,
                 new MellomlagringKrypto("passphrase", util),

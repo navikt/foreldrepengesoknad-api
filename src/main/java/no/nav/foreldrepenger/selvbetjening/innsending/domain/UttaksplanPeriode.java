@@ -3,6 +3,7 @@ package no.nav.foreldrepenger.selvbetjening.innsending.domain;
 import static com.fasterxml.jackson.annotation.JsonInclude.Include.NON_EMPTY;
 import static no.nav.foreldrepenger.common.domain.validation.InputValideringRegex.BARE_BOKSTAVER;
 import static no.nav.foreldrepenger.common.domain.validation.InputValideringRegex.FRITEKST;
+import static no.nav.foreldrepenger.common.util.StringUtil.maskListe;
 
 import java.util.Collections;
 import java.util.List;
@@ -18,7 +19,7 @@ import com.fasterxml.jackson.annotation.JsonInclude;
 public record UttaksplanPeriode(@Pattern(regexp = BARE_BOKSTAVER) String type,
                                 Double samtidigUttakProsent,
                                 Double stillingsprosent,
-                                List<@Pattern(regexp = FRITEKST) String> orgnumre, //TODO: Kan også være utenlandske?
+                                List<@Pattern(regexp = FRITEKST) String> orgnumre,
                                 List<@Pattern(regexp = "^[\\p{Digit}\\p{L}]*$") String> vedlegg, // en vedleggsID
                                 @Pattern(regexp = BARE_BOKSTAVER) String forelder,
                                 @Pattern(regexp = "^[\\p{Digit}\\p{L}_]*$") String konto,
@@ -58,4 +59,26 @@ public record UttaksplanPeriode(@Pattern(regexp = BARE_BOKSTAVER) String type,
         this.ønskerSamtidigUttak = ønskerSamtidigUttak;
     }
 
+    @Override
+    public String toString() {
+        return "UttaksplanPeriode{" +
+            "type='" + type + '\'' +
+            ", samtidigUttakProsent=" + samtidigUttakProsent +
+            ", stillingsprosent=" + stillingsprosent +
+            ", orgnumre=" + maskListe(orgnumre) +
+            ", vedlegg=" + vedlegg +
+            ", forelder='" + forelder + '\'' +
+            ", konto='" + konto + '\'' +
+            ", morsAktivitetIPerioden='" + morsAktivitetIPerioden + '\'' +
+            ", årsak='" + årsak + '\'' +
+            ", tidsperiode=" + tidsperiode +
+            ", erArbeidstaker=" + erArbeidstaker +
+            ", erFrilanser=" + erFrilanser +
+            ", erSelvstendig=" + erSelvstendig +
+            ", graderingInnvilget=" + graderingInnvilget +
+            ", gradert=" + gradert +
+            ", ønskerFlerbarnsdager=" + ønskerFlerbarnsdager +
+            ", ønskerSamtidigUttak=" + ønskerSamtidigUttak +
+            '}';
+    }
 }
