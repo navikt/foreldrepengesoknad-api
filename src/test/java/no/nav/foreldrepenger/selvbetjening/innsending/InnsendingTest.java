@@ -24,8 +24,8 @@ import org.springframework.test.web.client.MockRestServiceServer;
 import org.springframework.util.unit.DataSize;
 import org.springframework.util.unit.DataUnit;
 
+import no.nav.foreldrepenger.selvbetjening.config.TokenUtilConfiguration;
 import no.nav.foreldrepenger.selvbetjening.mellomlagring.KryptertMellomlagring;
-import no.nav.foreldrepenger.selvbetjening.util.TokenUtil;
 import no.nav.foreldrepenger.selvbetjening.vedlegg.DelegerendeVedleggSjekker;
 import no.nav.foreldrepenger.selvbetjening.vedlegg.Image2PDFConverter;
 import no.nav.foreldrepenger.selvbetjening.vedlegg.PDFEncryptionVedleggSjekker;
@@ -35,7 +35,7 @@ import no.nav.security.token.support.spring.SpringTokenValidationContextHolder;
 
 @ExtendWith(SpringExtension.class)
 @TestPropertySource(properties = { "spring.cloud.vault.enabled=false" })
-@ContextConfiguration(classes = { Image2PDFConverter.class, TokenUtil.class, SpringTokenValidationContextHolder.class })
+@ContextConfiguration(classes = { Image2PDFConverter.class, TokenUtilConfiguration.class, SpringTokenValidationContextHolder.class })
 @RestClientTest
 @ActiveProfiles("test")
 class InnsendingTest {

@@ -6,10 +6,10 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.web.bind.annotation.GetMapping;
 
+import no.nav.foreldrepenger.common.util.TokenUtil;
 import no.nav.foreldrepenger.selvbetjening.http.ProtectedRestController;
 import no.nav.foreldrepenger.selvbetjening.oppslag.domain.PersonFrontend;
 import no.nav.foreldrepenger.selvbetjening.oppslag.domain.Søkerinfo;
-import no.nav.foreldrepenger.selvbetjening.util.TokenUtil;
 import no.nav.security.token.support.core.api.Unprotected;
 
 @ProtectedRestController(OppslagController.OPPSLAG_PATH)

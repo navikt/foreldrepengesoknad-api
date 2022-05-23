@@ -19,9 +19,9 @@ import org.springframework.test.web.servlet.MockMvc;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 
+import no.nav.foreldrepenger.common.util.TokenUtil;
 import no.nav.foreldrepenger.selvbetjening.config.JacksonConfiguration;
 import no.nav.foreldrepenger.selvbetjening.error.ApiExceptionHandler;
-import no.nav.foreldrepenger.selvbetjening.util.TokenUtil;
 
 @Import({MellomlagringController.class, ApiExceptionHandler.class})
 @WebMvcTest(controllers = MellomlagringController.class)

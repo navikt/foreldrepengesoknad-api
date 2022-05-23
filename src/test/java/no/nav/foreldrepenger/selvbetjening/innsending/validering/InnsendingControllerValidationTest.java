@@ -18,6 +18,7 @@ import org.springframework.web.bind.MethodArgumentNotValidException;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 
+import no.nav.foreldrepenger.common.util.TokenUtil;
 import no.nav.foreldrepenger.selvbetjening.config.JacksonConfiguration;
 import no.nav.foreldrepenger.selvbetjening.error.ApiExceptionHandler;
 import no.nav.foreldrepenger.selvbetjening.innsending.Innsending;
@@ -25,7 +26,6 @@ import no.nav.foreldrepenger.selvbetjening.innsending.InnsendingController;
 import no.nav.foreldrepenger.selvbetjening.innsending.domain.ForeldrepengesøknadFrontend;
 import no.nav.foreldrepenger.selvbetjening.innsending.domain.SvangerskapspengesøknadFrontend;
 import no.nav.foreldrepenger.selvbetjening.innsending.domain.SøknadFrontend;
-import no.nav.foreldrepenger.selvbetjening.util.TokenUtil;
 
 @Import({InnsendingController.class, ApiExceptionHandler.class})
 @WebMvcTest(controllers = InnsendingController.class)

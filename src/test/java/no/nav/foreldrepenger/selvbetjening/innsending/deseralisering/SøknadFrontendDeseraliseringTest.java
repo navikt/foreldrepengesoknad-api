@@ -141,6 +141,7 @@ class SøknadFrontendDeseraliseringTest {
         assertThat(søknadFrontend.getVedlegg()).isEmpty();
     }
 
+    @Test
     void ettersendelseDeraliseringTest() throws IOException, URISyntaxException {
         var ettersendelse = mapper.readValue(bytesFra("json/ettersendelse_I000044.json"), SøknadFrontend.class);
         assertThat(ettersendelse).isNotNull();
@@ -152,6 +153,6 @@ class SøknadFrontendDeseraliseringTest {
         var vedlegg = vedleggListe.get(0);
         assertThat(vedlegg.getSkjemanummer()).isEqualTo("I000044");
         assertThat(vedlegg.getId()).isEqualTo("V090740687265315217194125674862219730");
-        assertThat(vedlegg.getUrl()).isEqualTo(new URI("V090740687265315217194125674862219730"));
+        assertThat(vedlegg.getUrl()).isEqualTo(new URI("https://foreldrepengesoknad-api.dev.nav.no/rest/storage/vedlegg/b9974360-6c07-4b9d-acac-14f0f417d200"));
     }
 }

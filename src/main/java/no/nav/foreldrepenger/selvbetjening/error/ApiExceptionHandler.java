@@ -37,7 +37,7 @@ import org.springframework.web.servlet.NoHandlerFoundException;
 import org.springframework.web.servlet.mvc.method.annotation.ResponseEntityExceptionHandler;
 
 import no.nav.foreldrepenger.common.error.UnexpectedInputException;
-import no.nav.foreldrepenger.selvbetjening.util.TokenUtil;
+import no.nav.foreldrepenger.common.util.TokenUtil;
 import no.nav.foreldrepenger.selvbetjening.uttak.ManglendeFamiliehendelseException;
 import no.nav.foreldrepenger.selvbetjening.vedlegg.AttachmentException;
 import no.nav.foreldrepenger.selvbetjening.vedlegg.AttachmentTooLargeException;
