@@ -18,15 +18,15 @@ public class MellomlagringKrypto {
     }
 
     public String katalognavn() {
-        return hexBinary(encrypt(tokenUtil.autentisertBruker().value()).getBytes());
+        return hexBinary(encrypt(tokenUtil.getSubject()).getBytes());
     }
 
     public String encrypt(String plaintext) {
-        return new Krypto(passphrase, tokenUtil.autentisertBruker().value()).encrypt(plaintext);
+        return new Krypto(passphrase, tokenUtil.getSubject()).encrypt(plaintext);
     }
 
     public String decrypt(String encrypted) {
-        return new Krypto(passphrase, tokenUtil.autentisertBruker().value()).decrypt(encrypted);
+        return new Krypto(passphrase, tokenUtil.getSubject()).decrypt(encrypted);
     }
 
     public String hexBinary(byte[] data) {

@@ -36,10 +36,10 @@ public class IdMismatchFilterBean extends GenericFilterBean {
 
     private void checkIds(ServletRequest request) {
         var fnr = ((HttpServletRequest) request).getHeader(FNR);
-        if ((fnr != null) && tokenUtil.erAutentisert() && !fnr.equals(tokenUtil.autentisertBruker().value())) {
+        if ((fnr != null) && tokenUtil.erAutentisert() && !fnr.equals(tokenUtil.getSubject())) {
             LOG.warn("ID Mismatch. Fødselsnummer i søknad matcher ikke innlogget bruker. Forekommer typisk når søker og annenpart " +
                 "søker i samme browser om hverandre. Enkelttilfeller kan ignoreres.");
-            throw new IdMismatchException(partialMask(fnr), partialMask(tokenUtil.autentisertBruker().value()));
+            throw new IdMismatchException(partialMask(fnr), partialMask(tokenUtil.getSubject()));
         }
     }
 

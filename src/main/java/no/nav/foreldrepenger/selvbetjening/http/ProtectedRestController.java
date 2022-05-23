@@ -17,7 +17,7 @@ import no.nav.security.token.support.core.api.ProtectedWithClaims;
 
 @RestController
 @Documented
-@ProtectedWithClaims(issuer = SELVBETJENING)
+@ProtectedWithClaims(issuer = SELVBETJENING, claimMap = CLAIMS)
 @Target(TYPE)
 @Retention(RUNTIME)
 @RequestMapping
