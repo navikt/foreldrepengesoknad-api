@@ -18,20 +18,18 @@ import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Component;
 import org.springframework.web.filter.GenericFilterBean;
 
-import no.nav.foreldrepenger.selvbetjening.util.CallIdGenerator;
+import no.nav.foreldrepenger.common.util.CallIdGenerator;
+
 
 @Component
 public class HeadersToMDCFilterBean extends GenericFilterBean {
     private static final Logger LOG = LoggerFactory.getLogger(HeadersToMDCFilterBean.class);
 
-
+    private final CallIdGenerator generator = new CallIdGenerator();
     private final String applicationName;
-    private final CallIdGenerator generator;
 
-    public HeadersToMDCFilterBean(@Value("${spring.application.name}") String applicationName,
-                                  CallIdGenerator generator) {
+    public HeadersToMDCFilterBean(@Value("${spring.application.name}") String applicationName) {
         this.applicationName = applicationName;
-        this.generator = generator;
     }
 
     @Override

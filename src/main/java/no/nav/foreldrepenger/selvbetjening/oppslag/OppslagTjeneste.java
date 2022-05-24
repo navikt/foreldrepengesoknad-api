@@ -41,7 +41,7 @@ public class OppslagTjeneste implements Oppslag {
     private Søkerinfo søkerinfo() {
         LOG.info("Henter søkerinfo");
         var info = new Søkerinfo(tilPersonFrontend(oppslag.hentPerson()), innsyn.hentArbeidsForhold());
-        LOG.info("Hentet søkerinfo for {} med {} arbeidsforhold OK", info.søker().fnr(), info.arbeidsforhold().size());
+        LOG.info("Hentet søkerinfo for med {} arbeidsforhold OK", info.arbeidsforhold().size());
         LOG.trace(CONFIDENTIAL, "Hentet søkerinfo {}", info);
         return info;
     }
