@@ -35,6 +35,7 @@ jobs:
           mvn install -e --batch-mode --settings .github/.m2/settings.xml
 
       - name: Sonar analyse
+        if: github.actor != 'dependabot[bot]'
         run: |
           mvn jacoco:prepare-agent jacoco:report sonar:sonar --settings .github/.m2/settings.xml
         env:
