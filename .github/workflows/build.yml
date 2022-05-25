@@ -79,6 +79,6 @@ jobs:
              });
       - name: Sonar analyse
         run: |
-          mvn jacoco:prepare-agent jacoco:report sonar:sonar --settings .github/.m2/settings.xml
+          mvn jacoco:report org.sonarsource.scanner.maven:sonar-maven-plugin:sonar --settings .github/.m2/settings.xml
         env:
           SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}
