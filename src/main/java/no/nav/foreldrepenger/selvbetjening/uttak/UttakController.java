@@ -11,7 +11,6 @@ import javax.validation.constraints.Pattern;
 
 import org.springframework.format.annotation.DateTimeFormat;
 import org.springframework.validation.annotation.Validated;
-import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
@@ -42,7 +41,6 @@ public class UttakController {
     }
 
     @GetMapping
-    @CrossOrigin(origins = "*", allowCredentials = "false")
     public KontoBeregning beregn(@RequestParam("antallBarn") int antallBarn,
                                  @RequestParam("morHarRett") boolean morHarRett,
                                  @RequestParam("farHarRett") boolean farHarRett,
