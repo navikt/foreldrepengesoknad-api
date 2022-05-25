@@ -26,7 +26,7 @@ public class InnsynTjeneste implements Innsyn {
 
     @Override
     public UttaksplanDto hentUttaksplan(String saksnummer) {
-        LOG.info("Henter uttaksplan for sak {}", saksnummer);
+        LOG.info("Henter uttaksplan for sak");
         return connection.hentUttaksplan(saksnummer);
     }
 

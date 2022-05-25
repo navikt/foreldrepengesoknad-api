@@ -39,7 +39,7 @@ public class InnsynController {
     }
 
     @GetMapping("/uttaksplan")
-    public UttaksplanDto uttaksplan(@RequestParam(name = "saksnummer") @Pattern(regexp = BARE_TALL) String saksnummer) {
+    public UttaksplanDto uttaksplan(@RequestParam(name = "saksnummer") @Pattern(regexp = BARE_TALL) @NotNull String saksnummer) {
         return innsynTjeneste.hentUttaksplan(saksnummer);
     }
 

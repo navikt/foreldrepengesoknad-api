@@ -22,7 +22,7 @@ import no.nav.foreldrepenger.selvbetjening.innsyn.saker.Sak;
 
 @ExtendWith(MockitoExtension.class)
 @ExtendWith(SpringExtension.class)
-public class InnsynConnectionTest {
+class InnsynConnectionTest {
 
     @Mock
     RestOperations rest;
@@ -37,7 +37,7 @@ public class InnsynConnectionTest {
     }
 
     @Test
-    public void testUthentingAvSaker() {
+    void testUthentingAvSaker() {
         lenient().when(rest.getForObject(any(), eq(Sak[].class))).thenReturn(saker());
         List<Sak> saker = connection.hentSaker();
         assertThat(saker).hasSize(1);

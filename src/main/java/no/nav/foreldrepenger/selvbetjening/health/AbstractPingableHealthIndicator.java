@@ -11,7 +11,7 @@ public abstract class AbstractPingableHealthIndicator implements HealthIndicator
 
     private final PingEndpointAware pingable;
 
-    public AbstractPingableHealthIndicator(PingEndpointAware pingable) {
+    protected AbstractPingableHealthIndicator(PingEndpointAware pingable) {
         this.pingable = pingable;
     }
 

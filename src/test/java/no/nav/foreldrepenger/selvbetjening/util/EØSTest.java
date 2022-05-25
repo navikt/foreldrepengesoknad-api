@@ -7,20 +7,20 @@ import org.junit.jupiter.api.Test;
 
 import com.neovisionaries.i18n.CountryCode;
 
-public class EØSTest {
+class EØSTest {
 
     @Test
-    public void testNorge() {
+    void testNorge() {
         assertFalse(IkkeNordiskEØSLand.ikkeNordiskEøsLand(CountryCode.NO));
     }
 
     @Test
-    public void testUK() {
+    void testUK() {
         assertTrue(IkkeNordiskEØSLand.ikkeNordiskEøsLand(CountryCode.UK));
     }
 
     @Test
-    public void testNull() {
+    void testNull() {
         assertFalse(IkkeNordiskEØSLand.ikkeNordiskEøsLand(null));
     }
 

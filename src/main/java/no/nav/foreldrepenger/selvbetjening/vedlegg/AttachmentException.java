@@ -6,15 +6,15 @@ public abstract class AttachmentException extends RuntimeException {
 
     private final MediaType mediaType;
 
-    public AttachmentException(String msg) {
+    protected AttachmentException(String msg) {
         this(msg, null);
     }
 
-    public AttachmentException(String msg, Exception cause) {
+    protected AttachmentException(String msg, Exception cause) {
         this(msg, null, cause);
     }
 
-    public AttachmentException(String msg, MediaType mediaType, Throwable e) {
+    protected AttachmentException(String msg, MediaType mediaType, Throwable e) {
         super(msg, e);
         this.mediaType = mediaType;
     }

@@ -13,18 +13,18 @@ import javax.imageio.ImageIO;
 
 import org.junit.jupiter.api.Test;
 
-public class ImageScalerTest {
+class ImageScalerTest {
 
     @Test
-    public void imgSmallerThanA4RemainsUnchanged() throws Exception {
+    void imgSmallerThanA4RemainsUnchanged() throws Exception {
         URL url = getClass().getResource("/pdf/jks.jpg");
         byte[] orig = Files.readAllBytes(Paths.get(url.toURI()));
         byte[] scaled = ImageScaler.downToA4(orig, "jpg");
-        assertThat(scaled.length).isEqualTo(orig.length);
+        assertThat(scaled).hasSameSizeAs(orig);
     }
 
     @Test
-    public void imgBiggerThanA4IsScaledDown() throws Exception {
+    void imgBiggerThanA4IsScaledDown() throws Exception {
         URL url = getClass().getResource("/pdf/rdd.png");
         byte[] orig = Files.readAllBytes(Paths.get(url.toURI()));
         byte[] scaled = ImageScaler.downToA4(orig, "jpg");
@@ -35,7 +35,7 @@ public class ImageScalerTest {
     }
 
     @Test
-    public void scaledImgHasRetainedFormat() throws Exception {
+    void scaledImgHasRetainedFormat() throws Exception {
         URL url = getClass().getResource("/pdf/rdd.png");
         final byte[] orig = Files.readAllBytes(Paths.get(url.toURI()));
         final byte[] scaled = ImageScaler.downToA4(orig, "jpg");
@@ -43,7 +43,7 @@ public class ImageScalerTest {
     }
 
     @Test
-    public void rotateLandscapeToPortrait() throws Exception {
+    void rotateLandscapeToPortrait() throws Exception {
         URL url = getClass().getResource("/pdf/landscape.jpg");
         byte[] orig = Files.readAllBytes(Paths.get(url.toURI()));
         byte[] scaled = ImageScaler.downToA4(orig, "jpg");
