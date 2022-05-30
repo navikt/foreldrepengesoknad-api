@@ -46,7 +46,7 @@ class EttersendingTilDtoMapperTest {
         var ettersendelseFraFrontend = mapper.readValue(bytesFra("json/ettersendelse_I000044.json"), EttersendingFrontend.class);
         var ettersendelse = connection.body(ettersendelseFraFrontend);
 
-        assertThat(ettersendelse.type()).isEqualTo(EttersendingsType.foreldrepenger);
+        assertThat(ettersendelse.type()).isEqualTo(EttersendingsType.FORELDREPENGER);
         assertThat(ettersendelse.saksnr()).isEqualTo("352003201");
         assertThat(ettersendelse.vedlegg()).hasSize(1);
         var vedlegg = ettersendelse.vedlegg().get(0);

@@ -1,6 +1,7 @@
 package no.nav.foreldrepenger.selvbetjening.historikk;
 
 import static no.nav.foreldrepenger.common.domain.validation.InputValideringRegex.FRITEKST;
+import static no.nav.foreldrepenger.common.util.Constants.FNR;
 import static no.nav.foreldrepenger.selvbetjening.historikk.HistorikkController.HISTORIKK;
 
 import java.util.List;
@@ -33,7 +34,7 @@ public class HistorikkDevController {
     }
 
     @GetMapping
-    public List<HistorikkInnslag> historikk(@Valid @RequestParam("fnr") Fødselsnummer fnr) {
+    public List<HistorikkInnslag> historikk(@Valid @RequestParam(FNR) Fødselsnummer fnr) {
         return historikk.historikkFor(fnr);
     }
 
@@ -43,7 +44,7 @@ public class HistorikkDevController {
     }
 
     @GetMapping(path = "/vedlegg")
-    public List<String> vedlegg(@Valid @RequestParam("fnr") Fødselsnummer fnr, @RequestParam("saksnummer") @Pattern(regexp = FRITEKST) String saksnummer) {
+    public List<String> vedlegg(@Valid @RequestParam(FNR) Fødselsnummer fnr, @RequestParam("saksnummer") @Pattern(regexp = FRITEKST) String saksnummer) {
         return historikk.manglendeVedleggFor(fnr, saksnummer);
     }
 

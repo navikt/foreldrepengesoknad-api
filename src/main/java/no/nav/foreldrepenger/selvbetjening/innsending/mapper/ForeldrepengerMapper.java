@@ -76,7 +76,7 @@ final class ForeldrepengerMapper {
         return foreldrepengerBuilder
             .annenForelder(tilAnnenForelder(f))
             .relasjonTilBarn(tilRelasjonTilBarn(f))
-            .dekningsgrad(Dekningsgrad.fraKode(f.getDekningsgrad()))
+            .dekningsgrad(Dekningsgrad.valueOf(f.getDekningsgrad()))
             .fordeling(tilFordeling(f))
             .rettigheter(tilRettigheter(f))
             .build();
@@ -129,10 +129,8 @@ final class ForeldrepengerMapper {
     }
 
     private static FriUtsettelsesPeriode tilFriUtsettelsesPeriode(UttaksplanPeriode u) {
-        loggHvisKontoErSatt(u);
         return FriUtsettelsesPeriode.FriUtsettelsesPeriodeBuilder()
             .årsak(UtsettelsesÅrsak.valueOf(u.årsak()))
-            .type(u.konto() != null ? StønadskontoType.valueOf(u.konto()) : null)
             .erArbeidstaker(u.erArbeidstaker())
             .morsAktivitetsType(u.morsAktivitetIPerioden() != null ? MorsAktivitet.valueOf(u.morsAktivitetIPerioden()) : null)
             .fom(u.tidsperiode().fom())
@@ -143,10 +141,8 @@ final class ForeldrepengerMapper {
     }
 
     private static UtsettelsesPeriode tilUtsettelsesPeriode(UttaksplanPeriode u) {
-        loggHvisKontoErSatt(u);
         return UtsettelsesPeriode.UtsettelsesPeriodeBuilder()
             .årsak(UtsettelsesÅrsak.valueOf(u.årsak()))
-            .uttaksperiodeType(u.konto() != null ? StønadskontoType.valueOf(u.konto()) : null)
             .erArbeidstaker(u.erArbeidstaker())
             .virksomhetsnummer(u.orgnumre())
             .morsAktivitetsType(u.morsAktivitetIPerioden() != null ? MorsAktivitet.valueOf(u.morsAktivitetIPerioden()) : null)
@@ -154,12 +150,6 @@ final class ForeldrepengerMapper {
             .tom(u.tidsperiode().tom())
             .vedlegg(u.vedlegg())
             .build();
-    }
-
-    private static void loggHvisKontoErSatt(UttaksplanPeriode u) {
-        if (u.konto() != null) {
-            LOG.info("Utsettelsesperiode av typen {} har kontotype satt til {}", u.type(), u.konto());
-        }
     }
 
     private static OppholdsPeriode tilOppholdsPeriode(UttaksplanPeriode u) {

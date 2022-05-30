@@ -1,13 +1,17 @@
 package no.nav.foreldrepenger.selvbetjening.minidialog;
 
+import static no.nav.foreldrepenger.common.util.Constants.FNR;
+import static no.nav.foreldrepenger.selvbetjening.util.URIUtil.queryParams;
+import static no.nav.foreldrepenger.selvbetjening.util.URIUtil.uri;
+
 import java.net.URI;
 
 import org.springframework.boot.context.properties.ConfigurationProperties;
 import org.springframework.boot.context.properties.ConstructorBinding;
 import org.springframework.boot.context.properties.bind.DefaultValue;
 
-import no.nav.foreldrepenger.common.util.Pair;
 import no.nav.foreldrepenger.selvbetjening.http.AbstractConfig;
+import no.nav.foreldrepenger.selvbetjening.util.URIUtil;
 
 @ConfigurationProperties(MinidialogConfig.MINIDIALOG)
 public class MinidialogConfig extends AbstractConfig {
@@ -25,20 +29,20 @@ public class MinidialogConfig extends AbstractConfig {
     }
 
     public URI minidialogPreprodURI(String fnr, boolean activeOnly) {
-        return uri(getUri(), MINIDIALOGER, queryParams(Pair.of("fnr", fnr), Pair.of("activeOnly", activeOnly)));
+        return uri(getBaseUri(), MINIDIALOGER, queryParams(FNR, fnr, "activeOnly", String.valueOf(activeOnly)));
     }
 
     public URI aktiveSpmURI() {
-        return uri(getUri(), MINIDIALOG + "/me");
+        return uri(getBaseUri(), MINIDIALOG + "/me");
     }
 
     public URI aktiveSpmURI(String fnr) {
-        return uri(getUri(), AKTIVE, queryParams(Pair.of("fnr", fnr)));
+        return uri(getBaseUri(), AKTIVE, URIUtil.queryParam(FNR, fnr));
     }
 
     @Override
     public URI pingURI() {
-        return uri(getUri(), DEFAULT_PING_PATH);
+        return uri(getBaseUri(), DEFAULT_PING_PATH);
     }
 
 }

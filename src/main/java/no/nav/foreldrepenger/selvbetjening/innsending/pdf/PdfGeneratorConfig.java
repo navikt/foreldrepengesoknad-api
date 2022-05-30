@@ -1,5 +1,7 @@
 package no.nav.foreldrepenger.selvbetjening.innsending.pdf;
 
+import static no.nav.foreldrepenger.selvbetjening.util.URIUtil.uri;
+
 import java.net.URI;
 
 import org.springframework.boot.context.properties.ConfigurationProperties;
@@ -21,11 +23,11 @@ public class PdfGeneratorConfig extends AbstractConfig {
 
     @Override
     protected URI pingURI() {
-        return uri(getUri(), DEFAULT_PING_PATH);
+        return uri(getBaseUri(), DEFAULT_PING_PATH);
     }
 
     URI tilbakebetalingURI() {
-        return uri(getUri(), TILBAKEBETALING_UTTALELSE);
+        return uri(getBaseUri(), TILBAKEBETALING_UTTALELSE);
     }
 
 }

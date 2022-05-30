@@ -173,9 +173,7 @@ class ForeldrepengeSøknadTilDtoMapperTest {
         var utsettelsesPerioder = getUtsettelsesPeriode(uttaksperioder);
         assertThat(utsettelsesPerioder).hasSize(1);
         var utsettelseperiode = utsettelsesPerioder.get(0);
-        assertThat(utsettelseperiode.getUttaksperiodeType()).isNull();
         assertThat(utsettelseperiode.getÅrsak().name()).isEqualTo("SYKDOM");
-        assertThat(utsettelseperiode.getUttaksperiodeType()).isNull();
         assertThat(utsettelseperiode.getFom()).isNotNull();
         assertThat(utsettelseperiode.getTom()).isNotNull();
 

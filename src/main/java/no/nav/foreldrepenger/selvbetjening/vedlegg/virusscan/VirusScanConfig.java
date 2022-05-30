@@ -20,6 +20,6 @@ public class VirusScanConfig extends AbstractConfig {
 
     @Override
     protected URI pingURI() {
-        return getUri();
+        return getBaseUri();
     }
 }
