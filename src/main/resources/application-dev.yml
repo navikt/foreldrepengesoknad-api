@@ -37,6 +37,11 @@ no.nav:
           fpinfo-historikk:
             token-exchange:
               audience: dev-fss:teamforeldrepenger:fpinfo-historikk
+      issuer:
+        selvbetjening:
+          discoveryurl: https://navtestb2c.b2clogin.com/navtestb2c.onmicrosoft.com/v2.0/.well-known/openid-configuration?p=B2C_1A_idporten_ver1
+          accepted_audience: https://nav.no
+          cookie_name: selvbetjening-idtoken
 
 oppslag:
   uri: https://fpsoknad-mottak.dev-fss-pub.nais.io/api/
