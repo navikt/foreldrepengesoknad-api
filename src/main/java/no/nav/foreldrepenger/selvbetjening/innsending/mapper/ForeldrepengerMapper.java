@@ -9,9 +9,6 @@ import static org.apache.commons.lang3.BooleanUtils.toBoolean;
 import java.util.ArrayList;
 import java.util.List;
 
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
-
 import no.nav.foreldrepenger.common.domain.Søker;
 import no.nav.foreldrepenger.common.domain.felles.ProsentAndel;
 import no.nav.foreldrepenger.common.domain.foreldrepenger.Dekningsgrad;
@@ -35,8 +32,6 @@ import no.nav.foreldrepenger.selvbetjening.innsending.domain.Foreldrepengesøkna
 import no.nav.foreldrepenger.selvbetjening.innsending.domain.UttaksplanPeriode;
 
 final class ForeldrepengerMapper {
-
-    private static final Logger LOG = LoggerFactory.getLogger(ForeldrepengerMapper.class);
 
     private ForeldrepengerMapper() {
     }
@@ -76,7 +71,7 @@ final class ForeldrepengerMapper {
         return foreldrepengerBuilder
             .annenForelder(tilAnnenForelder(f))
             .relasjonTilBarn(tilRelasjonTilBarn(f))
-            .dekningsgrad(Dekningsgrad.valueOf(f.getDekningsgrad()))
+            .dekningsgrad(Dekningsgrad.fraKode(f.getDekningsgrad()))
             .fordeling(tilFordeling(f))
             .rettigheter(tilRettigheter(f))
             .build();

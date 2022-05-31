@@ -32,11 +32,10 @@ class EttersendingTilDtoMapperTest {
 
     @Test
     void testEttersendingMapper() {
-        var type = "foreldrepenger";
         var saksnummer = "952003131";
-        var ettersendelseFraFrontend = new EttersendingFrontend(type, saksnummer, null, null, null);
+        var ettersendelseFraFrontend = new EttersendingFrontend("foreldrepenger", saksnummer, null, null, null);
         var ettersendelse = connection.body(ettersendelseFraFrontend);
-        assertThat(ettersendelse.type().name()).isEqualTo(type);
+        assertThat(ettersendelse.type()).isEqualTo(EttersendingsType.FORELDREPENGER);
         assertThat(ettersendelse.saksnr()).isEqualTo(saksnummer);
         assertThat(ettersendelse.vedlegg()).isEmpty();
     }
