@@ -44,7 +44,7 @@ class VirusScanConnection extends AbstractRestConnection {
         if (isEnabled()) {
             if (bytes != null) {
                 LOG.trace("Scanner {}", name);
-                var scanResults = putForObject(config.getUri(), bytes, ScanResult[].class);
+                var scanResults = putForObject(config.getBaseUri(), bytes, ScanResult[].class);
                 if (scanResults.length != 1) {
                     LOG.warn("Uventet respons med lengde {}, forventet lengde er 1", scanResults.length);
                     throw new AttachmentVirusException(name);

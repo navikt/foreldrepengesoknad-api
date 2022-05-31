@@ -9,9 +9,6 @@ import static org.apache.commons.lang3.BooleanUtils.toBoolean;
 import java.util.ArrayList;
 import java.util.List;
 
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
-
 import no.nav.foreldrepenger.common.domain.Søker;
 import no.nav.foreldrepenger.common.domain.felles.ProsentAndel;
 import no.nav.foreldrepenger.common.domain.foreldrepenger.Dekningsgrad;
@@ -35,8 +32,6 @@ import no.nav.foreldrepenger.selvbetjening.innsending.domain.Foreldrepengesøkna
 import no.nav.foreldrepenger.selvbetjening.innsending.domain.UttaksplanPeriode;
 
 final class ForeldrepengerMapper {
-
-    private static final Logger LOG = LoggerFactory.getLogger(ForeldrepengerMapper.class);
 
     private ForeldrepengerMapper() {
     }
@@ -129,10 +124,8 @@ final class ForeldrepengerMapper {
     }
 
     private static FriUtsettelsesPeriode tilFriUtsettelsesPeriode(UttaksplanPeriode u) {
-        loggHvisKontoErSatt(u);
         return FriUtsettelsesPeriode.FriUtsettelsesPeriodeBuilder()
             .årsak(UtsettelsesÅrsak.valueOf(u.årsak()))
-            .type(u.konto() != null ? StønadskontoType.valueOf(u.konto()) : null)
             .erArbeidstaker(u.erArbeidstaker())
             .morsAktivitetsType(u.morsAktivitetIPerioden() != null ? MorsAktivitet.valueOf(u.morsAktivitetIPerioden()) : null)
             .fom(u.tidsperiode().fom())
@@ -143,10 +136,8 @@ final class ForeldrepengerMapper {
     }
 
     private static UtsettelsesPeriode tilUtsettelsesPeriode(UttaksplanPeriode u) {
-        loggHvisKontoErSatt(u);
         return UtsettelsesPeriode.UtsettelsesPeriodeBuilder()
             .årsak(UtsettelsesÅrsak.valueOf(u.årsak()))
-            .uttaksperiodeType(u.konto() != null ? StønadskontoType.valueOf(u.konto()) : null)
             .erArbeidstaker(u.erArbeidstaker())
             .virksomhetsnummer(u.orgnumre())
             .morsAktivitetsType(u.morsAktivitetIPerioden() != null ? MorsAktivitet.valueOf(u.morsAktivitetIPerioden()) : null)
@@ -154,12 +145,6 @@ final class ForeldrepengerMapper {
             .tom(u.tidsperiode().tom())
             .vedlegg(u.vedlegg())
             .build();
-    }
-
-    private static void loggHvisKontoErSatt(UttaksplanPeriode u) {
-        if (u.konto() != null) {
-            LOG.info("Utsettelsesperiode av typen {} har kontotype satt til {}", u.type(), u.konto());
-        }
     }
 
     private static OppholdsPeriode tilOppholdsPeriode(UttaksplanPeriode u) {

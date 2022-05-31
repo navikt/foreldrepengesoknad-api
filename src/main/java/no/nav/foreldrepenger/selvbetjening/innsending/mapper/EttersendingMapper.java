@@ -13,7 +13,7 @@ public final class EttersendingMapper {
     public static no.nav.foreldrepenger.common.domain.felles.Ettersending tilEttersending(EttersendingFrontend ettersending) {
         return new no.nav.foreldrepenger.common.domain.felles.Ettersending(
             ettersending.saksnummer(),
-            EttersendingsType.valueOf(ettersending.type()),
+            EttersendingsType.valueOf(ettersending.type().toUpperCase()),
             new ArrayList<>(),
             ettersending.dialogId());
     }

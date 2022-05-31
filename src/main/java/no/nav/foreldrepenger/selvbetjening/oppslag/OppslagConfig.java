@@ -1,5 +1,7 @@
 package no.nav.foreldrepenger.selvbetjening.oppslag;
 
+import static no.nav.foreldrepenger.selvbetjening.util.URIUtil.uri;
+
 import java.net.URI;
 
 import org.springframework.boot.context.properties.ConfigurationProperties;
@@ -21,11 +23,11 @@ public class OppslagConfig extends AbstractConfig {
 
     @Override
     public URI pingURI() {
-        return uri(getUri(), PING);
+        return uri(getBaseUri(), PING);
     }
 
     URI personURI() {
-        return uri(getUri(), PERSON);
+        return uri(getBaseUri(), PERSON);
     }
 
 }

@@ -1,5 +1,7 @@
 package no.nav.foreldrepenger.selvbetjening.innsyn;
 
+import static no.nav.foreldrepenger.selvbetjening.util.URIUtil.uri;
+
 import java.net.URI;
 
 import org.springframework.boot.context.properties.ConfigurationProperties;
@@ -8,6 +10,7 @@ import org.springframework.boot.context.properties.bind.DefaultValue;
 
 import no.nav.foreldrepenger.common.domain.Fødselsnummer;
 import no.nav.foreldrepenger.selvbetjening.http.AbstractConfig;
+import no.nav.foreldrepenger.selvbetjening.util.URIUtil;
 
 @ConfigurationProperties(prefix = "innsyn")
 public class InnsynConfig extends AbstractConfig {
@@ -30,26 +33,26 @@ public class InnsynConfig extends AbstractConfig {
 
     @Override
     public URI pingURI() {
-        return uri(getUri(), PING);
+        return uri(getBaseUri(), PING);
     }
 
     URI fpsakURI() {
-        return uri(getUri(), FPSAK_SAKER);
+        return uri(getBaseUri(), FPSAK_SAKER);
     }
 
     URI uttakURI(String saksnummer) {
-        return uri(getUri(), UTTAKSPLAN, queryParams(SAKSNUMMER, saksnummer));
+        return uri(getBaseUri(), UTTAKSPLAN, URIUtil.queryParam(SAKSNUMMER, saksnummer));
     }
 
     URI uttakURIForAnnenPart(Fødselsnummer annenPart) {
-        return uri(getUri(), UTTAKSPLANANNEN, queryParams(ANNENPART, annenPart.value()));
+        return uri(getBaseUri(), UTTAKSPLANANNEN, URIUtil.queryParam(ANNENPART, annenPart.value()));
     }
 
     URI fpsakV2URI() {
-        return uri(getUri(), FPSAK_SAKER_V2);
+        return uri(getBaseUri(), FPSAK_SAKER_V2);
     }
 
     public URI arbeidsforholdURI() {
-        return uri(getUri(), ARBEIDSFORHOLD);
+        return uri(getBaseUri(), ARBEIDSFORHOLD);
     }
 }

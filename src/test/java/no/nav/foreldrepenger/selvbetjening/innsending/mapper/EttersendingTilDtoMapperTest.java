@@ -32,11 +32,10 @@ class EttersendingTilDtoMapperTest {
 
     @Test
     void testEttersendingMapper() {
-        var type = "foreldrepenger";
         var saksnummer = "952003131";
-        var ettersendelseFraFrontend = new EttersendingFrontend(type, saksnummer, null, null, null);
+        var ettersendelseFraFrontend = new EttersendingFrontend("foreldrepenger", saksnummer, null, null, null);
         var ettersendelse = connection.body(ettersendelseFraFrontend);
-        assertThat(ettersendelse.type().name()).isEqualTo(type);
+        assertThat(ettersendelse.type()).isEqualTo(EttersendingsType.FORELDREPENGER);
         assertThat(ettersendelse.saksnr()).isEqualTo(saksnummer);
         assertThat(ettersendelse.vedlegg()).isEmpty();
     }
@@ -46,7 +45,7 @@ class EttersendingTilDtoMapperTest {
         var ettersendelseFraFrontend = mapper.readValue(bytesFra("json/ettersendelse_I000044.json"), EttersendingFrontend.class);
         var ettersendelse = connection.body(ettersendelseFraFrontend);
 
-        assertThat(ettersendelse.type()).isEqualTo(EttersendingsType.foreldrepenger);
+        assertThat(ettersendelse.type()).isEqualTo(EttersendingsType.FORELDREPENGER);
         assertThat(ettersendelse.saksnr()).isEqualTo("352003201");
         assertThat(ettersendelse.vedlegg()).hasSize(1);
         var vedlegg = ettersendelse.vedlegg().get(0);

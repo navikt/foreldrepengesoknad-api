@@ -1,5 +1,9 @@
 package no.nav.foreldrepenger.selvbetjening.historikk;
 
+import static no.nav.foreldrepenger.common.util.Constants.FNR;
+import static no.nav.foreldrepenger.selvbetjening.util.URIUtil.queryParams;
+import static no.nav.foreldrepenger.selvbetjening.util.URIUtil.uri;
+
 import java.net.URI;
 
 import org.springframework.boot.context.properties.ConfigurationProperties;
@@ -7,19 +11,20 @@ import org.springframework.boot.context.properties.ConstructorBinding;
 import org.springframework.boot.context.properties.bind.DefaultValue;
 
 import no.nav.foreldrepenger.common.domain.Fødselsnummer;
-import no.nav.foreldrepenger.common.util.Pair;
 import no.nav.foreldrepenger.selvbetjening.http.AbstractConfig;
+import no.nav.foreldrepenger.selvbetjening.util.URIUtil;
 
 @ConfigurationProperties("historikk")
 public class HistorikkConfig extends AbstractConfig {
-    private static final String HISTORIKK = "historikk";
+    private static final String DEFAULT_PING_PATH = "actuator/health/liveness";
+    private static final String HISTORIKK = "/historikk";
+    private static final String MANGLEDEVEDLEGG_PATH = HISTORIKK + "/me/manglendevedlegg";
 
-    private static final String FNR = "fnr";
+    // Only DEV (TODO: Gjør dette på en bedre måte)
+    private static final String HISTORIKK_DEV_PATH = HISTORIKK + "/dev/all";
+    private static final String VEDLEGG_DEV_PATH = "/dev/vedlegg";
 
     private static final String SAKSNUMMER = "saksnummer";
-
-    private static final String DEFAULT_PING_PATH = "actuator/health/liveness";
-
 
     @ConstructorBinding
     public HistorikkConfig(URI uri, @DefaultValue("true") boolean enabled) {
@@ -27,30 +32,29 @@ public class HistorikkConfig extends AbstractConfig {
     }
 
     public URI historikkURI() {
-        return uri(getUri(), HISTORIKK + "/me/all");
+        return uri(getBaseUri(), MANGLEDEVEDLEGG_PATH + "/me/all");
     }
 
     public URI vedleggURI(String saksnr) {
-        return uri(getUri(), HISTORIKK + "/me/manglendevedlegg", queryParams(SAKSNUMMER, saksnr));
+        return uri(getBaseUri(), MANGLEDEVEDLEGG_PATH, URIUtil.queryParam(SAKSNUMMER, saksnr));
     }
 
     public URI historikkPreprodURI(String fnr) {
-        return uri(getUri(), HISTORIKK + "/dev/all", queryParams(FNR, fnr));
+        return uri(getBaseUri(), HISTORIKK_DEV_PATH, URIUtil.queryParam(FNR, fnr));
     }
 
     public URI vedleggPreprodURI(Fødselsnummer fnr, String saksnr) {
-        return uri(getUri(), HISTORIKK + "/dev/vedlegg",
-                queryParams(Pair.of(SAKSNUMMER, saksnr), Pair.of(FNR, fnr.value())));
+        return uri(getBaseUri(), VEDLEGG_DEV_PATH, queryParams(SAKSNUMMER, saksnr, FNR, fnr.value()));
     }
 
     @Override
     public URI pingURI() {
-        return uri(getUri(), DEFAULT_PING_PATH);
+        return uri(getBaseUri(), DEFAULT_PING_PATH);
     }
 
 
     public URI minidialogURI() {
-        return uri(getUri(), "/me/minidialoger/spm");
+        return uri(getBaseUri(), "/me/minidialoger/spm");
 
     }
 

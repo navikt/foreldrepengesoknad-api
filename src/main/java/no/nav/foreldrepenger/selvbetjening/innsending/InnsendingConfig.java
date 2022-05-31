@@ -1,5 +1,7 @@
 package no.nav.foreldrepenger.selvbetjening.innsending;
 
+import static no.nav.foreldrepenger.selvbetjening.util.URIUtil.uri;
+
 import java.net.URI;
 
 import org.springframework.boot.context.properties.ConfigurationProperties;
@@ -26,19 +28,19 @@ public class InnsendingConfig extends AbstractConfig {
 
     @Override
     protected URI pingURI() {
-        return uri(getUri(), PING);
+        return uri(getBaseUri(), PING);
     }
 
     URI innsendingURI() {
-        return uri(getUri(), SEND);
+        return uri(getBaseUri(), SEND);
     }
 
     URI endringURI() {
-        return uri(getUri(), ENDRE);
+        return uri(getBaseUri(), ENDRE);
     }
 
     URI ettersendingURI() {
-        return uri(getUri(), ETTERSEND);
+        return uri(getBaseUri(), ETTERSEND);
     }
 
 }
