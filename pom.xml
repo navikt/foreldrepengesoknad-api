@@ -35,7 +35,7 @@
 
         <selvbetjening-felles.version>0.8.9</selvbetjening-felles.version>
         <springdoc.version>1.6.9</springdoc.version>
-		<token-validation-version>2.0.20</token-validation-version>
+		<token-validation-version>2.0.21</token-validation-version>
         <nimbus-jose-jwt.version>8.23</nimbus-jose-jwt.version>
 		<tika.version>2.4.0</tika.version>
 		<logback.logstash.version>7.2</logback.logstash.version>
