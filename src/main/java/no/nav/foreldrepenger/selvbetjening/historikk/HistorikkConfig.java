@@ -16,8 +16,9 @@ import no.nav.foreldrepenger.selvbetjening.util.URIUtil;
 
 @ConfigurationProperties("historikk")
 public class HistorikkConfig extends AbstractConfig {
-    private static final String DEFAULT_PING_PATH = "actuator/health/liveness";
     private static final String HISTORIKK = "/historikk";
+    private static final String DEFAULT_PING_PATH = "actuator/health/liveness";
+    private static final String HISTORIKK_ALL_PATH = HISTORIKK + "/me/all";
     private static final String MANGLEDEVEDLEGG_PATH = HISTORIKK + "/me/manglendevedlegg";
 
     // Only DEV (TODO: Gjør dette på en bedre måte)
@@ -32,7 +33,7 @@ public class HistorikkConfig extends AbstractConfig {
     }
 
     public URI historikkURI() {
-        return uri(getBaseUri(), MANGLEDEVEDLEGG_PATH + "/me/all");
+        return uri(getBaseUri(), HISTORIKK_ALL_PATH);
     }
 
     public URI vedleggURI(String saksnr) {
