@@ -17,7 +17,6 @@ import org.springframework.http.HttpMethod;
 import org.springframework.http.HttpStatus;
 import org.springframework.test.context.ActiveProfiles;
 import org.springframework.test.context.ContextConfiguration;
-import org.springframework.test.context.TestPropertySource;
 import org.springframework.test.context.junit.jupiter.SpringExtension;
 import org.springframework.test.web.client.ExpectedCount;
 import org.springframework.test.web.client.MockRestServiceServer;
@@ -34,7 +33,6 @@ import no.nav.foreldrepenger.selvbetjening.vedlegg.virusscan.ClamAvVirusScanner;
 import no.nav.security.token.support.spring.SpringTokenValidationContextHolder;
 
 @ExtendWith(SpringExtension.class)
-@TestPropertySource(properties = { "spring.cloud.vault.enabled=false" })
 @ContextConfiguration(classes = { Image2PDFConverter.class, TokenUtilConfiguration.class, SpringTokenValidationContextHolder.class })
 @RestClientTest
 @ActiveProfiles("test")

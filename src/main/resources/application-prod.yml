@@ -11,11 +11,6 @@ allowed:
     https://svangerskapspengesoknad.intern.nav.no,
     https://foreldrepengeplanlegger.intern.nav.no
 
-spring:
-  cloud:
-    vault:
-      enabled: false
-
 mellomlagring:
   tmp:
     navn: mellomlagring-prod

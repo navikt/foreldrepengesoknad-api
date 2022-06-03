@@ -43,7 +43,6 @@
 		<pdfbox.version>2.0.26</pdfbox.version>
 		<jacoco.version>0.8.8</jacoco.version>
 		<gcp.version>0.174.0</gcp.version>
-		<spring.cloud.vault.version>3.1.1</spring.cloud.vault.version>
 		<simpleclient.version>0.15.0</simpleclient.version>
 	</properties>
 	<dependencyManagement>
@@ -54,13 +53,6 @@
 				<version>${gcp.version}</version>
 				<type>pom</type>
 				<scope>import</scope>
-			</dependency>
-			<dependency>
-				<groupId>org.springframework.cloud</groupId>
-				<artifactId>spring-cloud-vault-dependencies</artifactId>
-				<version>${spring.cloud.vault.version}</version>
-				<scope>import</scope>
-				<type>pom</type>
 			</dependency>
 		</dependencies>
 	</dependencyManagement>
@@ -87,10 +79,6 @@
 		<dependency>
 			<groupId>com.google.cloud</groupId>
 			<artifactId>google-cloud-storage</artifactId>
-		</dependency>
-		<dependency>
-			<groupId>org.springframework.cloud</groupId>
-			<artifactId>spring-cloud-starter-vault-config</artifactId>
 		</dependency>
 		<dependency>
 			<groupId>com.fasterxml.jackson.core</groupId>
@@ -231,7 +219,7 @@
             <artifactId>fpsoknad-felles</artifactId>
             <version>${selvbetjening-felles.version}</version>
         </dependency>
-	</dependencies>
+    </dependencies>
 	<build>
 		<plugins>
 			<plugin>
