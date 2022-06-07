@@ -12,14 +12,10 @@ import no.nav.foreldrepenger.selvbetjening.http.AbstractConfig;
 
 @ConfigurationProperties(prefix = "mottak")
 public class InnsendingConfig extends AbstractConfig {
-
-    private static final String ENDRE = "/mottak/endre";
-
-    private static final String ETTERSEND = "/mottak/ettersend";
-
-    private static final String SEND = "/mottak/send";
-
     private static final String PING = "mottak/ping";
+    private static final String SEND = "mottak/send";
+    private static final String ENDRE = "mottak/endre";
+    private static final String ETTERSEND = "mottak/ettersend";
 
     @ConstructorBinding
     public InnsendingConfig(URI uri, @DefaultValue("true") boolean enabled) {

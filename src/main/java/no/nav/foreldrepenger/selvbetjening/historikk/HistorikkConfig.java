@@ -16,14 +16,15 @@ import no.nav.foreldrepenger.selvbetjening.util.URIUtil;
 
 @ConfigurationProperties("historikk")
 public class HistorikkConfig extends AbstractConfig {
-    private static final String HISTORIKK = "/historikk";
     private static final String DEFAULT_PING_PATH = "actuator/health/liveness";
+
+    private static final String HISTORIKK = "historikk";
     private static final String HISTORIKK_ALL_PATH = HISTORIKK + "/me/all";
     private static final String MANGLEDEVEDLEGG_PATH = HISTORIKK + "/me/manglendevedlegg";
 
     // Only DEV (TODO: Gjør dette på en bedre måte)
     private static final String HISTORIKK_DEV_PATH = HISTORIKK + "/dev/all";
-    private static final String VEDLEGG_DEV_PATH = "/dev/vedlegg";
+    private static final String VEDLEGG_DEV_PATH = HISTORIKK + "/dev/vedlegg";
 
     private static final String SAKSNUMMER = "saksnummer";
 
