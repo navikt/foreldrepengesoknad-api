@@ -11,7 +11,7 @@ import org.springframework.core.annotation.AliasFor;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
-import no.nav.foreldrepenger.boot.conditionals.ConditionalOnNotProd;
+import no.nav.boot.conditionals.ConditionalOnNotProd;
 import no.nav.security.token.support.core.api.Unprotected;
 
 @RestController

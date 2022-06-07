@@ -19,7 +19,7 @@ import com.google.cloud.storage.Storage;
 import com.google.cloud.storage.StorageException;
 import com.google.cloud.storage.StorageOptions;
 
-import no.nav.foreldrepenger.boot.conditionals.ConditionalOnGCP;
+import no.nav.boot.conditionals.ConditionalOnGCP;
 
 @Component
 @ConditionalOnGCP

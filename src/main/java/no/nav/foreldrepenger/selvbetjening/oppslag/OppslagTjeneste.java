@@ -1,6 +1,6 @@
 package no.nav.foreldrepenger.selvbetjening.oppslag;
 
-import static no.nav.foreldrepenger.boot.conditionals.EnvUtil.CONFIDENTIAL;
+import static no.nav.boot.conditionals.EnvUtil.CONFIDENTIAL;
 import static no.nav.foreldrepenger.selvbetjening.oppslag.mapper.PersonMapper.tilPersonFrontend;
 
 import javax.inject.Inject;

@@ -1,6 +1,6 @@
 package no.nav.foreldrepenger.selvbetjening.minidialog;
 
-import static no.nav.foreldrepenger.boot.conditionals.EnvUtil.isDevOrLocal;
+import static no.nav.boot.conditionals.EnvUtil.isDevOrLocal;
 
 import java.util.List;
 

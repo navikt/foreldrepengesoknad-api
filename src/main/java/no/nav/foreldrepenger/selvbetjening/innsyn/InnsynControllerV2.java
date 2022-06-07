@@ -6,7 +6,7 @@ import javax.inject.Inject;
 
 import org.springframework.web.bind.annotation.GetMapping;
 
-import no.nav.foreldrepenger.boot.conditionals.ConditionalOnNotProd;
+import no.nav.boot.conditionals.ConditionalOnNotProd;
 import no.nav.foreldrepenger.common.innsyn.v2.Saker;
 import no.nav.foreldrepenger.selvbetjening.http.ProtectedRestController;
 
