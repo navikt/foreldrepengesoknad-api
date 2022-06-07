@@ -1,7 +1,7 @@
 package no.nav.foreldrepenger.selvbetjening.mellomlagring;
 
 import static java.nio.charset.StandardCharsets.UTF_8;
-import static org.apache.http.HttpStatus.SC_NOT_FOUND;
+import static org.springframework.http.HttpStatus.NOT_FOUND;
 import static org.springframework.http.MediaType.APPLICATION_JSON_VALUE;
 
 import java.net.URI;
@@ -53,7 +53,7 @@ public class GCPMellomlagring extends AbstractMellomlagringTjeneste {
                     .map(Blob::getContent)
                     .map(b -> new String(b, UTF_8));
         } catch (StorageException e) {
-            if (SC_NOT_FOUND == e.getCode()) {
+            if (NOT_FOUND.value() == e.getCode()) {
                 LOG.trace("Katalog {} ikke funnet, ({})", katalog, e);
                 return Optional.empty();
             }

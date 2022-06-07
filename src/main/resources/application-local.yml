@@ -11,9 +11,6 @@ management:
 server:
   port: 9002
 spring:
-  cloud:
-    vault:
-      enabled: false
   mvc:
     log-request-details: true
 

@@ -26,9 +26,7 @@ import no.nav.foreldrepenger.selvbetjening.innsyn.InnsynConnection;
 import no.nav.security.token.support.spring.SpringTokenValidationContextHolder;
 
 @ExtendWith(SpringExtension.class)
-@TestPropertySource(properties = {
-    "oppslag.uri: http://www.oppslag.no",
-    "spring.cloud.vault.enabled=false" })
+@TestPropertySource(properties = {"oppslag.uri: http://www.oppslag.no"})
 @ContextConfiguration(classes = {
     TokenUtilConfiguration.class,
     SpringTokenValidationContextHolder.class })

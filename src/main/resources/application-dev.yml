@@ -20,9 +20,7 @@ management:
 spring:
   mvc:
     log-request-details: true
-  cloud:
-    vault:
-      enabled: false
+
 virus:
   uri: http://clamav.clamav/scan
 
