@@ -5,6 +5,7 @@
 [![Code Smells](https://sonarcloud.io/api/project_badges/measure?project=navikt_foreldrepengesoknad-api&metric=code_smells)](https://sonarcloud.io/summary/new_code?id=navikt_foreldrepengesoknad-api)
 [![Security Rating](https://sonarcloud.io/api/project_badges/measure?project=navikt_foreldrepengesoknad-api&metric=security_rating)](https://sonarcloud.io/summary/new_code?id=navikt_foreldrepengesoknad-api)
 [![Coverage](https://sonarcloud.io/api/project_badges/measure?project=navikt_foreldrepengesoknad-api&metric=coverage)](https://sonarcloud.io/summary/new_code?id=navikt_foreldrepengesoknad-api)
+![GitHub](https://img.shields.io/github/license/navikt/fpsoknad-felles)
 
 # REST-API for foreldrepenger/engangsstønad/svangerskapspenger
 
