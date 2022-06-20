@@ -40,23 +40,23 @@ class VirusScanConnection extends AbstractRestConnection {
         return "OK";
     }
 
-    void scan(byte[] bytes, String name) {
+    void scan(byte[] bytes, String uuid) {
         if (isEnabled()) {
             if (bytes != null) {
-                LOG.trace("Scanner {}", name);
+                LOG.trace("Scanner {}", uuid);
                 var scanResults = putForObject(config.getBaseUri(), bytes, ScanResult[].class);
                 if (scanResults.length != 1) {
                     LOG.warn("Uventet respons med lengde {}, forventet lengde er 1", scanResults.length);
-                    throw new AttachmentVirusException(name);
+                    throw new AttachmentVirusException(uuid);
                 }
                 var scanResult = scanResults[0];
                 LOG.trace("Fikk scan result {}", scanResult);
                 if (OK.equals(scanResult.getResult())) {
-                    LOG.trace("Ingen virus i {}", name);
+                    LOG.trace("Ingen virus i {}", uuid);
                     return;
                 }
                 LOG.warn("Fant virus!, status {}", scanResult.getResult());
-                throw new AttachmentVirusException(name);
+                throw new AttachmentVirusException(uuid);
             }
             LOG.info("Ingen scanning av null bytes", bytes);
             return;

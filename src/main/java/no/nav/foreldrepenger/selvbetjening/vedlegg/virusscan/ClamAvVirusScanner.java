@@ -27,7 +27,7 @@ public class ClamAvVirusScanner implements VedleggSjekker, Pingable {
     @Override
     public void sjekk(Attachment... vedlegg) {
         safeStream(vedlegg)
-                .forEach(v -> connection.scan(v.bytes, v.filename));
+                .forEach(v -> connection.scan(v.bytes, v.uuid));
     }
 
     @Override
