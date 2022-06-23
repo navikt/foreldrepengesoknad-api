@@ -62,7 +62,7 @@
 		<dependency>
 			<groupId>no.nav.foreldrepenger</groupId>
 			<artifactId>uttak-regler</artifactId>
-            <version>12.4.7</version>
+            <version>12.5.5</version>
 		</dependency>
         <dependency>
             <groupId>no.nav.boot</groupId>
