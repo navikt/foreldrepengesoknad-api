@@ -73,6 +73,7 @@ public class UttakController {
         var bareFarHarRett = farHarRett && !morHarRett;
         var aleneomsorg = erMor && morHarAleneomsorg || !erMor && farHarAleneomsorg;
         var minsterettGrunnlag = new BeregnMinsterettGrunnlag.Builder()
+            .antallBarn(antallBarn)
             .minsterett(minsterett)
             .mor(erMor)
             .bareFarHarRett(bareFarHarRett)
