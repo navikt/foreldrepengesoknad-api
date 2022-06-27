@@ -7,7 +7,6 @@ import java.time.LocalDate;
 
 import org.junit.jupiter.api.Test;
 
-import no.nav.foreldrepenger.regler.uttak.beregnkontoer.Minsterett;
 import no.nav.foreldrepenger.regler.uttak.beregnkontoer.StønadskontoBeregningStønadskontotype;
 
 class UttakControllerTest {
@@ -31,8 +30,8 @@ class UttakControllerTest {
             null, "100", false, true, false, null);
 
         assertThat(resultat.kontoer()).containsEntry(StønadskontoBeregningStønadskontotype.FORELDREPENGER, 200);
-        assertThat(resultat.minsteretter().generellMinsterett()).isEqualTo(Minsterett.BFHR_MINSTERETT_DAGER);
-        assertThat(resultat.minsteretter().farRundtFødsel()).isEqualTo(Minsterett.UTTAK_RUNDT_FØDSEL_DAGER);
+        assertThat(resultat.minsteretter().generellMinsterett()).isEqualTo(40);
+        assertThat(resultat.minsteretter().farRundtFødsel()).isEqualTo(10);
 
     }
 
