@@ -7,6 +7,7 @@ import static no.nav.foreldrepenger.regler.uttak.konfig.StandardKonfigurasjon.SÃ
 import java.time.LocalDate;
 
 import javax.inject.Inject;
+import javax.validation.constraints.Digits;
 import javax.validation.constraints.Pattern;
 
 import org.springframework.format.annotation.DateTimeFormat;
@@ -43,7 +44,7 @@ public class UttakController {
 
     @GetMapping
     @CrossOrigin(origins = "*", allowCredentials = "false")
-    public KontoBeregning beregn(@RequestParam("antallBarn") int antallBarn,
+    public KontoBeregning beregn(@RequestParam("antallBarn") @Digits(integer = 2, fraction = 0) int antallBarn,
                                  @RequestParam("morHarRett") boolean morHarRett,
                                  @RequestParam("farHarRett") boolean farHarRett,
                                  @RequestParam(name = "morHarAleneomsorg", required = false, defaultValue = "false") boolean morHarAleneomsorg,

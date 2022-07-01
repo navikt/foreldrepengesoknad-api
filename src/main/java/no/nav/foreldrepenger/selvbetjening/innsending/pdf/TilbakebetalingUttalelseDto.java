@@ -1,10 +1,11 @@
 package no.nav.foreldrepenger.selvbetjening.innsending.pdf;
 
 import no.nav.foreldrepenger.common.domain.Fødselsnummer;
+import no.nav.foreldrepenger.common.domain.Saksnummer;
 
 public record TilbakebetalingUttalelseDto(String navn,
                                           Fødselsnummer fnr,
-                                          String saksnummer,
+                                          Saksnummer saksnummer,
                                           String ytelse,
                                           String innsendtDato,
                                           String tilsvar) {

@@ -20,6 +20,7 @@ import org.springframework.test.context.junit.jupiter.SpringExtension;
 import org.springframework.test.web.client.ExpectedCount;
 import org.springframework.test.web.client.MockRestServiceServer;
 
+import no.nav.foreldrepenger.common.domain.Saksnummer;
 import no.nav.foreldrepenger.selvbetjening.config.TokenUtilConfiguration;
 import no.nav.security.token.support.spring.SpringTokenValidationContextHolder;
 
@@ -50,11 +51,11 @@ class InnsynTest {
 
     @Test
     void uttaksplan() {
-        server
-                .expect(ExpectedCount.once(), requestTo(CFG.uttakURI("42")))
+        var saksnummer = Saksnummer.valueOf("42");
+        server.expect(ExpectedCount.once(), requestTo(CFG.uttakURI(saksnummer)))
                 .andExpect(method(HttpMethod.GET))
                 .andRespond(withStatus(HttpStatus.OK));
-        innsyn.hentUttaksplan("42");
+        innsyn.hentUttaksplan(saksnummer);
         server.verify();
     }
 

@@ -6,16 +6,20 @@ import static no.nav.foreldrepenger.common.domain.validation.InputValideringRege
 import java.util.List;
 import java.util.Optional;
 
+import javax.validation.Valid;
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Pattern;
+import javax.validation.constraints.Size;
+
+import no.nav.foreldrepenger.common.domain.Saksnummer;
 
 public record EttersendingFrontend(@Pattern(regexp = FRITEKST) @NotNull String type,
-                                   @Pattern(regexp = FRITEKST) String saksnummer,
-                                   List<VedleggFrontend> vedlegg,
-                                   BrukerTekst brukerTekst,
+                                   @Valid Saksnummer saksnummer,
+                                   @Valid @Size(max = 20) List<VedleggFrontend> vedlegg,
+                                   @Valid BrukerTekst brukerTekst,
                                    @Pattern(regexp = FRITEKST) String dialogId) {
 
-    public EttersendingFrontend(String type, String saksnummer, List<VedleggFrontend> vedlegg, BrukerTekst brukerTekst, String dialogId) {
+    public EttersendingFrontend(String type, Saksnummer saksnummer, List<VedleggFrontend> vedlegg, BrukerTekst brukerTekst, String dialogId) {
         this.type = type;
         this.saksnummer = saksnummer;
         this.vedlegg = Optional.ofNullable(vedlegg).orElse(emptyList());

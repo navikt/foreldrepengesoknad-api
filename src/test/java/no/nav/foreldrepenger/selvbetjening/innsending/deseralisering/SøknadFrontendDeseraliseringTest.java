@@ -145,7 +145,7 @@ class SøknadFrontendDeseraliseringTest {
     void ettersendelseDeraliseringTest() throws IOException, URISyntaxException {
         var ettersendelse = mapper.readValue(bytesFra("json/ettersendelse_I000044.json"), SøknadFrontend.class);
         assertThat(ettersendelse).isNotNull();
-        assertThat(ettersendelse.getSaksnummer()).isEqualTo("352003201");
+        assertThat(ettersendelse.getSaksnummer().value()).isEqualTo("352003201");
         assertThat(ettersendelse.getType()).isEqualTo("foreldrepenger");
 
         var vedleggListe = ettersendelse.getVedlegg();

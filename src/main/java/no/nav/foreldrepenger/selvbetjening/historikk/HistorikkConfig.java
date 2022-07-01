@@ -11,6 +11,7 @@ import org.springframework.boot.context.properties.ConstructorBinding;
 import org.springframework.boot.context.properties.bind.DefaultValue;
 
 import no.nav.foreldrepenger.common.domain.Fødselsnummer;
+import no.nav.foreldrepenger.common.domain.Saksnummer;
 import no.nav.foreldrepenger.selvbetjening.http.AbstractConfig;
 import no.nav.foreldrepenger.selvbetjening.util.URIUtil;
 
@@ -37,16 +38,16 @@ public class HistorikkConfig extends AbstractConfig {
         return uri(getBaseUri(), HISTORIKK_ALL_PATH);
     }
 
-    public URI vedleggURI(String saksnr) {
-        return uri(getBaseUri(), MANGLEDEVEDLEGG_PATH, URIUtil.queryParam(SAKSNUMMER, saksnr));
+    public URI vedleggURI(Saksnummer saksnr) {
+        return uri(getBaseUri(), MANGLEDEVEDLEGG_PATH, URIUtil.queryParam(SAKSNUMMER, saksnr.value()));
     }
 
     public URI historikkPreprodURI(String fnr) {
         return uri(getBaseUri(), HISTORIKK_DEV_PATH, URIUtil.queryParam(FNR, fnr));
     }
 
-    public URI vedleggPreprodURI(Fødselsnummer fnr, String saksnr) {
-        return uri(getBaseUri(), VEDLEGG_DEV_PATH, queryParams(SAKSNUMMER, saksnr, FNR, fnr.value()));
+    public URI vedleggPreprodURI(Fødselsnummer fnr, Saksnummer saksnr) {
+        return uri(getBaseUri(), VEDLEGG_DEV_PATH, queryParams(SAKSNUMMER, saksnr.value(), FNR, fnr.value()));
     }
 
     @Override

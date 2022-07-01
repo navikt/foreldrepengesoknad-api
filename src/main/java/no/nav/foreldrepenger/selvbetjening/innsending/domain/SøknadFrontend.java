@@ -3,7 +3,6 @@ package no.nav.foreldrepenger.selvbetjening.innsending.domain;
 import static com.fasterxml.jackson.annotation.JsonTypeInfo.Id.NAME;
 import static java.util.Collections.emptyList;
 import static no.nav.foreldrepenger.common.domain.validation.InputValideringRegex.BARE_BOKSTAVER;
-import static no.nav.foreldrepenger.common.domain.validation.InputValideringRegex.BARE_TALL;
 import static no.nav.foreldrepenger.common.domain.validation.InputValideringRegex.FRITEKST;
 
 import java.time.LocalDateTime;
@@ -12,6 +11,7 @@ import java.util.Optional;
 
 import javax.validation.Valid;
 import javax.validation.constraints.Pattern;
+import javax.validation.constraints.Size;
 
 import com.fasterxml.jackson.annotation.JsonCreator;
 import com.fasterxml.jackson.annotation.JsonSubTypes;
@@ -19,6 +19,7 @@ import com.fasterxml.jackson.annotation.JsonSubTypes.Type;
 import com.fasterxml.jackson.annotation.JsonTypeInfo;
 
 import lombok.EqualsAndHashCode;
+import no.nav.foreldrepenger.common.domain.Saksnummer;
 
 @EqualsAndHashCode
 @JsonTypeInfo(use = NAME, property = "type", visible = true)
@@ -32,8 +33,8 @@ public abstract sealed class SøknadFrontend permits EngangsstønadFrontend, For
     private LocalDateTime opprettet;
     @Pattern(regexp = BARE_BOKSTAVER)
     private final String type;
-    @Pattern(regexp = BARE_TALL)
-    private final String saksnummer;
+    @Valid
+    private final Saksnummer saksnummer;
     @Valid
     private final SøkerFrontend søker;
     @Valid
@@ -48,10 +49,11 @@ public abstract sealed class SøknadFrontend permits EngangsstønadFrontend, For
     @Pattern(regexp = FRITEKST)
     private final String tilleggsopplysninger;
     @Valid
+    @Size(max = 20)
     private final List<VedleggFrontend> vedlegg;
 
     @JsonCreator
-    protected SøknadFrontend(LocalDateTime opprettet, String type, String saksnummer, SøkerFrontend søker, BarnFrontend barn,
+    protected SøknadFrontend(LocalDateTime opprettet, String type, Saksnummer saksnummer, SøkerFrontend søker, BarnFrontend barn,
                              AnnenForelderFrontend annenForelder, UtenlandsoppholdFrontend informasjonOmUtenlandsopphold, String situasjon,
                              Boolean erEndringssøknad, String tilleggsopplysninger, List<VedleggFrontend> vedlegg) {
         this.opprettet = opprettet;
@@ -71,7 +73,7 @@ public abstract sealed class SøknadFrontend permits EngangsstønadFrontend, For
         return type;
     }
 
-    public String getSaksnummer() {
+    public Saksnummer getSaksnummer() {
         return saksnummer;
     }
 

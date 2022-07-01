@@ -28,7 +28,7 @@ class EttersendelseFrontendDeseraliseringTest {
         var ettersendelse = mapper.readValue(bytesFra("json/ettersendelse_I000044.json"), EttersendingFrontend.class);
 
         assertThat(ettersendelse.type()).isEqualTo("foreldrepenger");
-        assertThat(ettersendelse.saksnummer()).isEqualTo("352003201");
+        assertThat(ettersendelse.saksnummer().value()).isEqualTo("352003201");
         assertThat(ettersendelse.vedlegg()).hasSize(1);
         var vedlegg = ettersendelse.vedlegg().get(0);
         assertThat(vedlegg.getId()).isEqualTo("V090740687265315217194125674862219730");

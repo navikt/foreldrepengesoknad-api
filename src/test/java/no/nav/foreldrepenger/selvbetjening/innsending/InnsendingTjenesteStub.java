@@ -16,6 +16,7 @@ import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 
 import no.nav.foreldrepenger.common.domain.Kvittering;
+import no.nav.foreldrepenger.common.domain.Saksnummer;
 import no.nav.foreldrepenger.selvbetjening.innsending.domain.EttersendingFrontend;
 import no.nav.foreldrepenger.selvbetjening.innsending.domain.SøknadFrontend;
 
@@ -23,7 +24,7 @@ import no.nav.foreldrepenger.selvbetjening.innsending.domain.SøknadFrontend;
 @ConditionalOnProperty(name = "stub.mottak", havingValue = "true")
 public class InnsendingTjenesteStub implements Innsending {
 
-    public static final Kvittering STUB = new Kvittering(now(), "12345", new byte[0], new byte[0]);
+    public static final Kvittering STUB = new Kvittering(now(), Saksnummer.valueOf("12345"), new byte[0], new byte[0]);
 
     private static final Logger LOG = getLogger(InnsendingTjenesteStub.class);
 
