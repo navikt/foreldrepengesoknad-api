@@ -34,7 +34,7 @@
 		<project.reporting.outputEncoding>UTF-8</project.reporting.outputEncoding>
 
         <selvbetjening-felles.version>0.8.13</selvbetjening-felles.version>
-		<token-validation-version>2.1.1</token-validation-version>
+		<token-validation-version>2.1.2</token-validation-version>
         <boot-conditionals.version>3.0.2</boot-conditionals.version>
 
         <springdoc.version>1.6.9</springdoc.version>
@@ -44,7 +44,7 @@
 		<nv.version>1.29</nv.version>
 		<pdfbox.version>2.0.26</pdfbox.version>
 		<jacoco.version>0.8.8</jacoco.version>
-		<gcp.version>0.175.0</gcp.version>
+		<gcp.version>0.176.0</gcp.version>
 		<simpleclient.version>0.16.0</simpleclient.version>
 	</properties>
 	<dependencyManagement>
@@ -62,7 +62,7 @@
 		<dependency>
 			<groupId>no.nav.foreldrepenger</groupId>
 			<artifactId>uttak-regler</artifactId>
-            <version>12.5.10</version>
+            <version>12.5.11</version>
 		</dependency>
         <dependency>
             <groupId>no.nav.boot</groupId>

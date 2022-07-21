@@ -59,7 +59,8 @@ public class UttakController {
 
         guardFamiliehendelse(fødselsdato, termindato, omsorgsovertakelseDato);
         var dekningsgradOversatt = dekningsgrad(dekningsgrad);
-        var grunnlag = new BeregnKontoerGrunnlag.Builder().antallBarn(antallBarn)
+        var grunnlag = new BeregnKontoerGrunnlag.Builder()
+            .antallBarn(antallBarn)
             .dekningsgrad(dekningsgradOversatt)
             .morAleneomsorg(morHarAleneomsorg)
             .farAleneomsorg(farHarAleneomsorg)
@@ -68,6 +69,7 @@ public class UttakController {
             .fødselsdato(fødselsdato)
             .omsorgsovertakelseDato(omsorgsovertakelseDato)
             .termindato(termindato)
+            .minsterett(minsterett)
             .build();
         var stønadskontoer = regelOrkestrering.beregnKontoer(grunnlag, SØKNADSDIALOG).getStønadskontoer();
         var bareFarHarRett = farHarRett && !morHarRett;
