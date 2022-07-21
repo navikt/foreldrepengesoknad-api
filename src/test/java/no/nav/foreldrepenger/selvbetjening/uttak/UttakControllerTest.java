@@ -35,4 +35,28 @@ class UttakControllerTest {
 
     }
 
+    @Test
+    void aleneomsorg() {
+        var controller = new UttakController();
+        var resultat = controller.beregn(1, false, true, false, true, null, LocalDate.now(),
+            null, "100", false, true, false, null);
+
+        assertThat(resultat.kontoer()).containsEntry(StønadskontoBeregningStønadskontotype.FORELDREPENGER, 46 * 5);
+        assertThat(resultat.minsteretter().generellMinsterett()).isZero();
+
+    }
+
+    @Test
+    void bfhr_flere_barn_minsterett_skal_ikke_ha_flerbarnsdager() {
+        var controller = new UttakController();
+        var resultat = controller.beregn(2, false, true, false, false, LocalDate.now(), LocalDate.now().minusWeeks(1),
+            null, "100", false, true, false, null);
+
+        assertThat(resultat.kontoer()).containsEntry(StønadskontoBeregningStønadskontotype.FORELDREPENGER, 285);
+        assertThat(resultat.kontoer()).doesNotContainKey(StønadskontoBeregningStønadskontotype.FLERBARNSDAGER);
+        assertThat(resultat.minsteretter().generellMinsterett()).isEqualTo(85);
+        assertThat(resultat.minsteretter().farRundtFødsel()).isEqualTo(10);
+
+    }
+
 }
