@@ -11,6 +11,7 @@ import org.springframework.stereotype.Component;
 import org.springframework.web.client.RestOperations;
 
 import no.nav.foreldrepenger.common.domain.Fødselsnummer;
+import no.nav.foreldrepenger.common.domain.Saksnummer;
 import no.nav.foreldrepenger.selvbetjening.http.AbstractRestConnection;
 
 @Component
@@ -51,11 +52,11 @@ public class HistorikkConnection extends AbstractRestConnection {
         return historikk;
     }
 
-    public List<String> manglendeVedlegg(Fødselsnummer fnr, String saksnr) {
+    public List<String> manglendeVedlegg(Fødselsnummer fnr, Saksnummer saksnr) {
         return hentManglendeVedlegg(config.vedleggPreprodURI(fnr, saksnr));
     }
 
-    public List<String> manglendeVedlegg(String saksnr) {
+    public List<String> manglendeVedlegg(Saksnummer saksnr) {
         return hentManglendeVedlegg(config.vedleggURI(saksnr));
     }
 

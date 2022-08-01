@@ -13,6 +13,7 @@ import com.fasterxml.jackson.annotation.JsonCreator;
 
 import lombok.Builder;
 import lombok.EqualsAndHashCode;
+import no.nav.foreldrepenger.common.domain.Saksnummer;
 
 @EqualsAndHashCode(callSuper = true)
 public final class ForeldrepengesøknadFrontend extends SøknadFrontend {
@@ -25,7 +26,7 @@ public final class ForeldrepengesøknadFrontend extends SøknadFrontend {
 
     @Builder
     @JsonCreator
-    public ForeldrepengesøknadFrontend(LocalDateTime opprettet, String type, String saksnummer, SøkerFrontend søker, BarnFrontend barn,
+    public ForeldrepengesøknadFrontend(LocalDateTime opprettet, String type, Saksnummer saksnummer, SøkerFrontend søker, BarnFrontend barn,
                                        AnnenForelderFrontend annenForelder, UtenlandsoppholdFrontend informasjonOmUtenlandsopphold,
                                        String situasjon, Boolean erEndringssøknad, String tilleggsopplysninger,
                                        List<VedleggFrontend> vedlegg, String dekningsgrad, List<UttaksplanPeriode> uttaksplan) {

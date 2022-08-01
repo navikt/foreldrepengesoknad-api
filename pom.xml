@@ -33,7 +33,7 @@
 		<project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
 		<project.reporting.outputEncoding>UTF-8</project.reporting.outputEncoding>
 
-        <selvbetjening-felles.version>0.8.13</selvbetjening-felles.version>
+        <selvbetjening-felles.version>0.8.14</selvbetjening-felles.version>
 		<token-validation-version>2.1.2</token-validation-version>
         <boot-conditionals.version>3.0.2</boot-conditionals.version>
 
@@ -216,6 +216,12 @@
 			<groupId>org.projectlombok</groupId>
 			<artifactId>lombok</artifactId>
 		</dependency>
+        <dependency>
+            <groupId>org.reflections</groupId>
+            <artifactId>reflections</artifactId>
+            <version>0.10.2</version>
+            <scope>test</scope>
+        </dependency>
     </dependencies>
 	<build>
 		<plugins>

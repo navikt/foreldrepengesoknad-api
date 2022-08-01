@@ -14,6 +14,7 @@ import org.springframework.stereotype.Component;
 import org.springframework.web.client.RestOperations;
 
 import no.nav.foreldrepenger.common.domain.Fødselsnummer;
+import no.nav.foreldrepenger.common.domain.Saksnummer;
 import no.nav.foreldrepenger.common.innsyn.uttaksplan.UttaksplanDto;
 import no.nav.foreldrepenger.common.innsyn.v2.Saker;
 import no.nav.foreldrepenger.selvbetjening.http.AbstractRestConnection;
@@ -41,7 +42,7 @@ public class InnsynConnection extends AbstractRestConnection {
         return cfg.pingURI();
     }
 
-    public UttaksplanDto hentUttaksplan(String saksnummer) {
+    public UttaksplanDto hentUttaksplan(Saksnummer saksnummer) {
         return getIfEnabled(cfg.uttakURI(saksnummer), UttaksplanDto.class, false);
     }
 

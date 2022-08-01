@@ -7,6 +7,7 @@ import org.springframework.boot.autoconfigure.condition.ConditionalOnProperty;
 import org.springframework.stereotype.Service;
 
 import no.nav.foreldrepenger.common.domain.Fødselsnummer;
+import no.nav.foreldrepenger.common.domain.Saksnummer;
 
 @Service
 @ConditionalOnProperty(name = "stub.historikk", havingValue = "true")
@@ -28,12 +29,12 @@ public class HistorikkTjenesteStub implements Historikk {
     }
 
     @Override
-    public List<String> manglendeVedlegg(String saksnr) {
+    public List<String> manglendeVedlegg(Saksnummer saksnr) {
         return Collections.emptyList();
     }
 
     @Override
-    public List<String> manglendeVedleggFor(Fødselsnummer fnr, String saksnr) {
+    public List<String> manglendeVedleggFor(Fødselsnummer fnr, Saksnummer saksnr) {
         return Collections.emptyList();
     }
 

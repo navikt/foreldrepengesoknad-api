@@ -8,6 +8,7 @@ import javax.validation.Valid;
 import com.fasterxml.jackson.annotation.JsonCreator;
 
 import lombok.EqualsAndHashCode;
+import no.nav.foreldrepenger.common.domain.Saksnummer;
 import no.nav.foreldrepenger.selvbetjening.innsending.domain.tilrettelegging.Tilrettelegging;
 
 @EqualsAndHashCode(callSuper = true)
@@ -16,7 +17,7 @@ public final class SvangerskapspengesøknadFrontend extends SøknadFrontend {
     private final List<Tilrettelegging> tilrettelegging;
 
     @JsonCreator
-    public SvangerskapspengesøknadFrontend(LocalDateTime opprettet, String type, String saksnummer, SøkerFrontend søker, BarnFrontend barn,
+    public SvangerskapspengesøknadFrontend(LocalDateTime opprettet, String type, Saksnummer saksnummer, SøkerFrontend søker, BarnFrontend barn,
                                            AnnenForelderFrontend annenForelder, UtenlandsoppholdFrontend informasjonOmUtenlandsopphold,
                                            String situasjon, Boolean erEndringssøknad, String tilleggsopplysninger,
                                            List<VedleggFrontend> vedlegg, List<Tilrettelegging> tilrettelegging) {

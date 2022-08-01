@@ -13,6 +13,7 @@ import org.springframework.test.context.junit.jupiter.SpringExtension;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 
+import no.nav.foreldrepenger.common.domain.Saksnummer;
 import no.nav.foreldrepenger.common.domain.felles.DokumentType;
 import no.nav.foreldrepenger.common.domain.felles.EttersendingsType;
 import no.nav.foreldrepenger.selvbetjening.config.JacksonConfiguration;
@@ -32,7 +33,7 @@ class EttersendingTilDtoMapperTest {
 
     @Test
     void testEttersendingMapper() {
-        var saksnummer = "952003131";
+        var saksnummer = Saksnummer.valueOf("952003131");
         var ettersendelseFraFrontend = new EttersendingFrontend("foreldrepenger", saksnummer, null, null, null);
         var ettersendelse = connection.body(ettersendelseFraFrontend);
         assertThat(ettersendelse.type()).isEqualTo(EttersendingsType.FORELDREPENGER);
@@ -46,7 +47,7 @@ class EttersendingTilDtoMapperTest {
         var ettersendelse = connection.body(ettersendelseFraFrontend);
 
         assertThat(ettersendelse.type()).isEqualTo(EttersendingsType.FORELDREPENGER);
-        assertThat(ettersendelse.saksnr()).isEqualTo("352003201");
+        assertThat(ettersendelse.saksnr().value()).isEqualTo("352003201");
         assertThat(ettersendelse.vedlegg()).hasSize(1);
         var vedlegg = ettersendelse.vedlegg().get(0);
         assertThat(vedlegg.getId()).isEqualTo("V090740687265315217194125674862219730");

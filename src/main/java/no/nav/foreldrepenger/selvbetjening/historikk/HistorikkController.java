@@ -1,18 +1,15 @@
 package no.nav.foreldrepenger.selvbetjening.historikk;
 
-import static no.nav.foreldrepenger.common.domain.validation.InputValideringRegex.FRITEKST;
-
 import java.util.List;
 
-import javax.validation.constraints.Pattern;
+import javax.validation.Valid;
 
-import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 
+import no.nav.foreldrepenger.common.domain.Saksnummer;
 import no.nav.foreldrepenger.selvbetjening.http.ProtectedRestController;
 
-@Validated
 @ProtectedRestController(value = HistorikkController.HISTORIKK)
 public class HistorikkController {
 
@@ -30,7 +27,7 @@ public class HistorikkController {
     }
 
     @GetMapping(path = "/vedlegg")
-    public List<String> vedlegg(@RequestParam("saksnummer") @Pattern(regexp = FRITEKST) String saksnummer) {
+    public List<String> vedlegg(@Valid @RequestParam("saksnummer") Saksnummer saksnummer) {
         return historikk.manglendeVedlegg(saksnummer);
     }
 

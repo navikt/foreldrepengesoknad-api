@@ -10,6 +10,7 @@ import java.lang.annotation.Retention;
 import java.lang.annotation.Target;
 
 import org.springframework.core.annotation.AliasFor;
+import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
@@ -18,6 +19,7 @@ import no.nav.security.token.support.core.api.ProtectedWithClaims;
 @RestController
 @Documented
 @ProtectedWithClaims(issuer = SELVBETJENING, claimMap = CLAIMS)
+@Validated
 @Target(TYPE)
 @Retention(RUNTIME)
 @RequestMapping

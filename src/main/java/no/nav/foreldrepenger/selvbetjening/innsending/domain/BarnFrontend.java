@@ -9,25 +9,28 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 
+import javax.validation.Valid;
+import javax.validation.constraints.Digits;
 import javax.validation.constraints.Pattern;
+import javax.validation.constraints.Size;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonInclude;
 
 @JsonInclude(NON_EMPTY)
-public record BarnFrontend(List<LocalDate> fødselsdatoer,
-                           int antallBarn,
-                           List<@Pattern(regexp = FRITEKST) String> terminbekreftelse,
+public record BarnFrontend(@Valid @Size(max = 10) List<LocalDate> fødselsdatoer,
+                           @Digits(integer = 2, fraction = 0) int antallBarn,
+                           @Valid @Size(max = 10) List<@Pattern(regexp = FRITEKST) String> terminbekreftelse,
                            LocalDate termindato,
                            LocalDate terminbekreftelseDato,
                            LocalDate adopsjonsdato,
-                           List<@Pattern(regexp = FRITEKST) String> adopsjonsvedtak,
+                           @Valid @Size(max = 10) List<@Pattern(regexp = FRITEKST) String> adopsjonsvedtak,
                            LocalDate ankomstdato,
                            boolean adopsjonAvEktefellesBarn,
                            boolean søkerAdopsjonAlene,
                            LocalDate foreldreansvarsdato,
-                           List<@Pattern(regexp = FRITEKST) String> omsorgsovertakelse,
-                           List<@Pattern(regexp = FRITEKST) String> dokumentasjonAvAleneomsorg) {
+                           @Valid @Size(max = 10) List<@Pattern(regexp = FRITEKST) String> omsorgsovertakelse,
+                           @Valid @Size(max = 10) List<@Pattern(regexp = FRITEKST) String> dokumentasjonAvAleneomsorg) {
 
     public BarnFrontend(List<LocalDate> fødselsdatoer, int antallBarn, List<String> terminbekreftelse, LocalDate termindato,
                         LocalDate terminbekreftelseDato, LocalDate adopsjonsdato, List<String> adopsjonsvedtak,

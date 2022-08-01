@@ -9,6 +9,7 @@ import org.springframework.boot.context.properties.ConstructorBinding;
 import org.springframework.boot.context.properties.bind.DefaultValue;
 
 import no.nav.foreldrepenger.common.domain.Fødselsnummer;
+import no.nav.foreldrepenger.common.domain.Saksnummer;
 import no.nav.foreldrepenger.selvbetjening.http.AbstractConfig;
 import no.nav.foreldrepenger.selvbetjening.util.URIUtil;
 
@@ -40,8 +41,8 @@ public class InnsynConfig extends AbstractConfig {
         return uri(getBaseUri(), FPSAK_SAKER);
     }
 
-    URI uttakURI(String saksnummer) {
-        return uri(getBaseUri(), UTTAKSPLAN, URIUtil.queryParam(SAKSNUMMER, saksnummer));
+    URI uttakURI(Saksnummer saksnummer) {
+        return uri(getBaseUri(), UTTAKSPLAN, URIUtil.queryParam(SAKSNUMMER, saksnummer.value()));
     }
 
     URI uttakURIForAnnenPart(Fødselsnummer annenPart) {

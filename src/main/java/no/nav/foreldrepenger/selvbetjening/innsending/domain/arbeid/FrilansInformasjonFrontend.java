@@ -7,13 +7,14 @@ import java.util.List;
 import java.util.Optional;
 
 import javax.validation.Valid;
+import javax.validation.constraints.Size;
 
 import com.fasterxml.jackson.annotation.JsonCreator;
 
 public record FrilansInformasjonFrontend(LocalDate oppstart,
                                          boolean jobberFremdelesSomFrilans,
                                          boolean driverFosterhjem,
-                                         @Valid List<FrilansoppdragFrontend> oppdragForNæreVennerEllerFamilieSiste10Mnd) {
+                                         @Valid @Size(max = 10) List<FrilansoppdragFrontend> oppdragForNæreVennerEllerFamilieSiste10Mnd) {
 
     @JsonCreator
     public FrilansInformasjonFrontend(LocalDate oppstart, boolean jobberFremdelesSomFrilans, boolean driverFosterhjem, List<FrilansoppdragFrontend> oppdragForNæreVennerEllerFamilieSiste10Mnd) {

@@ -8,6 +8,7 @@ import org.springframework.boot.autoconfigure.condition.ConditionalOnProperty;
 import org.springframework.stereotype.Service;
 
 import no.nav.foreldrepenger.common.domain.Fødselsnummer;
+import no.nav.foreldrepenger.common.domain.Saksnummer;
 import no.nav.foreldrepenger.common.innsyn.uttaksplan.UttaksplanDto;
 import no.nav.foreldrepenger.common.innsyn.v2.Saker;
 import no.nav.foreldrepenger.selvbetjening.innsyn.saker.Sak;
@@ -25,7 +26,7 @@ public class InnsynTjeneste implements Innsyn {
     }
 
     @Override
-    public UttaksplanDto hentUttaksplan(String saksnummer) {
+    public UttaksplanDto hentUttaksplan(Saksnummer saksnummer) {
         LOG.info("Henter uttaksplan for sak");
         return connection.hentUttaksplan(saksnummer);
     }

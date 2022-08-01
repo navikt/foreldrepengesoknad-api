@@ -10,6 +10,7 @@ import org.springframework.core.env.Environment;
 import org.springframework.stereotype.Service;
 
 import no.nav.foreldrepenger.common.domain.Fødselsnummer;
+import no.nav.foreldrepenger.common.domain.Saksnummer;
 
 @Service
 @ConditionalOnProperty(name = "stub.historikk", havingValue = "false", matchIfMissing = true)
@@ -27,12 +28,12 @@ public class HistorikkTjeneste implements Historikk, EnvironmentAware {
     }
 
     @Override
-    public List<String> manglendeVedlegg(String saksnr) {
+    public List<String> manglendeVedlegg(Saksnummer saksnr) {
         return connection.manglendeVedlegg(saksnr);
     }
 
     @Override
-    public List<String> manglendeVedleggFor(Fødselsnummer fnr, String saksnr) {
+    public List<String> manglendeVedleggFor(Fødselsnummer fnr, Saksnummer saksnr) {
         if (isDevOrLocal(env)) {
             return connection.manglendeVedlegg(fnr, saksnr);
         }

@@ -136,7 +136,7 @@ class InnsendingControllerValidationTest {
         var result = mvc.perform(post(InnsendingController.INNSENDING_CONTROLLER_PATH)
                 .contentType(MediaType.APPLICATION_JSON)
                 .content(mapper.writeValueAsString(sf)
-                    .replace(fpSøknad.getSaksnummer(), "Ulovlig tegn [≈≈|£©≈[™")
+                    .replace(fpSøknad.getSaksnummer().value(), "Ulovlig tegn [≈≈|£©≈[™")
                     .replace(fpSøknad.getSituasjon(), "Lattidattidudadaääö˙[`")
                 ))
             .andExpect(status().isBadRequest())

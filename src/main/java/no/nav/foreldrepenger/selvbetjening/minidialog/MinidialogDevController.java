@@ -34,7 +34,7 @@ public class MinidialogDevController {
     }
 
     @GetMapping("/aktive")
-    public List<MinidialogInnslag> aktiveSpørsmål(@RequestParam(FNR) Fødselsnummer fnr) {
+    public List<MinidialogInnslag> aktiveSpørsmål(@Valid @RequestParam(FNR) Fødselsnummer fnr) {
         return minidialog.hentAktiveMinidialogSpørsmål(fnr);
     }
 

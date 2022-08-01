@@ -8,7 +8,9 @@ import static no.nav.foreldrepenger.common.domain.validation.InputValideringRege
 import java.util.List;
 import java.util.Optional;
 
+import javax.validation.Valid;
 import javax.validation.constraints.Pattern;
+import javax.validation.constraints.Size;
 
 import com.fasterxml.jackson.annotation.JsonInclude;
 
@@ -18,9 +20,9 @@ import no.nav.foreldrepenger.selvbetjening.innsending.domain.Tidsperiode;
 public record AnnenInntektFrontend(@Pattern(regexp = "^[\\p{L}_]*$") String type,       // TODO: AnnenOpptjeningType enum, men håndtere ikke null.
                                    @Pattern(regexp = BARE_BOKSTAVER) String land,
                                    @Pattern(regexp = FRITEKST) String arbeidsgiverNavn,
-                                   Tidsperiode tidsperiode,
+                                   @Valid Tidsperiode tidsperiode,
                                    boolean erNærVennEllerFamilieMedArbeisdgiver,
-                                   List<@Pattern(regexp = "^[\\p{Digit}\\p{L}]*$") String> vedlegg) {
+                                   @Valid @Size(max = 10) List<@Pattern(regexp = "^[\\p{Digit}\\p{L}]*$") String> vedlegg) {
 
     public AnnenInntektFrontend(String type, String land, String arbeidsgiverNavn, Tidsperiode tidsperiode,
                                 boolean erNærVennEllerFamilieMedArbeisdgiver, List<String> vedlegg) {
