@@ -15,7 +15,7 @@ import no.nav.foreldrepenger.common.domain.Saksnummer;
 
 public record EttersendingFrontend(@Pattern(regexp = FRITEKST) @NotNull String type,
                                    @Valid Saksnummer saksnummer,
-                                   @Valid @Size(max = 20) List<VedleggFrontend> vedlegg,
+                                   @Valid @Size(max = 30) List<VedleggFrontend> vedlegg,
                                    @Valid BrukerTekst brukerTekst,
                                    @Pattern(regexp = FRITEKST) String dialogId) {
 

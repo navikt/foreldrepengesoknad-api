@@ -2,7 +2,6 @@ package no.nav.foreldrepenger.selvbetjening.innsending.domain;
 
 import static com.fasterxml.jackson.annotation.JsonInclude.Include.NON_EMPTY;
 import static java.util.Collections.emptyList;
-import static no.nav.foreldrepenger.common.domain.validation.InputValideringRegex.FRITEKST;
 
 import java.time.LocalDate;
 import java.util.ArrayList;
@@ -20,17 +19,17 @@ import com.fasterxml.jackson.annotation.JsonInclude;
 @JsonInclude(NON_EMPTY)
 public record BarnFrontend(@Valid @Size(max = 10) List<LocalDate> fødselsdatoer,
                            @Digits(integer = 2, fraction = 0) int antallBarn,
-                           @Valid @Size(max = 10) List<@Pattern(regexp = FRITEKST) String> terminbekreftelse,
+                           @Valid @Size(max = 10) List<@Pattern(regexp = "^[\\p{Digit}\\p{L}]*$") String> terminbekreftelse,
                            LocalDate termindato,
                            LocalDate terminbekreftelseDato,
                            LocalDate adopsjonsdato,
-                           @Valid @Size(max = 10) List<@Pattern(regexp = FRITEKST) String> adopsjonsvedtak,
+                           @Valid @Size(max = 10) List<@Pattern(regexp = "^[\\p{Digit}\\p{L}]*$") String> adopsjonsvedtak,
                            LocalDate ankomstdato,
                            boolean adopsjonAvEktefellesBarn,
                            boolean søkerAdopsjonAlene,
                            LocalDate foreldreansvarsdato,
-                           @Valid @Size(max = 10) List<@Pattern(regexp = FRITEKST) String> omsorgsovertakelse,
-                           @Valid @Size(max = 10) List<@Pattern(regexp = FRITEKST) String> dokumentasjonAvAleneomsorg) {
+                           @Valid @Size(max = 10) List<@Pattern(regexp = "^[\\p{Digit}\\p{L}]*$") String> omsorgsovertakelse,
+                           @Valid @Size(max = 10) List<@Pattern(regexp = "^[\\p{Digit}\\p{L}]*$") String> dokumentasjonAvAleneomsorg) {
 
     public BarnFrontend(List<LocalDate> fødselsdatoer, int antallBarn, List<String> terminbekreftelse, LocalDate termindato,
                         LocalDate terminbekreftelseDato, LocalDate adopsjonsdato, List<String> adopsjonsvedtak,

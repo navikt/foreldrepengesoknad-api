@@ -18,8 +18,8 @@ public record SøkerFrontend(BrukerRolle rolle,
                             Målform språkkode,
                             Boolean erAleneOmOmsorg,
                             @Valid FrilansInformasjonFrontend frilansInformasjon,
-                            @Valid @Size(max = 10) List<SelvstendigNæringsdrivendeInformasjonFrontend> selvstendigNæringsdrivendeInformasjon,
-                            @Valid @Size(max = 10) List<AnnenInntektFrontend> andreInntekterSiste10Mnd) {
+                            @Valid @Size(max = 15) List<SelvstendigNæringsdrivendeInformasjonFrontend> selvstendigNæringsdrivendeInformasjon,
+                            @Valid @Size(max = 15) List<AnnenInntektFrontend> andreInntekterSiste10Mnd) {
 
     public SøkerFrontend(BrukerRolle rolle, Målform språkkode, Boolean erAleneOmOmsorg, FrilansInformasjonFrontend frilansInformasjon,
                          List<SelvstendigNæringsdrivendeInformasjonFrontend> selvstendigNæringsdrivendeInformasjon,
