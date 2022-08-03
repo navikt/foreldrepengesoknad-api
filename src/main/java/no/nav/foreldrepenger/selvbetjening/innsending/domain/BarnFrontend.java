@@ -19,17 +19,17 @@ import com.fasterxml.jackson.annotation.JsonInclude;
 @JsonInclude(NON_EMPTY)
 public record BarnFrontend(@Valid @Size(max = 10) List<LocalDate> fødselsdatoer,
                            @Digits(integer = 2, fraction = 0) int antallBarn,
-                           @Valid @Size(max = 10) List<@Pattern(regexp = "^[\\p{Digit}\\p{L}]*$") String> terminbekreftelse,
+                           @Valid @Size(max = 15) List<@Pattern(regexp = "^[\\p{Digit}\\p{L}]*$") String> terminbekreftelse,
                            LocalDate termindato,
                            LocalDate terminbekreftelseDato,
                            LocalDate adopsjonsdato,
-                           @Valid @Size(max = 10) List<@Pattern(regexp = "^[\\p{Digit}\\p{L}]*$") String> adopsjonsvedtak,
+                           @Valid @Size(max = 15) List<@Pattern(regexp = "^[\\p{Digit}\\p{L}]*$") String> adopsjonsvedtak,
                            LocalDate ankomstdato,
                            boolean adopsjonAvEktefellesBarn,
                            boolean søkerAdopsjonAlene,
                            LocalDate foreldreansvarsdato,
-                           @Valid @Size(max = 10) List<@Pattern(regexp = "^[\\p{Digit}\\p{L}]*$") String> omsorgsovertakelse,
-                           @Valid @Size(max = 10) List<@Pattern(regexp = "^[\\p{Digit}\\p{L}]*$") String> dokumentasjonAvAleneomsorg) {
+                           @Valid @Size(max = 15) List<@Pattern(regexp = "^[\\p{Digit}\\p{L}]*$") String> omsorgsovertakelse,
+                           @Valid @Size(max = 15) List<@Pattern(regexp = "^[\\p{Digit}\\p{L}]*$") String> dokumentasjonAvAleneomsorg) {
 
     public BarnFrontend(List<LocalDate> fødselsdatoer, int antallBarn, List<String> terminbekreftelse, LocalDate termindato,
                         LocalDate terminbekreftelseDato, LocalDate adopsjonsdato, List<String> adopsjonsvedtak,

@@ -22,7 +22,7 @@ public record SelvstendigNæringsdrivendeInformasjonFrontend(
     @Digits(integer = 3, fraction = 2) Double stillingsprosent,
     @Digits(integer = 9, fraction = 0) int næringsinntekt,
     @Valid @Size(max = 10) List<Virksomhetstype> næringstyper,
-    @Valid @Size(max = 10) List<@Pattern(regexp = "^[\\p{Digit}\\p{L}]*$") String> vedlegg,
+    @Valid @Size(max = 15) List<@Pattern(regexp = "^[\\p{Digit}\\p{L}]*$") String> vedlegg,
     LocalDate oppstartsdato,
     @Valid NæringsinntektInformasjonFrontend endringAvNæringsinntektInformasjon,
     @Pattern(regexp = FRITEKST) String navnPåNæringen,

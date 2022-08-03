@@ -22,7 +22,7 @@ public record AnnenInntektFrontend(@Pattern(regexp = "^[\\p{L}_]*$") String type
                                    @Pattern(regexp = FRITEKST) String arbeidsgiverNavn,
                                    @Valid Tidsperiode tidsperiode,
                                    boolean erNærVennEllerFamilieMedArbeisdgiver,
-                                   @Valid @Size(max = 10) List<@Pattern(regexp = "^[\\p{Digit}\\p{L}]*$") String> vedlegg) {
+                                   @Valid @Size(max = 15) List<@Pattern(regexp = "^[\\p{Digit}\\p{L}]*$") String> vedlegg) {
 
     public AnnenInntektFrontend(String type, String land, String arbeidsgiverNavn, Tidsperiode tidsperiode,
                                 boolean erNærVennEllerFamilieMedArbeisdgiver, List<String> vedlegg) {
