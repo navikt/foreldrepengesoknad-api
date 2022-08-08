@@ -2,7 +2,6 @@ package no.nav.foreldrepenger.selvbetjening.uttak;
 
 import static no.nav.foreldrepenger.regler.uttak.beregnkontoer.grunnlag.Dekningsgrad.DEKNINGSGRAD_100;
 import static no.nav.foreldrepenger.regler.uttak.beregnkontoer.grunnlag.Dekningsgrad.DEKNINGSGRAD_80;
-import static no.nav.foreldrepenger.regler.uttak.konfig.StandardKonfigurasjon.SØKNADSDIALOG;
 
 import java.time.LocalDate;
 
@@ -72,7 +71,7 @@ public class UttakController {
             .termindato(termindato)
             .minsterett(minsterett)
             .build();
-        var stønadskontoer = regelOrkestrering.beregnKontoer(grunnlag, SØKNADSDIALOG).getStønadskontoer();
+        var stønadskontoer = regelOrkestrering.beregnKontoer(grunnlag).getStønadskontoer();
         var bareFarHarRett = farHarRett && !morHarRett;
         var aleneomsorg = erMor && morHarAleneomsorg || !erMor && farHarAleneomsorg;
         var minsterettGrunnlag = new BeregnMinsterettGrunnlag.Builder()
