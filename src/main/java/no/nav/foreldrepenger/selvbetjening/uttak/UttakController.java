@@ -55,6 +55,7 @@ public class UttakController {
                                  @RequestParam(value = "erMor", required = false) boolean erMor,
                                  @RequestParam(value = "minsterett", required = false) boolean minsterett,
                                  @RequestParam(value = "morHarUføretrygd", required = false) boolean morHarUføretrygd,
+                                 @RequestParam(value = "annenPartHarRettPåForeldrepengerIEØS", required = false) boolean annenPartHarRettPåForeldrepengerIEØS,
                                  @RequestParam(value = "familieHendelseDatoNesteSak", required = false) LocalDate familieHendelseDatoNesteSak) {
 
         guardFamiliehendelse(fødselsdato, termindato, omsorgsovertakelseDato);
@@ -80,7 +81,7 @@ public class UttakController {
             .mor(erMor)
             .bareFarHarRett(bareFarHarRett)
             .aleneomsorg(aleneomsorg)
-            .morHarUføretrygd(morHarUføretrygd)
+            .morHarUføretrygd(morHarUføretrygd || annenPartHarRettPåForeldrepengerIEØS)
             .dekningsgrad(dekningsgradOversatt)
             .familieHendelseDato(familiehendelse(fødselsdato, termindato, omsorgsovertakelseDato))
             .familieHendelseDatoNesteSak(familieHendelseDatoNesteSak)
