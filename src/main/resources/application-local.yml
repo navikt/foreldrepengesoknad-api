@@ -42,7 +42,7 @@ no.nav.security.jwt:
           client-auth-method: private_key_jwt
   issuer:
     selvbetjening:
-      discovery-url: http://localhost:8060/rest/loginservice/.well-known/openid-configuration
+      discovery-url: http://vtp:8060/rest/AzureAd/loginservice/v2.0/.well-known/openid-configuration
       accepted-audience: OIDC
       cookie-name: selvbetjening-idtoken
 

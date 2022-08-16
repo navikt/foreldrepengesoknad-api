@@ -4,8 +4,8 @@ package no.nav.foreldrepenger.selvbetjening.innsyn;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.google.common.base.Joiner;
 import no.nav.foreldrepenger.common.mapper.DefaultJsonMapper;
-import no.nav.foreldrepenger.selvbetjening.config.JacksonConfiguration;
 import no.nav.foreldrepenger.selvbetjening.http.UnprotectedRestController;
+import org.springframework.context.annotation.Profile;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
@@ -13,9 +13,6 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.client.RestOperations;
-import org.springframework.web.servlet.ModelAndView;
-import org.springframework.web.servlet.view.RedirectView;
 
 import java.io.IOException;
 import java.net.URI;
@@ -24,7 +21,8 @@ import java.net.http.HttpRequest;
 import java.net.http.HttpResponse;
 import java.util.Map;
 
-@UnprotectedRestController(InnsynController.INNSYN)
+@UnprotectedRestController("/rest/token-mock")
+@Profile("local")
 public class TokenControllerVtp {
 
     private static final HttpClient client = HttpClient.newHttpClient();
@@ -40,8 +38,8 @@ public class TokenControllerVtp {
             </head>
                 <body>
                 <div style="text-align:center;width:100%%;">
-                   <caption><h3>Fødselsnummer takk:</h3></caption>
-                    <form action="http://localhost:9002/rest/innsyn/tokensmoken" method="post">
+                   <caption><h3>Fødselsnummer:</h3></caption>
+                    <form action="http://localhost:9002/rest/innsyn/token" method="post">
                       <input type="hidden" name="redirect_uri" value="%s" />
                       <input type="text" name="fnr" />
                       <input type="submit" value="SUbmit" />
@@ -53,7 +51,7 @@ public class TokenControllerVtp {
         return String.format(tmpl, redirect);
     }
 
-    @PostMapping("/tokensmoken")
+    @PostMapping("/token")
     public ResponseEntity<?> token(@RequestParam String fnr, @RequestParam URI redirect_uri) throws IOException, InterruptedException {
         var data = Map.of("grant_type", "client_credentials",
             "scope", "openid",
@@ -72,16 +70,8 @@ public class TokenControllerVtp {
         headers.setLocation(redirect_uri);
         var tmpl = "selvbetjening-idtoken=%s;Path=/;Domain=localhost";
         headers.add("Set-Cookie", String.format(tmpl, body.idToken));
-        var r = new ResponseEntity<>(headers, HttpStatus.SEE_OTHER);
-        return r;
+        return new ResponseEntity<>(headers, HttpStatus.SEE_OTHER);
     }
 
-    record Token(
-        @JsonProperty("id_token")
-        String idToken
-//        String refreshToken,
-//        String accessToken,
-//        int expiresIn,
-//        String tokenType
-    ) {}
+    record Token(@JsonProperty("id_token") String idToken) {}
 }
