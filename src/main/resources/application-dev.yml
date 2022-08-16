@@ -36,7 +36,7 @@ no.nav:
             token-exchange:
               audience: dev-fss:teamforeldrepenger:fpinfo-historikk
       issuer:
-        selvbetjening-b2c:
+        selvbetjening:
           discoveryurl: https://navtestb2c.b2clogin.com/navtestb2c.onmicrosoft.com/v2.0/.well-known/openid-configuration?p=B2C_1A_idporten_ver1
           accepted_audience: 9ecf7c8f-4efd-466d-b864-97fe3571b160
           cookie_name: selvbetjening-idtoken
