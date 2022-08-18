@@ -1,5 +1,5 @@
 allowed.origins: '*'
-debug: false
+debug: true
 management:
   endpoints:
     web:
@@ -42,17 +42,19 @@ no.nav.security.jwt:
           client-auth-method: private_key_jwt
   issuer:
     selvbetjening:
-      discovery-url: http://vtp:8060/rest/AzureAd/aadb2c/v2.0/.well-known/openid-configuration
+      discovery-url: http://vtp:8060/rest/AzureAd/loginservice/v2.0/.well-known/openid-configuration
       accepted-audience: OIDC
+      cookie-name: selvbetjening-idtoken
 
 virus:
   enabled: false
 fppdfgen:
   enabled: false
 historikk:
-  enabled: false
+  enabled: true
+  uri: http://localhost:9003/api/
 minidialog:
-  enabled: false
+  uri: http://localhost:9003/api/
 innsyn:
   uri: http://localhost:9001/api/
 mottak:
