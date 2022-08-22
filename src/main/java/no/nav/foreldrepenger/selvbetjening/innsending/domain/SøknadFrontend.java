@@ -49,7 +49,7 @@ public abstract sealed class SøknadFrontend permits EngangsstønadFrontend, For
     @Pattern(regexp = FRITEKST)
     private final String tilleggsopplysninger;
     @Valid
-    @Size(max = 30)
+    @Size(max = 40)
     private final List<VedleggFrontend> vedlegg;
 
     @JsonCreator
