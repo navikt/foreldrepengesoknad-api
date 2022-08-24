@@ -41,6 +41,7 @@ class SøknadFrontendDeseraliseringTest {
         assertThat(fs.getSituasjon()).isEqualTo("fødsel");
         assertThat(fs.getErEndringssøknad()).isFalse();
         assertThat(fs.getDekningsgrad()).isEqualTo("80");
+        assertThat(fs.isØnskerJustertUttakVedFødsel()).isEqualTo(true);
 
         assertThat(fs.getUttaksplan()).hasSize(3);
         var uttaksperiode1 = fs.getUttaksplan().get(0);

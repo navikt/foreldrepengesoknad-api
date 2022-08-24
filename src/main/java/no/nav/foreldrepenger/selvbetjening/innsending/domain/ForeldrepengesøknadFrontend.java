@@ -24,16 +24,29 @@ public final class ForeldrepengesøknadFrontend extends SøknadFrontend {
     @Valid
     private final List<UttaksplanPeriode> uttaksplan;
 
+    private final Boolean ønskerJustertUttakVedFødsel;
+
     @Builder
     @JsonCreator
-    public ForeldrepengesøknadFrontend(LocalDateTime opprettet, String type, Saksnummer saksnummer, SøkerFrontend søker, BarnFrontend barn,
-                                       AnnenForelderFrontend annenForelder, UtenlandsoppholdFrontend informasjonOmUtenlandsopphold,
-                                       String situasjon, Boolean erEndringssøknad, String tilleggsopplysninger,
-                                       List<VedleggFrontend> vedlegg, String dekningsgrad, List<UttaksplanPeriode> uttaksplan) {
+    public ForeldrepengesøknadFrontend(LocalDateTime opprettet,
+                                       String type,
+                                       Saksnummer saksnummer,
+                                       SøkerFrontend søker,
+                                       BarnFrontend barn,
+                                       AnnenForelderFrontend annenForelder,
+                                       UtenlandsoppholdFrontend informasjonOmUtenlandsopphold,
+                                       String situasjon,
+                                       Boolean erEndringssøknad,
+                                       String tilleggsopplysninger,
+                                       List<VedleggFrontend> vedlegg,
+                                       String dekningsgrad,
+                                       List<UttaksplanPeriode> uttaksplan,
+                                       Boolean ønskerJustertUttakVedFødsel) {
         super(opprettet, type, saksnummer, søker, barn, annenForelder, informasjonOmUtenlandsopphold, situasjon,
             erEndringssøknad, tilleggsopplysninger, vedlegg);
         this.dekningsgrad = dekningsgrad;
         this.uttaksplan = uttaksplan;
+        this.ønskerJustertUttakVedFødsel = ønskerJustertUttakVedFødsel;
     }
 
     public String getDekningsgrad() {
@@ -44,11 +57,16 @@ public final class ForeldrepengesøknadFrontend extends SøknadFrontend {
         return uttaksplan;
     }
 
+    public Boolean isØnskerJustertUttakVedFødsel() {
+        return ønskerJustertUttakVedFødsel;
+    }
+
     @Override
     public String toString() {
         return "Foreldrepengesøknad{" +
             "dekningsgrad='" + dekningsgrad + '\'' +
             ", uttaksplan=" + uttaksplan +
+            ", ønskerJustertUttakVedFødsel=" + ønskerJustertUttakVedFødsel +
             "} " + super.toString();
     }
 }

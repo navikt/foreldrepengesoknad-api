@@ -89,6 +89,7 @@ final class ForeldrepengerMapper {
     private static Fordeling tilFordeling(ForeldrepengesøknadFrontend f) {
         return Fordeling.builder()
             .perioder(tilLukketPeriodeMedVedlegg(f.getUttaksplan()))
+            .ønskerJustertUttakVedFødsel(f.isØnskerJustertUttakVedFødsel())
             .erAnnenForelderInformert(f.getAnnenForelder().erInformertOmSøknaden())
             .build();
     }
