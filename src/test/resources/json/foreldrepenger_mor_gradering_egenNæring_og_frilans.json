@@ -14,6 +14,7 @@
         "termindato": "2021-12-07T00:00:00.000Z"
     },
     "dekningsgrad": "80",
+    "ønskerJustertUttakVedFødsel": true,
     "erEndringssøknad": false,
     "harGodkjentOppsummering": true,
     "harGodkjentVilkår": true,
