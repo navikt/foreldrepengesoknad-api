@@ -26,9 +26,6 @@ spec:
         - application: clamav
           namespace: clamav
       external:
-        - host: storage.googleapis.com
-        - host: oauth2.googleapis.com
-        - host: www.googleapis.com
         {{#each external as |url|}}
         - host: {{url}}
         {{/each}}
