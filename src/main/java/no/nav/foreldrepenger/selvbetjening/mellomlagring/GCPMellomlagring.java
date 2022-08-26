@@ -25,7 +25,7 @@ import no.nav.boot.conditionals.ConditionalOnGCP;
 @ConditionalOnGCP
 public class GCPMellomlagring extends AbstractMellomlagringTjeneste {
 
-    private static final URI STORAGE_URI = URI.create("https://storage.googleapis.com");
+    private static final URI STORAGE_URI = URI.create("https://storage.private.googleapis.com");
 
     private static final Logger LOG = LoggerFactory.getLogger(GCPMellomlagring.class);
 
@@ -34,10 +34,11 @@ public class GCPMellomlagring extends AbstractMellomlagringTjeneste {
     public GCPMellomlagring(Bøtte mellomlagringBøtte, RetrySettings retrySettings) {
         super(mellomlagringBøtte);
         this.storage = StorageOptions
-                .newBuilder()
-                .setRetrySettings(retrySettings)
-                .build()
-                .getService();
+            .newBuilder()
+            .setHost(STORAGE_URI.toString())
+            .setRetrySettings(retrySettings)
+            .build()
+            .getService();
     }
 
     @Override
