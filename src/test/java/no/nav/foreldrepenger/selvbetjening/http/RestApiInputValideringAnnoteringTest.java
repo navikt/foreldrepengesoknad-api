@@ -7,13 +7,13 @@ import java.util.Set;
 
 import javax.validation.Valid;
 
-import no.nav.foreldrepenger.selvbetjening.innsyn.VtpTokenMock;
 import org.junit.jupiter.api.Test;
 
 import no.nav.foreldrepenger.selvbetjening.uttak.UttakController;
+import no.nav.foreldrepenger.selvbetjening.uttak.UttakControllerV2;
 
 class RestApiInputValideringAnnoteringTest extends RestApiTestUtil {
-    private static final Set<Class<?>> UNNTATT_RESTCONTROLLER = Set.of(UttakController.class, VtpTokenMock.class);
+    private static final Set<Class<?>> UNNTATT_RESTCONTROLLER = Set.of(UttakController.class, UttakControllerV2.class);
     private static final Set<Class<?>> UNNTATT_PARAMETER_TYPE = Set.of(boolean.class, String.class);
 
 

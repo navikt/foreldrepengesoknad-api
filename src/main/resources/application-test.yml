@@ -29,9 +29,9 @@ virus:
 fppdfgen:
   enabled: false
 historikk:
-  enabled: false
+  uri: ${fpinfo-historikk.url}
 minidialog:
-  enabled: false
+  uri: ${fpinfo-historikk.url}
 innsyn:
   uri: ${fpsoknad-mottak.url}
 mottak:

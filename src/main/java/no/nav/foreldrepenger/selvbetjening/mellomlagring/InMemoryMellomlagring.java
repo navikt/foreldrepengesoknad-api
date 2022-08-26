@@ -7,11 +7,10 @@ import java.util.Optional;
 
 import org.springframework.stereotype.Service;
 
-import no.nav.boot.conditionals.Cluster;
-import no.nav.boot.conditionals.ConditionalOnClusters;
+import no.nav.boot.conditionals.ConditionalOnLocalOrTest;
 
 @Service
-@ConditionalOnClusters(clusters = {Cluster.LOCAL, Cluster.VTP, Cluster.TEST})
+@ConditionalOnLocalOrTest
 public class InMemoryMellomlagring extends AbstractMellomlagringTjeneste {
 
     private final Map<String, String> store;
