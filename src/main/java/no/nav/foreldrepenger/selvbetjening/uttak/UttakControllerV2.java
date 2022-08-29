@@ -27,18 +27,17 @@ import no.nav.security.token.support.core.api.Unprotected;
 @Validated
 @Unprotected
 @RestController
-@RequestMapping(UttakController.UTTAK_PATH)
-// TODO: Fjern denne etter frontend har endret til å gå mot rest/konto istedenfor /konto
-public class UttakController {
+@RequestMapping(UttakControllerV2.UTTAK_PATH)
+public class UttakControllerV2 {
 
-    static final String UTTAK_PATH = "/konto";
+    static final String UTTAK_PATH = "/rest/konto";
 
     private static final String FMT = "yyyyMMdd";
     private final StønadskontoRegelOrkestrering regelOrkestrering;
 
 
     @Inject
-    public UttakController() {
+    public UttakControllerV2() {
         this.regelOrkestrering = new StønadskontoRegelOrkestrering();
     }
 
