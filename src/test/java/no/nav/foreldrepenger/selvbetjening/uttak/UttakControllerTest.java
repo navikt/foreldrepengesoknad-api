@@ -65,10 +65,10 @@ class UttakControllerTest {
         var resultat = controller.beregn(1, false, true, false, false, LocalDate.now(), LocalDate.now().minusWeeks(1),
             null, "100", false, true, false, true, null);
 
-        assertThat(resultat.kontoer()).doesNotContainKey(StønadskontoBeregningStønadskontotype.FORELDREPENGER);
-        assertThat(resultat.minsteretter().generellMinsterett()).isZero();
+        assertThat(resultat.kontoer()).containsEntry(StønadskontoBeregningStønadskontotype.FORELDREPENGER, 200);
+        assertThat(resultat.minsteretter().generellMinsterett()).isEqualTo(75);
         assertThat(resultat.minsteretter().farRundtFødsel()).isEqualTo(10);
-        assertThat(resultat.kontoer()).containsEntry(StønadskontoBeregningStønadskontotype.FEDREKVOTE, 75);
+
     }
 
 }

@@ -5,6 +5,7 @@ import static no.nav.foreldrepenger.regler.uttak.beregnkontoer.grunnlag.Deknings
 
 import java.time.LocalDate;
 
+import javax.inject.Inject;
 import javax.validation.constraints.Digits;
 import javax.validation.constraints.Pattern;
 
@@ -27,13 +28,18 @@ import no.nav.security.token.support.core.api.Unprotected;
 @Unprotected
 @RestController
 @RequestMapping(UttakControllerV2.UTTAK_PATH)
-//TODO rename tilbake til UttakController
 public class UttakControllerV2 {
 
     static final String UTTAK_PATH = "/rest/konto";
 
     private static final String FMT = "yyyyMMdd";
-    private static final StønadskontoRegelOrkestrering REGEL_ORKESTRERING = new StønadskontoRegelOrkestrering();
+    private final StønadskontoRegelOrkestrering regelOrkestrering;
+
+
+    @Inject
+    public UttakControllerV2() {
+        this.regelOrkestrering = new StønadskontoRegelOrkestrering();
+    }
 
     @GetMapping
     @CrossOrigin(origins = "*", allowCredentials = "false")
@@ -49,52 +55,33 @@ public class UttakControllerV2 {
                                  @RequestParam(value = "erMor", required = false) boolean erMor,
                                  @RequestParam(value = "minsterett", required = false) boolean minsterett,
                                  @RequestParam(value = "morHarUføretrygd", required = false) boolean morHarUføretrygd,
-                                 @RequestParam(value = "harAnnenForelderTilsvarendeRettEØS", required = false) boolean harAnnenForelderTilsvarendeRettEØS,
+                                 @RequestParam(value = "annenPartHarRettPåForeldrepengerIEØS", required = false) boolean annenPartHarRettPåForeldrepengerIEØS,
                                  @RequestParam(value = "familieHendelseDatoNesteSak", required = false) LocalDate familieHendelseDatoNesteSak) {
-        return beregnKonto(antallBarn, morHarRett, farHarRett, morHarAleneomsorg, farHarAleneomsorg, fødselsdato,
-            termindato, omsorgsovertakelseDato, dekningsgrad, erMor, minsterett, morHarUføretrygd,
-            harAnnenForelderTilsvarendeRettEØS, familieHendelseDatoNesteSak);
-    }
 
-
-    static KontoBeregning beregnKonto(int antallBarn,
-                                      boolean morHarRett,
-                                      boolean farHarRett,
-                                      boolean morHarAleneomsorg,
-                                      boolean farHarAleneomsorg,
-                                      LocalDate fødselsdato,
-                                      LocalDate termindato,
-                                      LocalDate omsorgsovertakelseDato,
-                                      String dekningsgrad,
-                                      boolean erMor,
-                                      boolean minsterett,
-                                      boolean morHarUføretrygd,
-                                      boolean harAnnenForelderTilsvarendeRettEØS,
-                                      LocalDate familieHendelseDatoNesteSak) {
         guardFamiliehendelse(fødselsdato, termindato, omsorgsovertakelseDato);
         var dekningsgradOversatt = dekningsgrad(dekningsgrad);
-        var grunnlag = new BeregnKontoerGrunnlag.Builder().antallBarn(antallBarn)
+        var grunnlag = new BeregnKontoerGrunnlag.Builder()
+            .antallBarn(antallBarn)
             .dekningsgrad(dekningsgradOversatt)
             .morAleneomsorg(morHarAleneomsorg)
             .farAleneomsorg(farHarAleneomsorg)
             .morRett(morHarRett)
             .farRett(farHarRett)
-            .annenpartTilsvarendeRettEØS(harAnnenForelderTilsvarendeRettEØS)
             .fødselsdato(fødselsdato)
             .omsorgsovertakelseDato(omsorgsovertakelseDato)
             .termindato(termindato)
             .minsterett(minsterett)
             .build();
-        var stønadskontoer = REGEL_ORKESTRERING.beregnKontoer(grunnlag).getStønadskontoer();
+        var stønadskontoer = regelOrkestrering.beregnKontoer(grunnlag).getStønadskontoer();
         var bareFarHarRett = farHarRett && !morHarRett;
         var aleneomsorg = erMor && morHarAleneomsorg || !erMor && farHarAleneomsorg;
-        var minsterettGrunnlag = new BeregnMinsterettGrunnlag.Builder().antallBarn(antallBarn)
+        var minsterettGrunnlag = new BeregnMinsterettGrunnlag.Builder()
+            .antallBarn(antallBarn)
             .minsterett(minsterett)
             .mor(erMor)
             .bareFarHarRett(bareFarHarRett)
             .aleneomsorg(aleneomsorg)
-            .morHarUføretrygd(morHarUføretrygd)
-            .annenpartTilsvarendeRettEØS(harAnnenForelderTilsvarendeRettEØS)
+            .morHarUføretrygd(morHarUføretrygd || annenPartHarRettPåForeldrepengerIEØS)
             .dekningsgrad(dekningsgradOversatt)
             .familieHendelseDato(familiehendelse(fødselsdato, termindato, omsorgsovertakelseDato))
             .familieHendelseDatoNesteSak(familieHendelseDatoNesteSak)
@@ -103,9 +90,7 @@ public class UttakControllerV2 {
         return new KontoBeregning(stønadskontoer, Minsteretter.from(minsteretter));
     }
 
-    private static LocalDate familiehendelse(LocalDate fødselsdato,
-                                             LocalDate termindato,
-                                             LocalDate omsorgsovertakelseDato) {
+    private LocalDate familiehendelse(LocalDate fødselsdato, LocalDate termindato, LocalDate omsorgsovertakelseDato) {
         if (omsorgsovertakelseDato != null) {
             return omsorgsovertakelseDato;
         }
@@ -115,9 +100,7 @@ public class UttakControllerV2 {
         return termindato;
     }
 
-    private static void guardFamiliehendelse(LocalDate fødselsdato,
-                                             LocalDate termindato,
-                                             LocalDate omsorgsovertakelseDato) {
+    private void guardFamiliehendelse(LocalDate fødselsdato, LocalDate termindato, LocalDate omsorgsovertakelseDato) {
         if (fødselsdato == null && termindato == null && omsorgsovertakelseDato == null) {
             throw new ManglendeFamiliehendelseException("Mangler dato for familiehendelse");
         }
@@ -133,6 +116,6 @@ public class UttakControllerV2 {
 
     @Override
     public String toString() {
-        return getClass().getSimpleName() + " [regelOrkestrering=" + REGEL_ORKESTRERING + "]";
+        return getClass().getSimpleName() + " [regelOrkestrering=" + regelOrkestrering + "]";
     }
 }

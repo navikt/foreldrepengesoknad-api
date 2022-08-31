@@ -17,7 +17,7 @@ public record AnnenForelderFrontend(boolean kanIkkeOppgis,
                                     boolean harRettPåForeldrepenger,
                                     boolean erInformertOmSøknaden,
                                     boolean harMorUføretrygd,
-                                    boolean harAnnenForelderTilsvarendeRettEØS) {
+                                    boolean harRettPåForeldrepengerIEØS) {
 
     @JsonIgnore
     public String type() {
@@ -42,7 +42,7 @@ public record AnnenForelderFrontend(boolean kanIkkeOppgis,
             ", harRettPåForeldrepenger=" + harRettPåForeldrepenger +
             ", erInformertOmSøknaden=" + erInformertOmSøknaden +
             ", harMorUføretrygd=" + harMorUføretrygd +
-            ", harAnnenForelderTilsvarendeRettEØS=" + harAnnenForelderTilsvarendeRettEØS +
+            ", harRettPåForeldrepengerIEØS=" + harRettPåForeldrepengerIEØS +
             '}';
     }
 }
