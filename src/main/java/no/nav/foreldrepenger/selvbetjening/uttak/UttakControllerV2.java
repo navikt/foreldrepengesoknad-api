@@ -79,22 +79,23 @@ public class UttakControllerV2 {
             .farAleneomsorg(farHarAleneomsorg)
             .morRett(morHarRett)
             .farRett(farHarRett)
-            .annenpartTilsvarendeRettEØS(harAnnenForelderTilsvarendeRettEØS)
+            .morHarRettEØS(!erMor && harAnnenForelderTilsvarendeRettEØS)
+            .farHarRettEØS(erMor && harAnnenForelderTilsvarendeRettEØS)
             .fødselsdato(fødselsdato)
             .omsorgsovertakelseDato(omsorgsovertakelseDato)
             .termindato(termindato)
             .minsterett(minsterett)
             .build();
         var stønadskontoer = REGEL_ORKESTRERING.beregnKontoer(grunnlag).getStønadskontoer();
-        var bareFarHarRett = farHarRett && !morHarRett;
-        var aleneomsorg = erMor && morHarAleneomsorg || !erMor && farHarAleneomsorg;
+        var morHarRettEllerEØS = morHarRett || (!erMor && harAnnenForelderTilsvarendeRettEØS);
+        var bareFarHarRett = farHarRett && !morHarRettEllerEØS;
+        var aleneomsorg = (erMor && morHarAleneomsorg) || (!erMor && farHarAleneomsorg);
         var minsterettGrunnlag = new BeregnMinsterettGrunnlag.Builder().antallBarn(antallBarn)
             .minsterett(minsterett)
             .mor(erMor)
             .bareFarHarRett(bareFarHarRett)
             .aleneomsorg(aleneomsorg)
             .morHarUføretrygd(morHarUføretrygd)
-            .annenpartTilsvarendeRettEØS(harAnnenForelderTilsvarendeRettEØS)
             .dekningsgrad(dekningsgradOversatt)
             .familieHendelseDato(familiehendelse(fødselsdato, termindato, omsorgsovertakelseDato))
             .familieHendelseDatoNesteSak(familieHendelseDatoNesteSak)
