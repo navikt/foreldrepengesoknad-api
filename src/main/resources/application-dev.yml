@@ -29,7 +29,7 @@ no.nav:
     jwt:
       client:
         registration:
-          fpsoknad-mottak:
+          fncat-logger:
             token-exchange:
               audience: dev-fss:teamforeldrepenger:fpsoknad-mottak
           fpinfo-historikk:
@@ -42,13 +42,13 @@ no.nav:
           cookie_name: selvbetjening-idtoken
 
 oppslag:
-  uri: https://fpsoknad-mottak.dev-fss-pub.nais.io/api/
+  uri: https://ncat-logger.dev-fss-pub.nais.io/api/
 historikk:
   uri: https://fpinfo-historikk.dev-fss-pub.nais.io/api/
 mottak:
-  uri: https://fpsoknad-mottak.dev-fss-pub.nais.io/api/
+  uri: https://ncat-logger.dev-fss-pub.nais.io/api/
 innsyn:
-  uri: https://fpsoknad-mottak.dev-fss-pub.nais.io/api/
+  uri: https://ncat-logger.dev-fss-pub.nais.io/api/
 minidialog:
   uri: https://fpinfo-historikk.dev-fss-pub.nais.io/api/
 fppdfgen:
