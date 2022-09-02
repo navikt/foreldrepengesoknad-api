@@ -9,7 +9,7 @@ allowed:
 no.nav:
   security:
     jwt:
-      dont-propagate-bearertoken: true
+      dont-propagate-bearertoken: false
       client:
         registration:
           fpsoknad-mottak:

@@ -14,11 +14,9 @@ import static org.springframework.util.ReflectionUtils.getField;
 import static org.springframework.util.ReflectionUtils.makeAccessible;
 
 import java.time.Duration;
-import java.util.Arrays;
 import java.util.List;
 import java.util.Optional;
 
-import no.nav.security.token.support.spring.validation.interceptor.BearerTokenClientHttpRequestInterceptor;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Value;
@@ -55,10 +53,7 @@ public class RestClientConfiguration implements WebMvcConfigurer {
 
     @Bean
     public RestOperations customRestTemplate(RestTemplateBuilder b, ClientHttpRequestInterceptor... interceptors) {
-        var interceptorsUtenBearerTokenInterceptor = Arrays.stream(interceptors)
-            .filter(i -> i.getClass().equals(BearerTokenClientHttpRequestInterceptor.class))
-            .toList();
-        return b.interceptors(interceptorsUtenBearerTokenInterceptor)
+        return b.interceptors(interceptors)
             .setConnectTimeout(CONNECT_TIMEOUT)
             .setReadTimeout(READ_TIMEOUT)
             .build();
