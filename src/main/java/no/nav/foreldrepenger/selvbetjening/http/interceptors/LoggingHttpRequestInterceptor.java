@@ -25,7 +25,7 @@ public class LoggingHttpRequestInterceptor implements ClientHttpRequestIntercept
 
     @Override
     public ClientHttpResponse intercept(HttpRequest request, byte[] body, ClientHttpRequestExecution execution) throws IOException {
-        LOG.info("Kaller {} med headers \n{}", request.getURI(), request.getHeaders());
+        LOG.debug("Kaller {} med headers \n{}", request.getURI(), request.getHeaders());
         return execution.execute(request, body);
     }
 
