@@ -29,15 +29,6 @@ no.nav:
     jwt:
       client:
         registration:
-          ncat-logger:
-            well-known-url: ${token.x.well.known.url}
-            grant-type: urn:ietf:params:oauth:grant-type:token-exchange
-            authentication:
-              client-id: ${token.x.client.id}
-              client-jwk: ${token.x.private.jwk}
-              client-auth-method: private_key_jwt
-            token-exchange:
-              audience: dev-fss:teamforeldrepenger:fpsoknad-mottak
           fpsoknad-mottak:
             token-exchange:
               audience: dev-fss:teamforeldrepenger:fpsoknad-mottak
@@ -51,13 +42,13 @@ no.nav:
           cookie_name: selvbetjening-idtoken
 
 oppslag:
-  uri: http://ncat-logger.nais.svc.cluster.local
+  uri: https://fpsoknad-mottak.dev-fss-pub.nais.io/api/
 historikk:
   uri: https://fpinfo-historikk.dev-fss-pub.nais.io/api/
 mottak:
-  uri: http://ncat-logger.nais.svc.cluster.local
+  uri: https://fpsoknad-mottak.dev-fss-pub.nais.io/api/
 innsyn:
-  uri: http://ncat-logger.nais.svc.cluster.local
+  uri: https://fpsoknad-mottak.dev-fss-pub.nais.io/api/
 minidialog:
   uri: https://fpinfo-historikk.dev-fss-pub.nais.io/api/
 fppdfgen:
