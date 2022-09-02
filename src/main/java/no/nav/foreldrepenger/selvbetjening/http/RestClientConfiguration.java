@@ -13,6 +13,7 @@ import static org.springframework.util.ReflectionUtils.findField;
 import static org.springframework.util.ReflectionUtils.getField;
 import static org.springframework.util.ReflectionUtils.makeAccessible;
 
+import java.nio.charset.StandardCharsets;
 import java.time.Duration;
 import java.util.List;
 import java.util.Optional;
@@ -25,6 +26,7 @@ import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.core.annotation.Order;
 import org.springframework.http.client.ClientHttpRequestInterceptor;
+import org.springframework.http.converter.StringHttpMessageConverter;
 import org.springframework.retry.RetryCallback;
 import org.springframework.retry.RetryContext;
 import org.springframework.retry.RetryListener;
@@ -54,6 +56,7 @@ public class RestClientConfiguration implements WebMvcConfigurer {
     @Bean
     public RestOperations customRestTemplate(RestTemplateBuilder b, ClientHttpRequestInterceptor... interceptors) {
         return b.interceptors(interceptors)
+            .messageConverters(new StringHttpMessageConverter(StandardCharsets.UTF_8))
             .setConnectTimeout(CONNECT_TIMEOUT)
             .setReadTimeout(READ_TIMEOUT)
             .build();
