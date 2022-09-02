@@ -13,11 +13,12 @@ import static org.springframework.util.ReflectionUtils.findField;
 import static org.springframework.util.ReflectionUtils.getField;
 import static org.springframework.util.ReflectionUtils.makeAccessible;
 
-import java.nio.charset.StandardCharsets;
 import java.time.Duration;
+import java.util.Arrays;
 import java.util.List;
 import java.util.Optional;
 
+import no.nav.security.token.support.spring.validation.interceptor.BearerTokenClientHttpRequestInterceptor;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Value;
@@ -26,7 +27,6 @@ import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.core.annotation.Order;
 import org.springframework.http.client.ClientHttpRequestInterceptor;
-import org.springframework.http.converter.StringHttpMessageConverter;
 import org.springframework.retry.RetryCallback;
 import org.springframework.retry.RetryContext;
 import org.springframework.retry.RetryListener;
@@ -55,8 +55,10 @@ public class RestClientConfiguration implements WebMvcConfigurer {
 
     @Bean
     public RestOperations customRestTemplate(RestTemplateBuilder b, ClientHttpRequestInterceptor... interceptors) {
-        return b.interceptors(interceptors)
-            .messageConverters(new StringHttpMessageConverter(StandardCharsets.UTF_8))
+        var interceptorsUtenBearerTokenInterceptor = Arrays.stream(interceptors)
+            .filter(i -> i.getClass().equals(BearerTokenClientHttpRequestInterceptor.class))
+            .toList();
+        return b.interceptors(interceptorsUtenBearerTokenInterceptor)
             .setConnectTimeout(CONNECT_TIMEOUT)
             .setReadTimeout(READ_TIMEOUT)
             .build();
