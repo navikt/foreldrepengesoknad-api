@@ -4,7 +4,7 @@ metadata:
   name: foreldrepengesoknad-api
   namespace: teamforeldrepenger
   annotations:
-    nginx.ingress.kubernetes.io/proxy-body-size: "56M"
+    nginx.ingress.kubernetes.io/proxy-body-size: "256M"
     nginx.ingress.kubernetes.io/proxy-read-timeout: "90"
   labels:
     team: teamforeldrepenger
