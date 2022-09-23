@@ -29,14 +29,14 @@ virus:
 fppdfgen:
   enabled: false
 historikk:
-  uri: ${fpinfo-historikk.url}
+  uri: ${fpinfo-historikk.override.url}
 minidialog:
-  uri: ${fpinfo-historikk.url}
+  uri: ${fpinfo-historikk.override.url}
 innsyn:
-  uri: ${fpsoknad-mottak.url}
+  uri: ${fpsoknad-mottak.override.url}
 mottak:
-  uri: ${fpsoknad-mottak.url}
+  uri: ${fpsoknad-mottak.override.url}
 oppslag:
-  uri: ${fpsoknad-mottak.url}
+  uri: ${fpsoknad-mottak.override.url}
 storage:
   passphrase: tullogtøys
