@@ -37,10 +37,10 @@ spec:
     cpuThresholdPercentage: 80
   liveness:
     path: /internal/actuator/health/liveness
-    initialDelay: 60
+    initialDelay: 15
   readiness:
     path: /internal/actuator/health/readiness
-    initialDelay: 60
+    initialDelay: 15
   prometheus:
     enabled: true
     path: /internal/actuator/prometheus
