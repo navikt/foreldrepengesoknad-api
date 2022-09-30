@@ -15,9 +15,9 @@ public record AnnenForelderFrontend(boolean kanIkkeOppgis,
                                     boolean utenlandskFnr,
                                     @Pattern(regexp = BARE_BOKSTAVER) String bostedsland,
                                     boolean harRettPåForeldrepenger,
-                                    boolean erInformertOmSøknaden,
-                                    boolean harMorUføretrygd,
-                                    boolean harAnnenForelderTilsvarendeRettEØS) {
+                                    Boolean erInformertOmSøknaden,
+                                    Boolean harMorUføretrygd,
+                                    Boolean harAnnenForelderTilsvarendeRettEØS) {
 
     @JsonIgnore
     public String type() {

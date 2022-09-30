@@ -80,7 +80,7 @@ final class ForeldrepengerMapper {
     private static Rettigheter tilRettigheter(ForeldrepengesøknadFrontend f) {
         return new Rettigheter(
             f.getAnnenForelder().harRettPåForeldrepenger(),
-            toBoolean(f.getSøker().erAleneOmOmsorg()),
+            f.getSøker().erAleneOmOmsorg(),
             f.getAnnenForelder().harMorUføretrygd(),
             f.getAnnenForelder().harAnnenForelderTilsvarendeRettEØS());
     }
