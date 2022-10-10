@@ -6,6 +6,8 @@ import javax.inject.Inject;
 import javax.validation.Valid;
 import javax.validation.constraints.NotNull;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -19,6 +21,8 @@ import no.nav.foreldrepenger.selvbetjening.innsyn.saker.Sak;
 
 @ProtectedRestController(InnsynController.INNSYN)
 public class InnsynController {
+
+    private static final Logger LOG = LoggerFactory.getLogger(InnsynController.class);
 
     public static final String INNSYN = "/rest/innsyn";
 
@@ -41,11 +45,13 @@ public class InnsynController {
 
     @GetMapping("/uttaksplanannen")
     public UttaksplanDto uttaksplanAnnenPart(@Valid @RequestParam(name = "annenPart") @NotNull Fødselsnummer annenPart) {
+        LOG.info("Tjeneste kalles uttaksplanannen");
         return innsynTjeneste.hentUttaksplanAnnenPart(annenPart);
     }
 
     @PostMapping("/uttaksplanannen1")
     public UttaksplanDto uttaksplanAnnenPart1(@Valid @RequestBody @NotNull Fødselsnummer annenPart) {
+        LOG.info("Tjeneste kalles uttaksplanannen1");
         return innsynTjeneste.hentUttaksplanAnnenPart(annenPart);
     }
 
