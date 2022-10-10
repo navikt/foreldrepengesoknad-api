@@ -32,14 +32,15 @@ public record UttaksplanPeriode(@Pattern(regexp = BARE_BOKSTAVER) String type,
                                 boolean graderingInnvilget,
                                 boolean gradert,
                                 boolean ønskerFlerbarnsdager,
-                                boolean ønskerSamtidigUttak) {
+                                boolean ønskerSamtidigUttak,
+                                Boolean justeresVedFødsel) {
 
     @JsonCreator
     public UttaksplanPeriode(String type, Double samtidigUttakProsent, Double stillingsprosent, List<String> orgnumre,
                              List<String> vedlegg, String forelder, String konto, String morsAktivitetIPerioden,
                              String årsak, Tidsperiode tidsperiode, boolean erArbeidstaker,
                              boolean erFrilanser, boolean erSelvstendig, boolean graderingInnvilget, boolean gradert,
-                             boolean ønskerFlerbarnsdager, boolean ønskerSamtidigUttak) {
+                             boolean ønskerFlerbarnsdager, boolean ønskerSamtidigUttak, Boolean justeresVedFødsel) {
         this.type = type;
         this.samtidigUttakProsent = samtidigUttakProsent;
         this.stillingsprosent = stillingsprosent;
@@ -57,6 +58,7 @@ public record UttaksplanPeriode(@Pattern(regexp = BARE_BOKSTAVER) String type,
         this.gradert = gradert;
         this.ønskerFlerbarnsdager = ønskerFlerbarnsdager;
         this.ønskerSamtidigUttak = ønskerSamtidigUttak;
+        this.justeresVedFødsel = justeresVedFødsel;
     }
 
     @Override
@@ -79,6 +81,7 @@ public record UttaksplanPeriode(@Pattern(regexp = BARE_BOKSTAVER) String type,
             ", gradert=" + gradert +
             ", ønskerFlerbarnsdager=" + ønskerFlerbarnsdager +
             ", ønskerSamtidigUttak=" + ønskerSamtidigUttak +
+            ", justeresVedFødsel=" + justeresVedFødsel +
             '}';
     }
 }
