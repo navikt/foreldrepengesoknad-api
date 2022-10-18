@@ -6,6 +6,7 @@ import no.nav.foreldrepenger.common.domain.Fødselsnummer;
 import no.nav.foreldrepenger.common.domain.Saksnummer;
 import no.nav.foreldrepenger.common.innsyn.uttaksplan.UttaksplanDto;
 import no.nav.foreldrepenger.common.innsyn.v2.Saker;
+import no.nav.foreldrepenger.common.innsyn.v2.VedtakPeriode;
 import no.nav.foreldrepenger.selvbetjening.http.Pingable;
 import no.nav.foreldrepenger.selvbetjening.http.RetryAware;
 import no.nav.foreldrepenger.selvbetjening.innsyn.saker.Sak;
@@ -20,4 +21,5 @@ public interface Innsyn extends Pingable, RetryAware {
 
     List<Sak> hentSaker();
 
+    List<VedtakPeriode> annenPartsVedtaksperioder(AnnenPartVedtakIdentifikator request);
 }

@@ -13,6 +13,7 @@ import no.nav.foreldrepenger.common.domain.Fødselsnummer;
 import no.nav.foreldrepenger.common.domain.Saksnummer;
 import no.nav.foreldrepenger.common.innsyn.uttaksplan.UttaksplanDto;
 import no.nav.foreldrepenger.common.innsyn.v2.Saker;
+import no.nav.foreldrepenger.common.innsyn.v2.VedtakPeriode;
 import no.nav.foreldrepenger.selvbetjening.innsyn.saker.Behandling;
 import no.nav.foreldrepenger.selvbetjening.innsyn.saker.Sak;
 
@@ -40,6 +41,11 @@ public class InnsynTjenesteStub implements Innsyn {
         return List.of(
                 new Sak("123234545", "UBEH", now().minusYears(1), "LA8PV", null, "SVP", List.of(), false),
                 new Sak("424242424", "LOP", mottattdato.toLocalDate(), null, null, "SVP", List.of(behandling), true));
+    }
+
+    @Override
+    public List<VedtakPeriode> annenPartsVedtaksperioder(AnnenPartVedtakIdentifikator request) {
+        return List.of();
     }
 
     @Override
