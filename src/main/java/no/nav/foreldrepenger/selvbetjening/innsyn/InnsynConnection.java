@@ -17,6 +17,7 @@ import no.nav.foreldrepenger.common.domain.Fødselsnummer;
 import no.nav.foreldrepenger.common.domain.Saksnummer;
 import no.nav.foreldrepenger.common.innsyn.uttaksplan.UttaksplanDto;
 import no.nav.foreldrepenger.common.innsyn.v2.Saker;
+import no.nav.foreldrepenger.common.innsyn.v2.VedtakPeriode;
 import no.nav.foreldrepenger.selvbetjening.http.AbstractRestConnection;
 import no.nav.foreldrepenger.selvbetjening.innsyn.saker.Sak;
 import no.nav.foreldrepenger.selvbetjening.oppslag.domain.Arbeidsforhold;
@@ -65,6 +66,18 @@ public class InnsynConnection extends AbstractRestConnection {
                 .orElse(emptyList());
         LOG.info("Hentet {} sak{} fra {}", saker.size(), flertall(saker.size()), uri);
         return saker;
+    }
+
+    public List<VedtakPeriode> annenPartsVedtaksperioder(AnnenPartVedtakIdentifikator annenPartVedtakIdentifikator) {
+        LOG.info("Henter annen parts vedtaksperioder");
+
+        var uri = cfg.vedtaksperioderURI();
+        var perioder = Optional.ofNullable(postForObject(uri, annenPartVedtakIdentifikator, VedtakPeriode[].class))
+            .map(Arrays::asList)
+            .orElse(emptyList());
+
+        LOG.info("Hentet annen parts vedtaksperioder. Antall perioder {}", perioder.size());
+        return perioder;
     }
 
     public List<Arbeidsforhold> hentArbeidsForhold() {

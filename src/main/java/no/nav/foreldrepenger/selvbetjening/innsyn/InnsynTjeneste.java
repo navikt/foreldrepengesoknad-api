@@ -11,6 +11,7 @@ import no.nav.foreldrepenger.common.domain.Fødselsnummer;
 import no.nav.foreldrepenger.common.domain.Saksnummer;
 import no.nav.foreldrepenger.common.innsyn.uttaksplan.UttaksplanDto;
 import no.nav.foreldrepenger.common.innsyn.v2.Saker;
+import no.nav.foreldrepenger.common.innsyn.v2.VedtakPeriode;
 import no.nav.foreldrepenger.selvbetjening.innsyn.saker.Sak;
 
 @Service
@@ -47,6 +48,11 @@ public class InnsynTjeneste implements Innsyn {
     public Saker hentSakerV2() {
         LOG.info("Henter sakerV2 for pålogget bruker");
         return connection.hentSakerV2();
+    }
+
+    @Override
+    public List<VedtakPeriode> annenPartsVedtaksperioder(AnnenPartVedtakIdentifikator annenPartVedtakIdentifikator) {
+        return connection.annenPartsVedtaksperioder(annenPartVedtakIdentifikator);
     }
 
     @Override
