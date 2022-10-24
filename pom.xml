@@ -35,7 +35,7 @@
 
         <selvbetjening-felles.version>0.8.29</selvbetjening-felles.version>
 		<token-validation-version>2.1.2</token-validation-version>
-        <boot-conditionals.version>3.1.0</boot-conditionals.version>
+        <boot-conditionals.version>4.0.3</boot-conditionals.version>
 
         <springdoc.version>1.6.11</springdoc.version>
         <nimbus-jose-jwt.version>8.23</nimbus-jose-jwt.version>
