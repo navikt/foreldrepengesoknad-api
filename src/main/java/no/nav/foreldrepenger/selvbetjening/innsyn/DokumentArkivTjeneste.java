@@ -14,6 +14,9 @@ import java.net.URI;
 public class DokumentArkivTjeneste extends AbstractRestConnection {
 
     private final static URI BASE_URI = URI.create("https://fpinfo-historikk.dev-fss-pub.nais.io/api/");
+    private final static URI DOKUMENTER_URI = UriComponentsBuilder.fromUri(BASE_URI)
+        .pathSegment("arkiv", "alle")
+        .build().toUri();
 
 
     @Inject
@@ -23,6 +26,10 @@ public class DokumentArkivTjeneste extends AbstractRestConnection {
 
     public byte[] hentDokument(String dokumentId) {
         return getForObject(dokUri(dokumentId), byte[].class);
+    }
+
+    public String hentDokumentoversikt() {
+        return getForObject(DOKUMENTER_URI, String.class);
     }
 
     private URI dokUri(String dokumentId) {
