@@ -16,8 +16,8 @@ import org.springframework.web.client.RestOperations;
 import no.nav.foreldrepenger.common.domain.Fødselsnummer;
 import no.nav.foreldrepenger.common.domain.Saksnummer;
 import no.nav.foreldrepenger.common.innsyn.uttaksplan.UttaksplanDto;
+import no.nav.foreldrepenger.common.innsyn.v2.AnnenPartVedtak;
 import no.nav.foreldrepenger.common.innsyn.v2.Saker;
-import no.nav.foreldrepenger.common.innsyn.v2.VedtakPeriode;
 import no.nav.foreldrepenger.selvbetjening.http.AbstractRestConnection;
 import no.nav.foreldrepenger.selvbetjening.innsyn.saker.Sak;
 import no.nav.foreldrepenger.selvbetjening.oppslag.domain.Arbeidsforhold;
@@ -68,16 +68,14 @@ public class InnsynConnection extends AbstractRestConnection {
         return saker;
     }
 
-    public List<VedtakPeriode> annenPartsVedtaksperioder(AnnenPartVedtakIdentifikator annenPartVedtakIdentifikator) {
-        LOG.info("Henter annen parts vedtaksperioder");
+    public Optional<AnnenPartVedtak> annenPartVedtak(AnnenPartVedtakIdentifikator annenPartVedtakIdentifikator) {
+        LOG.info("Henter annen parts vedtak");
 
-        var uri = cfg.vedtaksperioderURI();
-        var perioder = Optional.ofNullable(postForObject(uri, annenPartVedtakIdentifikator, VedtakPeriode[].class))
-            .map(Arrays::asList)
-            .orElse(emptyList());
+        var uri = cfg.annenPartVedtakURI();
+        var vedtak = Optional.ofNullable(postForObject(uri, annenPartVedtakIdentifikator, AnnenPartVedtak.class));
 
-        LOG.info("Hentet annen parts vedtaksperioder. Antall perioder {}", perioder.size());
-        return perioder;
+        LOG.info("Hentet annen parts vedtak. Antall perioder {}", vedtak.map(v -> v.perioder().size()).orElse(0));
+        return vedtak;
     }
 
     public List<Arbeidsforhold> hentArbeidsForhold() {

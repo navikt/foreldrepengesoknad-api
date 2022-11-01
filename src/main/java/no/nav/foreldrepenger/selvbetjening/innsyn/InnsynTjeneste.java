@@ -1,6 +1,7 @@
 package no.nav.foreldrepenger.selvbetjening.innsyn;
 
 import java.util.List;
+import java.util.Optional;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -10,8 +11,8 @@ import org.springframework.stereotype.Service;
 import no.nav.foreldrepenger.common.domain.Fødselsnummer;
 import no.nav.foreldrepenger.common.domain.Saksnummer;
 import no.nav.foreldrepenger.common.innsyn.uttaksplan.UttaksplanDto;
+import no.nav.foreldrepenger.common.innsyn.v2.AnnenPartVedtak;
 import no.nav.foreldrepenger.common.innsyn.v2.Saker;
-import no.nav.foreldrepenger.common.innsyn.v2.VedtakPeriode;
 import no.nav.foreldrepenger.selvbetjening.innsyn.saker.Sak;
 
 @Service
@@ -51,8 +52,8 @@ public class InnsynTjeneste implements Innsyn {
     }
 
     @Override
-    public List<VedtakPeriode> annenPartsVedtaksperioder(AnnenPartVedtakIdentifikator annenPartVedtakIdentifikator) {
-        return connection.annenPartsVedtaksperioder(annenPartVedtakIdentifikator);
+    public Optional<AnnenPartVedtak> annenPartVedtak(AnnenPartVedtakIdentifikator annenPartVedtakIdentifikator) {
+        return connection.annenPartVedtak(annenPartVedtakIdentifikator);
     }
 
     @Override

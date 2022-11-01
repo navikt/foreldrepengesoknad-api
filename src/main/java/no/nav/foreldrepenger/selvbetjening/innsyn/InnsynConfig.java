@@ -27,7 +27,7 @@ public class InnsynConfig extends AbstractConfig {
 
 
     private static final String FPSAK_SAKER_V2 = "innsyn/v2/saker";
-    private static final String VEDTAKSPERIODER_ANNEN_PART = "innsyn/v2/annenForeldersVedtaksperioder";
+    private static final String ANNEN_PART_VEDTAK = "innsyn/v2/annenPartVedtak";
 
     @ConstructorBinding
     public InnsynConfig(URI uri, @DefaultValue("true") boolean enabled) {
@@ -55,8 +55,8 @@ public class InnsynConfig extends AbstractConfig {
         return uri(getBaseUri(), FPSAK_SAKER_V2);
     }
 
-    URI vedtaksperioderURI() {
-        return uri(getBaseUri(), VEDTAKSPERIODER_ANNEN_PART);
+    URI annenPartVedtakURI() {
+        return uri(getBaseUri(), ANNEN_PART_VEDTAK);
     }
 
     public URI arbeidsforholdURI() {

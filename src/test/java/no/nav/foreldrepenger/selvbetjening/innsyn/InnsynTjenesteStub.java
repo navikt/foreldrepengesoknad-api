@@ -2,8 +2,10 @@ package no.nav.foreldrepenger.selvbetjening.innsyn;
 
 import static java.time.LocalDate.now;
 
+import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.util.List;
+import java.util.Optional;
 import java.util.Set;
 
 import org.springframework.boot.autoconfigure.condition.ConditionalOnProperty;
@@ -12,8 +14,9 @@ import org.springframework.stereotype.Service;
 import no.nav.foreldrepenger.common.domain.Fødselsnummer;
 import no.nav.foreldrepenger.common.domain.Saksnummer;
 import no.nav.foreldrepenger.common.innsyn.uttaksplan.UttaksplanDto;
+import no.nav.foreldrepenger.common.innsyn.v2.AnnenPartVedtak;
+import no.nav.foreldrepenger.common.innsyn.v2.Dekningsgrad;
 import no.nav.foreldrepenger.common.innsyn.v2.Saker;
-import no.nav.foreldrepenger.common.innsyn.v2.VedtakPeriode;
 import no.nav.foreldrepenger.selvbetjening.innsyn.saker.Behandling;
 import no.nav.foreldrepenger.selvbetjening.innsyn.saker.Sak;
 
@@ -44,8 +47,8 @@ public class InnsynTjenesteStub implements Innsyn {
     }
 
     @Override
-    public List<VedtakPeriode> annenPartsVedtaksperioder(AnnenPartVedtakIdentifikator request) {
-        return List.of();
+    public Optional<AnnenPartVedtak> annenPartVedtak(AnnenPartVedtakIdentifikator request) {
+        return Optional.of(new AnnenPartVedtak(List.of(), LocalDate.now(), Dekningsgrad.HUNDRE));
     }
 
     @Override
