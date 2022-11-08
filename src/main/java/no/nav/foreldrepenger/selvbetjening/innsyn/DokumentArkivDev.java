@@ -5,7 +5,7 @@ import no.nav.foreldrepenger.selvbetjening.http.ProtectedRestController;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.PathVariable;
 
 import javax.inject.Inject;
 
@@ -20,9 +20,9 @@ public class DokumentArkivDev {
         this.dokumentArkivTjeneste = dokumentArkivTjeneste;
     }
 
-    @GetMapping(value = "/hent-dokument", produces = MediaType.APPLICATION_PDF_VALUE)
-    public byte[] hentDokument(@RequestParam("dokumentId") String dokumentId) {
-        return dokumentArkivTjeneste.hentDokument(dokumentId);
+    @GetMapping(value = "/hent-dokument/{journalpostId}/{dokumentId}", produces = MediaType.APPLICATION_PDF_VALUE)
+    public byte[] hentDokument(@PathVariable("journalpostId") String journalpostId, @PathVariable("dokumentId") String dokumentId) {
+        return dokumentArkivTjeneste.hentDokument(journalpostId, dokumentId);
     }
 
     @GetMapping(value = "/alle", produces = MediaType.APPLICATION_JSON_VALUE)

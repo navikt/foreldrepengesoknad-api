@@ -24,18 +24,17 @@ public class DokumentArkivTjeneste extends AbstractRestConnection {
         super(operations);
     }
 
-    public byte[] hentDokument(String dokumentId) {
-        return getForObject(dokUri(dokumentId), byte[].class);
+    public byte[] hentDokument(String journalpostId, String dokumentId) {
+        return getForObject(dokUri(journalpostId, dokumentId), byte[].class);
     }
 
     public String hentDokumentoversikt() {
         return getForObject(DOKUMENTER_URI, String.class);
     }
 
-    private URI dokUri(String dokumentId) {
+    private URI dokUri(String journalpostId, String dokumentId) {
         return UriComponentsBuilder.fromUri(BASE_URI)
-            .pathSegment("arkiv", "hent-dokument")
-            .queryParam("dokumentId", dokumentId)
+            .pathSegment("arkiv", "hent-dokument", journalpostId, dokumentId)
             .build().toUri();
     }
 
