@@ -50,7 +50,7 @@ public class UttakControllerV2 {
                                  @RequestParam(value = "minsterett", required = false) boolean minsterett,
                                  @RequestParam(value = "morHarUføretrygd", required = false) boolean morHarUføretrygd,
                                  @RequestParam(value = "harAnnenForelderTilsvarendeRettEØS", required = false) boolean harAnnenForelderTilsvarendeRettEØS,
-                                 @RequestParam(value = "familieHendelseDatoNesteSak", required = false) LocalDate familieHendelseDatoNesteSak) {
+                                 @RequestParam(value = "familieHendelseDatoNesteSak", required = false) @DateTimeFormat(pattern = FMT) LocalDate familieHendelseDatoNesteSak) {
         return beregnKonto(antallBarn, morHarRett, farHarRett, morHarAleneomsorg, farHarAleneomsorg, fødselsdato,
             termindato, omsorgsovertakelseDato, dekningsgrad, erMor, minsterett, morHarUføretrygd,
             harAnnenForelderTilsvarendeRettEØS, familieHendelseDatoNesteSak);
