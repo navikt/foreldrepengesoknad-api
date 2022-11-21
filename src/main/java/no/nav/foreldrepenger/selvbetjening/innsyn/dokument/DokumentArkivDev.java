@@ -1,4 +1,4 @@
-package no.nav.foreldrepenger.selvbetjening.innsyn;
+package no.nav.foreldrepenger.selvbetjening.innsyn.dokument;
 
 import no.nav.boot.conditionals.ConditionalOnNotProd;
 import no.nav.foreldrepenger.selvbetjening.http.ProtectedRestController;
