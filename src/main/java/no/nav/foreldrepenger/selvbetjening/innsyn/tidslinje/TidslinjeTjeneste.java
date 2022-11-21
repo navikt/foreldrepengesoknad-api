@@ -8,23 +8,23 @@ import org.springframework.web.util.UriComponentsBuilder;
 
 import javax.inject.Inject;
 import java.net.URI;
-import java.util.Map;
 
 @Service
 @ConditionalOnNotProd
 public class TidslinjeTjeneste extends AbstractRestConnection {
 
     private final static URI BASE_URI = URI.create("https://fpinfo-historikk.dev-fss-pub.nais.io/api/");
-    private final static String TIDSLINJE_URI_TMPL = BASE_URI + "tidslinje/{saksnummer}";
-
 
     @Inject
     public TidslinjeTjeneste(RestOperations operations) {
         super(operations);
     }
+
     public String hentTidslinje(String saksnummer) {
-        var uri = UriComponentsBuilder.fromHttpUrl(TIDSLINJE_URI_TMPL)
-            .buildAndExpand(Map.of("saksnummer", saksnummer))
+        var uri = UriComponentsBuilder.fromUri(BASE_URI)
+            .pathSegment("tidslinje")
+            .queryParam("saksnummer", saksnummer)
+            .build()
             .toUri();
         return getForObject(uri, String.class);
     }
