@@ -7,12 +7,15 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 
+import javax.inject.Inject;
+
 @ConditionalOnNotProd
 @ProtectedRestController("/rest/innsyn/tidslinje")
 public class TidslinjeDevController {
 
     private TidslinjeTjeneste tidslinjeTjeneste;
 
+    @Inject
     public TidslinjeDevController(TidslinjeTjeneste tidslinjeTjeneste) {
         this.tidslinjeTjeneste = tidslinjeTjeneste;
     }
