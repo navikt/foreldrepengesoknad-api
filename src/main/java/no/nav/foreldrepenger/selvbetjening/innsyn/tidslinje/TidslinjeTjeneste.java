@@ -13,7 +13,7 @@ import java.net.URI;
 @ConditionalOnNotProd
 public class TidslinjeTjeneste extends AbstractRestConnection {
 
-    private final static URI BASE_URI = URI.create("https://fpinfo-historikk.dev-fss-pub.nais.io/api/");
+    private final static URI BASE_URI = URI.create("https://fpinfo-historikk.dev-fss-pub.nais.io/api/historikk");
 
     @Inject
     public TidslinjeTjeneste(RestOperations operations) {

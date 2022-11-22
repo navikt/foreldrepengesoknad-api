@@ -20,7 +20,7 @@ public class TidslinjeDevController {
         this.tidslinjeTjeneste = tidslinjeTjeneste;
     }
 
-    @GetMapping(value = "/", produces = MediaType.APPLICATION_JSON_VALUE)
+    @GetMapping(produces = MediaType.APPLICATION_JSON_VALUE)
     public ResponseEntity<String> hentTidslinje(@RequestParam String saksnummer) {
         return ResponseEntity.ok().body(tidslinjeTjeneste.hentTidslinje(saksnummer));
     }
