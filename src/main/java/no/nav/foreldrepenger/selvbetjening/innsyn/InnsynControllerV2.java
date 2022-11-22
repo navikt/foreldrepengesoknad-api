@@ -5,6 +5,7 @@ import static no.nav.foreldrepenger.selvbetjening.innsyn.InnsynControllerV2.INNS
 import javax.inject.Inject;
 import javax.validation.Valid;
 
+import org.springframework.http.MediaType;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -32,7 +33,7 @@ public class InnsynControllerV2 {
         return innsynTjeneste.hentSakerV2();
     }
 
-    @PostMapping("/annenPartVedtak")
+    @PostMapping(path = "/annenPartVedtak", consumes = MediaType.APPLICATION_JSON_VALUE)
     public AnnenPartVedtak annenPartVedtak(@Valid @RequestBody AnnenPartVedtakIdentifikator annenPartVedtakIdentifikator) {
         return innsynTjeneste.annenPartVedtak(annenPartVedtakIdentifikator).orElse(null);
     }
