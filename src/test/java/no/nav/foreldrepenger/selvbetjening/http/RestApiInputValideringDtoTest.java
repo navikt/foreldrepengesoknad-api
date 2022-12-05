@@ -37,6 +37,8 @@ import javax.validation.constraints.Null;
 import javax.validation.constraints.Pattern;
 import javax.validation.constraints.Size;
 
+import no.nav.foreldrepenger.selvbetjening.innsending.domain.VedleggFrontend;
+import no.nav.foreldrepenger.selvbetjening.innsending.domain.VedlegglistestørrelseConstraint;
 import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.MethodSource;
 
@@ -89,6 +91,7 @@ class RestApiInputValideringDtoTest extends RestApiTestUtil {
             put(int.class, List.of(List.of(Min.class, Max.class), List.of(Digits.class)));
             put(BigDecimal.class, List.of(List.of(Min.class, Max.class, Digits.class),
                 List.of(DecimalMin.class, DecimalMax.class, Digits.class)));
+            put(List.class, List.of(List.of(VedlegglistestørrelseConstraint.class)));
 
 
             putAll(UNNTATT_FRA_VALIDERING);
@@ -107,12 +110,21 @@ class RestApiInputValideringDtoTest extends RestApiTestUtil {
                     return Collections.singletonList(List.of(Size.class));
                 }
             }
+            if (harKorrektvedlegglisteConstraint(field)) {
+                return List.of(List.of(VedlegglistestørrelseConstraint.class));
+            }
             return singletonList(List.of(Valid.class, Size.class));
 
         }
         return VALIDERINGSALTERNATIVER.get(type);
     }
 
+    private static boolean harKorrektvedlegglisteConstraint(Field field) {
+        var aktuell = brukerGenerics(field)
+            && field.getType().equals(List.class)
+            && field.getGenericType().getTypeName().contains(VedleggFrontend.class.getName());
+        return aktuell && field.isAnnotationPresent(VedlegglistestørrelseConstraint.class);
+    }
 
     private static Set<Class<?>> finnAlleDtoTyper() {
         Set<Class<?>> parametre = new TreeSet<>(Comparator.comparing(Class::getName));
