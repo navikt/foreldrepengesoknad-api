@@ -2,11 +2,17 @@ package no.nav.foreldrepenger.selvbetjening.innsending.deseralisering;
 
 import static no.nav.foreldrepenger.common.util.ResourceHandleUtil.bytesFra;
 import static org.assertj.core.api.Assertions.assertThat;
+import static org.junit.jupiter.api.Assertions.assertFalse;
+import static org.junit.jupiter.api.Assertions.assertTrue;
 
 import java.io.IOException;
 import java.net.URI;
 import java.net.URISyntaxException;
+import java.util.ArrayList;
+import java.util.List;
 
+import com.fasterxml.jackson.core.JsonProcessingException;
+import no.nav.foreldrepenger.selvbetjening.innsending.domain.VedleggFrontend;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -22,9 +28,13 @@ import no.nav.foreldrepenger.selvbetjening.config.JacksonConfiguration;
 import no.nav.foreldrepenger.selvbetjening.innsending.domain.ForeldrepengesøknadFrontend;
 import no.nav.foreldrepenger.selvbetjening.innsending.domain.SøknadFrontend;
 
+import javax.validation.Validation;
+import javax.validation.Validator;
+
 @ExtendWith(SpringExtension.class)
 @ContextConfiguration(classes = JacksonConfiguration.class)
 class SøknadFrontendDeseraliseringTest {
+    private final Validator validator = Validation.buildDefaultValidatorFactory().getValidator();
 
     @Autowired
     private ObjectMapper mapper;
@@ -155,5 +165,43 @@ class SøknadFrontendDeseraliseringTest {
         assertThat(vedlegg.getSkjemanummer()).isEqualTo("I000044");
         assertThat(vedlegg.getId()).isEqualTo("V090740687265315217194125674862219730");
         assertThat(vedlegg.getUrl()).isEqualTo(new URI("https://foreldrepengesoknad-api.dev.nav.no/rest/storage/vedlegg/b9974360-6c07-4b9d-acac-14f0f417d200"));
+    }
+
+    @Test
+    void innsendingVedlegglistestørrelsevalidatorTest() throws JsonProcessingException {
+        var forMangeSendSenere = validVedleggsliste(101, 0);
+        assertFalse(forMangeSendSenere);
+
+        var forMangeOpplastede = validVedleggsliste(0, 41);
+        assertFalse(forMangeOpplastede);
+
+        var innenforGrensene = validVedleggsliste(50, 35);
+        assertTrue(innenforGrensene);
+
+        var tomListeInnenforGrensen = validVedleggsliste(0, 0);
+        assertTrue(tomListeInnenforGrensen);
+    }
+
+    private boolean validVedleggsliste(int sendSenereVedlegg, int opplastetVedlegg) {
+        List<VedleggFrontend>  sendSenere = new ArrayList<VedleggFrontend>();
+
+        while (sendSenere.size() < sendSenereVedlegg) {
+            var nyttVedlegg = new VedleggFrontend(null, "Beskrivelse", "Id", "SEND_SENERE", "Skjemanummer", "xyz", null);
+            sendSenere.add(nyttVedlegg);
+        }
+
+        List<VedleggFrontend> opplastet = new ArrayList<>();
+        while (opplastet.size() < opplastetVedlegg) {
+            var nyttVedlegg = new VedleggFrontend(null, "Beskrivelse", "Id", null, "Skjemanummer", "xyz", null);
+            opplastet.add(nyttVedlegg);
+        }
+        sendSenere.addAll(opplastet);
+
+        var søknad = new ForeldrepengesøknadFrontend(null, "", null, null, null, null, null, null, null, "", sendSenere,
+            null, List.of(), null);
+
+        var constraintViolations = validator.validate(søknad);
+        var match = constraintViolations.stream().anyMatch(cv -> cv.getMessageTemplate().equals("Vedleggslisten kan ikke inneholde flere enn 40 opplastede vedlegg eller 100 vedlegg som skal sendes senere."));
+        return !match;
     }
 }

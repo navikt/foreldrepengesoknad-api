@@ -48,9 +48,8 @@ public abstract sealed class SøknadFrontend permits EngangsstønadFrontend, For
     private final Boolean erEndringssøknad;
     @Pattern(regexp = FRITEKST)
     private final String tilleggsopplysninger;
-    @Valid
-    @Size(max = 40)
-    private final List<VedleggFrontend> vedlegg;
+    @VedlegglistestørrelseConstraint
+    private final List<@Valid VedleggFrontend> vedlegg;
 
     @JsonCreator
     protected SøknadFrontend(LocalDateTime opprettet, String type, Saksnummer saksnummer, SøkerFrontend søker, BarnFrontend barn,
