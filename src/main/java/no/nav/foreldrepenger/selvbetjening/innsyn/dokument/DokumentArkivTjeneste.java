@@ -2,6 +2,7 @@ package no.nav.foreldrepenger.selvbetjening.innsyn.dokument;
 
 import no.nav.boot.conditionals.ConditionalOnNotProd;
 import no.nav.foreldrepenger.selvbetjening.http.AbstractRestConnection;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 import org.springframework.web.client.RestOperations;
 import org.springframework.web.util.UriComponentsBuilder;
@@ -13,15 +14,14 @@ import java.net.URI;
 @ConditionalOnNotProd
 public class DokumentArkivTjeneste extends AbstractRestConnection {
 
-    private final static URI BASE_URI = URI.create("https://fpinfo-historikk.dev-fss-pub.nais.io/api/");
-    private final static URI DOKUMENTER_URI = UriComponentsBuilder.fromUri(BASE_URI)
-        .pathSegment("arkiv", "alle")
-        .build().toUri();
+    private URI baseUri;
 
 
     @Inject
-    public DokumentArkivTjeneste(RestOperations operations) {
+    public DokumentArkivTjeneste(@Value("${historikk.uri}") URI baseUri,
+                                 RestOperations operations) {
         super(operations);
+        this.baseUri = baseUri;
     }
 
     public byte[] hentDokument(String journalpostId, String dokumentId) {
@@ -29,19 +29,25 @@ public class DokumentArkivTjeneste extends AbstractRestConnection {
     }
 
     public String hentDokumentoversikt() {
-        return getForObject(DOKUMENTER_URI, String.class);
+        return getForObject(dokumenterUri(), String.class);
     }
 
     private URI dokUri(String journalpostId, String dokumentId) {
-        return UriComponentsBuilder.fromUri(BASE_URI)
+        return UriComponentsBuilder.fromUri(baseUri)
             .pathSegment("arkiv", "hent-dokument", journalpostId, dokumentId)
             .build().toUri();
     }
 
     @Override
     public URI pingURI() {
-        return UriComponentsBuilder.fromUri(BASE_URI)
+        return UriComponentsBuilder.fromUri(baseUri)
             .pathSegment("actuator/health/liveness")
+            .build().toUri();
+    }
+
+    private URI dokumenterUri() {
+        return UriComponentsBuilder.fromUri(baseUri)
+            .pathSegment("arkiv", "alle")
             .build().toUri();
     }
 
