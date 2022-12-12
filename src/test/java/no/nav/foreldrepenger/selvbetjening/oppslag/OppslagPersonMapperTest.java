@@ -98,7 +98,7 @@ class OppslagPersonMapperTest {
 
         var barnFnr = new Fødselsnummer("11111122222");
         var barnFødselsdato = LocalDate.now().minusMonths(5);
-        var barnFelles = new Barn(barnFnr, barnFødselsdato, null, Kjønn.K, annenPartFelles);
+        var barnFelles = new Barn(barnFnr, barnFødselsdato, null, null, Kjønn.K, annenPartFelles);
 
         var søkerFnr = new Fødselsnummer("12345612345");
         var søkerAktørId = AktørId.valueOf("9988888877777");
@@ -114,8 +114,8 @@ class OppslagPersonMapperTest {
         var barnFnr2 = new Fødselsnummer("22222233333");
         var barnFødselsdato1 = LocalDate.now().minusMonths(18);
         var barnFødselsdato2 = LocalDate.now().minusMonths(5);
-        var barnFelles1 = new Barn(barnFnr1, barnFødselsdato1, null, Kjønn.K, null);
-        var barnFelles2 = new Barn(barnFnr2, barnFødselsdato2, null, Kjønn.M, null);
+        var barnFelles1 = new Barn(barnFnr1, barnFødselsdato1, null, null, Kjønn.K, null);
+        var barnFelles2 = new Barn(barnFnr2, barnFødselsdato2, null, null, Kjønn.M, null);
 
         var søkerFnr = new Fødselsnummer("12345612345");
         var søkerAktørId = AktørId.valueOf("9988888877777");

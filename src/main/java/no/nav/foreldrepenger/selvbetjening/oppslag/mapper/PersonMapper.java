@@ -51,7 +51,7 @@ public final class PersonMapper {
             Optional.ofNullable(barn.navn()).map(no.nav.foreldrepenger.common.domain.Navn::mellomnavn).orElse(null),
             Optional.ofNullable(barn.navn()).map(no.nav.foreldrepenger.common.domain.Navn::etternavn).orElse(null),
             Optional.ofNullable(barn.kjønn()).map(Enum::name).orElse(null),
-            barn.fødselsdato(), tilAnnenforelder(barn.annenPart()));
+            barn.fødselsdato(), barn.dødsdato(), tilAnnenforelder(barn.annenPart()));
     }
 
     private static AnnenForelderFrontend tilAnnenforelder(AnnenPart annenPart) {
