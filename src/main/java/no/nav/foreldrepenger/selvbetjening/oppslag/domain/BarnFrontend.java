@@ -14,6 +14,7 @@ public record BarnFrontend(String fnr,
                            String etternavn,
                            String kjønn,
                            LocalDate fødselsdato,
+                           LocalDate dødsdato,
                            AnnenForelderFrontend annenForelder) {
 
     @Override
@@ -25,6 +26,7 @@ public record BarnFrontend(String fnr,
             ", etternavn='" + mask(etternavn) + '\'' +
             ", kjønn='" + kjønn + '\'' +
             ", fødselsdato=" + fødselsdato +
+            ", dødsdato=" + dødsdato +
             ", annenForelder=" + annenForelder +
             '}';
     }
