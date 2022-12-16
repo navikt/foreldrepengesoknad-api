@@ -11,6 +11,7 @@ import java.util.Set;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import no.nav.foreldrepenger.common.domain.Fødselsnummer;
 import no.nav.foreldrepenger.common.domain.felles.AnnenPart;
 import no.nav.foreldrepenger.selvbetjening.oppslag.domain.AnnenForelderFrontend;
 import no.nav.foreldrepenger.selvbetjening.oppslag.domain.BarnFrontend;
@@ -46,7 +47,7 @@ public final class PersonMapper {
 
     private static BarnFrontend tilBarn(no.nav.foreldrepenger.common.domain.Barn barn) {
         return new BarnFrontend(
-            barn.fnr().value(),
+            Optional.ofNullable(barn.fnr()).map(Fødselsnummer::value).orElse(null),
             Optional.ofNullable(barn.navn()).map(no.nav.foreldrepenger.common.domain.Navn::fornavn).orElse(null),
             Optional.ofNullable(barn.navn()).map(no.nav.foreldrepenger.common.domain.Navn::mellomnavn).orElse(null),
             Optional.ofNullable(barn.navn()).map(no.nav.foreldrepenger.common.domain.Navn::etternavn).orElse(null),
