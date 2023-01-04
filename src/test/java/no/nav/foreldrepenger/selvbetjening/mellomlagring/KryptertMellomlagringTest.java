@@ -13,8 +13,6 @@ import org.springframework.mock.web.MockMultipartFile;
 import org.springframework.test.context.junit.jupiter.SpringExtension;
 import org.springframework.util.unit.DataSize;
 
-import com.google.gson.Gson;
-
 import no.nav.foreldrepenger.common.util.TokenUtil;
 import no.nav.foreldrepenger.selvbetjening.innsending.pdf.PdfGeneratorStub;
 import no.nav.foreldrepenger.selvbetjening.vedlegg.DelegerendeVedleggSjekker;
@@ -26,7 +24,6 @@ import no.nav.foreldrepenger.selvbetjening.vedlegg.virusscan.ClamAvVirusScanner;
 @ExtendWith(SpringExtension.class)
 class KryptertMellomlagringTest {
 
-    private static final Gson MAPPER = new Gson();
     @Mock
     ClamAvVirusScanner scanner;
     @Mock

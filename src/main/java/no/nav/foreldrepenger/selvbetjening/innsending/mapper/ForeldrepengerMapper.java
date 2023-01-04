@@ -4,7 +4,6 @@ import static no.nav.foreldrepenger.selvbetjening.innsending.mapper.CommonMapper
 import static no.nav.foreldrepenger.selvbetjening.innsending.mapper.CommonMapper.tilMedlemskap;
 import static no.nav.foreldrepenger.selvbetjening.innsending.mapper.CommonMapper.tilOpptjening;
 import static no.nav.foreldrepenger.selvbetjening.innsending.mapper.CommonMapper.tilRelasjonTilBarn;
-import static org.apache.commons.lang3.BooleanUtils.toBoolean;
 
 import java.util.ArrayList;
 import java.util.List;

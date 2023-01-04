@@ -1,12 +1,12 @@
 package no.nav.foreldrepenger.selvbetjening.http.interceptors;
 
-import static java.util.concurrent.TimeUnit.MILLISECONDS;
 import static org.springframework.http.HttpStatus.Series.CLIENT_ERROR;
 import static org.springframework.http.HttpStatus.Series.SERVER_ERROR;
 
 import java.io.IOException;
+import java.time.Duration;
+import java.time.Instant;
 
-import org.apache.commons.lang3.time.StopWatch;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.http.HttpRequest;
@@ -23,22 +23,19 @@ public class TimingAndLoggingClientHttpRequestInterceptor implements ClientHttpR
     @Override
     public ClientHttpResponse intercept(HttpRequest request, byte[] body, ClientHttpRequestExecution execution)
             throws IOException {
-
-        StopWatch timer = new StopWatch();
-        timer.start();
+        var start = Instant.now();
         ClientHttpResponse respons = execution.execute(request, body);
-        timer.stop();
-        log(request, respons.getStatusCode(), timer);
+        var finish = Instant.now();
+        var ms = Duration.between(start, finish).toMillis();
+        log(request, respons.getStatusCode(), ms);
         return respons;
     }
 
-    private static void log(HttpRequest request, HttpStatus code, StopWatch timer) {
+    private static void log(HttpRequest request, HttpStatus code, long ms) {
         if (hasError(code)) {
-            LOG.warn("{} - {} - ({}). Dette tok {}ms", request.getMethodValue(), request.getURI().getPath(),
-                    code, timer.getTime(MILLISECONDS));
+            LOG.warn("{} - {} - ({}). Dette tok {}ms", request.getMethodValue(), request.getURI().getPath(), code, ms);
         } else {
-            LOG.info("{} - {} - ({}). Dette tok {}ms", request.getMethodValue(), request.getURI().getPath(),
-                    code, timer.getTime(MILLISECONDS));
+            LOG.info("{} - {} - ({}). Dette tok {}ms", request.getMethodValue(), request.getURI().getPath(), code, ms);
         }
     }
 
