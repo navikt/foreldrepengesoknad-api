@@ -6,15 +6,16 @@ import static no.nav.foreldrepenger.common.util.MDCUtil.callId;
 import static org.springframework.core.NestedExceptionUtils.getMostSpecificCause;
 
 import java.time.LocalDateTime;
+import java.util.Arrays;
 import java.util.List;
 import java.util.Objects;
+import java.util.stream.Collectors;
 
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.MethodArgumentNotValidException;
 
 import com.fasterxml.jackson.annotation.JsonFormat;
 import com.fasterxml.jackson.annotation.JsonInclude;
-import com.google.common.collect.Lists;
 
 @JsonInclude(JsonInclude.Include.NON_NULL)
 class ApiError {
@@ -54,7 +55,7 @@ class ApiError {
     }
 
     private static List<String> messages(Throwable t, String destination, Object... objects) {
-        var messages = Lists.newArrayList(objects);
+        var messages = Arrays.stream(objects).collect(Collectors.toList());
         var cause = getMostSpecificCause(t);
         if (!(cause instanceof MethodArgumentNotValidException)) {
             messages.add(cause.getMessage());

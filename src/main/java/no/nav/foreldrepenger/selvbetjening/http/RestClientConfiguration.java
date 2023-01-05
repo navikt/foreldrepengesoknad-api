@@ -32,8 +32,6 @@ import org.springframework.web.client.RestOperations;
 import org.springframework.web.servlet.config.annotation.CorsRegistry;
 import org.springframework.web.servlet.config.annotation.WebMvcConfigurer;
 
-import com.google.common.base.Splitter;
-
 import no.nav.security.token.support.client.core.oauth2.OAuth2AccessTokenService;
 import no.nav.security.token.support.client.spring.ClientConfigurationProperties;
 import no.nav.security.token.support.client.spring.oauth2.ClientConfigurationPropertiesMatcher;
@@ -71,7 +69,7 @@ public class RestClientConfiguration implements WebMvcConfigurer {
     public ClientConfigurationPropertiesMatcher tokenxClientConfigMatcher() {
         return (properties, uri) -> {
             LOG.trace("Oppslag token X konfig for {}", uri.getHost());
-            var cfg = properties.getRegistration().get(Splitter.on(".").splitToList(uri.getHost()).get(0));
+            var cfg = properties.getRegistration().get(uri.getHost().split("\\.")[0]);
             if (cfg != null) {
                 LOG.trace("Oppslag token X konfig for {} OK", uri.getHost());
             } else {
