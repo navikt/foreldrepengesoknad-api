@@ -96,7 +96,7 @@ public class InnsendingTjeneste implements Innsending {
         return "V" + IDGENERATOR.nextLong();
     }
 
-    private void hentKryptertVedleggOgSjekkerVedlegg(List<VedleggFrontend> vedlegg) {
+    public void hentKryptertVedleggOgSjekkerVedlegg(List<VedleggFrontend> vedlegg) {
         if (!vedlegg.isEmpty()) {
             LOG.info("Henter og sjekker mellomlagring for {} vedlegg", vedlegg.size());
             vedlegg.forEach(this::hentVedleggBytes);
