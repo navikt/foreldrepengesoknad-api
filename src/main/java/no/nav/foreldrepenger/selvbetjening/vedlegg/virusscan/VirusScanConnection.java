@@ -13,7 +13,7 @@ import no.nav.foreldrepenger.selvbetjening.http.AbstractRestConnection;
 import no.nav.foreldrepenger.selvbetjening.vedlegg.AttachmentVirusException;
 
 @Component
-class VirusScanConnection extends AbstractRestConnection {
+public class VirusScanConnection extends AbstractRestConnection {
 
     private static final Logger LOG = LoggerFactory.getLogger(VirusScanConnection.class);
 
@@ -40,7 +40,7 @@ class VirusScanConnection extends AbstractRestConnection {
         return "OK";
     }
 
-    void scan(byte[] bytes, String uuid) {
+    public void scan(byte[] bytes, String uuid) {
         if (isEnabled()) {
             if (bytes != null) {
                 LOG.trace("Scanner {}", uuid);

@@ -39,7 +39,7 @@ public class Attachment {
         return of(file.getOriginalFilename(), getBytes(file), MediaType.valueOf(file.getContentType()));
     }
 
-    private static Attachment of(String fileName, byte[] bytes, MediaType mediaType) {
+    public static Attachment of(String fileName, byte[] bytes, MediaType mediaType) {
         return new Attachment(fileName, bytes, mediaType);
     }
 
