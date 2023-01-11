@@ -5,13 +5,13 @@ import java.util.Optional;
 import org.apache.tika.Tika;
 import org.springframework.http.MediaType;
 
-final class VedleggUtil {
+public final class VedleggUtil {
 
     private VedleggUtil() {
 
     }
 
-    static MediaType mediaType(byte[] bytes) {
+    public static MediaType mediaType(byte[] bytes) {
         return Optional.ofNullable(bytes)
                 .filter(b -> b.length > 0)
                 .map(b -> MediaType.valueOf(new Tika().detect(b)))

@@ -4,7 +4,7 @@ import org.apache.pdfbox.pdmodel.encryption.InvalidPasswordException;
 
 public class AttachmentPasswordProtectedException extends AttachmentException {
 
-    public AttachmentPasswordProtectedException(InvalidPasswordException e) {
-        super("Kryptert PDF", e);
+    public AttachmentPasswordProtectedException() {
+        super("Dokumentet kan ikke håndteres av NAV ettersom det er passordbeskyttet.");
     }
 }

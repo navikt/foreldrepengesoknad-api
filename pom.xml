@@ -39,10 +39,10 @@
 
         <springdoc.version>1.6.11</springdoc.version>
         <nimbus-jose-jwt.version>8.23</nimbus-jose-jwt.version>
-		<tika.version>2.4.1</tika.version>
+		<tika.version>2.6.0</tika.version>
 		<logback.logstash.version>7.2</logback.logstash.version>
 		<nv.version>1.29</nv.version>
-		<pdfbox.version>2.0.26</pdfbox.version>
+		<pdfbox.version>2.0.27</pdfbox.version>
 		<jacoco.version>0.8.8</jacoco.version>
 		<gcp.version>0.177.0</gcp.version>
 		<simpleclient.version>0.16.0</simpleclient.version>

@@ -56,7 +56,7 @@ public class VirusScanConnection extends AbstractRestConnection {
                     return;
                 }
                 LOG.warn("Fant virus!, status {}", scanResult.getResult());
-                throw new AttachmentVirusException(uuid);
+                throw new AttachmentVirusException("Virus påvist i dokument med id " + uuid);
             }
             LOG.info("Ingen scanning av null bytes", bytes);
             return;

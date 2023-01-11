@@ -26,7 +26,8 @@ public class KryptertMellomlagring {
     private final MellomlagringKrypto krypto;
     private final VedleggSjekker sjekker;
 
-    public KryptertMellomlagring(Mellomlagring mellomlagring, MellomlagringKrypto krypto,
+    public KryptertMellomlagring(Mellomlagring mellomlagring,
+                                 MellomlagringKrypto krypto,
                                  @Qualifier(DELEGERENDE) VedleggSjekker sjekker) {
         this.mellomlagring = mellomlagring;
         this.krypto = krypto;

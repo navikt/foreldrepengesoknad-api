@@ -33,7 +33,8 @@ public class PDFEncryptionVedleggSjekker implements VedleggSjekker {
         if (bytes != null && APPLICATION_PDF.equals(mediaType(bytes))) {
             try (var doc = PDDocument.load(bytes)) {
             } catch (InvalidPasswordException e) {
-                throw new AttachmentPasswordProtectedException(e);
+                LOG.info("Pdf feiler sjekk for kryptering", e);
+                throw new AttachmentPasswordProtectedException();
             } catch (Exception e) {
                 LOG.warn("Kunne ikke sjekke {}", limit(bytes), e);
             }
