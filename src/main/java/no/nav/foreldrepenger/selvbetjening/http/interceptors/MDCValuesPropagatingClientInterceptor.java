@@ -21,7 +21,7 @@ public class MDCValuesPropagatingClientInterceptor implements ClientHttpRequestI
     public ClientHttpResponse intercept(HttpRequest request, byte[] body, ClientHttpRequestExecution execution)
             throws IOException {
 
-        propagateIfSet(request, NAV_CALL_ID, NAV_CONSUMER_ID);
+        propagateIfSet(request, NAV_CALL_ID, NAV_CONSUMER_ID, "JTI");
         return execution.execute(request, body);
     }
 
