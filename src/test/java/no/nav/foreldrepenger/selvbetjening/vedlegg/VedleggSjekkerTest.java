@@ -2,10 +2,12 @@ package no.nav.foreldrepenger.selvbetjening.vedlegg;
 
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.assertThatThrownBy;
+import static org.junit.jupiter.api.Assertions.assertDoesNotThrow;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.doThrow;
 import static org.mockito.Mockito.when;
 
+import java.io.IOException;
 import java.net.URI;
 import java.util.List;
 import java.util.Optional;
@@ -14,6 +16,7 @@ import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
+import org.springframework.core.io.ClassPathResource;
 import org.springframework.http.MediaType;
 import org.springframework.util.unit.DataSize;
 
@@ -127,6 +130,22 @@ class VedleggSjekkerTest {
         assertThat(vedleggene.get(0).getUrl()).isEqualTo(nyVedleggHeltLik.getUrl());
     }
 
+    @Test
+    void ikkeStøttetFormat() throws IOException {
+        var formatSjekker = new StøttetFormatSjekker();
+
+        var ikkeStøttetOctetStreamFil = vedlegg(1);
+        assertThatThrownBy(() -> formatSjekker.sjekk(ikkeStøttetOctetStreamFil)).isInstanceOf(AttachmentTypeUnsupportedException.class);
+
+        var støttedeFormaterListe = List.of(
+            fraResource("pdf/landscape.jpg"),
+            fraResource("pdf/nav-logo.png"),
+            fraResource("pdf/junit-test.pdf"));
+        støttedeFormaterListe.stream()
+             .map(bytes -> Attachment.of("filnavn", bytes, MediaType.IMAGE_JPEG))
+             .forEach(attachment -> assertDoesNotThrow(() -> formatSjekker.sjekk(attachment)));
+    }
+
     private static Attachment attachment(int megabytes) {
         var content = new byte[((int) DataSize.ofMegabytes(megabytes).toBytes())];
         return Attachment.of("en pdf", content, MediaType.APPLICATION_PDF);
@@ -136,5 +155,9 @@ class VedleggSjekkerTest {
         var uuid = "802e2ce7-8106-46cf-afdb-2aecc2b6de7c";
         var content = new byte[((int) DataSize.ofMegabytes(megabytes).toBytes())];
         return new VedleggFrontend(content, "En stoooor pdf!", "V00001", null, "I000038", uuid, URI.create("https://foreldrepengesoknad-api.nav.no/" + uuid));
+    }
+
+    private static byte[] fraResource(String classPathResource) throws IOException {
+        return new ClassPathResource(classPathResource).getInputStream().readAllBytes();
     }
 }
