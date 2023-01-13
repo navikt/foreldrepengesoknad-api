@@ -41,13 +41,11 @@ class VedleggSjekkerTest {
     @Mock
     private VirusScanConnection virusScanConnection;
 
+    private static final StørrelseVedleggSjekker størrelseVedleggSjekker = new StørrelseVedleggSjekker(DataSize.ofMegabytes(7), DataSize.ofMegabytes(3));
+
 
     @Test
     void størrelseVedleggSjekkerhappyCase() {
-        var maxTotal = DataSize.ofMegabytes(7);
-        var maxEnkel = DataSize.ofMegabytes(3);
-        var størrelseVedleggSjekker = new StørrelseVedleggSjekker(maxTotal, maxEnkel);
-
         // Hvert enkelt eller total overstiger ikke maks
         størrelseVedleggSjekker.sjekk(attachment(2), attachment(2));
         størrelseVedleggSjekker.sjekk(vedlegg(2), vedlegg(2));
@@ -55,10 +53,6 @@ class VedleggSjekkerTest {
 
     @Test
     void størrelseVedleggSjekkerHiverAttachmentTooLargeExceptionVedForStortEnkeltVedlegg() {
-        var maxTotal = DataSize.ofMegabytes(7);
-        var maxEnkel = DataSize.ofMegabytes(3);
-        var størrelseVedleggSjekker = new StørrelseVedleggSjekker(maxTotal, maxEnkel);
-
         var attachmentOverMaxEnkel = attachment(4);
         var vedleggOverMaxEnkel = vedlegg(4);
 
@@ -69,10 +63,6 @@ class VedleggSjekkerTest {
     }
     @Test
     void størrelseVedleggSjekkerHiverAttachmentsTooLargeExceptionVedForStoreVedleggTotalt() {
-        var maxTotal = DataSize.ofMegabytes(7);
-        var maxEnkel = DataSize.ofMegabytes(3);
-        var størrelseVedleggSjekker = new StørrelseVedleggSjekker(maxTotal, maxEnkel);
-
         var attachment2MB = attachment(2);
         var vedlegg2MB = vedlegg(2);
 
@@ -106,32 +96,7 @@ class VedleggSjekkerTest {
     }
 
     @Test
-    void verifiserAtVedleggSjekkeneIkkeModifisererInnholdetUtenomÅLeggeTilContent() {
-        var vedlegg = vedlegg(4);
-        var vedleggene = List.of(vedlegg);
-        var delegerendeVedleggSjekker = new DelegerendeVedleggSjekker(
-            new StørrelseVedleggSjekker(DataSize.ofMegabytes(64), DataSize.ofMegabytes(16)),
-            new PDFEncryptionVedleggSjekker(),
-            new ClamAvVirusScanner(virusScanConnection)
-        );
-        var innsendingTjeneste = new InnsendingTjeneste(connection, mellomlagring, delegerendeVedleggSjekker, pdfGenerator);
-        when(mellomlagring.lesKryptertVedlegg(vedlegg.getUuid())).thenReturn(Optional.of(attachment(4)));
-
-        innsendingTjeneste.hentKryptertVedleggOgSjekkerVedlegg(vedleggene);
-
-        var nyVedleggHeltLik = vedlegg(4);
-        assertThat(vedleggene).hasSize(1);
-        assertThat(vedleggene.get(0).getContent()).isEqualTo(nyVedleggHeltLik.getContent());
-        assertThat(vedleggene.get(0).getBeskrivelse()).isEqualTo(nyVedleggHeltLik.getBeskrivelse());
-        assertThat(vedleggene.get(0).getId()).isEqualTo(nyVedleggHeltLik.getId());
-        assertThat(vedleggene.get(0).getInnsendingsType()).isEqualTo(nyVedleggHeltLik.getInnsendingsType()).isNull();
-        assertThat(vedleggene.get(0).getSkjemanummer()).isEqualTo(nyVedleggHeltLik.getSkjemanummer());
-        assertThat(vedleggene.get(0).getUuid()).isEqualTo(nyVedleggHeltLik.getUuid());
-        assertThat(vedleggene.get(0).getUrl()).isEqualTo(nyVedleggHeltLik.getUrl());
-    }
-
-    @Test
-    void ikkeStøttetFormat() throws IOException {
+    void detekterStøttetOgIkkeStøttetFormat() throws IOException {
         var formatSjekker = new StøttetFormatSjekker();
 
         var ikkeStøttetOctetStreamFil = vedlegg(1);
@@ -144,6 +109,27 @@ class VedleggSjekkerTest {
         støttedeFormaterListe.stream()
              .map(bytes -> Attachment.of("filnavn", bytes, MediaType.IMAGE_JPEG))
              .forEach(attachment -> assertDoesNotThrow(() -> formatSjekker.sjekk(attachment)));
+    }
+
+    @Test
+    void verifiserAtInnsendingtjenesteHenterVedlegg() {
+        var vedlegg = vedlegg(1);
+        var vedleggene = List.of(vedlegg);
+
+        var innsendingTjeneste = new InnsendingTjeneste(connection, mellomlagring, pdfGenerator);
+        when(mellomlagring.lesKryptertVedlegg(vedlegg.getUuid())).thenReturn(Optional.of(attachment(1)));
+
+        innsendingTjeneste.hentMellomlagredeFiler(vedleggene);
+
+        var nyVedleggHeltLik = vedlegg(1);
+        assertThat(vedleggene).hasSize(1);
+        assertThat(vedleggene.get(0).getContent()).isEqualTo(nyVedleggHeltLik.getContent());
+        assertThat(vedleggene.get(0).getBeskrivelse()).isEqualTo(nyVedleggHeltLik.getBeskrivelse());
+        assertThat(vedleggene.get(0).getId()).isEqualTo(nyVedleggHeltLik.getId());
+        assertThat(vedleggene.get(0).getInnsendingsType()).isEqualTo(nyVedleggHeltLik.getInnsendingsType()).isNull();
+        assertThat(vedleggene.get(0).getSkjemanummer()).isEqualTo(nyVedleggHeltLik.getSkjemanummer());
+        assertThat(vedleggene.get(0).getUuid()).isEqualTo(nyVedleggHeltLik.getUuid());
+        assertThat(vedleggene.get(0).getUrl()).isEqualTo(nyVedleggHeltLik.getUrl());
     }
 
     private static Attachment attachment(int megabytes) {
