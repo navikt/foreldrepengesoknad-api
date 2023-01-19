@@ -17,7 +17,8 @@ public class PdfGeneratorConfig extends AbstractConfig {
     private static final String DEFAULT_PING_PATH = "is_alive";
 
     @ConstructorBinding
-    public PdfGeneratorConfig(URI uri, @DefaultValue("true") boolean enabled, String key) {
+    public PdfGeneratorConfig(@DefaultValue("http://fppdfgen") URI uri,
+                              @DefaultValue("true") boolean enabled) {
         super(uri, enabled);
     }
 
