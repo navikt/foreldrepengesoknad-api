@@ -16,7 +16,7 @@ mellomlagring:
     navn: mellomlagring-prod
 
 virus:
-  uri: http://clamav.clamav/scan
+  uri: http://clamav.nais-system/scan
 
 no.nav:
   security:
