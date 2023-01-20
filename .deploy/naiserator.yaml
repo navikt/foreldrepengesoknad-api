@@ -24,7 +24,7 @@ spec:
       rules:
         - application: fppdfgen
         - application: clamav
-          namespace: clamav
+          namespace: nais-system
       external:
         {{#each external as |url|}}
         - host: {{url}}
