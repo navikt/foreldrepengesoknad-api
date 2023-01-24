@@ -52,6 +52,8 @@
     <logger name="org.apache.pdfbox.pdmodel.font" level="ERROR" />
     <logger name="org.apache.pdfbox.rendering.CIDType0Glyph2D" level="ERROR" />
     <logger name="org.apache.pdfbox.pdfparser.COSParser" level="ERROR" />
+    <logger name="org.apache.pdfbox.pdfparser.BaseParser" level="ERROR" />
+
     <logger name="secureLogger" level="INFO" additivity="false">
         <appender-ref ref="secureLogger" />
     </logger>
