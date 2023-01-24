@@ -33,11 +33,11 @@
 		<project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
 		<project.reporting.outputEncoding>UTF-8</project.reporting.outputEncoding>
 
-    <selvbetjening-felles.version>0.8.38</selvbetjening-felles.version>
+        <selvbetjening-felles.version>0.8.38</selvbetjening-felles.version>
 		<token-validation-version>2.1.9</token-validation-version>
-    <boot-conditionals.version>5.0.2</boot-conditionals.version>
+        <boot-conditionals.version>5.0.2</boot-conditionals.version>
 
-    <springdoc.version>1.6.14</springdoc.version>
+        <springdoc.version>1.6.14</springdoc.version>
 		<tika.version>2.6.0</tika.version>
 		<logback.logstash.version>7.2</logback.logstash.version>
 		<nv.version>1.29</nv.version>
