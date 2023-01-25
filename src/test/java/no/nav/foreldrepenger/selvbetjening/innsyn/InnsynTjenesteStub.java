@@ -48,7 +48,7 @@ public class InnsynTjenesteStub implements Innsyn {
 
     @Override
     public Optional<AnnenPartVedtak> annenPartVedtak(AnnenPartVedtakIdentifikator request) {
-        return Optional.of(new AnnenPartVedtak(List.of(), LocalDate.now(), Dekningsgrad.HUNDRE));
+        return Optional.of(new AnnenPartVedtak(List.of(), LocalDate.now(), Dekningsgrad.HUNDRE, 0));
     }
 
     @Override
