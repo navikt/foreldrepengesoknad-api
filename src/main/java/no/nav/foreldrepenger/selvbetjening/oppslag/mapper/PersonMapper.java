@@ -6,7 +6,6 @@ import static no.nav.foreldrepenger.selvbetjening.util.IkkeNordiskEØSLand.ikkeN
 
 import java.util.List;
 import java.util.Optional;
-import java.util.Set;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -39,7 +38,7 @@ public final class PersonMapper {
 
     }
 
-    private static List<BarnFrontend> tilBarn(Set<no.nav.foreldrepenger.common.domain.Barn> barn) {
+    private static List<BarnFrontend> tilBarn(List<no.nav.foreldrepenger.common.domain.Barn> barn) {
         return barn.stream()
             .map(PersonMapper::tilBarn)
             .toList();
