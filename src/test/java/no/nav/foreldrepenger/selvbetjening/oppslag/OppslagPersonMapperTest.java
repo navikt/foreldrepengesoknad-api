@@ -6,7 +6,6 @@ import static org.assertj.core.api.Assertions.assertThat;
 
 import java.time.LocalDate;
 import java.util.List;
-import java.util.Set;
 
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -106,7 +105,7 @@ class OppslagPersonMapperTest {
         var søkerEtternavn = "Flakk";
         return new Person(søkerAktørId, søkerFnr, LocalDate.now().minusYears(25),
             new Navn(søkerFornavn, null,  søkerEtternavn), Kjønn.M, Målform.NB, CountryCode.NO,
-            Bankkonto.UKJENT, Set.of(barnFelles));
+            Bankkonto.UKJENT, List.of(barnFelles));
     }
 
     public static Person personUtenAnnenpart() {
@@ -123,7 +122,7 @@ class OppslagPersonMapperTest {
         var søkerEtternavn = "Flakk";
         return new Person(søkerAktørId, søkerFnr, LocalDate.now().minusYears(30),
             new Navn(søkerFornavn, null,  søkerEtternavn), Kjønn.M, Målform.NB, CountryCode.NO, null,
-                Set.of(barnFelles1, barnFelles2));
+                List.of(barnFelles1, barnFelles2));
     }
 
     public static List<Arbeidsforhold> arbeidsforhold() {
