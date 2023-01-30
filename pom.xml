@@ -33,7 +33,7 @@
 		<project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
 		<project.reporting.outputEncoding>UTF-8</project.reporting.outputEncoding>
 
-        <selvbetjening-felles.version>0.8.43</selvbetjening-felles.version>
+        <selvbetjening-felles.version>0.8.44</selvbetjening-felles.version>
 		<token-validation-version>2.1.9</token-validation-version>
         <boot-conditionals.version>5.0.2</boot-conditionals.version>
 
