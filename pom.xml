@@ -43,7 +43,7 @@
 		<nv.version>1.29</nv.version>
 		<pdfbox.version>2.0.27</pdfbox.version>
 		<jacoco.version>0.8.8</jacoco.version>
-		<gcp.version>0.185.0</gcp.version>
+		<gcp.version>0.186.0</gcp.version>
 		<simpleclient.version>0.16.0</simpleclient.version>
 	</properties>
 	<dependencyManagement>
