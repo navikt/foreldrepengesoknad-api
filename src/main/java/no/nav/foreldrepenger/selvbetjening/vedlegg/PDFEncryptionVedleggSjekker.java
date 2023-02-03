@@ -1,7 +1,6 @@
 package no.nav.foreldrepenger.selvbetjening.vedlegg;
 
 import static no.nav.foreldrepenger.common.util.StreamUtil.safeStream;
-import static no.nav.foreldrepenger.common.util.StringUtil.limit;
 import static no.nav.foreldrepenger.selvbetjening.vedlegg.VedleggUtil.mediaType;
 import static org.springframework.http.MediaType.APPLICATION_PDF;
 
@@ -36,7 +35,7 @@ public class PDFEncryptionVedleggSjekker implements VedleggSjekker {
                 LOG.info("Pdf feiler sjekk for kryptering", e);
                 throw new AttachmentPasswordProtectedException();
             } catch (Exception e) {
-                LOG.warn("Kunne ikke sjekke {}", limit(bytes), e);
+                throw new AttachmentUnreadableException("Pdf er uleselig");
             }
         }
     }
