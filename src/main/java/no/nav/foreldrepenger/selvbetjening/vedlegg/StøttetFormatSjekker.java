@@ -30,7 +30,7 @@ public class StøttetFormatSjekker implements VedleggSjekker {
 
     private static void check(byte[] content) {
         var detectedType = mediaType(content);
-        if (!supportedTypes.contains(detectedType)) {
+        if (detectedType != null && !supportedTypes.contains(detectedType)) {
             throw new AttachmentTypeUnsupportedException(detectedType);
         };
     }
