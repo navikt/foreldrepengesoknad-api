@@ -59,6 +59,9 @@ public class StørrelseVedleggSjekker implements VedleggSjekker {
 
     private void sjekkStørrelse(Attachment vedlegg) {
         LOG.info("Sjekker størrelse for {}", vedlegg);
+        if (vedlegg.size.toBytes() == 0) {
+            throw new AttachmentUnreadableException("Vedlegget er uten innhold");
+        }
         if (vedlegg.size.toBytes() > maxEnkelSize.toBytes()) {
             throw new AttachmentTooLargeException(vedlegg.size, maxEnkelSize);
         }

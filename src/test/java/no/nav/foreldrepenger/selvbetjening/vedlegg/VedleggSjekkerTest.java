@@ -41,14 +41,14 @@ class VedleggSjekkerTest {
     @Mock
     private VirusScanConnection virusScanConnection;
 
-    private static final StørrelseVedleggSjekker størrelseVedleggSjekker = new StørrelseVedleggSjekker(DataSize.ofMegabytes(7), DataSize.ofMegabytes(3));
+    private static final StørrelseVedleggSjekker sjekker = new StørrelseVedleggSjekker(DataSize.ofMegabytes(7), DataSize.ofMegabytes(3));
 
 
     @Test
     void størrelseVedleggSjekkerhappyCase() {
         // Hvert enkelt eller total overstiger ikke maks
-        størrelseVedleggSjekker.sjekk(attachment(2), attachment(2));
-        størrelseVedleggSjekker.sjekk(vedlegg(2), vedlegg(2));
+        sjekker.sjekk(attachment(2), attachment(2));
+        sjekker.sjekk(vedlegg(2), vedlegg(2));
     }
 
     @Test
@@ -56,9 +56,9 @@ class VedleggSjekkerTest {
         var attachmentOverMaxEnkel = attachment(4);
         var vedleggOverMaxEnkel = vedlegg(4);
 
-        assertThatThrownBy(() -> størrelseVedleggSjekker.sjekk(attachmentOverMaxEnkel))
+        assertThatThrownBy(() -> sjekker.sjekk(attachmentOverMaxEnkel))
             .isInstanceOf(AttachmentTooLargeException.class);
-        assertThatThrownBy(() -> størrelseVedleggSjekker.sjekk(vedleggOverMaxEnkel))
+        assertThatThrownBy(() -> sjekker.sjekk(vedleggOverMaxEnkel))
             .isInstanceOf(AttachmentTooLargeException.class);
     }
     @Test
@@ -68,19 +68,25 @@ class VedleggSjekkerTest {
 
         // Totalt 8MB (maks er 7)
         assertThatThrownBy(() ->
-            størrelseVedleggSjekker.sjekk(
+            sjekker.sjekk(
                 attachment2MB,
                 attachment2MB,
                 attachment2MB,
                 attachment2MB))
             .isInstanceOf(AttachmentsTooLargeException.class);
         assertThatThrownBy(() ->
-            størrelseVedleggSjekker.sjekk(
+            sjekker.sjekk(
                 vedlegg2MB,
                 vedlegg2MB,
                 vedlegg2MB,
                 vedlegg2MB))
             .isInstanceOf(AttachmentsTooLargeException.class);
+    }
+
+    @Test
+    void exceptionNårAttachmentIkkeHarInnhold() {
+        var attachment0B = attachment(0);
+        assertThatThrownBy(() -> sjekker.sjekk(attachment0B)).isInstanceOf(AttachmentUnreadableException.class);
     }
 
     @Test
