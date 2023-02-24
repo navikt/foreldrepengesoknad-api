@@ -10,31 +10,31 @@ import java.util.Optional;
 
 import javax.validation.Valid;
 import javax.validation.constraints.Digits;
-import javax.validation.constraints.Pattern;
 import javax.validation.constraints.Size;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonInclude;
+import no.nav.foreldrepenger.common.domain.felles.VedleggReferanse;
 
 @JsonInclude(NON_EMPTY)
 public record BarnFrontend(@Valid @Size(max = 10) List<LocalDate> fødselsdatoer,
                            @Digits(integer = 2, fraction = 0) int antallBarn,
-                           @Valid @Size(max = 15) List<@Pattern(regexp = "^[\\p{Digit}\\p{L}]*$") String> terminbekreftelse,
+                           @Valid @Size(max = 15) List<VedleggReferanse> terminbekreftelse,
                            LocalDate termindato,
                            LocalDate terminbekreftelseDato,
                            LocalDate adopsjonsdato,
-                           @Valid @Size(max = 15) List<@Pattern(regexp = "^[\\p{Digit}\\p{L}]*$") String> adopsjonsvedtak,
+                           @Valid @Size(max = 15) List<VedleggReferanse> adopsjonsvedtak,
                            LocalDate ankomstdato,
                            boolean adopsjonAvEktefellesBarn,
                            boolean søkerAdopsjonAlene,
                            LocalDate foreldreansvarsdato,
-                           @Valid @Size(max = 15) List<@Pattern(regexp = "^[\\p{Digit}\\p{L}]*$") String> omsorgsovertakelse,
-                           @Valid @Size(max = 15) List<@Pattern(regexp = "^[\\p{Digit}\\p{L}]*$") String> dokumentasjonAvAleneomsorg) {
+                           @Valid @Size(max = 15) List<VedleggReferanse> omsorgsovertakelse,
+                           @Valid @Size(max = 15) List<VedleggReferanse> dokumentasjonAvAleneomsorg) {
 
-    public BarnFrontend(List<LocalDate> fødselsdatoer, int antallBarn, List<String> terminbekreftelse, LocalDate termindato,
-                        LocalDate terminbekreftelseDato, LocalDate adopsjonsdato, List<String> adopsjonsvedtak,
+    public BarnFrontend(List<LocalDate> fødselsdatoer, int antallBarn, List<VedleggReferanse> terminbekreftelse, LocalDate termindato,
+                        LocalDate terminbekreftelseDato, LocalDate adopsjonsdato, List<VedleggReferanse> adopsjonsvedtak,
                         LocalDate ankomstdato, boolean adopsjonAvEktefellesBarn, boolean søkerAdopsjonAlene,
-                        LocalDate foreldreansvarsdato, List<String> omsorgsovertakelse, List<String> dokumentasjonAvAleneomsorg) {
+                        LocalDate foreldreansvarsdato, List<VedleggReferanse> omsorgsovertakelse, List<VedleggReferanse> dokumentasjonAvAleneomsorg) {
         this.fødselsdatoer = fødselsdatoer;
         this.antallBarn = antallBarn;
         this.terminbekreftelse = Optional.ofNullable(terminbekreftelse).orElse(emptyList());
@@ -51,8 +51,8 @@ public record BarnFrontend(@Valid @Size(max = 10) List<LocalDate> fødselsdatoer
     }
 
     @JsonIgnore
-    public List<String> getAlleVedlegg() {
-        List<String> alleVedlegg = new ArrayList<>();
+    public List<VedleggReferanse> getAlleVedlegg() {
+        List<VedleggReferanse> alleVedlegg = new ArrayList<>();
         alleVedlegg.addAll(terminbekreftelse);
         alleVedlegg.addAll(omsorgsovertakelse);
         alleVedlegg.addAll(adopsjonsvedtak);

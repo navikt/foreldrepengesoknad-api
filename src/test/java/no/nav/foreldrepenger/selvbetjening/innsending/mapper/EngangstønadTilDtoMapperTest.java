@@ -40,7 +40,7 @@ class EngangstønadTilDtoMapperTest {
         var søknad = connection.body(sf);
 
         var søker = søknad.getSøker();
-        assertThat(søker.getMålform()).isEqualTo(Målform.NB);
+        assertThat(søker.målform()).isEqualTo(Målform.NB);
 
         assertThat(søknad.getYtelse()).isInstanceOf(Engangsstønad.class);
         var ytelse = (Engangsstønad) søknad.getYtelse();

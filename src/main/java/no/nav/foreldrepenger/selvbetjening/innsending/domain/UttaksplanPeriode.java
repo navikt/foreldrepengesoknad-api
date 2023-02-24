@@ -9,10 +9,12 @@ import java.util.Collections;
 import java.util.List;
 import java.util.Optional;
 
+import javax.validation.Valid;
 import javax.validation.constraints.Pattern;
 
 import com.fasterxml.jackson.annotation.JsonCreator;
 import com.fasterxml.jackson.annotation.JsonInclude;
+import no.nav.foreldrepenger.common.domain.felles.VedleggReferanse;
 
 // TODO: Skriv om til superklasse og subklasser basert på type
 @JsonInclude(NON_EMPTY)
@@ -20,7 +22,7 @@ public record UttaksplanPeriode(@Pattern(regexp = BARE_BOKSTAVER) String type,
                                 Double samtidigUttakProsent,
                                 Double stillingsprosent,
                                 List<@Pattern(regexp = FRITEKST) String> orgnumre,
-                                List<@Pattern(regexp = "^[\\p{Digit}\\p{L}]*$") String> vedlegg, // en vedleggsID
+                                @Valid List<VedleggReferanse> vedlegg, // en vedleggsID
                                 @Pattern(regexp = BARE_BOKSTAVER) String forelder,
                                 @Pattern(regexp = "^[\\p{Digit}\\p{L}_]*$") String konto,
                                 @Pattern(regexp = "^[\\p{Digit}\\p{L}_]*$") String morsAktivitetIPerioden,
@@ -37,7 +39,7 @@ public record UttaksplanPeriode(@Pattern(regexp = BARE_BOKSTAVER) String type,
 
     @JsonCreator
     public UttaksplanPeriode(String type, Double samtidigUttakProsent, Double stillingsprosent, List<String> orgnumre,
-                             List<String> vedlegg, String forelder, String konto, String morsAktivitetIPerioden,
+                             List<VedleggReferanse> vedlegg, String forelder, String konto, String morsAktivitetIPerioden,
                              String årsak, Tidsperiode tidsperiode, boolean erArbeidstaker,
                              boolean erFrilanser, boolean erSelvstendig, boolean graderingInnvilget, boolean gradert,
                              boolean ønskerFlerbarnsdager, boolean ønskerSamtidigUttak, Boolean justeresVedFødsel) {

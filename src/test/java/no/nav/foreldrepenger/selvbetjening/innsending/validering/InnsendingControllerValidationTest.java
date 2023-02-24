@@ -74,7 +74,7 @@ class InnsendingControllerValidationTest {
                 .contentType(MediaType.APPLICATION_JSON)
                 .content(mapper.writeValueAsString(sf)
                     .replace(annenInntektFrontend.arbeidsgiverNavn(), "Ulovlig tegn [≈≈|£©≈[™")
-                    .replaceFirst(annenInntektFrontend.vedlegg().get(0), "Also ILLEGA @¨¨¨¨ö~~π<>")
+                    .replaceFirst(annenInntektFrontend.vedlegg().get(0).referanse(), "Also ILLEGA @¨¨¨¨ö~~π<>")
                 ))
             .andExpect(status().isBadRequest())
             .andReturn();
@@ -116,7 +116,7 @@ class InnsendingControllerValidationTest {
                 .contentType(MediaType.APPLICATION_JSON)
                 .content(mapper.writeValueAsString(sf)
                     .replace(tilrettelegging.type(), "Ulovlig tegn [≈≈|£©≈[™")
-                    .replaceFirst(tilrettelegging.vedlegg().get(0), "Also ILLEGA @¨¨¨¨ö~~π<>")
+                    .replaceFirst(tilrettelegging.vedlegg().get(0).referanse(), "Also ILLEGA @¨¨¨¨ö~~π<>")
                     .replace(tilrettelegging.arbeidsforhold().id(), "Ikke lovlig \u0085")
                 ))
             .andExpect(status().isBadRequest())

@@ -1,27 +1,24 @@
 package no.nav.foreldrepenger.selvbetjening.innsending.domain;
 
+import com.fasterxml.jackson.annotation.JsonCreator;
+import com.fasterxml.jackson.annotation.JsonSubTypes;
+import com.fasterxml.jackson.annotation.JsonSubTypes.Type;
+import com.fasterxml.jackson.annotation.JsonTypeInfo;
+import no.nav.foreldrepenger.common.domain.Saksnummer;
+
+import javax.validation.Valid;
+import javax.validation.constraints.Pattern;
+import java.time.LocalDateTime;
+import java.util.List;
+import java.util.Objects;
+import java.util.Optional;
+
 import static com.fasterxml.jackson.annotation.JsonTypeInfo.Id.NAME;
 import static java.util.Collections.emptyList;
 import static no.nav.foreldrepenger.common.domain.validation.InputValideringRegex.BARE_BOKSTAVER;
 import static no.nav.foreldrepenger.common.domain.validation.InputValideringRegex.FRITEKST;
 
-import java.time.LocalDateTime;
-import java.util.List;
-import java.util.Optional;
 
-import javax.validation.Valid;
-import javax.validation.constraints.Pattern;
-import javax.validation.constraints.Size;
-
-import com.fasterxml.jackson.annotation.JsonCreator;
-import com.fasterxml.jackson.annotation.JsonSubTypes;
-import com.fasterxml.jackson.annotation.JsonSubTypes.Type;
-import com.fasterxml.jackson.annotation.JsonTypeInfo;
-
-import lombok.EqualsAndHashCode;
-import no.nav.foreldrepenger.common.domain.Saksnummer;
-
-@EqualsAndHashCode
 @JsonTypeInfo(use = NAME, property = "type", visible = true)
 @JsonSubTypes({
         @Type(value = EngangsstønadFrontend.class, name = "engangsstønad"),
@@ -114,6 +111,19 @@ public abstract sealed class SøknadFrontend permits EngangsstønadFrontend, For
 
     public List<VedleggFrontend> getVedlegg() {
         return vedlegg;
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        SøknadFrontend that = (SøknadFrontend) o;
+        return Objects.equals(opprettet, that.opprettet) && Objects.equals(type, that.type) && Objects.equals(saksnummer, that.saksnummer) && Objects.equals(søker, that.søker) && Objects.equals(barn, that.barn) && Objects.equals(annenForelder, that.annenForelder) && Objects.equals(informasjonOmUtenlandsopphold, that.informasjonOmUtenlandsopphold) && Objects.equals(situasjon, that.situasjon) && Objects.equals(erEndringssøknad, that.erEndringssøknad) && Objects.equals(tilleggsopplysninger, that.tilleggsopplysninger) && Objects.equals(vedlegg, that.vedlegg);
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(opprettet, type, saksnummer, søker, barn, annenForelder, informasjonOmUtenlandsopphold, situasjon, erEndringssøknad, tilleggsopplysninger, vedlegg);
     }
 
     @Override

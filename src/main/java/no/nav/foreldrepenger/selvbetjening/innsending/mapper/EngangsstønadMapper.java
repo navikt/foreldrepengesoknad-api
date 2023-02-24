@@ -3,11 +3,14 @@ package no.nav.foreldrepenger.selvbetjening.innsending.mapper;
 import static no.nav.foreldrepenger.selvbetjening.innsending.mapper.CommonMapper.tilMedlemskap;
 import static no.nav.foreldrepenger.selvbetjening.innsending.mapper.CommonMapper.tilRelasjonTilBarn;
 
+import java.time.LocalDate;
 import java.util.ArrayList;
 
 import no.nav.foreldrepenger.common.domain.BrukerRolle;
 import no.nav.foreldrepenger.common.domain.Søker;
+import no.nav.foreldrepenger.common.domain.Søknad;
 import no.nav.foreldrepenger.common.domain.Ytelse;
+import no.nav.foreldrepenger.common.domain.engangsstønad.Engangsstønad;
 import no.nav.foreldrepenger.selvbetjening.innsending.domain.EngangsstønadFrontend;
 
 final class EngangsstønadMapper {
@@ -16,11 +19,13 @@ final class EngangsstønadMapper {
     }
 
     static no.nav.foreldrepenger.common.domain.Søknad tilEngangsstønad(EngangsstønadFrontend e) {
-        return no.nav.foreldrepenger.common.domain.Søknad.builder()
-            .søker(tilSøker(e))
-            .ytelse(tilYtelse(e))
-            .vedlegg(new ArrayList<>()) // Settes av InnsendingConnection etter logging
-            .build();
+        return new Søknad(
+            LocalDate.now(),
+            tilSøker(e),
+            tilYtelse(e),
+            e.getTilleggsopplysninger(),
+            new ArrayList<>() // Settes av InnsendingConnection etter logging
+        );
     }
 
     private static Søker tilSøker(EngangsstønadFrontend e) {
@@ -32,12 +37,9 @@ final class EngangsstønadMapper {
     }
 
     private static Ytelse tilYtelse(EngangsstønadFrontend e) {
-        var engangsstønadBuilder = no.nav.foreldrepenger.common.domain.engangsstønad.Engangsstønad.builder();
-        if (Boolean.FALSE.equals(e.getErEndringssøknad())) {
-            engangsstønadBuilder.medlemsskap(tilMedlemskap(e));
-        }
-        return engangsstønadBuilder
-            .relasjonTilBarn(tilRelasjonTilBarn(e))
-            .build();
+        return new Engangsstønad(
+            Boolean.FALSE.equals(e.getErEndringssøknad()) ? tilMedlemskap(e) : null,
+            tilRelasjonTilBarn(e)
+        );
     }
 }

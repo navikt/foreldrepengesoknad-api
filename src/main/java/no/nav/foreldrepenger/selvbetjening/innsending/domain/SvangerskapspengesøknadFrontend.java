@@ -1,17 +1,15 @@
 package no.nav.foreldrepenger.selvbetjening.innsending.domain;
 
-import java.time.LocalDateTime;
-import java.util.List;
-
-import javax.validation.Valid;
-
 import com.fasterxml.jackson.annotation.JsonCreator;
-
-import lombok.EqualsAndHashCode;
 import no.nav.foreldrepenger.common.domain.Saksnummer;
 import no.nav.foreldrepenger.selvbetjening.innsending.domain.tilrettelegging.Tilrettelegging;
 
-@EqualsAndHashCode(callSuper = true)
+import javax.validation.Valid;
+import java.time.LocalDateTime;
+import java.util.List;
+import java.util.Objects;
+
+
 public final class SvangerskapspengesøknadFrontend extends SøknadFrontend {
     @Valid
     private final List<Tilrettelegging> tilrettelegging;
@@ -28,6 +26,20 @@ public final class SvangerskapspengesøknadFrontend extends SøknadFrontend {
 
     public List<Tilrettelegging> getTilrettelegging() {
         return tilrettelegging;
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        if (!super.equals(o)) return false;
+        SvangerskapspengesøknadFrontend that = (SvangerskapspengesøknadFrontend) o;
+        return Objects.equals(tilrettelegging, that.tilrettelegging);
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(super.hashCode(), tilrettelegging);
     }
 
     @Override

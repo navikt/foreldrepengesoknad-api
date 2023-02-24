@@ -1,21 +1,18 @@
 package no.nav.foreldrepenger.selvbetjening.innsending.domain;
 
-import static no.nav.foreldrepenger.common.domain.validation.InputValideringRegex.BARE_TALL;
-
-import java.time.LocalDateTime;
-import java.util.List;
+import com.fasterxml.jackson.annotation.JsonCreator;
+import no.nav.foreldrepenger.common.domain.Saksnummer;
 
 import javax.validation.Valid;
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Pattern;
+import java.time.LocalDateTime;
+import java.util.List;
+import java.util.Objects;
 
-import com.fasterxml.jackson.annotation.JsonCreator;
+import static no.nav.foreldrepenger.common.domain.validation.InputValideringRegex.BARE_TALL;
 
-import lombok.Builder;
-import lombok.EqualsAndHashCode;
-import no.nav.foreldrepenger.common.domain.Saksnummer;
 
-@EqualsAndHashCode(callSuper = true)
 public final class ForeldrepengesøknadFrontend extends SøknadFrontend {
 
     @NotNull
@@ -26,7 +23,6 @@ public final class ForeldrepengesøknadFrontend extends SøknadFrontend {
 
     private final Boolean ønskerJustertUttakVedFødsel;
 
-    @Builder
     @JsonCreator
     public ForeldrepengesøknadFrontend(LocalDateTime opprettet,
                                        String type,
@@ -59,6 +55,20 @@ public final class ForeldrepengesøknadFrontend extends SøknadFrontend {
 
     public Boolean isØnskerJustertUttakVedFødsel() {
         return ønskerJustertUttakVedFødsel;
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        if (!super.equals(o)) return false;
+        ForeldrepengesøknadFrontend that = (ForeldrepengesøknadFrontend) o;
+        return Objects.equals(dekningsgrad, that.dekningsgrad) && Objects.equals(uttaksplan, that.uttaksplan) && Objects.equals(ønskerJustertUttakVedFødsel, that.ønskerJustertUttakVedFødsel);
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(super.hashCode(), dekningsgrad, uttaksplan, ønskerJustertUttakVedFødsel);
     }
 
     @Override

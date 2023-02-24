@@ -1,14 +1,6 @@
 package no.nav.foreldrepenger.selvbetjening.innsending.mapper;
 
-import static java.time.LocalDate.now;
-import static no.nav.foreldrepenger.common.util.StreamUtil.safeStream;
-import static no.nav.foreldrepenger.selvbetjening.util.DateUtil.erNyopprettet;
-import static org.springframework.util.ObjectUtils.isEmpty;
-
-import java.util.List;
-
 import com.neovisionaries.i18n.CountryCode;
-
 import no.nav.foreldrepenger.common.domain.Fødselsnummer;
 import no.nav.foreldrepenger.common.domain.Orgnummer;
 import no.nav.foreldrepenger.common.domain.felles.DokumentType;
@@ -28,11 +20,9 @@ import no.nav.foreldrepenger.common.domain.felles.opptjening.AnnenOpptjeningType
 import no.nav.foreldrepenger.common.domain.felles.opptjening.EgenNæring;
 import no.nav.foreldrepenger.common.domain.felles.opptjening.Frilans;
 import no.nav.foreldrepenger.common.domain.felles.opptjening.FrilansOppdrag;
-import no.nav.foreldrepenger.common.domain.felles.opptjening.NorskOrganisasjon;
 import no.nav.foreldrepenger.common.domain.felles.opptjening.Opptjening;
 import no.nav.foreldrepenger.common.domain.felles.opptjening.Regnskapsfører;
 import no.nav.foreldrepenger.common.domain.felles.opptjening.UtenlandskArbeidsforhold;
-import no.nav.foreldrepenger.common.domain.felles.opptjening.UtenlandskOrganisasjon;
 import no.nav.foreldrepenger.common.domain.felles.relasjontilbarn.Adopsjon;
 import no.nav.foreldrepenger.common.domain.felles.relasjontilbarn.FremtidigFødsel;
 import no.nav.foreldrepenger.common.domain.felles.relasjontilbarn.Fødsel;
@@ -50,6 +40,14 @@ import no.nav.foreldrepenger.selvbetjening.innsending.domain.arbeid.Frilansoppdr
 import no.nav.foreldrepenger.selvbetjening.innsending.domain.arbeid.SelvstendigNæringsdrivendeInformasjonFrontend;
 import no.nav.foreldrepenger.selvbetjening.innsending.domain.arbeid.TilknyttetPerson;
 
+import java.time.LocalDate;
+import java.util.List;
+
+import static java.time.LocalDate.now;
+import static no.nav.foreldrepenger.common.util.StreamUtil.safeStream;
+import static no.nav.foreldrepenger.selvbetjening.util.DateUtil.erNyopprettet;
+import static org.springframework.util.ObjectUtils.isEmpty;
+
 public final class CommonMapper {
 
     private CommonMapper() {
@@ -57,10 +55,10 @@ public final class CommonMapper {
 
     public static no.nav.foreldrepenger.common.domain.felles.Vedlegg tilVedlegg(VedleggFrontend vedlegg) {
         var vedleggMetadata = new VedleggMetaData(
-            vedlegg.getBeskrivelse(),
             vedlegg.getId(),
             vedlegg.getInnsendingsType() != null ? InnsendingsType.valueOf(vedlegg.getInnsendingsType()) : null,
-            vedlegg.getSkjemanummer() != null ? DokumentType.valueOf(vedlegg.getSkjemanummer()) : null
+            vedlegg.getSkjemanummer() != null ? DokumentType.valueOf(vedlegg.getSkjemanummer()) : null,
+            vedlegg.getBeskrivelse()
         );
         return new PåkrevdVedlegg(vedleggMetadata, vedlegg.getContent());
     }
@@ -87,13 +85,12 @@ public final class CommonMapper {
 
     static Opptjening tilOpptjening(SøknadFrontend s) {
         var søker = s.getSøker();
-        return Opptjening.builder()
-            .frilans(tilFrilans(søker.frilansInformasjon()))
-            .egenNæring(tilEgenNæring(søker.selvstendigNæringsdrivendeInformasjon()))
-            .utenlandskArbeidsforhold(tilUtenlandsArbeidsforhold(søker.andreInntekterSiste10Mnd()))
-            .annenOpptjening(tilAnnenOpptjening(søker.andreInntekterSiste10Mnd()))
-            .build();
-
+        return new Opptjening(
+            tilUtenlandsArbeidsforhold(søker.andreInntekterSiste10Mnd()),
+            tilEgenNæring(søker.selvstendigNæringsdrivendeInformasjon()),
+            tilAnnenOpptjening(søker.andreInntekterSiste10Mnd()),
+            tilFrilans(søker.frilansInformasjon())
+        );
     }
 
     static RelasjonTilBarn tilRelasjonTilBarn(SøknadFrontend søknad) {
@@ -110,42 +107,42 @@ public final class CommonMapper {
     }
 
     static Fødsel tilFødsel(BarnFrontend barn) {
-        return Fødsel.builder()
-            .fødselsdato(barn.fødselsdatoer())
-            .termindato(barn.termindato())
-            .antallBarn(barn.antallBarn())
-            .vedlegg(barn.getAlleVedlegg())
-            .build();
+        return new Fødsel(
+            barn.antallBarn(),
+            barn.fødselsdatoer(),
+            barn.termindato(),
+            barn.getAlleVedlegg()
+        );
     }
 
     private static Omsorgsovertakelse tilOmsorgsovertagelse(BarnFrontend barn) {
-        return Omsorgsovertakelse.builder()
-            .omsorgsovertakelsesdato(barn.foreldreansvarsdato())
-            .fødselsdato(barn.fødselsdatoer())
-            .antallBarn(barn.antallBarn())
-            .vedlegg(barn.getAlleVedlegg())
-            .build();
+        return new Omsorgsovertakelse(
+            barn.antallBarn(),
+            barn.foreldreansvarsdato(),
+            barn.fødselsdatoer(),
+            barn.getAlleVedlegg()
+        );
     }
 
     private static FremtidigFødsel tilFremtidigFødsel(BarnFrontend barn) {
-        return FremtidigFødsel.builder()
-            .terminDato(barn.termindato())
-            .utstedtDato(barn.terminbekreftelseDato())
-            .antallBarn(barn.antallBarn())
-            .vedlegg(barn.getAlleVedlegg())
-            .build();
+        return new FremtidigFødsel(
+            barn.antallBarn(),
+            barn.termindato(),
+            barn.terminbekreftelseDato(),
+            barn.getAlleVedlegg()
+        );
     }
 
     private static Adopsjon tilAdopsjon(BarnFrontend barn) {
-        return Adopsjon.builder()
-            .omsorgsovertakelsesdato(barn.adopsjonsdato())
-            .ektefellesBarn(barn.adopsjonAvEktefellesBarn())
-            .søkerAdopsjonAlene(barn.søkerAdopsjonAlene())
-            .ankomstDato(barn.ankomstdato())
-            .fødselsdato(barn.fødselsdatoer())
-            .antallBarn(barn.antallBarn())
-            .vedlegg(barn.getAlleVedlegg())
-            .build();
+        return new Adopsjon(
+            barn.antallBarn(),
+            barn.adopsjonsdato(),
+            barn.adopsjonAvEktefellesBarn(),
+            barn.søkerAdopsjonAlene(),
+            barn.getAlleVedlegg(),
+            barn.ankomstdato(),
+            barn.fødselsdatoer()
+        );
     }
 
     private static UtenlandskForelder tilUtenlandskForelder(AnnenForelderFrontend annenForelder) {
@@ -187,12 +184,12 @@ public final class CommonMapper {
     }
 
     private static UtenlandskArbeidsforhold tilUtenlandsArbeidsforhold(AnnenInntektFrontend annenInntekt) {
-        return UtenlandskArbeidsforhold.builder()
-            .arbeidsgiverNavn(annenInntekt.arbeidsgiverNavn())
-            .land(land(annenInntekt.land()))
-            .periode(new ÅpenPeriode(annenInntekt.tidsperiode().fom(), annenInntekt.tidsperiode().tom()))
-            .vedlegg(annenInntekt.vedlegg())
-            .build();
+        return new UtenlandskArbeidsforhold(
+            annenInntekt.arbeidsgiverNavn(),
+            new ÅpenPeriode(annenInntekt.tidsperiode().fom(), annenInntekt.tidsperiode().tom()),
+            annenInntekt.vedlegg(),
+            land(annenInntekt.land())
+        );
     }
 
     private static List<EgenNæring> tilEgenNæring(List<SelvstendigNæringsdrivendeInformasjonFrontend> selvstendigNæringsdrivendeInformasjon) {
@@ -202,92 +199,46 @@ public final class CommonMapper {
     }
 
     private static EgenNæring tilEgenNæring(SelvstendigNæringsdrivendeInformasjonFrontend selvstendig) {
-        return selvstendig.registrertINorge() ? tilNorskNæring(selvstendig) : tilUtenlandskOrganisasjon(selvstendig);
-    }
-
-    private static NorskOrganisasjon tilNorskNæring(SelvstendigNæringsdrivendeInformasjonFrontend selvstendig) {
-        // Spesifikk
-        var norskOrganisasjonBuilder = NorskOrganisasjon.builder()
-            .orgName(selvstendig.navnPåNæringen())
-            .orgNummer(selvstendig.organisasjonsnummer() != null ? Orgnummer.valueOf(selvstendig.organisasjonsnummer()): null);
-
-
-        // Generelle TODO: Identisk til UtenlandskOrgansiasjon.. Mye duplisering... skrive bort i fra abstract class maybe?
-        norskOrganisasjonBuilder
-            .stillingsprosent(selvstendig.stillingsprosent() != null ? ProsentAndel.valueOf(selvstendig.stillingsprosent()) : null)
-            .periode(new ÅpenPeriode(selvstendig.tidsperiode().fom(), selvstendig.tidsperiode().tom()))
-            .erNyIArbeidslivet(selvstendig.harBlittYrkesaktivILøpetAvDeTreSisteFerdigliknedeÅrene())
-            .erNyOpprettet(erNyopprettet(selvstendig.tidsperiode().fom()))
-            .erVarigEndring(selvstendig.hattVarigEndringAvNæringsinntektSiste4Kalenderår())
-            .vedlegg(selvstendig.vedlegg())
-            .virksomhetsTyper(selvstendig.næringstyper())
-            .oppstartsDato(selvstendig.oppstartsdato());
-
-        var næringsInfo = selvstendig.endringAvNæringsinntektInformasjon();
-        if (næringsInfo != null) {
-            norskOrganisasjonBuilder
-                .endringsDato(næringsInfo.dato())
-                .næringsinntektBrutto(næringsInfo.næringsinntektEtterEndring())
-                .beskrivelseEndring(næringsInfo.forklaring());
-        } else {
-            norskOrganisasjonBuilder.næringsinntektBrutto(selvstendig.næringsinntekt());
-        }
+        var nærRelasjon = false;
+        List<Regnskapsfører> regnskapsførere = null;
 
         var regnskapsfører = selvstendig.regnskapsfører();
         var revisor = selvstendig.revisor();
         if (regnskapsfører != null) {
-            norskOrganisasjonBuilder
-                .regnskapsførere(List.of(tilRegnskapsfører(regnskapsfører)))
-                .nærRelasjon(regnskapsfører.erNærVennEllerFamilie());
+            regnskapsførere = List.of(tilRegnskapsfører(regnskapsfører));
+            nærRelasjon = regnskapsfører.erNærVennEllerFamilie();
         } else if (revisor != null) {
-            norskOrganisasjonBuilder
-                .regnskapsførere(List.of(tilRegnskapsfører(revisor)))
-                .nærRelasjon(revisor.erNærVennEllerFamilie());
+            regnskapsførere = List.of(tilRegnskapsfører(revisor));
+            nærRelasjon = revisor.erNærVennEllerFamilie();
         }
 
-        return norskOrganisasjonBuilder.build();
-    }
-
-    private static UtenlandskOrganisasjon tilUtenlandskOrganisasjon(SelvstendigNæringsdrivendeInformasjonFrontend selvstendig) {
-        // Spesifikk
-        var utenlandskOrganisasjonBuilder = UtenlandskOrganisasjon.builder()
-            .orgName(selvstendig.navnPåNæringen())
-            .registrertILand(land(selvstendig.registrertILand()));
-
-        // Generelle
-        utenlandskOrganisasjonBuilder
-            .stillingsprosent(selvstendig.stillingsprosent() != null ? ProsentAndel.valueOf(selvstendig.stillingsprosent()) : null)
-            .periode(new ÅpenPeriode(selvstendig.tidsperiode().fom(), selvstendig.tidsperiode().tom()))
-            .erNyIArbeidslivet(selvstendig.harBlittYrkesaktivILøpetAvDeTreSisteFerdigliknedeÅrene())
-            .erNyOpprettet(erNyopprettet(selvstendig.tidsperiode().fom()))
-            .erVarigEndring(selvstendig.hattVarigEndringAvNæringsinntektSiste4Kalenderår())
-            .vedlegg(selvstendig.vedlegg())
-            .virksomhetsTyper(selvstendig.næringstyper())
-            .oppstartsDato(selvstendig.oppstartsdato());
-
+        LocalDate endringsDato = null;
+        String beskrivelseEndring = null;
+        var næringsinntektBrutto = selvstendig.næringsinntekt();
         var næringsInfo = selvstendig.endringAvNæringsinntektInformasjon();
         if (næringsInfo != null) {
-            utenlandskOrganisasjonBuilder
-                .endringsDato(næringsInfo.dato())
-                .næringsinntektBrutto(næringsInfo.næringsinntektEtterEndring())
-                .beskrivelseEndring(næringsInfo.forklaring());
-        } else {
-            utenlandskOrganisasjonBuilder.næringsinntektBrutto(selvstendig.næringsinntekt());
+            endringsDato = næringsInfo.dato();
+            næringsinntektBrutto = næringsInfo.næringsinntektEtterEndring();
         }
 
-        var regnskapsfører = selvstendig.regnskapsfører();
-        var revisor = selvstendig.revisor();
-        if (regnskapsfører != null) {
-            utenlandskOrganisasjonBuilder
-                .regnskapsførere(List.of(tilRegnskapsfører(regnskapsfører)))
-                .nærRelasjon(regnskapsfører.erNærVennEllerFamilie());
-        } else if (revisor != null) {
-            utenlandskOrganisasjonBuilder
-                .regnskapsførere(List.of(tilRegnskapsfører(revisor)))
-                .nærRelasjon(revisor.erNærVennEllerFamilie());
-        }
-
-        return utenlandskOrganisasjonBuilder.build();
+        return new EgenNæring(
+            selvstendig.registrertINorge() ? CountryCode.NO : land(selvstendig.registrertILand()),
+            selvstendig.organisasjonsnummer() != null ? Orgnummer.valueOf(selvstendig.organisasjonsnummer()): null,
+            selvstendig.navnPåNæringen(),
+            selvstendig.næringstyper(),
+            new ÅpenPeriode(selvstendig.tidsperiode().fom(), selvstendig.tidsperiode().tom()),
+            nærRelasjon,
+            regnskapsførere,
+            erNyopprettet(selvstendig.tidsperiode().fom()),
+            selvstendig.hattVarigEndringAvNæringsinntektSiste4Kalenderår(),
+            selvstendig.harBlittYrkesaktivILøpetAvDeTreSisteFerdigliknedeÅrene(),
+            næringsinntektBrutto,
+            endringsDato,
+            selvstendig.oppstartsdato(),
+            beskrivelseEndring,
+            selvstendig.stillingsprosent() != null ? ProsentAndel.valueOf(selvstendig.stillingsprosent()) : null,
+            selvstendig.vedlegg()
+        );
     }
 
     private static Regnskapsfører tilRegnskapsfører(TilknyttetPerson person) {

@@ -50,7 +50,6 @@ public class InnsendingTjenesteStub implements Innsending {
     // TODO: Fiks/fjern denne
     private Kvittering postStub(SøknadFrontend søknad) {
         var dto = tilSøknad(søknad);
-        dto.setTilleggsopplysninger(søknad.getTilleggsopplysninger());
         søknad.getVedlegg().forEach(v -> {
             v.setContent(new byte[] {});
             dto.getVedlegg().add(tilVedlegg(v));

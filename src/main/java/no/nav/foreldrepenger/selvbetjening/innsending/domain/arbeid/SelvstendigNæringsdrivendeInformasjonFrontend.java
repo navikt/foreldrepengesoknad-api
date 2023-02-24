@@ -12,6 +12,7 @@ import javax.validation.constraints.Digits;
 import javax.validation.constraints.Pattern;
 import javax.validation.constraints.Size;
 
+import no.nav.foreldrepenger.common.domain.felles.VedleggReferanse;
 import no.nav.foreldrepenger.common.domain.felles.opptjening.Virksomhetstype;
 import no.nav.foreldrepenger.selvbetjening.innsending.domain.Tidsperiode;
 
@@ -22,7 +23,7 @@ public record SelvstendigNæringsdrivendeInformasjonFrontend(
     @Digits(integer = 3, fraction = 2) Double stillingsprosent,
     @Digits(integer = 9, fraction = 0) int næringsinntekt,
     @Valid @Size(max = 10) List<Virksomhetstype> næringstyper,
-    @Valid @Size(max = 15) List<@Pattern(regexp = "^[\\p{Digit}\\p{L}]*$") String> vedlegg,
+    @Valid @Size(max = 15) List<VedleggReferanse> vedlegg,
     LocalDate oppstartsdato,
     @Valid NæringsinntektInformasjonFrontend endringAvNæringsinntektInformasjon,
     @Pattern(regexp = FRITEKST) String navnPåNæringen,

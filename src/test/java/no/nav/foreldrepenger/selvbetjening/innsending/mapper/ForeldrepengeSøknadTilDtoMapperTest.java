@@ -1,22 +1,9 @@
 package no.nav.foreldrepenger.selvbetjening.innsending.mapper;
 
-import static no.nav.foreldrepenger.common.util.ResourceHandleUtil.bytesFra;
-import static org.assertj.core.api.Assertions.assertThat;
-
-import java.io.IOException;
-import java.util.List;
-
-import org.junit.jupiter.api.Test;
-import org.junit.jupiter.api.extension.ExtendWith;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.test.context.ContextConfiguration;
-import org.springframework.test.context.junit.jupiter.SpringExtension;
-
 import com.fasterxml.jackson.databind.ObjectMapper;
-
+import com.neovisionaries.i18n.CountryCode;
 import no.nav.foreldrepenger.common.domain.BrukerRolle;
 import no.nav.foreldrepenger.common.domain.felles.ProsentAndel;
-import no.nav.foreldrepenger.common.domain.felles.opptjening.NorskOrganisasjon;
 import no.nav.foreldrepenger.common.domain.felles.relasjontilbarn.Adopsjon;
 import no.nav.foreldrepenger.common.domain.felles.relasjontilbarn.FremtidigFødsel;
 import no.nav.foreldrepenger.common.domain.felles.relasjontilbarn.Fødsel;
@@ -31,6 +18,17 @@ import no.nav.foreldrepenger.selvbetjening.innsending.InnsendingConnection;
 import no.nav.foreldrepenger.selvbetjening.innsending.domain.ForeldrepengesøknadFrontend;
 import no.nav.foreldrepenger.selvbetjening.innsending.domain.SøknadFrontend;
 import no.nav.foreldrepenger.selvbetjening.vedlegg.Image2PDFConverter;
+import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.extension.ExtendWith;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.test.context.ContextConfiguration;
+import org.springframework.test.context.junit.jupiter.SpringExtension;
+
+import java.io.IOException;
+import java.util.List;
+
+import static no.nav.foreldrepenger.common.util.ResourceHandleUtil.bytesFra;
+import static org.assertj.core.api.Assertions.assertThat;
 
 @ExtendWith(SpringExtension.class)
 @ContextConfiguration(classes = JacksonConfiguration.class)
@@ -52,8 +50,8 @@ class ForeldrepengeSøknadTilDtoMapperTest {
         assertThat(søknad).isNotNull();
 
         var søker = søknad.getSøker();
-        assertThat(søker.getSøknadsRolle()).isEqualTo(BrukerRolle.MOR);
-        assertThat(søker.getMålform()).isEqualTo(Målform.NB);
+        assertThat(søker.søknadsRolle()).isEqualTo(BrukerRolle.MOR);
+        assertThat(søker.målform()).isEqualTo(Målform.NB);
 
         assertThat(søknad.getYtelse()).isInstanceOf(Foreldrepenger.class);
         var ytelse = (Foreldrepenger) søknad.getYtelse();
@@ -75,11 +73,11 @@ class ForeldrepengeSøknadTilDtoMapperTest {
 
         var søknad = connection.body(sf);
         assertThat(søknad).isNotNull();
-        assertThat(søknad.getSøker().getSøknadsRolle()).isEqualTo(BrukerRolle.FAR);
+        assertThat(søknad.getSøker().søknadsRolle()).isEqualTo(BrukerRolle.FAR);
 
         var søker = søknad.getSøker();
-        assertThat(søker.getSøknadsRolle()).isEqualTo(BrukerRolle.FAR);
-        assertThat(søker.getMålform()).isEqualTo(Målform.NB);
+        assertThat(søker.søknadsRolle()).isEqualTo(BrukerRolle.FAR);
+        assertThat(søker.målform()).isEqualTo(Målform.NB);
 
         assertThat(søknad.getYtelse()).isInstanceOf(Foreldrepenger.class);
         var ytelse = (Foreldrepenger) søknad.getYtelse();
@@ -115,7 +113,7 @@ class ForeldrepengeSøknadTilDtoMapperTest {
 
         var søknad = connection.body(sf);
         assertThat(søknad).isNotNull();
-        assertThat(søknad.getSøker().getSøknadsRolle()).isEqualTo(BrukerRolle.MOR);
+        assertThat(søknad.getSøker().søknadsRolle()).isEqualTo(BrukerRolle.MOR);
         assertThat(søknad.getYtelse()).isInstanceOf(Foreldrepenger.class);
         var ytelse = (Foreldrepenger) søknad.getYtelse();
         assertThat(ytelse.relasjonTilBarn()).isInstanceOf(Fødsel.class);
@@ -145,15 +143,14 @@ class ForeldrepengeSøknadTilDtoMapperTest {
         var egennæringer = ytelse.opptjening().egenNæring();
         assertThat(egennæringer).hasSize(1);
         var egennæring = egennæringer.get(0);
-        assertThat(egennæring).isInstanceOf(NorskOrganisasjon.class);
-        var norskOrganisasjon = (NorskOrganisasjon) egennæring;
-        assertThat(norskOrganisasjon.getOrgName()).isNotNull();
-        assertThat(norskOrganisasjon.getOrgNummer()).isNotNull();
-        assertThat(norskOrganisasjon.getRegnskapsførere()).hasSize(1);
-        assertThat(norskOrganisasjon.isNærRelasjon()).isTrue();
-        assertThat(norskOrganisasjon.getNæringsinntektBrutto()).isEqualTo(220_000);
-        assertThat(norskOrganisasjon.isErNyIArbeidslivet()).isFalse();
-        assertThat(norskOrganisasjon.isErNyOpprettet()).isTrue();
+        assertThat(egennæring.registrertILand()).isEqualTo(CountryCode.NO);
+        assertThat(egennæring.orgName()).isNotNull();
+        assertThat(egennæring.orgNummer()).isNotNull();
+        assertThat(egennæring.regnskapsførere()).hasSize(1);
+        assertThat(egennæring.nærRelasjon()).isTrue();
+        assertThat(egennæring.næringsinntektBrutto()).isEqualTo(220_000);
+        assertThat(egennæring.erNyIArbeidslivet()).isFalse();
+        assertThat(egennæring.erNyOpprettet()).isTrue();
     }
 
 
@@ -164,7 +161,7 @@ class ForeldrepengeSøknadTilDtoMapperTest {
 
         var søknad = connection.body(sf);
         assertThat(søknad).isNotNull();
-        assertThat(søknad.getSøker().getSøknadsRolle()).isEqualTo(BrukerRolle.MOR);
+        assertThat(søknad.getSøker().søknadsRolle()).isEqualTo(BrukerRolle.MOR);
         assertThat(søknad.getYtelse()).isInstanceOf(Foreldrepenger.class);
         var ytelse = (Foreldrepenger) søknad.getYtelse();
         assertThat(ytelse.relasjonTilBarn()).isInstanceOf(Fødsel.class);

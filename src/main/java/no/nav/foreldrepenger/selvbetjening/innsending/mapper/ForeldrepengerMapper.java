@@ -5,10 +5,12 @@ import static no.nav.foreldrepenger.selvbetjening.innsending.mapper.CommonMapper
 import static no.nav.foreldrepenger.selvbetjening.innsending.mapper.CommonMapper.tilOpptjening;
 import static no.nav.foreldrepenger.selvbetjening.innsending.mapper.CommonMapper.tilRelasjonTilBarn;
 
+import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
 
 import no.nav.foreldrepenger.common.domain.Søker;
+import no.nav.foreldrepenger.common.domain.Søknad;
 import no.nav.foreldrepenger.common.domain.felles.ProsentAndel;
 import no.nav.foreldrepenger.common.domain.foreldrepenger.Dekningsgrad;
 import no.nav.foreldrepenger.common.domain.foreldrepenger.Endringssøknad;
@@ -38,17 +40,20 @@ final class ForeldrepengerMapper {
     static no.nav.foreldrepenger.common.domain.Søknad tilForeldrepengesøknad(ForeldrepengesøknadFrontend foreldrepengesøknad) {
         if (Boolean.TRUE.equals(foreldrepengesøknad.getErEndringssøknad())) {
             return new Endringssøknad(
-                foreldrepengesøknad.getSaksnummer(),
-                null, // Settes senere
+                LocalDate.now(),
                 tilSøker(foreldrepengesøknad),
                 tilYtelse(foreldrepengesøknad),
-                new ArrayList<>()); // Settes av InnsendingConnection etter logging
+                foreldrepengesøknad.getTilleggsopplysninger(),
+                new ArrayList<>(),  // Settes av InnsendingConnection etter logging
+                foreldrepengesøknad.getSaksnummer());
         }
-        return no.nav.foreldrepenger.common.domain.Søknad.builder()
-            .søker(tilSøker(foreldrepengesøknad))
-            .ytelse(tilYtelse(foreldrepengesøknad))
-            .vedlegg(new ArrayList<>()) // Settes av InnsendingConnection etter logging
-            .build();
+        return new Søknad(
+            LocalDate.now(),
+            tilSøker(foreldrepengesøknad),
+            tilYtelse(foreldrepengesøknad),
+            foreldrepengesøknad.getTilleggsopplysninger(),
+            new ArrayList<>() // Settes av InnsendingConnection etter logging
+        );
     }
 
     private static Søker tilSøker(ForeldrepengesøknadFrontend f) {
@@ -61,19 +66,15 @@ final class ForeldrepengerMapper {
 
 
     private static Foreldrepenger tilYtelse(ForeldrepengesøknadFrontend f) {
-        var foreldrepengerBuilder = Foreldrepenger.builder();
-        if (Boolean.FALSE.equals(f.getErEndringssøknad())) {
-            foreldrepengerBuilder
-                .medlemsskap(tilMedlemskap(f))
-                .opptjening(tilOpptjening(f));
-        }
-        return foreldrepengerBuilder
-            .annenForelder(tilAnnenForelder(f))
-            .relasjonTilBarn(tilRelasjonTilBarn(f))
-            .dekningsgrad(Dekningsgrad.fraKode(f.getDekningsgrad()))
-            .fordeling(tilFordeling(f))
-            .rettigheter(tilRettigheter(f))
-            .build();
+        return new Foreldrepenger(
+            tilAnnenForelder(f),
+            tilRelasjonTilBarn(f),
+            tilRettigheter(f),
+            Dekningsgrad.fraKode(f.getDekningsgrad()),
+            Boolean.FALSE.equals(f.getErEndringssøknad()) ? tilOpptjening(f) : null,
+            tilFordeling(f),
+            Boolean.FALSE.equals(f.getErEndringssøknad()) ? tilMedlemskap(f) : null
+        );
     }
 
     private static Rettigheter tilRettigheter(ForeldrepengesøknadFrontend f) {
@@ -81,16 +82,17 @@ final class ForeldrepengerMapper {
             f.getAnnenForelder().harRettPåForeldrepenger(),
             f.getSøker().erAleneOmOmsorg(),
             f.getAnnenForelder().harMorUføretrygd(),
+            null,
             f.getAnnenForelder().harAnnenForelderTilsvarendeRettEØS());
     }
 
 
     private static Fordeling tilFordeling(ForeldrepengesøknadFrontend f) {
-        return Fordeling.builder()
-            .perioder(tilLukketPeriodeMedVedlegg(f.getUttaksplan()))
-            .ønskerJustertUttakVedFødsel(f.isØnskerJustertUttakVedFødsel())
-            .erAnnenForelderInformert(f.getAnnenForelder().erInformertOmSøknaden())
-            .build();
+        return new Fordeling(
+            f.getAnnenForelder().erInformertOmSøknaden(),
+            tilLukketPeriodeMedVedlegg(f.getUttaksplan()),
+            f.isØnskerJustertUttakVedFødsel()
+        );
     }
 
     private static List<LukketPeriodeMedVedlegg> tilLukketPeriodeMedVedlegg(List<UttaksplanPeriode> uttaksplan) {
@@ -114,81 +116,77 @@ final class ForeldrepengerMapper {
     }
 
     private static OverføringsPeriode tilOverføringsPeriode(UttaksplanPeriode u) {
-        return OverføringsPeriode.builder()
-            .årsak(u.årsak() != null ? Overføringsårsak.valueOf(u.årsak()) : null)
-            .uttaksperiodeType(StønadskontoType.valueSafelyOf(u.konto()))
-            .fom(u.tidsperiode().fom())
-            .tom(u.tidsperiode().tom())
-            .vedlegg(u.vedlegg())
-            .build();
+        return new OverføringsPeriode(
+            u.tidsperiode().fom(),
+            u.tidsperiode().tom(),
+            u.årsak() != null ? Overføringsårsak.valueOf(u.årsak()) : null,
+            StønadskontoType.valueSafelyOf(u.konto()),
+            u.vedlegg()
+        );
     }
 
     private static FriUtsettelsesPeriode tilFriUtsettelsesPeriode(UttaksplanPeriode u) {
-        return FriUtsettelsesPeriode.FriUtsettelsesPeriodeBuilder()
-            .årsak(UtsettelsesÅrsak.valueOf(u.årsak()))
-            .erArbeidstaker(u.erArbeidstaker())
-            .morsAktivitetsType(u.morsAktivitetIPerioden() != null ? MorsAktivitet.valueOf(u.morsAktivitetIPerioden()) : null)
-            .fom(u.tidsperiode().fom())
-            .tom(u.tidsperiode().tom())
-            .vedlegg(u.vedlegg())
-            .build();
-
+        return new FriUtsettelsesPeriode(
+            u.tidsperiode().fom(),
+            u.tidsperiode().tom(),
+            u.erArbeidstaker(),
+            UtsettelsesÅrsak.valueOf(u.årsak()),
+            u.morsAktivitetIPerioden() != null ? MorsAktivitet.valueOf(u.morsAktivitetIPerioden()) : null,
+            u.vedlegg()
+        );
     }
 
     private static UtsettelsesPeriode tilUtsettelsesPeriode(UttaksplanPeriode u) {
-        return UtsettelsesPeriode.UtsettelsesPeriodeBuilder()
-            .årsak(UtsettelsesÅrsak.valueOf(u.årsak()))
-            .erArbeidstaker(u.erArbeidstaker())
-            .virksomhetsnummer(u.orgnumre())
-            .morsAktivitetsType(u.morsAktivitetIPerioden() != null ? MorsAktivitet.valueOf(u.morsAktivitetIPerioden()) : null)
-            .fom(u.tidsperiode().fom())
-            .tom(u.tidsperiode().tom())
-            .vedlegg(u.vedlegg())
-            .build();
+        return new UtsettelsesPeriode(
+            u.tidsperiode().fom(),
+            u.tidsperiode().tom(),
+            u.erArbeidstaker(),
+            UtsettelsesÅrsak.valueOf(u.årsak()),
+            u.morsAktivitetIPerioden() != null ? MorsAktivitet.valueOf(u.morsAktivitetIPerioden()) : null,
+            u.vedlegg()
+        );
     }
 
     private static OppholdsPeriode tilOppholdsPeriode(UttaksplanPeriode u) {
-        return OppholdsPeriode.builder()
-            .årsak(u.årsak() != null ? Oppholdsårsak.valueOf(u.årsak()) : null)
-            .fom(u.tidsperiode().fom())
-            .tom(u.tidsperiode().tom())
-            .vedlegg(u.vedlegg())
-            .build();
+        return new OppholdsPeriode(
+            u.tidsperiode().fom(),
+            u.tidsperiode().tom(),
+            u.årsak() != null ? Oppholdsårsak.valueOf(u.årsak()) : null,
+            u.vedlegg()
+        );
     }
 
     private static UttaksPeriode tilUttaksPeriode(UttaksplanPeriode u) {
-        return UttaksPeriode.UttaksPeriodeBuilder()
-            .uttaksperiodeType(StønadskontoType.valueSafelyOf(u.konto()))
-            .ønskerSamtidigUttak(u.ønskerSamtidigUttak())
-            .morsAktivitetsType(u.morsAktivitetIPerioden() != null ? MorsAktivitet.valueOf(u.morsAktivitetIPerioden()) : null)
-            .ønskerFlerbarnsdager(u.ønskerFlerbarnsdager())
-            .samtidigUttakProsent(u.samtidigUttakProsent() != null ? ProsentAndel.valueOf(u.samtidigUttakProsent()) : null)
-            .justeresVedFødsel(u.justeresVedFødsel())
-            .fom(u.tidsperiode().fom())
-            .tom(u.tidsperiode().tom())
-            .vedlegg(u.vedlegg())
-            .build();
+        return new UttaksPeriode(
+            u.tidsperiode().fom(),
+            u.tidsperiode().tom(),
+            u.vedlegg(),
+            StønadskontoType.valueSafelyOf(u.konto()),
+            u.ønskerSamtidigUttak(),
+            u.morsAktivitetIPerioden() != null ? MorsAktivitet.valueOf(u.morsAktivitetIPerioden()) : null,
+            u.ønskerFlerbarnsdager(),
+            u.samtidigUttakProsent() != null ? ProsentAndel.valueOf(u.samtidigUttakProsent()) : null,
+            u.justeresVedFødsel()
+        );
     }
 
     private static GradertUttaksPeriode tilGradertUttaksperiode(UttaksplanPeriode u) {
-        return GradertUttaksPeriode.GradertUttaksPeriodeBuilder()
-            .arbeidsForholdSomskalGraderes(true)
-            .arbeidstidProsent(u.stillingsprosent() != null ? ProsentAndel.valueOf(u.stillingsprosent()) : null)
-            .erArbeidstaker(u.erArbeidstaker())
-            .justeresVedFødsel(u.justeresVedFødsel())
-            .virksomhetsnummer(u.orgnumre())
-            .frilans(u.erFrilanser())
-            .selvstendig(u.erSelvstendig())
-
-            .uttaksperiodeType(StønadskontoType.valueSafelyOf(u.konto()))
-            .ønskerSamtidigUttak(u.ønskerSamtidigUttak())
-            .morsAktivitetsType(u.morsAktivitetIPerioden() != null ? MorsAktivitet.valueOf(u.morsAktivitetIPerioden()) : null)
-            .ønskerFlerbarnsdager(u.ønskerFlerbarnsdager())
-            .samtidigUttakProsent(u.samtidigUttakProsent() != null ? ProsentAndel.valueOf(u.samtidigUttakProsent()) : null)
-
-            .fom(u.tidsperiode().fom())
-            .tom(u.tidsperiode().tom())
-            .vedlegg(u.vedlegg())
-            .build();
+        return new GradertUttaksPeriode(
+            u.tidsperiode().fom(),
+            u.tidsperiode().tom(),
+            u.vedlegg(),
+            StønadskontoType.valueSafelyOf(u.konto()),
+            u.ønskerSamtidigUttak(),
+            u.morsAktivitetIPerioden() != null ? MorsAktivitet.valueOf(u.morsAktivitetIPerioden()) : null,
+            u.ønskerFlerbarnsdager(),
+            u.samtidigUttakProsent() != null ? ProsentAndel.valueOf(u.samtidigUttakProsent()) : null,
+            u.stillingsprosent() != null ? ProsentAndel.valueOf(u.stillingsprosent()) : null,
+            u.erArbeidstaker(),
+            u.orgnumre(),
+            true,
+            u.erFrilanser(),
+            u.erSelvstendig(),
+            u.justeresVedFødsel()
+        );
     }
 }
