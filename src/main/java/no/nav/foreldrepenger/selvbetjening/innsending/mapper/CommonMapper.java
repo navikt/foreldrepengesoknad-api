@@ -39,6 +39,7 @@ import no.nav.foreldrepenger.selvbetjening.innsending.domain.arbeid.FrilansInfor
 import no.nav.foreldrepenger.selvbetjening.innsending.domain.arbeid.FrilansoppdragFrontend;
 import no.nav.foreldrepenger.selvbetjening.innsending.domain.arbeid.SelvstendigNæringsdrivendeInformasjonFrontend;
 import no.nav.foreldrepenger.selvbetjening.innsending.domain.arbeid.TilknyttetPerson;
+import org.jetbrains.annotations.Nullable;
 
 import java.time.LocalDate;
 import java.util.List;
@@ -77,6 +78,9 @@ public final class CommonMapper {
     }
 
     static Medlemsskap tilMedlemskap(SøknadFrontend s) {
+        if (Boolean.TRUE.equals(s.getErEndringssøknad())) {
+            return null;
+        }
         var opphold = s.getInformasjonOmUtenlandsopphold();
         return new Medlemsskap(
             tilUtenlandsoppholdsliste(opphold.tidligereOpphold()),
@@ -84,6 +88,10 @@ public final class CommonMapper {
     }
 
     static Opptjening tilOpptjening(SøknadFrontend s) {
+        if (Boolean.TRUE.equals(s.getErEndringssøknad())) {
+            return null;
+        }
+
         var søker = s.getSøker();
         return new Opptjening(
             tilUtenlandsArbeidsforhold(søker.andreInntekterSiste10Mnd()),
@@ -199,9 +207,8 @@ public final class CommonMapper {
     }
 
     private static EgenNæring tilEgenNæring(SelvstendigNæringsdrivendeInformasjonFrontend selvstendig) {
-        var nærRelasjon = false;
+        var nærRelasjon = false; // TODO: Kan vi ha både regnsskapsfører og revisor? Vi har bare propagert en av delene til nå. Bare regnskapsfører hvis begge er oppgitt.
         List<Regnskapsfører> regnskapsførere = null;
-
         var regnskapsfører = selvstendig.regnskapsfører();
         var revisor = selvstendig.revisor();
         if (regnskapsfører != null) {
@@ -219,11 +226,12 @@ public final class CommonMapper {
         if (næringsInfo != null) {
             endringsDato = næringsInfo.dato();
             næringsinntektBrutto = næringsInfo.næringsinntektEtterEndring();
+            beskrivelseEndring = næringsInfo.forklaring();
         }
 
         return new EgenNæring(
             selvstendig.registrertINorge() ? CountryCode.NO : land(selvstendig.registrertILand()),
-            selvstendig.organisasjonsnummer() != null ? Orgnummer.valueOf(selvstendig.organisasjonsnummer()): null,
+            tilOrgnummer(selvstendig),
             selvstendig.navnPåNæringen(),
             selvstendig.næringstyper(),
             new ÅpenPeriode(selvstendig.tidsperiode().fom(), selvstendig.tidsperiode().tom()),
@@ -239,6 +247,13 @@ public final class CommonMapper {
             selvstendig.stillingsprosent() != null ? ProsentAndel.valueOf(selvstendig.stillingsprosent()) : null,
             selvstendig.vedlegg()
         );
+    }
+
+    private static Orgnummer tilOrgnummer(SelvstendigNæringsdrivendeInformasjonFrontend selvstendig) {
+        if (selvstendig.registrertINorge()) {
+            return selvstendig.organisasjonsnummer() != null ? Orgnummer.valueOf(selvstendig.organisasjonsnummer()) : null;
+        }
+        return null;
     }
 
     private static Regnskapsfører tilRegnskapsfører(TilknyttetPerson person) {

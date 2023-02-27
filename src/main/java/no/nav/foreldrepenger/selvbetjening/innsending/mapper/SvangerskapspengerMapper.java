@@ -54,8 +54,8 @@ final class SvangerskapspengerMapper {
         return new Svangerskapspenger(
             s.getBarn().termindato(),
             tilFødselsdato(s),
-            Boolean.FALSE.equals(s.getErEndringssøknad()) ? tilMedlemskap(s) : null,
-            Boolean.FALSE.equals(s.getErEndringssøknad()) ? tilOpptjening(s) : null,
+            tilMedlemskap(s),
+            tilOpptjening(s),
             tilTilrettelegging(s)
         );
     }

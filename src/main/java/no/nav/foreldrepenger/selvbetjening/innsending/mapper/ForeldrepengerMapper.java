@@ -71,9 +71,9 @@ final class ForeldrepengerMapper {
             tilRelasjonTilBarn(f),
             tilRettigheter(f),
             Dekningsgrad.fraKode(f.getDekningsgrad()),
-            Boolean.FALSE.equals(f.getErEndringssøknad()) ? tilOpptjening(f) : null,
+            tilOpptjening(f),
             tilFordeling(f),
-            Boolean.FALSE.equals(f.getErEndringssøknad()) ? tilMedlemskap(f) : null
+            tilMedlemskap(f)
         );
     }
 

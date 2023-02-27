@@ -38,7 +38,7 @@ final class EngangsstønadMapper {
 
     private static Ytelse tilYtelse(EngangsstønadFrontend e) {
         return new Engangsstønad(
-            Boolean.FALSE.equals(e.getErEndringssøknad()) ? tilMedlemskap(e) : null,
+            tilMedlemskap(e),
             tilRelasjonTilBarn(e)
         );
     }
