@@ -12,6 +12,7 @@ import java.net.URI;
 import java.util.List;
 import java.util.Optional;
 
+import no.nav.foreldrepenger.common.domain.felles.VedleggReferanse;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.Mock;
@@ -47,8 +48,8 @@ class VedleggSjekkerTest {
     @Test
     void størrelseVedleggSjekkerhappyCase() {
         // Hvert enkelt eller total overstiger ikke maks
-        sjekker.sjekk(attachment(2), attachment(2));
-        sjekker.sjekk(vedlegg(2), vedlegg(2));
+        assertDoesNotThrow(() -> sjekker.sjekk(attachment(2), attachment(2)));
+        assertDoesNotThrow(() -> sjekker.sjekk(vedlegg(2), vedlegg(2)));
     }
 
     @Test
@@ -146,7 +147,7 @@ class VedleggSjekkerTest {
     private static VedleggFrontend vedlegg(int megabytes) {
         var uuid = "802e2ce7-8106-46cf-afdb-2aecc2b6de7c";
         var content = new byte[((int) DataSize.ofMegabytes(megabytes).toBytes())];
-        return new VedleggFrontend(content, "En stoooor pdf!", "V00001", null, "I000038", uuid, URI.create("https://foreldrepengesoknad-api.nav.no/" + uuid));
+        return new VedleggFrontend(content, "En stoooor pdf!", new VedleggReferanse("V00001"), null, "I000038", uuid, URI.create("https://foreldrepengesoknad-api.nav.no/" + uuid));
     }
 
     private static byte[] fraResource(String classPathResource) throws IOException {

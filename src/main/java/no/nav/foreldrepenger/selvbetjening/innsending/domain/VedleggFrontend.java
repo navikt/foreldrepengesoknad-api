@@ -5,17 +5,20 @@ import static no.nav.foreldrepenger.common.domain.validation.InputValideringRege
 import java.net.URI;
 import java.util.Objects;
 
+import javax.validation.Valid;
 import javax.validation.constraints.Pattern;
 
 import com.fasterxml.jackson.annotation.JsonCreator;
+import no.nav.foreldrepenger.common.domain.felles.VedleggReferanse;
 
 public class VedleggFrontend {
 
     private byte[] content;
     @Pattern(regexp = FRITEKST)
     private final String beskrivelse;
-    @Pattern(regexp = "^[\\p{Digit}\\p{L}]*$")
-    private final String id;
+
+    @Valid
+    private final VedleggReferanse id;
     @Pattern(regexp = "^[\\p{Digit}\\p{L}_]*$")
     private final String innsendingsType;
     @Pattern(regexp = "^[\\p{Digit}\\p{L}]*$")
@@ -24,12 +27,12 @@ public class VedleggFrontend {
     private final String uuid;
     private final URI url;
 
-    public VedleggFrontend(byte[] content, String beskrivelse, String id, String skjemanummer) {
+    public VedleggFrontend(byte[] content, String beskrivelse, VedleggReferanse id, String skjemanummer) {
         this(content, beskrivelse, id, null, skjemanummer, null, null);
     }
 
     @JsonCreator
-    public VedleggFrontend(byte[] content, String beskrivelse, String id, String innsendingsType, String skjemanummer, String uuid, URI url) {
+    public VedleggFrontend(byte[] content, String beskrivelse, VedleggReferanse id, String innsendingsType, String skjemanummer, String uuid, URI url) {
         this.content = content;
         this.beskrivelse = beskrivelse;
         this.id = id;
@@ -61,7 +64,7 @@ public class VedleggFrontend {
         return beskrivelse;
     }
 
-    public String getId() {
+    public VedleggReferanse getId() {
         return id;
     }
 

@@ -33,11 +33,13 @@ final class SvangerskapspengerMapper {
     }
 
     static Søknad tilSvangerskapspengesøknad(SvangerskapspengesøknadFrontend s) {
-        return no.nav.foreldrepenger.common.domain.Søknad.builder()
-            .søker(tilSøker(s))
-            .ytelse(tilYtelse(s))
-            .vedlegg(new ArrayList<>()) // Settes av InnsendingConnection etter logging
-            .build();
+        return new Søknad(
+            LocalDate.now(),
+            tilSøker(s),
+            tilYtelse(s),
+            s.getTilleggsopplysninger(),
+            new ArrayList<>() // Settes av InnsendingConnection etter logging
+        );
     }
 
     private static Søker tilSøker(SvangerskapspengesøknadFrontend s) {
@@ -49,17 +51,13 @@ final class SvangerskapspengerMapper {
     }
 
     public static Svangerskapspenger tilYtelse(SvangerskapspengesøknadFrontend s) {
-        var svangerskapspengerBuilder = Svangerskapspenger.builder();
-        if (Boolean.FALSE.equals(s.getErEndringssøknad())) {
-            svangerskapspengerBuilder
-                .medlemsskap(tilMedlemskap(s))
-                .opptjening(tilOpptjening(s));
-        }
-        return svangerskapspengerBuilder
-            .termindato(s.getBarn().termindato())
-            .fødselsdato(tilFødselsdato(s))
-            .tilrettelegging(tilTilrettelegging(s))
-            .build();
+        return new Svangerskapspenger(
+            s.getBarn().termindato(),
+            tilFødselsdato(s),
+            tilMedlemskap(s),
+            tilOpptjening(s),
+            tilTilrettelegging(s)
+        );
     }
 
     private static LocalDate tilFødselsdato(SvangerskapspengesøknadFrontend s) {

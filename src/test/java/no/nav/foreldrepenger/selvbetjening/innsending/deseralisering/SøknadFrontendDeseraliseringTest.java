@@ -12,6 +12,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
+import no.nav.foreldrepenger.common.domain.felles.VedleggReferanse;
 import no.nav.foreldrepenger.selvbetjening.innsending.domain.VedleggFrontend;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -51,7 +52,7 @@ class SøknadFrontendDeseraliseringTest {
         assertThat(fs.getSituasjon()).isEqualTo("fødsel");
         assertThat(fs.getErEndringssøknad()).isFalse();
         assertThat(fs.getDekningsgrad()).isEqualTo("80");
-        assertThat(fs.isØnskerJustertUttakVedFødsel()).isEqualTo(true);
+        assertThat(fs.isØnskerJustertUttakVedFødsel()).isTrue();
 
         assertThat(fs.getUttaksplan()).hasSize(3);
         var uttaksperiode1 = fs.getUttaksplan().get(0);
@@ -163,12 +164,12 @@ class SøknadFrontendDeseraliseringTest {
         assertThat(vedleggListe).hasSize(1);
         var vedlegg = vedleggListe.get(0);
         assertThat(vedlegg.getSkjemanummer()).isEqualTo("I000044");
-        assertThat(vedlegg.getId()).isEqualTo("V090740687265315217194125674862219730");
+        assertThat(vedlegg.getId()).isEqualTo(new VedleggReferanse("V090740687265315217194125674862219730"));
         assertThat(vedlegg.getUrl()).isEqualTo(new URI("https://foreldrepengesoknad-api.dev.nav.no/rest/storage/vedlegg/b9974360-6c07-4b9d-acac-14f0f417d200"));
     }
 
     @Test
-    void innsendingVedlegglistestørrelsevalidatorTest() throws JsonProcessingException {
+    void innsendingVedlegglistestørrelsevalidatorTest() {
         var forMangeSendSenere = validVedleggsliste(101, 0);
         assertFalse(forMangeSendSenere);
 
@@ -183,16 +184,16 @@ class SøknadFrontendDeseraliseringTest {
     }
 
     private boolean validVedleggsliste(int sendSenereVedlegg, int opplastetVedlegg) {
-        List<VedleggFrontend>  sendSenere = new ArrayList<VedleggFrontend>();
+        List<VedleggFrontend>  sendSenere = new ArrayList<>();
 
         while (sendSenere.size() < sendSenereVedlegg) {
-            var nyttVedlegg = new VedleggFrontend(null, "Beskrivelse", "Id", "SEND_SENERE", "Skjemanummer", "xyz", null);
+            var nyttVedlegg = new VedleggFrontend(null, "Beskrivelse", new VedleggReferanse("Id"), "SEND_SENERE", "Skjemanummer", "xyz", null);
             sendSenere.add(nyttVedlegg);
         }
 
         List<VedleggFrontend> opplastet = new ArrayList<>();
         while (opplastet.size() < opplastetVedlegg) {
-            var nyttVedlegg = new VedleggFrontend(null, "Beskrivelse", "Id", null, "Skjemanummer", "xyz", null);
+            var nyttVedlegg = new VedleggFrontend(null, "Beskrivelse", new VedleggReferanse("Id"), null, "Skjemanummer", "xyz", null);
             opplastet.add(nyttVedlegg);
         }
         sendSenere.addAll(opplastet);

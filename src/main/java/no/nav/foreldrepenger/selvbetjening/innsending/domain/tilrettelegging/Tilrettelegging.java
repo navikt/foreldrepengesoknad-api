@@ -13,6 +13,7 @@ import javax.validation.constraints.Pattern;
 
 import com.fasterxml.jackson.annotation.JsonCreator;
 import com.fasterxml.jackson.annotation.JsonInclude;
+import no.nav.foreldrepenger.common.domain.felles.VedleggReferanse;
 
 @JsonInclude(NON_EMPTY)
 public record Tilrettelegging(@Pattern(regexp = BARE_BOKSTAVER) String type,
@@ -21,12 +22,12 @@ public record Tilrettelegging(@Pattern(regexp = BARE_BOKSTAVER) String type,
                               LocalDate behovForTilretteleggingFom,
                               LocalDate tilrettelagtArbeidFom,
                               LocalDate slutteArbeidFom,
-                              List<@Pattern(regexp = "^[\\p{Digit}\\p{L}]*$") String> vedlegg) {
+                              List<VedleggReferanse> vedlegg) {
 
     @JsonCreator
     public Tilrettelegging(String type, Arbeidsforhold arbeidsforhold, Double stillingsprosent,
                            LocalDate behovForTilretteleggingFom, LocalDate tilrettelagtArbeidFom,
-                           LocalDate slutteArbeidFom, List<String> vedlegg) {
+                           LocalDate slutteArbeidFom, List<VedleggReferanse> vedlegg) {
         this.type = type;
         this.arbeidsforhold = arbeidsforhold;
         this.stillingsprosent = stillingsprosent;

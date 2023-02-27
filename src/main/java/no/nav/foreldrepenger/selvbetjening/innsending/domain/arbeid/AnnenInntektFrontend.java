@@ -14,6 +14,7 @@ import javax.validation.constraints.Size;
 
 import com.fasterxml.jackson.annotation.JsonInclude;
 
+import no.nav.foreldrepenger.common.domain.felles.VedleggReferanse;
 import no.nav.foreldrepenger.selvbetjening.innsending.domain.Tidsperiode;
 
 @JsonInclude(NON_NULL)
@@ -22,10 +23,10 @@ public record AnnenInntektFrontend(@Pattern(regexp = "^[\\p{L}_]*$") String type
                                    @Pattern(regexp = FRITEKST) String arbeidsgiverNavn,
                                    @Valid Tidsperiode tidsperiode,
                                    boolean erNærVennEllerFamilieMedArbeisdgiver,
-                                   @Valid @Size(max = 15) List<@Pattern(regexp = "^[\\p{Digit}\\p{L}]*$") String> vedlegg) {
+                                   @Valid @Size(max = 15) List<VedleggReferanse> vedlegg) {
 
     public AnnenInntektFrontend(String type, String land, String arbeidsgiverNavn, Tidsperiode tidsperiode,
-                                boolean erNærVennEllerFamilieMedArbeisdgiver, List<String> vedlegg) {
+                                boolean erNærVennEllerFamilieMedArbeisdgiver, List<VedleggReferanse> vedlegg) {
         this.type = type;
         this.land = land;
         this.arbeidsgiverNavn = arbeidsgiverNavn;

@@ -49,8 +49,8 @@ class SvangerskapspengesøknadTilDtoMapperTest {
         assertThat(ytelse.termindato()).isNotNull();
 
         var søker = søknad.getSøker();
-        assertThat(søker.getSøknadsRolle()).isEqualTo(BrukerRolle.MOR);
-        assertThat(søker.getMålform()).isEqualTo(Målform.NB);
+        assertThat(søker.søknadsRolle()).isEqualTo(BrukerRolle.MOR);
+        assertThat(søker.målform()).isEqualTo(Målform.NB);
 
         // Medlemsskap
         var medlemsskap = ytelse.medlemsskap();

@@ -6,6 +6,7 @@ import java.security.SecureRandom;
 import java.util.List;
 import java.util.Random;
 
+import no.nav.foreldrepenger.common.domain.felles.VedleggReferanse;
 import org.slf4j.Logger;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnProperty;
 import org.springframework.stereotype.Service;
@@ -88,8 +89,8 @@ public class InnsendingTjeneste implements Innsending {
             e.brukerTekst());
     }
 
-    private static String id() {
-        return "V" + IDGENERATOR.nextLong();
+    private static VedleggReferanse id() {
+        return new VedleggReferanse("V" + IDGENERATOR.nextLong());
     }
 
     public void hentMellomlagredeFiler(List<VedleggFrontend> vedlegg) {
