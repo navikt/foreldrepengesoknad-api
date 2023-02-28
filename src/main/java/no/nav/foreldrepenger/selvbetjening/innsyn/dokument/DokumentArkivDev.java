@@ -1,6 +1,5 @@
 package no.nav.foreldrepenger.selvbetjening.innsyn.dokument;
 
-import no.nav.boot.conditionals.ConditionalOnNotProd;
 import no.nav.foreldrepenger.selvbetjening.http.ProtectedRestController;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
@@ -9,7 +8,6 @@ import org.springframework.web.bind.annotation.PathVariable;
 
 import javax.inject.Inject;
 
-@ConditionalOnNotProd
 @ProtectedRestController("/rest/dokument")
 public class DokumentArkivDev {
 
@@ -26,6 +24,11 @@ public class DokumentArkivDev {
     }
 
     @GetMapping(value = "/alle", produces = MediaType.APPLICATION_JSON_VALUE)
+    public ResponseEntity<String> hentDokumentoversikten() {
+        return ResponseEntity.ok().body(dokumentArkivTjeneste.hentDokumentoversikt());
+    }
+
+    @GetMapping(value = "/dokmentoversikt", produces = MediaType.APPLICATION_JSON_VALUE)
     public ResponseEntity<String> hentDokumentoversikt() {
         return ResponseEntity.ok().body(dokumentArkivTjeneste.hentDokumentoversikt());
     }

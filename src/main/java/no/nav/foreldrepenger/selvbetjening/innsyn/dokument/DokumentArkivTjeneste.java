@@ -1,6 +1,5 @@
 package no.nav.foreldrepenger.selvbetjening.innsyn.dokument;
 
-import no.nav.boot.conditionals.ConditionalOnNotProd;
 import no.nav.foreldrepenger.selvbetjening.http.AbstractRestConnection;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
@@ -11,10 +10,9 @@ import javax.inject.Inject;
 import java.net.URI;
 
 @Service
-@ConditionalOnNotProd
 public class DokumentArkivTjeneste extends AbstractRestConnection {
 
-    private URI baseUri;
+    private final URI baseUri;
 
 
     @Inject
