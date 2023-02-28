@@ -20,6 +20,7 @@ import java.util.Optional;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.boot.autoconfigure.web.client.RestTemplateBuilderConfigurer;
 import org.springframework.boot.web.client.RestTemplateBuilder;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -55,6 +56,14 @@ public class RestClientConfiguration implements WebMvcConfigurer {
             .setConnectTimeout(CONNECT_TIMEOUT)
             .setReadTimeout(READ_TIMEOUT)
             .build();
+    }
+
+    @Bean
+    public RestTemplateBuilder tokendingsRestTemplateBuilder(RestTemplateBuilderConfigurer configurer) {
+        // RestTemplateBuilder tas inn av DefaultOAuth2HttpClient. Setter default timeout verdier for denne.
+        return configurer.configure(new RestTemplateBuilder())
+            .setConnectTimeout(Duration.ofSeconds(5))
+            .setReadTimeout(Duration.ofSeconds(15));
     }
 
     @Bean
