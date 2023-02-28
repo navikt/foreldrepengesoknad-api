@@ -1,6 +1,5 @@
 package no.nav.foreldrepenger.selvbetjening.innsyn.tidslinje;
 
-import no.nav.boot.conditionals.ConditionalOnNotProd;
 import no.nav.foreldrepenger.selvbetjening.http.AbstractRestConnection;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
@@ -11,12 +10,12 @@ import javax.inject.Inject;
 import java.net.URI;
 
 @Service
-@ConditionalOnNotProd
 public class TidslinjeTjeneste extends AbstractRestConnection {
     private final URI baseUri;
 
     @Inject
-    public TidslinjeTjeneste(RestOperations operations, @Value("${historikk.uri}") URI uri) {
+    public TidslinjeTjeneste(RestOperations operations,
+                             @Value("${historikk.uri}") URI uri) {
         super(operations);
         this.baseUri = uri;
     }

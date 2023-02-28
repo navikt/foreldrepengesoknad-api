@@ -9,12 +9,12 @@ import org.springframework.web.bind.annotation.PathVariable;
 import javax.inject.Inject;
 
 @ProtectedRestController("/rest/dokument")
-public class DokumentArkivDev {
+public class DokumentArkiv {
 
     private DokumentArkivTjeneste dokumentArkivTjeneste;
 
     @Inject
-    public DokumentArkivDev(DokumentArkivTjeneste dokumentArkivTjeneste) {
+    public DokumentArkiv(DokumentArkivTjeneste dokumentArkivTjeneste) {
         this.dokumentArkivTjeneste = dokumentArkivTjeneste;
     }
 
@@ -28,7 +28,7 @@ public class DokumentArkivDev {
         return ResponseEntity.ok().body(dokumentArkivTjeneste.hentDokumentoversikt());
     }
 
-    @GetMapping(value = "/dokmentoversikt", produces = MediaType.APPLICATION_JSON_VALUE)
+    @GetMapping(value = "/dokumentoversikt", produces = MediaType.APPLICATION_JSON_VALUE)
     public ResponseEntity<String> hentDokumentoversikt() {
         return ResponseEntity.ok().body(dokumentArkivTjeneste.hentDokumentoversikt());
     }
