@@ -60,8 +60,8 @@
 	<dependencies>
 		<dependency>
 			<groupId>no.nav.foreldrepenger</groupId>
-			<artifactId>uttak-regler</artifactId>
-            <version>14.3.3</version>
+			<artifactId>stonadskonto-regler</artifactId>
+            <version>1.0.0</version>
 		</dependency>
         <dependency>
             <groupId>no.nav.boot</groupId>

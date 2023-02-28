@@ -2,7 +2,8 @@ package no.nav.foreldrepenger.selvbetjening.uttak;
 
 import java.util.Map;
 
-import no.nav.foreldrepenger.regler.uttak.beregnkontoer.Minsterett;
+import no.nav.foreldrepenger.stønadskonto.regelmodell.Minsterett;
+
 
 public record Minsteretter(int generellMinsterett, int farRundtFødsel, int toTette) {
 
