@@ -47,5 +47,6 @@ jobs:
     uses: navikt/fp-gha-workflows/.github/workflows/snyk.yml@main
     with:
       build-version: ${{ needs.build-app.outputs.build-version }}
+      multi-module-maven-project: false
     secrets: inherit
 

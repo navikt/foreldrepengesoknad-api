@@ -14,5 +14,6 @@ jobs:
     name: Snyk
     uses: navikt/fp-gha-workflows/.github/workflows/snyk.yml@main
     with:
-      build-version: snyk-snapshot
+      build-version: latest
+      multi-module-maven-project: false
     secrets: inherit
