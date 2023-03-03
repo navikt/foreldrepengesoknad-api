@@ -22,7 +22,7 @@ public class DokumentArkivTjeneste extends AbstractRestConnection {
         this.baseUri = baseUri;
     }
 
-    public byte[] hentDokument(String journalpostId, String dokumentId) {
+    public byte[] hentDokument(JournalpostId journalpostId, DokumentInfoId dokumentId) {
         return getForObject(dokUri(journalpostId, dokumentId), byte[].class);
     }
 
@@ -30,9 +30,9 @@ public class DokumentArkivTjeneste extends AbstractRestConnection {
         return getForObject(dokumenterUri(), String.class);
     }
 
-    private URI dokUri(String journalpostId, String dokumentId) {
+    private URI dokUri(JournalpostId journalpostId, DokumentInfoId dokumentId) {
         return UriComponentsBuilder.fromUri(baseUri)
-            .pathSegment("arkiv", "hent-dokument", journalpostId, dokumentId)
+            .pathSegment("arkiv", "hent-dokument", journalpostId.value(), dokumentId.value())
             .build().toUri();
     }
 
