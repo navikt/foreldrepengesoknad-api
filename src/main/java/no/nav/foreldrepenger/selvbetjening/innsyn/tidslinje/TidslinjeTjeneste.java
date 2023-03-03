@@ -25,7 +25,7 @@ public class TidslinjeTjeneste extends AbstractRestConnection implements RetryAw
     public String hentTidslinje(Saksnummer saksnummer) {
         var uri = UriComponentsBuilder.fromUri(baseUri)
             .pathSegment("historikk", "tidslinje")
-            .queryParam("saksnummer", saksnummer)
+            .queryParam("saksnummer", saksnummer.value())
             .build()
             .toUri();
         return getForObject(uri, String.class);
