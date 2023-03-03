@@ -1,32 +1,20 @@
 package no.nav.foreldrepenger.selvbetjening.innsyn;
 
-import static no.nav.foreldrepenger.selvbetjening.util.URIUtil.uri;
-
-import java.net.URI;
-
+import no.nav.foreldrepenger.selvbetjening.http.AbstractConfig;
 import org.springframework.boot.context.properties.ConfigurationProperties;
 import org.springframework.boot.context.properties.ConstructorBinding;
 import org.springframework.boot.context.properties.bind.DefaultValue;
 
-import no.nav.foreldrepenger.common.domain.Fødselsnummer;
-import no.nav.foreldrepenger.common.domain.Saksnummer;
-import no.nav.foreldrepenger.selvbetjening.http.AbstractConfig;
-import no.nav.foreldrepenger.selvbetjening.util.URIUtil;
+import java.net.URI;
+
+import static no.nav.foreldrepenger.selvbetjening.util.URIUtil.uri;
 
 @ConfigurationProperties(prefix = "innsyn")
 public class InnsynConfig extends AbstractConfig {
 
     private static final String PING = "actuator/health/liveness";
-    private static final String FPSAK_SAKER = "innsyn/saker";
-
     private static final String ARBEIDSFORHOLD = "innsyn/arbeidsforhold";
-    private static final String SAKSNUMMER = "saksnummer";
-    private static final String ANNENPART = "annenPart";
-    private static final String UTTAKSPLAN = "innsyn/uttaksplan";
-    private static final String UTTAKSPLANANNEN = "innsyn/uttaksplanannen";
-
-
-    private static final String FPSAK_SAKER_V2 = "innsyn/v2/saker";
+    private static final String SAKER = "innsyn/v2/saker";
     private static final String ANNEN_PART_VEDTAK = "innsyn/v2/annenPartVedtak";
 
     @ConstructorBinding
@@ -39,20 +27,8 @@ public class InnsynConfig extends AbstractConfig {
         return uri(getBaseUri(), PING);
     }
 
-    URI fpsakURI() {
-        return uri(getBaseUri(), FPSAK_SAKER);
-    }
-
-    URI uttakURI(Saksnummer saksnummer) {
-        return uri(getBaseUri(), UTTAKSPLAN, URIUtil.queryParam(SAKSNUMMER, saksnummer.value()));
-    }
-
-    URI uttakURIForAnnenPart(Fødselsnummer annenPart) {
-        return uri(getBaseUri(), UTTAKSPLANANNEN, URIUtil.queryParam(ANNENPART, annenPart.value()));
-    }
-
-    URI fpsakV2URI() {
-        return uri(getBaseUri(), FPSAK_SAKER_V2);
+    URI sakerURI() {
+        return uri(getBaseUri(), SAKER);
     }
 
     URI annenPartVedtakURI() {
