@@ -1,21 +1,18 @@
 package no.nav.foreldrepenger.selvbetjening.oppslag;
 
-import static no.nav.boot.conditionals.EnvUtil.CONFIDENTIAL;
-import static no.nav.foreldrepenger.selvbetjening.oppslag.mapper.PersonMapper.tilPersonFrontend;
-
-import javax.inject.Inject;
-
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
-import org.springframework.boot.autoconfigure.condition.ConditionalOnProperty;
-import org.springframework.stereotype.Service;
-
 import no.nav.foreldrepenger.selvbetjening.innsyn.InnsynConnection;
 import no.nav.foreldrepenger.selvbetjening.oppslag.domain.PersonFrontend;
 import no.nav.foreldrepenger.selvbetjening.oppslag.domain.Søkerinfo;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+import org.springframework.stereotype.Service;
+
+import javax.inject.Inject;
+
+import static no.nav.boot.conditionals.EnvUtil.CONFIDENTIAL;
+import static no.nav.foreldrepenger.selvbetjening.oppslag.mapper.PersonMapper.tilPersonFrontend;
 
 @Service
-@ConditionalOnProperty(name = "stub.oppslag", havingValue = "false", matchIfMissing = true)
 public class OppslagTjeneste implements Oppslag {
 
     private static final Logger LOG = LoggerFactory.getLogger(OppslagTjeneste.class);

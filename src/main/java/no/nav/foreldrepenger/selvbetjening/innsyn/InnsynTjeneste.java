@@ -1,22 +1,14 @@
 package no.nav.foreldrepenger.selvbetjening.innsyn;
 
-import java.util.List;
-import java.util.Optional;
-
+import no.nav.foreldrepenger.common.innsyn.AnnenPartVedtak;
+import no.nav.foreldrepenger.common.innsyn.Saker;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.springframework.boot.autoconfigure.condition.ConditionalOnProperty;
 import org.springframework.stereotype.Service;
 
-import no.nav.foreldrepenger.common.domain.Fødselsnummer;
-import no.nav.foreldrepenger.common.domain.Saksnummer;
-import no.nav.foreldrepenger.common.innsyn.uttaksplan.UttaksplanDto;
-import no.nav.foreldrepenger.common.innsyn.v2.AnnenPartVedtak;
-import no.nav.foreldrepenger.common.innsyn.v2.Saker;
-import no.nav.foreldrepenger.selvbetjening.innsyn.saker.Sak;
+import java.util.Optional;
 
 @Service
-@ConditionalOnProperty(name = "stub.oppslag", havingValue = "false", matchIfMissing = true)
 public class InnsynTjeneste implements Innsyn {
 
     private final InnsynConnection connection;
@@ -28,27 +20,9 @@ public class InnsynTjeneste implements Innsyn {
     }
 
     @Override
-    public UttaksplanDto hentUttaksplan(Saksnummer saksnummer) {
-        LOG.info("Henter uttaksplan for sak");
-        return connection.hentUttaksplan(saksnummer);
-    }
-
-    @Override
-    public UttaksplanDto hentUttaksplanAnnenPart(Fødselsnummer annenPart) {
-        LOG.info("Henter uttaksplan for annen part {}", annenPart);
-        return connection.hentUttaksplanAnnenPart(annenPart);
-    }
-
-    @Override
-    public List<Sak> hentSaker() {
+    public Saker hentSaker() {
         LOG.info("Henter saker for pålogget bruker");
         return connection.hentSaker();
-    }
-
-    @Override
-    public Saker hentSakerV2() {
-        LOG.info("Henter sakerV2 for pålogget bruker");
-        return connection.hentSakerV2();
     }
 
     @Override

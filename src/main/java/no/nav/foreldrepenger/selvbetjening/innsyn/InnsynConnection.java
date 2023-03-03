@@ -1,26 +1,20 @@
 package no.nav.foreldrepenger.selvbetjening.innsyn;
 
-import static java.util.Collections.emptyList;
-import static no.nav.foreldrepenger.common.util.StringUtil.flertall;
+import no.nav.foreldrepenger.common.innsyn.AnnenPartVedtak;
+import no.nav.foreldrepenger.common.innsyn.Saker;
+import no.nav.foreldrepenger.selvbetjening.http.AbstractRestConnection;
+import no.nav.foreldrepenger.selvbetjening.oppslag.domain.Arbeidsforhold;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+import org.springframework.stereotype.Component;
+import org.springframework.web.client.RestOperations;
 
 import java.net.URI;
 import java.util.Arrays;
 import java.util.List;
 import java.util.Optional;
 
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
-import org.springframework.stereotype.Component;
-import org.springframework.web.client.RestOperations;
-
-import no.nav.foreldrepenger.common.domain.Fødselsnummer;
-import no.nav.foreldrepenger.common.domain.Saksnummer;
-import no.nav.foreldrepenger.common.innsyn.uttaksplan.UttaksplanDto;
-import no.nav.foreldrepenger.common.innsyn.v2.AnnenPartVedtak;
-import no.nav.foreldrepenger.common.innsyn.v2.Saker;
-import no.nav.foreldrepenger.selvbetjening.http.AbstractRestConnection;
-import no.nav.foreldrepenger.selvbetjening.innsyn.saker.Sak;
-import no.nav.foreldrepenger.selvbetjening.oppslag.domain.Arbeidsforhold;
+import static java.util.Collections.emptyList;
 
 @Component
 public class InnsynConnection extends AbstractRestConnection {
@@ -43,31 +37,6 @@ public class InnsynConnection extends AbstractRestConnection {
         return cfg.pingURI();
     }
 
-    public UttaksplanDto hentUttaksplan(Saksnummer saksnummer) {
-        return getIfEnabled(cfg.uttakURI(saksnummer), UttaksplanDto.class, false);
-    }
-
-    public UttaksplanDto hentUttaksplanAnnenPart(Fødselsnummer annenPart) {
-        return getIfEnabled(cfg.uttakURIForAnnenPart(annenPart), UttaksplanDto.class, false);
-    }
-
-    private <T> T getIfEnabled(URI uri, Class<T> clazz, boolean shouldThrow) {
-        if (isEnabled()) {
-            return getForObject(uri, clazz, shouldThrow);
-        }
-        LOG.warn("Innsyn er ikke aktivert");
-        return null;
-    }
-
-    public List<Sak> hentSaker() {
-        var uri = cfg.fpsakURI();
-        var saker = Optional.ofNullable(getForObject(uri, Sak[].class, false))
-                .map(Arrays::asList)
-                .orElse(emptyList());
-        LOG.info("Hentet {} sak{} fra {}", saker.size(), flertall(saker.size()), uri);
-        return saker;
-    }
-
     public Optional<AnnenPartVedtak> annenPartVedtak(AnnenPartVedtakIdentifikator annenPartVedtakIdentifikator) {
         LOG.info("Henter annen parts vedtak");
 
@@ -85,7 +54,7 @@ public class InnsynConnection extends AbstractRestConnection {
                 .orElse(emptyList());
     }
 
-    public Saker hentSakerV2() {
-        return getForObject(cfg.fpsakV2URI(), Saker.class);
+    public Saker hentSaker() {
+        return getForObject(cfg.sakerURI(), Saker.class);
     }
 }
