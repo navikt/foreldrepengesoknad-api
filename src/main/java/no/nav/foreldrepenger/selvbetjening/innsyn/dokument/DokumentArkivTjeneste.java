@@ -1,6 +1,7 @@
 package no.nav.foreldrepenger.selvbetjening.innsyn.dokument;
 
 import no.nav.foreldrepenger.selvbetjening.http.AbstractRestConnection;
+import no.nav.foreldrepenger.selvbetjening.http.RetryAware;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 import org.springframework.web.client.RestOperations;
@@ -10,7 +11,7 @@ import javax.inject.Inject;
 import java.net.URI;
 
 @Service
-public class DokumentArkivTjeneste extends AbstractRestConnection {
+public class DokumentArkivTjeneste extends AbstractRestConnection implements RetryAware {
 
     private final URI baseUri;
 
@@ -22,7 +23,7 @@ public class DokumentArkivTjeneste extends AbstractRestConnection {
         this.baseUri = baseUri;
     }
 
-    public byte[] hentDokument(String journalpostId, String dokumentId) {
+    public byte[] hentDokument(JournalpostId journalpostId, DokumentInfoId dokumentId) {
         return getForObject(dokUri(journalpostId, dokumentId), byte[].class);
     }
 
@@ -30,9 +31,9 @@ public class DokumentArkivTjeneste extends AbstractRestConnection {
         return getForObject(dokumenterUri(), String.class);
     }
 
-    private URI dokUri(String journalpostId, String dokumentId) {
+    private URI dokUri(JournalpostId journalpostId, DokumentInfoId dokumentId) {
         return UriComponentsBuilder.fromUri(baseUri)
-            .pathSegment("arkiv", "hent-dokument", journalpostId, dokumentId)
+            .pathSegment("arkiv", "hent-dokument", journalpostId.value(), dokumentId.value())
             .build().toUri();
     }
 

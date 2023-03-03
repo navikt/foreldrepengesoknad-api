@@ -7,19 +7,21 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 
 import javax.inject.Inject;
+import javax.validation.Valid;
 
 @ProtectedRestController("/rest/dokument")
-public class DokumentArkiv {
+public class DokumentArkivController {
 
-    private DokumentArkivTjeneste dokumentArkivTjeneste;
+    private final DokumentArkivTjeneste dokumentArkivTjeneste;
 
     @Inject
-    public DokumentArkiv(DokumentArkivTjeneste dokumentArkivTjeneste) {
+    public DokumentArkivController(DokumentArkivTjeneste dokumentArkivTjeneste) {
         this.dokumentArkivTjeneste = dokumentArkivTjeneste;
     }
 
     @GetMapping(value = "/hent-dokument/{journalpostId}/{dokumentId}", produces = MediaType.APPLICATION_PDF_VALUE)
-    public byte[] hentDokument(@PathVariable("journalpostId") String journalpostId, @PathVariable("dokumentId") String dokumentId) {
+    public byte[] hentDokument(@Valid @PathVariable("journalpostId") JournalpostId journalpostId,
+                               @Valid @PathVariable("dokumentId") DokumentInfoId dokumentId) {
         return dokumentArkivTjeneste.hentDokument(journalpostId, dokumentId);
     }
 
