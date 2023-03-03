@@ -12,7 +12,7 @@ import javax.inject.Inject;
 import java.net.URI;
 
 @Service
-public class TidslinjeTjeneste extends AbstractRestConnection {
+public class TidslinjeTjeneste extends AbstractRestConnection implements RetryAware {
     private final URI baseUri;
 
     @Inject

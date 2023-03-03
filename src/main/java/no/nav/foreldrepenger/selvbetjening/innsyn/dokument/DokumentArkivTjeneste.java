@@ -1,6 +1,7 @@
 package no.nav.foreldrepenger.selvbetjening.innsyn.dokument;
 
 import no.nav.foreldrepenger.selvbetjening.http.AbstractRestConnection;
+import no.nav.foreldrepenger.selvbetjening.http.RetryAware;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 import org.springframework.web.client.RestOperations;
@@ -10,7 +11,7 @@ import javax.inject.Inject;
 import java.net.URI;
 
 @Service
-public class DokumentArkivTjeneste extends AbstractRestConnection {
+public class DokumentArkivTjeneste extends AbstractRestConnection implements RetryAware {
 
     private final URI baseUri;
 
