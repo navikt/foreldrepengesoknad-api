@@ -34,7 +34,7 @@
 		<project.reporting.outputEncoding>UTF-8</project.reporting.outputEncoding>
 
         <selvbetjening-felles.version>1.0.0</selvbetjening-felles.version>
-		<token-validation-version>2.1.9</token-validation-version>
+		<token-validation-version>3.0.8</token-validation-version>
         <boot-conditionals.version>5.0.2</boot-conditionals.version>
 
         <springdoc.version>1.6.14</springdoc.version>
