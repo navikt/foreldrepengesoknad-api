@@ -69,7 +69,7 @@ public class InnsendingConnection extends AbstractRestConnection {
     }
 
     public Søknad body(SøknadFrontend søknadFrontend) {
-        SECURE_LOGGER.info("Søknad {} mottatt: {}", søknadFrontend.getType(), søknadFrontend);
+        SECURE_LOGGER.info("{} mottatt fra frontend med følende innhold: {}", søknadFrontend.getType(), søknadFrontend);
         var dto = tilSøknad(søknadFrontend);
 
         var unikeVedleggMedInnhold = hentUnikeVedleggMedInnhold(søknadFrontend.getVedlegg());
@@ -82,7 +82,6 @@ public class InnsendingConnection extends AbstractRestConnection {
     }
 
     public no.nav.foreldrepenger.common.domain.felles.Ettersending body(EttersendingFrontend ettersending) {
-        SECURE_LOGGER.info("Ettersending mottatt: {}", ettersending);
         var dto = tilEttersending(ettersending);
 
         var unikeVedleggMedInnhold = hentUnikeVedleggMedInnhold(ettersending.vedlegg());
