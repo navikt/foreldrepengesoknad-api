@@ -12,7 +12,7 @@ import static no.nav.foreldrepenger.selvbetjening.util.URIUtil.uri;
 @ConfigurationProperties(prefix = "oversikt")
 public class OversiktConfig extends AbstractConfig {
 
-    private static final String SAKER = "/api/saker";
+    private static final String SAKER = "api/saker";
 
     @ConstructorBinding
     protected OversiktConfig(URI uri, @DefaultValue("true") boolean enabled) {
