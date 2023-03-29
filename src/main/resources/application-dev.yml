@@ -35,6 +35,9 @@ no.nav:
           fpinfo-historikk:
             token-exchange:
               audience: dev-fss:teamforeldrepenger:fpinfo-historikk
+          fpoversikt:
+            token-exchange:
+              audience: dev-gcp:teamforeldrepenger:fpoversikt
       issuer:
         selvbetjening:
           discoveryurl: https://navtestb2c.b2clogin.com/navtestb2c.onmicrosoft.com/v2.0/.well-known/openid-configuration?p=B2C_1A_idporten_ver1
@@ -53,3 +56,5 @@ minidialog:
   uri: https://fpinfo-historikk.dev-fss-pub.nais.io/api/
 fppdfgen:
   uri: http://fppdfgen
+oversikt:
+  uri: http://fpoversikt

@@ -23,6 +23,9 @@ no.nav.security.jwt:
       fpinfo-historikk:
         token-exchange:
           audience: lokal
+      fpoversikt:
+        token-exchange:
+          audience: lokal
 
 virus:
   enabled: false
@@ -38,5 +41,7 @@ mottak:
   uri: ${fpsoknad-mottak.override.url}
 oppslag:
   uri: ${fpsoknad-mottak.override.url}
+oversikt:
+  uri: ${fpoversikt.override.url}
 storage:
   passphrase: tullogtøys

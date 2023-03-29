@@ -31,6 +31,13 @@ no.nav.security.jwt:
         authentication:
           client-id: foreldrepengesoknad-api
           client-jwk: src/test/resources/tokenx/jwk.json
+      fpoversikt:
+        well-known-url: http://localhost:8060/rest/tokenx/.well-known/oauth-authorization-server
+        token-exchange:
+          audience: local:teamforeldrepenger:fpoversikt
+        authentication:
+          client-id: foreldrepengesoknad-api
+          client-jwk: src/test/resources/tokenx/jwk.json
       localhost:
         well-known-url: http://localhost:8060/rest/tokenx/.well-known/oauth-authorization-server
         grant-type: urn:ietf:params:oauth:grant-type:token-exchange
@@ -61,5 +68,7 @@ mottak:
   uri: http://localhost:9001/api/
 oppslag:
   uri: http://localhost:9001/api/
+oversikt:
+  uri: http://localhost:8889/api/
 storage:
   passphrase: tullogtøys
