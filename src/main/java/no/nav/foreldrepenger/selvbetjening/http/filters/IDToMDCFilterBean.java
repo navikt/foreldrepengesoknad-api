@@ -16,6 +16,7 @@ import javax.servlet.http.HttpServletRequest;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.slf4j.MDC;
 import org.springframework.stereotype.Component;
 import org.springframework.web.filter.GenericFilterBean;
 
@@ -42,7 +43,11 @@ public class IDToMDCFilterBean extends GenericFilterBean {
         var httpServletRequest = (HttpServletRequest) req;
         var uri = httpServletRequest.getRequestURI();
         copyHeadersToMDC(httpServletRequest, uri);
-        chain.doFilter(req, res);
+        try {
+            chain.doFilter(req, res);
+        } finally {
+            MDC.clear();
+        }
     }
 
     private void copyHeadersToMDC(HttpServletRequest request, String uri) {
