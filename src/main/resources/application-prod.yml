@@ -29,6 +29,9 @@ no.nav:
           fpinfo-historikk:
             token-exchange:
               audience: prod-fss:teamforeldrepenger:fpinfo-historikk
+          fpoversikt:
+            token-exchange:
+              audience: prod-gcp:teamforeldrepenger:fpoversikt
 
 oppslag:
   uri: https://fpsoknad-mottak.prod-fss-pub.nais.io/api/
@@ -42,3 +45,5 @@ minidialog:
   uri: https://fpinfo-historikk.prod-fss-pub.nais.io/api/
 fppdfgen:
   uri: http://fppdfgen
+oversikt:
+  uri: http://fpoversikt
