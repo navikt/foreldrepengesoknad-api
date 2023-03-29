@@ -3,6 +3,7 @@ package no.nav.foreldrepenger.selvbetjening.innsyn;
 import no.nav.foreldrepenger.selvbetjening.http.AbstractConfig;
 import org.springframework.boot.context.properties.ConfigurationProperties;
 import org.springframework.boot.context.properties.ConstructorBinding;
+import org.springframework.boot.context.properties.bind.DefaultValue;
 
 import java.net.URI;
 
@@ -14,8 +15,8 @@ public class OversiktConfig extends AbstractConfig {
     private static final String SAKER = "/api/saker";
 
     @ConstructorBinding
-    protected OversiktConfig(URI baseUri, boolean enabled) {
-        super(baseUri, enabled);
+    protected OversiktConfig(URI uri, @DefaultValue("true") boolean enabled) {
+        super(uri, enabled);
     }
 
     @Override
