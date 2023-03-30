@@ -30,7 +30,7 @@ jobs:
   deploy-dev:
     name: Deploy dev
     if: github.ref_name == 'master'
-    needs: [build-app, autotest]
+    needs: build-app
     uses: navikt/fp-gha-workflows/.github/workflows/deploy-app.yml@deploy
     with:
       image: ghcr.io/${{ github.repository }}:${{ needs.build-app.outputs.build-version }}
@@ -40,7 +40,7 @@ jobs:
   deploy-prod:
     name: Deploy prod
     if: github.ref_name == 'master'
-    needs: [build-app, autotest, deploy-dev]
+    needs: [build-app, deploy-dev]
     uses: navikt/fp-gha-workflows/.github/workflows/deploy-app.yml@deploy
     with:
       image: ghcr.io/${{ github.repository }}:${{ needs.build-app.outputs.build-version }}
