@@ -13,6 +13,11 @@ on:
       - 'CODEOWNERS'
 
 jobs:
+  codeql:
+    name: CodeQl
+    uses: navikt/fp-gha-workflows/.github/workflows/codeql.yml@main
+    secrets: inherit
+
   build-app:
     name: Build
     uses: navikt/fp-gha-workflows/.github/workflows/build-app-no-db.yml@main
@@ -22,32 +27,23 @@ jobs:
       push-image: ${{ github.ref_name == 'master' }} # default: false
     secrets: inherit
 
-  create-issue:
-    name: Issues
+  deploy-dev:
+    name: Deploy dev
     if: github.ref_name == 'master'
-    needs: build-app
-    uses: navikt/fp-gha-workflows/.github/workflows/issues.yml@main
+    needs: [build-app, autotest]
+    uses: navikt/fp-gha-workflows/.github/workflows/deploy-app.yml@deploy
     with:
-      build-version: ${{ needs.build-app.outputs.build-version }}
+      image: ghcr.io/${{ github.repository }}:${{ needs.build-app.outputs.build-version }}
+      cluster: dev-gcp
     secrets: inherit
 
-  promote:
-    name: Deploy til dev-gcp
+  deploy-prod:
+    name: Deploy prod
     if: github.ref_name == 'master'
-    needs: [ build-app, create-issue ]
-    uses: navikt/fp-gha-workflows/.github/workflows/deploy-app.yml@main
+    needs: [build-app, autotest, deploy-dev]
+    uses: navikt/fp-gha-workflows/.github/workflows/deploy-app.yml@deploy
     with:
-      issue-number: ${{ needs.create-issue.outputs.issue-number }}
-      environment: dev
-      platform: gcp
-    secrets: inherit
-
-  snyk:
-    name: Snyk
-    needs: build-app
-    uses: navikt/fp-gha-workflows/.github/workflows/snyk.yml@main
-    with:
-      build-version: ${{ needs.build-app.outputs.build-version }}
-      multi-module-maven-project: false
+      image: ghcr.io/${{ github.repository }}:${{ needs.build-app.outputs.build-version }}
+      cluster: prod-gcp
     secrets: inherit
 

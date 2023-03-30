@@ -1,0 +1,10 @@
+name: CodeQl Analyse
+on:
+  schedule:
+    - cron: '0 0 * * 0,4'
+
+jobs:
+  codeql:
+    name: CodeQl
+    uses: navikt/fp-gha-workflows/.github/workflows/codeql.yml@main
+    secrets: inherit
