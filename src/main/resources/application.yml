@@ -60,9 +60,6 @@ server:
   servlet:
     context-path: /
   forward-headers-strategy: native
-  error:
-    whitelabel:
-      enabled: false
 spring:
   cloud.discovery.enabled: false
   cache:

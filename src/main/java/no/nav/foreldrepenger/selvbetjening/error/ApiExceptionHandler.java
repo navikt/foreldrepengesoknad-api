@@ -1,37 +1,5 @@
 package no.nav.foreldrepenger.selvbetjening.error;
 
-import jakarta.validation.ConstraintViolationException;
-import no.nav.foreldrepenger.common.error.UnexpectedInputException;
-import no.nav.foreldrepenger.common.util.TokenUtil;
-import no.nav.foreldrepenger.selvbetjening.uttak.ManglendeFamiliehendelseException;
-import no.nav.foreldrepenger.selvbetjening.vedlegg.AttachmentException;
-import no.nav.foreldrepenger.selvbetjening.vedlegg.AttachmentTooLargeException;
-import no.nav.foreldrepenger.selvbetjening.vedlegg.AttachmentsTooLargeException;
-import no.nav.security.token.support.core.exceptions.JwtTokenInvalidClaimException;
-import no.nav.security.token.support.core.exceptions.JwtTokenValidatorException;
-import no.nav.security.token.support.spring.validation.interceptor.JwtTokenUnauthorizedException;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
-import org.springframework.http.HttpHeaders;
-import org.springframework.http.HttpStatusCode;
-import org.springframework.http.ResponseEntity;
-import org.springframework.http.converter.HttpMessageNotReadableException;
-import org.springframework.validation.FieldError;
-import org.springframework.web.HttpMediaTypeNotAcceptableException;
-import org.springframework.web.bind.MethodArgumentNotValidException;
-import org.springframework.web.bind.annotation.ControllerAdvice;
-import org.springframework.web.bind.annotation.ExceptionHandler;
-import org.springframework.web.bind.annotation.ResponseBody;
-import org.springframework.web.client.HttpStatusCodeException;
-import org.springframework.web.context.request.ServletWebRequest;
-import org.springframework.web.context.request.WebRequest;
-import org.springframework.web.multipart.MaxUploadSizeExceededException;
-import org.springframework.web.multipart.MultipartException;
-import org.springframework.web.servlet.NoHandlerFoundException;
-import org.springframework.web.servlet.mvc.method.annotation.ResponseEntityExceptionHandler;
-
-import java.util.Optional;
-
 import static no.nav.foreldrepenger.common.util.StreamUtil.safeStream;
 import static org.springframework.http.HttpStatus.BAD_REQUEST;
 import static org.springframework.http.HttpStatus.CONFLICT;
@@ -43,8 +11,39 @@ import static org.springframework.http.HttpStatus.PAYLOAD_TOO_LARGE;
 import static org.springframework.http.HttpStatus.UNAUTHORIZED;
 import static org.springframework.http.HttpStatus.UNPROCESSABLE_ENTITY;
 
+import java.util.Optional;
+
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+import org.springframework.http.HttpHeaders;
+import org.springframework.http.HttpStatusCode;
+import org.springframework.http.ResponseEntity;
+import org.springframework.http.converter.HttpMessageNotReadableException;
+import org.springframework.validation.FieldError;
+import org.springframework.web.HttpMediaTypeNotAcceptableException;
+import org.springframework.web.bind.MethodArgumentNotValidException;
+import org.springframework.web.bind.annotation.ControllerAdvice;
+import org.springframework.web.bind.annotation.ExceptionHandler;
+import org.springframework.web.client.HttpStatusCodeException;
+import org.springframework.web.context.request.ServletWebRequest;
+import org.springframework.web.context.request.WebRequest;
+import org.springframework.web.multipart.MaxUploadSizeExceededException;
+import org.springframework.web.multipart.MultipartException;
+import org.springframework.web.servlet.NoHandlerFoundException;
+import org.springframework.web.servlet.mvc.method.annotation.ResponseEntityExceptionHandler;
+
+import jakarta.validation.ConstraintViolationException;
+import no.nav.foreldrepenger.common.error.UnexpectedInputException;
+import no.nav.foreldrepenger.common.util.TokenUtil;
+import no.nav.foreldrepenger.selvbetjening.uttak.ManglendeFamiliehendelseException;
+import no.nav.foreldrepenger.selvbetjening.vedlegg.AttachmentException;
+import no.nav.foreldrepenger.selvbetjening.vedlegg.AttachmentTooLargeException;
+import no.nav.foreldrepenger.selvbetjening.vedlegg.AttachmentsTooLargeException;
+import no.nav.security.token.support.core.exceptions.JwtTokenInvalidClaimException;
+import no.nav.security.token.support.core.exceptions.JwtTokenValidatorException;
+import no.nav.security.token.support.spring.validation.interceptor.JwtTokenUnauthorizedException;
+
 @ControllerAdvice
-@ResponseBody
 public class ApiExceptionHandler extends ResponseEntityExceptionHandler {
 
     private static final Logger LOG = LoggerFactory.getLogger(ApiExceptionHandler.class);
