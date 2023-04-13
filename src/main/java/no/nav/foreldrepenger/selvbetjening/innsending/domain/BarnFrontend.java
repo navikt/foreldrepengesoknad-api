@@ -8,9 +8,9 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 
-import javax.validation.Valid;
-import javax.validation.constraints.Digits;
-import javax.validation.constraints.Size;
+import jakarta.validation.Valid;
+import jakarta.validation.constraints.Digits;
+import jakarta.validation.constraints.Size;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonInclude;

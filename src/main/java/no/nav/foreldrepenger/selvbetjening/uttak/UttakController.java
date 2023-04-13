@@ -1,12 +1,8 @@
 package no.nav.foreldrepenger.selvbetjening.uttak;
 
-import static no.nav.foreldrepenger.selvbetjening.uttak.UttakControllerV2.beregnKonto;
-
-import java.time.LocalDate;
-
-import javax.validation.constraints.Digits;
-import javax.validation.constraints.Pattern;
-
+import jakarta.validation.constraints.Digits;
+import jakarta.validation.constraints.Pattern;
+import no.nav.security.token.support.core.api.Unprotected;
 import org.springframework.format.annotation.DateTimeFormat;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.CrossOrigin;
@@ -15,7 +11,9 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
-import no.nav.security.token.support.core.api.Unprotected;
+import java.time.LocalDate;
+
+import static no.nav.foreldrepenger.selvbetjening.uttak.UttakControllerV2.beregnKonto;
 
 @Validated
 @Unprotected

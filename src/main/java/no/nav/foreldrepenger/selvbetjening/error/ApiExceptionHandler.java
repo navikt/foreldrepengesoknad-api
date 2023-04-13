@@ -1,25 +1,19 @@
 package no.nav.foreldrepenger.selvbetjening.error;
 
-import static no.nav.foreldrepenger.common.util.StreamUtil.safeStream;
-import static org.springframework.http.HttpStatus.BAD_REQUEST;
-import static org.springframework.http.HttpStatus.CONFLICT;
-import static org.springframework.http.HttpStatus.FORBIDDEN;
-import static org.springframework.http.HttpStatus.INTERNAL_SERVER_ERROR;
-import static org.springframework.http.HttpStatus.NOT_ACCEPTABLE;
-import static org.springframework.http.HttpStatus.NOT_FOUND;
-import static org.springframework.http.HttpStatus.PAYLOAD_TOO_LARGE;
-import static org.springframework.http.HttpStatus.UNAUTHORIZED;
-import static org.springframework.http.HttpStatus.UNPROCESSABLE_ENTITY;
-
-import java.util.Optional;
-
-import javax.validation.ConstraintViolation;
-import javax.validation.ConstraintViolationException;
-
+import jakarta.validation.ConstraintViolationException;
+import no.nav.foreldrepenger.common.error.UnexpectedInputException;
+import no.nav.foreldrepenger.common.util.TokenUtil;
+import no.nav.foreldrepenger.selvbetjening.uttak.ManglendeFamiliehendelseException;
+import no.nav.foreldrepenger.selvbetjening.vedlegg.AttachmentException;
+import no.nav.foreldrepenger.selvbetjening.vedlegg.AttachmentTooLargeException;
+import no.nav.foreldrepenger.selvbetjening.vedlegg.AttachmentsTooLargeException;
+import no.nav.security.token.support.core.exceptions.JwtTokenInvalidClaimException;
+import no.nav.security.token.support.core.exceptions.JwtTokenValidatorException;
+import no.nav.security.token.support.spring.validation.interceptor.JwtTokenUnauthorizedException;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.http.HttpHeaders;
-import org.springframework.http.HttpStatus;
+import org.springframework.http.HttpStatusCode;
 import org.springframework.http.ResponseEntity;
 import org.springframework.http.converter.HttpMessageNotReadableException;
 import org.springframework.validation.FieldError;
@@ -36,15 +30,18 @@ import org.springframework.web.multipart.MultipartException;
 import org.springframework.web.servlet.NoHandlerFoundException;
 import org.springframework.web.servlet.mvc.method.annotation.ResponseEntityExceptionHandler;
 
-import no.nav.foreldrepenger.common.error.UnexpectedInputException;
-import no.nav.foreldrepenger.common.util.TokenUtil;
-import no.nav.foreldrepenger.selvbetjening.uttak.ManglendeFamiliehendelseException;
-import no.nav.foreldrepenger.selvbetjening.vedlegg.AttachmentException;
-import no.nav.foreldrepenger.selvbetjening.vedlegg.AttachmentTooLargeException;
-import no.nav.foreldrepenger.selvbetjening.vedlegg.AttachmentsTooLargeException;
-import no.nav.security.token.support.core.exceptions.JwtTokenInvalidClaimException;
-import no.nav.security.token.support.core.exceptions.JwtTokenValidatorException;
-import no.nav.security.token.support.spring.validation.interceptor.JwtTokenUnauthorizedException;
+import java.util.Optional;
+
+import static no.nav.foreldrepenger.common.util.StreamUtil.safeStream;
+import static org.springframework.http.HttpStatus.BAD_REQUEST;
+import static org.springframework.http.HttpStatus.CONFLICT;
+import static org.springframework.http.HttpStatus.FORBIDDEN;
+import static org.springframework.http.HttpStatus.INTERNAL_SERVER_ERROR;
+import static org.springframework.http.HttpStatus.NOT_ACCEPTABLE;
+import static org.springframework.http.HttpStatus.NOT_FOUND;
+import static org.springframework.http.HttpStatus.PAYLOAD_TOO_LARGE;
+import static org.springframework.http.HttpStatus.UNAUTHORIZED;
+import static org.springframework.http.HttpStatus.UNPROCESSABLE_ENTITY;
 
 @ControllerAdvice
 @ResponseBody
@@ -59,23 +56,22 @@ public class ApiExceptionHandler extends ResponseEntityExceptionHandler {
     }
 
     @Override
-    protected ResponseEntity<Object> handleHttpMessageNotReadable(HttpMessageNotReadableException e, HttpHeaders headers, HttpStatus status, WebRequest req) {
+    protected ResponseEntity<Object> handleHttpMessageNotReadable(HttpMessageNotReadableException e, HttpHeaders headers, HttpStatusCode status, WebRequest req) {
         return logAndHandle(UNPROCESSABLE_ENTITY, e, req, headers);
     }
 
     @Override
-    protected ResponseEntity<Object> handleHttpMediaTypeNotAcceptable(HttpMediaTypeNotAcceptableException e, HttpHeaders headers, HttpStatus status, WebRequest req) {
+    protected ResponseEntity<Object> handleHttpMediaTypeNotAcceptable(HttpMediaTypeNotAcceptableException e, HttpHeaders headers, HttpStatusCode status, WebRequest req) {
         return logAndHandle(NOT_ACCEPTABLE, e, req, headers);
     }
 
     @Override
-    protected ResponseEntity<Object> handleNoHandlerFoundException(NoHandlerFoundException e, HttpHeaders headers, HttpStatus status, WebRequest req) {
+    protected ResponseEntity<Object> handleNoHandlerFoundException(NoHandlerFoundException e, HttpHeaders headers, HttpStatusCode status, WebRequest req) {
         return logAndHandle(NOT_FOUND, e, req, headers);
     }
 
     @Override
-    protected ResponseEntity<Object> handleMethodArgumentNotValid(MethodArgumentNotValidException e, HttpHeaders headers, HttpStatus status, WebRequest req) {
-        SECURE_LOGGER.warn("[{} ({})] Bruker har sendt med felter som inneholder ugyldig verdier.", req.getContextPath(), status, e);
+    protected ResponseEntity<Object> handleMethodArgumentNotValid(MethodArgumentNotValidException e, HttpHeaders headers, HttpStatusCode status, WebRequest req) {
         var feltMedValideringsFeil = safeStream(e.getBindingResult().getFieldErrors())
             .map(ApiExceptionHandler::errorMessage)
             .toList();
@@ -84,10 +80,6 @@ public class ApiExceptionHandler extends ResponseEntityExceptionHandler {
 
     @ExceptionHandler
     public ResponseEntity<Object> handleConstraintViolationException(ConstraintViolationException e, WebRequest req) {
-        var avvisteVerdier = safeStream(e.getConstraintViolations())
-            .map(ConstraintViolation::getInvalidValue)
-            .toList();
-        SECURE_LOGGER.warn("[{} ({})] Valideringsfeil: {}", req.getContextPath(),  e.getLocalizedMessage(), avvisteVerdier, e);
         return logAndHandle(BAD_REQUEST, e, req);
     }
 
@@ -139,20 +131,20 @@ public class ApiExceptionHandler extends ResponseEntityExceptionHandler {
 
     @ExceptionHandler
     public ResponseEntity<Object> catchAll(Exception e, WebRequest req) {
-        LOG.warn("Ikke-forventet exception", e);
         return logAndHandle(INTERNAL_SERVER_ERROR, e, req);
     }
 
-    private ResponseEntity<Object> logAndHandle(HttpStatus status, Exception e, WebRequest req) {
+    private ResponseEntity<Object> logAndHandle(HttpStatusCode status, Exception e, WebRequest req) {
         return logAndHandle(status, e, req, new HttpHeaders());
     }
 
-    private ResponseEntity<Object> logAndHandle(HttpStatus status, Exception e, WebRequest req, HttpHeaders headers,
+    private ResponseEntity<Object> logAndHandle(HttpStatusCode status, Exception e, WebRequest req, HttpHeaders headers,
             Object... messages) {
         var apiError = apiErrorFra(status, e, messages);
         var path = fullPathTilKaltEndepunkt(req);
-        if (e instanceof MethodArgumentNotValidException) {
+        if (ikkeLoggExceptionsMedSensitiveOpplysnignerTilVanligLogg(e)) {
             LOG.warn("[{} ({})] {}", path, status, apiError.getMessages());
+            SECURE_LOGGER.warn("[{}] {} {}", req.getContextPath(), status, apiError.getMessages(), e);
         } else if (tokenUtil.erAutentisert() && !tokenUtil.erUtløpt()) {
             LOG.warn("[{}] {} {}", path, status, apiError.getMessages(), e);
         } else {
@@ -165,7 +157,7 @@ public class ApiExceptionHandler extends ResponseEntityExceptionHandler {
         return "(" + error.getField() + ") " + error.getDefaultMessage();
     }
 
-    private static ApiError apiErrorFra(HttpStatus status, Exception e, Object... messages) {
+    private static ApiError apiErrorFra(HttpStatusCode status, Exception e, Object... messages) {
         return new ApiError(status, e, messages);
     }
 
@@ -175,5 +167,9 @@ public class ApiExceptionHandler extends ResponseEntityExceptionHandler {
         } catch (Exception e) {
             return req.getContextPath();
         }
+    }
+
+    private boolean ikkeLoggExceptionsMedSensitiveOpplysnignerTilVanligLogg(Exception e) {
+        return e instanceof MethodArgumentNotValidException || e instanceof ConstraintViolationException;
     }
 }

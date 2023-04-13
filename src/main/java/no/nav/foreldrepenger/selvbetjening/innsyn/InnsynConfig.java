@@ -2,7 +2,6 @@ package no.nav.foreldrepenger.selvbetjening.innsyn;
 
 import no.nav.foreldrepenger.selvbetjening.http.AbstractConfig;
 import org.springframework.boot.context.properties.ConfigurationProperties;
-import org.springframework.boot.context.properties.ConstructorBinding;
 import org.springframework.boot.context.properties.bind.DefaultValue;
 
 import java.net.URI;
@@ -17,7 +16,6 @@ public class InnsynConfig extends AbstractConfig {
     private static final String SAKER = "innsyn/v2/saker";
     private static final String ANNEN_PART_VEDTAK = "innsyn/v2/annenPartVedtak";
 
-    @ConstructorBinding
     public InnsynConfig(URI uri, @DefaultValue("true") boolean enabled) {
         super(uri, enabled);
     }

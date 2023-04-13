@@ -1,13 +1,11 @@
 package no.nav.foreldrepenger.selvbetjening.minidialog;
 
-import java.util.List;
-
-import javax.inject.Inject;
-
-import org.springframework.web.bind.annotation.GetMapping;
-
 import no.nav.foreldrepenger.selvbetjening.historikk.MinidialogInnslag;
 import no.nav.foreldrepenger.selvbetjening.http.ProtectedRestController;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.web.bind.annotation.GetMapping;
+
+import java.util.List;
 
 @ProtectedRestController(MinidialogController.MINIDIALOG_PATH)
 public class MinidialogController {
@@ -16,7 +14,7 @@ public class MinidialogController {
 
     private final Minidialog minidialog;
 
-    @Inject
+    @Autowired
     public MinidialogController(Minidialog minidialog) {
         this.minidialog = minidialog;
     }

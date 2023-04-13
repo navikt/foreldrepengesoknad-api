@@ -6,7 +6,7 @@ import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Component;
 import org.springframework.web.filter.AbstractRequestLoggingFilter;
 
-import javax.servlet.http.HttpServletRequest;
+import jakarta.servlet.http.HttpServletRequest;
 
 import static no.nav.foreldrepenger.selvbetjening.innsending.InnsendingController.INNSENDING_CONTROLLER_PATH;
 

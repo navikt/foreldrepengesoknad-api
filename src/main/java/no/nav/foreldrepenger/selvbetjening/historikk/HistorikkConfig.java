@@ -1,19 +1,17 @@
 package no.nav.foreldrepenger.selvbetjening.historikk;
 
-import static no.nav.foreldrepenger.common.util.Constants.FNR;
-import static no.nav.foreldrepenger.selvbetjening.util.URIUtil.queryParams;
-import static no.nav.foreldrepenger.selvbetjening.util.URIUtil.uri;
-
-import java.net.URI;
-
-import org.springframework.boot.context.properties.ConfigurationProperties;
-import org.springframework.boot.context.properties.ConstructorBinding;
-import org.springframework.boot.context.properties.bind.DefaultValue;
-
 import no.nav.foreldrepenger.common.domain.Fødselsnummer;
 import no.nav.foreldrepenger.common.domain.Saksnummer;
 import no.nav.foreldrepenger.selvbetjening.http.AbstractConfig;
 import no.nav.foreldrepenger.selvbetjening.util.URIUtil;
+import org.springframework.boot.context.properties.ConfigurationProperties;
+import org.springframework.boot.context.properties.bind.DefaultValue;
+
+import java.net.URI;
+
+import static no.nav.foreldrepenger.common.util.Constants.FNR;
+import static no.nav.foreldrepenger.selvbetjening.util.URIUtil.queryParams;
+import static no.nav.foreldrepenger.selvbetjening.util.URIUtil.uri;
 
 @ConfigurationProperties("historikk")
 public class HistorikkConfig extends AbstractConfig {
@@ -29,7 +27,6 @@ public class HistorikkConfig extends AbstractConfig {
 
     private static final String SAKSNUMMER = "saksnummer";
 
-    @ConstructorBinding
     public HistorikkConfig(URI uri, @DefaultValue("true") boolean enabled) {
         super(uri, enabled);
     }

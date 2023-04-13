@@ -11,7 +11,6 @@ import java.net.URISyntaxException;
 import java.util.ArrayList;
 import java.util.List;
 
-import com.fasterxml.jackson.core.JsonProcessingException;
 import no.nav.foreldrepenger.common.domain.felles.VedleggReferanse;
 import no.nav.foreldrepenger.selvbetjening.innsending.domain.VedleggFrontend;
 import org.junit.jupiter.api.Test;
@@ -29,8 +28,8 @@ import no.nav.foreldrepenger.selvbetjening.config.JacksonConfiguration;
 import no.nav.foreldrepenger.selvbetjening.innsending.domain.ForeldrepengesøknadFrontend;
 import no.nav.foreldrepenger.selvbetjening.innsending.domain.SøknadFrontend;
 
-import javax.validation.Validation;
-import javax.validation.Validator;
+import jakarta.validation.Validation;
+import jakarta.validation.Validator;
 
 @ExtendWith(SpringExtension.class)
 @ContextConfiguration(classes = JacksonConfiguration.class)

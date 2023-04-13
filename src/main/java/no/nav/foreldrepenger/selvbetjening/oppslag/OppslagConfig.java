@@ -1,14 +1,12 @@
 package no.nav.foreldrepenger.selvbetjening.oppslag;
 
-import static no.nav.foreldrepenger.selvbetjening.util.URIUtil.uri;
+import no.nav.foreldrepenger.selvbetjening.http.AbstractConfig;
+import org.springframework.boot.context.properties.ConfigurationProperties;
+import org.springframework.boot.context.properties.bind.DefaultValue;
 
 import java.net.URI;
 
-import org.springframework.boot.context.properties.ConfigurationProperties;
-import org.springframework.boot.context.properties.ConstructorBinding;
-import org.springframework.boot.context.properties.bind.DefaultValue;
-
-import no.nav.foreldrepenger.selvbetjening.http.AbstractConfig;
+import static no.nav.foreldrepenger.selvbetjening.util.URIUtil.uri;
 
 @ConfigurationProperties("oppslag")
 public class OppslagConfig extends AbstractConfig {
@@ -16,7 +14,6 @@ public class OppslagConfig extends AbstractConfig {
     private static final String PING = "actuator/health/liveness";
     private static final String PERSON = "oppslag/person";
 
-    @ConstructorBinding
     public OppslagConfig(URI uri, @DefaultValue("true") boolean enabled) {
         super(uri, enabled);
     }

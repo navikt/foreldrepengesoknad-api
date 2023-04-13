@@ -5,8 +5,8 @@ import static no.nav.foreldrepenger.common.domain.validation.InputValideringRege
 import java.net.URI;
 import java.util.Objects;
 
-import javax.validation.Valid;
-import javax.validation.constraints.Pattern;
+import jakarta.validation.Valid;
+import jakarta.validation.constraints.Pattern;
 
 import com.fasterxml.jackson.annotation.JsonCreator;
 import no.nav.foreldrepenger.common.domain.felles.VedleggReferanse;

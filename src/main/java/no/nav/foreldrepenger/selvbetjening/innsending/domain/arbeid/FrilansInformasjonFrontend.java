@@ -6,8 +6,8 @@ import java.time.LocalDate;
 import java.util.List;
 import java.util.Optional;
 
-import javax.validation.Valid;
-import javax.validation.constraints.Size;
+import jakarta.validation.Valid;
+import jakarta.validation.constraints.Size;
 
 import com.fasterxml.jackson.annotation.JsonCreator;
 

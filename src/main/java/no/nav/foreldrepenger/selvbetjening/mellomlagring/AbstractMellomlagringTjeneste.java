@@ -1,13 +1,12 @@
 package no.nav.foreldrepenger.selvbetjening.mellomlagring;
 
-import static no.nav.foreldrepenger.common.util.StreamUtil.safeStream;
+import jakarta.annotation.PostConstruct;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import java.util.Optional;
 
-import javax.annotation.PostConstruct;
-
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
+import static no.nav.foreldrepenger.common.util.StreamUtil.safeStream;
 
 public abstract class AbstractMellomlagringTjeneste implements Mellomlagring {
     private static final String DEAKIVERT = "Mellomlagringsoperasjoner er deaktivert";
