@@ -9,9 +9,7 @@ import java.util.List;
 import com.fasterxml.jackson.annotation.JsonInclude;
 
 import no.nav.foreldrepenger.common.domain.Fødselsnummer;
-import no.nav.foreldrepenger.common.domain.felles.Bankkonto;
 
-// TODO: Konsolider modell her med Person i sakerV2 og/eller Person fra mottak/felles
 @JsonInclude(NON_EMPTY)
 public record PersonFrontend(Fødselsnummer fnr,
                              String fornavn,
@@ -21,13 +19,14 @@ public record PersonFrontend(Fødselsnummer fnr,
                              LocalDate fødselsdato,
                              boolean ikkeNordiskEøsLand, // Ikke i bruk i frontend!
                              Bankkonto bankkonto,
-                             List<BarnFrontend> barn) {
+                             List<BarnFrontend> barn,
+                             Sivilstand sivilstand) {
 
     @Override
     public String toString() {
         return "Person{" +
             "fnr='" + fnr + '\'' +
-            ", fornavn='" + fornavn + '\'' +
+            ", fornavn='" + mask(fornavn) + '\'' +
             ", mellomnavn='" + mask(mellomnavn) + '\'' +
             ", etternavn='" + mask(etternavn) + '\'' +
             ", kjønn='" + kjønn + '\'' +
@@ -35,6 +34,7 @@ public record PersonFrontend(Fødselsnummer fnr,
             ", ikkeNordiskEøsLand=" + ikkeNordiskEøsLand +
             ", bankkonto=" + bankkonto +
             ", barn=" + barn +
+            ", sivilstand=" + sivilstand +
             '}';
     }
 }

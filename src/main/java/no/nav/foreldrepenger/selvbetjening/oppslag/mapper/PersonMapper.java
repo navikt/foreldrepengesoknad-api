@@ -13,8 +13,10 @@ import org.slf4j.LoggerFactory;
 import no.nav.foreldrepenger.common.domain.Fødselsnummer;
 import no.nav.foreldrepenger.common.domain.felles.AnnenPart;
 import no.nav.foreldrepenger.selvbetjening.oppslag.domain.AnnenForelderFrontend;
+import no.nav.foreldrepenger.selvbetjening.oppslag.domain.Bankkonto;
 import no.nav.foreldrepenger.selvbetjening.oppslag.domain.BarnFrontend;
 import no.nav.foreldrepenger.selvbetjening.oppslag.domain.PersonFrontend;
+import no.nav.foreldrepenger.selvbetjening.oppslag.domain.Sivilstand;
 
 public final class PersonMapper {
 
@@ -32,10 +34,34 @@ public final class PersonMapper {
             Optional.ofNullable(dto.kjønn()).map(Enum::name).orElse(null),
             dto.fødselsdato(),
             ikkeNordiskEøsLand(dto.land()),
-            dto.bankkonto(),
-            sort(tilBarn(dto.barn()))
+            tilBankkonto(dto.bankkonto()),
+            sort(tilBarn(dto.barn())),
+            tilSivilstand(dto.sivilstand())
         );
 
+    }
+
+    private static Sivilstand tilSivilstand(no.nav.foreldrepenger.common.domain.felles.Sivilstand sivilstand) {
+        return sivilstand == null ? null : new Sivilstand(map(sivilstand.type()));
+    }
+
+    private static Sivilstand.Type map(no.nav.foreldrepenger.common.domain.felles.Sivilstand.Type type) {
+        return switch (type) {
+            case UOPPGITT -> Sivilstand.Type.UOPPGITT;
+            case UGIFT -> Sivilstand.Type.UGIFT;
+            case GIFT -> Sivilstand.Type.GIFT;
+            case ENKE_ELLER_ENKEMANN -> Sivilstand.Type.ENKE_ELLER_ENKEMANN;
+            case SKILT -> Sivilstand.Type.SKILT;
+            case SEPARERT -> Sivilstand.Type.SEPARERT;
+            case REGISTRERT_PARTNER -> Sivilstand.Type.REGISTRERT_PARTNER;
+            case SEPARERT_PARTNER -> Sivilstand.Type.SEPARERT_PARTNER;
+            case SKILT_PARTNER -> Sivilstand.Type.SKILT_PARTNER;
+            case GJENLEVENDE_PARTNER -> Sivilstand.Type.GJENLEVENDE_PARTNER;
+        };
+    }
+
+    private static Bankkonto tilBankkonto(no.nav.foreldrepenger.common.domain.felles.Bankkonto bankkonto) {
+        return bankkonto == null ? null : new Bankkonto(bankkonto.kontonummer(), bankkonto.banknavn());
     }
 
     private static List<BarnFrontend> tilBarn(List<no.nav.foreldrepenger.common.domain.Barn> barn) {
