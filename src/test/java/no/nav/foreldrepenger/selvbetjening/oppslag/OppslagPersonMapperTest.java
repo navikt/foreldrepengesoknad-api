@@ -21,6 +21,7 @@ import no.nav.foreldrepenger.common.domain.felles.AnnenPart;
 import no.nav.foreldrepenger.common.domain.felles.Bankkonto;
 import no.nav.foreldrepenger.common.domain.felles.Kjønn;
 import no.nav.foreldrepenger.common.domain.felles.Person;
+import no.nav.foreldrepenger.common.domain.felles.Sivilstand;
 import no.nav.foreldrepenger.common.oppslag.dkif.Målform;
 import no.nav.foreldrepenger.selvbetjening.oppslag.domain.Arbeidsforhold;
 
@@ -84,7 +85,6 @@ class OppslagPersonMapperTest {
 
     }
 
-
     public static Person personMedAnnenpart() {
         var annenpartFnr = new Fødselsnummer("33333344444");
         var annenpartAktørId = AktørId.valueOf("9999999999");
@@ -105,7 +105,7 @@ class OppslagPersonMapperTest {
         var søkerEtternavn = "Flakk";
         return new Person(søkerAktørId, søkerFnr, LocalDate.now().minusYears(25),
             new Navn(søkerFornavn, null,  søkerEtternavn), Kjønn.M, Målform.NB, CountryCode.NO,
-            Bankkonto.UKJENT, List.of(barnFelles));
+            Bankkonto.UKJENT, List.of(barnFelles), new Sivilstand(Sivilstand.Type.GIFT));
     }
 
     public static Person personUtenAnnenpart() {
@@ -122,7 +122,7 @@ class OppslagPersonMapperTest {
         var søkerEtternavn = "Flakk";
         return new Person(søkerAktørId, søkerFnr, LocalDate.now().minusYears(30),
             new Navn(søkerFornavn, null,  søkerEtternavn), Kjønn.M, Målform.NB, CountryCode.NO, null,
-                List.of(barnFelles1, barnFelles2));
+                List.of(barnFelles1, barnFelles2), new Sivilstand(Sivilstand.Type.SEPARERT));
     }
 
     public static List<Arbeidsforhold> arbeidsforhold() {
