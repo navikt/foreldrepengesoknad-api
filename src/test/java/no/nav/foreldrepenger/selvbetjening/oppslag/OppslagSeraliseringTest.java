@@ -34,7 +34,6 @@ class OppslagSeraliseringTest {
     private static final String ARBEIDSGIVER_NAVN = "KJELL T. RINGS SYKKELVERKSTED";
     private static final Double STILLINGSPROSENT = 100d;
     private static final LocalDate FOM_ARBEIDSFORHOLD = now().minusYears(2);
-    private static final LocalDate TOM_ARBEIDSFORHOLD = null;
     @Autowired
     private ObjectMapper mapper;
 
@@ -49,7 +48,6 @@ class OppslagSeraliseringTest {
         assertThat(person.fornavn()).isEqualTo(personFelles.navn().fornavn());
         assertThat(person.etternavn()).isEqualTo(personFelles.navn().etternavn());
         assertThat(person.kjønn()).isEqualTo(personFelles.kjønn().name());
-        assertThat(person.ikkeNordiskEøsLand()).isFalse();
         assertThat(person.barn()).hasSize(1);
         var barn = person.barn().get(0);
 

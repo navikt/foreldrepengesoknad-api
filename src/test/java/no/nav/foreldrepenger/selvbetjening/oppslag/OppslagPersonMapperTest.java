@@ -48,7 +48,6 @@ class OppslagPersonMapperTest {
         assertThat(person.fornavn()).isEqualTo(personFelles.navn().fornavn());
         assertThat(person.etternavn()).isEqualTo(personFelles.navn().etternavn());
         assertThat(person.kjønn()).isEqualTo(personFelles.kjønn().name());
-        assertThat(person.ikkeNordiskEøsLand()).isFalse();
         assertThat(person.barn()).hasSize(1);
         var barn = person.barn().get(0);
 
@@ -73,7 +72,6 @@ class OppslagPersonMapperTest {
         assertThat(person.fornavn()).isEqualTo(personFelles.navn().fornavn());
         assertThat(person.etternavn()).isEqualTo(personFelles.navn().etternavn());
         assertThat(person.kjønn()).isEqualTo(personFelles.kjønn().name());
-        assertThat(person.ikkeNordiskEøsLand()).isFalse();
         assertThat(person.barn()).hasSize(2);
 
         for (var barn : person.barn()) {
