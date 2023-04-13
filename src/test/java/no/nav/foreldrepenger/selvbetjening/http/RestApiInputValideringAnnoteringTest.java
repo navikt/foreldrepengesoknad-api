@@ -5,7 +5,7 @@ import static org.assertj.core.api.Assertions.assertThat;
 import java.lang.reflect.Parameter;
 import java.util.Set;
 
-import javax.validation.Valid;
+import jakarta.validation.Valid;
 
 import org.junit.jupiter.api.Test;
 

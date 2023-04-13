@@ -1,20 +1,19 @@
 package no.nav.foreldrepenger.selvbetjening.innsyn.dokument;
 
+import jakarta.validation.Valid;
 import no.nav.foreldrepenger.selvbetjening.http.ProtectedRestController;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
-
-import javax.inject.Inject;
-import javax.validation.Valid;
 
 @ProtectedRestController("/rest/dokument")
 public class DokumentArkivController {
 
     private final DokumentArkivTjeneste dokumentArkivTjeneste;
 
-    @Inject
+    @Autowired
     public DokumentArkivController(DokumentArkivTjeneste dokumentArkivTjeneste) {
         this.dokumentArkivTjeneste = dokumentArkivTjeneste;
     }

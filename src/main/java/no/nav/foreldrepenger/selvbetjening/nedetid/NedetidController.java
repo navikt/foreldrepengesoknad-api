@@ -1,6 +1,6 @@
 package no.nav.foreldrepenger.selvbetjening.nedetid;
 
-import javax.validation.Valid;
+import jakarta.validation.Valid;
 
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;

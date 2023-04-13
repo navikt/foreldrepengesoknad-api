@@ -4,8 +4,8 @@ import static no.nav.foreldrepenger.common.domain.validation.InputValideringRege
 
 import java.time.LocalDate;
 
-import javax.validation.constraints.Digits;
-import javax.validation.constraints.Pattern;
+import jakarta.validation.constraints.Digits;
+import jakarta.validation.constraints.Pattern;
 
 public record NæringsinntektInformasjonFrontend(LocalDate dato,
                                                 @Digits(integer = 9, fraction = 0) int næringsinntektEtterEndring,

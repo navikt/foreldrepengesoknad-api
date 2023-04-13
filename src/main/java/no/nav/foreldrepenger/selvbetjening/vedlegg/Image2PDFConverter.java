@@ -1,5 +1,20 @@
 package no.nav.foreldrepenger.selvbetjening.vedlegg;
 
+import org.apache.pdfbox.pdmodel.PDDocument;
+import org.apache.pdfbox.pdmodel.PDPage;
+import org.apache.pdfbox.pdmodel.PDPageContentStream;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.core.io.ClassPathResource;
+import org.springframework.core.io.Resource;
+import org.springframework.http.MediaType;
+import org.springframework.stereotype.Component;
+
+import java.io.ByteArrayOutputStream;
+import java.io.IOException;
+import java.util.List;
+
 import static java.util.Arrays.asList;
 import static no.nav.foreldrepenger.selvbetjening.vedlegg.ImageScaler.downToA4;
 import static no.nav.foreldrepenger.selvbetjening.vedlegg.VedleggUtil.mediaType;
@@ -10,22 +25,6 @@ import static org.springframework.http.MediaType.IMAGE_JPEG;
 import static org.springframework.http.MediaType.IMAGE_PNG;
 import static org.springframework.util.StreamUtils.copyToByteArray;
 
-import java.io.ByteArrayOutputStream;
-import java.io.IOException;
-import java.util.List;
-
-import javax.inject.Inject;
-
-import org.apache.pdfbox.pdmodel.PDDocument;
-import org.apache.pdfbox.pdmodel.PDPage;
-import org.apache.pdfbox.pdmodel.PDPageContentStream;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
-import org.springframework.core.io.ClassPathResource;
-import org.springframework.core.io.Resource;
-import org.springframework.http.MediaType;
-import org.springframework.stereotype.Component;
-
 @Component
 public class Image2PDFConverter {
 
@@ -33,7 +32,7 @@ public class Image2PDFConverter {
 
     private static final Logger LOG = LoggerFactory.getLogger(Image2PDFConverter.class);
 
-    @Inject
+    @Autowired
     public Image2PDFConverter() {
         this(IMAGE_JPEG, IMAGE_PNG);
     }

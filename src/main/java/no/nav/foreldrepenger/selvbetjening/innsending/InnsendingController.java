@@ -2,7 +2,7 @@ package no.nav.foreldrepenger.selvbetjening.innsending;
 
 import static no.nav.boot.conditionals.EnvUtil.CONFIDENTIAL;
 
-import javax.validation.Valid;
+import jakarta.validation.Valid;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;

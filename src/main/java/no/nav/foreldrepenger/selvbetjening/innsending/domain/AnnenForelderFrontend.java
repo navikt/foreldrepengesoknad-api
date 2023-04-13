@@ -4,7 +4,7 @@ import static no.nav.foreldrepenger.common.domain.validation.InputValideringRege
 import static no.nav.foreldrepenger.common.domain.validation.InputValideringRegex.FRITEKST;
 import static no.nav.foreldrepenger.common.util.StringUtil.mask;
 
-import javax.validation.constraints.Pattern;
+import jakarta.validation.constraints.Pattern;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
 

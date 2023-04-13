@@ -5,9 +5,8 @@ import no.nav.foreldrepenger.selvbetjening.oppslag.domain.PersonFrontend;
 import no.nav.foreldrepenger.selvbetjening.oppslag.domain.Søkerinfo;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
-
-import javax.inject.Inject;
 
 import static no.nav.boot.conditionals.EnvUtil.CONFIDENTIAL;
 import static no.nav.foreldrepenger.selvbetjening.oppslag.mapper.PersonMapper.tilPersonFrontend;
@@ -19,7 +18,7 @@ public class OppslagTjeneste implements Oppslag {
     private final OppslagConnection oppslag;
     private final InnsynConnection innsyn;
 
-    @Inject
+    @Autowired
     public OppslagTjeneste(OppslagConnection oppslag, InnsynConnection innsyn) {
         this.oppslag = oppslag;
         this.innsyn = innsyn;

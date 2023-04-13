@@ -3,13 +3,13 @@ package no.nav.foreldrepenger.selvbetjening.innsyn;
 import no.nav.foreldrepenger.common.innsyn.AnnenPartVedtak;
 import no.nav.foreldrepenger.common.innsyn.Saker;
 import no.nav.foreldrepenger.selvbetjening.http.ProtectedRestController;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.MediaType;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 
-import javax.inject.Inject;
-import javax.validation.Valid;
+import jakarta.validation.Valid;
 
 import static no.nav.foreldrepenger.selvbetjening.innsyn.InnsynController.INNSYN;
 
@@ -20,7 +20,7 @@ public class InnsynController {
 
     private final Innsyn innsynTjeneste;
 
-    @Inject
+    @Autowired
     public InnsynController(Innsyn innsyn) {
         this.innsynTjeneste = innsyn;
     }

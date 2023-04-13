@@ -12,7 +12,7 @@
 	<parent>
 		<groupId>org.springframework.boot</groupId>
 		<artifactId>spring-boot-starter-parent</artifactId>
-		<version>2.7.8</version>
+		<version>3.0.5</version>
 	</parent>
 	<licenses>
 		<license>
@@ -33,16 +33,18 @@
 		<project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
 		<project.reporting.outputEncoding>UTF-8</project.reporting.outputEncoding>
 
-        <selvbetjening-felles.version>1.0.2</selvbetjening-felles.version>
-		<token-validation-version>2.1.9</token-validation-version>
+        <stonadskonto-regler.version>1.0.1</stonadskonto-regler.version>
+        <selvbetjening-felles.version>2.0.0</selvbetjening-felles.version>
+		<token-validation-version>3.0.10</token-validation-version>
         <boot-conditionals.version>5.0.6</boot-conditionals.version>
 
         <springdoc.version>1.7.0</springdoc.version>
 		<tika.version>2.7.0</tika.version>
 		<logback.logstash.version>7.3</logback.logstash.version>
 		<nv.version>1.29</nv.version>
+        <reflections.version>0.10.2</reflections.version>
 		<pdfbox.version>2.0.27</pdfbox.version>
-		<jacoco.version>0.8.9</jacoco.version>
+		<jacoco.version>0.8.8</jacoco.version>
 		<gcp.version>0.193.0</gcp.version>
 		<simpleclient.version>0.16.0</simpleclient.version>
 	</properties>
@@ -61,7 +63,7 @@
 		<dependency>
 			<groupId>no.nav.foreldrepenger</groupId>
 			<artifactId>stonadskonto-regler</artifactId>
-            <version>1.0.1</version>
+            <version>${stonadskonto-regler.version}</version>
 		</dependency>
         <dependency>
             <groupId>no.nav.boot</groupId>
@@ -90,17 +92,6 @@
             <version>${selvbetjening-felles.version}</version>
         </dependency>
 
-
-		<dependency>
-			<groupId>org.springframework.boot</groupId>
-			<artifactId>spring-boot-properties-migrator</artifactId>
-			<scope>runtime</scope>
-		</dependency>
-
-		<dependency>
-			<groupId>javax.xml.bind</groupId>
-			<artifactId>jaxb-api</artifactId>
-		</dependency>
 		<dependency>
 			<groupId>com.google.cloud</groupId>
 			<artifactId>google-cloud-storage</artifactId>
@@ -120,10 +111,6 @@
         </dependency>
         <dependency>
             <groupId>org.springframework.boot</groupId>
-            <artifactId>spring-boot-starter-jetty</artifactId>
-        </dependency>
-        <dependency>
-            <groupId>org.springframework.boot</groupId>
             <artifactId>spring-boot-devtools</artifactId>
             <optional>true</optional>
         </dependency>
@@ -138,12 +125,6 @@
         <dependency>
             <groupId>org.springframework.boot</groupId>
             <artifactId>spring-boot-starter-web</artifactId>
-            <exclusions>
-                <exclusion>
-                    <groupId>org.springframework.boot</groupId>
-                    <artifactId>spring-boot-starter-tomcat</artifactId>
-                </exclusion>
-            </exclusions>
         </dependency>
         <dependency>
             <groupId>org.springframework.boot</groupId>
@@ -179,11 +160,6 @@
 			<artifactId>pdfbox</artifactId>
 			<version>${pdfbox.version}</version>
 		</dependency>
-        <dependency>
-            <groupId>javax.inject</groupId>
-            <artifactId>javax.inject</artifactId>
-            <version>1</version>
-        </dependency>
 		<dependency>
 			<groupId>io.micrometer</groupId>
 			<artifactId>micrometer-registry-prometheus</artifactId>
@@ -214,16 +190,12 @@
         <dependency>
             <groupId>org.reflections</groupId>
             <artifactId>reflections</artifactId>
-            <version>0.10.2</version>
+            <version>${reflections.version}</version>
             <scope>test</scope>
         </dependency>
     </dependencies>
 	<build>
 		<plugins>
-			<plugin>
-				<groupId>pl.project13.maven</groupId>
-				<artifactId>git-commit-id-plugin</artifactId>
-			</plugin>
 			<plugin>
 				<groupId>org.apache.maven.plugins</groupId>
 				<artifactId>maven-failsafe-plugin</artifactId>

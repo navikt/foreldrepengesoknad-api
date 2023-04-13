@@ -1,20 +1,17 @@
 package no.nav.foreldrepenger.selvbetjening.http.interceptors;
 
-import static org.springframework.http.HttpStatus.Series.CLIENT_ERROR;
-import static org.springframework.http.HttpStatus.Series.SERVER_ERROR;
-
-import java.io.IOException;
-import java.time.Duration;
-import java.time.Instant;
-
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.http.HttpRequest;
-import org.springframework.http.HttpStatus;
+import org.springframework.http.HttpStatusCode;
 import org.springframework.http.client.ClientHttpRequestExecution;
 import org.springframework.http.client.ClientHttpRequestInterceptor;
 import org.springframework.http.client.ClientHttpResponse;
 import org.springframework.stereotype.Component;
+
+import java.io.IOException;
+import java.time.Duration;
+import java.time.Instant;
 
 @Component
 public class TimingAndLoggingClientHttpRequestInterceptor implements ClientHttpRequestInterceptor {
@@ -31,15 +28,15 @@ public class TimingAndLoggingClientHttpRequestInterceptor implements ClientHttpR
         return respons;
     }
 
-    private static void log(HttpRequest request, HttpStatus code, long ms) {
+    private static void log(HttpRequest request, HttpStatusCode code, long ms) {
         if (hasError(code)) {
-            LOG.warn("{} - {} - ({}). Dette tok {}ms", request.getMethodValue(), request.getURI().getPath(), code, ms);
+            LOG.warn("{} - {} - ({}). Dette tok {}ms", request.getMethod(), request.getURI().getPath(), code, ms);
         } else {
-            LOG.info("{} - {} - ({}). Dette tok {}ms", request.getMethodValue(), request.getURI().getPath(), code, ms);
+            LOG.info("{} - {} - ({}). Dette tok {}ms", request.getMethod(), request.getURI().getPath(), code, ms);
         }
     }
 
-    private static boolean hasError(HttpStatus code) {
-        return code.series().equals(CLIENT_ERROR) || code.series().equals(SERVER_ERROR);
+    private static boolean hasError(HttpStatusCode code) {
+        return code.is4xxClientError() || code.is5xxServerError();
     }
 }
