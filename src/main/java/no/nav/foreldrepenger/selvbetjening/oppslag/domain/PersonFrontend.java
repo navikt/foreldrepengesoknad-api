@@ -17,7 +17,6 @@ public record PersonFrontend(Fødselsnummer fnr,
                              String etternavn,
                              String kjønn,
                              LocalDate fødselsdato,
-                             boolean ikkeNordiskEøsLand, // Ikke i bruk i frontend!
                              Bankkonto bankkonto,
                              List<BarnFrontend> barn,
                              Sivilstand sivilstand) {
@@ -31,7 +30,6 @@ public record PersonFrontend(Fødselsnummer fnr,
             ", etternavn='" + mask(etternavn) + '\'' +
             ", kjønn='" + kjønn + '\'' +
             ", fødselsdato=" + fødselsdato +
-            ", ikkeNordiskEøsLand=" + ikkeNordiskEøsLand +
             ", bankkonto=" + bankkonto +
             ", barn=" + barn +
             ", sivilstand=" + sivilstand +

@@ -2,7 +2,6 @@ package no.nav.foreldrepenger.selvbetjening.oppslag.mapper;
 
 import static java.util.Comparator.comparing;
 import static no.nav.foreldrepenger.common.util.StreamUtil.safeStream;
-import static no.nav.foreldrepenger.selvbetjening.util.IkkeNordiskEØSLand.ikkeNordiskEøsLand;
 
 import java.util.List;
 import java.util.Optional;
@@ -33,7 +32,6 @@ public final class PersonMapper {
             Optional.ofNullable(dto.navn()).map(no.nav.foreldrepenger.common.domain.Navn::etternavn).orElse(null),
             Optional.ofNullable(dto.kjønn()).map(Enum::name).orElse(null),
             dto.fødselsdato(),
-            ikkeNordiskEøsLand(dto.land()),
             tilBankkonto(dto.bankkonto()),
             sort(tilBarn(dto.barn())),
             tilSivilstand(dto.sivilstand())
