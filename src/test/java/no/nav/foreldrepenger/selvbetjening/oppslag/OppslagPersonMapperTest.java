@@ -11,8 +11,6 @@ import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.springframework.test.context.junit.jupiter.SpringExtension;
 
-import com.neovisionaries.i18n.CountryCode;
-
 import no.nav.foreldrepenger.common.domain.AktørId;
 import no.nav.foreldrepenger.common.domain.Barn;
 import no.nav.foreldrepenger.common.domain.Fødselsnummer;
@@ -102,7 +100,7 @@ class OppslagPersonMapperTest {
         var søkerFornavn = "Kvikk";
         var søkerEtternavn = "Flakk";
         return new Person(søkerAktørId, søkerFnr, LocalDate.now().minusYears(25),
-            new Navn(søkerFornavn, null,  søkerEtternavn), Kjønn.M, Målform.NB, CountryCode.NO,
+            new Navn(søkerFornavn, null,  søkerEtternavn), Kjønn.M, Målform.NB,
             Bankkonto.UKJENT, List.of(barnFelles), new Sivilstand(Sivilstand.Type.GIFT));
     }
 
@@ -119,7 +117,7 @@ class OppslagPersonMapperTest {
         var søkerFornavn = "Kvikk";
         var søkerEtternavn = "Flakk";
         return new Person(søkerAktørId, søkerFnr, LocalDate.now().minusYears(30),
-            new Navn(søkerFornavn, null,  søkerEtternavn), Kjønn.M, Målform.NB, CountryCode.NO, null,
+            new Navn(søkerFornavn, null,  søkerEtternavn), Kjønn.M, Målform.NB, null,
                 List.of(barnFelles1, barnFelles2), new Sivilstand(Sivilstand.Type.SEPARERT));
     }
 
