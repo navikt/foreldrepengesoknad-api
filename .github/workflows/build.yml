@@ -31,7 +31,7 @@ jobs:
     name: Deploy dev
     if: github.ref_name == 'master'
     needs: build-app
-    uses: navikt/fp-gha-workflows/.github/workflows/deploy-app.yml@deploy
+    uses: navikt/fp-gha-workflows/.github/workflows/deploy.yml@main
     with:
       image: ghcr.io/${{ github.repository }}:${{ needs.build-app.outputs.build-version }}
       cluster: dev-gcp
@@ -41,7 +41,7 @@ jobs:
     name: Deploy prod
     if: github.ref_name == 'master'
     needs: [build-app, deploy-dev]
-    uses: navikt/fp-gha-workflows/.github/workflows/deploy-app.yml@deploy
+    uses: navikt/fp-gha-workflows/.github/workflows/deploy.yml@main
     with:
       image: ghcr.io/${{ github.repository }}:${{ needs.build-app.outputs.build-version }}
       cluster: prod-gcp

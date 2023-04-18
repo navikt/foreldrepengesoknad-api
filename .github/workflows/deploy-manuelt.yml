@@ -17,7 +17,7 @@ on:
 jobs:
   deploy:
     name: Deploy dev
-    uses: navikt/fp-gha-workflows/.github/workflows/deploy-app.yml@deploy
+    uses: navikt/fp-gha-workflows/.github/workflows/deploy.yml@main
     with:
       image: ghcr.io/${{ github.repository }}:${{ inputs.image }}
       cluster: ${{ inputs.environment }}-gcp
