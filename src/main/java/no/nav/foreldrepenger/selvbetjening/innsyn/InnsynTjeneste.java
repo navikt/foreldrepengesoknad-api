@@ -1,7 +1,6 @@
 package no.nav.foreldrepenger.selvbetjening.innsyn;
 
-import static no.nav.boot.conditionals.EnvUtil.isDevOrLocal;
-import static no.nav.boot.conditionals.EnvUtil.isVTP;
+import static no.nav.boot.conditionals.EnvUtil.isProd;
 
 import java.util.Optional;
 
@@ -32,7 +31,7 @@ public class InnsynTjeneste implements Innsyn, EnvironmentAware {
     @Override
     public Saker hentSaker() {
         try {
-            if (isDevOrLocal(env) || isVTP(env)) {
+            if (!isProd(env)) {
                 var saker = oversiktConnection.hentSaker();
                 LOG.trace("Mottatt saker fra fpoversikt: {}", saker);
             }
