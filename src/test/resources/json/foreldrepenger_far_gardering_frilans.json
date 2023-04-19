@@ -97,7 +97,7 @@
             "skjemanummer": "I000038",
             "type": "morsaktivitetdokumentasjon",
             "uploaded": true,
-            "url": "https://foreldrepengesoknad-api.dev.nav.no/rest/storage/vedlegg/d26911e0-e5d7-454b-840b-34e9f17ed46e",
+            "url": "https://foreldrepengesoknad-api.intern.dev.nav.no/rest/storage/vedlegg/d26911e0-e5d7-454b-840b-34e9f17ed46e",
             "uuid": "d26911e0-e5d7-454b-840b-34e9f17ed46e"
         }
     ]

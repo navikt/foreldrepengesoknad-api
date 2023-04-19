@@ -164,7 +164,7 @@ class SøknadFrontendDeseraliseringTest {
         var vedlegg = vedleggListe.get(0);
         assertThat(vedlegg.getSkjemanummer()).isEqualTo("I000044");
         assertThat(vedlegg.getId()).isEqualTo(new VedleggReferanse("V090740687265315217194125674862219730"));
-        assertThat(vedlegg.getUrl()).isEqualTo(new URI("https://foreldrepengesoknad-api.dev.nav.no/rest/storage/vedlegg/b9974360-6c07-4b9d-acac-14f0f417d200"));
+        assertThat(vedlegg.getUrl()).isEqualTo(new URI("https://foreldrepengesoknad-api.intern.dev.nav.no/rest/storage/vedlegg/b9974360-6c07-4b9d-acac-14f0f417d200"));
     }
 
     @Test

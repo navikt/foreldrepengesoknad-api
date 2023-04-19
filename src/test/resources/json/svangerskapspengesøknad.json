@@ -45,7 +45,7 @@
             "skjemanummer": "I000109",
             "type": "tilrettelegging",
             "uploaded": true,
-            "url": "https://foreldrepengesoknad-api.dev.nav.no/rest/storage/vedlegg/733de40c-1c57-4cbc-933f-dcd43ba8548b",
+            "url": "https://foreldrepengesoknad-api.intern.dev.nav.no/rest/storage/vedlegg/733de40c-1c57-4cbc-933f-dcd43ba8548b",
             "uuid": "733de40c-1c57-4cbc-933f-dcd43ba8548b"
         }
     ]

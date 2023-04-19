@@ -26,7 +26,7 @@
             "skjemanummer": "I000062",
             "type": "terminbekreftelse",
             "uploaded": true,
-            "url": "https://foreldrepengesoknad-api.dev.nav.no/rest/storage/vedlegg/51ebb57c-db8c-49ea-9f09-ab1cb29e3447",
+            "url": "https://foreldrepengesoknad-api.intern.dev.nav.no/rest/storage/vedlegg/51ebb57c-db8c-49ea-9f09-ab1cb29e3447",
             "uuid": "51ebb57c-db8c-49ea-9f09-ab1cb29e3447"
         }
     ]
