@@ -1,14 +1,3 @@
-# For most projects, this workflow file will not need changing; you simply need
-# to commit it to your repository.
-#
-# You may wish to alter this file to override the set of languages analyzed,
-# or to provide custom queries or build logic.
-#
-# ******** NOTE ********
-# We have attempted to detect the languages in your repository. Please check
-# the `language` matrix defined below to confirm you have the correct set of
-# supported CodeQL languages.
-#
 name: "CodeQL"
 
 on:
@@ -20,64 +9,11 @@ on:
     - cron: '0 0 * * 0,4'
 
 jobs:
-#   codeql:
-#     name: CodeQl
-#     permissions:
-#       actions: read
-#       contents: read
-#       security-events: write
-#     uses: navikt/fp-gha-workflows/.github/workflows/codeql.yml@main
-#     secrets: inherit
-
-  analyze:
-    name: Analyze code
-    if: github.actor != 'dependabot[bot]'
-    runs-on: ubuntu-latest
-    permissions:
-      actions: read
-      contents: read
-      security-events: write
-    steps:
-      - uses: actions/checkout@v3
-
-      - name: Initialize CodeQL
-        uses: github/codeql-action/init@v2
-        with:
-          languages: java
-
-      - name: Create maven .m2 settings for GITHUB
-        uses: whelk-io/maven-settings-xml-action@v21
-        with:
-          repositories: '[{"id": "github", "name": "github", "url": "https://maven.pkg.github.com/${{ github.repository }}",
-              "releases": { "enabled": "true" }, "snapshots": { "enabled": "false" }}]'
-          servers: '[{ "id": "github", "username": "${{ github.actor }}", "password": "${{ secrets.GITHUB_TOKEN}}" }]'
-          output_file: settings.xml
-
-      - name: Set up JDK-17 with cache
-        uses: actions/setup-java@v3
-        with:
-          java-version: 17
-          distribution: 'temurin'
-          cache: 'maven'
-
-      - name: Generate build version
-        id: generate-build-version
-        run: |
-          echo "build-version=$(date +%Y.%m.%d.%H%M%S)-$(echo $GITHUB_SHA | cut -c1-7)" >> $GITHUB_OUTPUT
-
-      - name: Print build version
-        run: echo "Generated build-version is ${{ steps.generate-build-version.outputs.build-version }}"
-
-      - name: Build artifacts
-        run: |
-          echo "Building artifacts ${{ steps.generate-build-version.outputs.build-version }}"
-          mvn versions:set -DnewVersion="${{ steps.generate-build-version.outputs.build-version }}" -s settings.xml -q -e -B
-          mvn install -s settings.xml -q -e -B -DskipTests
-
-      - name: Perform CodeQL Analysis
-        uses: github/codeql-action/analyze@v2
-        with:
-          category: "/language:java"
-
-
-
+  codeql:
+   name: CodeQl
+   permissions:
+     actions: read
+     contents: read
+     security-events: write
+   uses: navikt/fp-gha-workflows/.github/workflows/codeql.yml@main
+   secrets: inherit
