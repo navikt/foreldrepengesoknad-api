@@ -36,7 +36,7 @@
         <stonadskonto-regler.version>1.0.1</stonadskonto-regler.version>
         <selvbetjening-felles.version>2.2.0</selvbetjening-felles.version>
 		<token-validation-version>3.0.10</token-validation-version>
-        <boot-conditionals.version>5.0.6</boot-conditionals.version>
+        <boot-conditionals.version>5.0.7</boot-conditionals.version>
 
         <springdoc.version>2.1.0</springdoc.version>
 		<tika.version>2.7.0</tika.version>
