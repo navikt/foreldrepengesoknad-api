@@ -17,45 +17,63 @@ import no.nav.foreldrepenger.common.innsyn.Saker;
 public class InnsynTjeneste implements Innsyn, EnvironmentAware {
 
     private Environment env;
-    private final InnsynConnection connection;
-    private final OversiktConnection oversiktConnection;
+    private final InnsynConnection connectionFpinfo;
+    private final OversiktConnection connectionFpoversikt;
 
     private static final Logger LOG = LoggerFactory.getLogger(InnsynTjeneste.class);
+    private static final Logger SECURE_LOGGER = LoggerFactory.getLogger("secureLogger");
 
-    public InnsynTjeneste(InnsynConnection innsynConnection,
-                          OversiktConnection oversiktConnection) {
-        this.connection = innsynConnection;
-        this.oversiktConnection = oversiktConnection;
+    public InnsynTjeneste(InnsynConnection connectionFpinfo,
+                          OversiktConnection connectionFpoversikt) {
+        this.connectionFpinfo = connectionFpinfo;
+        this.connectionFpoversikt = connectionFpoversikt;
     }
 
     @Override
     public Saker hentSaker() {
-        try {
-            if (!isProd(env)) {
-                var saker = oversiktConnection.hentSaker();
-                LOG.trace("Mottatt saker fra fpoversikt: {}", saker);
-            }
-        } catch (Exception e) {
-            LOG.warn("Noe gikk galt med henting av saker fra fpoversikt", e);
+        LOG.info("Henter saker for pålogget bruker");
+        var sakerFraFpinfo = connectionFpinfo.hentSaker();
+
+        if (!isProd(env)) {
+            sammenlignSakerFraOversiktOgFpinfoFailSafe(sakerFraFpinfo);
         }
 
-        LOG.info("Henter saker for pålogget bruker");
-        return connection.hentSaker();
+        return sakerFraFpinfo;
+    }
+
+    private void sammenlignSakerFraOversiktOgFpinfoFailSafe(Saker sakerFraFpinfo) {
+        try {
+            LOG.info("Henter saker for pålogget bruker fra fpoversikt");
+            var sakerFraFpoversikt = connectionFpoversikt.hentSaker();
+
+            if (sakerFraFpinfo.equals(sakerFraFpoversikt)) {
+                LOG.info("Ingen avvik funnet ved sammenligning av saker hentet fra fpinfo og fpoversikt");
+            } else {
+                LOG.info("Avvik funnet ved sammenligning av saker hentet fra fpinfo og fpoversikt");
+                SECURE_LOGGER.info("""
+                    Avvik funnet ved sammenligning av saker hentet fra fpinfo og fpoversikt.
+                    Fpinfo {}
+                    Fpoversikt {}
+                    """, sakerFraFpinfo, sakerFraFpoversikt);
+            }
+        } catch (Exception e) {
+            LOG.warn("Noe gikk galt med henting eller sammenligning av saker fra fpoversikt", e);
+        }
     }
 
     @Override
     public Optional<AnnenPartVedtak> annenPartVedtak(AnnenPartVedtakIdentifikator annenPartVedtakIdentifikator) {
-        return connection.annenPartVedtak(annenPartVedtakIdentifikator);
+        return connectionFpinfo.annenPartVedtak(annenPartVedtakIdentifikator);
     }
 
     @Override
     public String ping() {
-        return connection.ping();
+        return connectionFpinfo.ping();
     }
 
     @Override
     public String toString() {
-        return getClass().getSimpleName() + " [innsynConnection=" + connection + "]";
+        return getClass().getSimpleName() + " [innsynConnection=" + connectionFpinfo + "]";
     }
 
     @Override
