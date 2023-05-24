@@ -83,7 +83,7 @@ class OppslagPersonMapperTest {
 
     public static Person personMedAnnenpart() {
         var annenpartFnr = new Fødselsnummer("33333344444");
-        var annenpartAktørId = AktørId.valueOf("9999999999");
+        var annenpartAktørId = new AktørId("9999999999");
         var annenpartFødselsdato = LocalDate.now().minusYears(23);
         var annenpartFornavn = "Guro";
         var annenpartMellomnavn = "";
@@ -96,7 +96,7 @@ class OppslagPersonMapperTest {
         var barnFelles = new Barn(barnFnr, barnFødselsdato, null, null, Kjønn.K, annenPartFelles);
 
         var søkerFnr = new Fødselsnummer("12345612345");
-        var søkerAktørId = AktørId.valueOf("9988888877777");
+        var søkerAktørId = new AktørId("9988888877777");
         var søkerFornavn = "Kvikk";
         var søkerEtternavn = "Flakk";
         return new Person(søkerAktørId, søkerFnr, LocalDate.now().minusYears(25),
@@ -113,7 +113,7 @@ class OppslagPersonMapperTest {
         var barnFelles2 = new Barn(barnFnr2, barnFødselsdato2, null, null, Kjønn.M, null);
 
         var søkerFnr = new Fødselsnummer("12345612345");
-        var søkerAktørId = AktørId.valueOf("9988888877777");
+        var søkerAktørId = new AktørId("9988888877777");
         var søkerFornavn = "Kvikk";
         var søkerEtternavn = "Flakk";
         return new Person(søkerAktørId, søkerFnr, LocalDate.now().minusYears(30),

@@ -1,27 +1,29 @@
 package no.nav.foreldrepenger.selvbetjening.innsending;
 
-import com.fasterxml.jackson.core.JsonProcessingException;
-import com.fasterxml.jackson.databind.ObjectMapper;
-import no.nav.foreldrepenger.common.domain.Kvittering;
-import no.nav.foreldrepenger.common.domain.Saksnummer;
-import no.nav.foreldrepenger.selvbetjening.innsending.domain.EttersendingFrontend;
-import no.nav.foreldrepenger.selvbetjening.innsending.domain.SøknadFrontend;
-import org.slf4j.Logger;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.boot.autoconfigure.condition.ConditionalOnProperty;
-import org.springframework.stereotype.Service;
-
 import static java.time.LocalDateTime.now;
 import static no.nav.foreldrepenger.selvbetjening.innsending.mapper.CommonMapper.tilVedlegg;
 import static no.nav.foreldrepenger.selvbetjening.innsending.mapper.EttersendingMapper.tilEttersending;
 import static no.nav.foreldrepenger.selvbetjening.innsending.mapper.SøknadMapper.tilSøknad;
 import static org.slf4j.LoggerFactory.getLogger;
 
+import org.slf4j.Logger;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.boot.autoconfigure.condition.ConditionalOnProperty;
+import org.springframework.stereotype.Service;
+
+import com.fasterxml.jackson.core.JsonProcessingException;
+import com.fasterxml.jackson.databind.ObjectMapper;
+
+import no.nav.foreldrepenger.common.domain.Kvittering;
+import no.nav.foreldrepenger.common.domain.Saksnummer;
+import no.nav.foreldrepenger.selvbetjening.innsending.domain.EttersendingFrontend;
+import no.nav.foreldrepenger.selvbetjening.innsending.domain.SøknadFrontend;
+
 @Service
 @ConditionalOnProperty(name = "stub.mottak", havingValue = "true")
 public class InnsendingTjenesteStub implements Innsending {
 
-    public static final Kvittering STUB = new Kvittering(now(), Saksnummer.valueOf("12345"), new byte[0], new byte[0]);
+    public static final Kvittering STUB = new Kvittering(now(), new Saksnummer("12345"), new byte[0], new byte[0]);
 
     private static final Logger LOG = getLogger(InnsendingTjenesteStub.class);
 

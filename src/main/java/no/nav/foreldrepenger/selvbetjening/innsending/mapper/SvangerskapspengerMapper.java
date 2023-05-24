@@ -133,6 +133,6 @@ final class SvangerskapspengerMapper {
     }
 
     private static Virksomhet tilVirksomhet(no.nav.foreldrepenger.selvbetjening.innsending.domain.tilrettelegging.Arbeidsforhold arbeidsforhold) {
-        return new Virksomhet(Orgnummer.valueOf(arbeidsforhold.id()));
+        return new Virksomhet(new Orgnummer(arbeidsforhold.id()));
     }
 }

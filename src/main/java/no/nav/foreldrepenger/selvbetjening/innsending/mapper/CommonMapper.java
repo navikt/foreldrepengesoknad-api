@@ -1,6 +1,15 @@
 package no.nav.foreldrepenger.selvbetjening.innsending.mapper;
 
+import static java.time.LocalDate.now;
+import static no.nav.foreldrepenger.common.util.StreamUtil.safeStream;
+import static no.nav.foreldrepenger.selvbetjening.util.DateUtil.erNyopprettet;
+import static org.springframework.util.ObjectUtils.isEmpty;
+
+import java.time.LocalDate;
+import java.util.List;
+
 import com.neovisionaries.i18n.CountryCode;
+
 import no.nav.foreldrepenger.common.domain.Fødselsnummer;
 import no.nav.foreldrepenger.common.domain.Orgnummer;
 import no.nav.foreldrepenger.common.domain.felles.DokumentType;
@@ -39,15 +48,6 @@ import no.nav.foreldrepenger.selvbetjening.innsending.domain.arbeid.FrilansInfor
 import no.nav.foreldrepenger.selvbetjening.innsending.domain.arbeid.FrilansoppdragFrontend;
 import no.nav.foreldrepenger.selvbetjening.innsending.domain.arbeid.SelvstendigNæringsdrivendeInformasjonFrontend;
 import no.nav.foreldrepenger.selvbetjening.innsending.domain.arbeid.TilknyttetPerson;
-import org.jetbrains.annotations.Nullable;
-
-import java.time.LocalDate;
-import java.util.List;
-
-import static java.time.LocalDate.now;
-import static no.nav.foreldrepenger.common.util.StreamUtil.safeStream;
-import static no.nav.foreldrepenger.selvbetjening.util.DateUtil.erNyopprettet;
-import static org.springframework.util.ObjectUtils.isEmpty;
 
 public final class CommonMapper {
 
@@ -251,7 +251,7 @@ public final class CommonMapper {
 
     private static Orgnummer tilOrgnummer(SelvstendigNæringsdrivendeInformasjonFrontend selvstendig) {
         if (selvstendig.registrertINorge()) {
-            return selvstendig.organisasjonsnummer() != null ? Orgnummer.valueOf(selvstendig.organisasjonsnummer()) : null;
+            return selvstendig.organisasjonsnummer() != null ? new Orgnummer(selvstendig.organisasjonsnummer()) : null;
         }
         return null;
     }
