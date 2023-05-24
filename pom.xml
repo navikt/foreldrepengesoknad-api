@@ -12,7 +12,7 @@
 	<parent>
 		<groupId>org.springframework.boot</groupId>
 		<artifactId>spring-boot-starter-parent</artifactId>
-		<version>3.0.6</version>
+		<version>3.1.0</version>
 	</parent>
 	<licenses>
 		<license>
@@ -34,18 +34,18 @@
 		<project.reporting.outputEncoding>UTF-8</project.reporting.outputEncoding>
 
         <stonadskonto-regler.version>1.0.1</stonadskonto-regler.version>
-        <selvbetjening-felles.version>2.2.2</selvbetjening-felles.version>
+        <selvbetjening-felles.version>2.3.0</selvbetjening-felles.version>
 		<token-validation-version>3.0.10</token-validation-version>
-        <boot-conditionals.version>5.0.7</boot-conditionals.version>
+        <boot-conditionals.version>5.0.8</boot-conditionals.version>
 
         <springdoc.version>2.1.0</springdoc.version>
-		<tika.version>2.7.0</tika.version>
+		<tika.version>2.8.0</tika.version>
 		<logback.logstash.version>7.3</logback.logstash.version>
 		<nv.version>1.29</nv.version>
         <reflections.version>0.10.2</reflections.version>
 		<pdfbox.version>2.0.28</pdfbox.version>
 		<jacoco.version>0.8.10</jacoco.version>
-		<gcp.version>0.195.0</gcp.version>
+		<gcp.version>0.196.0</gcp.version>
 		<simpleclient.version>0.16.0</simpleclient.version>
 	</properties>
 	<dependencyManagement>

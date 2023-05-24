@@ -33,7 +33,7 @@ class EttersendingTilDtoMapperTest {
 
     @Test
     void testEttersendingMapper() {
-        var saksnummer = Saksnummer.valueOf("952003131");
+        var saksnummer = new Saksnummer("952003131");
         var ettersendelseFraFrontend = new EttersendingFrontend("foreldrepenger", saksnummer, null, null, null);
         var ettersendelse = connection.body(ettersendelseFraFrontend);
         assertThat(ettersendelse.type()).isEqualTo(EttersendingsType.FORELDREPENGER);
