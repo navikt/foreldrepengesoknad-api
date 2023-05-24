@@ -5,7 +5,7 @@ import static no.nav.foreldrepenger.common.util.StreamUtil.safeStream;
 import static no.nav.foreldrepenger.selvbetjening.innsending.mapper.CommonMapper.tilVedlegg;
 import static no.nav.foreldrepenger.selvbetjening.innsending.mapper.EttersendingMapper.tilEttersending;
 import static no.nav.foreldrepenger.selvbetjening.innsending.mapper.SøknadMapper.tilSøknad;
-import static org.apache.commons.lang3.StringEscapeUtils.escapeHtml4;
+import static no.nav.foreldrepenger.selvbetjening.util.StringUtils.escapeHtml;
 
 import java.net.URI;
 import java.util.List;
@@ -71,7 +71,7 @@ public class InnsendingConnection extends AbstractRestConnection {
 
     public Søknad body(SøknadFrontend søknadFrontend) {
         if (LOG.isInfoEnabled()) {
-            SECURE_LOGGER.info("{} mottatt fra frontend med følende innhold: {}", søknadFrontend.getType(), escapeHtml4(søknadFrontend.toString()));
+            SECURE_LOGGER.info("{} mottatt fra frontend med følende innhold: {}", søknadFrontend.getType(), escapeHtml(søknadFrontend));
         }
         var dto = tilSøknad(søknadFrontend);
 
@@ -93,7 +93,7 @@ public class InnsendingConnection extends AbstractRestConnection {
         if (ettersending.vedlegg().size() > unikeVedleggMedInnhold.size()) {
             LOG.info("Mottatt duplikate vedlegg under ettersending. Fjerner duplikate vedlegg. Sjekk secure logg for mer info.");
             if (LOG.isInfoEnabled()) {
-                SECURE_LOGGER.info("Ettersendte vedlegg fra frontend før vasking er {}", escapeHtml4(ettersending.vedlegg().toString()));
+                SECURE_LOGGER.info("Ettersendte vedlegg fra frontend før vasking er {}", escapeHtml(ettersending.vedlegg()));
             }
         }
         return dto;

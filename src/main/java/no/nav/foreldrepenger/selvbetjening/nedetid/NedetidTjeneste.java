@@ -1,6 +1,6 @@
 package no.nav.foreldrepenger.selvbetjening.nedetid;
 
-import static org.apache.commons.lang3.StringEscapeUtils.escapeHtml4;
+import static no.nav.foreldrepenger.selvbetjening.util.StringUtils.escapeHtml;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -12,7 +12,9 @@ public class NedetidTjeneste implements Nedetid {
 
     @Override
     public void registrer(NedetidInfo info) {
-        LOG.info("Registrerer nedetid {}", escapeHtml4(info.toString()));
+        if (LOG.isInfoEnabled()) {
+            LOG.info("Registrerer nedetid {}", escapeHtml(info));
+        }
     }
 
 }

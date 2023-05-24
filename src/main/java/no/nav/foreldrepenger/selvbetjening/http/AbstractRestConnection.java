@@ -1,7 +1,7 @@
 package no.nav.foreldrepenger.selvbetjening.http;
 
 import static no.nav.boot.conditionals.EnvUtil.CONFIDENTIAL;
-import static org.apache.commons.lang3.StringEscapeUtils.escapeHtml4;
+import static no.nav.foreldrepenger.selvbetjening.util.StringUtils.escapeHtml;
 import static org.springframework.http.HttpStatus.NOT_FOUND;
 
 import java.net.URI;
@@ -30,7 +30,7 @@ public abstract class AbstractRestConnection implements PingEndpointAware, Toggl
         try {
             if (!isEnabled()) {
                 if (LOG.isInfoEnabled()) {
-                    LOG.info("Service er ikke aktiv, GETer ikke fra {}", escapeHtml4(uri.toString()));
+                    LOG.info("Service er ikke aktiv, GETer ikke fra {}", escapeHtml(uri));
                 }
                 return null;
             }
@@ -42,7 +42,7 @@ public abstract class AbstractRestConnection implements PingEndpointAware, Toggl
         } catch (HttpClientErrorException e) {
             if (!throwOnNotFound && NOT_FOUND.equals(e.getStatusCode())) {
                 if (LOG.isInfoEnabled()) {
-                    LOG.info("Fant intet objekt på {}, returnerer null", escapeHtml4(uri.toString()));
+                    LOG.info("Fant intet objekt på {}, returnerer null", escapeHtml(uri));
                 }
                 return null;
             }
@@ -53,7 +53,7 @@ public abstract class AbstractRestConnection implements PingEndpointAware, Toggl
     public <T> T postForObject(URI uri, Object payload, Class<T> responseType) {
         if (!isEnabled()) {
             if (LOG.isInfoEnabled()) {
-                LOG.info("Service er ikke aktiv, POSTer ikke til {}", escapeHtml4(uri.toString()));
+                LOG.info("Service er ikke aktiv, POSTer ikke til {}", escapeHtml(uri));
             }
             return null;
         }
@@ -63,7 +63,7 @@ public abstract class AbstractRestConnection implements PingEndpointAware, Toggl
     public <T> T putForObject(URI uri, Object payload, Class<T> responseType) {
         if (!isEnabled()) {
             if (LOG.isInfoEnabled()) {
-                LOG.info("Service er ikke aktiv, PUTer ikke til {}", escapeHtml4(uri.toString()));
+                LOG.info("Service er ikke aktiv, PUTer ikke til {}", escapeHtml(uri));
             }
             return null;
         }

@@ -1,7 +1,7 @@
 package no.nav.foreldrepenger.selvbetjening.innsending;
 
 import static no.nav.boot.conditionals.EnvUtil.CONFIDENTIAL;
-import static org.apache.commons.lang3.StringEscapeUtils.escapeHtml4;
+import static no.nav.foreldrepenger.selvbetjening.util.StringUtils.escapeHtml;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -30,8 +30,8 @@ public class InnsendingController {
     public Kvittering sendInn(@Valid @RequestBody SøknadFrontend søknad) {
         LOG.info("Mottok søknad med målform {} og {} vedlegg", søknad.getSøker().språkkode(), søknad.getVedlegg().size());
         if (LOG.isInfoEnabled() && LOG.isInfoEnabled(CONFIDENTIAL)) {
-            LOG.info(CONFIDENTIAL, "{}", escapeHtml4(søknad.toString()));
-            LOG.info(CONFIDENTIAL, "Søker er {}", escapeHtml4(søknad.getSøker().toString()));
+            LOG.info(CONFIDENTIAL, "{}", escapeHtml(søknad));
+            LOG.info(CONFIDENTIAL, "Søker er {}", escapeHtml(søknad.getSøker()));
         }
         return innsending.sendInn(søknad);
     }
@@ -40,7 +40,7 @@ public class InnsendingController {
     public Kvittering sendInn(@Valid @RequestBody EttersendingFrontend ettersending) {
         LOG.info("Mottok ettersending av {} vedlegg", ettersending.vedlegg().size());
         if (LOG.isInfoEnabled() && LOG.isInfoEnabled(CONFIDENTIAL)) {
-            LOG.info(CONFIDENTIAL, "{}", escapeHtml4(ettersending.toString()));
+            LOG.info(CONFIDENTIAL, "{}", escapeHtml(ettersending));
         }
         return innsending.ettersend(ettersending);
     }
@@ -49,7 +49,7 @@ public class InnsendingController {
     public Kvittering endre(@Valid @RequestBody SøknadFrontend søknad) {
         LOG.info("Mottok endringssøknad med {} vedlegg", søknad.getVedlegg().size());
         if (LOG.isInfoEnabled() && LOG.isInfoEnabled(CONFIDENTIAL)) {
-            LOG.info(CONFIDENTIAL, "{}", escapeHtml4(søknad.toString()));
+            LOG.info(CONFIDENTIAL, "{}", escapeHtml(søknad));
         }
         return innsending.endre(søknad);
     }
