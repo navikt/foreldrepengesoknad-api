@@ -70,7 +70,9 @@ public class InnsendingConnection extends AbstractRestConnection {
     }
 
     public Søknad body(SøknadFrontend søknadFrontend) {
-        SECURE_LOGGER.info("{} mottatt fra frontend med følende innhold: {}", søknadFrontend.getType(), escapeHtml4(søknadFrontend.toString()));
+        if (LOG.isInfoEnabled()) {
+            SECURE_LOGGER.info("{} mottatt fra frontend med følende innhold: {}", søknadFrontend.getType(), escapeHtml4(søknadFrontend.toString()));
+        }
         var dto = tilSøknad(søknadFrontend);
 
         var unikeVedleggMedInnhold = hentUnikeVedleggMedInnhold(søknadFrontend.getVedlegg());
@@ -90,7 +92,9 @@ public class InnsendingConnection extends AbstractRestConnection {
 
         if (ettersending.vedlegg().size() > unikeVedleggMedInnhold.size()) {
             LOG.info("Mottatt duplikate vedlegg under ettersending. Fjerner duplikate vedlegg. Sjekk secure logg for mer info.");
-            SECURE_LOGGER.info("Ettersendte vedlegg fra frontend før vasking er {}", ettersending.vedlegg());
+            if (LOG.isInfoEnabled()) {
+                SECURE_LOGGER.info("Ettersendte vedlegg fra frontend før vasking er {}", escapeHtml4(ettersending.vedlegg().toString()));
+            }
         }
         return dto;
     }

@@ -29,22 +29,28 @@ public class InnsendingController {
     @PostMapping
     public Kvittering sendInn(@Valid @RequestBody SøknadFrontend søknad) {
         LOG.info("Mottok søknad med målform {} og {} vedlegg", søknad.getSøker().språkkode(), søknad.getVedlegg().size());
-        LOG.info(CONFIDENTIAL, "{}", escapeHtml4(søknad.toString()));
-        LOG.info(CONFIDENTIAL, "Søker er {}", escapeHtml4(søknad.getSøker().toString()));
+        if (LOG.isInfoEnabled() && LOG.isInfoEnabled(CONFIDENTIAL)) {
+            LOG.info(CONFIDENTIAL, "{}", escapeHtml4(søknad.toString()));
+            LOG.info(CONFIDENTIAL, "Søker er {}", escapeHtml4(søknad.getSøker().toString()));
+        }
         return innsending.sendInn(søknad);
     }
 
     @PostMapping("/ettersend")
     public Kvittering sendInn(@Valid @RequestBody EttersendingFrontend ettersending) {
         LOG.info("Mottok ettersending av {} vedlegg", ettersending.vedlegg().size());
-        LOG.info(CONFIDENTIAL, "{}", escapeHtml4(ettersending.toString()));
+        if (LOG.isInfoEnabled() && LOG.isInfoEnabled(CONFIDENTIAL)) {
+            LOG.info(CONFIDENTIAL, "{}", escapeHtml4(ettersending.toString()));
+        }
         return innsending.ettersend(ettersending);
     }
 
     @PostMapping("/endre")
     public Kvittering endre(@Valid @RequestBody SøknadFrontend søknad) {
         LOG.info("Mottok endringssøknad med {} vedlegg", søknad.getVedlegg().size());
-        LOG.info(CONFIDENTIAL, "{}", escapeHtml4(søknad.toString()));
+        if (LOG.isInfoEnabled() && LOG.isInfoEnabled(CONFIDENTIAL)) {
+            LOG.info(CONFIDENTIAL, "{}", escapeHtml4(søknad.toString()));
+        }
         return innsending.endre(søknad);
     }
 
