@@ -1,6 +1,7 @@
 package no.nav.foreldrepenger.selvbetjening.http;
 
 import static no.nav.boot.conditionals.EnvUtil.CONFIDENTIAL;
+import static no.nav.foreldrepenger.selvbetjening.util.StringUtils.escapeHtml;
 import static org.springframework.http.HttpStatus.NOT_FOUND;
 
 import java.net.URI;
@@ -28,7 +29,9 @@ public abstract class AbstractRestConnection implements PingEndpointAware, Toggl
     public <T> T getForObject(URI uri, Class<T> responseType, boolean throwOnNotFound) {
         try {
             if (!isEnabled()) {
-                LOG.info("Service er ikke aktiv, GETer ikke fra {}", uri);
+                if (LOG.isInfoEnabled()) {
+                    LOG.info("Service er ikke aktiv, GETer ikke fra {}", escapeHtml(uri));
+                }
                 return null;
             }
             T respons = operations.getForObject(uri, responseType);
@@ -38,7 +41,9 @@ public abstract class AbstractRestConnection implements PingEndpointAware, Toggl
             return respons;
         } catch (HttpClientErrorException e) {
             if (!throwOnNotFound && NOT_FOUND.equals(e.getStatusCode())) {
-                LOG.info("Fant intet objekt på {}, returnerer null", uri);
+                if (LOG.isInfoEnabled()) {
+                    LOG.info("Fant intet objekt på {}, returnerer null", escapeHtml(uri));
+                }
                 return null;
             }
             throw e;
@@ -47,7 +52,9 @@ public abstract class AbstractRestConnection implements PingEndpointAware, Toggl
 
     public <T> T postForObject(URI uri, Object payload, Class<T> responseType) {
         if (!isEnabled()) {
-            LOG.info("Service er ikke aktiv, POSTer ikke til {}", uri);
+            if (LOG.isInfoEnabled()) {
+                LOG.info("Service er ikke aktiv, POSTer ikke til {}", escapeHtml(uri));
+            }
             return null;
         }
         return operations.postForObject(uri, payload, responseType);
@@ -55,7 +62,9 @@ public abstract class AbstractRestConnection implements PingEndpointAware, Toggl
 
     public <T> T putForObject(URI uri, Object payload, Class<T> responseType) {
         if (!isEnabled()) {
-            LOG.info("Service er ikke aktiv, PUTer ikke til {}", uri);
+            if (LOG.isInfoEnabled()) {
+                LOG.info("Service er ikke aktiv, PUTer ikke til {}", escapeHtml(uri));
+            }
             return null;
         }
         return operations.exchange(RequestEntity.put(uri).body(payload), responseType).getBody();

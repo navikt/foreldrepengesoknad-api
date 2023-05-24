@@ -1,5 +1,7 @@
 package no.nav.foreldrepenger.selvbetjening.nedetid;
 
+import static no.nav.foreldrepenger.selvbetjening.util.StringUtils.escapeHtml;
+
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Component;
@@ -10,7 +12,9 @@ public class NedetidTjeneste implements Nedetid {
 
     @Override
     public void registrer(NedetidInfo info) {
-        LOG.info("Registrerer nedetid {}", info);
+        if (LOG.isInfoEnabled()) {
+            LOG.info("Registrerer nedetid {}", escapeHtml(info));
+        }
     }
 
 }
