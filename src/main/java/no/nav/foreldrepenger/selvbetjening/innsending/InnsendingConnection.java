@@ -5,6 +5,7 @@ import static no.nav.foreldrepenger.common.util.StreamUtil.safeStream;
 import static no.nav.foreldrepenger.selvbetjening.innsending.mapper.CommonMapper.tilVedlegg;
 import static no.nav.foreldrepenger.selvbetjening.innsending.mapper.EttersendingMapper.tilEttersending;
 import static no.nav.foreldrepenger.selvbetjening.innsending.mapper.SøknadMapper.tilSøknad;
+import static org.apache.commons.lang3.StringEscapeUtils.escapeHtml4;
 
 import java.net.URI;
 import java.util.List;
@@ -69,7 +70,7 @@ public class InnsendingConnection extends AbstractRestConnection {
     }
 
     public Søknad body(SøknadFrontend søknadFrontend) {
-        SECURE_LOGGER.info("{} mottatt fra frontend med følende innhold: {}", søknadFrontend.getType(), søknadFrontend);
+        SECURE_LOGGER.info("{} mottatt fra frontend med følende innhold: {}", søknadFrontend.getType(), escapeHtml4(søknadFrontend.toString()));
         var dto = tilSøknad(søknadFrontend);
 
         var unikeVedleggMedInnhold = hentUnikeVedleggMedInnhold(søknadFrontend.getVedlegg());

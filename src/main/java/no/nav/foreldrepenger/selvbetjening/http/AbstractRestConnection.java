@@ -1,6 +1,7 @@
 package no.nav.foreldrepenger.selvbetjening.http;
 
 import static no.nav.boot.conditionals.EnvUtil.CONFIDENTIAL;
+import static org.apache.commons.lang3.StringEscapeUtils.escapeHtml4;
 import static org.springframework.http.HttpStatus.NOT_FOUND;
 
 import java.net.URI;
@@ -28,7 +29,7 @@ public abstract class AbstractRestConnection implements PingEndpointAware, Toggl
     public <T> T getForObject(URI uri, Class<T> responseType, boolean throwOnNotFound) {
         try {
             if (!isEnabled()) {
-                LOG.info("Service er ikke aktiv, GETer ikke fra {}", uri);
+                LOG.info("Service er ikke aktiv, GETer ikke fra {}", escapeHtml4(uri.toString()));
                 return null;
             }
             T respons = operations.getForObject(uri, responseType);

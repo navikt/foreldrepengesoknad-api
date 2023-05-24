@@ -1,22 +1,23 @@
 package no.nav.foreldrepenger.selvbetjening.innsending.domain;
 
-import com.fasterxml.jackson.annotation.JsonCreator;
-import com.fasterxml.jackson.annotation.JsonSubTypes;
-import com.fasterxml.jackson.annotation.JsonSubTypes.Type;
-import com.fasterxml.jackson.annotation.JsonTypeInfo;
-import no.nav.foreldrepenger.common.domain.Saksnummer;
+import static com.fasterxml.jackson.annotation.JsonTypeInfo.Id.NAME;
+import static java.util.Collections.emptyList;
+import static no.nav.foreldrepenger.common.domain.validation.InputValideringRegex.BARE_BOKSTAVER;
+import static no.nav.foreldrepenger.common.domain.validation.InputValideringRegex.FRITEKST;
 
-import jakarta.validation.Valid;
-import jakarta.validation.constraints.Pattern;
 import java.time.LocalDateTime;
 import java.util.List;
 import java.util.Objects;
 import java.util.Optional;
 
-import static com.fasterxml.jackson.annotation.JsonTypeInfo.Id.NAME;
-import static java.util.Collections.emptyList;
-import static no.nav.foreldrepenger.common.domain.validation.InputValideringRegex.BARE_BOKSTAVER;
-import static no.nav.foreldrepenger.common.domain.validation.InputValideringRegex.FRITEKST;
+import com.fasterxml.jackson.annotation.JsonCreator;
+import com.fasterxml.jackson.annotation.JsonSubTypes;
+import com.fasterxml.jackson.annotation.JsonSubTypes.Type;
+import com.fasterxml.jackson.annotation.JsonTypeInfo;
+
+import jakarta.validation.Valid;
+import jakarta.validation.constraints.Pattern;
+import no.nav.foreldrepenger.common.domain.Saksnummer;
 
 
 @JsonTypeInfo(use = NAME, property = "type", visible = true)
@@ -138,7 +139,6 @@ public abstract sealed class SøknadFrontend permits EngangsstønadFrontend, For
             ", informasjonOmUtenlandsopphold=" + informasjonOmUtenlandsopphold +
             ", situasjon='" + situasjon + '\'' +
             ", erEndringssøknad=" + erEndringssøknad +
-            ", tilleggsopplysninger='" + tilleggsopplysninger + '\'' +
             ", vedlegg=" + vedlegg +
             '}';
     }
