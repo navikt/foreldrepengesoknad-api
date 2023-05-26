@@ -48,7 +48,7 @@ public class InnsynTjeneste implements Innsyn, EnvironmentAware {
 
             if (sakerFraFpinfo.equals(sakerFraFpoversikt)) {
                 LOG.info("Ingen avvik funnet ved sammenligning av saker hentet fra fpinfo og fpoversikt");
-            } else {
+            } else if (!isProd(env) || !harSaker(sakerFraFpoversikt)) {
                 LOG.info("Avvik funnet ved sammenligning av saker hentet fra fpinfo og fpoversikt");
                 SECURE_LOGGER.info("""
                     Avvik funnet ved sammenligning av saker hentet fra fpinfo og fpoversikt.
@@ -59,6 +59,12 @@ public class InnsynTjeneste implements Innsyn, EnvironmentAware {
         } catch (Exception e) {
             LOG.warn("Noe gikk galt med henting eller sammenligning av saker fra fpoversikt", e);
         }
+    }
+
+    private boolean harSaker(Saker sakerFraFpoversikt) {
+        return !sakerFraFpoversikt.foreldrepenger().isEmpty()
+            || !sakerFraFpoversikt.svangerskapspenger().isEmpty()
+            || !sakerFraFpoversikt.engangsstønad().isEmpty();
     }
 
     @Override
