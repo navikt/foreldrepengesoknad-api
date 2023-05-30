@@ -1,11 +1,14 @@
 package no.nav.foreldrepenger.selvbetjening.innsyn;
 
-import no.nav.foreldrepenger.common.innsyn.Saker;
-import no.nav.foreldrepenger.selvbetjening.http.AbstractRestConnection;
+import java.net.URI;
+import java.util.Optional;
+
 import org.springframework.stereotype.Component;
 import org.springframework.web.client.RestOperations;
 
-import java.net.URI;
+import no.nav.foreldrepenger.common.innsyn.AnnenPartVedtak;
+import no.nav.foreldrepenger.common.innsyn.Saker;
+import no.nav.foreldrepenger.selvbetjening.http.AbstractRestConnection;
 
 @Component
 public class OversiktConnection extends AbstractRestConnection {
@@ -19,6 +22,9 @@ public class OversiktConnection extends AbstractRestConnection {
 
     public Saker hentSaker() {
         return getForObject(cfg.saker(), Saker.class);
+    }
+    public Optional<AnnenPartVedtak> hentAnnenpartsVedtak() {
+        return Optional.ofNullable(getForObject(cfg.annenpartsVedtak(), AnnenPartVedtak.class));
     }
 
     @Override
