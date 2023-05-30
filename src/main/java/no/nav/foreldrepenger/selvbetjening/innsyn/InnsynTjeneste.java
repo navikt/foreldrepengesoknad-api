@@ -65,7 +65,38 @@ public class InnsynTjeneste implements Innsyn, EnvironmentAware {
 
     @Override
     public Optional<AnnenPartVedtak> annenPartVedtak(AnnenPartVedtakIdentifikator annenPartVedtakIdentifikator) {
-        return connectionFpinfo.annenPartVedtak(annenPartVedtakIdentifikator);
+        var annenPartVedtakFpinfo = connectionFpinfo.annenPartVedtak(annenPartVedtakIdentifikator);
+        if (!isProd(env)) {
+            sammenlignAnnenpartsVedtakFraOversiktOgFpinfoFailSafe(annenPartVedtakFpinfo);
+        }
+        return annenPartVedtakFpinfo;
+    }
+
+    private void sammenlignAnnenpartsVedtakFraOversiktOgFpinfoFailSafe(Optional<AnnenPartVedtak> annenPartVedtakFpinfo) {
+        try {
+            LOG.info("Henter vedtak for annenpart fra fpoversikt");
+            var annenpartsVedtakFpoversikt = connectionFpoversikt.hentAnnenpartsVedtak();
+            if (annenPartVedtakFpinfo.isEmpty() && annenpartsVedtakFpoversikt.isEmpty()) {
+                LOG.info("Ingen avvik funnet ved sammenligning av saker hentet fra fpinfo og fpoversikt. Begge returnerer null");
+            } else if (annenPartVedtakFpinfo.isEmpty() || annenpartsVedtakFpoversikt.isEmpty()) {
+                if (annenPartVedtakFpinfo.isPresent()) {
+                    LOG.info("Avvik i annenparts vedtak! Fpinfo returnerer vedtak mens fpoversikt returnerer null");
+                } else {
+                    LOG.info("Avvik i annenparts vedtak! Fpoversikt returnerer vedtak mens fpinfo returnerer null");
+                }
+            } else if (annenPartVedtakFpinfo.get().equals(annenpartsVedtakFpoversikt.get())) {
+                LOG.info("Ingen avvik funnet ved sammenligning av saker hentet fra fpinfo og fpoversikt");
+            } else {
+                LOG.info("Avvik i annenparts vedtak! Innhold er ulikt. Sjekk secure logs for mer info");
+                SECURE_LOGGER.info("""
+                    Avvik i annenparts vedtak!
+                    Fpinfo {}
+                    Fpoversikt {}
+                    """, annenPartVedtakFpinfo.get(), annenpartsVedtakFpoversikt.get());
+            }
+        } catch (Exception e) {
+            LOG.warn("Noe gikk galt med henting eller sammenligning av annenparts vedtak fra fpoversikt", e);
+        }
     }
 
     @Override

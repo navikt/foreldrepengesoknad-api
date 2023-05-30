@@ -1,17 +1,19 @@
 package no.nav.foreldrepenger.selvbetjening.innsyn;
 
-import no.nav.foreldrepenger.selvbetjening.http.AbstractConfig;
-import org.springframework.boot.context.properties.ConfigurationProperties;
-import org.springframework.boot.context.properties.bind.DefaultValue;
+import static no.nav.foreldrepenger.selvbetjening.util.URIUtil.uri;
 
 import java.net.URI;
 
-import static no.nav.foreldrepenger.selvbetjening.util.URIUtil.uri;
+import org.springframework.boot.context.properties.ConfigurationProperties;
+import org.springframework.boot.context.properties.bind.DefaultValue;
+
+import no.nav.foreldrepenger.selvbetjening.http.AbstractConfig;
 
 @ConfigurationProperties(prefix = "oversikt")
 public class OversiktConfig extends AbstractConfig {
 
     private static final String SAKER = "api/saker";
+    private static final String ANNENPART_VEDTAK = "api/annenPart";
 
     protected OversiktConfig(URI uri, @DefaultValue("true") boolean enabled) {
         super(uri, enabled);
@@ -24,5 +26,9 @@ public class OversiktConfig extends AbstractConfig {
 
     URI saker() {
         return uri(getBaseUri(), SAKER);
+    }
+
+    URI annenpartsVedtak() {
+        return uri(getBaseUri(), ANNENPART_VEDTAK);
     }
 }
