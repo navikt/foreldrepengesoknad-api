@@ -33,11 +33,7 @@ public class InnsynTjeneste implements Innsyn, EnvironmentAware {
     public Saker hentSaker() {
         LOG.info("Henter saker for pålogget bruker");
         var sakerFraFpinfo = connectionFpinfo.hentSaker();
-
-        if (!isProd(env)) {
-            sammenlignSakerFraOversiktOgFpinfoFailSafe(sakerFraFpinfo);
-        }
-
+        sammenlignSakerFraOversiktOgFpinfoFailSafe(sakerFraFpinfo);
         return sakerFraFpinfo;
     }
 
