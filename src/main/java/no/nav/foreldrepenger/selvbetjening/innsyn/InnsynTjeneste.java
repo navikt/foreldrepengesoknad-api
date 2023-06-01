@@ -48,21 +48,21 @@ public class InnsynTjeneste implements Innsyn {
                     """, sakerFraFpinfo, sakerFraFpoversikt);
             }
         } catch (Exception e) {
-            LOG.warn("Noe gikk galt med henting eller sammenligning av saker fra fpoversikt", e);
+            LOG.info("Noe gikk galt med henting eller sammenligning av saker fra fpoversikt", e);
         }
     }
 
     @Override
     public Optional<AnnenPartVedtak> annenPartVedtak(AnnenPartVedtakIdentifikator annenPartVedtakIdentifikator) {
         var annenPartVedtakFpinfo = connectionFpinfo.annenPartVedtak(annenPartVedtakIdentifikator);
-        sammenlignAnnenpartsVedtakFraOversiktOgFpinfoFailSafe(annenPartVedtakFpinfo);
+        sammenlignAnnenpartsVedtakFraOversiktOgFpinfoFailSafe(annenPartVedtakIdentifikator, annenPartVedtakFpinfo);
         return annenPartVedtakFpinfo;
     }
 
-    private void sammenlignAnnenpartsVedtakFraOversiktOgFpinfoFailSafe(Optional<AnnenPartVedtak> annenPartVedtakFpinfo) {
+    private void sammenlignAnnenpartsVedtakFraOversiktOgFpinfoFailSafe(AnnenPartVedtakIdentifikator annenPartVedtakIdentifikator, Optional<AnnenPartVedtak> annenPartVedtakFpinfo) {
         try {
             LOG.info("Henter vedtak for annenpart fra fpoversikt");
-            var annenpartsVedtakFpoversikt = connectionFpoversikt.hentAnnenpartsVedtak();
+            var annenpartsVedtakFpoversikt = connectionFpoversikt.hentAnnenpartsVedtak(annenPartVedtakIdentifikator);
             if (annenPartVedtakFpinfo.isEmpty() && annenpartsVedtakFpoversikt.isEmpty()) {
                 LOG.info("Ingen avvik funnet ved sammenligning av saker hentet fra fpinfo og fpoversikt. Begge returnerer null");
             } else if (annenPartVedtakFpinfo.isEmpty() || annenpartsVedtakFpoversikt.isEmpty()) {
@@ -82,7 +82,7 @@ public class InnsynTjeneste implements Innsyn {
                     """, annenPartVedtakFpinfo.get(), annenpartsVedtakFpoversikt.get());
             }
         } catch (Exception e) {
-            LOG.warn("Noe gikk galt med henting eller sammenligning av annenparts vedtak fra fpoversikt", e);
+            LOG.info("Noe gikk galt med henting eller sammenligning av annenparts vedtak fra fpoversikt", e);
         }
     }
 

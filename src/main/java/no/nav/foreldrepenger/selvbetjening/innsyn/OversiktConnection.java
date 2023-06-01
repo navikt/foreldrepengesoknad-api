@@ -23,8 +23,8 @@ public class OversiktConnection extends AbstractRestConnection {
     public Saker hentSaker() {
         return getForObject(cfg.saker(), Saker.class);
     }
-    public Optional<AnnenPartVedtak> hentAnnenpartsVedtak() {
-        return Optional.ofNullable(getForObject(cfg.annenpartsVedtak(), AnnenPartVedtak.class));
+    public Optional<AnnenPartVedtak> hentAnnenpartsVedtak(AnnenPartVedtakIdentifikator annenPartVedtakIdentifikator) {
+        return Optional.ofNullable(postForObject(cfg.annenpartsVedtak(), annenPartVedtakIdentifikator, AnnenPartVedtak.class));
     }
 
     @Override
