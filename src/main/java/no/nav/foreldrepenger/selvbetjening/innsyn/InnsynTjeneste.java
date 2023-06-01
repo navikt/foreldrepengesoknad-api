@@ -1,22 +1,17 @@
 package no.nav.foreldrepenger.selvbetjening.innsyn;
 
-import static no.nav.boot.conditionals.EnvUtil.isProd;
-
 import java.util.Optional;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.springframework.context.EnvironmentAware;
-import org.springframework.core.env.Environment;
 import org.springframework.stereotype.Service;
 
 import no.nav.foreldrepenger.common.innsyn.AnnenPartVedtak;
 import no.nav.foreldrepenger.common.innsyn.Saker;
 
 @Service
-public class InnsynTjeneste implements Innsyn, EnvironmentAware {
+public class InnsynTjeneste implements Innsyn {
 
-    private Environment env;
     private final InnsynConnection connectionFpinfo;
     private final OversiktConnection connectionFpoversikt;
 
@@ -60,9 +55,7 @@ public class InnsynTjeneste implements Innsyn, EnvironmentAware {
     @Override
     public Optional<AnnenPartVedtak> annenPartVedtak(AnnenPartVedtakIdentifikator annenPartVedtakIdentifikator) {
         var annenPartVedtakFpinfo = connectionFpinfo.annenPartVedtak(annenPartVedtakIdentifikator);
-        if (!isProd(env)) {
-            sammenlignAnnenpartsVedtakFraOversiktOgFpinfoFailSafe(annenPartVedtakFpinfo);
-        }
+        sammenlignAnnenpartsVedtakFraOversiktOgFpinfoFailSafe(annenPartVedtakFpinfo);
         return annenPartVedtakFpinfo;
     }
 
@@ -101,10 +94,5 @@ public class InnsynTjeneste implements Innsyn, EnvironmentAware {
     @Override
     public String toString() {
         return getClass().getSimpleName() + " [innsynConnection=" + connectionFpinfo + "]";
-    }
-
-    @Override
-    public void setEnvironment(Environment env) {
-        this.env = env;
     }
 }
