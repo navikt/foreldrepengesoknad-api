@@ -6,6 +6,8 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Service;
 
+import com.fasterxml.jackson.databind.ObjectMapper;
+
 import no.nav.foreldrepenger.common.innsyn.AnnenPartVedtak;
 import no.nav.foreldrepenger.common.innsyn.Saker;
 
@@ -14,14 +16,17 @@ public class InnsynTjeneste implements Innsyn {
 
     private final InnsynConnection connectionFpinfo;
     private final OversiktConnection connectionFpoversikt;
+    private final ObjectMapper mapper;
 
     private static final Logger LOG = LoggerFactory.getLogger(InnsynTjeneste.class);
     private static final Logger SECURE_LOGGER = LoggerFactory.getLogger("secureLogger");
 
     public InnsynTjeneste(InnsynConnection connectionFpinfo,
-                          OversiktConnection connectionFpoversikt) {
+                          OversiktConnection connectionFpoversikt,
+                          ObjectMapper mapper) {
         this.connectionFpinfo = connectionFpinfo;
         this.connectionFpoversikt = connectionFpoversikt;
+        this.mapper = mapper;
     }
 
     @Override
@@ -45,7 +50,7 @@ public class InnsynTjeneste implements Innsyn {
                     Avvik funnet ved sammenligning av saker hentet fra fpinfo og fpoversikt.
                     Fpinfo {}
                     Fpoversikt {}
-                    """, sakerFraFpinfo, sakerFraFpoversikt);
+                    """, serialize(sakerFraFpinfo), serialize(sakerFraFpoversikt));
             }
         } catch (Exception e) {
             LOG.info("Noe gikk galt med henting eller sammenligning av saker fra fpoversikt", e);
@@ -79,10 +84,18 @@ public class InnsynTjeneste implements Innsyn {
                     Avvik i annenparts vedtak!
                     Fpinfo {}
                     Fpoversikt {}
-                    """, annenPartVedtakFpinfo.get(), annenpartsVedtakFpoversikt.get());
+                    """, serialize(annenPartVedtakFpinfo.get()), serialize(annenpartsVedtakFpoversikt.get()));
             }
         } catch (Exception e) {
             LOG.info("Noe gikk galt med henting eller sammenligning av annenparts vedtak fra fpoversikt", e);
+        }
+    }
+
+    public String serialize(Object obj) {
+        try {
+            return mapper.writerWithDefaultPrettyPrinter().writeValueAsString(obj);
+        } catch (Exception e) {
+            return obj.toString();
         }
     }
 
