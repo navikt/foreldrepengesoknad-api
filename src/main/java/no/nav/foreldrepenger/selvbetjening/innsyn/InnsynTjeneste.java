@@ -64,7 +64,7 @@ public class InnsynTjeneste implements Innsyn {
             LOG.info("Henter vedtak for annenpart fra fpoversikt");
             var annenpartsVedtakFpoversikt = connectionFpoversikt.hentAnnenpartsVedtak(annenPartVedtakIdentifikator);
             if (annenPartVedtakFpinfo.isEmpty() && annenpartsVedtakFpoversikt.isEmpty()) {
-                LOG.info("Ingen avvik funnet ved sammenligning av saker hentet fra fpinfo og fpoversikt. Begge returnerer null");
+                LOG.info("Ingen avvik funnet ved sammenligning av annenparts vedtak hentet fra fpinfo og fpoversikt. Begge returnerer null");
             } else if (annenPartVedtakFpinfo.isEmpty() || annenpartsVedtakFpoversikt.isEmpty()) {
                 if (annenPartVedtakFpinfo.isPresent()) {
                     LOG.info("Avvik i annenparts vedtak! Fpinfo returnerer vedtak mens fpoversikt returnerer null");
@@ -72,7 +72,7 @@ public class InnsynTjeneste implements Innsyn {
                     LOG.info("Avvik i annenparts vedtak! Fpoversikt returnerer vedtak mens fpinfo returnerer null");
                 }
             } else if (annenPartVedtakFpinfo.get().equals(annenpartsVedtakFpoversikt.get())) {
-                LOG.info("Ingen avvik funnet ved sammenligning av saker hentet fra fpinfo og fpoversikt");
+                LOG.info("Ingen avvik funnet ved sammenligning av annenparts vedtak hentet fra fpinfo og fpoversikt");
             } else {
                 LOG.info("Avvik i annenparts vedtak! Innhold er ulikt. Sjekk secure logs for mer info");
                 SECURE_LOGGER.info("""
