@@ -2,8 +2,12 @@ package no.nav.foreldrepenger.selvbetjening.innsyn;
 
 import java.util.Optional;
 
+import no.nav.boot.conditionals.EnvUtil;
+
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.context.EnvironmentAware;
+import org.springframework.core.env.Environment;
 import org.springframework.stereotype.Service;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
@@ -12,7 +16,7 @@ import no.nav.foreldrepenger.common.innsyn.AnnenPartVedtak;
 import no.nav.foreldrepenger.common.innsyn.Saker;
 
 @Service
-public class InnsynTjeneste implements Innsyn {
+public class InnsynTjeneste implements Innsyn, EnvironmentAware {
 
     private final InnsynConnection connectionFpinfo;
     private final OversiktConnection connectionFpoversikt;
@@ -20,6 +24,7 @@ public class InnsynTjeneste implements Innsyn {
 
     private static final Logger LOG = LoggerFactory.getLogger(InnsynTjeneste.class);
     private static final Logger SECURE_LOGGER = LoggerFactory.getLogger("secureLogger");
+    private Environment env;
 
     public InnsynTjeneste(InnsynConnection connectionFpinfo,
                           OversiktConnection connectionFpoversikt,
@@ -33,15 +38,23 @@ public class InnsynTjeneste implements Innsyn {
     public Saker hentSaker() {
         LOG.info("Henter saker for pålogget bruker");
         var sakerFraFpinfo = connectionFpinfo.hentSaker();
-        sammenlignSakerFraOversiktOgFpinfoFailSafe(sakerFraFpinfo);
-        return sakerFraFpinfo;
+        var sakerFraFpoversikt = hentSakerFraFpoversikt();
+        sammenlignSakerFraOversiktOgFpinfoFailSafe(sakerFraFpinfo, sakerFraFpoversikt);
+        return EnvUtil.isProd(env) ? sakerFraFpinfo : sakerFraFpoversikt;
     }
 
-    private void sammenlignSakerFraOversiktOgFpinfoFailSafe(Saker sakerFraFpinfo) {
+    private Saker hentSakerFraFpoversikt() {
         try {
             LOG.info("Henter saker for pålogget bruker fra fpoversikt");
-            var sakerFraFpoversikt = connectionFpoversikt.hentSaker();
+            return connectionFpoversikt.hentSaker();
+        } catch (Exception e) {
+            LOG.info("Noe gikk galt med henting av saker fra fpoversikt", e);
+            return null;
+        }
+    }
 
+    private void sammenlignSakerFraOversiktOgFpinfoFailSafe(Saker sakerFraFpinfo, Saker sakerFraFpoversikt) {
+        try {
             if (sakerFraFpinfo.equals(sakerFraFpoversikt)) {
                 LOG.info("Ingen avvik funnet ved sammenligning av saker hentet fra fpinfo og fpoversikt");
             } else {
@@ -102,6 +115,11 @@ public class InnsynTjeneste implements Innsyn {
     @Override
     public String ping() {
         return connectionFpinfo.ping();
+    }
+
+    @Override
+    public void setEnvironment(Environment environment) {
+        this.env = environment;
     }
 
     @Override
