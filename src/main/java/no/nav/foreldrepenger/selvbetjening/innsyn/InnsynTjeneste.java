@@ -2,8 +2,6 @@ package no.nav.foreldrepenger.selvbetjening.innsyn;
 
 import java.util.Optional;
 
-import no.nav.boot.conditionals.EnvUtil;
-
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.context.EnvironmentAware;
@@ -12,6 +10,7 @@ import org.springframework.stereotype.Service;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 
+import no.nav.boot.conditionals.EnvUtil;
 import no.nav.foreldrepenger.common.innsyn.AnnenPartVedtak;
 import no.nav.foreldrepenger.common.innsyn.Saker;
 
@@ -58,7 +57,8 @@ public class InnsynTjeneste implements Innsyn, EnvironmentAware {
             if (sakerFraFpinfo.equals(sakerFraFpoversikt)) {
                 LOG.info("Ingen avvik funnet ved sammenligning av saker hentet fra fpinfo og fpoversikt");
             } else {
-                LOG.info("Avvik funnet ved sammenligning av saker hentet fra fpinfo og fpoversikt");
+                LOG.info("Avvik funnet ved sammenligning av saker hentet fra fpinfo og fpoversikt. Ulikt antall {}",
+                    uliktAntallSaker(sakerFraFpinfo, sakerFraFpoversikt));
                 SECURE_LOGGER.info("""
                     Avvik funnet ved sammenligning av saker hentet fra fpinfo og fpoversikt.
                     Fpinfo {}
@@ -68,6 +68,12 @@ public class InnsynTjeneste implements Innsyn, EnvironmentAware {
         } catch (Exception e) {
             LOG.info("Noe gikk galt med henting eller sammenligning av saker fra fpoversikt", e);
         }
+    }
+
+    private boolean uliktAntallSaker(Saker sakerFraFpinfo, Saker sakerFraFpoversikt) {
+        return sakerFraFpinfo.engangsstønad().size() != sakerFraFpoversikt.engangsstønad().size()
+            || sakerFraFpinfo.foreldrepenger().size() != sakerFraFpoversikt.foreldrepenger().size()
+            || sakerFraFpinfo.svangerskapspenger().size() != sakerFraFpoversikt.svangerskapspenger().size();
     }
 
     @Override
