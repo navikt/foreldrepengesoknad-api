@@ -39,7 +39,7 @@ public class InnsynTjeneste implements Innsyn, EnvironmentAware {
 //        var sakerFraFpoversikt = hentSakerFraFpoversikt();
 //        sammenlignSakerFraOversiktOgFpinfoFailSafe(sakerFraFpinfo, sakerFraFpoversikt);
 //        return EnvUtil.isProd(env) ? sakerFraFpinfo : sakerFraFpoversikt;
-        return connectionFpinfo.hentSaker();
+        return sakerFraFpinfo;
     }
 
     private Saker hentSakerFraFpoversikt() {
