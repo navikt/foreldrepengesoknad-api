@@ -10,6 +10,7 @@ import org.springframework.stereotype.Service;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 
+import no.nav.boot.conditionals.EnvUtil;
 import no.nav.foreldrepenger.common.innsyn.AnnenPartVedtak;
 import no.nav.foreldrepenger.common.innsyn.Saker;
 
@@ -36,10 +37,9 @@ public class InnsynTjeneste implements Innsyn, EnvironmentAware {
     public Saker hentSaker() {
         LOG.info("Henter saker for pålogget bruker");
         var sakerFraFpinfo = connectionFpinfo.hentSaker();
-//        var sakerFraFpoversikt = hentSakerFraFpoversikt();
-//        sammenlignSakerFraOversiktOgFpinfoFailSafe(sakerFraFpinfo, sakerFraFpoversikt);
-//        return EnvUtil.isProd(env) ? sakerFraFpinfo : sakerFraFpoversikt;
-        return sakerFraFpinfo;
+        var sakerFraFpoversikt = hentSakerFraFpoversikt();
+        sammenlignSakerFraOversiktOgFpinfoFailSafe(sakerFraFpinfo, sakerFraFpoversikt);
+        return EnvUtil.isProd(env) ? sakerFraFpinfo : sakerFraFpoversikt;
     }
 
     private Saker hentSakerFraFpoversikt() {
