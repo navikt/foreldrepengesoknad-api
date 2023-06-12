@@ -3,7 +3,9 @@ allowed:
     https://engangsstonad.intern.dev.nav.no,
     https://foreldrepenger.intern.dev.nav.no,
     https://foreldrepengesoknad.intern.dev.nav.no,
-    https://foreldrepengesoknad-rework.intern.dev.nav.no
+    https://foreldrepengesoknad-rework.intern.dev.nav.no,
+    https://svangerskapspengesoknad-sommer.intern.dev.nav.no,
+    https://foreldrepenger-sommer.intern.dev.nav.no
 
 management:
   endpoints:
