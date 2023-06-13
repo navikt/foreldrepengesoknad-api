@@ -1,14 +1,20 @@
 package no.nav.foreldrepenger.selvbetjening.innsyn.dokument;
 
-import no.nav.foreldrepenger.selvbetjening.http.AbstractRestConnection;
-import no.nav.foreldrepenger.selvbetjening.http.RetryAware;
+import static java.util.Collections.emptyList;
+
+import java.net.URI;
+import java.util.Arrays;
+import java.util.List;
+import java.util.Optional;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 import org.springframework.web.client.RestOperations;
 import org.springframework.web.util.UriComponentsBuilder;
 
-import java.net.URI;
+import no.nav.foreldrepenger.selvbetjening.http.AbstractRestConnection;
+import no.nav.foreldrepenger.selvbetjening.http.RetryAware;
 
 @Service
 public class DokumentArkivTjeneste extends AbstractRestConnection implements RetryAware {
@@ -27,8 +33,10 @@ public class DokumentArkivTjeneste extends AbstractRestConnection implements Ret
         return getForObject(dokUri(journalpostId, dokumentId), byte[].class);
     }
 
-    public String hentDokumentoversikt() {
-        return getForObject(dokumenterUri(), String.class);
+    public List<ArkivDokument> hentDokumentoversikt() {
+        return Optional.ofNullable(getForObject(dokumenterUri(), ArkivDokument[].class))
+            .map(Arrays::asList)
+            .orElse(emptyList());
     }
 
     private URI dokUri(JournalpostId journalpostId, DokumentInfoId dokumentId) {
