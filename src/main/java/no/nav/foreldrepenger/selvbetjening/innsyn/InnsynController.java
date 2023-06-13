@@ -38,7 +38,7 @@ public class InnsynController {
         return innsynTjeneste.hentSaker();
     }
 
-    @GetMapping("/saker/status")
+    @GetMapping("/saker/oppdatert")
     public boolean erSakOppdatert() {
         var dokumentoversikt = dokumentArkivTjeneste.hentDokumentoversikt();
         var søkaderMottattNylig = dokumentoversikt.stream()
