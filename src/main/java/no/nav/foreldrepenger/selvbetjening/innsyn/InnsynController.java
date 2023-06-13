@@ -22,10 +22,10 @@ import no.nav.foreldrepenger.selvbetjening.innsyn.dokument.DokumentArkivTjeneste
 public class InnsynController {
 
     public static final String INNSYN = "/rest/innsyn/v2";
+    private final static String TITTEL_VED_SØKNAD = "Søknad om";
 
     private final Innsyn innsynTjeneste;
     private final DokumentArkivTjeneste dokumentArkivTjeneste;
-    private final String TITTEL_VED_SØKNAD = "Søknad om";
 
     @Autowired
     public InnsynController(Innsyn innsyn, DokumentArkivTjeneste dokumentArkivTjeneste) {
