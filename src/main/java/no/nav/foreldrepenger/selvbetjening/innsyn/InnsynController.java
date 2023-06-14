@@ -51,6 +51,10 @@ public class InnsynController {
             return true;
         }
 
+        if (søkaderMottattNylig.stream().anyMatch(søknad -> søknad.saksnummer() == null)) {
+            return false;
+        }
+
         // Vi har nylig mottatt dokument. Sjekk at saken er oppdatert etter dette tidspunktet.
         var sakerFraFpoversikt = innsynTjeneste.hentSaker();
         var listeMedSakerFraFpoversikt = concat(sakerFraFpoversikt.foreldrepenger().stream(),
