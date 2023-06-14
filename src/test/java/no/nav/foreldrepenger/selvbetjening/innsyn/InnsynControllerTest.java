@@ -79,6 +79,21 @@ class InnsynControllerTest {
         assertThat(innsynController.erSakOppdatert()).isFalse();
     }
 
+    @Test
+    void nårSøknadIkkeHarSaksnummerAntarViAtSakenIkkeErOppdatert() {
+        var innsynController = new InnsynController(innsyn, dokumentArkivTjeneste);
+
+        var søknadOmForeldrepenger1 = arkivertSøknadOmForeldrepenger(LocalDateTime.now(), null);
+        var søknadOmForeldrepenger2 = arkivertSøknadOmForeldrepenger(LocalDateTime.now(), FAKE_SAKSNUMMER);
+        var arkiverteDokumenter = List.of(søknadOmForeldrepenger1, søknadOmForeldrepenger2);
+        when(dokumentArkivTjeneste.hentDokumentoversikt()).thenReturn(arkiverteDokumenter);
+
+        var saker = new Saker(Set.of(fpsak("987654321", LocalDateTime.now().minusMinutes(30))), Set.of(), Set.of());
+        when(innsyn.hentSaker()).thenReturn(saker);
+
+        assertThat(innsynController.erSakOppdatert()).isFalse();
+    }
+
     private static ArkivDokument arkivertSøknadOmForeldrepenger(LocalDateTime mottatt, String saksnummer) {
         return new ArkivDokument(
             ArkivDokument.DokumentType.INNGÅENDE_DOKUMENT,
