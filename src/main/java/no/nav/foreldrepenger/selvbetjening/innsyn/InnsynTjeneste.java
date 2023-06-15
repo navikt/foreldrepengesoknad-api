@@ -27,6 +27,9 @@ public class InnsynTjeneste implements Innsyn {
 
     @Override
     public Optional<AnnenPartVedtak> annenPartVedtak(AnnenPartVedtakIdentifikator annenPartVedtakIdentifikator) {
+        if (annenPartVedtakIdentifikator == null || annenPartVedtakIdentifikator.annenPartFødselsnummer() == null || annenPartVedtakIdentifikator.annenPartFødselsnummer().value().isBlank()) {
+            return Optional.empty();
+        }
         return fpoversiktConnection.hentAnnenpartsVedtak(annenPartVedtakIdentifikator);
     }
 
