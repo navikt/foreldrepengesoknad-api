@@ -13,6 +13,7 @@ import no.nav.foreldrepenger.selvbetjening.http.AbstractConfig;
 public class OversiktConfig extends AbstractConfig {
 
     private static final String SAKER = "api/saker";
+    private static final String ARBEIDSFORHOLD = "innsyn/arbeidsforhold";
     private static final String ANNENPART_VEDTAK = "api/annenPart";
 
     protected OversiktConfig(URI uri, @DefaultValue("true") boolean enabled) {
@@ -30,5 +31,9 @@ public class OversiktConfig extends AbstractConfig {
 
     URI annenpartsVedtak() {
         return uri(getBaseUri(), ANNENPART_VEDTAK);
+    }
+
+    URI arbeidsforholdURI() {
+        return uri(getBaseUri(), ARBEIDSFORHOLD);
     }
 }
