@@ -76,7 +76,7 @@ public class InnsynController {
                 .filter(sak -> sak.saksnummer().value().equals(søknad.saksnummer()))
                 .anyMatch(sak -> sak.oppdatertTidspunkt().isAfter(søknad.mottatt()));
             if (!erSakOppdatert) {
-                LOG.info("Sak ikke oppdatert. Gjelder sak {}", søknad.saksnummer());
+                LOG.info("Sak ikke oppdatert. Gjelder sak {} Mottatt {}", søknad.saksnummer(), søknad.mottatt());
                 return false;
             }
         }
