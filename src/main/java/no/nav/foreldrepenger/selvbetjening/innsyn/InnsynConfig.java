@@ -12,6 +12,7 @@ import no.nav.foreldrepenger.selvbetjening.http.AbstractConfig;
 @ConfigurationProperties(prefix = "oversikt")
 public class InnsynConfig extends AbstractConfig {
 
+    private static final String PING = "internal/health/isAlive";
     private static final String SAKER = "api/saker";
     private static final String ANNENPART_VEDTAK = "api/annenPart";
 
@@ -21,7 +22,7 @@ public class InnsynConfig extends AbstractConfig {
 
     @Override
     protected URI pingURI() {
-        return null;
+        return uri(getBaseUri(), PING);
     }
 
     URI saker() {
