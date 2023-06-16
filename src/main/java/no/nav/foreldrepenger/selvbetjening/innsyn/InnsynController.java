@@ -4,6 +4,7 @@ import static java.util.stream.Stream.concat;
 import static no.nav.foreldrepenger.selvbetjening.innsyn.InnsynController.INNSYN;
 
 import java.time.LocalDateTime;
+import java.util.Comparator;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -55,7 +56,12 @@ public class InnsynController {
         }
 
         if (søkaderMottattNylig.stream().anyMatch(søknad -> søknad.saksnummer() == null)) {
-            LOG.info("Sak ikke oppdatert. Fant søknad hvor saksnummer er null -> GOSYS");
+            var førsteMottattDato = søkaderMottattNylig.stream()
+                .min(Comparator.comparing(ArkivDokument::mottatt))
+                .map(ArkivDokument::mottatt)
+                .orElse(null);
+            LOG.info("Sak ikke oppdatert. Fant søknad hvor saksnummer er null -> GOSYS. Antall {} Mottatt {}",
+                søkaderMottattNylig.size(), førsteMottattDato);
             return false;
         }
 
