@@ -35,8 +35,6 @@ historikk:
   uri: ${fpinfo-historikk.override.url}
 minidialog:
   uri: ${fpinfo-historikk.override.url}
-innsyn:
-  uri: ${fpsoknad-mottak.override.url}
 mottak:
   uri: ${fpsoknad-mottak.override.url}
 oppslag:

@@ -11,18 +11,18 @@ import no.nav.foreldrepenger.common.innsyn.Saker;
 
 @Service
 public class InnsynTjeneste implements Innsyn {
-    private final OversiktConnection fpoversiktConnection;
+    private final InnsynConnection innsynConnection;
 
     private static final Logger LOG = LoggerFactory.getLogger(InnsynTjeneste.class);
 
-    public InnsynTjeneste(OversiktConnection fpoversiktConnection) {
-        this.fpoversiktConnection = fpoversiktConnection;
+    public InnsynTjeneste(InnsynConnection innsynConnection) {
+        this.innsynConnection = innsynConnection;
     }
 
     @Override
     public Saker hentSaker() {
         LOG.info("Henter saker for pålogget bruker");
-        return fpoversiktConnection.hentSaker();
+        return innsynConnection.hentSaker();
     }
 
     @Override
@@ -30,16 +30,16 @@ public class InnsynTjeneste implements Innsyn {
         if (annenPartVedtakIdentifikator == null || annenPartVedtakIdentifikator.annenPartFødselsnummer() == null || annenPartVedtakIdentifikator.annenPartFødselsnummer().value().isBlank()) {
             return Optional.empty();
         }
-        return fpoversiktConnection.hentAnnenpartsVedtak(annenPartVedtakIdentifikator);
+        return innsynConnection.hentAnnenpartsVedtak(annenPartVedtakIdentifikator);
     }
 
     @Override
     public String ping() {
-        return fpoversiktConnection.ping();
+        return innsynConnection.ping();
     }
 
     @Override
     public String toString() {
-        return getClass().getSimpleName() + " [innsynConnection=" + fpoversiktConnection + "]";
+        return getClass().getSimpleName() + " [innsynConnection=" + innsynConnection + "]";
     }
 }

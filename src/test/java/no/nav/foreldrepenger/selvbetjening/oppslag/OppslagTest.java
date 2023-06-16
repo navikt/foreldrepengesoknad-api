@@ -21,8 +21,6 @@ import org.springframework.test.web.client.ExpectedCount;
 import org.springframework.test.web.client.MockRestServiceServer;
 
 import no.nav.foreldrepenger.selvbetjening.config.TokenUtilConfiguration;
-import no.nav.foreldrepenger.selvbetjening.innsyn.InnsynConfig;
-import no.nav.foreldrepenger.selvbetjening.innsyn.InnsynConnection;
 import no.nav.security.token.support.spring.SpringTokenValidationContextHolder;
 
 @ExtendWith(SpringExtension.class)
@@ -34,7 +32,6 @@ import no.nav.security.token.support.spring.SpringTokenValidationContextHolder;
 class OppslagTest {
 
     private final OppslagConfig oppslagConfig = new OppslagConfig(URI.create("http://www.vg.no"), true);
-    private final InnsynConfig innsynConfig = new InnsynConfig(URI.create("http://www.vg.no"), true);
 
     @Autowired
     private MockRestServiceServer server;
@@ -47,8 +44,7 @@ class OppslagTest {
     @BeforeEach
     public void restOperations() {
         var oppslagConnection = new OppslagConnection(oppslagBuilder.build(), oppslagConfig);
-        var innsynConnection = new InnsynConnection(null, innsynConfig);
-        oppslag = new OppslagTjeneste(oppslagConnection, innsynConnection);
+        oppslag = new OppslagTjeneste(oppslagConnection);
     }
 
     @Test
