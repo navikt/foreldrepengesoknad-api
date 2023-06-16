@@ -11,11 +11,11 @@ import no.nav.foreldrepenger.common.innsyn.Saker;
 import no.nav.foreldrepenger.selvbetjening.http.AbstractRestConnection;
 
 @Component
-public class OversiktConnection extends AbstractRestConnection {
+public class InnsynConnection extends AbstractRestConnection {
 
-    private final OversiktConfig cfg;
+    private final InnsynConfig cfg;
 
-    public OversiktConnection(RestOperations operations, OversiktConfig cfg) {
+    public InnsynConnection(RestOperations operations, InnsynConfig cfg) {
         super(operations);
         this.cfg = cfg;
     }

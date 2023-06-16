@@ -62,8 +62,6 @@ historikk:
   uri: http://localhost:9003/api/
 minidialog:
   uri: http://localhost:9003/api/
-innsyn:
-  uri: http://localhost:9001/api/
 mottak:
   uri: http://localhost:9001/api/
 oppslag:

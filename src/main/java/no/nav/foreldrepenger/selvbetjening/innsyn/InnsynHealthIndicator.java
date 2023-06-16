@@ -5,9 +5,9 @@ import org.springframework.stereotype.Component;
 import no.nav.foreldrepenger.selvbetjening.health.AbstractPingableHealthIndicator;
 
 @Component
-public class OversiktHealthIndicator extends AbstractPingableHealthIndicator {
+public class InnsynHealthIndicator extends AbstractPingableHealthIndicator {
 
-    public OversiktHealthIndicator(OversiktConnection tjeneste) {
+    public InnsynHealthIndicator(InnsynConnection tjeneste) {
         super(tjeneste);
     }
 }

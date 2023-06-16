@@ -10,12 +10,12 @@ import org.springframework.boot.context.properties.bind.DefaultValue;
 import no.nav.foreldrepenger.selvbetjening.http.AbstractConfig;
 
 @ConfigurationProperties(prefix = "oversikt")
-public class OversiktConfig extends AbstractConfig {
+public class InnsynConfig extends AbstractConfig {
 
     private static final String SAKER = "api/saker";
     private static final String ANNENPART_VEDTAK = "api/annenPart";
 
-    protected OversiktConfig(URI uri, @DefaultValue("true") boolean enabled) {
+    protected InnsynConfig(URI uri, @DefaultValue("true") boolean enabled) {
         super(uri, enabled);
     }
 
