@@ -5,6 +5,8 @@ import static no.nav.foreldrepenger.selvbetjening.innsyn.InnsynController.INNSYN
 
 import java.time.LocalDateTime;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.MediaType;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -21,6 +23,7 @@ import no.nav.foreldrepenger.selvbetjening.innsyn.dokument.DokumentArkivTjeneste
 @ProtectedRestController(INNSYN)
 public class InnsynController {
 
+    private static final Logger LOG = LoggerFactory.getLogger(InnsynController.class);
     public static final String INNSYN = "/rest/innsyn/v2";
     private final static String TITTEL_VED_SØKNAD = "Søknad om";
 
@@ -52,6 +55,7 @@ public class InnsynController {
         }
 
         if (søkaderMottattNylig.stream().anyMatch(søknad -> søknad.saksnummer() == null)) {
+            LOG.info("Sak ikke oppdatert. Fant søknad hvor saksnummer er null -> GOSYS");
             return false;
         }
 
@@ -66,6 +70,7 @@ public class InnsynController {
                 .filter(sak -> sak.saksnummer().value().equals(søknad.saksnummer()))
                 .anyMatch(sak -> sak.oppdatertTidspunkt().isAfter(søknad.mottatt()));
             if (!erSakOppdatert) {
+                LOG.info("Sak ikke oppdatert. Gjelder sak {}", søknad.saksnummer());
                 return false;
             }
         }
