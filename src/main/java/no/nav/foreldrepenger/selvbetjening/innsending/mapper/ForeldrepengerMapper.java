@@ -8,6 +8,7 @@ import static no.nav.foreldrepenger.selvbetjening.innsending.mapper.CommonMapper
 import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Objects;
 
 import no.nav.foreldrepenger.common.domain.Søker;
 import no.nav.foreldrepenger.common.domain.Søknad;
@@ -66,15 +67,20 @@ final class ForeldrepengerMapper {
 
 
     private static Foreldrepenger tilYtelse(ForeldrepengesøknadFrontend f) {
+        var relasjonTilBarn = endringssøknadAdopsjon(f) ? null : tilRelasjonTilBarn(f);
         return new Foreldrepenger(
             tilAnnenForelder(f),
-            tilRelasjonTilBarn(f),
+            relasjonTilBarn,
             tilRettigheter(f),
             Dekningsgrad.fraKode(f.getDekningsgrad()),
             tilOpptjening(f),
             tilFordeling(f),
             tilMedlemskap(f)
         );
+    }
+
+    private static boolean endringssøknadAdopsjon(ForeldrepengesøknadFrontend f) {
+        return Objects.equals(f.getErEndringssøknad(), Boolean.TRUE);
     }
 
     private static Rettigheter tilRettigheter(ForeldrepengesøknadFrontend f) {
