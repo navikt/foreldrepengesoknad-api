@@ -18,6 +18,7 @@ import com.neovisionaries.i18n.CountryCode;
 import no.nav.foreldrepenger.common.domain.BrukerRolle;
 import no.nav.foreldrepenger.common.domain.felles.ProsentAndel;
 import no.nav.foreldrepenger.common.domain.felles.relasjontilbarn.Adopsjon;
+import no.nav.foreldrepenger.common.domain.felles.relasjontilbarn.FremtidigFødsel;
 import no.nav.foreldrepenger.common.domain.felles.relasjontilbarn.Fødsel;
 import no.nav.foreldrepenger.common.domain.foreldrepenger.Endringssøknad;
 import no.nav.foreldrepenger.common.domain.foreldrepenger.Foreldrepenger;
@@ -202,7 +203,7 @@ class ForeldrepengeSøknadTilDtoMapperTest {
 
         assertThat(søknad.getYtelse()).isInstanceOf(Foreldrepenger.class);
         var ytelse = (Foreldrepenger) søknad.getYtelse();
-        assertThat(ytelse.relasjonTilBarn()).isNull();
+        assertThat(ytelse.relasjonTilBarn()).isInstanceOf(FremtidigFødsel.class);
     }
 
 
