@@ -67,7 +67,7 @@ final class ForeldrepengerMapper {
 
 
     private static Foreldrepenger tilYtelse(ForeldrepengesøknadFrontend f) {
-        var relasjonTilBarn = endringssøknadAdopsjon(f) ? null : tilRelasjonTilBarn(f);
+        var relasjonTilBarn = endringssøknad(f) ? null : tilRelasjonTilBarn(f);
         return new Foreldrepenger(
             tilAnnenForelder(f),
             relasjonTilBarn,
@@ -79,7 +79,7 @@ final class ForeldrepengerMapper {
         );
     }
 
-    private static boolean endringssøknadAdopsjon(ForeldrepengesøknadFrontend f) {
+    private static boolean endringssøknad(ForeldrepengesøknadFrontend f) {
         return Objects.equals(f.getErEndringssøknad(), Boolean.TRUE);
     }
 
