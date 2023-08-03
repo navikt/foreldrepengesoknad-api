@@ -3,6 +3,9 @@ package no.nav.foreldrepenger.selvbetjening.vedlegg;
 import org.apache.pdfbox.pdmodel.PDDocument;
 import org.apache.pdfbox.pdmodel.PDPage;
 import org.apache.pdfbox.pdmodel.PDPageContentStream;
+import org.apache.pdfbox.pdmodel.common.PDRectangle;
+import org.apache.pdfbox.pdmodel.graphics.image.LosslessFactory;
+import org.apache.pdfbox.pdmodel.graphics.image.PDImageXObject;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -17,6 +20,7 @@ import java.util.List;
 
 import static java.util.Arrays.asList;
 import static no.nav.foreldrepenger.selvbetjening.vedlegg.ImageScaler.downToA4;
+import static no.nav.foreldrepenger.selvbetjening.vedlegg.ImageScaler.pdfFraBilde;
 import static no.nav.foreldrepenger.selvbetjening.vedlegg.VedleggUtil.mediaType;
 import static org.apache.pdfbox.pdmodel.common.PDRectangle.A4;
 import static org.apache.pdfbox.pdmodel.graphics.image.PDImageXObject.createFromByteArray;
@@ -91,10 +95,8 @@ public class Image2PDFConverter {
     }
 
     private static void addPDFPageFromImage(PDDocument doc, byte[] orig, String fmt) {
-        PDPage page = new PDPage(A4);
-        doc.addPage(page);
-        try (var cs = new PDPageContentStream(doc, page)) {
-            cs.drawImage(createFromByteArray(doc, downToA4(orig, fmt), "img"), (int) A4.getLowerLeftX(), (int) A4.getLowerLeftY());
+        try {
+           pdfFraBilde(doc, orig);
         } catch (Exception e) {
             throw new AttachmentConversionException("Konvertering av vedlegg feilet", e);
         }
