@@ -4,6 +4,7 @@ import java.awt.geom.AffineTransform;
 import java.awt.image.BufferedImage;
 import java.io.ByteArrayInputStream;
 import java.io.IOException;
+import java.util.function.Predicate;
 
 import javax.imageio.ImageIO;
 
@@ -12,7 +13,6 @@ import org.apache.pdfbox.pdmodel.PDPage;
 import org.apache.pdfbox.pdmodel.PDPageContentStream;
 import org.apache.pdfbox.pdmodel.common.PDRectangle;
 import org.apache.pdfbox.pdmodel.graphics.image.LosslessFactory;
-import org.apache.pdfbox.pdmodel.graphics.image.PDImageXObject;
 import org.apache.pdfbox.util.Matrix;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -42,16 +42,12 @@ class ImageScaler {
         PDPage pdPage = new PDPage(PDRectangle.A4);
         doc.addPage(pdPage);
 
-        try {
-            java.awt.image.BufferedImage bufferedImage = ImageIO.read(new ByteArrayInputStream(bilde));
-            Bildedimensjon bildedimensjon = new Bildedimensjon(bufferedImage.getWidth(), bufferedImage.getHeight());
-
-            Matrix matrix = bildedimensjon.transform(pdPage);
-            PDImageXObject pdImg = LosslessFactory.createFromImage(doc, bufferedImage);
-
-            try (PDPageContentStream pdPageContentStream = new PDPageContentStream(doc, pdPage)) {
-                pdPageContentStream.drawImage(pdImg, matrix);
-            }
+        try (var pdPageContentStream = new PDPageContentStream(doc, pdPage)) {
+            var bufferedImage = ImageIO.read(new ByteArrayInputStream(bilde));
+            var bildedimensjon = new Bildedimensjon(bufferedImage.getWidth(), bufferedImage.getHeight());
+            var matrix = bildedimensjon.transform(pdPage);
+            var pdImageXObject = LosslessFactory.createFromImage(doc, bufferedImage);
+            pdPageContentStream.drawImage(pdImageXObject, matrix);
         } catch (Throwable e) {
             long størrelse = bilde.length;
             throw new IllegalStateException("Konvertering av bilde med størrelse " + størrelse + " bytes feilet", e);
@@ -59,6 +55,7 @@ class ImageScaler {
     }
 
     private static class Bildedimensjon {
+        private static final Logger LOG = LoggerFactory.getLogger(Bildedimensjon.class);
         private final float width;
         private final float height;
         private final boolean rotert;
@@ -74,18 +71,17 @@ class ImageScaler {
         }
 
         public Matrix transform(PDPage pdPage) {
-            Bildedimensjon skalertBildedimensjon = roterOgSkalerNed(pdPage.getMediaBox().getWidth(), pdPage.getMediaBox().getHeight());
-
-            AffineTransform transform = new AffineTransform(
+            var skalertBildedimensjon = roterOgSkalerNed(pdPage.getMediaBox().getWidth(), pdPage.getMediaBox().getHeight());
+            var transform = new AffineTransform(
                 skalertBildedimensjon.width,
                 0f,
                 0f,
                 skalertBildedimensjon.height,
                 pdPage.getMediaBox().getLowerLeftX(),
-                pdPage.getMediaBox().getLowerLeftY()
+                pdPage.getMediaBox().getUpperRightY() - skalertBildedimensjon.height
             );
 
-            Matrix matrix = new Matrix(transform);
+            var matrix = new Matrix(transform);
 
             if (skalertBildedimensjon.rotert) {
                 matrix.translate(1f, 0f); // Flytt bildet 1 gang (width) til høyre på x-aksen
@@ -96,12 +92,9 @@ class ImageScaler {
             return matrix;
         }
 
-        private boolean roteres() {
-            return width > height;
-        }
-
         private Bildedimensjon roterOgSkalerNed(float pageSizeWidth, float pageSizeHeight) {
-            if (roteres()) {
+            boolean skalRoteres = width > height && width > pageSizeWidth;
+            if (skalRoteres) {
                 return new Bildedimensjon(height, width, true).skalertDimensjon(pageSizeWidth, pageSizeHeight);
             } else {
                 return skalertDimensjon(pageSizeWidth, pageSizeHeight);
@@ -111,15 +104,19 @@ class ImageScaler {
         private Bildedimensjon skalertDimensjon(float pageSizeWidth, float pageSizeHeight) {
             float width = this.width;
             float height = this.height;
+            LOG.info("Bildedimensjon før scale: width {}, height {}, rotert {}", width, height, rotert);
+            Predicate<Bildedimensjon> behovForNedskaleringPortrett = bd -> !bd.rotert && (pageSizeWidth < bd.width || pageSizeHeight < bd.height);
+            Predicate<Bildedimensjon> behovForNedskaleringLandskap = bd -> bd.rotert && (pageSizeWidth < bd.height || pageSizeHeight < bd.width);
+            if (behovForNedskaleringLandskap.or(behovForNedskaleringPortrett).test(this)) {
+                // Skaler og ivareta ratio
+                float widthRatio = pageSizeWidth / this.width;
+                float heightRatio = pageSizeHeight / this.height;
+                float scale = Math.min(widthRatio, heightRatio);
+                width *= scale;
+                height *= scale;
+            }
 
-            if (width > pageSizeWidth) {
-                width = pageSizeWidth;
-                height = width * this.height / this.width;
-            }
-            if (height > pageSizeHeight) {
-                height = pageSizeHeight;
-                width = height * this.width / this.height;
-            }
+            LOG.info("Bildedimensjon: width {}, height {}, rotert {}", width, height, rotert);
             return new Bildedimensjon(width, height, this.rotert);
         }
     }
