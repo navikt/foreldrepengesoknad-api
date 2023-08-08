@@ -36,10 +36,11 @@ class ImageScalerTest {
 
     @Test
     void rotateLandscapeToPortrait() throws Exception {
+        var pdPage = new PDPage(PDRectangle.A4);
         var origImage = getBufferedImage("/pdf/landscape.jpg");
-        ImageScaler.matrixFromImage(new PDPage(PDRectangle.A4), origImage);
+        ImageScaler.matrixFromImage(pdPage, origImage);
         // rotert
-        assertThat(new PDPage(PDRectangle.A4).getRotation()).isEqualTo(90);
+        assertThat(pdPage.getRotation()).isEqualTo(90);
     }
 
     @Test
