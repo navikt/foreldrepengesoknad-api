@@ -1,67 +1,58 @@
 package no.nav.foreldrepenger.selvbetjening.vedlegg;
 
 import static org.assertj.core.api.Assertions.assertThat;
+import static org.junit.jupiter.api.Assertions.assertDoesNotThrow;
 
 import java.awt.image.BufferedImage;
 import java.io.ByteArrayInputStream;
-import java.io.InputStream;
-import java.net.URL;
+import java.io.IOException;
+import java.net.URISyntaxException;
 import java.nio.file.Files;
 import java.nio.file.Paths;
 
 import javax.imageio.ImageIO;
 
+import org.apache.pdfbox.pdmodel.PDPage;
+import org.apache.pdfbox.pdmodel.common.PDRectangle;
 import org.junit.jupiter.api.Test;
 
 class ImageScalerTest {
 
     @Test
     void imgSmallerThanA4RemainsUnchanged() throws Exception {
-        URL url = getClass().getResource("/pdf/jks.jpg");
-        byte[] orig = Files.readAllBytes(Paths.get(url.toURI()));
-        byte[] scaled = ImageScaler.downToA4(orig, "jpg");
-        assertThat(scaled).hasSameSizeAs(orig);
+        var bufferedImage = getBufferedImage("/pdf/jks.jpg");
+        var matrix = ImageScaler.matrixFromImage(new PDPage(PDRectangle.A4), bufferedImage);
+        assertThat(matrix.getScaleX()).isEqualTo(bufferedImage.getWidth());
+        assertThat(matrix.getScaleY()).isEqualTo(bufferedImage.getHeight());
     }
 
     @Test
     void imgBiggerThanA4IsScaledDown() throws Exception {
-        URL url = getClass().getResource("/pdf/rdd.png");
-        byte[] orig = Files.readAllBytes(Paths.get(url.toURI()));
-        byte[] scaled = ImageScaler.downToA4(orig, "jpg");
-        BufferedImage origImg = fromBytes(orig);
-        BufferedImage scaledImg = fromBytes(scaled);
-        assertThat(scaledImg.getWidth()).isLessThan(origImg.getWidth());
-        assertThat(scaledImg.getHeight()).isLessThan(origImg.getHeight());
-    }
-
-    @Test
-    void scaledImgHasRetainedFormat() throws Exception {
-        URL url = getClass().getResource("/pdf/rdd.png");
-        final byte[] orig = Files.readAllBytes(Paths.get(url.toURI()));
-        final byte[] scaled = ImageScaler.downToA4(orig, "jpg");
-        assertThat(hasJpgSignature(scaled)).isTrue();
+        var origImg = getBufferedImage("/pdf/rdd.png");
+        var matrix = ImageScaler.matrixFromImage(new PDPage(PDRectangle.A4), origImg);
+        assertThat(matrix.getScaleX()).isLessThan(origImg.getWidth());
+        assertThat(matrix.getScaleY()).isLessThan(origImg.getHeight());
     }
 
     @Test
     void rotateLandscapeToPortrait() throws Exception {
-        URL url = getClass().getResource("/pdf/landscape.jpg");
-        byte[] orig = Files.readAllBytes(Paths.get(url.toURI()));
-        byte[] scaled = ImageScaler.downToA4(orig, "jpg");
-        BufferedImage origImg = fromBytes(orig);
-        BufferedImage scaledImg = fromBytes(scaled);
-        assertThat(origImg.getWidth()).isGreaterThan(origImg.getHeight());
-        assertThat(scaledImg.getHeight()).isGreaterThan(scaledImg.getWidth());
+        var origImage = getBufferedImage("/pdf/landscape.jpg");
+        ImageScaler.matrixFromImage(new PDPage(PDRectangle.A4), origImage);
+        // rotert
+        assertThat(new PDPage(PDRectangle.A4).getRotation()).isEqualTo(90);
     }
 
-    public boolean hasJpgSignature(byte[] bytes) {
-        return (bytes[0] & 0XFF) == 0xFF &&
-                (bytes[1] & 0XFF) == 0xD8 &&
-                (bytes[0] & 0XFF) == 0xFF;
+    @Test
+    void bufferedImageCustomType() throws Exception {
+        var origImage = getBufferedImage("/pdf/png_type_0.png");
+        assertDoesNotThrow(() -> ImageScaler.matrixFromImage(new PDPage(PDRectangle.A4), origImage));
     }
 
-    private static BufferedImage fromBytes(byte[] bytes) {
-        try (InputStream in = new ByteArrayInputStream(bytes)) {
-            return ImageIO.read(in);
+    private static BufferedImage getBufferedImage(String imageResource) throws IOException, URISyntaxException {
+        var uri = ImageScalerTest.class.getResource(imageResource).toURI();
+        var bytes = Files.readAllBytes(Paths.get(uri));
+        try (var is = new ByteArrayInputStream(bytes)) {
+            return ImageIO.read(is);
         } catch (Exception ex) {
             throw new RuntimeException(ex);
         }

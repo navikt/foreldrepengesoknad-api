@@ -1,11 +1,6 @@
 package no.nav.foreldrepenger.selvbetjening.vedlegg;
 
 import org.apache.pdfbox.pdmodel.PDDocument;
-import org.apache.pdfbox.pdmodel.PDPage;
-import org.apache.pdfbox.pdmodel.PDPageContentStream;
-import org.apache.pdfbox.pdmodel.common.PDRectangle;
-import org.apache.pdfbox.pdmodel.graphics.image.LosslessFactory;
-import org.apache.pdfbox.pdmodel.graphics.image.PDImageXObject;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -19,11 +14,8 @@ import java.io.IOException;
 import java.util.List;
 
 import static java.util.Arrays.asList;
-import static no.nav.foreldrepenger.selvbetjening.vedlegg.ImageScaler.downToA4;
 import static no.nav.foreldrepenger.selvbetjening.vedlegg.ImageScaler.pdfFraBilde;
 import static no.nav.foreldrepenger.selvbetjening.vedlegg.VedleggUtil.mediaType;
-import static org.apache.pdfbox.pdmodel.common.PDRectangle.A4;
-import static org.apache.pdfbox.pdmodel.graphics.image.PDImageXObject.createFromByteArray;
 import static org.springframework.http.MediaType.APPLICATION_PDF;
 import static org.springframework.http.MediaType.IMAGE_JPEG;
 import static org.springframework.http.MediaType.IMAGE_PNG;
