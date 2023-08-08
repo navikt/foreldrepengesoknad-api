@@ -61,18 +61,18 @@ public class Image2PDFConverter {
             return bytes;
         }
         if (validImageTypes(mediaType)) {
-            return embedImagesInPdf(mediaType.getSubtype(), bytes);
+            return embedImagesInPdf(bytes);
         }
         throw new AttachmentTypeUnsupportedException(mediaType);
     }
 
-    private static byte[] embedImagesInPdf(String imgType, byte[]... images) {
-        return embedImagesInPdf(asList(images), imgType);
+    private static byte[] embedImagesInPdf(byte[]... images) {
+        return embedImagesInPdf(asList(images));
     }
 
-    private static byte[] embedImagesInPdf(List<byte[]> images, String imgType) {
+    private static byte[] embedImagesInPdf(List<byte[]> images) {
         try (var doc = new PDDocument(); var outputStream = new ByteArrayOutputStream()) {
-            images.forEach(i -> addPDFPageFromImage(doc, i, imgType));
+            images.forEach(i -> addPDFPageFromImage(doc, i));
             doc.save(outputStream);
             return outputStream.toByteArray();
         } catch (Exception e) {
@@ -86,7 +86,7 @@ public class Image2PDFConverter {
         return isValid;
     }
 
-    private static void addPDFPageFromImage(PDDocument doc, byte[] orig, String fmt) {
+    private static void addPDFPageFromImage(PDDocument doc, byte[] orig) {
         try {
            pdfFraBilde(doc, orig);
         } catch (Exception e) {
