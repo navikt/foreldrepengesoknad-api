@@ -38,7 +38,7 @@ class ImageScaler {
         }
     }
 
-    static Matrix matrixFromImage(PDPage pdPage, BufferedImage bufferedImage) throws IOException {
+    static Matrix matrixFromImage(PDPage pdPage, BufferedImage bufferedImage) {
         if (bufferedImage.getType() == BufferedImage.TYPE_CUSTOM) {
             LOG.info("BufferedImage er TYPE_CUSTOM"); // ukjent type, logger i tilfelle problemer med konvertering
         }
