@@ -1,8 +1,6 @@
 package no.nav.foreldrepenger.selvbetjening.vedlegg;
 
 import org.apache.pdfbox.pdmodel.PDDocument;
-import org.apache.pdfbox.pdmodel.PDPage;
-import org.apache.pdfbox.pdmodel.PDPageContentStream;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -16,10 +14,8 @@ import java.io.IOException;
 import java.util.List;
 
 import static java.util.Arrays.asList;
-import static no.nav.foreldrepenger.selvbetjening.vedlegg.ImageScaler.downToA4;
+import static no.nav.foreldrepenger.selvbetjening.vedlegg.ImageScaler.pdfFraBilde;
 import static no.nav.foreldrepenger.selvbetjening.vedlegg.VedleggUtil.mediaType;
-import static org.apache.pdfbox.pdmodel.common.PDRectangle.A4;
-import static org.apache.pdfbox.pdmodel.graphics.image.PDImageXObject.createFromByteArray;
 import static org.springframework.http.MediaType.APPLICATION_PDF;
 import static org.springframework.http.MediaType.IMAGE_JPEG;
 import static org.springframework.http.MediaType.IMAGE_PNG;
@@ -65,18 +61,18 @@ public class Image2PDFConverter {
             return bytes;
         }
         if (validImageTypes(mediaType)) {
-            return embedImagesInPdf(mediaType.getSubtype(), bytes);
+            return embedImagesInPdf(bytes);
         }
         throw new AttachmentTypeUnsupportedException(mediaType);
     }
 
-    private static byte[] embedImagesInPdf(String imgType, byte[]... images) {
-        return embedImagesInPdf(asList(images), imgType);
+    private static byte[] embedImagesInPdf(byte[]... images) {
+        return embedImagesInPdf(asList(images));
     }
 
-    private static byte[] embedImagesInPdf(List<byte[]> images, String imgType) {
+    private static byte[] embedImagesInPdf(List<byte[]> images) {
         try (var doc = new PDDocument(); var outputStream = new ByteArrayOutputStream()) {
-            images.forEach(i -> addPDFPageFromImage(doc, i, imgType));
+            images.forEach(i -> addPDFPageFromImage(doc, i));
             doc.save(outputStream);
             return outputStream.toByteArray();
         } catch (Exception e) {
@@ -90,11 +86,9 @@ public class Image2PDFConverter {
         return isValid;
     }
 
-    private static void addPDFPageFromImage(PDDocument doc, byte[] orig, String fmt) {
-        PDPage page = new PDPage(A4);
-        doc.addPage(page);
-        try (var cs = new PDPageContentStream(doc, page)) {
-            cs.drawImage(createFromByteArray(doc, downToA4(orig, fmt), "img"), (int) A4.getLowerLeftX(), (int) A4.getLowerLeftY());
+    private static void addPDFPageFromImage(PDDocument doc, byte[] orig) {
+        try {
+           pdfFraBilde(doc, orig);
         } catch (Exception e) {
             throw new AttachmentConversionException("Konvertering av vedlegg feilet", e);
         }

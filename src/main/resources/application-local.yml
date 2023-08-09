@@ -67,6 +67,6 @@ mottak:
 oppslag:
   uri: http://localhost:9001/api/
 oversikt:
-  uri: http://localhost:8889/api/
+  uri: http://localhost:8889
 storage:
   passphrase: tullogtøys

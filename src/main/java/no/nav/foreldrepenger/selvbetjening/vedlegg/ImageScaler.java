@@ -1,21 +1,19 @@
 package no.nav.foreldrepenger.selvbetjening.vedlegg;
 
-import static java.awt.image.AffineTransformOp.TYPE_BILINEAR;
-import static java.awt.image.BufferedImage.TYPE_CUSTOM;
-
-import java.awt.Dimension;
-import java.awt.Graphics2D;
-import java.awt.Image;
 import java.awt.geom.AffineTransform;
-import java.awt.image.AffineTransformOp;
 import java.awt.image.BufferedImage;
 import java.io.ByteArrayInputStream;
-import java.io.ByteArrayOutputStream;
 import java.io.IOException;
+import java.util.function.Predicate;
 
 import javax.imageio.ImageIO;
 
+import org.apache.pdfbox.pdmodel.PDDocument;
+import org.apache.pdfbox.pdmodel.PDPage;
+import org.apache.pdfbox.pdmodel.PDPageContentStream;
 import org.apache.pdfbox.pdmodel.common.PDRectangle;
+import org.apache.pdfbox.pdmodel.graphics.image.LosslessFactory;
+import org.apache.pdfbox.util.Matrix;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -27,81 +25,86 @@ class ImageScaler {
 
     }
 
-    static byte[] downToA4(byte[] origImage, String format) {
-        final PDRectangle A4 = PDRectangle.A4;
+    static void pdfFraBilde(PDDocument doc, byte[] image) {
+        PDPage pdPage = new PDPage(PDRectangle.A4);
+        doc.addPage(pdPage);
+        try (var pdPageContentStream = new PDPageContentStream(doc, pdPage)) {
+            var bufferedImage = ImageIO.read(new ByteArrayInputStream(image));
+            var matrix = matrixFromImage(pdPage, bufferedImage);
+            var pdImageXObject = LosslessFactory.createFromImage(doc, bufferedImage);
+            pdPageContentStream.drawImage(pdImageXObject, matrix);
+        } catch (IOException e) {
+            throw new AttachmentConversionException("Konvertering av vedlegg feilet", e);
+        }
+    }
 
-        try {
-            var image = ImageIO.read(new ByteArrayInputStream(origImage));
-            image = rotatePortrait(image);
-            Dimension pdfPageDim = new Dimension((int) A4.getWidth(), (int) A4.getHeight());
-            Dimension origDim = new Dimension(image.getWidth(), image.getHeight());
-            Dimension newDim = getScaledDimension(origDim, pdfPageDim);
+    static Matrix matrixFromImage(PDPage pdPage, BufferedImage bufferedImage) {
+        if (bufferedImage.getType() == BufferedImage.TYPE_CUSTOM) {
+            LOG.info("BufferedImage er TYPE_CUSTOM"); // ukjent type, logger i tilfelle problemer med konvertering
+        }
+        var bildedimensjon = new Bildedimensjon(bufferedImage.getWidth(), bufferedImage.getHeight());
+        return bildedimensjon.transform(pdPage);
+    }
 
-            if (newDim.equals(origDim)) {
-                return origImage;
-            } else {
-                BufferedImage scaledImg = scaleDown(image, newDim);
-                return toBytes(scaledImg, format);
+    private static class Bildedimensjon {
+        private final float width;
+        private final float height;
+        private final boolean rotert;
+
+        private Bildedimensjon(float width, float height, boolean rotert) {
+            this.width = width;
+            this.height = height;
+            this.rotert = rotert;
+        }
+
+        public Bildedimensjon(int width, int height) {
+            this(width, height, false);
+        }
+
+        public Matrix transform(PDPage pdPage) {
+            var skalertBildedimensjon = roterOgSkalerNed(pdPage.getMediaBox().getWidth(), pdPage.getMediaBox().getHeight());
+            var transform = new AffineTransform(
+                skalertBildedimensjon.width,
+                0f,
+                0f,
+                skalertBildedimensjon.height,
+                pdPage.getMediaBox().getLowerLeftX(),
+                pdPage.getMediaBox().getUpperRightY() - skalertBildedimensjon.height);
+
+            var matrix = new Matrix(transform);
+
+            if (skalertBildedimensjon.rotert) {
+                matrix.translate(1f, 0f); // Flytt bildet 1 gang (width) til høyre på x-aksen
+                matrix.rotate(Math.toRadians(90.0));
+                pdPage.setRotation(90);
             }
-        } catch (IOException ex) {
-            throw new AttachmentConversionException("Konvertering av vedlegg feilet", ex);
-        }
-    }
 
-    private static BufferedImage rotatePortrait(BufferedImage image) {
-        if (image.getHeight() >= image.getWidth()) {
-            return image;
-        }
-        if (image.getType() == TYPE_CUSTOM) {
-            LOG.info("Kan ikke rotere bilde med ukjent type");
-            return image;
-
+            return matrix;
         }
 
-        var rotatedImage = new BufferedImage(image.getHeight(), image.getWidth(), image.getType());
-        var transform = new AffineTransform();
-        transform.rotate(Math.toRadians(90), image.getHeight() / 2f, image.getHeight() / 2f);
-        var op = new AffineTransformOp(transform, TYPE_BILINEAR);
-        rotatedImage = op.filter(image, rotatedImage);
-        return rotatedImage;
-    }
-
-    private static Dimension getScaledDimension(Dimension imgSize, Dimension a4) {
-        int originalWidth = imgSize.width;
-        int originalHeight = imgSize.height;
-        int a4Width = a4.width;
-        int a4Height = a4.height;
-        int newWidth = originalWidth;
-        int newHeight = originalHeight;
-
-        if (originalWidth > a4Width) {
-            newWidth = a4Width;
-            newHeight = (newWidth * originalHeight) / originalWidth;
+        private Bildedimensjon roterOgSkalerNed(float pageSizeWidth, float pageSizeHeight) {
+            boolean skalRoteres = width > height && width > pageSizeWidth;
+            if (skalRoteres) {
+                return new Bildedimensjon(height, width, true).skalertDimensjon(pageSizeWidth, pageSizeHeight);
+            } else {
+                return skalertDimensjon(pageSizeWidth, pageSizeHeight);
+            }
         }
 
-        if (newHeight > a4Height) {
-            newHeight = a4Height;
-            newWidth = (newHeight * originalWidth) / originalHeight;
-        }
-
-        return new Dimension(newWidth, newHeight);
-    }
-
-    private static BufferedImage scaleDown(BufferedImage origImage, Dimension newDim) {
-        int newWidth = (int) newDim.getWidth();
-        int newHeight = (int) newDim.getHeight();
-        Image tempImg = origImage.getScaledInstance(newWidth, newHeight, Image.SCALE_SMOOTH);
-        BufferedImage scaledImg = new BufferedImage(newWidth, newHeight, BufferedImage.TYPE_3BYTE_BGR);
-        Graphics2D g = (Graphics2D) scaledImg.getGraphics();
-        g.drawImage(tempImg, 0, 0, null);
-        g.dispose();
-        return scaledImg;
-    }
-
-    private static byte[] toBytes(BufferedImage img, String format) throws IOException {
-        try (var baos = new ByteArrayOutputStream()) {
-            ImageIO.write(img, format, baos);
-            return baos.toByteArray();
+        private Bildedimensjon skalertDimensjon(float pageSizeWidth, float pageSizeHeight) {
+            float newWidth = this.width;
+            float newHeight = this.height;
+            Predicate<Bildedimensjon> behovForNedskaleringPortrett = bd -> !bd.rotert && (pageSizeWidth < bd.width || pageSizeHeight < bd.height);
+            Predicate<Bildedimensjon> behovForNedskaleringLandskap = bd -> bd.rotert && (pageSizeWidth < bd.height || pageSizeHeight < bd.width);
+            if (behovForNedskaleringLandskap.or(behovForNedskaleringPortrett).test(this)) {
+                // Skaler og ivareta ratio
+                float widthRatio = pageSizeWidth / this.width;
+                float heightRatio = pageSizeHeight / this.height;
+                float scale = Math.min(widthRatio, heightRatio);
+                newWidth *= scale;
+                newHeight *= scale;
+            }
+            return new Bildedimensjon(newWidth, newHeight, this.rotert);
         }
     }
 
