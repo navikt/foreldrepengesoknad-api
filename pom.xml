@@ -228,7 +228,7 @@
 				<artifactId>maven-surefire-plugin</artifactId>
                 <configuration>
                     <!-- Må ha @{argLine} ellers blir properties satt av jacoco-maven-plugin overkrevet -->
-                    <argLine>@{argLine} --enable-preview --add-opens java.base/java.time=ALL-UNNAMED</argLine>
+                    <argLine>@{argLine} --add-opens java.base/java.time=ALL-UNNAMED</argLine>
                 </configuration>
 			</plugin>
 			<plugin>
@@ -239,7 +239,6 @@
                     <source>17</source>
                     <target>17</target>
                     <release>${java.version}</release>
-                    <compilerArgs>--enable-preview</compilerArgs>
                 </configuration>
 			</plugin>
             <plugin>

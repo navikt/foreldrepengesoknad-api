@@ -15,10 +15,15 @@ public final class SøknadMapper {
     }
 
     public static no.nav.foreldrepenger.common.domain.Søknad tilSøknad(SøknadFrontend søknadFrontend) {
-        return switch (søknadFrontend) {
-            case EngangsstønadFrontend e -> tilEngangsstønad(e);
-            case ForeldrepengesøknadFrontend f -> tilForeldrepengesøknad(f);
-            case SvangerskapspengesøknadFrontend s -> tilSvangerskapspengesøknad(s);
-        };
+        if (søknadFrontend instanceof EngangsstønadFrontend s) {
+            return tilEngangsstønad(s);
+        }
+        if (søknadFrontend instanceof ForeldrepengesøknadFrontend s) {
+            return tilForeldrepengesøknad(s);
+        }
+        if (søknadFrontend instanceof SvangerskapspengesøknadFrontend s) {
+            return tilSvangerskapspengesøknad(s);
+        }
+        throw new IllegalArgumentException("Ukjent søknad " + søknadFrontend.getClass().getSimpleName());
     }
 }
