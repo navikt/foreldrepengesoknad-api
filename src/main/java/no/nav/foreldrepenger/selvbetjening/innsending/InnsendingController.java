@@ -1,18 +1,17 @@
 package no.nav.foreldrepenger.selvbetjening.innsending;
 
-import static no.nav.boot.conditionals.EnvUtil.CONFIDENTIAL;
-import static no.nav.foreldrepenger.selvbetjening.util.StringUtils.escapeHtml;
-
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-
 import jakarta.validation.Valid;
 import no.nav.foreldrepenger.common.domain.Kvittering;
 import no.nav.foreldrepenger.selvbetjening.http.ProtectedRestController;
 import no.nav.foreldrepenger.selvbetjening.innsending.domain.EttersendingFrontend;
 import no.nav.foreldrepenger.selvbetjening.innsending.domain.SøknadFrontend;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestBody;
+
+import static no.nav.boot.conditionals.EnvUtil.CONFIDENTIAL;
+import static no.nav.foreldrepenger.selvbetjening.util.StringUtils.escapeHtml;
 
 @ProtectedRestController(InnsendingController.INNSENDING_CONTROLLER_PATH)
 public class InnsendingController {
@@ -20,9 +19,9 @@ public class InnsendingController {
 
     public static final String INNSENDING_CONTROLLER_PATH = "/rest/soknad";
 
-    private final Innsending innsending;
+    private final InnsendingTjeneste innsending;
 
-    public InnsendingController(Innsending innsending) {
+    public InnsendingController(InnsendingTjeneste innsending) {
         this.innsending = innsending;
     }
 

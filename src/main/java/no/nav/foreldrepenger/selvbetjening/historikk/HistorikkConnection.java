@@ -1,18 +1,16 @@
 package no.nav.foreldrepenger.selvbetjening.historikk;
 
-import static java.util.Collections.emptyList;
+import no.nav.foreldrepenger.common.domain.Saksnummer;
+import no.nav.foreldrepenger.selvbetjening.http.AbstractRestConnection;
+import org.springframework.stereotype.Component;
+import org.springframework.web.client.RestOperations;
 
 import java.net.URI;
 import java.util.Arrays;
 import java.util.List;
 import java.util.Optional;
 
-import org.springframework.stereotype.Component;
-import org.springframework.web.client.RestOperations;
-
-import no.nav.foreldrepenger.common.domain.Fødselsnummer;
-import no.nav.foreldrepenger.common.domain.Saksnummer;
-import no.nav.foreldrepenger.selvbetjening.http.AbstractRestConnection;
+import static java.util.Collections.emptyList;
 
 @Component
 public class HistorikkConnection extends AbstractRestConnection {
@@ -38,10 +36,6 @@ public class HistorikkConnection extends AbstractRestConnection {
         return hentHistorikk(config.historikkURI());
     }
 
-    public List<HistorikkInnslag> hentHistorikk(Fødselsnummer fnr) {
-        return hentHistorikk(config.historikkPreprodURI(fnr.value()));
-    }
-
     private List<HistorikkInnslag> hentHistorikk(URI uri) {
         LOG.trace("Henter historikk fra {}", uri);
         List<HistorikkInnslag> historikk = Optional
@@ -50,10 +44,6 @@ public class HistorikkConnection extends AbstractRestConnection {
                 .orElse(emptyList());
         LOG.trace("Hentet historikk {} fra {}", historikk, uri);
         return historikk;
-    }
-
-    public List<String> manglendeVedlegg(Fødselsnummer fnr, Saksnummer saksnr) {
-        return hentManglendeVedlegg(config.vedleggPreprodURI(fnr, saksnr));
     }
 
     public List<String> manglendeVedlegg(Saksnummer saksnr) {

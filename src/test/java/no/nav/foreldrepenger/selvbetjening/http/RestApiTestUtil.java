@@ -1,16 +1,13 @@
 package no.nav.foreldrepenger.selvbetjening.http;
 
-import java.lang.reflect.Method;
-import java.lang.reflect.Modifier;
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.List;
-import java.util.Set;
-import java.util.function.Function;
-import java.util.stream.Collectors;
-
 import org.reflections.Reflections;
 import org.springframework.web.bind.annotation.RestController;
+
+import java.lang.reflect.Method;
+import java.lang.reflect.Modifier;
+import java.util.*;
+import java.util.function.Function;
+import java.util.stream.Collectors;
 
 abstract class RestApiTestUtil {
 
@@ -21,7 +18,7 @@ abstract class RestApiTestUtil {
 
     static Set<Class<?>> hentAlleRestControllerKlasser() {
         return REFLECTION.getTypesAnnotatedWith(RestController.class).stream()
-            .filter(aClass -> !List.of(UnprotectedRestController.class, ProtectedRestController.class).contains(aClass) )
+            .filter(aClass -> !Objects.equals(ProtectedRestController.class, aClass))
             .collect(Collectors.toSet());
     }
 

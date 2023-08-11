@@ -1,18 +1,16 @@
 package no.nav.foreldrepenger.selvbetjening.minidialog;
 
-import static java.util.Collections.emptyList;
+import no.nav.foreldrepenger.selvbetjening.historikk.MinidialogInnslag;
+import no.nav.foreldrepenger.selvbetjening.http.AbstractRestConnection;
+import org.springframework.stereotype.Component;
+import org.springframework.web.client.RestOperations;
 
 import java.net.URI;
 import java.util.Arrays;
 import java.util.List;
 import java.util.Optional;
 
-import org.springframework.stereotype.Component;
-import org.springframework.web.client.RestOperations;
-
-import no.nav.foreldrepenger.common.domain.Fødselsnummer;
-import no.nav.foreldrepenger.selvbetjening.historikk.MinidialogInnslag;
-import no.nav.foreldrepenger.selvbetjening.http.AbstractRestConnection;
+import static java.util.Collections.emptyList;
 
 @Component
 public class MinidialogConnection extends AbstractRestConnection {
@@ -34,16 +32,8 @@ public class MinidialogConnection extends AbstractRestConnection {
         return config.pingURI();
     }
 
-    public List<MinidialogInnslag> hentMinidialoger(Fødselsnummer fnr, boolean kunAktive) {
-        return getIfEnabled(config.minidialogPreprodURI(fnr.value(), kunAktive));
-    }
-
     public List<MinidialogInnslag> hentAktiveSpørsmål() {
         return getIfEnabled(config.aktiveSpmURI());
-    }
-
-    public List<MinidialogInnslag> hentAktiveSpørsmål(Fødselsnummer fnr) {
-        return getIfEnabled(config.aktiveSpmURI(fnr.value()));
     }
 
     private List<MinidialogInnslag> getIfEnabled(URI uri) {

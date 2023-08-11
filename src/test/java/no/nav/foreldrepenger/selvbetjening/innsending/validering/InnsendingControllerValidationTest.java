@@ -1,11 +1,15 @@
 package no.nav.foreldrepenger.selvbetjening.innsending.validering;
 
 
-import static no.nav.foreldrepenger.common.util.ResourceHandleUtil.bytesFra;
-import static org.assertj.core.api.Assertions.assertThat;
-import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
-import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
-
+import com.fasterxml.jackson.databind.ObjectMapper;
+import no.nav.foreldrepenger.common.util.TokenUtil;
+import no.nav.foreldrepenger.selvbetjening.config.JacksonConfiguration;
+import no.nav.foreldrepenger.selvbetjening.error.ApiExceptionHandler;
+import no.nav.foreldrepenger.selvbetjening.innsending.InnsendingController;
+import no.nav.foreldrepenger.selvbetjening.innsending.InnsendingTjeneste;
+import no.nav.foreldrepenger.selvbetjening.innsending.domain.ForeldrepengesøknadFrontend;
+import no.nav.foreldrepenger.selvbetjening.innsending.domain.SvangerskapspengesøknadFrontend;
+import no.nav.foreldrepenger.selvbetjening.innsending.domain.SøknadFrontend;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
@@ -16,16 +20,10 @@ import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.web.bind.MethodArgumentNotValidException;
 
-import com.fasterxml.jackson.databind.ObjectMapper;
-
-import no.nav.foreldrepenger.common.util.TokenUtil;
-import no.nav.foreldrepenger.selvbetjening.config.JacksonConfiguration;
-import no.nav.foreldrepenger.selvbetjening.error.ApiExceptionHandler;
-import no.nav.foreldrepenger.selvbetjening.innsending.Innsending;
-import no.nav.foreldrepenger.selvbetjening.innsending.InnsendingController;
-import no.nav.foreldrepenger.selvbetjening.innsending.domain.ForeldrepengesøknadFrontend;
-import no.nav.foreldrepenger.selvbetjening.innsending.domain.SvangerskapspengesøknadFrontend;
-import no.nav.foreldrepenger.selvbetjening.innsending.domain.SøknadFrontend;
+import static no.nav.foreldrepenger.common.util.ResourceHandleUtil.bytesFra;
+import static org.assertj.core.api.Assertions.assertThat;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
+import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
 @Import({InnsendingController.class, ApiExceptionHandler.class})
 @WebMvcTest(controllers = InnsendingController.class)
@@ -39,7 +37,7 @@ class InnsendingControllerValidationTest {
     private ObjectMapper mapper;
 
     @MockBean
-    private Innsending innsending;
+    private InnsendingTjeneste innsending;
 
     @MockBean
     private TokenUtil tokenUtil;
