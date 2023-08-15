@@ -1,19 +1,18 @@
 package no.nav.foreldrepenger.selvbetjening.http;
 
-import static org.assertj.core.api.Assertions.assertThat;
-
-import java.lang.reflect.Method;
-import java.util.List;
-
-import org.junit.jupiter.api.Test;
-import org.springframework.validation.annotation.Validated;
-import org.springframework.web.bind.annotation.RestController;
-
 import no.nav.boot.conditionals.ConditionalOnNotProd;
 import no.nav.foreldrepenger.selvbetjening.uttak.UttakController;
 import no.nav.foreldrepenger.selvbetjening.uttak.UttakControllerV2;
 import no.nav.security.token.support.core.api.ProtectedWithClaims;
 import no.nav.security.token.support.core.api.Unprotected;
+import org.junit.jupiter.api.Test;
+import org.springframework.validation.annotation.Validated;
+import org.springframework.web.bind.annotation.RestController;
+
+import java.lang.reflect.Method;
+import java.util.List;
+
+import static org.assertj.core.api.Assertions.assertThat;
 
 class RestApiSikredeEndepunktTest extends RestApiTestUtil {
 
@@ -27,14 +26,6 @@ class RestApiSikredeEndepunktTest extends RestApiTestUtil {
             .as("Sørg for at @ProtectedRestController ikke er annotert med @Unprotected!")
             .isFalse();
     }
-
-    @Test
-    void sjekkAtUnprotectedRestControllerIkkeErAktivIProd() {
-        assertThat(UnprotectedRestController.class)
-            .as("@UnprotectedRestController skal ikke brukes i produksjon!")
-            .hasAnnotation(ConditionalOnNotProd.class);
-    }
-
 
     @Test
     void sjekkAtAlleEndepunktErBeskyttet() {
@@ -59,7 +50,7 @@ class RestApiSikredeEndepunktTest extends RestApiTestUtil {
 
     private boolean erRestControllerUbeskyttet(Class<?> klasse) {
         if (klasse.isAnnotationPresent(Unprotected.class) || !klasse.isAnnotationPresent(ProtectedRestController.class)) {
-            if (klasse.isAnnotationPresent(ConditionalOnNotProd.class) || klasse.isAnnotationPresent(UnprotectedRestController.class)) {
+            if (klasse.isAnnotationPresent(ConditionalOnNotProd.class)) {
                 // Endepunkt som ikke er eksponsert mot prod trenger ikke å være protected
                 return false;
             }

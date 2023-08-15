@@ -12,10 +12,10 @@ public class MinidialogController {
 
     static final String MINIDIALOG_PATH = "/rest/minidialog";
 
-    private final Minidialog minidialog;
+    private final MinidialogTjeneste minidialog;
 
     @Autowired
-    public MinidialogController(Minidialog minidialog) {
+    public MinidialogController(MinidialogTjeneste minidialog) {
         this.minidialog = minidialog;
     }
 
