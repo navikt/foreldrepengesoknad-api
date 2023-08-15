@@ -1,6 +1,7 @@
 package no.nav.foreldrepenger.selvbetjening.error;
 
 import static no.nav.foreldrepenger.common.util.StreamUtil.safeStream;
+import static org.springframework.core.NestedExceptionUtils.getMostSpecificCause;
 import static org.springframework.http.HttpStatus.BAD_REQUEST;
 import static org.springframework.http.HttpStatus.CONFLICT;
 import static org.springframework.http.HttpStatus.FORBIDDEN;
@@ -48,6 +49,7 @@ public class ApiExceptionHandler extends ResponseEntityExceptionHandler {
 
     private static final Logger LOG = LoggerFactory.getLogger(ApiExceptionHandler.class);
     private static final Logger SECURE_LOGGER = LoggerFactory.getLogger("secureLogger");
+    public static final String REDIRECT_INNLOGGING_VED_MANGLEDE_NIVÅ_ACR = "Required claims not present in token.[acr=Level4]";
     private final TokenUtil tokenUtil;
 
     public ApiExceptionHandler(TokenUtil tokenUtil) {
@@ -137,19 +139,35 @@ public class ApiExceptionHandler extends ResponseEntityExceptionHandler {
         return logAndHandle(status, e, req, new HttpHeaders());
     }
 
-    private ResponseEntity<Object> logAndHandle(HttpStatusCode status, Exception e, WebRequest req, HttpHeaders headers,
-            Object... messages) {
+    private ResponseEntity<Object> logAndHandle(HttpStatusCode status, Exception e, WebRequest req, HttpHeaders headers, Object... messages) {
         var apiError = apiErrorFra(status, e, messages);
-        var path = fullPathTilKaltEndepunkt(req);
-        if (ikkeLoggExceptionsMedSensitiveOpplysnignerTilVanligLogg(e)) {
-            LOG.warn("[{} ({})] {}", path, status, apiError.getMessages());
-            SECURE_LOGGER.warn("[{}] {} {}", req.getContextPath(), status, apiError.getMessages(), e);
-        } else if (tokenUtil.erAutentisert() && !tokenUtil.erUtløpt()) {
-            LOG.warn("[{}] {} {}", path, status, apiError.getMessages(), e);
-        } else {
-            LOG.debug("[{}] {} {}", path, status, apiError.getMessages(),e);
-        }
+        logException(status, e, req, apiError);
         return handleExceptionInternal(e, apiError, headers, status, req);
+    }
+
+    private void logException(HttpStatusCode status, Exception e, WebRequest req, ApiError apiError) {
+        var path = fullPathTilKaltEndepunkt(req);
+        if (loggExceptionPåInfoNivå(e)) {
+            LOG.info("[{}] {} {}", path, status, apiError.getMessages(), e);
+        } else {
+            if (ikkeLoggExceptionsMedSensitiveOpplysnignerTilVanligLogg(e)) {
+                LOG.warn("[{} ({})] {}", path, status, apiError.getMessages());
+                SECURE_LOGGER.warn("[{}] {} {}", req.getContextPath(), status, apiError.getMessages(), e);
+            } else {
+                LOG.warn("[{}] {} {}", path, status, apiError.getMessages(), e);
+            }
+        }
+    }
+
+    private boolean loggExceptionPåInfoNivå(Exception e) {
+        if (!tokenUtil.erAutentisert()) return true;
+        if (tokenUtil.erUtløpt()) return true;
+        if (e instanceof JwtTokenUnauthorizedException && getMostSpecificCause(e).getMessage().contains(REDIRECT_INNLOGGING_VED_MANGLEDE_NIVÅ_ACR)) return true;
+        return false;
+    }
+
+    private boolean ikkeLoggExceptionsMedSensitiveOpplysnignerTilVanligLogg(Exception e) {
+        return e instanceof MethodArgumentNotValidException || e instanceof ConstraintViolationException;
     }
 
     private static String errorMessage(FieldError error) {
@@ -166,9 +184,5 @@ public class ApiExceptionHandler extends ResponseEntityExceptionHandler {
         } catch (Exception e) {
             return req.getContextPath();
         }
-    }
-
-    private boolean ikkeLoggExceptionsMedSensitiveOpplysnignerTilVanligLogg(Exception e) {
-        return e instanceof MethodArgumentNotValidException || e instanceof ConstraintViolationException;
     }
 }
