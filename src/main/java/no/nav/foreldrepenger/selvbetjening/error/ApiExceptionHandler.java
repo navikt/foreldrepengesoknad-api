@@ -162,6 +162,7 @@ public class ApiExceptionHandler extends ResponseEntityExceptionHandler {
     private boolean loggExceptionPåInfoNivå(Exception e) {
         if (!tokenUtil.erAutentisert()) return true;
         if (tokenUtil.erUtløpt()) return true;
+        if (e instanceof JwtTokenInvalidClaimException && getMostSpecificCause(e).getMessage().contains(REDIRECT_INNLOGGING_VED_MANGLEDE_NIVÅ_ACR)) return true;
         if (e instanceof JwtTokenUnauthorizedException && getMostSpecificCause(e).getMessage().contains(REDIRECT_INNLOGGING_VED_MANGLEDE_NIVÅ_ACR)) return true;
         return false;
     }
