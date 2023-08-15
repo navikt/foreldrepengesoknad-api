@@ -2,8 +2,6 @@ package no.nav.foreldrepenger.selvbetjening.vedlegg.virusscan;
 
 import static no.nav.foreldrepenger.selvbetjening.vedlegg.virusscan.Result.OK;
 
-import java.net.URI;
-
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Component;
@@ -24,24 +22,10 @@ public class VirusScanConnection extends AbstractRestConnection {
         this.config = config;
     }
 
-    @Override
-    public URI pingURI() {
-        return config.pingURI();
-    }
-
-    @Override
-    public boolean isEnabled() {
-        return config.isEnabled();
-    }
-
-    @Override
-    public String ping() {
-        scan(new byte[0], "ping");
-        return "OK";
-    }
-
     public void scan(byte[] bytes, String uuid) {
-        if (isEnabled()) {
+        if (!config.isEnabled()) {
+            LOG.warn("Scanning er deaktivert");
+        } else {
             if (bytes != null) {
                 LOG.trace("Scanner {}", uuid);
                 var scanResults = putForObject(config.getBaseUri(), bytes, ScanResult[].class);
@@ -59,9 +43,7 @@ public class VirusScanConnection extends AbstractRestConnection {
                 throw new AttachmentVirusException("Virus påvist i dokument med id " + uuid);
             }
             LOG.info("Ingen scanning av null bytes", bytes);
-            return;
         }
-        LOG.warn("Scanning er deaktivert");
     }
 
     @Override

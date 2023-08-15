@@ -1,11 +1,11 @@
 package no.nav.foreldrepenger.selvbetjening.mellomlagring;
 
-import no.nav.foreldrepenger.common.error.UnexpectedInputException;
-import no.nav.foreldrepenger.common.util.TokenUtil;
-import no.nav.foreldrepenger.selvbetjening.vedlegg.DelegerendeVedleggSjekker;
-import no.nav.foreldrepenger.selvbetjening.vedlegg.PDFEncryptionVedleggSjekker;
-import no.nav.foreldrepenger.selvbetjening.vedlegg.StørrelseVedleggSjekker;
-import no.nav.foreldrepenger.selvbetjening.vedlegg.virusscan.ClamAvVirusScanner;
+import static org.assertj.core.api.Assertions.assertThat;
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.mockito.Mockito.when;
+
+import java.io.ByteArrayOutputStream;
+
 import org.apache.pdfbox.pdmodel.PDDocument;
 import org.apache.pdfbox.pdmodel.PDPage;
 import org.apache.pdfbox.pdmodel.PDPageContentStream;
@@ -18,11 +18,12 @@ import org.mockito.junit.jupiter.MockitoExtension;
 import org.springframework.mock.web.MockMultipartFile;
 import org.springframework.util.unit.DataSize;
 
-import java.io.ByteArrayOutputStream;
-
-import static org.assertj.core.api.Assertions.assertThat;
-import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.mockito.Mockito.when;
+import no.nav.foreldrepenger.common.error.UnexpectedInputException;
+import no.nav.foreldrepenger.common.util.TokenUtil;
+import no.nav.foreldrepenger.selvbetjening.vedlegg.DelegerendeVedleggSjekker;
+import no.nav.foreldrepenger.selvbetjening.vedlegg.PDFEncryptionVedleggSjekker;
+import no.nav.foreldrepenger.selvbetjening.vedlegg.StørrelseVedleggSjekker;
+import no.nav.foreldrepenger.selvbetjening.vedlegg.virusscan.ClamAvVirusScanner;
 
 @ExtendWith(MockitoExtension.class)
 class KryptertMellomlagringTest {
@@ -47,7 +48,6 @@ class KryptertMellomlagringTest {
 
     @Test
     void TestKryptertSøknad() {
-        when(bøtte.isEnabled()).thenReturn(true);
         km.lagreKryptertSøknad("Søknad");
         var lest = km.lesKryptertSøknad();
         assertThat(lest).isPresent();
@@ -58,7 +58,6 @@ class KryptertMellomlagringTest {
 
     @Test
     void TestKryptertVedlegg() {
-        when(bøtte.isEnabled()).thenReturn(true);
         var pdf = generatePdf();
         var original = Attachment.of(new MockMultipartFile("vedlegg", "originalt vedlegg", "application/pdf", pdf));
         km.lagreKryptertVedlegg(original);

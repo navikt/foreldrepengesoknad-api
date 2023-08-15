@@ -38,35 +38,21 @@ public class InnsendingConnection extends AbstractRestConnection {
         this.converter = converter;
     }
 
-    @Override
-    public boolean isEnabled() {
-        return config.isEnabled();
-    }
-
-    @Override
-    public URI pingURI() {
-        return config.pingURI();
-    }
-
     public Kvittering sendInn(SøknadFrontend søknad) {
         søknad.setOpprettet(now());
-        return postIfEnabled(config.innsendingURI(), body(søknad));
+        return post(config.innsendingURI(), body(søknad));
     }
 
     public Kvittering ettersend(EttersendingFrontend ettersending) {
-        return postIfEnabled(config.ettersendingURI(), body(ettersending));
+        return post(config.ettersendingURI(), body(ettersending));
     }
 
     public Kvittering endre(SøknadFrontend søknad) {
-        return postIfEnabled(config.endringURI(), body(søknad));
+        return post(config.endringURI(), body(søknad));
     }
 
-    private Kvittering postIfEnabled(URI uri, Object body) {
-        if (isEnabled()) {
-            return postForObject(uri, body, Kvittering.class);
-        }
-        LOG.info("Innsending er ikke aktivert");
-        return null;
+    private Kvittering post(URI uri, Object body) {
+        return postForObject(uri, body, Kvittering.class);
     }
 
     public Søknad body(SøknadFrontend søknadFrontend) {
@@ -100,10 +86,7 @@ public class InnsendingConnection extends AbstractRestConnection {
     }
 
     private List<Vedlegg> hentUnikeVedleggMedInnhold(List<VedleggFrontend> vedleggFrontend) {
-        return safeStream(vedleggFrontend)
-            .distinct()
-            .map(v -> tilVedlegg(convert(v)))
-            .toList();
+        return safeStream(vedleggFrontend).distinct().map(v -> tilVedlegg(convert(v))).toList();
     }
 
     private VedleggFrontend convert(VedleggFrontend v) {

@@ -1,6 +1,5 @@
 package no.nav.foreldrepenger.selvbetjening.mellomlagring;
 
-import java.net.URI;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.Optional;
@@ -26,21 +25,6 @@ public class InMemoryMellomlagring extends AbstractMellomlagringTjeneste {
     }
 
     @Override
-    public String ping() {
-        return "OK";
-    }
-
-    @Override
-    public URI pingURI() {
-        return URI.create("http://localhost/stub");
-    }
-
-    @Override
-    public String name() {
-        return pingURI().getHost();
-    }
-
-    @Override
     protected void validerBøtte(Bøtte bøtte) {
 
     }
@@ -59,11 +43,6 @@ public class InMemoryMellomlagring extends AbstractMellomlagringTjeneste {
     @Override
     protected void doSlett(String bøtte, String katalog, String key) {
         store.remove(key(katalog, key));
-    }
-
-    @Override
-    public boolean isEnabled() {
-        return true;
     }
 
 }

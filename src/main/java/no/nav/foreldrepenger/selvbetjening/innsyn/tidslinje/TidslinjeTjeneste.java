@@ -1,15 +1,16 @@
 package no.nav.foreldrepenger.selvbetjening.innsyn.tidslinje;
 
-import no.nav.foreldrepenger.common.domain.Saksnummer;
-import no.nav.foreldrepenger.selvbetjening.http.AbstractRestConnection;
-import no.nav.foreldrepenger.selvbetjening.http.RetryAware;
+import java.net.URI;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 import org.springframework.web.client.RestOperations;
 import org.springframework.web.util.UriComponentsBuilder;
 
-import java.net.URI;
+import no.nav.foreldrepenger.common.domain.Saksnummer;
+import no.nav.foreldrepenger.selvbetjening.http.AbstractRestConnection;
+import no.nav.foreldrepenger.selvbetjening.http.RetryAware;
 
 @Service
 public class TidslinjeTjeneste extends AbstractRestConnection implements RetryAware {
@@ -29,17 +30,5 @@ public class TidslinjeTjeneste extends AbstractRestConnection implements RetryAw
             .build()
             .toUri();
         return getForObject(uri, String.class);
-    }
-
-    @Override
-    public URI pingURI() {
-        return UriComponentsBuilder.fromUri(baseUri)
-            .pathSegment("actuator/health/liveness")
-            .build().toUri();
-    }
-
-    @Override
-    public boolean isEnabled() {
-        return true;
     }
 }

@@ -1,27 +1,26 @@
 package no.nav.foreldrepenger.selvbetjening.historikk;
 
-import no.nav.foreldrepenger.common.domain.Saksnummer;
-import no.nav.foreldrepenger.selvbetjening.http.AbstractConfig;
-import no.nav.foreldrepenger.selvbetjening.util.URIUtil;
-import org.springframework.boot.context.properties.ConfigurationProperties;
-import org.springframework.boot.context.properties.bind.DefaultValue;
+import static no.nav.foreldrepenger.selvbetjening.util.URIUtil.uri;
 
 import java.net.URI;
 
-import static no.nav.foreldrepenger.selvbetjening.util.URIUtil.uri;
+import org.springframework.boot.context.properties.ConfigurationProperties;
+
+import no.nav.foreldrepenger.common.domain.Saksnummer;
+import no.nav.foreldrepenger.selvbetjening.util.URIUtil;
 
 @ConfigurationProperties("historikk")
-public class HistorikkConfig extends AbstractConfig {
-    private static final String DEFAULT_PING_PATH = "actuator/health/liveness";
+public class HistorikkConfig {
 
     private static final String HISTORIKK = "historikk";
     private static final String HISTORIKK_ALL_PATH = HISTORIKK + "/me/all";
     private static final String MANGLEDEVEDLEGG_PATH = HISTORIKK + "/me/manglendevedlegg";
 
     private static final String SAKSNUMMER = "saksnummer";
+    private final URI baseUri;
 
-    public HistorikkConfig(URI uri, @DefaultValue("true") boolean enabled) {
-        super(uri, enabled);
+    public HistorikkConfig(URI uri) {
+        this.baseUri = uri;
     }
 
     public URI historikkURI() {
@@ -32,9 +31,7 @@ public class HistorikkConfig extends AbstractConfig {
         return uri(getBaseUri(), MANGLEDEVEDLEGG_PATH, URIUtil.queryParam(SAKSNUMMER, saksnr.value()));
     }
 
-    @Override
-    public URI pingURI() {
-        return uri(getBaseUri(), DEFAULT_PING_PATH);
+    private URI getBaseUri() {
+        return baseUri;
     }
-
 }

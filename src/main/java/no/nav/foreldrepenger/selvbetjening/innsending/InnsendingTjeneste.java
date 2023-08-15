@@ -1,8 +1,16 @@
 package no.nav.foreldrepenger.selvbetjening.innsending;
 
+import static org.slf4j.LoggerFactory.getLogger;
+
+import java.security.SecureRandom;
+import java.util.List;
+import java.util.Random;
+
+import org.slf4j.Logger;
+import org.springframework.stereotype.Service;
+
 import no.nav.foreldrepenger.common.domain.Kvittering;
 import no.nav.foreldrepenger.common.domain.felles.VedleggReferanse;
-import no.nav.foreldrepenger.selvbetjening.http.Pingable;
 import no.nav.foreldrepenger.selvbetjening.http.RetryAware;
 import no.nav.foreldrepenger.selvbetjening.innsending.domain.EttersendingFrontend;
 import no.nav.foreldrepenger.selvbetjening.innsending.domain.SøknadFrontend;
@@ -10,17 +18,9 @@ import no.nav.foreldrepenger.selvbetjening.innsending.domain.VedleggFrontend;
 import no.nav.foreldrepenger.selvbetjening.innsending.domain.tilbakebetaling.TilbakebetalingUttalelse;
 import no.nav.foreldrepenger.selvbetjening.innsending.pdf.PdfGenerator;
 import no.nav.foreldrepenger.selvbetjening.mellomlagring.KryptertMellomlagring;
-import org.slf4j.Logger;
-import org.springframework.stereotype.Service;
-
-import java.security.SecureRandom;
-import java.util.List;
-import java.util.Random;
-
-import static org.slf4j.LoggerFactory.getLogger;
 
 @Service
-public class InnsendingTjeneste implements Pingable, RetryAware {
+public class InnsendingTjeneste implements RetryAware {
 
     private static final String RETURNERER_KVITTERING = "Returnerer kvittering {}";
     private static final Logger LOG = getLogger(InnsendingTjeneste.class);
@@ -66,11 +66,6 @@ public class InnsendingTjeneste implements Pingable, RetryAware {
         slettMellomlagringOgSøknad(es);
         LOG.info(RETURNERER_KVITTERING, kvittering);
         return kvittering;
-    }
-
-    @Override
-    public String ping() {
-        return connection.ping();
     }
 
     private VedleggFrontend vedleggFra(TilbakebetalingUttalelse u) {

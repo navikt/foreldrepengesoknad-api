@@ -8,11 +8,6 @@
     "description": "A description for 'no.nav.security.oidc'"
   },
   {
-    "name": "virus.enabled",
-    "type": "java.lang.String",
-    "description": "A description for 'virus.enabled'"
-  },
-  {
     "name": "http.proxy",
     "type": "java.lang.String",
     "description": "A description for 'http.proxy'"
@@ -21,11 +16,6 @@
     "name": "no.nav.foreldrepenger.toggles.fnr-header-filter",
     "type": "java.lang.String",
     "description": "A description for 'no.nav.foreldrepenger.toggles.fnr-header-filter'"
-  },
-  {
-    "name": "no.nav.foreldrepenger.selvbetjening.api.virus.enabled",
-    "type": "java.lang.String",
-    "description": "A description for 'no.nav.foreldrepenger.selvbetjening'"
   },
   {
     "name": "no.nav.security.jwt.issuer.selvbetjening.discoveryurl",
