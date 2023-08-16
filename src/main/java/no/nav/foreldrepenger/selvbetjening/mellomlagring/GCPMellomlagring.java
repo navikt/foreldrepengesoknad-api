@@ -4,7 +4,6 @@ import static java.nio.charset.StandardCharsets.UTF_8;
 import static org.springframework.http.HttpStatus.NOT_FOUND;
 import static org.springframework.http.MediaType.APPLICATION_JSON_VALUE;
 
-import java.net.URI;
 import java.util.Optional;
 
 import org.slf4j.Logger;
@@ -24,8 +23,6 @@ import no.nav.boot.conditionals.ConditionalOnGCP;
 @Component
 @ConditionalOnGCP
 public class GCPMellomlagring extends AbstractMellomlagringTjeneste {
-
-    private static final URI STORAGE_URI = URI.create("https://storage.googleapis.com");
 
     private static final Logger LOG = LoggerFactory.getLogger(GCPMellomlagring.class);
 
@@ -69,20 +66,10 @@ public class GCPMellomlagring extends AbstractMellomlagringTjeneste {
 
     @Override
     protected void validerBøtte(Bøtte bøtte) {
-        storage.get(bøtte.getNavn());
+        storage.get(bøtte.navn());
     }
 
     private static BlobId blobFra(String bøttenavn, String katalog, String key) {
         return BlobId.of(bøttenavn, key(katalog, key));
-    }
-
-    @Override
-    public URI pingURI() {
-        return STORAGE_URI;
-    }
-
-    @Override
-    public String name() {
-        return ("GCPMellomlagring");
     }
 }

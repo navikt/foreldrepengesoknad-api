@@ -1,14 +1,14 @@
 package no.nav.foreldrepenger.selvbetjening.minidialog;
 
-import no.nav.foreldrepenger.selvbetjening.historikk.MinidialogInnslag;
-import no.nav.foreldrepenger.selvbetjening.http.Pingable;
-import no.nav.foreldrepenger.selvbetjening.http.RetryAware;
-import org.springframework.stereotype.Service;
-
 import java.util.List;
 
+import org.springframework.stereotype.Service;
+
+import no.nav.foreldrepenger.selvbetjening.historikk.MinidialogInnslag;
+import no.nav.foreldrepenger.selvbetjening.http.RetryAware;
+
 @Service
-public class MinidialogTjeneste implements Pingable, RetryAware {
+public class MinidialogTjeneste implements RetryAware {
     private final MinidialogConnection connection;
 
     public MinidialogTjeneste(MinidialogConnection connection) {
@@ -17,11 +17,6 @@ public class MinidialogTjeneste implements Pingable, RetryAware {
 
     public List<MinidialogInnslag> aktive() {
         return connection.hentAktiveSpørsmål();
-    }
-
-    @Override
-    public String ping() {
-        return connection.ping();
     }
 
     @Override

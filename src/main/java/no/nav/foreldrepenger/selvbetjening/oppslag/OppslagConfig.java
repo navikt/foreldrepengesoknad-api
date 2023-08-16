@@ -5,24 +5,16 @@ import static no.nav.foreldrepenger.selvbetjening.util.URIUtil.uri;
 import java.net.URI;
 
 import org.springframework.boot.context.properties.ConfigurationProperties;
-import org.springframework.boot.context.properties.bind.DefaultValue;
-
-import no.nav.foreldrepenger.selvbetjening.http.AbstractConfig;
 
 @ConfigurationProperties("oppslag")
-public class OppslagConfig extends AbstractConfig {
+public class OppslagConfig {
 
-    private static final String PING = "actuator/health/liveness";
     private static final String PERSON = "oppslag/person";
     private static final String ARBEIDSFORHOLD = "oppslag/person/arbeidsforhold";
+    private final URI baseUri;
 
-    public OppslagConfig(URI uri, @DefaultValue("true") boolean enabled) {
-        super(uri, enabled);
-    }
-
-    @Override
-    public URI pingURI() {
-        return uri(getBaseUri(), PING);
+    public OppslagConfig(URI uri) {
+        this.baseUri = uri;
     }
 
     URI personURI() {
@@ -33,4 +25,7 @@ public class OppslagConfig extends AbstractConfig {
         return uri(getBaseUri(), ARBEIDSFORHOLD);
     }
 
+    private URI getBaseUri() {
+        return baseUri;
+    }
 }

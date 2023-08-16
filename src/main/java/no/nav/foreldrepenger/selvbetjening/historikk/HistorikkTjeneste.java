@@ -1,14 +1,14 @@
 package no.nav.foreldrepenger.selvbetjening.historikk;
 
-import no.nav.foreldrepenger.common.domain.Saksnummer;
-import no.nav.foreldrepenger.selvbetjening.http.Pingable;
-import no.nav.foreldrepenger.selvbetjening.http.RetryAware;
-import org.springframework.stereotype.Service;
-
 import java.util.List;
 
+import org.springframework.stereotype.Service;
+
+import no.nav.foreldrepenger.common.domain.Saksnummer;
+import no.nav.foreldrepenger.selvbetjening.http.RetryAware;
+
 @Service
-public class HistorikkTjeneste implements Pingable, RetryAware {
+public class HistorikkTjeneste implements RetryAware {
     private final HistorikkConnection connection;
 
     public HistorikkTjeneste(HistorikkConnection connection) {
@@ -21,11 +21,6 @@ public class HistorikkTjeneste implements Pingable, RetryAware {
 
     public List<String> manglendeVedlegg(Saksnummer saksnr) {
         return connection.manglendeVedlegg(saksnr);
-    }
-
-    @Override
-    public String ping() {
-        return connection.ping();
     }
 
     @Override

@@ -1,6 +1,5 @@
 package no.nav.foreldrepenger.selvbetjening.innsyn;
 
-import java.net.URI;
 import java.util.Optional;
 
 import org.springframework.stereotype.Component;
@@ -25,15 +24,5 @@ public class InnsynConnection extends AbstractRestConnection {
     }
     public Optional<AnnenPartVedtak> hentAnnenpartsVedtak(AnnenPartVedtakIdentifikator annenPartVedtakIdentifikator) {
         return Optional.ofNullable(postForObject(cfg.annenpartsVedtak(), annenPartVedtakIdentifikator, AnnenPartVedtak.class));
-    }
-
-    @Override
-    public URI pingURI() {
-        return cfg.pingURI();
-    }
-
-    @Override
-    public boolean isEnabled() {
-        return cfg.isEnabled();
     }
 }

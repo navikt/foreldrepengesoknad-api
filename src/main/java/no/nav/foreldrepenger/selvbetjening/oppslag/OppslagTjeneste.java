@@ -41,11 +41,6 @@ public class OppslagTjeneste implements Oppslag {
     }
 
     @Override
-    public String ping() {
-        return oppslag.ping();
-    }
-
-    @Override
     public String toString() {
         return getClass().getSimpleName() + " [oppslag=" + oppslag + "]";
     }

@@ -51,9 +51,4 @@ public class PdfGeneratorTjeneste implements PdfGenerator {
     public String toString() {
         return getClass().getSimpleName() + "[connection=" + connection + ", oppslagTjeneste=" + oppslagTjeneste + "]";
     }
-
-    @Override
-    public String ping() {
-        return connection.ping();
-    }
 }

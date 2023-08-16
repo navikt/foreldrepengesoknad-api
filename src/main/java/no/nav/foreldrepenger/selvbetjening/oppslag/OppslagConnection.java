@@ -3,7 +3,6 @@ package no.nav.foreldrepenger.selvbetjening.oppslag;
 import static java.util.Collections.emptyList;
 import static no.nav.boot.conditionals.EnvUtil.CONFIDENTIAL;
 
-import java.net.URI;
 import java.util.Arrays;
 import java.util.List;
 import java.util.Optional;
@@ -25,32 +24,15 @@ public class OppslagConnection extends AbstractRestConnection {
         this.config = config;
     }
 
-    @Override
-    public boolean isEnabled() {
-        return config.isEnabled();
-    }
-
     public Person hentPerson() {
-        if (isEnabled()) {
-            var person = getForObject(config.personURI(), Person.class);
-            LOG.info(CONFIDENTIAL, "Fikk person {}", person);
-            return person;
-        }
-        LOG.warn("Oppslag av person er deaktivert");
-        return null;
+        var person = getForObject(config.personURI(), Person.class);
+        LOG.info(CONFIDENTIAL, "Fikk person {}", person);
+        return person;
 
     }
 
     public List<Arbeidsforhold> hentArbeidsForhold() {
-        return Optional
-            .ofNullable(getForObject(config.arbeidsforholdURI(), Arbeidsforhold[].class, false))
-            .map(Arrays::asList)
-            .orElse(emptyList());
-    }
-
-    @Override
-    public URI pingURI() {
-        return config.pingURI();
+        return Optional.ofNullable(getForObject(config.arbeidsforholdURI(), Arbeidsforhold[].class, false)).map(Arrays::asList).orElse(emptyList());
     }
 
     @Override

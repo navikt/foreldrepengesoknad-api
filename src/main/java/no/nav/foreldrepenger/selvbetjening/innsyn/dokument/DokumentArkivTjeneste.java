@@ -45,21 +45,9 @@ public class DokumentArkivTjeneste extends AbstractRestConnection implements Ret
             .build().toUri();
     }
 
-    @Override
-    public URI pingURI() {
-        return UriComponentsBuilder.fromUri(baseUri)
-            .pathSegment("actuator/health/liveness")
-            .build().toUri();
-    }
-
     private URI dokumenterUri() {
         return UriComponentsBuilder.fromUri(baseUri)
             .pathSegment("arkiv", "alle")
             .build().toUri();
-    }
-
-    @Override
-    public boolean isEnabled() {
-        return true;
     }
 }

@@ -12,7 +12,7 @@ import org.springframework.http.RequestEntity;
 import org.springframework.web.client.HttpClientErrorException;
 import org.springframework.web.client.RestOperations;
 
-public abstract class AbstractRestConnection implements PingEndpointAware, Togglable {
+public abstract class AbstractRestConnection {
 
     protected static final Logger LOG = LoggerFactory.getLogger(AbstractRestConnection.class);
 
@@ -28,12 +28,6 @@ public abstract class AbstractRestConnection implements PingEndpointAware, Toggl
 
     public <T> T getForObject(URI uri, Class<T> responseType, boolean throwOnNotFound) {
         try {
-            if (!isEnabled()) {
-                if (LOG.isInfoEnabled()) {
-                    LOG.info("Service er ikke aktiv, GETer ikke fra {}", escapeHtml(uri));
-                }
-                return null;
-            }
             T respons = operations.getForObject(uri, responseType);
             if (respons != null) {
                 LOG.trace(CONFIDENTIAL, "Respons: {}", respons);
@@ -51,33 +45,11 @@ public abstract class AbstractRestConnection implements PingEndpointAware, Toggl
     }
 
     public <T> T postForObject(URI uri, Object payload, Class<T> responseType) {
-        if (!isEnabled()) {
-            if (LOG.isInfoEnabled()) {
-                LOG.info("Service er ikke aktiv, POSTer ikke til {}", escapeHtml(uri));
-            }
-            return null;
-        }
         return operations.postForObject(uri, payload, responseType);
     }
 
     public <T> T putForObject(URI uri, Object payload, Class<T> responseType) {
-        if (!isEnabled()) {
-            if (LOG.isInfoEnabled()) {
-                LOG.info("Service er ikke aktiv, PUTer ikke til {}", escapeHtml(uri));
-            }
-            return null;
-        }
         return operations.exchange(RequestEntity.put(uri).body(payload), responseType).getBody();
-    }
-
-    @Override
-    public String name() {
-        return getClass().getSimpleName();
-    }
-
-    @Override
-    public String ping() {
-        return getForObject(pingURI(), String.class);
     }
 
     @Override

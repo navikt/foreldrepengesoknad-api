@@ -1,18 +1,19 @@
 package no.nav.foreldrepenger.selvbetjening.http;
 
+import static org.assertj.core.api.Assertions.assertThat;
+
+import java.lang.reflect.Method;
+import java.util.List;
+
+import org.junit.jupiter.api.Test;
+import org.springframework.validation.annotation.Validated;
+import org.springframework.web.bind.annotation.RestController;
+
 import no.nav.boot.conditionals.ConditionalOnNotProd;
 import no.nav.foreldrepenger.selvbetjening.uttak.UttakController;
 import no.nav.foreldrepenger.selvbetjening.uttak.UttakControllerV2;
 import no.nav.security.token.support.core.api.ProtectedWithClaims;
 import no.nav.security.token.support.core.api.Unprotected;
-import org.junit.jupiter.api.Test;
-import org.springframework.validation.annotation.Validated;
-import org.springframework.web.bind.annotation.RestController;
-
-import java.lang.reflect.Method;
-import java.util.List;
-
-import static org.assertj.core.api.Assertions.assertThat;
 
 class RestApiSikredeEndepunktTest extends RestApiTestUtil {
 
@@ -31,7 +32,7 @@ class RestApiSikredeEndepunktTest extends RestApiTestUtil {
     void sjekkAtAlleEndepunktErBeskyttet() {
         for (var metode : finnAlleRestMetoder()) {
             assertThat(erEndepunktUnprotected(metode))
-                .as("Bare ping endepunkt skal være ubeskyttet. Følgende endepunkt er ikke " + printKlasseOgMetodeNavn.apply(metode))
+                .as("Følgende endepunkt er ikke beskyttet " + printKlasseOgMetodeNavn.apply(metode))
                 .isFalse();
         }
     }

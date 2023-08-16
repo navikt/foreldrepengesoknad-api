@@ -34,11 +34,6 @@ public class InnsynTjeneste implements Innsyn {
     }
 
     @Override
-    public String ping() {
-        return innsynConnection.ping();
-    }
-
-    @Override
     public String toString() {
         return getClass().getSimpleName() + " [innsynConnection=" + innsynConnection + "]";
     }

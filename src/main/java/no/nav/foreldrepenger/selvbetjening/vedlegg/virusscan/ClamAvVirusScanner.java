@@ -4,13 +4,12 @@ import static no.nav.foreldrepenger.common.util.StreamUtil.safeStream;
 
 import org.springframework.stereotype.Service;
 
-import no.nav.foreldrepenger.selvbetjening.http.Pingable;
 import no.nav.foreldrepenger.selvbetjening.innsending.domain.VedleggFrontend;
 import no.nav.foreldrepenger.selvbetjening.mellomlagring.Attachment;
 import no.nav.foreldrepenger.selvbetjening.vedlegg.VedleggSjekker;
 
 @Service
-public class ClamAvVirusScanner implements VedleggSjekker, Pingable {
+public class ClamAvVirusScanner implements VedleggSjekker {
 
     private final VirusScanConnection connection;
 
@@ -28,11 +27,6 @@ public class ClamAvVirusScanner implements VedleggSjekker, Pingable {
     public void sjekk(Attachment... vedlegg) {
         safeStream(vedlegg)
                 .forEach(v -> connection.scan(v.bytes, v.uuid));
-    }
-
-    @Override
-    public String ping() {
-        return connection.ping();
     }
 
     @Override

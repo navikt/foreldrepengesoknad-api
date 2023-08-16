@@ -1,27 +1,21 @@
 package no.nav.foreldrepenger.selvbetjening.innsending;
 
-import no.nav.foreldrepenger.selvbetjening.http.AbstractConfig;
-import org.springframework.boot.context.properties.ConfigurationProperties;
-import org.springframework.boot.context.properties.bind.DefaultValue;
+import static no.nav.foreldrepenger.selvbetjening.util.URIUtil.uri;
 
 import java.net.URI;
 
-import static no.nav.foreldrepenger.selvbetjening.util.URIUtil.uri;
+import org.springframework.boot.context.properties.ConfigurationProperties;
 
 @ConfigurationProperties(prefix = "mottak")
-public class InnsendingConfig extends AbstractConfig {
-    private static final String PING = "mottak/ping";
+public class InnsendingConfig {
     private static final String SEND = "mottak/send";
     private static final String ENDRE = "mottak/endre";
     private static final String ETTERSEND = "mottak/ettersend";
 
-    public InnsendingConfig(URI uri, @DefaultValue("true") boolean enabled) {
-        super(uri, enabled);
-    }
+    private final URI baseUri;
 
-    @Override
-    protected URI pingURI() {
-        return uri(getBaseUri(), PING);
+    public InnsendingConfig(URI uri) {
+        this.baseUri = uri;
     }
 
     URI innsendingURI() {
@@ -36,4 +30,7 @@ public class InnsendingConfig extends AbstractConfig {
         return uri(getBaseUri(), ETTERSEND);
     }
 
+    private URI getBaseUri() {
+        return baseUri;
+    }
 }

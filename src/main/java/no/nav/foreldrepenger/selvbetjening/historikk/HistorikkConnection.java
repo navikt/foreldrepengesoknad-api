@@ -1,16 +1,17 @@
 package no.nav.foreldrepenger.selvbetjening.historikk;
 
-import no.nav.foreldrepenger.common.domain.Saksnummer;
-import no.nav.foreldrepenger.selvbetjening.http.AbstractRestConnection;
-import org.springframework.stereotype.Component;
-import org.springframework.web.client.RestOperations;
+import static java.util.Collections.emptyList;
 
 import java.net.URI;
 import java.util.Arrays;
 import java.util.List;
 import java.util.Optional;
 
-import static java.util.Collections.emptyList;
+import org.springframework.stereotype.Component;
+import org.springframework.web.client.RestOperations;
+
+import no.nav.foreldrepenger.common.domain.Saksnummer;
+import no.nav.foreldrepenger.selvbetjening.http.AbstractRestConnection;
 
 @Component
 public class HistorikkConnection extends AbstractRestConnection {
@@ -20,16 +21,6 @@ public class HistorikkConnection extends AbstractRestConnection {
     public HistorikkConnection(RestOperations operations, HistorikkConfig config) {
         super(operations);
         this.config = config;
-    }
-
-    @Override
-    public boolean isEnabled() {
-        return config.isEnabled();
-    }
-
-    @Override
-    public URI pingURI() {
-        return config.pingURI();
     }
 
     public List<HistorikkInnslag> hentHistorikk() {

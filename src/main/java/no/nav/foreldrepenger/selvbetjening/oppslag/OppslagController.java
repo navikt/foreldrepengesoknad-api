@@ -1,14 +1,14 @@
 package no.nav.foreldrepenger.selvbetjening.oppslag;
 
-import no.nav.foreldrepenger.common.util.TokenUtil;
-import no.nav.foreldrepenger.selvbetjening.http.ProtectedRestController;
-import no.nav.foreldrepenger.selvbetjening.oppslag.domain.PersonFrontend;
-import no.nav.foreldrepenger.selvbetjening.oppslag.domain.Søkerinfo;
-import no.nav.security.token.support.core.api.Unprotected;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.GetMapping;
+
+import no.nav.foreldrepenger.common.util.TokenUtil;
+import no.nav.foreldrepenger.selvbetjening.http.ProtectedRestController;
+import no.nav.foreldrepenger.selvbetjening.oppslag.domain.PersonFrontend;
+import no.nav.foreldrepenger.selvbetjening.oppslag.domain.Søkerinfo;
 
 @ProtectedRestController(OppslagController.OPPSLAG_PATH)
 public class OppslagController {
@@ -35,12 +35,6 @@ public class OppslagController {
     public Søkerinfo søkerinfo() {
         LOG.trace("Level er {}", tokenUtil.getLevel());
         return oppslag.hentSøkerinfo();
-    }
-
-    @GetMapping("/ping")
-    @Unprotected
-    public String ping() {
-        return oppslag.ping();
     }
 
     @Override
