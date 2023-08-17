@@ -46,7 +46,7 @@ public class VedleggsHåndteringTjeneste {
         if (søknad.getVedlegg().isEmpty()) {
             return søknad;
         }
-        var nyReferanseMapping = new HashMap<MutableVedleggReferanse, MutableVedleggReferanse>();
+        var duplisertVedleggReferanseTilEksisterendeVedleggReferanseMapping = new HashMap<MutableVedleggReferanse, MutableVedleggReferanse>();
         var unikeVedlegg = new ArrayList<VedleggFrontend>();
         var alleVedleggMedInnhold = hentUnikeVedleggMedInnhold(søknad.getVedlegg());
 
@@ -54,19 +54,19 @@ public class VedleggsHåndteringTjeneste {
             var vedleggEksistererAllerede = unikeVedlegg.stream()
                     .filter(v -> Objects.equals(vedlegg.getInnsendingsType(), v.getInnsendingsType()))
                     .filter(v -> Objects.equals(vedlegg.getSkjemanummer(), v.getSkjemanummer()))
-                    .filter(v -> Arrays.equals(v.getContent(), vedlegg.getContent()))
+                    .filter(v -> Arrays.equals(vedlegg.getContent(), v.getContent()))
                     .findFirst();
 
             if (vedleggEksistererAllerede.isPresent()) {
-                nyReferanseMapping.put(vedlegg.getId(), vedleggEksistererAllerede.get().getId());
+                duplisertVedleggReferanseTilEksisterendeVedleggReferanseMapping.put(vedlegg.getId(), vedleggEksistererAllerede.get().getId());
             } else {
                 unikeVedlegg.add(vedlegg);
             }
         }
 
-        erstattAlleReferanserSomErDuplikater(søknad, nyReferanseMapping);
+        erstattAlleReferanserSomErDuplikater(søknad, duplisertVedleggReferanseTilEksisterendeVedleggReferanseMapping);
         erstattGammelVedleggslisteMedNyUtenDuplikater(søknad, unikeVedlegg);
-        LOG.info("Fjerner {} dupliserte av totalt {} mottatt.", alleVedleggMedInnhold.size() - unikeVedlegg.size(), alleVedleggMedInnhold.size());
+        LOG.info("Fjerner {} dupliserte vedlegg av totalt {} mottatt.", alleVedleggMedInnhold.size() - unikeVedlegg.size(), alleVedleggMedInnhold.size());
         return søknad;
     }
 
