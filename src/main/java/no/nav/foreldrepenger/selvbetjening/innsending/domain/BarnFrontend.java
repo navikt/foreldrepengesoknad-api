@@ -1,40 +1,38 @@
 package no.nav.foreldrepenger.selvbetjening.innsending.domain;
 
-import static com.fasterxml.jackson.annotation.JsonInclude.Include.NON_EMPTY;
-import static java.util.Collections.emptyList;
+import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.annotation.JsonInclude;
+import jakarta.validation.Valid;
+import jakarta.validation.constraints.Digits;
+import jakarta.validation.constraints.Size;
 
 import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 
-import jakarta.validation.Valid;
-import jakarta.validation.constraints.Digits;
-import jakarta.validation.constraints.Size;
-
-import com.fasterxml.jackson.annotation.JsonIgnore;
-import com.fasterxml.jackson.annotation.JsonInclude;
-import no.nav.foreldrepenger.common.domain.felles.VedleggReferanse;
+import static com.fasterxml.jackson.annotation.JsonInclude.Include.NON_EMPTY;
+import static java.util.Collections.emptyList;
 
 @JsonInclude(NON_EMPTY)
 public record BarnFrontend(@Valid @Size(max = 10) List<LocalDate> fødselsdatoer,
                            @Digits(integer = 2, fraction = 0) int antallBarn,
-                           @Valid @Size(max = 15) List<VedleggReferanse> terminbekreftelse,
+                           @Valid @Size(max = 15) List<MutableVedleggReferanse> terminbekreftelse,
                            LocalDate termindato,
                            LocalDate terminbekreftelseDato,
                            LocalDate adopsjonsdato,
-                           @Valid @Size(max = 15) List<VedleggReferanse> adopsjonsvedtak,
+                           @Valid @Size(max = 15) List<MutableVedleggReferanse> adopsjonsvedtak,
                            LocalDate ankomstdato,
                            boolean adopsjonAvEktefellesBarn,
                            boolean søkerAdopsjonAlene,
                            LocalDate foreldreansvarsdato,
-                           @Valid @Size(max = 15) List<VedleggReferanse> omsorgsovertakelse,
-                           @Valid @Size(max = 15) List<VedleggReferanse> dokumentasjonAvAleneomsorg) {
+                           @Valid @Size(max = 15) List<MutableVedleggReferanse> omsorgsovertakelse,
+                           @Valid @Size(max = 15) List<MutableVedleggReferanse> dokumentasjonAvAleneomsorg) {
 
-    public BarnFrontend(List<LocalDate> fødselsdatoer, int antallBarn, List<VedleggReferanse> terminbekreftelse, LocalDate termindato,
-                        LocalDate terminbekreftelseDato, LocalDate adopsjonsdato, List<VedleggReferanse> adopsjonsvedtak,
+    public BarnFrontend(List<LocalDate> fødselsdatoer, int antallBarn, List<MutableVedleggReferanse> terminbekreftelse, LocalDate termindato,
+                        LocalDate terminbekreftelseDato, LocalDate adopsjonsdato, List<MutableVedleggReferanse> adopsjonsvedtak,
                         LocalDate ankomstdato, boolean adopsjonAvEktefellesBarn, boolean søkerAdopsjonAlene,
-                        LocalDate foreldreansvarsdato, List<VedleggReferanse> omsorgsovertakelse, List<VedleggReferanse> dokumentasjonAvAleneomsorg) {
+                        LocalDate foreldreansvarsdato, List<MutableVedleggReferanse> omsorgsovertakelse, List<MutableVedleggReferanse> dokumentasjonAvAleneomsorg) {
         this.fødselsdatoer = fødselsdatoer;
         this.antallBarn = antallBarn;
         this.terminbekreftelse = Optional.ofNullable(terminbekreftelse).orElse(emptyList());
@@ -51,8 +49,8 @@ public record BarnFrontend(@Valid @Size(max = 10) List<LocalDate> fødselsdatoer
     }
 
     @JsonIgnore
-    public List<VedleggReferanse> getAlleVedlegg() {
-        List<VedleggReferanse> alleVedlegg = new ArrayList<>();
+    public List<MutableVedleggReferanse> getAlleVedlegg() {
+        List<MutableVedleggReferanse> alleVedlegg = new ArrayList<>();
         alleVedlegg.addAll(terminbekreftelse);
         alleVedlegg.addAll(omsorgsovertakelse);
         alleVedlegg.addAll(adopsjonsvedtak);

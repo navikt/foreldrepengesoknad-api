@@ -1,15 +1,6 @@
 package no.nav.foreldrepenger.selvbetjening.innsending.mapper;
 
-import static java.time.LocalDate.now;
-import static no.nav.foreldrepenger.common.util.StreamUtil.safeStream;
-import static no.nav.foreldrepenger.selvbetjening.util.DateUtil.erNyopprettet;
-import static org.springframework.util.ObjectUtils.isEmpty;
-
-import java.time.LocalDate;
-import java.util.List;
-
 import com.neovisionaries.i18n.CountryCode;
-
 import no.nav.foreldrepenger.common.domain.Fødselsnummer;
 import no.nav.foreldrepenger.common.domain.Orgnummer;
 import no.nav.foreldrepenger.common.domain.felles.DokumentType;
@@ -18,6 +9,7 @@ import no.nav.foreldrepenger.common.domain.felles.LukketPeriode;
 import no.nav.foreldrepenger.common.domain.felles.ProsentAndel;
 import no.nav.foreldrepenger.common.domain.felles.PåkrevdVedlegg;
 import no.nav.foreldrepenger.common.domain.felles.VedleggMetaData;
+import no.nav.foreldrepenger.common.domain.felles.VedleggReferanse;
 import no.nav.foreldrepenger.common.domain.felles.annenforelder.AnnenForelder;
 import no.nav.foreldrepenger.common.domain.felles.annenforelder.NorskForelder;
 import no.nav.foreldrepenger.common.domain.felles.annenforelder.UkjentForelder;
@@ -40,6 +32,7 @@ import no.nav.foreldrepenger.common.domain.felles.relasjontilbarn.RelasjonTilBar
 import no.nav.foreldrepenger.common.domain.felles.ÅpenPeriode;
 import no.nav.foreldrepenger.selvbetjening.innsending.domain.AnnenForelderFrontend;
 import no.nav.foreldrepenger.selvbetjening.innsending.domain.BarnFrontend;
+import no.nav.foreldrepenger.selvbetjening.innsending.domain.MutableVedleggReferanse;
 import no.nav.foreldrepenger.selvbetjening.innsending.domain.SøknadFrontend;
 import no.nav.foreldrepenger.selvbetjening.innsending.domain.UtenlandsoppholdPeriodeFrontend;
 import no.nav.foreldrepenger.selvbetjening.innsending.domain.VedleggFrontend;
@@ -49,19 +42,47 @@ import no.nav.foreldrepenger.selvbetjening.innsending.domain.arbeid.Frilansoppdr
 import no.nav.foreldrepenger.selvbetjening.innsending.domain.arbeid.SelvstendigNæringsdrivendeInformasjonFrontend;
 import no.nav.foreldrepenger.selvbetjening.innsending.domain.arbeid.TilknyttetPerson;
 
+import java.time.LocalDate;
+import java.util.List;
+
+import static java.time.LocalDate.now;
+import static no.nav.foreldrepenger.common.util.StreamUtil.safeStream;
+import static no.nav.foreldrepenger.selvbetjening.util.DateUtil.erNyopprettet;
+import static org.springframework.util.ObjectUtils.isEmpty;
+
 public final class CommonMapper {
 
     private CommonMapper() {
     }
 
+    public static List<no.nav.foreldrepenger.common.domain.felles.Vedlegg> tilVedlegg(List<VedleggFrontend> vedlegg) {
+        return safeStream(vedlegg)
+                .distinct()
+                .map(CommonMapper::tilVedlegg)
+                .toList();
+    }
+
+
     public static no.nav.foreldrepenger.common.domain.felles.Vedlegg tilVedlegg(VedleggFrontend vedlegg) {
         var vedleggMetadata = new VedleggMetaData(
-            vedlegg.getId(),
+            tilVedleggsreferanse(vedlegg.getId()),
             vedlegg.getInnsendingsType() != null ? InnsendingsType.valueOf(vedlegg.getInnsendingsType()) : null,
             vedlegg.getSkjemanummer() != null ? DokumentType.valueOf(vedlegg.getSkjemanummer()) : null,
             vedlegg.getBeskrivelse()
         );
         return new PåkrevdVedlegg(vedleggMetadata, vedlegg.getContent());
+    }
+
+
+    public static List<VedleggReferanse> tilVedleggsreferanse(List<MutableVedleggReferanse> vedleggsreferanser) {
+        return safeStream(vedleggsreferanser)
+                .distinct()
+                .map(CommonMapper::tilVedleggsreferanse)
+                .toList();
+    }
+
+    public static VedleggReferanse tilVedleggsreferanse(MutableVedleggReferanse vedleggsreferanse) {
+        return new VedleggReferanse(vedleggsreferanse.referanse());
     }
 
     static AnnenForelder tilAnnenForelder(SøknadFrontend søknad) {
@@ -119,7 +140,7 @@ public final class CommonMapper {
             barn.antallBarn(),
             barn.fødselsdatoer(),
             barn.termindato(),
-            barn.getAlleVedlegg()
+            tilVedleggsreferanse(barn.getAlleVedlegg())
         );
     }
 
@@ -128,7 +149,7 @@ public final class CommonMapper {
             barn.antallBarn(),
             barn.foreldreansvarsdato(),
             barn.fødselsdatoer(),
-            barn.getAlleVedlegg()
+            tilVedleggsreferanse(barn.getAlleVedlegg())
         );
     }
 
@@ -137,7 +158,7 @@ public final class CommonMapper {
             barn.antallBarn(),
             barn.termindato(),
             barn.terminbekreftelseDato(),
-            barn.getAlleVedlegg()
+            tilVedleggsreferanse(barn.getAlleVedlegg())
         );
     }
 
@@ -147,7 +168,7 @@ public final class CommonMapper {
             barn.adopsjonsdato(),
             barn.adopsjonAvEktefellesBarn(),
             barn.søkerAdopsjonAlene(),
-            barn.getAlleVedlegg(),
+            tilVedleggsreferanse(barn.getAlleVedlegg()),
             barn.ankomstdato(),
             barn.fødselsdatoer()
         );
@@ -180,7 +201,7 @@ public final class CommonMapper {
         return new AnnenOpptjening(
             annenInntekt.type() != null ? AnnenOpptjeningType.valueOf(annenInntekt.type()) : null,
             new ÅpenPeriode(annenInntekt.tidsperiode().fom(), annenInntekt.tidsperiode().tom()),
-            annenInntekt.vedlegg());
+            tilVedleggsreferanse(annenInntekt.vedlegg()));
     }
 
     private static List<UtenlandskArbeidsforhold> tilUtenlandsArbeidsforhold(List<AnnenInntektFrontend> andreInntekterSiste10Mnd) {
@@ -195,7 +216,7 @@ public final class CommonMapper {
         return new UtenlandskArbeidsforhold(
             annenInntekt.arbeidsgiverNavn(),
             new ÅpenPeriode(annenInntekt.tidsperiode().fom(), annenInntekt.tidsperiode().tom()),
-            annenInntekt.vedlegg(),
+            tilVedleggsreferanse(annenInntekt.vedlegg()),
             land(annenInntekt.land())
         );
     }
@@ -245,7 +266,7 @@ public final class CommonMapper {
             selvstendig.oppstartsdato(),
             beskrivelseEndring,
             selvstendig.stillingsprosent() != null ? ProsentAndel.valueOf(selvstendig.stillingsprosent()) : null,
-            selvstendig.vedlegg()
+            tilVedleggsreferanse(selvstendig.vedlegg())
         );
     }
 

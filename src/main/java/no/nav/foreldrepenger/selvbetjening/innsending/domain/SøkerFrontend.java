@@ -1,18 +1,17 @@
 package no.nav.foreldrepenger.selvbetjening.innsending.domain;
 
-import static java.util.Collections.emptyList;
-
-import java.util.List;
-import java.util.Optional;
-
 import jakarta.validation.Valid;
 import jakarta.validation.constraints.Size;
-
 import no.nav.foreldrepenger.common.domain.BrukerRolle;
 import no.nav.foreldrepenger.common.oppslag.dkif.Målform;
 import no.nav.foreldrepenger.selvbetjening.innsending.domain.arbeid.AnnenInntektFrontend;
 import no.nav.foreldrepenger.selvbetjening.innsending.domain.arbeid.FrilansInformasjonFrontend;
 import no.nav.foreldrepenger.selvbetjening.innsending.domain.arbeid.SelvstendigNæringsdrivendeInformasjonFrontend;
+
+import java.util.List;
+import java.util.Optional;
+
+import static java.util.Collections.emptyList;
 
 public record SøkerFrontend(BrukerRolle rolle,
                             Målform språkkode,

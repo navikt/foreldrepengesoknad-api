@@ -5,7 +5,6 @@ import static org.assertj.core.api.Assertions.assertThat;
 
 import java.io.IOException;
 
-import no.nav.foreldrepenger.common.domain.felles.VedleggReferanse;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -16,6 +15,7 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 
 import no.nav.foreldrepenger.selvbetjening.config.JacksonConfiguration;
 import no.nav.foreldrepenger.selvbetjening.innsending.domain.EttersendingFrontend;
+import no.nav.foreldrepenger.selvbetjening.innsending.domain.MutableVedleggReferanse;
 
 @ExtendWith(SpringExtension.class)
 @ContextConfiguration(classes = JacksonConfiguration.class)
@@ -32,7 +32,7 @@ class EttersendelseFrontendDeseraliseringTest {
         assertThat(ettersendelse.saksnummer().value()).isEqualTo("352003201");
         assertThat(ettersendelse.vedlegg()).hasSize(1);
         var vedlegg = ettersendelse.vedlegg().get(0);
-        assertThat(vedlegg.getId()).isEqualTo(new VedleggReferanse("V090740687265315217194125674862219730"));
+        assertThat(vedlegg.getId()).isEqualTo(new MutableVedleggReferanse("V090740687265315217194125674862219730"));
         assertThat(vedlegg.getSkjemanummer()).isEqualTo("I000044");
         assertThat(vedlegg.getContent()).isNull();
         assertThat(vedlegg.getInnsendingsType()).isNull();

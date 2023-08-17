@@ -18,6 +18,7 @@ import no.nav.foreldrepenger.common.domain.felles.relasjontilbarn.FremtidigFøds
 import no.nav.foreldrepenger.common.oppslag.dkif.Målform;
 import no.nav.foreldrepenger.selvbetjening.config.JacksonConfiguration;
 import no.nav.foreldrepenger.selvbetjening.innsending.InnsendingConnection;
+import no.nav.foreldrepenger.selvbetjening.innsending.VedleggsHåndteringTjeneste;
 import no.nav.foreldrepenger.selvbetjening.innsending.domain.EngangsstønadFrontend;
 import no.nav.foreldrepenger.selvbetjening.innsending.domain.SøknadFrontend;
 import no.nav.foreldrepenger.selvbetjening.vedlegg.Image2PDFConverter;
@@ -27,7 +28,7 @@ import no.nav.foreldrepenger.selvbetjening.vedlegg.Image2PDFConverter;
 @ContextConfiguration(classes = JacksonConfiguration.class)
 class EngangstønadTilDtoMapperTest {
 
-    private final InnsendingConnection connection = new InnsendingConnection(null, null, new Image2PDFConverter());
+    private final InnsendingConnection connection = new InnsendingConnection(null, null, new VedleggsHåndteringTjeneste(new Image2PDFConverter()));
 
     @Autowired
     private ObjectMapper mapper;

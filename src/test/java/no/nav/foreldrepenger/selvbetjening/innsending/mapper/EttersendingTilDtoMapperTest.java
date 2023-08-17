@@ -18,6 +18,7 @@ import no.nav.foreldrepenger.common.domain.felles.DokumentType;
 import no.nav.foreldrepenger.common.domain.felles.EttersendingsType;
 import no.nav.foreldrepenger.selvbetjening.config.JacksonConfiguration;
 import no.nav.foreldrepenger.selvbetjening.innsending.InnsendingConnection;
+import no.nav.foreldrepenger.selvbetjening.innsending.VedleggsHåndteringTjeneste;
 import no.nav.foreldrepenger.selvbetjening.innsending.domain.EttersendingFrontend;
 import no.nav.foreldrepenger.selvbetjening.vedlegg.Image2PDFConverter;
 
@@ -26,7 +27,7 @@ import no.nav.foreldrepenger.selvbetjening.vedlegg.Image2PDFConverter;
 @ContextConfiguration(classes = JacksonConfiguration.class)
 class EttersendingTilDtoMapperTest {
 
-    private final InnsendingConnection connection = new InnsendingConnection(null, null, new Image2PDFConverter());
+    private final InnsendingConnection connection = new InnsendingConnection(null, null, new VedleggsHåndteringTjeneste(new Image2PDFConverter()));
 
     @Autowired
     private ObjectMapper mapper;

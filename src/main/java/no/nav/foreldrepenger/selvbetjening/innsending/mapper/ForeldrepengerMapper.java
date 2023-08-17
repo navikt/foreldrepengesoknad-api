@@ -1,14 +1,5 @@
 package no.nav.foreldrepenger.selvbetjening.innsending.mapper;
 
-import static no.nav.foreldrepenger.selvbetjening.innsending.mapper.CommonMapper.tilAnnenForelder;
-import static no.nav.foreldrepenger.selvbetjening.innsending.mapper.CommonMapper.tilMedlemskap;
-import static no.nav.foreldrepenger.selvbetjening.innsending.mapper.CommonMapper.tilOpptjening;
-import static no.nav.foreldrepenger.selvbetjening.innsending.mapper.CommonMapper.tilRelasjonTilBarn;
-
-import java.time.LocalDate;
-import java.util.ArrayList;
-import java.util.List;
-
 import no.nav.foreldrepenger.common.domain.Søker;
 import no.nav.foreldrepenger.common.domain.Søknad;
 import no.nav.foreldrepenger.common.domain.felles.ProsentAndel;
@@ -32,6 +23,16 @@ import no.nav.foreldrepenger.common.domain.foreldrepenger.fordeling.UttaksPeriod
 import no.nav.foreldrepenger.selvbetjening.innsending.domain.ForeldrepengesøknadFrontend;
 import no.nav.foreldrepenger.selvbetjening.innsending.domain.UttaksplanPeriode;
 
+import java.time.LocalDate;
+import java.util.List;
+
+import static no.nav.foreldrepenger.selvbetjening.innsending.mapper.CommonMapper.tilAnnenForelder;
+import static no.nav.foreldrepenger.selvbetjening.innsending.mapper.CommonMapper.tilMedlemskap;
+import static no.nav.foreldrepenger.selvbetjening.innsending.mapper.CommonMapper.tilOpptjening;
+import static no.nav.foreldrepenger.selvbetjening.innsending.mapper.CommonMapper.tilRelasjonTilBarn;
+import static no.nav.foreldrepenger.selvbetjening.innsending.mapper.CommonMapper.tilVedlegg;
+import static no.nav.foreldrepenger.selvbetjening.innsending.mapper.CommonMapper.tilVedleggsreferanse;
+
 final class ForeldrepengerMapper {
 
     private ForeldrepengerMapper() {
@@ -44,7 +45,7 @@ final class ForeldrepengerMapper {
                 tilSøker(foreldrepengesøknad),
                 tilYtelse(foreldrepengesøknad),
                 foreldrepengesøknad.getTilleggsopplysninger(),
-                new ArrayList<>(),  // Settes av InnsendingConnection etter logging
+                tilVedlegg(foreldrepengesøknad.getVedlegg()),
                 foreldrepengesøknad.getSaksnummer());
         }
         return new Søknad(
@@ -52,7 +53,7 @@ final class ForeldrepengerMapper {
             tilSøker(foreldrepengesøknad),
             tilYtelse(foreldrepengesøknad),
             foreldrepengesøknad.getTilleggsopplysninger(),
-            new ArrayList<>() // Settes av InnsendingConnection etter logging
+            tilVedlegg(foreldrepengesøknad.getVedlegg())
         );
     }
 
@@ -121,7 +122,7 @@ final class ForeldrepengerMapper {
             u.tidsperiode().tom(),
             u.årsak() != null ? Overføringsårsak.valueOf(u.årsak()) : null,
             StønadskontoType.valueSafelyOf(u.konto()),
-            u.vedlegg()
+            tilVedleggsreferanse(u.vedlegg())
         );
     }
 
@@ -132,7 +133,7 @@ final class ForeldrepengerMapper {
             u.erArbeidstaker(),
             UtsettelsesÅrsak.valueOf(u.årsak()),
             u.morsAktivitetIPerioden() != null ? MorsAktivitet.valueOf(u.morsAktivitetIPerioden()) : null,
-            u.vedlegg()
+            tilVedleggsreferanse(u.vedlegg())
         );
     }
 
@@ -143,7 +144,7 @@ final class ForeldrepengerMapper {
             u.erArbeidstaker(),
             UtsettelsesÅrsak.valueOf(u.årsak()),
             u.morsAktivitetIPerioden() != null ? MorsAktivitet.valueOf(u.morsAktivitetIPerioden()) : null,
-            u.vedlegg()
+            tilVedleggsreferanse(u.vedlegg())
         );
     }
 
@@ -152,7 +153,7 @@ final class ForeldrepengerMapper {
             u.tidsperiode().fom(),
             u.tidsperiode().tom(),
             u.årsak() != null ? Oppholdsårsak.valueOf(u.årsak()) : null,
-            u.vedlegg()
+            tilVedleggsreferanse(u.vedlegg())
         );
     }
 
@@ -160,7 +161,7 @@ final class ForeldrepengerMapper {
         return new UttaksPeriode(
             u.tidsperiode().fom(),
             u.tidsperiode().tom(),
-            u.vedlegg(),
+            tilVedleggsreferanse(u.vedlegg()),
             StønadskontoType.valueSafelyOf(u.konto()),
             u.ønskerSamtidigUttak(),
             u.morsAktivitetIPerioden() != null ? MorsAktivitet.valueOf(u.morsAktivitetIPerioden()) : null,
@@ -174,7 +175,7 @@ final class ForeldrepengerMapper {
         return new GradertUttaksPeriode(
             u.tidsperiode().fom(),
             u.tidsperiode().tom(),
-            u.vedlegg(),
+            tilVedleggsreferanse(u.vedlegg()),
             StønadskontoType.valueSafelyOf(u.konto()),
             u.ønskerSamtidigUttak(),
             u.morsAktivitetIPerioden() != null ? MorsAktivitet.valueOf(u.morsAktivitetIPerioden()) : null,

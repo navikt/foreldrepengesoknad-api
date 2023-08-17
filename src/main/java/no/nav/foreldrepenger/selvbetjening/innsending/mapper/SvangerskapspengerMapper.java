@@ -1,14 +1,5 @@
 package no.nav.foreldrepenger.selvbetjening.innsending.mapper;
 
-import static no.nav.foreldrepenger.selvbetjening.innsending.mapper.CommonMapper.tilMedlemskap;
-import static no.nav.foreldrepenger.selvbetjening.innsending.mapper.CommonMapper.tilOpptjening;
-
-import java.time.LocalDate;
-import java.util.ArrayList;
-import java.util.List;
-
-import org.springframework.util.CollectionUtils;
-
 import no.nav.foreldrepenger.common.domain.BrukerRolle;
 import no.nav.foreldrepenger.common.domain.Fødselsnummer;
 import no.nav.foreldrepenger.common.domain.Orgnummer;
@@ -26,6 +17,15 @@ import no.nav.foreldrepenger.common.domain.svangerskapspenger.tilrettelegging.ar
 import no.nav.foreldrepenger.common.domain.svangerskapspenger.tilrettelegging.arbeidsforhold.SelvstendigNæringsdrivende;
 import no.nav.foreldrepenger.common.domain.svangerskapspenger.tilrettelegging.arbeidsforhold.Virksomhet;
 import no.nav.foreldrepenger.selvbetjening.innsending.domain.SvangerskapspengesøknadFrontend;
+import org.springframework.util.CollectionUtils;
+
+import java.time.LocalDate;
+import java.util.List;
+
+import static no.nav.foreldrepenger.selvbetjening.innsending.mapper.CommonMapper.tilMedlemskap;
+import static no.nav.foreldrepenger.selvbetjening.innsending.mapper.CommonMapper.tilOpptjening;
+import static no.nav.foreldrepenger.selvbetjening.innsending.mapper.CommonMapper.tilVedlegg;
+import static no.nav.foreldrepenger.selvbetjening.innsending.mapper.CommonMapper.tilVedleggsreferanse;
 
 final class SvangerskapspengerMapper {
 
@@ -38,7 +38,7 @@ final class SvangerskapspengerMapper {
             tilSøker(s),
             tilYtelse(s),
             s.getTilleggsopplysninger(),
-            new ArrayList<>() // Settes av InnsendingConnection etter logging
+            tilVedlegg(s.getVedlegg())
         );
     }
 
@@ -87,7 +87,7 @@ final class SvangerskapspengerMapper {
             tilArbeidsforhold(tilrettelegging.arbeidsforhold()),
             tilrettelegging.behovForTilretteleggingFom(),
             tilrettelegging.slutteArbeidFom(),
-            tilrettelegging.vedlegg()
+            tilVedleggsreferanse(tilrettelegging.vedlegg())
         );
     }
 
@@ -97,7 +97,7 @@ final class SvangerskapspengerMapper {
             tilrettelegging.behovForTilretteleggingFom(),
             tilrettelegging.tilrettelagtArbeidFom(),
             tilrettelegging.stillingsprosent() != null ? ProsentAndel.valueOf(tilrettelegging.stillingsprosent()) : null,
-            tilrettelegging.vedlegg()
+            tilVedleggsreferanse(tilrettelegging.vedlegg())
         );
     }
 
@@ -106,7 +106,7 @@ final class SvangerskapspengerMapper {
             tilArbeidsforhold(tilrettelegging.arbeidsforhold()),
             tilrettelegging.behovForTilretteleggingFom(),
             tilrettelegging.tilrettelagtArbeidFom(),
-            tilrettelegging.vedlegg()
+            tilVedleggsreferanse(tilrettelegging.vedlegg())
         );
     }
 
