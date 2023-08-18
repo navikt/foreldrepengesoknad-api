@@ -46,6 +46,7 @@ public class VedleggsHåndteringTjeneste {
         if (søknad.getVedlegg().isEmpty()) {
             return søknad;
         }
+        long start = System.currentTimeMillis();
         var duplisertVedleggReferanseTilEksisterendeVedleggReferanseMapping = new HashMap<MutableVedleggReferanse, MutableVedleggReferanse>();
         var unikeVedlegg = new ArrayList<VedleggFrontend>();
         var alleVedleggMedInnhold = hentUnikeVedleggMedInnhold(søknad.getVedlegg());
@@ -66,7 +67,8 @@ public class VedleggsHåndteringTjeneste {
 
         erstattAlleReferanserSomErDuplikater(søknad, duplisertVedleggReferanseTilEksisterendeVedleggReferanseMapping);
         erstattGammelVedleggslisteMedNyUtenDuplikater(søknad, unikeVedlegg);
-        LOG.info("Fjerner {} dupliserte vedlegg av totalt {} mottatt.", alleVedleggMedInnhold.size() - unikeVedlegg.size(), alleVedleggMedInnhold.size());
+        long finish = System.currentTimeMillis();
+        LOG.info("Fjerner {} dupliserte vedlegg av totalt {} mottatt ({}ms).", alleVedleggMedInnhold.size() - unikeVedlegg.size(), alleVedleggMedInnhold.size(), finish - start);
         return søknad;
     }
 
