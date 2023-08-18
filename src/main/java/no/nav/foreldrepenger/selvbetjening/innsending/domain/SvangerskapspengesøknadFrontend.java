@@ -33,7 +33,7 @@ public final class SvangerskapspengesøknadFrontend extends SøknadFrontend {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
         if (!super.equals(o)) return false;
-        SvangerskapspengesøknadFrontend that = (SvangerskapspengesøknadFrontend) o;
+        var that = (SvangerskapspengesøknadFrontend) o;
         return Objects.equals(tilrettelegging, that.tilrettelegging);
     }
 

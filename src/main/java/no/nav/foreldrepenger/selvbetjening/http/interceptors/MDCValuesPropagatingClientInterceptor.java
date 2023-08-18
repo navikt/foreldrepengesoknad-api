@@ -26,8 +26,8 @@ public class MDCValuesPropagatingClientInterceptor implements ClientHttpRequestI
     }
 
     private static void propagateIfSet(HttpRequest request, String... keys) {
-        for (String key : keys) {
-            String value = MDC.get(key);
+        for (var key : keys) {
+            var value = MDC.get(key);
             if (value != null) {
                 request.getHeaders().add(key, value);
             }

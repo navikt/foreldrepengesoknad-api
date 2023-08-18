@@ -93,7 +93,7 @@ public class Attachment {
         if (getClass() != obj.getClass()) {
             return false;
         }
-        Attachment other = Attachment.class.cast(obj);
+        var other = Attachment.class.cast(obj);
         return Objects.equals(getContentType(), other.getContentType())
                 && Objects.equals(getSize(), other.getSize())
                 && Objects.equals(getFilename(), other.getFilename())

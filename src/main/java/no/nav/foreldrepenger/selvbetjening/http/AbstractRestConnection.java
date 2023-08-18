@@ -28,7 +28,7 @@ public abstract class AbstractRestConnection {
 
     public <T> T getForObject(URI uri, Class<T> responseType, boolean throwOnNotFound) {
         try {
-            T respons = operations.getForObject(uri, responseType);
+            var respons = operations.getForObject(uri, responseType);
             if (respons != null) {
                 LOG.trace(CONFIDENTIAL, "Respons: {}", respons);
             }

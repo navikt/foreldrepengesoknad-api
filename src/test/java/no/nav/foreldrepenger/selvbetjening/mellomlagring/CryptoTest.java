@@ -12,20 +12,20 @@ class CryptoTest {
 
     @Test
     void encryptDecryptAndMatch() {
-        String plainText = "crypto ftw!";
-        Krypto crypto = new Krypto("el passo phraso som er fryktelig lang OG kronglete og det er jo en god ting",
+        var plainText = "crypto ftw!";
+        var crypto = new Krypto("el passo phraso som er fryktelig lang OG kronglete og det er jo en god ting",
                 "12345678910");
-        String encrypted = crypto.encrypt(plainText);
-        String decrypted = crypto.decrypt(encrypted);
+        var encrypted = crypto.encrypt(plainText);
+        var decrypted = crypto.decrypt(encrypted);
         assertEquals(plainText, decrypted);
     }
 
     @Test
     void encryptedDiffersFromPlaintext() {
-        String plainText = "crypto ftw!";
-        Krypto crypto = new Krypto("denne er litt kortere", "12345678910");
-        String encrypted = crypto.encrypt(plainText);
-        String decoded = new String(Base64.getDecoder().decode(encrypted));
+        var plainText = "crypto ftw!";
+        var crypto = new Krypto("denne er litt kortere", "12345678910");
+        var encrypted = crypto.encrypt(plainText);
+        var decoded = new String(Base64.getDecoder().decode(encrypted));
         assertNotEquals(plainText, decoded);
     }
 

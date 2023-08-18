@@ -118,7 +118,7 @@ public abstract sealed class SøknadFrontend permits EngangsstønadFrontend, For
     public boolean equals(Object o) {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
-        SøknadFrontend that = (SøknadFrontend) o;
+        var that = (SøknadFrontend) o;
         return Objects.equals(opprettet, that.opprettet) && Objects.equals(type, that.type) && Objects.equals(saksnummer, that.saksnummer) && Objects.equals(søker, that.søker) && Objects.equals(barn, that.barn) && Objects.equals(annenForelder, that.annenForelder) && Objects.equals(informasjonOmUtenlandsopphold, that.informasjonOmUtenlandsopphold) && Objects.equals(situasjon, that.situasjon) && Objects.equals(erEndringssøknad, that.erEndringssøknad) && Objects.equals(tilleggsopplysninger, that.tilleggsopplysninger) && Objects.equals(vedlegg, that.vedlegg);
     }
 

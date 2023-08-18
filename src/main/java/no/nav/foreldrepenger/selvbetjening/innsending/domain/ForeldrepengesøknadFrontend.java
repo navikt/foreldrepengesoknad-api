@@ -62,7 +62,7 @@ public final class ForeldrepengesøknadFrontend extends SøknadFrontend {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
         if (!super.equals(o)) return false;
-        ForeldrepengesøknadFrontend that = (ForeldrepengesøknadFrontend) o;
+        var that = (ForeldrepengesøknadFrontend) o;
         return Objects.equals(dekningsgrad, that.dekningsgrad) && Objects.equals(uttaksplan, that.uttaksplan) && Objects.equals(ønskerJustertUttakVedFødsel, that.ønskerJustertUttakVedFødsel);
     }
 

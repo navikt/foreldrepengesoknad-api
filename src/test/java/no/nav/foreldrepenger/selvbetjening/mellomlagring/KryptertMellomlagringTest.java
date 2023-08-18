@@ -70,13 +70,12 @@ class KryptertMellomlagringTest {
 
     private static byte[] generatePdf() {
 
-        try (PDDocument document = new PDDocument();
-             ByteArrayOutputStream baos = new ByteArrayOutputStream()) {
+        try (var document = new PDDocument(); var baos = new ByteArrayOutputStream()) {
 
-            PDPage page = new PDPage();
+            var page = new PDPage();
             document.addPage(page);
 
-            PDPageContentStream contentStream = new PDPageContentStream(document, page);
+            var contentStream = new PDPageContentStream(document, page);
 
             contentStream.setFont(PDType1Font.COURIER, 12);
             contentStream.beginText();

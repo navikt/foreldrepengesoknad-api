@@ -29,7 +29,7 @@ public class HistorikkConnection extends AbstractRestConnection {
 
     private List<HistorikkInnslag> hentHistorikk(URI uri) {
         LOG.trace("Henter historikk fra {}", uri);
-        List<HistorikkInnslag> historikk = Optional
+        var historikk = Optional
                 .ofNullable(getForObject(uri, HistorikkInnslag[].class))
                 .map(Arrays::asList)
                 .orElse(emptyList());
@@ -43,7 +43,7 @@ public class HistorikkConnection extends AbstractRestConnection {
 
     private List<String> hentManglendeVedlegg(URI uri) {
         LOG.trace("Henter manglende vedlegg fra {}", uri);
-        List<String> vedleggIds = Optional
+        var vedleggIds = Optional
                 .ofNullable(getForObject(uri, String[].class))
                 .map(Arrays::asList)
                 .orElse(emptyList());

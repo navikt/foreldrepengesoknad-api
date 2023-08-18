@@ -26,7 +26,7 @@ class ImageScaler {
     }
 
     static void pdfFraBilde(PDDocument doc, byte[] image) {
-        PDPage pdPage = new PDPage(PDRectangle.A4);
+        var pdPage = new PDPage(PDRectangle.A4);
         doc.addPage(pdPage);
         try (var pdPageContentStream = new PDPageContentStream(doc, pdPage)) {
             var bufferedImage = ImageIO.read(new ByteArrayInputStream(image));
@@ -83,7 +83,7 @@ class ImageScaler {
         }
 
         private Bildedimensjon roterOgSkalerNed(float pageSizeWidth, float pageSizeHeight) {
-            boolean skalRoteres = width > height && width > pageSizeWidth;
+            var skalRoteres = width > height && width > pageSizeWidth;
             if (skalRoteres) {
                 return new Bildedimensjon(height, width, true).skalertDimensjon(pageSizeWidth, pageSizeHeight);
             } else {
@@ -92,15 +92,15 @@ class ImageScaler {
         }
 
         private Bildedimensjon skalertDimensjon(float pageSizeWidth, float pageSizeHeight) {
-            float newWidth = this.width;
-            float newHeight = this.height;
+            var newWidth = this.width;
+            var newHeight = this.height;
             Predicate<Bildedimensjon> behovForNedskaleringPortrett = bd -> !bd.rotert && (pageSizeWidth < bd.width || pageSizeHeight < bd.height);
             Predicate<Bildedimensjon> behovForNedskaleringLandskap = bd -> bd.rotert && (pageSizeWidth < bd.height || pageSizeHeight < bd.width);
             if (behovForNedskaleringLandskap.or(behovForNedskaleringPortrett).test(this)) {
                 // Skaler og ivareta ratio
-                float widthRatio = pageSizeWidth / this.width;
-                float heightRatio = pageSizeHeight / this.height;
-                float scale = Math.min(widthRatio, heightRatio);
+                var widthRatio = pageSizeWidth / this.width;
+                var heightRatio = pageSizeHeight / this.height;
+                var scale = Math.min(widthRatio, heightRatio);
                 newWidth *= scale;
                 newHeight *= scale;
             }

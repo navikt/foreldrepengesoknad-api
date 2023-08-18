@@ -90,7 +90,7 @@ public class InnsendingConnection extends AbstractRestConnection {
     }
 
     private VedleggFrontend convert(VedleggFrontend v) {
-        VedleggFrontend vedlegg = v.kopi();
+        var vedlegg = v.kopi();
         if ((v.getContent() != null) && (v.getContent().length > 0)) {
             vedlegg.setContent(converter.convert(v.getContent()));
         }

@@ -21,7 +21,7 @@ public class TimingAndLoggingClientHttpRequestInterceptor implements ClientHttpR
     public ClientHttpResponse intercept(HttpRequest request, byte[] body, ClientHttpRequestExecution execution)
             throws IOException {
         var start = Instant.now();
-        ClientHttpResponse respons = execution.execute(request, body);
+        var respons = execution.execute(request, body);
         var finish = Instant.now();
         var ms = Duration.between(start, finish).toMillis();
         log(request, respons.getStatusCode(), ms);

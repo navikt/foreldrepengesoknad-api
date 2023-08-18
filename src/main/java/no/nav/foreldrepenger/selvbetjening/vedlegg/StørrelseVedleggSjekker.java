@@ -47,7 +47,7 @@ public class StørrelseVedleggSjekker implements VedleggSjekker {
 
     private void sjekkTotalStørrelse(VedleggFrontend... vedlegg) {
         LOG.info("Sjekker total størrelse for {} vedlegg", vedlegg.length);
-        long total = safeStream(vedlegg)
+        var total = safeStream(vedlegg)
             .map(VedleggFrontend::getContent)
             .filter(Objects::nonNull)
             .mapToLong(v -> v.length)
@@ -69,7 +69,7 @@ public class StørrelseVedleggSjekker implements VedleggSjekker {
 
     private void sjekkTotalStørrelse(Attachment... vedlegg) {
         LOG.info("Sjekker total størrelse for {} vedlegg", vedlegg.length);
-        long total = safeStream(vedlegg)
+        var total = safeStream(vedlegg)
             .map(v -> v.bytes)
             .mapToLong(v -> v.length)
             .sum();

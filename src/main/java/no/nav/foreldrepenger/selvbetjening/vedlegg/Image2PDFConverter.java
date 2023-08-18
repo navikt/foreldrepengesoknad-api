@@ -56,7 +56,7 @@ public class Image2PDFConverter {
     }
 
     public byte[] convert(byte[] bytes) {
-        MediaType mediaType = mediaType(bytes);
+        var mediaType = mediaType(bytes);
         if (APPLICATION_PDF.equals(mediaType)) {
             return bytes;
         }
@@ -81,7 +81,7 @@ public class Image2PDFConverter {
     }
 
     private boolean validImageTypes(MediaType mediaType) {
-        boolean isValid = supportedMediaTypes.contains(mediaType);
+        var isValid = supportedMediaTypes.contains(mediaType);
         LOG.info("{} konvertere bytes av type {} til PDF", isValid ? "Vil" : "Vil ikke", mediaType);
         return isValid;
     }

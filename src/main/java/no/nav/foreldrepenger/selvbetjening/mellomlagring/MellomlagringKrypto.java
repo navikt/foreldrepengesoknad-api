@@ -30,8 +30,8 @@ public class MellomlagringKrypto {
     }
 
     public String hexBinary(byte[] data) {
-        StringBuilder r = new StringBuilder(data.length * 2);
-        for (byte b : data) {
+        var r = new StringBuilder(data.length * 2);
+        for (var b : data) {
             r.append(HEXCODE[(b >> 4) & 0xF]);
             r.append(HEXCODE[(b & 0xF)]);
         }

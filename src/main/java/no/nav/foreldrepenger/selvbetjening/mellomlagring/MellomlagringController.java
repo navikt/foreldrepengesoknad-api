@@ -62,7 +62,7 @@ public class MellomlagringController {
 
     @PostMapping(path = "/vedlegg", consumes = MULTIPART_FORM_DATA_VALUE)
     public ResponseEntity<String> lagreVedlegg(@Valid @RequestPart("vedlegg") MultipartFile attachmentMultipartFile) {
-        Attachment attachment = Attachment.of(attachmentMultipartFile);
+        var attachment = Attachment.of(attachmentMultipartFile);
         mellomlagring.lagreKryptertVedlegg(attachment);
         return created(attachment.uri()).body(attachment.uuid);
     }

@@ -50,7 +50,7 @@ public class Krypto {
 
     private Cipher cipher(int mode) throws NoSuchAlgorithmException, NoSuchPaddingException, InvalidKeyException,
             InvalidAlgorithmParameterException {
-        Cipher cipher = Cipher.getInstance(ALGO);
+        var cipher = Cipher.getInstance(ALGO);
         cipher.init(mode, key, new GCMParameterSpec(128, iv.getBytes()));
         return cipher;
     }

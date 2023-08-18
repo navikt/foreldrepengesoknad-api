@@ -31,7 +31,7 @@ public class PdfGeneratorTjeneste implements PdfGenerator {
     }
 
     private TilbakebetalingUttalelseDto fra(TilbakebetalingUttalelse uttalelse) {
-        Søkerinfo person = oppslagTjeneste.hentSøkerinfo();
+        var person = oppslagTjeneste.hentSøkerinfo();
         return new TilbakebetalingUttalelseDto(fulltnavn(person.søker()),
             person.søker().fnr(),
             uttalelse.saksnummer(),

@@ -29,7 +29,7 @@ public class MinidialogConnection extends AbstractRestConnection {
 
     private List<MinidialogInnslag> get(URI uri) {
         LOG.info("Henter minidialoger fra {}", uri);
-        List<MinidialogInnslag> dialoger = Optional.ofNullable(getForObject(uri, MinidialogInnslag[].class)).map(Arrays::asList).orElse(emptyList());
+        var dialoger = Optional.ofNullable(getForObject(uri, MinidialogInnslag[].class)).map(Arrays::asList).orElse(emptyList());
         LOG.trace("Hentet minidialoger {} fra {}", dialoger, uri);
         return dialoger;
     }

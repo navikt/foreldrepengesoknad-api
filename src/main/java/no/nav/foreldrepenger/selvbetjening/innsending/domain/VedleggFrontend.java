@@ -88,7 +88,7 @@ public class VedleggFrontend {
     public boolean equals(Object o) {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
-        VedleggFrontend that = (VedleggFrontend) o;
+        var that = (VedleggFrontend) o;
         return Objects.equals(id, that.id);
     }
 
