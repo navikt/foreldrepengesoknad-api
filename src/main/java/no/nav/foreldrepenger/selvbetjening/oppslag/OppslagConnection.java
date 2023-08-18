@@ -1,7 +1,6 @@
 package no.nav.foreldrepenger.selvbetjening.oppslag;
 
 import static java.util.Collections.emptyList;
-import static no.nav.boot.conditionals.EnvUtil.CONFIDENTIAL;
 
 import java.util.Arrays;
 import java.util.List;
@@ -25,9 +24,7 @@ public class OppslagConnection extends AbstractRestConnection {
     }
 
     public Person hentPerson() {
-        var person = getForObject(config.personURI(), Person.class);
-        LOG.info(CONFIDENTIAL, "Fikk person {}", person);
-        return person;
+        return getForObject(config.personURI(), Person.class);
 
     }
 

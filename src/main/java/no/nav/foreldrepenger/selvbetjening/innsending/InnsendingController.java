@@ -1,17 +1,18 @@
 package no.nav.foreldrepenger.selvbetjening.innsending;
 
-import jakarta.validation.Valid;
-import no.nav.foreldrepenger.common.domain.Kvittering;
-import no.nav.foreldrepenger.selvbetjening.http.ProtectedRestController;
-import no.nav.foreldrepenger.selvbetjening.innsending.domain.EttersendingFrontend;
-import no.nav.foreldrepenger.selvbetjening.innsending.domain.SøknadFrontend;
+import static no.nav.boot.conditionals.EnvUtil.CONFIDENTIAL;
+import static no.nav.foreldrepenger.selvbetjening.util.StringUtils.escapeHtml;
+
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 
-import static no.nav.boot.conditionals.EnvUtil.CONFIDENTIAL;
-import static no.nav.foreldrepenger.selvbetjening.util.StringUtils.escapeHtml;
+import jakarta.validation.Valid;
+import no.nav.foreldrepenger.common.domain.Kvittering;
+import no.nav.foreldrepenger.selvbetjening.http.ProtectedRestController;
+import no.nav.foreldrepenger.selvbetjening.innsending.domain.EttersendingFrontend;
+import no.nav.foreldrepenger.selvbetjening.innsending.domain.SøknadFrontend;
 
 @ProtectedRestController(InnsendingController.INNSENDING_CONTROLLER_PATH)
 public class InnsendingController {
@@ -29,7 +30,6 @@ public class InnsendingController {
     public Kvittering sendInn(@Valid @RequestBody SøknadFrontend søknad) {
         LOG.info("Mottok søknad med målform {} og {} vedlegg", søknad.getSøker().språkkode(), søknad.getVedlegg().size());
         if (LOG.isInfoEnabled() && LOG.isInfoEnabled(CONFIDENTIAL)) {
-            LOG.info(CONFIDENTIAL, "{}", escapeHtml(søknad));
             LOG.info(CONFIDENTIAL, "Søker er {}", escapeHtml(søknad.getSøker()));
         }
         return innsending.sendInn(søknad);
@@ -38,18 +38,12 @@ public class InnsendingController {
     @PostMapping("/ettersend")
     public Kvittering sendInn(@Valid @RequestBody EttersendingFrontend ettersending) {
         LOG.info("Mottok ettersending av {} vedlegg", ettersending.vedlegg().size());
-        if (LOG.isInfoEnabled() && LOG.isInfoEnabled(CONFIDENTIAL)) {
-            LOG.info(CONFIDENTIAL, "{}", escapeHtml(ettersending));
-        }
         return innsending.ettersend(ettersending);
     }
 
     @PostMapping("/endre")
     public Kvittering endre(@Valid @RequestBody SøknadFrontend søknad) {
         LOG.info("Mottok endringssøknad med {} vedlegg", søknad.getVedlegg().size());
-        if (LOG.isInfoEnabled() && LOG.isInfoEnabled(CONFIDENTIAL)) {
-            LOG.info(CONFIDENTIAL, "{}", escapeHtml(søknad));
-        }
         return innsending.endre(søknad);
     }
 
