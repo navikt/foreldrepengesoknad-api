@@ -1,9 +1,9 @@
 package no.nav.foreldrepenger.selvbetjening.innsending.mapper;
 
-import java.util.ArrayList;
-
 import no.nav.foreldrepenger.common.domain.felles.EttersendingsType;
 import no.nav.foreldrepenger.selvbetjening.innsending.domain.EttersendingFrontend;
+
+import static no.nav.foreldrepenger.selvbetjening.innsending.mapper.CommonMapper.tilVedlegg;
 
 public final class EttersendingMapper {
 
@@ -14,7 +14,7 @@ public final class EttersendingMapper {
         return new no.nav.foreldrepenger.common.domain.felles.Ettersending(
             ettersending.saksnummer(),
             EttersendingsType.valueOf(ettersending.type().toUpperCase()),
-            new ArrayList<>(),
+            tilVedlegg(ettersending.vedlegg()),
             ettersending.dialogId());
     }
 }

@@ -1,20 +1,7 @@
 package no.nav.foreldrepenger.selvbetjening.innsending.mapper;
 
-import static no.nav.foreldrepenger.common.util.ResourceHandleUtil.bytesFra;
-import static org.assertj.core.api.Assertions.assertThat;
-
-import java.io.IOException;
-import java.util.List;
-
-import org.junit.jupiter.api.Test;
-import org.junit.jupiter.api.extension.ExtendWith;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.test.context.ContextConfiguration;
-import org.springframework.test.context.junit.jupiter.SpringExtension;
-
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.neovisionaries.i18n.CountryCode;
-
 import no.nav.foreldrepenger.common.domain.BrukerRolle;
 import no.nav.foreldrepenger.common.domain.felles.ProsentAndel;
 import no.nav.foreldrepenger.common.domain.felles.relasjontilbarn.Adopsjon;
@@ -28,15 +15,27 @@ import no.nav.foreldrepenger.common.domain.foreldrepenger.fordeling.UtsettelsesP
 import no.nav.foreldrepenger.common.oppslag.dkif.Målform;
 import no.nav.foreldrepenger.selvbetjening.config.JacksonConfiguration;
 import no.nav.foreldrepenger.selvbetjening.innsending.InnsendingConnection;
+import no.nav.foreldrepenger.selvbetjening.innsending.VedleggsHåndteringTjeneste;
 import no.nav.foreldrepenger.selvbetjening.innsending.domain.ForeldrepengesøknadFrontend;
 import no.nav.foreldrepenger.selvbetjening.innsending.domain.SøknadFrontend;
 import no.nav.foreldrepenger.selvbetjening.vedlegg.Image2PDFConverter;
+import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.extension.ExtendWith;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.test.context.ContextConfiguration;
+import org.springframework.test.context.junit.jupiter.SpringExtension;
+
+import java.io.IOException;
+import java.util.List;
+
+import static no.nav.foreldrepenger.common.util.ResourceHandleUtil.bytesFra;
+import static org.assertj.core.api.Assertions.assertThat;
 
 @ExtendWith(SpringExtension.class)
 @ContextConfiguration(classes = JacksonConfiguration.class)
 class ForeldrepengeSøknadTilDtoMapperTest {
 
-    private final InnsendingConnection connection = new InnsendingConnection(null, null, new Image2PDFConverter());
+    private final InnsendingConnection connection = new InnsendingConnection(null, null, new VedleggsHåndteringTjeneste(new Image2PDFConverter()));
 
     @Autowired
     private ObjectMapper mapper;

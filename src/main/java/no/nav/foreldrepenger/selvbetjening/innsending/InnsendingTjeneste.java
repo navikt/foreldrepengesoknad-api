@@ -1,23 +1,22 @@
 package no.nav.foreldrepenger.selvbetjening.innsending;
 
-import static org.slf4j.LoggerFactory.getLogger;
-
-import java.security.SecureRandom;
-import java.util.List;
-import java.util.Random;
-
-import org.slf4j.Logger;
-import org.springframework.stereotype.Service;
-
 import no.nav.foreldrepenger.common.domain.Kvittering;
-import no.nav.foreldrepenger.common.domain.felles.VedleggReferanse;
 import no.nav.foreldrepenger.selvbetjening.http.RetryAware;
 import no.nav.foreldrepenger.selvbetjening.innsending.domain.EttersendingFrontend;
+import no.nav.foreldrepenger.selvbetjening.innsending.domain.MutableVedleggReferanse;
 import no.nav.foreldrepenger.selvbetjening.innsending.domain.SøknadFrontend;
 import no.nav.foreldrepenger.selvbetjening.innsending.domain.VedleggFrontend;
 import no.nav.foreldrepenger.selvbetjening.innsending.domain.tilbakebetaling.TilbakebetalingUttalelse;
 import no.nav.foreldrepenger.selvbetjening.innsending.pdf.PdfGenerator;
 import no.nav.foreldrepenger.selvbetjening.mellomlagring.KryptertMellomlagring;
+import org.slf4j.Logger;
+import org.springframework.stereotype.Service;
+
+import java.security.SecureRandom;
+import java.util.List;
+import java.util.Random;
+
+import static org.slf4j.LoggerFactory.getLogger;
 
 @Service
 public class InnsendingTjeneste implements RetryAware {
@@ -80,8 +79,8 @@ public class InnsendingTjeneste implements RetryAware {
             e.brukerTekst());
     }
 
-    private static VedleggReferanse id() {
-        return new VedleggReferanse("V" + IDGENERATOR.nextLong());
+    private static MutableVedleggReferanse id() {
+        return new MutableVedleggReferanse("V" + IDGENERATOR.nextLong());
     }
 
     public void hentMellomlagredeFiler(List<VedleggFrontend> vedlegg) {

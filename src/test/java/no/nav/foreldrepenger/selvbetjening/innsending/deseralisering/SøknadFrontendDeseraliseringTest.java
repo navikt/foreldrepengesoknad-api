@@ -11,8 +11,6 @@ import java.net.URISyntaxException;
 import java.util.ArrayList;
 import java.util.List;
 
-import no.nav.foreldrepenger.common.domain.felles.VedleggReferanse;
-import no.nav.foreldrepenger.selvbetjening.innsending.domain.VedleggFrontend;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -21,15 +19,16 @@ import org.springframework.test.context.junit.jupiter.SpringExtension;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 
+import jakarta.validation.Validation;
+import jakarta.validation.Validator;
 import no.nav.foreldrepenger.common.domain.BrukerRolle;
 import no.nav.foreldrepenger.common.domain.felles.opptjening.Virksomhetstype;
 import no.nav.foreldrepenger.common.oppslag.dkif.Målform;
 import no.nav.foreldrepenger.selvbetjening.config.JacksonConfiguration;
 import no.nav.foreldrepenger.selvbetjening.innsending.domain.ForeldrepengesøknadFrontend;
+import no.nav.foreldrepenger.selvbetjening.innsending.domain.MutableVedleggReferanse;
 import no.nav.foreldrepenger.selvbetjening.innsending.domain.SøknadFrontend;
-
-import jakarta.validation.Validation;
-import jakarta.validation.Validator;
+import no.nav.foreldrepenger.selvbetjening.innsending.domain.VedleggFrontend;
 
 @ExtendWith(SpringExtension.class)
 @ContextConfiguration(classes = JacksonConfiguration.class)
@@ -163,7 +162,7 @@ class SøknadFrontendDeseraliseringTest {
         assertThat(vedleggListe).hasSize(1);
         var vedlegg = vedleggListe.get(0);
         assertThat(vedlegg.getSkjemanummer()).isEqualTo("I000044");
-        assertThat(vedlegg.getId()).isEqualTo(new VedleggReferanse("V090740687265315217194125674862219730"));
+        assertThat(vedlegg.getId()).isEqualTo(new MutableVedleggReferanse("V090740687265315217194125674862219730"));
         assertThat(vedlegg.getUrl()).isEqualTo(new URI("https://foreldrepengesoknad-api.intern.dev.nav.no/rest/storage/vedlegg/b9974360-6c07-4b9d-acac-14f0f417d200"));
     }
 
@@ -186,13 +185,13 @@ class SøknadFrontendDeseraliseringTest {
         List<VedleggFrontend>  sendSenere = new ArrayList<>();
 
         while (sendSenere.size() < sendSenereVedlegg) {
-            var nyttVedlegg = new VedleggFrontend(null, "Beskrivelse", new VedleggReferanse("Id"), "SEND_SENERE", "Skjemanummer", "xyz", null);
+            var nyttVedlegg = new VedleggFrontend(null, "Beskrivelse", new MutableVedleggReferanse("Id"), "SEND_SENERE", "Skjemanummer", "xyz", null);
             sendSenere.add(nyttVedlegg);
         }
 
         List<VedleggFrontend> opplastet = new ArrayList<>();
         while (opplastet.size() < opplastetVedlegg) {
-            var nyttVedlegg = new VedleggFrontend(null, "Beskrivelse", new VedleggReferanse("Id"), null, "Skjemanummer", "xyz", null);
+            var nyttVedlegg = new VedleggFrontend(null, "Beskrivelse", new MutableVedleggReferanse("Id"), null, "Skjemanummer", "xyz", null);
             opplastet.add(nyttVedlegg);
         }
         sendSenere.addAll(opplastet);

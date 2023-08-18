@@ -1,23 +1,22 @@
 package no.nav.foreldrepenger.selvbetjening.innsending.domain;
 
-import static com.fasterxml.jackson.annotation.JsonTypeInfo.Id.NAME;
-import static java.util.Collections.emptyList;
-import static no.nav.foreldrepenger.common.domain.validation.InputValideringRegex.BARE_BOKSTAVER;
-import static no.nav.foreldrepenger.common.domain.validation.InputValideringRegex.FRITEKST;
+import com.fasterxml.jackson.annotation.JsonCreator;
+import com.fasterxml.jackson.annotation.JsonSubTypes;
+import com.fasterxml.jackson.annotation.JsonSubTypes.Type;
+import com.fasterxml.jackson.annotation.JsonTypeInfo;
+import jakarta.validation.Valid;
+import jakarta.validation.constraints.Pattern;
+import no.nav.foreldrepenger.common.domain.Saksnummer;
 
 import java.time.LocalDateTime;
 import java.util.List;
 import java.util.Objects;
 import java.util.Optional;
 
-import com.fasterxml.jackson.annotation.JsonCreator;
-import com.fasterxml.jackson.annotation.JsonSubTypes;
-import com.fasterxml.jackson.annotation.JsonSubTypes.Type;
-import com.fasterxml.jackson.annotation.JsonTypeInfo;
-
-import jakarta.validation.Valid;
-import jakarta.validation.constraints.Pattern;
-import no.nav.foreldrepenger.common.domain.Saksnummer;
+import static com.fasterxml.jackson.annotation.JsonTypeInfo.Id.NAME;
+import static java.util.Collections.emptyList;
+import static no.nav.foreldrepenger.common.domain.validation.InputValideringRegex.BARE_BOKSTAVER;
+import static no.nav.foreldrepenger.common.domain.validation.InputValideringRegex.FRITEKST;
 
 
 @JsonTypeInfo(use = NAME, property = "type", visible = true)
@@ -47,7 +46,7 @@ public abstract sealed class SøknadFrontend permits EngangsstønadFrontend, For
     @Pattern(regexp = FRITEKST)
     private final String tilleggsopplysninger;
     @VedlegglistestørrelseConstraint
-    private final List<@Valid VedleggFrontend> vedlegg;
+    private List<@Valid VedleggFrontend> vedlegg;
 
     @JsonCreator
     protected SøknadFrontend(LocalDateTime opprettet, String type, Saksnummer saksnummer, SøkerFrontend søker, BarnFrontend barn,
@@ -112,6 +111,10 @@ public abstract sealed class SøknadFrontend permits EngangsstønadFrontend, For
 
     public List<VedleggFrontend> getVedlegg() {
         return vedlegg;
+    }
+
+    public void setVedlegg(List<VedleggFrontend> vedlegg) {
+        this.vedlegg = vedlegg;
     }
 
     @Override

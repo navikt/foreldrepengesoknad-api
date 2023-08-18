@@ -1,20 +1,18 @@
 package no.nav.foreldrepenger.selvbetjening.innsending.domain;
 
-import static com.fasterxml.jackson.annotation.JsonInclude.Include.NON_EMPTY;
-import static no.nav.foreldrepenger.common.domain.validation.InputValideringRegex.BARE_BOKSTAVER;
-import static no.nav.foreldrepenger.common.domain.validation.InputValideringRegex.FRITEKST;
-import static no.nav.foreldrepenger.common.util.StringUtil.maskListe;
+import com.fasterxml.jackson.annotation.JsonCreator;
+import com.fasterxml.jackson.annotation.JsonInclude;
+import jakarta.validation.Valid;
+import jakarta.validation.constraints.Pattern;
 
 import java.util.Collections;
 import java.util.List;
 import java.util.Optional;
 
-import jakarta.validation.Valid;
-import jakarta.validation.constraints.Pattern;
-
-import com.fasterxml.jackson.annotation.JsonCreator;
-import com.fasterxml.jackson.annotation.JsonInclude;
-import no.nav.foreldrepenger.common.domain.felles.VedleggReferanse;
+import static com.fasterxml.jackson.annotation.JsonInclude.Include.NON_EMPTY;
+import static no.nav.foreldrepenger.common.domain.validation.InputValideringRegex.BARE_BOKSTAVER;
+import static no.nav.foreldrepenger.common.domain.validation.InputValideringRegex.FRITEKST;
+import static no.nav.foreldrepenger.common.util.StringUtil.maskListe;
 
 // TODO: Skriv om til superklasse og subklasser basert på type
 @JsonInclude(NON_EMPTY)
@@ -22,12 +20,12 @@ public record UttaksplanPeriode(@Pattern(regexp = BARE_BOKSTAVER) String type,
                                 Double samtidigUttakProsent,
                                 Double stillingsprosent,
                                 List<@Pattern(regexp = FRITEKST) String> orgnumre,
-                                @Valid List<VedleggReferanse> vedlegg, // en vedleggsID
+                                List<@Valid MutableVedleggReferanse> vedlegg, // en vedleggsID
                                 @Pattern(regexp = BARE_BOKSTAVER) String forelder,
                                 @Pattern(regexp = "^[\\p{Digit}\\p{L}_]*$") String konto,
                                 @Pattern(regexp = "^[\\p{Digit}\\p{L}_]*$") String morsAktivitetIPerioden,
                                 @Pattern(regexp = "^[\\p{Digit}\\p{L}_]*$") String årsak,
-                                Tidsperiode tidsperiode,
+                                @Valid Tidsperiode tidsperiode,
                                 boolean erArbeidstaker,
                                 boolean erFrilanser,
                                 boolean erSelvstendig,
@@ -39,7 +37,7 @@ public record UttaksplanPeriode(@Pattern(regexp = BARE_BOKSTAVER) String type,
 
     @JsonCreator
     public UttaksplanPeriode(String type, Double samtidigUttakProsent, Double stillingsprosent, List<String> orgnumre,
-                             List<VedleggReferanse> vedlegg, String forelder, String konto, String morsAktivitetIPerioden,
+                             List<MutableVedleggReferanse> vedlegg, String forelder, String konto, String morsAktivitetIPerioden,
                              String årsak, Tidsperiode tidsperiode, boolean erArbeidstaker,
                              boolean erFrilanser, boolean erSelvstendig, boolean graderingInnvilget, boolean gradert,
                              boolean ønskerFlerbarnsdager, boolean ønskerSamtidigUttak, Boolean justeresVedFødsel) {

@@ -2,10 +2,10 @@ package no.nav.foreldrepenger.selvbetjening;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
-import no.nav.foreldrepenger.common.domain.felles.VedleggReferanse;
 import no.nav.foreldrepenger.selvbetjening.config.JacksonConfiguration;
 import no.nav.foreldrepenger.selvbetjening.innsending.domain.BarnFrontend;
 import no.nav.foreldrepenger.selvbetjening.innsending.domain.EngangsstønadFrontend;
+import no.nav.foreldrepenger.selvbetjening.innsending.domain.MutableVedleggReferanse;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -29,7 +29,7 @@ class SerializationTest {
     @Test
     void engangstonad_deserialisation() throws IOException {
         var barn = new BarnFrontend(null, 2,
-            List.of(new VedleggReferanse(LocalDate.now().minusWeeks(6).toString())),
+            List.of(new MutableVedleggReferanse(LocalDate.now().minusWeeks(6).toString())),
             LocalDate.now().minusWeeks(1), null,
             null, null, null, false, false,
             null, null, null);
