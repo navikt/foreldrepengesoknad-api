@@ -1,6 +1,5 @@
 package no.nav.foreldrepenger.selvbetjening.mellomlagring;
 
-import static no.nav.boot.conditionals.EnvUtil.CONFIDENTIAL;
 import static no.nav.foreldrepenger.selvbetjening.mellomlagring.MellomlagringType.KORTTIDS;
 import static no.nav.foreldrepenger.selvbetjening.vedlegg.DelegerendeVedleggSjekker.DELEGERENDE;
 
@@ -35,12 +34,8 @@ public class KryptertMellomlagring {
     }
 
     public Optional<String> lesKryptertSøknad() {
-        var søknad = mellomlagring.les(KORTTIDS, katalog(), SØKNAD)
+        return mellomlagring.les(KORTTIDS, katalog(), SØKNAD)
             .map(krypto::decrypt);
-        if (søknad.isPresent()) {
-            LOG.info(CONFIDENTIAL, "Dekryptert søknad {}", søknad.get());
-        }
-        return søknad;
     }
 
     public void lagreKryptertSøknad(String søknad) {
@@ -52,13 +47,9 @@ public class KryptertMellomlagring {
     }
 
     public Optional<Attachment> lesKryptertVedlegg(String key) {
-        var vedlegg = mellomlagring.les(KORTTIDS, katalog(), key)
+        return mellomlagring.les(KORTTIDS, katalog(), key)
             .map(krypto::decrypt)
             .map(v -> GSON.fromJson(v, Attachment.class));
-        if (vedlegg.isPresent()) {
-            LOG.info(CONFIDENTIAL, "Dekryptert vedlegg {}", vedlegg.get());
-        }
-        return vedlegg;
     }
 
     public void lagreKryptertVedlegg(Attachment vedlegg) {
