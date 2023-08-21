@@ -104,8 +104,7 @@ public class ApiExceptionHandler extends ResponseEntityExceptionHandler {
         return logAndHandle(UNPROCESSABLE_ENTITY, e, req);
     }
 
-    @ExceptionHandler({ MultipartException.class, MaxUploadSizeExceededException.class,
-            AttachmentTooLargeException.class, AttachmentsTooLargeException.class })
+    @ExceptionHandler({ MultipartException.class, MaxUploadSizeExceededException.class, AttachmentTooLargeException.class, AttachmentsTooLargeException.class })
     public ResponseEntity<Object> handleTooLargeAttchment(Exception e, WebRequest req) {
         return logAndHandle(PAYLOAD_TOO_LARGE, e, req);
     }
@@ -164,6 +163,7 @@ public class ApiExceptionHandler extends ResponseEntityExceptionHandler {
         if (tokenUtil.erUtløpt()) return true;
         if (e instanceof JwtTokenInvalidClaimException && getMostSpecificCause(e).getMessage().contains(REDIRECT_INNLOGGING_VED_MANGLEDE_NIVÅ_ACR)) return true;
         if (e instanceof JwtTokenUnauthorizedException && getMostSpecificCause(e).getMessage().contains(REDIRECT_INNLOGGING_VED_MANGLEDE_NIVÅ_ACR)) return true;
+        if (e instanceof HttpMediaTypeNotAcceptableException) return true;
         return false;
     }
 
