@@ -11,13 +11,12 @@ import org.springframework.web.bind.annotation.RestController;
 
 import no.nav.boot.conditionals.ConditionalOnNotProd;
 import no.nav.foreldrepenger.selvbetjening.uttak.UttakController;
-import no.nav.foreldrepenger.selvbetjening.uttak.UttakControllerV2;
 import no.nav.security.token.support.core.api.ProtectedWithClaims;
 import no.nav.security.token.support.core.api.Unprotected;
 
 class RestApiSikredeEndepunktTest extends RestApiTestUtil {
 
-    private static final List<Class<?>> UNNTATT_RESTCONTROLLER = List.of(UttakController.class, UttakControllerV2.class);
+    private static final List<Class<?>> UNNTATT_RESTCONTROLLER = List.of(UttakController.class);
     private static final String ENDEPUNKT_SOM_KAN_VÆRE_UNPROTECTED = "ping";
 
     @Test

@@ -5,15 +5,13 @@ import static org.assertj.core.api.Assertions.assertThat;
 import java.lang.reflect.Parameter;
 import java.util.Set;
 
-import jakarta.validation.Valid;
-
 import org.junit.jupiter.api.Test;
 
+import jakarta.validation.Valid;
 import no.nav.foreldrepenger.selvbetjening.uttak.UttakController;
-import no.nav.foreldrepenger.selvbetjening.uttak.UttakControllerV2;
 
 class RestApiInputValideringAnnoteringTest extends RestApiTestUtil {
-    private static final Set<Class<?>> UNNTATT_RESTCONTROLLER = Set.of(UttakController.class, UttakControllerV2.class);
+    private static final Set<Class<?>> UNNTATT_RESTCONTROLLER = Set.of(UttakController.class);
     private static final Set<Class<?>> UNNTATT_PARAMETER_TYPE = Set.of(boolean.class, String.class);
 
 
