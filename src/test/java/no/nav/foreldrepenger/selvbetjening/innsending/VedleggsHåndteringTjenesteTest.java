@@ -1,13 +1,10 @@
 package no.nav.foreldrepenger.selvbetjening.innsending;
 
-import static no.nav.foreldrepenger.common.util.ResourceHandleUtil.bytesFra;
-import static org.assertj.core.api.Assertions.assertThat;
-import static org.mockito.ArgumentMatchers.any;
-import static org.mockito.Mockito.mock;
-import static org.mockito.Mockito.when;
-
-import java.io.IOException;
-
+import com.fasterxml.jackson.databind.ObjectMapper;
+import no.nav.foreldrepenger.selvbetjening.config.JacksonConfiguration;
+import no.nav.foreldrepenger.selvbetjening.innsending.domain.EttersendingFrontend;
+import no.nav.foreldrepenger.selvbetjening.innsending.domain.SøknadFrontend;
+import no.nav.foreldrepenger.selvbetjening.vedlegg.Image2PDFConverter;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -15,11 +12,13 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.junit.jupiter.SpringExtension;
 
-import com.fasterxml.jackson.databind.ObjectMapper;
+import java.io.IOException;
 
-import no.nav.foreldrepenger.selvbetjening.config.JacksonConfiguration;
-import no.nav.foreldrepenger.selvbetjening.innsending.domain.SøknadFrontend;
-import no.nav.foreldrepenger.selvbetjening.vedlegg.Image2PDFConverter;
+import static no.nav.foreldrepenger.common.util.ResourceHandleUtil.bytesFra;
+import static org.assertj.core.api.Assertions.assertThat;
+import static org.mockito.ArgumentMatchers.any;
+import static org.mockito.Mockito.mock;
+import static org.mockito.Mockito.when;
 
 @ExtendWith(SpringExtension.class)
 @ContextConfiguration(classes = JacksonConfiguration.class)
@@ -106,28 +105,28 @@ class VedleggsHåndteringTjenesteTest {
 
     @Test
     void ettersendingerForblirUendretVedIngenDupliserteVedlegg() throws IOException {
-        var ettersendelseOrginal = mapper.readValue(bytesFra("json/ettersendelse_I000044.json"), SøknadFrontend.class);
-        var ettersendelseDupliserteVedleggFjernet = mapper.readValue(bytesFra("json/ettersendelse_I000044.json"), SøknadFrontend.class);
+        var ettersendelseOrginal = mapper.readValue(bytesFra("json/ettersendelse_I000044.json"), EttersendingFrontend.class);
+        var ettersendelseDupliserteVedleggFjernet = mapper.readValue(bytesFra("json/ettersendelse_I000044.json"), EttersendingFrontend.class);
 
         var vedleggsHåndteringsTjeneste = new VedleggsHåndteringTjeneste(converter);
         vedleggsHåndteringsTjeneste.fjernDupliserteVedlegg(ettersendelseDupliserteVedleggFjernet);
 
-        assertThat(ettersendelseOrginal.getVedlegg()).hasSameSizeAs(ettersendelseDupliserteVedleggFjernet.getVedlegg());
+        assertThat(ettersendelseOrginal.vedlegg()).hasSameSizeAs(ettersendelseDupliserteVedleggFjernet.vedlegg());
         assertThat(ettersendelseOrginal).isEqualTo(ettersendelseDupliserteVedleggFjernet);
     }
 
     @Test
     void duplikateVedleggFjernesFraEttersending() throws IOException {
-        var ettersendelseOrginal = mapper.readValue(bytesFra("json/ettersendelse_I000044_duplikate_vedlegg.json"), SøknadFrontend.class);
-        var ettersendelseDupliserteVedleggFjernet = mapper.readValue(bytesFra("json/ettersendelse_I000044_duplikate_vedlegg.json"), SøknadFrontend.class);
+        var ettersendelseOrginal = mapper.readValue(bytesFra("json/ettersendelse_I000044_duplikate_vedlegg.json"), EttersendingFrontend.class);
+        var ettersendelseDupliserteVedleggFjernet = mapper.readValue(bytesFra("json/ettersendelse_I000044_duplikate_vedlegg.json"), EttersendingFrontend.class);
 
         var vedleggsHåndteringsTjeneste = new VedleggsHåndteringTjeneste(converter);
         vedleggsHåndteringsTjeneste.fjernDupliserteVedlegg(ettersendelseDupliserteVedleggFjernet);
 
-        assertThat(ettersendelseOrginal.getVedlegg()).hasSize(3);
-        assertThat(ettersendelseDupliserteVedleggFjernet.getVedlegg()).hasSize(1);
+        assertThat(ettersendelseOrginal.vedlegg()).hasSize(3);
+        assertThat(ettersendelseDupliserteVedleggFjernet.vedlegg()).hasSize(1);
 
-        ettersendelseDupliserteVedleggFjernet.setVedlegg(ettersendelseOrginal.getVedlegg());
+        ettersendelseDupliserteVedleggFjernet.vedlegg(ettersendelseOrginal.vedlegg());
         assertThat(ettersendelseOrginal).isEqualTo(ettersendelseDupliserteVedleggFjernet);
     }
 
