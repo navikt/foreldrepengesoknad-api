@@ -1,8 +1,11 @@
 package no.nav.foreldrepenger.selvbetjening.uttak;
 
-import jakarta.validation.constraints.Digits;
-import jakarta.validation.constraints.Pattern;
-import no.nav.security.token.support.core.api.Unprotected;
+import static no.nav.foreldrepenger.selvbetjening.uttak.UttakControllerV2.beregnKonto;
+
+import java.time.LocalDate;
+
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.format.annotation.DateTimeFormat;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.CrossOrigin;
@@ -11,9 +14,9 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
-import java.time.LocalDate;
-
-import static no.nav.foreldrepenger.selvbetjening.uttak.UttakControllerV2.beregnKonto;
+import jakarta.validation.constraints.Digits;
+import jakarta.validation.constraints.Pattern;
+import no.nav.security.token.support.core.api.Unprotected;
 
 @Validated
 @Unprotected
@@ -21,6 +24,8 @@ import static no.nav.foreldrepenger.selvbetjening.uttak.UttakControllerV2.beregn
 @RequestMapping(UttakController.UTTAK_PATH)
 // TODO: Fjern denne etter frontend har endret til å gå mot rest/konto istedenfor /konto
 public class UttakController {
+
+    private static final Logger LOG = LoggerFactory.getLogger(UttakController.class);
 
     static final String UTTAK_PATH = "/konto";
 
@@ -43,6 +48,7 @@ public class UttakController {
                                  @RequestParam(value = "harAnnenForelderTilsvarendeRettEØS", required = false) boolean harAnnenForelderTilsvarendeRettEØS,
                                  @RequestParam(value = "familieHendelseDatoNesteSak", required = false) @DateTimeFormat(pattern = FMT) LocalDate familieHendelseDatoNesteSak) {
 
+        LOG.info("Bruk av gammel uttak tjeneste");
         return beregnKonto(antallBarn, morHarRett, farHarRett, morHarAleneomsorg, farHarAleneomsorg, fødselsdato,
             termindato, omsorgsovertakelseDato, dekningsgrad, erMor, minsterett, morHarUføretrygd,
             harAnnenForelderTilsvarendeRettEØS, familieHendelseDatoNesteSak);
