@@ -55,6 +55,7 @@ public class VedleggsHåndteringTjeneste {
             var vedleggEksistererAllerede = unikeVedlegg.stream()
                     .filter(v -> Objects.equals(vedlegg.getInnsendingsType(), v.getInnsendingsType()))
                     .filter(v -> Objects.equals(vedlegg.getSkjemanummer(), v.getSkjemanummer()))
+                    .filter(v -> Objects.equals(vedlegg.getFilesize(), v.getFilesize()))
                     .filter(v -> Arrays.equals(vedlegg.getContent(), v.getContent()))
                     .findFirst();
 

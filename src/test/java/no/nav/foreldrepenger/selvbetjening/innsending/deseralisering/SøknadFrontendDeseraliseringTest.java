@@ -185,13 +185,14 @@ class SøknadFrontendDeseraliseringTest {
         List<VedleggFrontend>  sendSenere = new ArrayList<>();
 
         while (sendSenere.size() < sendSenereVedlegg) {
-            var nyttVedlegg = new VedleggFrontend(null, "Beskrivelse", new MutableVedleggReferanse("Id"), "SEND_SENERE", "Skjemanummer", "xyz", null);
+            var nyttVedlegg = new VedleggFrontend(null, "Beskrivelse", new MutableVedleggReferanse("Id"), "SEND_SENERE", "Skjemanummer", "xyz", null,
+                null);
             sendSenere.add(nyttVedlegg);
         }
 
         List<VedleggFrontend> opplastet = new ArrayList<>();
         while (opplastet.size() < opplastetVedlegg) {
-            var nyttVedlegg = new VedleggFrontend(null, "Beskrivelse", new MutableVedleggReferanse("Id"), null, "Skjemanummer", "xyz", null);
+            var nyttVedlegg = new VedleggFrontend(null, "Beskrivelse", new MutableVedleggReferanse("Id"), null, "Skjemanummer", "xyz", null, 123);
             opplastet.add(nyttVedlegg);
         }
         sendSenere.addAll(opplastet);

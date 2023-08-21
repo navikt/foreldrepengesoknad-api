@@ -25,13 +25,15 @@ public class VedleggFrontend {
     @Pattern(regexp = FRITEKST)
     private final String uuid;
     private final URI url;
+    private final Integer filesize;
 
     public VedleggFrontend(byte[] content, String beskrivelse, MutableVedleggReferanse id, String skjemanummer) {
-        this(content, beskrivelse, id, null, skjemanummer, null, null);
+        this(content, beskrivelse, id, null, skjemanummer, null, null, null);
     }
 
     @JsonCreator
-    public VedleggFrontend(byte[] content, String beskrivelse, MutableVedleggReferanse id, String innsendingsType, String skjemanummer, String uuid, URI url) {
+    public VedleggFrontend(byte[] content, String beskrivelse, MutableVedleggReferanse id, String innsendingsType, String skjemanummer, String uuid, URI url,
+                           Integer filesize) {
         this.content = content;
         this.beskrivelse = beskrivelse;
         this.id = id;
@@ -39,6 +41,7 @@ public class VedleggFrontend {
         this.skjemanummer = skjemanummer;
         this.uuid = uuid;
         this.url = url;
+        this.filesize = filesize;
     }
 
     public VedleggFrontend kopi() {
@@ -48,7 +51,8 @@ public class VedleggFrontend {
             this.getInnsendingsType(),
             this.getSkjemanummer(),
             this.getUuid(),
-            this.getUrl());
+            this.getUrl(),
+            this.getFilesize());
     }
 
     public byte[] getContent() {
@@ -81,6 +85,10 @@ public class VedleggFrontend {
 
     public URI getUrl() {
         return url;
+    }
+
+    public Integer getFilesize() {
+        return filesize;
     }
 
     @Override
