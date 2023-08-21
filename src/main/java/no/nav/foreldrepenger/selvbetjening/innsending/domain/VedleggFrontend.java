@@ -108,7 +108,7 @@ public class VedleggFrontend {
 
     @Override
     public String toString() {
-        return getClass().getSimpleName() + "[id=" + id + ", skjemanummer=" + skjemanummer + ", uuid=" + uuid
-                + ", url=" + url + ", innsendingsType=" + innsendingsType + "]";
+        return "VedleggFrontend{" + "beskrivelse='" + beskrivelse + '\'' + ", id=" + id + ", innsendingsType='" + innsendingsType + '\''
+            + ", skjemanummer='" + skjemanummer + '\'' + ", uuid='" + uuid + '\'' + ", url=" + url + ", filesize=" + filesize + '}';
     }
 }

@@ -46,11 +46,12 @@ public class VedleggsHåndteringTjeneste {
         if (søknad.getVedlegg().isEmpty()) {
             return søknad;
         }
-        long start = System.currentTimeMillis();
+
         var duplisertVedleggReferanseTilEksisterendeVedleggReferanseMapping = new HashMap<MutableVedleggReferanse, MutableVedleggReferanse>();
         var unikeVedlegg = new ArrayList<VedleggFrontend>();
         var alleVedleggMedInnhold = hentUnikeVedleggMedInnhold(søknad.getVedlegg());
 
+        long start = System.currentTimeMillis();
         for (var vedlegg : alleVedleggMedInnhold) {
             var vedleggEksistererAllerede = unikeVedlegg.stream()
                     .filter(v -> Objects.equals(vedlegg.getInnsendingsType(), v.getInnsendingsType()))
@@ -68,8 +69,8 @@ public class VedleggsHåndteringTjeneste {
 
         erstattAlleReferanserSomErDuplikater(søknad, duplisertVedleggReferanseTilEksisterendeVedleggReferanseMapping);
         erstattGammelVedleggslisteMedNyUtenDuplikater(søknad, unikeVedlegg);
-        long finish = System.currentTimeMillis();
-        LOG.info("Fjerner {} dupliserte vedlegg av totalt {} mottatt ({}ms).", alleVedleggMedInnhold.size() - unikeVedlegg.size(), alleVedleggMedInnhold.size(), finish - start);
+        long slutt = System.currentTimeMillis();
+        LOG.info("Fjerner {} dupliserte vedlegg av totalt {} mottatt ({}ms).", alleVedleggMedInnhold.size() - unikeVedlegg.size(), alleVedleggMedInnhold.size(), slutt - start);
         return søknad;
     }
 
@@ -112,7 +113,11 @@ public class VedleggsHåndteringTjeneste {
     }
 
     private List<VedleggFrontend> hentUnikeVedleggMedInnhold(List<VedleggFrontend> vedleggFrontend) {
-        return safeStream(vedleggFrontend).distinct().map(this::convert).toList();
+        long start = System.currentTimeMillis();
+        var unikeVedleggMedInnhold = safeStream(vedleggFrontend).distinct().map(this::convert).toList();
+        long slutt = System.currentTimeMillis();
+        LOG.info("Konvertering av vedlegg til PDF tok {}ms", slutt - start);
+        return unikeVedleggMedInnhold;
     }
 
     private VedleggFrontend convert(VedleggFrontend v) {
