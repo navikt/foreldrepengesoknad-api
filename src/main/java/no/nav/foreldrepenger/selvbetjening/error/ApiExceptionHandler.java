@@ -62,6 +62,11 @@ public class ApiExceptionHandler extends ResponseEntityExceptionHandler {
     }
 
     @Override
+    protected ResponseEntity<Object> handleHttpMediaTypeNotAcceptable(HttpMediaTypeNotAcceptableException e, HttpHeaders headers, HttpStatusCode status, WebRequest req) {
+        return logAndHandle(NOT_ACCEPTABLE, e, req, headers);
+    }
+
+    @Override
     protected ResponseEntity<Object> handleNoHandlerFoundException(NoHandlerFoundException e, HttpHeaders headers, HttpStatusCode status, WebRequest req) {
         return logAndHandle(NOT_FOUND, e, req, headers);
     }
@@ -72,11 +77,6 @@ public class ApiExceptionHandler extends ResponseEntityExceptionHandler {
             .map(ApiExceptionHandler::errorMessage)
             .toList();
         return logAndHandle(BAD_REQUEST, e, req, headers, feltMedValideringsFeil);
-    }
-
-    @ExceptionHandler
-    public ResponseEntity<Object> handleHttpMediaTypeNotAcceptableException(HttpMediaTypeNotAcceptableException e, WebRequest req) {
-        return logAndHandle(NOT_ACCEPTABLE, e, req);
     }
 
     @ExceptionHandler
