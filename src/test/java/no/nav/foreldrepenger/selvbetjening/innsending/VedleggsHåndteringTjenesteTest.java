@@ -80,6 +80,18 @@ class VedleggsHåndteringTjenesteTest {
     }
 
     @Test
+    void skalFjerneDuplikateVedleggFraAnnenInntektOgDokumentasjonAvAktivitetskrav() throws IOException {
+        var søknadOrginal = mapper.readValue(bytesFra("json/foreldrepenger_far_fellesperiode_førstegangstjenste_duplikate_vedlegg.json"), SøknadFrontend.class);
+        var søknadDupliserteVedleggFjernet = mapper.readValue(bytesFra("json/foreldrepenger_far_fellesperiode_førstegangstjenste_duplikate_vedlegg.json"), SøknadFrontend.class); // For å ikke lage kopi
+
+        var vedleggsHåndteringsTjeneste = new VedleggsHåndteringTjeneste(converter);
+        vedleggsHåndteringsTjeneste.fjernDupliserteVedlegg(søknadDupliserteVedleggFjernet);
+
+        assertThat(søknadOrginal.getVedlegg()).hasSize(9);
+        assertThat(søknadDupliserteVedleggFjernet.getVedlegg()).hasSize(5);
+    }
+
+    @Test
     void skalIkkeFjerneVedleggDerHvorTypeSkjemaNummerErLiktMensInnholdErForskjellig() throws IOException {
         var søknadOrginal = mapper.readValue(bytesFra("json/foreldrepenger_far_gardering_frilans_to_vedlegg_samme_type_ulikt_innhold.json"), SøknadFrontend.class);
         var søknadDupliserteVedleggFjernet = mapper.readValue(bytesFra("json/foreldrepenger_far_gardering_frilans_to_vedlegg_samme_type_ulikt_innhold.json"), SøknadFrontend.class); // For å ikke lage kopi

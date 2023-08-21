@@ -1,5 +1,14 @@
 package no.nav.foreldrepenger.selvbetjening.innsending.domain.arbeid;
 
+import static java.util.Collections.emptyList;
+import static no.nav.foreldrepenger.common.domain.validation.InputValideringRegex.BARE_BOKSTAVER;
+import static no.nav.foreldrepenger.common.domain.validation.InputValideringRegex.FRITEKST;
+import static no.nav.foreldrepenger.common.domain.validation.InputValideringRegex.ORGNUMMER;
+
+import java.time.LocalDate;
+import java.util.List;
+import java.util.Optional;
+
 import jakarta.validation.Valid;
 import jakarta.validation.constraints.Digits;
 import jakarta.validation.constraints.Pattern;
@@ -7,13 +16,6 @@ import jakarta.validation.constraints.Size;
 import no.nav.foreldrepenger.common.domain.felles.opptjening.Virksomhetstype;
 import no.nav.foreldrepenger.selvbetjening.innsending.domain.MutableVedleggReferanse;
 import no.nav.foreldrepenger.selvbetjening.innsending.domain.Tidsperiode;
-
-import java.time.LocalDate;
-import java.util.List;
-
-import static no.nav.foreldrepenger.common.domain.validation.InputValideringRegex.BARE_BOKSTAVER;
-import static no.nav.foreldrepenger.common.domain.validation.InputValideringRegex.FRITEKST;
-import static no.nav.foreldrepenger.common.domain.validation.InputValideringRegex.ORGNUMMER;
 
 public record SelvstendigNæringsdrivendeInformasjonFrontend(
     boolean harBlittYrkesaktivILøpetAvDeTreSisteFerdigliknedeÅrene,
@@ -31,4 +33,9 @@ public record SelvstendigNæringsdrivendeInformasjonFrontend(
     @Valid Tidsperiode tidsperiode,
     @Valid TilknyttetPerson regnskapsfører,
     @Valid TilknyttetPerson revisor) {
+
+    public SelvstendigNæringsdrivendeInformasjonFrontend {
+        næringstyper = Optional.ofNullable(næringstyper).orElse(emptyList());
+        vedlegg = Optional.ofNullable(vedlegg).orElse(emptyList());
+    }
 }
