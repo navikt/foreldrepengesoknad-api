@@ -8,6 +8,7 @@ import java.util.Objects;
 import com.fasterxml.jackson.annotation.JsonCreator;
 
 import jakarta.validation.Valid;
+import jakarta.validation.constraints.Digits;
 import jakarta.validation.constraints.Pattern;
 
 public class VedleggFrontend {
@@ -25,6 +26,7 @@ public class VedleggFrontend {
     @Pattern(regexp = FRITEKST)
     private final String uuid;
     private final URI url;
+    @Digits(integer = 8, fraction = 0)
     private final Integer filesize;
 
     public VedleggFrontend(byte[] content, String beskrivelse, MutableVedleggReferanse id, String skjemanummer) {
