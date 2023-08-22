@@ -1,15 +1,7 @@
 package no.nav.foreldrepenger.selvbetjening.innsending;
 
-import no.nav.foreldrepenger.selvbetjening.innsending.domain.EttersendingFrontend;
-import no.nav.foreldrepenger.selvbetjening.innsending.domain.ForeldrepengesøknadFrontend;
-import no.nav.foreldrepenger.selvbetjening.innsending.domain.MutableVedleggReferanse;
-import no.nav.foreldrepenger.selvbetjening.innsending.domain.SvangerskapspengesøknadFrontend;
-import no.nav.foreldrepenger.selvbetjening.innsending.domain.SøknadFrontend;
-import no.nav.foreldrepenger.selvbetjening.innsending.domain.VedleggFrontend;
-import no.nav.foreldrepenger.selvbetjening.vedlegg.Image2PDFConverter;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
-import org.springframework.stereotype.Component;
+import static java.util.stream.Stream.concat;
+import static no.nav.foreldrepenger.common.util.StreamUtil.safeStream;
 
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -17,8 +9,17 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Objects;
 
-import static java.util.stream.Stream.concat;
-import static no.nav.foreldrepenger.common.util.StreamUtil.safeStream;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+import org.springframework.stereotype.Component;
+
+import no.nav.foreldrepenger.selvbetjening.innsending.domain.EttersendingFrontend;
+import no.nav.foreldrepenger.selvbetjening.innsending.domain.ForeldrepengesøknadFrontend;
+import no.nav.foreldrepenger.selvbetjening.innsending.domain.MutableVedleggReferanse;
+import no.nav.foreldrepenger.selvbetjening.innsending.domain.SvangerskapspengesøknadFrontend;
+import no.nav.foreldrepenger.selvbetjening.innsending.domain.SøknadFrontend;
+import no.nav.foreldrepenger.selvbetjening.innsending.domain.VedleggFrontend;
+import no.nav.foreldrepenger.selvbetjening.vedlegg.Image2PDFConverter;
 
 @Component
 public class VedleggsHåndteringTjeneste {
@@ -35,7 +36,7 @@ public class VedleggsHåndteringTjeneste {
                 .distinct()
                 .toList();
 
-        ettersending.vedlegg(unikeVedlegg);
+        ettersending.vedlegg(konverterTilPDF(unikeVedlegg));
 
         LOG.info("Fjerner {} dupliserte av totalt {} mottatt.", alleVedlegg.size() - unikeVedlegg.size(), alleVedlegg.size());
         return ettersending;
