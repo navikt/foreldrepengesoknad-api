@@ -7,7 +7,6 @@ import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.doThrow;
 import static org.mockito.Mockito.when;
 
-import java.io.IOException;
 import java.net.URI;
 import java.util.List;
 import java.util.Optional;
@@ -103,7 +102,7 @@ class VedleggSjekkerTest {
     }
 
     @Test
-    void detekterStøttetOgIkkeStøttetFormat() throws IOException {
+    void detekterStøttetOgIkkeStøttetFormat() {
         var formatSjekker = new StøttetFormatSjekker();
 
         var ikkeStøttetOctetStreamFil = vedlegg(1);
@@ -150,7 +149,11 @@ class VedleggSjekkerTest {
         return new VedleggFrontend(content, "En stoooor pdf!", new MutableVedleggReferanse("V00001"), null, "I000038", uuid, URI.create("https://foreldrepengesoknad-api.intern.dev.nav.no/" + uuid), 123);
     }
 
-    private static byte[] fraResource(String classPathResource) throws IOException {
-        return new ClassPathResource(classPathResource).getInputStream().readAllBytes();
+    public static byte[] fraResource(String classPathResource) {
+        try (var is = new ClassPathResource(classPathResource).getInputStream()) {
+            return is.readAllBytes();
+        } catch (Exception e) {
+            throw new RuntimeException(e);
+        }
     }
 }
