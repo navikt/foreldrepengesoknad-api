@@ -35,7 +35,7 @@ public class DokumentArkivTjeneste extends AbstractRestConnection implements Ret
     }
 
     public ResponseEntity<byte[]> hentDokumentRespons(JournalpostId journalpostId, DokumentInfoId dokumentId) {
-        return getForEntity(dokUri(journalpostId, dokumentId), byte[].class);
+        return getForEntity(dokUriV2(journalpostId, dokumentId), byte[].class);
     }
 
     public List<ArkivDokument> hentDokumentoversikt() {
@@ -47,6 +47,12 @@ public class DokumentArkivTjeneste extends AbstractRestConnection implements Ret
     private URI dokUri(JournalpostId journalpostId, DokumentInfoId dokumentId) {
         return UriComponentsBuilder.fromUri(baseUri)
             .pathSegment("arkiv", "hent-dokument", journalpostId.value(), dokumentId.value())
+            .build().toUri();
+    }
+
+    private URI dokUriV2(JournalpostId journalpostId, DokumentInfoId dokumentId) {
+        return UriComponentsBuilder.fromUri(baseUri)
+            .pathSegment("arkiv", "hent-dokument", "v2", journalpostId.value(), dokumentId.value())
             .build().toUri();
     }
 
