@@ -9,6 +9,7 @@ import java.util.Optional;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 import org.springframework.web.client.RestOperations;
 import org.springframework.web.util.UriComponentsBuilder;
@@ -31,6 +32,10 @@ public class DokumentArkivTjeneste extends AbstractRestConnection implements Ret
 
     public byte[] hentDokument(JournalpostId journalpostId, DokumentInfoId dokumentId) {
         return getForObject(dokUri(journalpostId, dokumentId), byte[].class);
+    }
+
+    public ResponseEntity<byte[]> hentDokumentRespons(JournalpostId journalpostId, DokumentInfoId dokumentId) {
+        return getForEntity(dokUri(journalpostId, dokumentId), byte[].class);
     }
 
     public List<ArkivDokument> hentDokumentoversikt() {

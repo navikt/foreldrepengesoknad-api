@@ -9,6 +9,7 @@ import java.net.URI;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.http.RequestEntity;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.client.HttpClientErrorException;
 import org.springframework.web.client.RestOperations;
 
@@ -20,6 +21,20 @@ public abstract class AbstractRestConnection {
 
     protected AbstractRestConnection(RestOperations operations) {
         this.operations = operations;
+    }
+
+    public <T> ResponseEntity<T> getForEntity(URI uri, Class<T> responseType) {
+        try {
+            return operations.getForEntity(uri, responseType);
+        } catch (HttpClientErrorException e) {
+            if (NOT_FOUND.equals(e.getStatusCode())) {
+                if (LOG.isInfoEnabled()) {
+                    LOG.info("Fant intet objekt på {}, returnerer null", escapeHtml(uri));
+                }
+                return null;
+            }
+            throw e;
+        }
     }
 
     public <T> T getForObject(URI uri, Class<T> responseType) {
