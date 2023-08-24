@@ -24,18 +24,7 @@ public abstract class AbstractRestConnection {
     }
 
     public <T> ResponseEntity<T> getForEntity(String uriTemplate, Class<T> responseType, Object... uriVariables) {
-        try {
-            return operations.getForEntity(uriTemplate, responseType, uriVariables);
-        } catch (HttpClientErrorException e) {
-            if (NOT_FOUND.equals(e.getStatusCode())) {
-                if (LOG.isInfoEnabled()) {
-                    LOG.info("Fant intet objekt på template {} med uriVariables {} , returnerer null",
-                        escapeHtml(uriTemplate) , escapeHtml(uriVariables));
-                }
-                return null;
-            }
-            throw e;
-        }
+        return operations.getForEntity(uriTemplate, responseType, uriVariables);
     }
 
     public <T> T getForObject(URI uri, Class<T> responseType) {
