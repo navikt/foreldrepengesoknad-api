@@ -1,11 +1,24 @@
 package no.nav.foreldrepenger.selvbetjening.innsending.mapper;
 
+import static java.time.LocalDate.now;
+import static no.nav.foreldrepenger.common.util.StreamUtil.safeStream;
+import static no.nav.foreldrepenger.selvbetjening.util.DateUtil.erNyopprettet;
+import static org.springframework.http.MediaType.APPLICATION_PDF;
+import static org.springframework.http.MediaType.IMAGE_JPEG;
+import static org.springframework.http.MediaType.IMAGE_PNG;
+import static org.springframework.util.ObjectUtils.isEmpty;
+
+import java.time.LocalDate;
+import java.util.List;
+
 import com.neovisionaries.i18n.CountryCode;
+
 import no.nav.foreldrepenger.common.domain.Fødselsnummer;
 import no.nav.foreldrepenger.common.domain.Orgnummer;
 import no.nav.foreldrepenger.common.domain.felles.DokumentType;
 import no.nav.foreldrepenger.common.domain.felles.InnsendingsType;
 import no.nav.foreldrepenger.common.domain.felles.LukketPeriode;
+import no.nav.foreldrepenger.common.domain.felles.MediaType;
 import no.nav.foreldrepenger.common.domain.felles.ProsentAndel;
 import no.nav.foreldrepenger.common.domain.felles.PåkrevdVedlegg;
 import no.nav.foreldrepenger.common.domain.felles.VedleggMetaData;
@@ -41,14 +54,7 @@ import no.nav.foreldrepenger.selvbetjening.innsending.domain.arbeid.FrilansInfor
 import no.nav.foreldrepenger.selvbetjening.innsending.domain.arbeid.FrilansoppdragFrontend;
 import no.nav.foreldrepenger.selvbetjening.innsending.domain.arbeid.SelvstendigNæringsdrivendeInformasjonFrontend;
 import no.nav.foreldrepenger.selvbetjening.innsending.domain.arbeid.TilknyttetPerson;
-
-import java.time.LocalDate;
-import java.util.List;
-
-import static java.time.LocalDate.now;
-import static no.nav.foreldrepenger.common.util.StreamUtil.safeStream;
-import static no.nav.foreldrepenger.selvbetjening.util.DateUtil.erNyopprettet;
-import static org.springframework.util.ObjectUtils.isEmpty;
+import no.nav.foreldrepenger.selvbetjening.vedlegg.VedleggUtil;
 
 public final class CommonMapper {
 
@@ -68,9 +74,24 @@ public final class CommonMapper {
             tilVedleggsreferanse(vedlegg.getId()),
             vedlegg.getInnsendingsType() != null ? InnsendingsType.valueOf(vedlegg.getInnsendingsType()) : null,
             vedlegg.getSkjemanummer() != null ? DokumentType.valueOf(vedlegg.getSkjemanummer()) : null,
+            tilMediatype(vedlegg),
             vedlegg.getBeskrivelse()
         );
         return new PåkrevdVedlegg(vedleggMetadata, vedlegg.getContent());
+    }
+
+    private static MediaType tilMediatype(VedleggFrontend vedlegg) {
+        var mediaType = VedleggUtil.mediaType(vedlegg.getContent());
+        if (mediaType.equalsTypeAndSubtype(APPLICATION_PDF)) {
+            return MediaType.PDF;
+        }
+        if (mediaType.equalsTypeAndSubtype(IMAGE_JPEG)) {
+            return MediaType.JPEG;
+        }
+        if (mediaType.equalsTypeAndSubtype(IMAGE_PNG)) {
+            return MediaType.PNG;
+        }
+        throw new IllegalStateException("Utviklerfeil: Det skal ikke være mulig å sende inn vedlegg som er noe annet enn PDF, JPEG og PNG");
     }
 
 

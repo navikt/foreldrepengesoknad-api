@@ -34,7 +34,7 @@ class EttersendelseFrontendDeseraliseringTest {
         var vedlegg = ettersendelse.vedlegg().get(0);
         assertThat(vedlegg.getId()).isEqualTo(new MutableVedleggReferanse("V090740687265315217194125674862219730"));
         assertThat(vedlegg.getSkjemanummer()).isEqualTo("I000044");
-        assertThat(vedlegg.getContent()).isNull();
+        assertThat(vedlegg.getContent()).isEqualTo(new byte[]{ 37, 80, 68, 70, 45 });
         assertThat(vedlegg.getInnsendingsType()).isNull();
     }
 }
