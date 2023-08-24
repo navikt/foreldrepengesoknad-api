@@ -45,3 +45,5 @@ fppdfgen:
   uri: http://fppdfgen
 oversikt:
   uri: http://fpoversikt
+safselvbetjening:
+  baseUri: https://safselvbetjening.prod-fss-pub.nais.io

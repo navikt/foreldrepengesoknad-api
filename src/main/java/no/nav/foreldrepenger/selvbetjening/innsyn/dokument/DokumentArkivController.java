@@ -15,10 +15,12 @@ import no.nav.foreldrepenger.selvbetjening.http.ProtectedRestController;
 public class DokumentArkivController {
 
     private final DokumentArkivTjeneste dokumentArkivTjeneste;
+    private final SafselvbetjeningConnection safselvbetjeningConnection;
 
     @Autowired
-    public DokumentArkivController(DokumentArkivTjeneste dokumentArkivTjeneste) {
+    public DokumentArkivController(DokumentArkivTjeneste dokumentArkivTjeneste, SafselvbetjeningConnection safselvbetjeningConnection) {
         this.dokumentArkivTjeneste = dokumentArkivTjeneste;
+        this.safselvbetjeningConnection = safselvbetjeningConnection;
     }
 
     @GetMapping(value = "/hent-dokument/{journalpostId}/{dokumentId}", produces = MediaType.APPLICATION_PDF_VALUE)
@@ -30,7 +32,7 @@ public class DokumentArkivController {
     @GetMapping(value = "/hent-dokument/v2/{journalpostId}/{dokumentId}")
     public ResponseEntity<byte[]> hentDokumentV2(@Valid @PathVariable("journalpostId") JournalpostId journalpostId,
                                                  @Valid @PathVariable("dokumentId") DokumentInfoId dokumentId) {
-        return dokumentArkivTjeneste.hentDokumentRespons(journalpostId, dokumentId);
+        return safselvbetjeningConnection.hentDokument(journalpostId, dokumentId);
     }
 
     @GetMapping(value = "/alle", produces = MediaType.APPLICATION_JSON_VALUE)

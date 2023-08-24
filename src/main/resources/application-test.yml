@@ -41,5 +41,7 @@ oppslag:
   uri: ${fpsoknad-mottak.override.url}
 oversikt:
   uri: ${fpoversikt.override.url}
+safselvbetjening:
+  baseUri: ${saf.override.url}
 storage:
   passphrase: tullogtøys

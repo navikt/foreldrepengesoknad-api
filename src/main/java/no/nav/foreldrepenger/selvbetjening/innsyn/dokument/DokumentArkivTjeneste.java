@@ -9,7 +9,6 @@ import java.util.Optional;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
-import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 import org.springframework.web.client.RestOperations;
 import org.springframework.web.util.UriComponentsBuilder;
@@ -34,10 +33,6 @@ public class DokumentArkivTjeneste extends AbstractRestConnection implements Ret
         return getForObject(dokUri(journalpostId, dokumentId), byte[].class);
     }
 
-    public ResponseEntity<byte[]> hentDokumentRespons(JournalpostId journalpostId, DokumentInfoId dokumentId) {
-        return getForEntity(dokUriV2(journalpostId, dokumentId), byte[].class);
-    }
-
     public List<ArkivDokument> hentDokumentoversikt() {
         return Optional.ofNullable(getForObject(dokumenterUri(), ArkivDokument[].class))
             .map(Arrays::asList)
@@ -47,12 +42,6 @@ public class DokumentArkivTjeneste extends AbstractRestConnection implements Ret
     private URI dokUri(JournalpostId journalpostId, DokumentInfoId dokumentId) {
         return UriComponentsBuilder.fromUri(baseUri)
             .pathSegment("arkiv", "hent-dokument", journalpostId.value(), dokumentId.value())
-            .build().toUri();
-    }
-
-    private URI dokUriV2(JournalpostId journalpostId, DokumentInfoId dokumentId) {
-        return UriComponentsBuilder.fromUri(baseUri)
-            .pathSegment("arkiv", "hent-dokument", "v2", journalpostId.value(), dokumentId.value())
             .build().toUri();
     }
 

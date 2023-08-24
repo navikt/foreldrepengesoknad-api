@@ -6,6 +6,7 @@
   ],
   "external": [
     "fpsoknad-mottak.prod-fss-pub.nais.io",
-    "fpinfo-historikk.prod-fss-pub.nais.io"
+    "fpinfo-historikk.prod-fss-pub.nais.io",
+    "safselvbetjening.prod-fss-pub.nais.io"
   ]
 }
