@@ -23,13 +23,14 @@ public abstract class AbstractRestConnection {
         this.operations = operations;
     }
 
-    public <T> ResponseEntity<T> getForEntity(URI uri, Class<T> responseType) {
+    public <T> ResponseEntity<T> getForEntity(String uriTemplate, Class<T> responseType, Object... uriVariables) {
         try {
-            return operations.getForEntity(uri, responseType);
+            return operations.getForEntity(uriTemplate, responseType, uriVariables);
         } catch (HttpClientErrorException e) {
             if (NOT_FOUND.equals(e.getStatusCode())) {
                 if (LOG.isInfoEnabled()) {
-                    LOG.info("Fant intet objekt på {}, returnerer null", escapeHtml(uri));
+                    LOG.info("Fant intet objekt på template {} med uriVariables {} , returnerer null",
+                        escapeHtml(uriTemplate) , escapeHtml(uriVariables));
                 }
                 return null;
             }

@@ -13,8 +13,7 @@ import java.net.URI;
 
 public class SafselvbetjeningConnection extends AbstractRestConnection implements RetryAware {
 
-    private static final String HENT_DOKUMENT_PATH_TMPL = "/rest/hentdokument/{journalpostId}/{dokumentInfoId}/{variantFormat}";
-    private static final String DEFAULT_VARIANTFORMAT = "ARKIV";
+    private static final String HENT_DOKUMENT_PATH_TMPL = "/rest/hentdokument/{journalpostId}/{dokumentInfoId}/ARKIV";
     private final URI baseUri;
 
     @Autowired
@@ -25,16 +24,8 @@ public class SafselvbetjeningConnection extends AbstractRestConnection implement
     }
 
     public ResponseEntity<byte[]> hentDokument(JournalpostId journalpostId, DokumentInfoId dokumentId) {
-        return getForEntity(uri(journalpostId, dokumentId), byte[].class);
-    }
-
-    private URI uri(JournalpostId journalpostId, DokumentInfoId dokumentId) {
-        return UriComponentsBuilder.fromUri(baseUri)
-            .path(HENT_DOKUMENT_PATH_TMPL)
-            .queryParam("journalpostId", journalpostId.value())
-            .queryParam("dokumentInfoId", dokumentId.value())
-            .queryParam("variantFormat", DEFAULT_VARIANTFORMAT)
-            .build().toUri();
+        var uriTemplate = UriComponentsBuilder.fromUri(baseUri).path(HENT_DOKUMENT_PATH_TMPL).build().toUriString();
+        return getForEntity(uriTemplate, byte[].class, journalpostId, dokumentId);
     }
 
 }
