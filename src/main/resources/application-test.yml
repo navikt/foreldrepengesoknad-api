@@ -26,6 +26,9 @@ no.nav.security.jwt:
       fpoversikt:
         token-exchange:
           audience: lokal
+      safselvbetjening:
+        token-exchange:
+          audience: lokal
 
 virus:
   enabled: false
@@ -41,5 +44,7 @@ oppslag:
   uri: ${fpsoknad-mottak.override.url}
 oversikt:
   uri: ${fpoversikt.override.url}
+safselvbetjening:
+  baseUri: ${saf.override.url}
 storage:
   passphrase: tullogtøys

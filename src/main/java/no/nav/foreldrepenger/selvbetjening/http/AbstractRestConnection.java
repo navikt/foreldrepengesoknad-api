@@ -9,6 +9,7 @@ import java.net.URI;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.http.RequestEntity;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.client.HttpClientErrorException;
 import org.springframework.web.client.RestOperations;
 
@@ -20,6 +21,10 @@ public abstract class AbstractRestConnection {
 
     protected AbstractRestConnection(RestOperations operations) {
         this.operations = operations;
+    }
+
+    public <T> ResponseEntity<T> getForEntity(String uriTemplate, Class<T> responseType, Object... uriVariables) {
+        return operations.getForEntity(uriTemplate, responseType, uriVariables);
     }
 
     public <T> T getForObject(URI uri, Class<T> responseType) {
