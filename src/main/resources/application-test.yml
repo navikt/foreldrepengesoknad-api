@@ -26,6 +26,9 @@ no.nav.security.jwt:
       fpoversikt:
         token-exchange:
           audience: lokal
+      safselvbetjening:
+        token-exchange:
+          audience: lokal
 
 virus:
   enabled: false

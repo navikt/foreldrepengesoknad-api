@@ -6,11 +6,13 @@ import no.nav.foreldrepenger.selvbetjening.http.RetryAware;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.ResponseEntity;
+import org.springframework.stereotype.Component;
 import org.springframework.web.client.RestOperations;
 import org.springframework.web.util.UriComponentsBuilder;
 
 import java.net.URI;
 
+@Component
 public class SafselvbetjeningConnection extends AbstractRestConnection implements RetryAware {
 
     private static final String HENT_DOKUMENT_PATH_TMPL = "/rest/hentdokument/{journalpostId}/{dokumentInfoId}/ARKIV";
