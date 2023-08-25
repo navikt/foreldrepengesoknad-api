@@ -38,6 +38,7 @@ import no.nav.foreldrepenger.common.error.UnexpectedInputException;
 import no.nav.foreldrepenger.common.util.TokenUtil;
 import no.nav.foreldrepenger.selvbetjening.uttak.ManglendeFamiliehendelseException;
 import no.nav.foreldrepenger.selvbetjening.vedlegg.AttachmentException;
+import no.nav.foreldrepenger.selvbetjening.vedlegg.AttachmentPasswordProtectedException;
 import no.nav.foreldrepenger.selvbetjening.vedlegg.AttachmentTooLargeException;
 import no.nav.foreldrepenger.selvbetjening.vedlegg.AttachmentsTooLargeException;
 import no.nav.security.token.support.core.exceptions.JwtTokenInvalidClaimException;
@@ -164,6 +165,7 @@ public class ApiExceptionHandler extends ResponseEntityExceptionHandler {
         if (e instanceof JwtTokenInvalidClaimException && getMostSpecificCause(e).getMessage().contains(REDIRECT_INNLOGGING_VED_MANGLEDE_NIVÅ_ACR)) return true;
         if (e instanceof JwtTokenUnauthorizedException && getMostSpecificCause(e).getMessage().contains(REDIRECT_INNLOGGING_VED_MANGLEDE_NIVÅ_ACR)) return true;
         if (e instanceof HttpMediaTypeNotAcceptableException) return true;
+        if (e instanceof AttachmentPasswordProtectedException) return true;
         return false;
     }
 
