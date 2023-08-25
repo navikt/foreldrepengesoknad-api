@@ -44,6 +44,10 @@ no.nav:
           discoveryurl: ${loginservice.idporten.discovery.url}
           accepted_audience: ${loginservice.idporten.audience}
           cookie_name: selvbetjening-idtoken
+        idporten:
+          discoveryurl: ${idporten.well.known.url}
+          validation:
+            optional-claims: aud
 
 virus:
   enabled: true
