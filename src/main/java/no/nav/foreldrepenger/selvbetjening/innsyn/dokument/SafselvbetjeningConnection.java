@@ -27,7 +27,6 @@ public class SafselvbetjeningConnection extends AbstractRestConnection implement
 
     public ResponseEntity<byte[]> hentDokument(JournalpostId journalpostId, DokumentInfoId dokumentId) {
         var uriTemplate = UriComponentsBuilder.fromUri(baseUri).path(HENT_DOKUMENT_PATH_TMPL).build().toUriString();
-
         try {
             var safResponse = getForEntity(uriTemplate, byte[].class, journalpostId.value(), dokumentId.value());
             var safContentType = safResponse.getHeaders().getContentType();

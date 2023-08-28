@@ -23,13 +23,7 @@ public class DokumentArkivController {
         this.safselvbetjeningConnection = safselvbetjeningConnection;
     }
 
-    @GetMapping(value = "/hent-dokument/{journalpostId}/{dokumentId}", produces = MediaType.APPLICATION_PDF_VALUE)
-    public byte[] hentDokument(@Valid @PathVariable("journalpostId") JournalpostId journalpostId,
-                               @Valid @PathVariable("dokumentId") DokumentInfoId dokumentId) {
-        return dokumentArkivTjeneste.hentDokument(journalpostId, dokumentId);
-    }
-
-    @GetMapping(value = "/hent-dokument/v2/{journalpostId}/{dokumentId}")
+    @GetMapping(value = "/hent-dokument/{journalpostId}/{dokumentId}")
     public ResponseEntity<byte[]> hentDokumentV2(@Valid @PathVariable("journalpostId") JournalpostId journalpostId,
                                                  @Valid @PathVariable("dokumentId") DokumentInfoId dokumentId) {
         return safselvbetjeningConnection.hentDokument(journalpostId, dokumentId);
