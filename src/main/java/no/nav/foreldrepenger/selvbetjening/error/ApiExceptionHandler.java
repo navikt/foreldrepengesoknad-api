@@ -1,19 +1,17 @@
 package no.nav.foreldrepenger.selvbetjening.error;
 
-import static no.nav.foreldrepenger.common.util.StreamUtil.safeStream;
-import static org.springframework.core.NestedExceptionUtils.getMostSpecificCause;
-import static org.springframework.http.HttpStatus.BAD_REQUEST;
-import static org.springframework.http.HttpStatus.CONFLICT;
-import static org.springframework.http.HttpStatus.FORBIDDEN;
-import static org.springframework.http.HttpStatus.INTERNAL_SERVER_ERROR;
-import static org.springframework.http.HttpStatus.NOT_ACCEPTABLE;
-import static org.springframework.http.HttpStatus.NOT_FOUND;
-import static org.springframework.http.HttpStatus.PAYLOAD_TOO_LARGE;
-import static org.springframework.http.HttpStatus.UNAUTHORIZED;
-import static org.springframework.http.HttpStatus.UNPROCESSABLE_ENTITY;
-
-import java.util.Optional;
-
+import jakarta.validation.ConstraintViolationException;
+import no.nav.foreldrepenger.common.error.UnexpectedInputException;
+import no.nav.foreldrepenger.common.util.TokenUtil;
+import no.nav.foreldrepenger.selvbetjening.innsyn.UmydigBrukerException;
+import no.nav.foreldrepenger.selvbetjening.uttak.ManglendeFamiliehendelseException;
+import no.nav.foreldrepenger.selvbetjening.vedlegg.AttachmentException;
+import no.nav.foreldrepenger.selvbetjening.vedlegg.AttachmentPasswordProtectedException;
+import no.nav.foreldrepenger.selvbetjening.vedlegg.AttachmentTooLargeException;
+import no.nav.foreldrepenger.selvbetjening.vedlegg.AttachmentsTooLargeException;
+import no.nav.security.token.support.core.exceptions.JwtTokenInvalidClaimException;
+import no.nav.security.token.support.core.exceptions.JwtTokenValidatorException;
+import no.nav.security.token.support.spring.validation.interceptor.JwtTokenUnauthorizedException;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.http.HttpHeaders;
@@ -33,17 +31,19 @@ import org.springframework.web.multipart.MultipartException;
 import org.springframework.web.servlet.NoHandlerFoundException;
 import org.springframework.web.servlet.mvc.method.annotation.ResponseEntityExceptionHandler;
 
-import jakarta.validation.ConstraintViolationException;
-import no.nav.foreldrepenger.common.error.UnexpectedInputException;
-import no.nav.foreldrepenger.common.util.TokenUtil;
-import no.nav.foreldrepenger.selvbetjening.uttak.ManglendeFamiliehendelseException;
-import no.nav.foreldrepenger.selvbetjening.vedlegg.AttachmentException;
-import no.nav.foreldrepenger.selvbetjening.vedlegg.AttachmentPasswordProtectedException;
-import no.nav.foreldrepenger.selvbetjening.vedlegg.AttachmentTooLargeException;
-import no.nav.foreldrepenger.selvbetjening.vedlegg.AttachmentsTooLargeException;
-import no.nav.security.token.support.core.exceptions.JwtTokenInvalidClaimException;
-import no.nav.security.token.support.core.exceptions.JwtTokenValidatorException;
-import no.nav.security.token.support.spring.validation.interceptor.JwtTokenUnauthorizedException;
+import java.util.Optional;
+
+import static no.nav.foreldrepenger.common.util.StreamUtil.safeStream;
+import static org.springframework.core.NestedExceptionUtils.getMostSpecificCause;
+import static org.springframework.http.HttpStatus.BAD_REQUEST;
+import static org.springframework.http.HttpStatus.CONFLICT;
+import static org.springframework.http.HttpStatus.FORBIDDEN;
+import static org.springframework.http.HttpStatus.INTERNAL_SERVER_ERROR;
+import static org.springframework.http.HttpStatus.NOT_ACCEPTABLE;
+import static org.springframework.http.HttpStatus.NOT_FOUND;
+import static org.springframework.http.HttpStatus.PAYLOAD_TOO_LARGE;
+import static org.springframework.http.HttpStatus.UNAUTHORIZED;
+import static org.springframework.http.HttpStatus.UNPROCESSABLE_ENTITY;
 
 @ControllerAdvice
 public class ApiExceptionHandler extends ResponseEntityExceptionHandler {
@@ -160,13 +160,13 @@ public class ApiExceptionHandler extends ResponseEntityExceptionHandler {
     }
 
     private boolean loggExceptionPåInfoNivå(Exception e) {
-        if (!tokenUtil.erAutentisert()) return true;
-        if (tokenUtil.erUtløpt()) return true;
-        if (e instanceof JwtTokenInvalidClaimException && getMostSpecificCause(e).getMessage().contains(REDIRECT_INNLOGGING_VED_MANGLEDE_NIVÅ_ACR)) return true;
-        if (e instanceof JwtTokenUnauthorizedException && getMostSpecificCause(e).getMessage().contains(REDIRECT_INNLOGGING_VED_MANGLEDE_NIVÅ_ACR)) return true;
-        if (e instanceof HttpMediaTypeNotAcceptableException) return true;
-        if (e instanceof AttachmentPasswordProtectedException) return true;
-        return false;
+        return !tokenUtil.erAutentisert() ||
+                tokenUtil.erUtløpt() ||
+                e instanceof JwtTokenInvalidClaimException && getMostSpecificCause(e).getMessage().contains(REDIRECT_INNLOGGING_VED_MANGLEDE_NIVÅ_ACR) ||
+                e instanceof JwtTokenUnauthorizedException && getMostSpecificCause(e).getMessage().contains(REDIRECT_INNLOGGING_VED_MANGLEDE_NIVÅ_ACR) ||
+                e instanceof HttpMediaTypeNotAcceptableException ||
+                e instanceof AttachmentPasswordProtectedException ||
+                e instanceof UmydigBrukerException;
     }
 
     private boolean ikkeLoggExceptionsMedSensitiveOpplysnignerTilVanligLogg(Exception e) {
