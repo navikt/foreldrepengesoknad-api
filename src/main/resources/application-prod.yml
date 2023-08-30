@@ -1,15 +1,15 @@
 allowed:
   origins:
     https://engangsstonad.nav.no,
-    https://foreldrepenger.nav.no,
-    https://foreldrepengesoknad.nav.no,
-    https://svangerskapspengesoknad.nav.no,
-    https://foreldrepengeplanlegger.nav.no,
     https://engangsstonad.intern.nav.no,
+    https://foreldrepenger.nav.no,
     https://foreldrepenger.intern.nav.no,
+    https://foreldrepengesoknad.nav.no,
     https://foreldrepengesoknad.intern.nav.no,
+    https://svangerskapspengesoknad.nav.no,
     https://svangerskapspengesoknad.intern.nav.no,
-    https://foreldrepengeplanlegger.intern.nav.no
+    https://foreldrepengesoknad-api.nav.no,
+    https://foreldrepengesoknad-api.intern.nav.no
 
 mellomlagring:
   tmp:
