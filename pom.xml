@@ -35,7 +35,7 @@
 
         <stonadskonto-regler.version>1.0.1</stonadskonto-regler.version>
         <selvbetjening-felles.version>2.4.5</selvbetjening-felles.version>
-		<token-validation-version>3.0.10</token-validation-version>
+		<token-validation-version>3.1.5</token-validation-version>
         <boot-conditionals.version>5.0.9</boot-conditionals.version>
 
         <springdoc.version>2.2.0</springdoc.version>

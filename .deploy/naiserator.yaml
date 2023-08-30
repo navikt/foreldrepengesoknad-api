@@ -11,9 +11,20 @@ metadata:
 spec:
   tokenx:
     enabled: true
+  idporten:
+    enabled: true
+    sidecar:
+      enabled: {{wonderwall}}
+      autoLogin: {{wonderwall}}
+      autoLoginIgnorePaths:
+        - /rest/konto
   envFrom:
+    {{#if wonderwall}}
+    - secret: api-storage
+    {{else}}
     - configmap: loginservice-idporten
     - secret: api-storage
+    {{/if}}
   gcp:
     buckets:
       - name: {{tmpbucket}}

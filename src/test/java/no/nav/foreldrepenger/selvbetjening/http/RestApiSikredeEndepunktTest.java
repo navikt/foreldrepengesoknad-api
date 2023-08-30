@@ -1,18 +1,17 @@
 package no.nav.foreldrepenger.selvbetjening.http;
 
-import static org.assertj.core.api.Assertions.assertThat;
-
-import java.lang.reflect.Method;
-import java.util.List;
-
+import no.nav.boot.conditionals.ConditionalOnNotProd;
+import no.nav.foreldrepenger.selvbetjening.uttak.UttakController;
+import no.nav.security.token.support.core.api.RequiredIssuers;
+import no.nav.security.token.support.core.api.Unprotected;
 import org.junit.jupiter.api.Test;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.RestController;
 
-import no.nav.boot.conditionals.ConditionalOnNotProd;
-import no.nav.foreldrepenger.selvbetjening.uttak.UttakController;
-import no.nav.security.token.support.core.api.ProtectedWithClaims;
-import no.nav.security.token.support.core.api.Unprotected;
+import java.lang.reflect.Method;
+import java.util.List;
+
+import static org.assertj.core.api.Assertions.assertThat;
 
 class RestApiSikredeEndepunktTest extends RestApiTestUtil {
 
@@ -21,7 +20,7 @@ class RestApiSikredeEndepunktTest extends RestApiTestUtil {
 
     @Test
     void sjekkAtProtectedRestControllerIkkeHarUbeskyttetAnnotering() {
-        assertThat(ProtectedRestController.class).hasAnnotations(RestController.class, ProtectedWithClaims.class, Validated.class);
+        assertThat(ProtectedRestController.class).hasAnnotations(RestController.class, RequiredIssuers.class, Validated.class);
         assertThat(ProtectedRestController.class.isAnnotationPresent(Unprotected.class))
             .as("Sørg for at @ProtectedRestController ikke er annotert med @Unprotected!")
             .isFalse();
