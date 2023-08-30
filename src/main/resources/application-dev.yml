@@ -1,3 +1,9 @@
+wonderwall:
+  ingress: https://foreldrepengesoknad.intern.dev.nav.no,
+    https://foreldrepenger.intern.dev.nav.no,
+    https://svangerskapspengesoknad.intern.dev.nav.no,
+    https://engangsstonad.intern.dev.nav.no
+
 allowed:
   origins:
     https://engangsstonad.dev.nav.no,

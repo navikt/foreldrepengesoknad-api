@@ -49,5 +49,10 @@
     "name": "no.nav.foreldrepenger.selvbetjening.origins",
     "type": "java.lang.String",
     "description": "A description for 'no.nav.foreldrepenger.selvbetjening.origins'"
+  },
+  {
+    "name": "wonderwall.ingress",
+    "type": "java.lang.String",
+    "description": "A description for 'wonderwall.ingress'"
   }
 ]}
