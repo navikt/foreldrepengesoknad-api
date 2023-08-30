@@ -19,8 +19,12 @@ spec:
       autoLoginIgnorePaths:
         - /rest/konto
   envFrom:
+    {{#if wonderwall}}
+    - secret: api-storage
+    {{else}}
     - configmap: loginservice-idporten
     - secret: api-storage
+    {{/if}}
   gcp:
     buckets:
       - name: {{tmpbucket}}
