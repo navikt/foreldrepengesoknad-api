@@ -20,7 +20,7 @@ import static no.nav.foreldrepenger.common.util.TokenUtil.SELVBETJENING;
 @Documented
 @RequiredIssuers({
         @ProtectedWithClaims(issuer = SELVBETJENING, claimMap = CLAIMS),
-        @ProtectedWithClaims(issuer = "idporten", claimMap = { "acr=Level4", "acr=idporten-loa-high" })
+        @ProtectedWithClaims(issuer = "idporten", claimMap = { CLAIMS, "acr=idporten-loa-high" })
 })
 @Validated
 @Target(TYPE)
@@ -29,8 +29,5 @@ import static no.nav.foreldrepenger.common.util.TokenUtil.SELVBETJENING;
 public @interface ProtectedRestController {
     @AliasFor(annotation = RequestMapping.class, attribute = "value")
     String[] value() default {};
-
-    @AliasFor(annotation = ProtectedWithClaims.class, attribute = "claimMap")
-    String[] claimMap() default CLAIMS;
 
 }
