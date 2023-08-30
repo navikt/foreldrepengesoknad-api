@@ -1,7 +1,9 @@
 allowed:
-  origins: https://svangerskapspengesoknad.intern.dev.nav.no,
+  origins:
+    https://svangerskapspengesoknad.intern.dev.nav.no,
     https://engangsstonad.intern.dev.nav.no,
     https://foreldrepenger.intern.dev.nav.no,
+    https://foreldrepengesoknad-api.intern.dev.nav.no
     https://foreldrepengesoknad.intern.dev.nav.no,
     https://foreldrepengesoknad-rework.intern.dev.nav.no,
     https://svangerskapspengesoknad-sommer.intern.dev.nav.no,
