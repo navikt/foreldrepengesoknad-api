@@ -1,12 +1,3 @@
-allowed:
-  origins:
-    https://engangsstonad.nav.no,
-    https://foreldrepenger.nav.no,
-    https://foreldrepengesoknad.nav.no,
-    https://svangerskapspengesoknad.nav.no
-    https://foreldrepengesoknad-api.nav.no
-
-
 no.nav:
   security:
     jwt:

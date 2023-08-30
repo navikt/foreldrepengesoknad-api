@@ -1,13 +1,15 @@
 allowed:
   origins:
-    https://svangerskapspengesoknad.intern.dev.nav.no,
+    https://engangsstonad.dev.nav.no,
     https://engangsstonad.intern.dev.nav.no,
+    https://foreldrepenger.dev.nav.no,
     https://foreldrepenger.intern.dev.nav.no,
-    https://foreldrepengesoknad-api.intern.dev.nav.no
+    https://foreldrepengesoknad.dev.nav.no,
     https://foreldrepengesoknad.intern.dev.nav.no,
-    https://foreldrepengesoknad-rework.intern.dev.nav.no,
-    https://svangerskapspengesoknad-sommer.intern.dev.nav.no,
-    https://foreldrepenger-sommer.intern.dev.nav.no
+    https://svangerskapspengesoknad.dev.nav.no,
+    https://svangerskapspengesoknad.intern.dev.nav.no,
+    https://foreldrepengesoknad-api.dev.nav.no,
+    https://foreldrepengesoknad-api.intern.dev.nav.no
 
 management:
   endpoints:
