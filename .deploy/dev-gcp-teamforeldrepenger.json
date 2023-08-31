@@ -1,7 +1,6 @@
 {
   "tmpbucket": "mellomlagring",
   "ingresses": [
-    "https://foreldrepengesoknad-api.dev.nav.no",
     "https://foreldrepengesoknad-api.intern.dev.nav.no"
   ],
   "external": [
