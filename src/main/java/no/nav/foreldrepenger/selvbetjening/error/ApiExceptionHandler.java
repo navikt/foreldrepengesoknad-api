@@ -50,7 +50,7 @@ public class ApiExceptionHandler extends ResponseEntityExceptionHandler {
 
     private static final Logger LOG = LoggerFactory.getLogger(ApiExceptionHandler.class);
     private static final Logger SECURE_LOGGER = LoggerFactory.getLogger("secureLogger");
-    public static final String REDIRECT_INNLOGGING_VED_MANGLEDE_NIVÅ_ACR = "Required claims not present in token.[acr=Level4]";
+    public static final String REDIRECT_INNLOGGING_VED_MANGLEDE_NIVÅ_ACR = "Required claims not present in token.[acr=idporten-loa-high]";
     private final TokenUtil tokenUtil;
 
     public ApiExceptionHandler(TokenUtil tokenUtil) {
