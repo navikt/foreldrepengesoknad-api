@@ -20,7 +20,7 @@ import static no.nav.foreldrepenger.common.util.TokenUtil.SELVBETJENING;
 @Documented
 @RequiredIssuers({
         @ProtectedWithClaims(issuer = SELVBETJENING, claimMap = CLAIMS),
-        @ProtectedWithClaims(issuer = "idporten", claimMap = { CLAIMS, "acr=idporten-loa-high" })
+        @ProtectedWithClaims(issuer = "idporten", claimMap =  CLAIMS)
 })
 @Validated
 @Target(TYPE)
