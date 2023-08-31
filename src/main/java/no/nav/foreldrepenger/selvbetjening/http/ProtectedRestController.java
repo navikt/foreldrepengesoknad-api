@@ -19,7 +19,7 @@ import no.nav.security.token.support.core.api.RequiredIssuers;
 @RestController
 @Documented
 @RequiredIssuers(
-        @ProtectedWithClaims(issuer = TokenUtil.IDPORTEN, claimMap = { TokenUtil.IDPORTENV2_CLAIMS, TokenUtil.CLAIMS })
+        @ProtectedWithClaims(issuer = TokenUtil.IDPORTEN, claimMap = TokenUtil.IDPORTENV2_CLAIMS)
 )
 @Validated
 @Target(TYPE)
