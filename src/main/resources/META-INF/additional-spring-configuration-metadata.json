@@ -18,11 +18,6 @@
     "description": "A description for 'no.nav.foreldrepenger.toggles.fnr-header-filter'"
   },
   {
-    "name": "no.nav.security.jwt.issuer.selvbetjening.discoveryurl",
-    "type": "java.lang.String",
-    "description": "A description for 'no.nav.security.jwt.issuer.selvbetjening.discoveryurl'"
-  },
-  {
     "name": "historikk",
     "description": "A description for 'historikk'"
   },
@@ -39,10 +34,5 @@
     "name": "no.nav.foreldrepenger.selvbetjening.origins",
     "type": "java.lang.String",
     "description": "A description for 'no.nav.foreldrepenger.selvbetjening.origins'"
-  },
-  {
-    "name": "wonderwall.ingress",
-    "type": "java.lang.String",
-    "description": "A description for 'wonderwall.ingress'"
   }
 ]}

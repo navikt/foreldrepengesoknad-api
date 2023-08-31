@@ -18,7 +18,7 @@ import static no.nav.foreldrepenger.common.util.TokenUtil.*;
 @RestController
 @Documented
 @RequiredIssuers(
-        @ProtectedWithClaims(issuer = IDPORTEN, claimMap = { IDPORTENV2_CLAIMS, CLAIMS }, combineWithOr = true)
+        @ProtectedWithClaims(issuer = IDPORTEN, claimMap = { IDPORTENV2_CLAIMS })
 )
 @Validated
 @Target(TYPE)
