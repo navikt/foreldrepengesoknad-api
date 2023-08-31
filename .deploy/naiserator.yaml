@@ -14,13 +14,8 @@ spec:
   idporten:
     enabled: true
     sidecar:
-      enabled: {{wonderwall}}
-      autoLogin: false
+      enabled: true
   envFrom:
-    {{#if wonderwall}}
-    {{else}}
-    - configmap: loginservice-idporten
-    {{/if}}
     - secret: api-storage
   gcp:
     buckets:

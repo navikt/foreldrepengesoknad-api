@@ -1,5 +1,4 @@
 {
-  "wonderwall": false,
   "tmpbucket": "mellomlagring-prod",
   "ingresses": [
     "https://foreldrepengesoknad-api.nav.no",
