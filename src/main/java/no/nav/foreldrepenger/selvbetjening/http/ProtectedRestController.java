@@ -2,7 +2,6 @@ package no.nav.foreldrepenger.selvbetjening.http;
 
 import static java.lang.annotation.ElementType.TYPE;
 import static java.lang.annotation.RetentionPolicy.RUNTIME;
-import static no.nav.foreldrepenger.common.util.TokenUtil.CLAIMS;
 
 import java.lang.annotation.Documented;
 import java.lang.annotation.Retention;
@@ -19,7 +18,7 @@ import no.nav.security.token.support.core.api.RequiredIssuers;
 @RestController
 @Documented
 @RequiredIssuers(
-        @ProtectedWithClaims(issuer = "idporten", claimMap = CLAIMS)
+        @ProtectedWithClaims(issuer = "idporten", claimMap = "acr=idporten-loa-high")
 )
 @Validated
 @Target(TYPE)
