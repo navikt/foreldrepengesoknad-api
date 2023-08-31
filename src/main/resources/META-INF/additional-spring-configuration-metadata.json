@@ -27,16 +27,6 @@
     "description": "A description for 'historikk'"
   },
   {
-    "name": "no.nav.security.jwt.issuer.selvbetjening.accepted_audience",
-    "type": "java.lang.String",
-    "description": "A description for 'no.nav.security.jwt.issuer.selvbetjening.accepted_audience'"
-  },
-  {
-    "name": "no.nav.security.jwt.issuer.selvbetjening.cookie_name",
-    "type": "java.lang.String",
-    "description": "A description for 'no.nav.security.jwt.issuer.selvbetjening.cookie_name'"
-  },
-  {
     "name": "mottak",
     "description": "A description for 'mottak'"
   },

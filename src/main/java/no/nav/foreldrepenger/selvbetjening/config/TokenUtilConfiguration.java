@@ -13,6 +13,6 @@ public class TokenUtilConfiguration {
 
     @Bean
     public TokenUtil tokenUtil(TokenValidationContextHolder contextHolder) {
-        return new TokenUtil(contextHolder, SELVBETJENING);
+        return new TokenUtil(contextHolder, SELVBETJENING, "idporten");
     }
 }
