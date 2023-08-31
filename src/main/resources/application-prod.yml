@@ -35,6 +35,11 @@ no.nav:
           safselvbetjening:
             token-exchange:
               audience: prod-fss:teamdokumenthandtering:safselvbetjening
+      issuer:
+        selvbetjening:
+          discoveryurl: ${loginservice.idporten.discovery.url}
+          accepted_audience: ${loginservice.idporten.audience}
+          cookie_name: selvbetjening-idtoken
 
 oppslag:
   uri: https://fpsoknad-mottak.prod-fss-pub.nais.io/api/

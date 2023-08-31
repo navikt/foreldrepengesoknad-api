@@ -29,6 +29,11 @@ no.nav.security.jwt:
       safselvbetjening:
         token-exchange:
           audience: lokal
+  issuer:
+    selvbetjening:
+      discoveryurl: ${loginservice.idporten.discovery.url}
+      accepted_audience: ${loginservice.idporten.audience}
+      cookie_name: selvbetjening-idtoken
 
 virus:
   enabled: false

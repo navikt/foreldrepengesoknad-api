@@ -32,15 +32,6 @@ no.nav:
               client-id: ${token.x.client.id}
               client-jwk: ${token.x.private.jwk}
               client-auth-method: private_key_jwt
-      issuer:
-        selvbetjening:
-          discoveryurl: ${loginservice.idporten.discovery.url}
-          accepted_audience: ${loginservice.idporten.audience}
-          cookie_name: selvbetjening-idtoken
-        idporten:
-          discoveryurl: ${idporten.well.known.url}
-          validation:
-            optional-claims: aud
 
 virus:
   enabled: true
