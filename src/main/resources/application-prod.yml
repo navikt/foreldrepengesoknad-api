@@ -3,7 +3,7 @@ allowed:
     https://engangsstonad.nav.no,
     https://foreldrepenger.nav.no,
     https://foreldrepengesoknad.nav.no,
-    https://svangerskapspengesoknad.nav.no,
+    https://svangerskapspengesoknad.nav.no
 
 mellomlagring:
   tmp:
