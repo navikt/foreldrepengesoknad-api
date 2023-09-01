@@ -4,7 +4,6 @@ allowed:
     https://foreldrepenger.intern.dev.nav.no,
     https://foreldrepengesoknad.intern.dev.nav.no,
     https://svangerskapspengesoknad.intern.dev.nav.no,
-    https://foreldrepengesoknad-api.intern.dev.nav.no
 
 management:
   endpoints:

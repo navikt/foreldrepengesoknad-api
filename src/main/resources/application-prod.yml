@@ -4,7 +4,6 @@ allowed:
     https://foreldrepenger.nav.no,
     https://foreldrepengesoknad.nav.no,
     https://svangerskapspengesoknad.nav.no,
-    https://foreldrepengesoknad-api.nav.no,
 
 mellomlagring:
   tmp:
