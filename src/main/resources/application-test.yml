@@ -29,6 +29,9 @@ no.nav.security.jwt:
       safselvbetjening:
         token-exchange:
           audience: lokal
+  issuer:
+    idporten:
+      cookie_name: selvbetjening-idtoken
 
 virus:
   enabled: false
