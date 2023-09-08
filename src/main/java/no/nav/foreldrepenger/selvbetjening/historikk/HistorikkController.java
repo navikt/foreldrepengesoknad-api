@@ -39,14 +39,13 @@ public class HistorikkController {
         return manglendeVedleggFraFpinfoHistorikk;
     }
 
-    private void sammenlign(Saksnummer saksnummer, List<String> manglendeVedleggFraFpinfoHistorikk) {
+    private void sammenlign(Saksnummer saksnummer, List<String> fraHistorikk) {
         try {
-            var manglendeVedleggFraFpoversikt = innsyn.hentManglendeVedlegg(saksnummer);
-            if (manglendeVedleggFraFpinfoHistorikk.size() == manglendeVedleggFraFpoversikt.size() && manglendeVedleggFraFpinfoHistorikk.containsAll(manglendeVedleggFraFpoversikt) && manglendeVedleggFraFpoversikt.containsAll(
-                manglendeVedleggFraFpinfoHistorikk)) {
+            var fraFpoversikt = innsyn.hentManglendeVedlegg(saksnummer);
+            if (fraHistorikk.size() == fraFpoversikt.size() && fraHistorikk.containsAll(fraFpoversikt) && fraFpoversikt.containsAll(fraHistorikk)) {
                 LOG.info("Ingen avvik i manglende vedlegg mottatt fra fpoversikt sammenlignet med fpinfo-historikk");
             } else {
-                LOG.info("AVVIK[manglende vedlegg]: Fpinfo-historikk returnerte {}, mens fpoversikt returnerte {}", manglendeVedleggFraFpinfoHistorikk, manglendeVedleggFraFpoversikt);
+                LOG.info("AVVIK[manglende vedlegg]: Fpinfo-historikk returnerte {}, mens fpoversikt returnerte {}", fraHistorikk, fraFpoversikt);
             }
         } catch (Exception e) {
             LOG.info("Noe gikk galt med sammenligning av manglende vedlegg", e);
