@@ -1,13 +1,19 @@
 package no.nav.foreldrepenger.selvbetjening.innsyn;
 
-import no.nav.foreldrepenger.common.innsyn.AnnenPartVedtak;
-import no.nav.foreldrepenger.common.innsyn.Saker;
-import no.nav.foreldrepenger.selvbetjening.http.AbstractRestConnection;
+import static java.util.Collections.emptyList;
+
+import java.util.Arrays;
+import java.util.List;
+import java.util.Optional;
+
 import org.springframework.stereotype.Component;
 import org.springframework.web.client.HttpClientErrorException;
 import org.springframework.web.client.RestOperations;
 
-import java.util.Optional;
+import no.nav.foreldrepenger.common.domain.Saksnummer;
+import no.nav.foreldrepenger.common.innsyn.AnnenPartVedtak;
+import no.nav.foreldrepenger.common.innsyn.Saker;
+import no.nav.foreldrepenger.selvbetjening.http.AbstractRestConnection;
 
 @Component
 public class InnsynConnection extends AbstractRestConnection {
@@ -33,5 +39,17 @@ public class InnsynConnection extends AbstractRestConnection {
     }
     public Optional<AnnenPartVedtak> hentAnnenpartsVedtak(AnnenPartVedtakIdentifikator annenPartVedtakIdentifikator) {
         return Optional.ofNullable(postForObject(cfg.annenpartsVedtak(), annenPartVedtakIdentifikator, AnnenPartVedtak.class));
+    }
+
+    public List<String> hentManglendeVedlegg(Saksnummer saksnr) {
+        return Optional.ofNullable(getForObject(cfg.manglendeOppgaver(saksnr), String[].class))
+            .map(Arrays::asList)
+            .orElse(emptyList());
+    }
+
+    public List<TilbakekrevingsInnslag> hentUttalelserOmTilbakekreving() {
+        return Optional.ofNullable(getForObject(cfg.uttalelseOmTilbakekrevinger(), TilbakekrevingsInnslag[].class))
+            .map(Arrays::asList)
+            .orElse(emptyList());
     }
 }
