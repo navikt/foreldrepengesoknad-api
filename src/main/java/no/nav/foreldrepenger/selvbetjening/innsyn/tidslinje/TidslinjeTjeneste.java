@@ -1,6 +1,11 @@
 package no.nav.foreldrepenger.selvbetjening.innsyn.tidslinje;
 
+import static java.util.Collections.emptyList;
+
 import java.net.URI;
+import java.util.Arrays;
+import java.util.List;
+import java.util.Optional;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
@@ -23,12 +28,14 @@ public class TidslinjeTjeneste extends AbstractRestConnection implements RetryAw
         this.baseUri = uri;
     }
 
-    public String hentTidslinje(Saksnummer saksnummer) {
+    public List<TidslinjeHendelseDto> hentTidslinje(Saksnummer saksnummer) {
         var uri = UriComponentsBuilder.fromUri(baseUri)
             .pathSegment("historikk", "tidslinje")
             .queryParam("saksnummer", saksnummer.value())
             .build()
             .toUri();
-        return getForObject(uri, String.class);
+        return Optional.ofNullable(getForObject(uri, TidslinjeHendelseDto[].class))
+            .map(Arrays::asList)
+            .orElse(emptyList());
     }
 }
