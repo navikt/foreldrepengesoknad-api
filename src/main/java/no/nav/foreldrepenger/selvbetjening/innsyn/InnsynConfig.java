@@ -11,13 +11,17 @@ import no.nav.foreldrepenger.selvbetjening.util.URIUtil;
 
 @ConfigurationProperties(prefix = "oversikt")
 public class InnsynConfig {
+    private static final String CONTEXT_PATH = "api";
+    private static final String SAKER = CONTEXT_PATH + "/saker";
+    private static final String ANNENPART_VEDTAK = CONTEXT_PATH + "/annenPart";
+    private static final String TIDSLINJE = CONTEXT_PATH + "/tidslinje";
 
-    private static final String SAKSNUMMER = "saksnummer";
-    private static final String SAKER = "api/saker";
-    private static final String OPPGAVER = "api/oppgaver";
+    private static final String OPPGAVER = CONTEXT_PATH + "/oppgaver";
     private static final String MANGLENDE_VEDLEGG = OPPGAVER + "/manglendevedlegg";
     private static final String UTTALELSER_OM_TILBAKEKREVING = OPPGAVER + "/tilbakekrevingsuttalelse";
-    private static final String ANNENPART_VEDTAK = "api/annenPart";
+
+    private static final String SAKSNUMMER = "saksnummer";
+
     private final URI baseUri;
 
     protected InnsynConfig(URI uri) {
@@ -38,6 +42,10 @@ public class InnsynConfig {
 
     URI annenpartsVedtak() {
         return uri(getBaseUri(), ANNENPART_VEDTAK);
+    }
+
+    URI tidslinje(Saksnummer saksnummer) {
+        return uri(getBaseUri(), TIDSLINJE, URIUtil.queryParam(SAKSNUMMER, saksnummer.value()));
     }
 
     private URI getBaseUri() {

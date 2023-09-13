@@ -10,6 +10,7 @@ import org.springframework.stereotype.Service;
 import no.nav.foreldrepenger.common.domain.Saksnummer;
 import no.nav.foreldrepenger.common.innsyn.AnnenPartVedtak;
 import no.nav.foreldrepenger.common.innsyn.Saker;
+import no.nav.foreldrepenger.selvbetjening.innsyn.tidslinje.TidslinjeHendelseDto;
 
 @Service
 public class InnsynTjeneste implements Innsyn {
@@ -44,6 +45,12 @@ public class InnsynTjeneste implements Innsyn {
         }
         return innsynConnection.hentAnnenpartsVedtak(annenPartVedtakIdentifikator);
     }
+
+    @Override
+    public List<TidslinjeHendelseDto> tidslinje(Saksnummer saksnummer) {
+        return innsynConnection.tidslinje(saksnummer);
+    }
+
 
     @Override
     public String toString() {
