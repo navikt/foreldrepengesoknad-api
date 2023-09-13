@@ -1,17 +1,17 @@
 package no.nav.foreldrepenger.selvbetjening.innsending.domain;
 
+import static no.nav.foreldrepenger.common.domain.validation.InputValideringRegex.FRITEKST;
+
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Objects;
+import java.util.Optional;
+
 import jakarta.validation.Valid;
 import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Pattern;
 import jakarta.validation.constraints.Size;
 import no.nav.foreldrepenger.common.domain.Saksnummer;
-
-import java.util.List;
-import java.util.Objects;
-import java.util.Optional;
-
-import static java.util.Collections.emptyList;
-import static no.nav.foreldrepenger.common.domain.validation.InputValideringRegex.FRITEKST;
 
 public final class EttersendingFrontend {
     private final @Pattern(regexp = FRITEKST) @NotNull String type;
@@ -26,7 +26,7 @@ public final class EttersendingFrontend {
         this.saksnummer = saksnummer;
         this.brukerTekst = brukerTekst;
         this.dialogId = dialogId;
-        this.vedlegg = Optional.ofNullable(vedlegg).orElse(emptyList());
+        this.vedlegg = Optional.ofNullable(vedlegg).orElse(new ArrayList<>());
     }
 
     public String type() {
