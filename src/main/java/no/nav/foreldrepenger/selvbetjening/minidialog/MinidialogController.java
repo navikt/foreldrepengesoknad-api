@@ -1,6 +1,5 @@
 package no.nav.foreldrepenger.selvbetjening.minidialog;
 
-import static no.nav.boot.conditionals.EnvUtil.isDevOrLocal;
 import static no.nav.foreldrepenger.common.util.StreamUtil.safeStream;
 
 import java.util.List;
@@ -8,7 +7,6 @@ import java.util.List;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.core.env.Environment;
 import org.springframework.web.bind.annotation.GetMapping;
 
 import no.nav.foreldrepenger.selvbetjening.historikk.HistorikkInnslag;
@@ -25,21 +23,17 @@ public class MinidialogController {
 
     private final MinidialogTjeneste minidialog;
     private final Innsyn innsyn;
-    private final Environment env;
 
     @Autowired
-    public MinidialogController(MinidialogTjeneste minidialog, Innsyn innsyn, Environment env) {
+    public MinidialogController(MinidialogTjeneste minidialog, Innsyn innsyn) {
         this.minidialog = minidialog;
         this.innsyn = innsyn;
-        this.env = env;
     }
 
     @GetMapping
     public List<MinidialogInnslag> aktive() {
         var aktiveMinidialoger = minidialog.aktive();
-        if (isDevOrLocal(env)) {
-            sammenlign(aktiveMinidialoger);
-        }
+        sammenlign(aktiveMinidialoger);
         return aktiveMinidialoger;
     }
 
