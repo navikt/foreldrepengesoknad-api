@@ -34,22 +34,7 @@ public record TidslinjeHendelseDto(LocalDateTime opprettet,
         UTGÅENDE_ETTERLYS_INNTEKTSMELDING
     }
 
-    public record Dokument(String dokumentId, String dokumentTypeId) {
-
-        @Override
-        public boolean equals(Object o) {
-            if (this == o)
-                return true;
-            if (o == null || getClass() != o.getClass())
-                return false;
-            Dokument dokument = (Dokument) o;
-            return Objects.equals(dokumentId, dokument.dokumentId);
-        }
-
-        @Override
-        public int hashCode() {
-            return Objects.hash(dokumentId);
-        }
+    public record Dokument(String dokumentId, String tittel) {
     }
 
     @Override
