@@ -1,5 +1,6 @@
 package no.nav.foreldrepenger.selvbetjening.innsyn.tidslinje;
 
+import java.net.URI;
 import java.time.LocalDateTime;
 import java.util.List;
 import java.util.Objects;
@@ -34,7 +35,7 @@ public record TidslinjeHendelseDto(LocalDateTime opprettet,
         UTGÅENDE_ETTERLYS_INNTEKTSMELDING
     }
 
-    public record Dokument(String dokumentId, String tittel) {
+    public record Dokument(String dokumentId, String tittel, URI url) {
         @Override
         public boolean equals(Object o) {
             if (this == o)
