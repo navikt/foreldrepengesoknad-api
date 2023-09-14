@@ -5,14 +5,11 @@ import java.time.LocalDateTime;
 import java.util.List;
 import java.util.Objects;
 
-import no.nav.foreldrepenger.common.innsyn.Arbeidsgiver;
-
 public record TidslinjeHendelseDto(LocalDateTime opprettet,
                                    String journalpostId,
                                    AktørType aktørType,
                                    TidslinjeHendelseType tidslinjeHendelseType,
-                                   Arbeidsgiver arbeidsgiver, // Brukes ikke
-                                   List<Dokument> dokumenter) { // Brukes ikke
+                                   List<Dokument> dokumenter) {
 
     enum AktørType {
         BRUKER,
@@ -43,19 +40,18 @@ public record TidslinjeHendelseDto(LocalDateTime opprettet,
             if (o == null || getClass() != o.getClass())
                 return false;
             Dokument dokument = (Dokument) o;
-            return Objects.equals(dokumentId, dokument.dokumentId);
+            return Objects.equals(dokumentId, dokument.dokumentId) && Objects.equals(tittel, dokument.tittel);
         }
 
         @Override
         public int hashCode() {
-            return Objects.hash(dokumentId);
+            return Objects.hash(dokumentId, tittel);
         }
 
         @Override
         public String toString() {
-            return "Dokument{" + "dokumentId='" + dokumentId + '\'' + '}';
+            return "Dokument{" + "dokumentId='" + dokumentId + '\'' + ", tittel='" + tittel + '\'' + '}';
         }
-
     }
 
     @Override
@@ -67,12 +63,11 @@ public record TidslinjeHendelseDto(LocalDateTime opprettet,
         TidslinjeHendelseDto that = (TidslinjeHendelseDto) o;
         return aktørType == that.aktørType &&
             tidslinjeHendelseType == that.tidslinjeHendelseType &&
-            Objects.equals(arbeidsgiver, that.arbeidsgiver) &&
             Objects.equals(dokumenter, that.dokumenter);
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(aktørType, tidslinjeHendelseType, arbeidsgiver, dokumenter);
+        return Objects.hash(aktørType, tidslinjeHendelseType, dokumenter);
     }
 }
