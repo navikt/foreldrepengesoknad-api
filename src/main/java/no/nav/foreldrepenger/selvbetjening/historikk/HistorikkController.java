@@ -52,7 +52,7 @@ public class HistorikkController {
             if (fraHistorikk.size() == fraFpoversikt.size() && fraHistorikk.containsAll(fraFpoversikt) && fraFpoversikt.containsAll(fraHistorikk)) {
                 LOG.info("Ingen avvik i manglende vedlegg mottatt fra fpoversikt sammenlignet med fpinfo-historikk");
             } else {
-                LOG.info("AVVIK[manglende vedlegg]: Fpinfo-historikk returnerte {}, mens fpoversikt returnerte {}", fraHistorikk, fraFpoversikt);
+                LOG.info("AVVIK[manglende vedlegg]: Fpinfo-historikk returnerte {}, mens fpoversikt returnerte {} på saksnummer {}", fraHistorikk, fraFpoversikt, saksnummer.value());
             }
         } catch (Exception e) {
             LOG.info("Noe gikk galt med sammenligning av manglende vedlegg", e);

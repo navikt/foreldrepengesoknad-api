@@ -41,7 +41,7 @@ public class TidslinjeController {
             if (historikk.equals(oversikt)) {
                 LOG.info("Ingen avvik mellom tidslinje fra fpoversikt og fpinfo-historikk");
             } else {
-                LOG.info("AVVIK [tidslinje]: Fpinfo-historikk returnerte {}, mens fpoversikt returnerte {}", historikk, oversikt);
+                LOG.info("AVVIK [tidslinje]: Fpinfo-historikk returnerte {}, mens fpoversikt returnerte {} på saksnummer {}", historikk, oversikt, saksnummer.value());
             }
         } catch (Exception e) {
             LOG.info("Noe gikk galt med henting eller sammenligningav av tidlinjen", e);
