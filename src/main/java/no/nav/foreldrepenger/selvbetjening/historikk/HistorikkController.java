@@ -1,12 +1,9 @@
 package no.nav.foreldrepenger.selvbetjening.historikk;
 
-import static no.nav.boot.conditionals.EnvUtil.isDevOrLocal;
-
 import java.util.List;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.springframework.core.env.Environment;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 
@@ -24,12 +21,10 @@ public class HistorikkController {
 
     private final HistorikkTjeneste historikk;
     private final Innsyn innsyn;
-    private final Environment env;
 
-    public HistorikkController(HistorikkTjeneste historikk, Innsyn innsyn, Environment env) {
+    public HistorikkController(HistorikkTjeneste historikk, Innsyn innsyn) {
         this.historikk = historikk;
         this.innsyn = innsyn;
-        this.env = env;
     }
 
     @GetMapping
@@ -40,9 +35,7 @@ public class HistorikkController {
     @GetMapping(path = "/vedlegg")
     public List<String> vedlegg(@Valid @RequestParam("saksnummer") Saksnummer saksnummer) {
         var manglendeVedleggFraFpinfoHistorikk = historikk.manglendeVedlegg(saksnummer);
-        if (isDevOrLocal(env)) {
-            sammenlign(saksnummer, manglendeVedleggFraFpinfoHistorikk);
-        }
+        sammenlign(saksnummer, manglendeVedleggFraFpinfoHistorikk);
         return manglendeVedleggFraFpinfoHistorikk;
     }
 
