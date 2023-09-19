@@ -4,7 +4,6 @@ import static no.nav.foreldrepenger.selvbetjening.innsyn.tidslinje.TidslinjeHend
 import static no.nav.foreldrepenger.selvbetjening.innsyn.tidslinje.TidslinjeHendelseDto.TidslinjeHendelseType.ETTERSENDING;
 import static no.nav.foreldrepenger.selvbetjening.innsyn.tidslinje.TidslinjeHendelseDto.TidslinjeHendelseType.FØRSTEGANGSSØKNAD;
 import static no.nav.foreldrepenger.selvbetjening.innsyn.tidslinje.TidslinjeHendelseDto.TidslinjeHendelseType.FØRSTEGANGSSØKNAD_NY;
-import static no.nav.foreldrepenger.selvbetjening.innsyn.tidslinje.TidslinjeHendelseDto.TidslinjeHendelseType.INNTEKTSMELDING;
 import static no.nav.foreldrepenger.selvbetjening.innsyn.tidslinje.TidslinjeHendelseDto.TidslinjeHendelseType.VEDTAK;
 
 import java.util.List;
@@ -60,9 +59,8 @@ public class TidslinjeController {
                 }
 
                 if (ETTERSENDING.equals(innslag.tidslinjeHendelseType())) {
-                    if (!finnesHendelseTypeTidligereITidslinjen(FØRSTEGANGSSØKNAD, innslag, tidslinjeHendelseDto) || !finnesHendelseTypeTidligereITidslinjen(INNTEKTSMELDING, innslag,
-                        tidslinjeHendelseDto)) {
-                        LOG.info("Det finnes hverken søknad eller inntektsmelding før ettersendelse: {}", tidslinjeHendelseDto);
+                    if (!finnesHendelseTypeTidligereITidslinjen(FØRSTEGANGSSØKNAD, innslag, tidslinjeHendelseDto)) {
+                        LOG.info("Det finnes ikke søknad før ettersendelse: {}", tidslinjeHendelseDto);
                     }
                 }
 
