@@ -1,6 +1,14 @@
 package no.nav.foreldrepenger.selvbetjening.innsyn.tidslinje;
 
+import static no.nav.foreldrepenger.selvbetjening.innsyn.tidslinje.TidslinjeHendelseDto.TidslinjeHendelseType.ENDRINGSSØKNAD;
+import static no.nav.foreldrepenger.selvbetjening.innsyn.tidslinje.TidslinjeHendelseDto.TidslinjeHendelseType.ETTERSENDING;
+import static no.nav.foreldrepenger.selvbetjening.innsyn.tidslinje.TidslinjeHendelseDto.TidslinjeHendelseType.FØRSTEGANGSSØKNAD;
+import static no.nav.foreldrepenger.selvbetjening.innsyn.tidslinje.TidslinjeHendelseDto.TidslinjeHendelseType.FØRSTEGANGSSØKNAD_NY;
+import static no.nav.foreldrepenger.selvbetjening.innsyn.tidslinje.TidslinjeHendelseDto.TidslinjeHendelseType.INNTEKTSMELDING;
+import static no.nav.foreldrepenger.selvbetjening.innsyn.tidslinje.TidslinjeHendelseDto.TidslinjeHendelseType.VEDTAK;
+
 import java.util.List;
+import java.util.Set;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -32,7 +40,49 @@ public class TidslinjeController {
     public List<TidslinjeHendelseDto> hentTidslinje(@RequestParam @Valid Saksnummer saksnummer) {
         var tidslinjeHendelseDto = tidslinjeTjeneste.hentTidslinje(saksnummer);
         sammenlign(tidslinjeHendelseDto, saksnummer);
+        tidslinjeKonsistensSjekk(tidslinjeHendelseDto);
         return tidslinjeHendelseDto;
+    }
+
+    private static void tidslinjeKonsistensSjekk(List<TidslinjeHendelseDto> tidslinjeHendelseDto) {
+        try {
+            for (var innslag : tidslinjeHendelseDto) {
+                if (Set.of(FØRSTEGANGSSØKNAD, FØRSTEGANGSSØKNAD_NY).contains(innslag.tidslinjeHendelseType())) {
+                    if (finnesHendelseTypeTidligereITidslinjen(VEDTAK, innslag, tidslinjeHendelseDto)) {
+                        LOG.info("Vedtak finnes før førstegangssøknad: {}", tidslinjeHendelseDto);
+                    }
+                }
+
+                if (FØRSTEGANGSSØKNAD_NY.equals(innslag.tidslinjeHendelseType())) {
+                    if (!finnesHendelseTypeTidligereITidslinjen(FØRSTEGANGSSØKNAD, innslag, tidslinjeHendelseDto)) {
+                        LOG.info("Det finnes ingen førstegangssøknad før ny førstegangssøknad: {}", tidslinjeHendelseDto);
+                    }
+                }
+
+                if (ETTERSENDING.equals(innslag.tidslinjeHendelseType())) {
+                    if (!finnesHendelseTypeTidligereITidslinjen(FØRSTEGANGSSØKNAD, innslag, tidslinjeHendelseDto) || !finnesHendelseTypeTidligereITidslinjen(INNTEKTSMELDING, innslag,
+                        tidslinjeHendelseDto)) {
+                        LOG.info("Det finnes hverken søknad eller inntektsmelding før ettersendelse: {}", tidslinjeHendelseDto);
+                    }
+                }
+
+                if (ENDRINGSSØKNAD.equals(innslag.tidslinjeHendelseType())) {
+                    if (!finnesHendelseTypeTidligereITidslinjen(FØRSTEGANGSSØKNAD, innslag, tidslinjeHendelseDto) || !finnesHendelseTypeTidligereITidslinjen(VEDTAK, innslag, tidslinjeHendelseDto)) {
+                        LOG.info("Det finnes ikke førstegangssøknad og/eller vedtak før endringssøknad: {}", tidslinjeHendelseDto);
+                    }
+                }
+            }
+        } catch (Exception e) {
+            LOG.info("Konsistens sjekk feilet for tidslinje {}", tidslinjeHendelseDto, e);
+        }
+    }
+
+    private static boolean finnesHendelseTypeTidligereITidslinjen(TidslinjeHendelseDto.TidslinjeHendelseType tidslinjeHendelseType,
+                                                                  TidslinjeHendelseDto hendelse,
+                                                                  List<TidslinjeHendelseDto> tidslinjeHendelseDto) {
+        return tidslinjeHendelseDto.stream()
+            .filter(t -> t.tidslinjeHendelseType().equals(tidslinjeHendelseType))
+            .anyMatch(t -> t.opprettet().isBefore(hendelse.opprettet()));
     }
 
     private void sammenlign(List<TidslinjeHendelseDto> historikk, Saksnummer saksnummer) {
