@@ -49,7 +49,7 @@ public class TidslinjeController {
             for (var innslag : tidslinjeHendelseDto) {
                 if (Set.of(FØRSTEGANGSSØKNAD, FØRSTEGANGSSØKNAD_NY).contains(innslag.tidslinjeHendelseType())) {
                     if (finnesHendelseTypeTidligereITidslinjen(VEDTAK, innslag, tidslinjeHendelseDto)) {
-                        LOG.info("Vedtak finnes før førstegangssøknad: {}", tidslinjeHendelseDto);
+                        LOG.info("Det finnes vedtak uten førstegangssøknad: {}", tidslinjeHendelseDto);
                     }
                 }
 
