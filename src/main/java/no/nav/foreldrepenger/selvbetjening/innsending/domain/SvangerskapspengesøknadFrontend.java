@@ -1,13 +1,13 @@
 package no.nav.foreldrepenger.selvbetjening.innsending.domain;
 
-import com.fasterxml.jackson.annotation.JsonCreator;
-import no.nav.foreldrepenger.common.domain.Saksnummer;
-import no.nav.foreldrepenger.selvbetjening.innsending.domain.tilrettelegging.Tilrettelegging;
-
-import jakarta.validation.Valid;
-import java.time.LocalDateTime;
 import java.util.List;
 import java.util.Objects;
+
+import com.fasterxml.jackson.annotation.JsonCreator;
+
+import jakarta.validation.Valid;
+import no.nav.foreldrepenger.common.domain.Saksnummer;
+import no.nav.foreldrepenger.selvbetjening.innsending.domain.tilrettelegging.Tilrettelegging;
 
 
 public final class SvangerskapspengesøknadFrontend extends SøknadFrontend {
@@ -15,11 +15,11 @@ public final class SvangerskapspengesøknadFrontend extends SøknadFrontend {
     private final List<Tilrettelegging> tilrettelegging;
 
     @JsonCreator
-    public SvangerskapspengesøknadFrontend(LocalDateTime opprettet, String type, Saksnummer saksnummer, SøkerFrontend søker, BarnFrontend barn,
+    public SvangerskapspengesøknadFrontend(String type, Saksnummer saksnummer, SøkerFrontend søker, BarnFrontend barn,
                                            AnnenForelderFrontend annenForelder, UtenlandsoppholdFrontend informasjonOmUtenlandsopphold,
                                            String situasjon, Boolean erEndringssøknad, String tilleggsopplysninger,
                                            List<VedleggFrontend> vedlegg, List<Tilrettelegging> tilrettelegging) {
-        super(opprettet, type, saksnummer, søker, barn, annenForelder, informasjonOmUtenlandsopphold, situasjon,
+        super(type, saksnummer, søker, barn, annenForelder, informasjonOmUtenlandsopphold, situasjon,
             erEndringssøknad, tilleggsopplysninger, vedlegg);
         this.tilrettelegging = tilrettelegging;
     }

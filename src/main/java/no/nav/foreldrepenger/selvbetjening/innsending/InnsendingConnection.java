@@ -1,6 +1,5 @@
 package no.nav.foreldrepenger.selvbetjening.innsending;
 
-import static java.time.LocalDateTime.now;
 import static no.nav.foreldrepenger.selvbetjening.innsending.mapper.EttersendingMapper.tilEttersending;
 import static no.nav.foreldrepenger.selvbetjening.innsending.mapper.SøknadMapper.tilSøknad;
 import static no.nav.foreldrepenger.selvbetjening.util.StringUtils.escapeHtml;
@@ -32,7 +31,6 @@ public class InnsendingConnection extends AbstractRestConnection {
     }
 
     public Kvittering sendInn(SøknadFrontend søknad) {
-        søknad.setOpprettet(now());
         return post(config.innsendingURI(), body(søknad));
     }
 

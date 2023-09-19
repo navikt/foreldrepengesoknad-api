@@ -1,16 +1,16 @@
 package no.nav.foreldrepenger.selvbetjening.innsending.domain;
 
+import static no.nav.foreldrepenger.common.domain.validation.InputValideringRegex.BARE_TALL;
+
+import java.util.List;
+import java.util.Objects;
+
 import com.fasterxml.jackson.annotation.JsonCreator;
-import no.nav.foreldrepenger.common.domain.Saksnummer;
 
 import jakarta.validation.Valid;
 import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Pattern;
-import java.time.LocalDateTime;
-import java.util.List;
-import java.util.Objects;
-
-import static no.nav.foreldrepenger.common.domain.validation.InputValideringRegex.BARE_TALL;
+import no.nav.foreldrepenger.common.domain.Saksnummer;
 
 
 public final class ForeldrepengesøknadFrontend extends SøknadFrontend {
@@ -24,8 +24,7 @@ public final class ForeldrepengesøknadFrontend extends SøknadFrontend {
     private final Boolean ønskerJustertUttakVedFødsel;
 
     @JsonCreator
-    public ForeldrepengesøknadFrontend(LocalDateTime opprettet,
-                                       String type,
+    public ForeldrepengesøknadFrontend(String type,
                                        Saksnummer saksnummer,
                                        SøkerFrontend søker,
                                        BarnFrontend barn,
@@ -38,7 +37,7 @@ public final class ForeldrepengesøknadFrontend extends SøknadFrontend {
                                        String dekningsgrad,
                                        List<UttaksplanPeriode> uttaksplan,
                                        Boolean ønskerJustertUttakVedFødsel) {
-        super(opprettet, type, saksnummer, søker, barn, annenForelder, informasjonOmUtenlandsopphold, situasjon,
+        super(type, saksnummer, søker, barn, annenForelder, informasjonOmUtenlandsopphold, situasjon,
             erEndringssøknad, tilleggsopplysninger, vedlegg);
         this.dekningsgrad = dekningsgrad;
         this.uttaksplan = uttaksplan;

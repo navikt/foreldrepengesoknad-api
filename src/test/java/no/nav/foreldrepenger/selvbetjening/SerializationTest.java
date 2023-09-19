@@ -1,23 +1,24 @@
 package no.nav.foreldrepenger.selvbetjening;
 
-import com.fasterxml.jackson.core.JsonProcessingException;
-import com.fasterxml.jackson.databind.ObjectMapper;
-import no.nav.foreldrepenger.selvbetjening.config.JacksonConfiguration;
-import no.nav.foreldrepenger.selvbetjening.innsending.domain.BarnFrontend;
-import no.nav.foreldrepenger.selvbetjening.innsending.domain.EngangsstønadFrontend;
-import no.nav.foreldrepenger.selvbetjening.innsending.domain.MutableVedleggReferanse;
+import static org.junit.jupiter.api.Assertions.assertEquals;
+
+import java.io.IOException;
+import java.time.LocalDate;
+import java.util.List;
+
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.junit.jupiter.SpringExtension;
 
-import java.io.IOException;
-import java.time.LocalDate;
-import java.util.List;
+import com.fasterxml.jackson.core.JsonProcessingException;
+import com.fasterxml.jackson.databind.ObjectMapper;
 
-import static java.time.LocalDateTime.now;
-import static org.junit.jupiter.api.Assertions.assertEquals;
+import no.nav.foreldrepenger.selvbetjening.config.JacksonConfiguration;
+import no.nav.foreldrepenger.selvbetjening.innsending.domain.BarnFrontend;
+import no.nav.foreldrepenger.selvbetjening.innsending.domain.EngangsstønadFrontend;
+import no.nav.foreldrepenger.selvbetjening.innsending.domain.MutableVedleggReferanse;
 
 @ExtendWith(SpringExtension.class)
 @ContextConfiguration(classes = JacksonConfiguration.class)
@@ -36,7 +37,6 @@ class SerializationTest {
 
 
         var engangsstønad = new EngangsstønadFrontend(
-            now(),
             "engangsstønad",
             null, null,
             barn,
