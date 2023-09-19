@@ -7,7 +7,6 @@ import static no.nav.foreldrepenger.selvbetjening.innsyn.tidslinje.TidslinjeHend
 import static no.nav.foreldrepenger.selvbetjening.innsyn.tidslinje.TidslinjeHendelseDto.TidslinjeHendelseType.VEDTAK;
 
 import java.util.List;
-import java.util.Set;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -46,7 +45,7 @@ public class TidslinjeController {
     private static void tidslinjeKonsistensSjekk(List<TidslinjeHendelseDto> tidslinjeHendelseDto) {
         try {
             for (var innslag : tidslinjeHendelseDto) {
-                if (Set.of(FØRSTEGANGSSØKNAD, FØRSTEGANGSSØKNAD_NY).contains(innslag.tidslinjeHendelseType())) {
+                if (FØRSTEGANGSSØKNAD.equals(innslag.tidslinjeHendelseType())) {
                     if (finnesHendelseTypeTidligereITidslinjen(VEDTAK, innslag, tidslinjeHendelseDto)) {
                         LOG.info("Det finnes vedtak uten førstegangssøknad: {}", tidslinjeHendelseDto);
                     }
