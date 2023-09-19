@@ -1,22 +1,22 @@
 package no.nav.foreldrepenger.selvbetjening.innsending.domain;
 
-import com.fasterxml.jackson.annotation.JsonCreator;
-import com.fasterxml.jackson.annotation.JsonSubTypes;
-import com.fasterxml.jackson.annotation.JsonSubTypes.Type;
-import com.fasterxml.jackson.annotation.JsonTypeInfo;
-import jakarta.validation.Valid;
-import jakarta.validation.constraints.Pattern;
-import no.nav.foreldrepenger.common.domain.Saksnummer;
-
-import java.time.LocalDateTime;
-import java.util.List;
-import java.util.Objects;
-import java.util.Optional;
-
 import static com.fasterxml.jackson.annotation.JsonTypeInfo.Id.NAME;
 import static java.util.Collections.emptyList;
 import static no.nav.foreldrepenger.common.domain.validation.InputValideringRegex.BARE_BOKSTAVER;
 import static no.nav.foreldrepenger.common.domain.validation.InputValideringRegex.FRITEKST;
+
+import java.util.List;
+import java.util.Objects;
+import java.util.Optional;
+
+import com.fasterxml.jackson.annotation.JsonCreator;
+import com.fasterxml.jackson.annotation.JsonSubTypes;
+import com.fasterxml.jackson.annotation.JsonSubTypes.Type;
+import com.fasterxml.jackson.annotation.JsonTypeInfo;
+
+import jakarta.validation.Valid;
+import jakarta.validation.constraints.Pattern;
+import no.nav.foreldrepenger.common.domain.Saksnummer;
 
 
 @JsonTypeInfo(use = NAME, property = "type", visible = true)
@@ -27,7 +27,6 @@ import static no.nav.foreldrepenger.common.domain.validation.InputValideringRege
 })
 public abstract sealed class SøknadFrontend permits EngangsstønadFrontend, ForeldrepengesøknadFrontend, SvangerskapspengesøknadFrontend {
 
-    private LocalDateTime opprettet;
     @Pattern(regexp = BARE_BOKSTAVER)
     private final String type;
     @Valid
@@ -49,10 +48,9 @@ public abstract sealed class SøknadFrontend permits EngangsstønadFrontend, For
     private List<@Valid VedleggFrontend> vedlegg;
 
     @JsonCreator
-    protected SøknadFrontend(LocalDateTime opprettet, String type, Saksnummer saksnummer, SøkerFrontend søker, BarnFrontend barn,
+    protected SøknadFrontend(String type, Saksnummer saksnummer, SøkerFrontend søker, BarnFrontend barn,
                              AnnenForelderFrontend annenForelder, UtenlandsoppholdFrontend informasjonOmUtenlandsopphold, String situasjon,
                              Boolean erEndringssøknad, String tilleggsopplysninger, List<VedleggFrontend> vedlegg) {
-        this.opprettet = opprettet;
         this.type = type;
         this.saksnummer = saksnummer;
         this.søker = søker;
@@ -75,14 +73,6 @@ public abstract sealed class SøknadFrontend permits EngangsstønadFrontend, For
 
     public SøkerFrontend getSøker() {
         return søker;
-    }
-
-    public LocalDateTime getOpprettet() {
-        return opprettet;
-    }
-
-    public void setOpprettet(LocalDateTime opprettet) {
-        this.opprettet = opprettet;
     }
 
     public BarnFrontend getBarn() {
@@ -119,15 +109,23 @@ public abstract sealed class SøknadFrontend permits EngangsstønadFrontend, For
 
     @Override
     public boolean equals(Object o) {
-        if (this == o) return true;
-        if (o == null || getClass() != o.getClass()) return false;
+        if (this == o) {
+            return true;
+        }
+        if (o == null || getClass() != o.getClass()) {
+            return false;
+        }
         var that = (SøknadFrontend) o;
-        return Objects.equals(opprettet, that.opprettet) && Objects.equals(type, that.type) && Objects.equals(saksnummer, that.saksnummer) && Objects.equals(søker, that.søker) && Objects.equals(barn, that.barn) && Objects.equals(annenForelder, that.annenForelder) && Objects.equals(informasjonOmUtenlandsopphold, that.informasjonOmUtenlandsopphold) && Objects.equals(situasjon, that.situasjon) && Objects.equals(erEndringssøknad, that.erEndringssøknad) && Objects.equals(tilleggsopplysninger, that.tilleggsopplysninger) && Objects.equals(vedlegg, that.vedlegg);
+        return Objects.equals(type, that.type) && Objects.equals(saksnummer, that.saksnummer) && Objects.equals(søker, that.søker) && Objects.equals(
+            barn, that.barn) && Objects.equals(annenForelder, that.annenForelder) && Objects.equals(informasjonOmUtenlandsopphold,
+            that.informasjonOmUtenlandsopphold) && Objects.equals(situasjon, that.situasjon) && Objects.equals(erEndringssøknad,
+            that.erEndringssøknad) && Objects.equals(tilleggsopplysninger, that.tilleggsopplysninger) && Objects.equals(vedlegg, that.vedlegg);
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(opprettet, type, saksnummer, søker, barn, annenForelder, informasjonOmUtenlandsopphold, situasjon, erEndringssøknad, tilleggsopplysninger, vedlegg);
+        return Objects.hash(type, saksnummer, søker, barn, annenForelder, informasjonOmUtenlandsopphold, situasjon, erEndringssøknad,
+            tilleggsopplysninger, vedlegg);
     }
 
     @Override
@@ -136,7 +134,6 @@ public abstract sealed class SøknadFrontend permits EngangsstønadFrontend, For
             "type='" + type + '\'' +
             ", saksnummer='" + saksnummer + '\'' +
             ", søker=" + søker +
-            ", opprettet=" + opprettet +
             ", barn=" + barn +
             ", annenForelder=" + annenForelder +
             ", informasjonOmUtenlandsopphold=" + informasjonOmUtenlandsopphold +

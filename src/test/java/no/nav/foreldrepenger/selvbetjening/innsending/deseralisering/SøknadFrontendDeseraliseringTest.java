@@ -197,7 +197,7 @@ class SøknadFrontendDeseraliseringTest {
         }
         sendSenere.addAll(opplastet);
 
-        var søknad = new ForeldrepengesøknadFrontend(null, "", null, null, null, null, null, null, null, "", sendSenere,
+        var søknad = new ForeldrepengesøknadFrontend("", null, null, null, null, null, null, null, "", sendSenere,
             null, List.of(), null);
 
         var constraintViolations = validator.validate(søknad);
