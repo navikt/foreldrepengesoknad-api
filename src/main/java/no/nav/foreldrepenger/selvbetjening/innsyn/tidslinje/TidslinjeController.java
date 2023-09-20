@@ -36,10 +36,10 @@ public class TidslinjeController {
 
     @GetMapping(produces = MediaType.APPLICATION_JSON_VALUE)
     public List<TidslinjeHendelseDto> hentTidslinje(@RequestParam @Valid Saksnummer saksnummer) {
-        var tidslinjeHendelseDto = tidslinjeTjeneste.hentTidslinje(saksnummer);
-        sammenlign(tidslinjeHendelseDto, saksnummer);
-        tidslinjeKonsistensSjekk(tidslinjeHendelseDto);
-        return tidslinjeHendelseDto;
+        var oversikt = innsyn.tidslinje(saksnummer);
+        sammenlign(oversikt, saksnummer);
+        tidslinjeKonsistensSjekk(oversikt);
+        return oversikt;
     }
 
     private static void tidslinjeKonsistensSjekk(List<TidslinjeHendelseDto> tidslinjeHendelseDto) {
@@ -82,9 +82,9 @@ public class TidslinjeController {
             .anyMatch(t -> t.opprettet().isBefore(hendelse.opprettet()));
     }
 
-    private void sammenlign(List<TidslinjeHendelseDto> historikk, Saksnummer saksnummer) {
+    private void sammenlign(List<TidslinjeHendelseDto> oversikt, Saksnummer saksnummer) {
         try {
-            var oversikt = innsyn.tidslinje(saksnummer);
+            var historikk =  tidslinjeTjeneste.hentTidslinje(saksnummer);
             if (historikk.equals(oversikt)) {
                 LOG.info("Ingen avvik mellom tidslinje fra fpoversikt og fpinfo-historikk");
             } else {
