@@ -6,7 +6,6 @@ import java.util.List;
 import java.util.Objects;
 
 public record TidslinjeHendelseDto(LocalDateTime opprettet,
-                                   String journalpostId,
                                    AktørType aktørType,
                                    TidslinjeHendelseType tidslinjeHendelseType,
                                    List<Dokument> dokumenter) {
@@ -32,7 +31,7 @@ public record TidslinjeHendelseDto(LocalDateTime opprettet,
         UTGÅENDE_ETTERLYS_INNTEKTSMELDING
     }
 
-    public record Dokument(String dokumentId, String tittel, URI url) {
+    public record Dokument(String journalpostId, String dokumentId, String tittel, @Deprecated URI url) {
         @Override
         public boolean equals(Object o) {
             if (this == o)
