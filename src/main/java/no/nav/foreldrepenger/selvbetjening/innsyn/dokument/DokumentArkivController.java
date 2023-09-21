@@ -7,6 +7,7 @@ import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.RequestParam;
 
 import jakarta.validation.Valid;
 import jakarta.validation.constraints.NotNull;
@@ -34,8 +35,8 @@ public class DokumentArkivController {
         return safselvbetjeningConnection.hentDokument(journalpostId, dokumentId);
     }
 
-    @GetMapping(value = "/alle/v2")
-    public List<ArkivDokumentDto> hentDokumentoversikten(@Valid @NotNull @PathVariable("saksnummer") Saksnummer saksnummer) {
+    @GetMapping(value = "/alle/v2", produces = MediaType.APPLICATION_JSON_VALUE)
+    public List<ArkivDokumentDto> hentDokumentoversikten(@RequestParam @Valid @NotNull Saksnummer saksnummer) {
         return innsyn.alleDokumenterPåSak(saksnummer);
     }
 
