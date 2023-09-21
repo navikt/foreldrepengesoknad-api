@@ -10,6 +10,7 @@ import org.springframework.stereotype.Service;
 import no.nav.foreldrepenger.common.domain.Saksnummer;
 import no.nav.foreldrepenger.common.innsyn.AnnenPartVedtak;
 import no.nav.foreldrepenger.common.innsyn.Saker;
+import no.nav.foreldrepenger.selvbetjening.innsyn.dokument.ArkivDokumentDto;
 import no.nav.foreldrepenger.selvbetjening.innsyn.tidslinje.TidslinjeHendelseDto;
 
 @Service
@@ -51,6 +52,10 @@ public class InnsynTjeneste implements Innsyn {
         return innsynConnection.tidslinje(saksnummer);
     }
 
+    @Override
+    public List<ArkivDokumentDto> alleDokumenterPåSak(Saksnummer saksnummer) {
+        return innsynConnection.alleDokumenterPåSak(saksnummer);
+    }
 
     @Override
     public String toString() {

@@ -7,6 +7,7 @@ import no.nav.foreldrepenger.common.domain.Saksnummer;
 import no.nav.foreldrepenger.common.innsyn.AnnenPartVedtak;
 import no.nav.foreldrepenger.common.innsyn.Saker;
 import no.nav.foreldrepenger.selvbetjening.http.RetryAware;
+import no.nav.foreldrepenger.selvbetjening.innsyn.dokument.ArkivDokumentDto;
 import no.nav.foreldrepenger.selvbetjening.innsyn.tidslinje.TidslinjeHendelseDto;
 
 public interface Innsyn extends RetryAware {
@@ -20,4 +21,6 @@ public interface Innsyn extends RetryAware {
     Optional<AnnenPartVedtak> annenPartVedtak(AnnenPartVedtakIdentifikator request);
 
     List<TidslinjeHendelseDto> tidslinje(Saksnummer saksnummer);
+
+    List<ArkivDokumentDto> alleDokumenterPåSak(Saksnummer saksnummer);
 }
