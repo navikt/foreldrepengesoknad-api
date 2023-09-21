@@ -17,6 +17,7 @@ import no.nav.foreldrepenger.selvbetjening.http.AbstractRestConnection;
 import no.nav.foreldrepenger.selvbetjening.http.RetryAware;
 
 @Service
+@Deprecated
 public class DokumentArkivTjeneste extends AbstractRestConnection implements RetryAware {
 
     private final URI baseUri;
