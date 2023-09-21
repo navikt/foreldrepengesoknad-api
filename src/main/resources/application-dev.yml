@@ -45,6 +45,8 @@ historikk:
   uri: https://fpinfo-historikk.dev-fss-pub.nais.io/api/
 mottak:
   uri: https://fpsoknad-mottak.dev-fss-pub.nais.io/api/
+minidialog:
+  uri: https://fpinfo-historikk.dev-fss-pub.nais.io/api/
 fppdfgen:
   uri: http://fppdfgen
 oversikt:
