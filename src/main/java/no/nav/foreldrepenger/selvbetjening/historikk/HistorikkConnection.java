@@ -13,6 +13,8 @@ import org.springframework.web.client.RestOperations;
 import no.nav.foreldrepenger.common.domain.Saksnummer;
 import no.nav.foreldrepenger.selvbetjening.http.AbstractRestConnection;
 
+
+@Deprecated
 @Component
 public class HistorikkConnection extends AbstractRestConnection {
 
@@ -21,20 +23,6 @@ public class HistorikkConnection extends AbstractRestConnection {
     public HistorikkConnection(RestOperations operations, HistorikkConfig config) {
         super(operations);
         this.config = config;
-    }
-
-    public List<HistorikkInnslag> hentHistorikk() {
-        return hentHistorikk(config.historikkURI());
-    }
-
-    private List<HistorikkInnslag> hentHistorikk(URI uri) {
-        LOG.trace("Henter historikk fra {}", uri);
-        var historikk = Optional
-                .ofNullable(getForObject(uri, HistorikkInnslag[].class))
-                .map(Arrays::asList)
-                .orElse(emptyList());
-        LOG.trace("Hentet historikk {} fra {}", historikk, uri);
-        return historikk;
     }
 
     public List<String> manglendeVedlegg(Saksnummer saksnr) {

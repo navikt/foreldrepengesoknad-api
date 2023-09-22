@@ -49,6 +49,10 @@ public class InnsynConfig {
         return uri(getBaseUri(), TIDSLINJE, URIUtil.queryParam(SAKSNUMMER, saksnummer.value()));
     }
 
+    URI alleDokumenter() {
+        return uri(getBaseUri(), ALLE_DOKUMENTER);
+    }
+
     URI alleDokumenter(Saksnummer saksnummer) {
         return uri(getBaseUri(), ALLE_DOKUMENTER, URIUtil.queryParam(SAKSNUMMER, saksnummer.value()));
     }

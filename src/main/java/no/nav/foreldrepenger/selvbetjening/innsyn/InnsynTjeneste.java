@@ -53,6 +53,11 @@ public class InnsynTjeneste implements Innsyn {
     }
 
     @Override
+    public List<ArkivDokumentDto> alleDokumenterPåBruker() {
+        return innsynConnection.alleDokumenterPåBruker();
+    }
+
+    @Override
     public List<ArkivDokumentDto> alleDokumenterPåSak(Saksnummer saksnummer) {
         return innsynConnection.alleDokumenterPåSak(saksnummer);
     }

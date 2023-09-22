@@ -13,7 +13,6 @@ import no.nav.foreldrepenger.selvbetjening.util.URIUtil;
 public class HistorikkConfig {
 
     private static final String HISTORIKK = "historikk";
-    private static final String HISTORIKK_ALL_PATH = HISTORIKK + "/me/all";
     private static final String MANGLEDEVEDLEGG_PATH = HISTORIKK + "/me/manglendevedlegg";
 
     private static final String SAKSNUMMER = "saksnummer";
@@ -21,10 +20,6 @@ public class HistorikkConfig {
 
     public HistorikkConfig(URI uri) {
         this.baseUri = uri;
-    }
-
-    public URI historikkURI() {
-        return uri(getBaseUri(), HISTORIKK_ALL_PATH);
     }
 
     public URI vedleggURI(Saksnummer saksnr) {

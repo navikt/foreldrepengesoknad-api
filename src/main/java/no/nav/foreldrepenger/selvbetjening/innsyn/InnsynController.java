@@ -18,8 +18,7 @@ import jakarta.validation.Valid;
 import no.nav.foreldrepenger.common.innsyn.AnnenPartVedtak;
 import no.nav.foreldrepenger.common.innsyn.Saker;
 import no.nav.foreldrepenger.selvbetjening.http.ProtectedRestController;
-import no.nav.foreldrepenger.selvbetjening.innsyn.dokument.ArkivDokument;
-import no.nav.foreldrepenger.selvbetjening.innsyn.dokument.DokumentArkivTjeneste;
+import no.nav.foreldrepenger.selvbetjening.innsyn.dokument.ArkivDokumentDto;
 
 @ProtectedRestController(INNSYN)
 public class InnsynController {
@@ -29,12 +28,10 @@ public class InnsynController {
     private final static String TITTEL_VED_SØKNAD = "Søknad om";
 
     private final Innsyn innsynTjeneste;
-    private final DokumentArkivTjeneste dokumentArkivTjeneste;
 
     @Autowired
-    public InnsynController(Innsyn innsyn, DokumentArkivTjeneste dokumentArkivTjeneste) {
+    public InnsynController(Innsyn innsyn) {
         this.innsynTjeneste = innsyn;
-        this.dokumentArkivTjeneste = dokumentArkivTjeneste;
     }
 
     @GetMapping("/saker")
@@ -44,9 +41,9 @@ public class InnsynController {
 
     @GetMapping("/saker/oppdatert")
     public boolean erSakOppdatert() {
-        var dokumentoversikt = dokumentArkivTjeneste.hentDokumentoversikt();
-        var søkaderMottattNylig = dokumentoversikt.stream()
-            .filter(arkivDokument -> ArkivDokument.DokumentType.INNGÅENDE_DOKUMENT.equals(arkivDokument.type()))
+        var dokumenter = innsynTjeneste.alleDokumenterPåBruker();
+        var søkaderMottattNylig = dokumenter.stream()
+            .filter(arkivDokument -> ArkivDokumentDto.Type.INNGÅENDE_DOKUMENT.equals(arkivDokument.type()))
             .filter(arkivDokument -> arkivDokument.tittel().contains(TITTEL_VED_SØKNAD))
             .filter(arkivDokument -> arkivDokument.mottatt().isAfter(LocalDateTime.now().minusDays(1)))
             .toList();
@@ -57,8 +54,8 @@ public class InnsynController {
 
         if (søkaderMottattNylig.stream().anyMatch(søknad -> søknad.saksnummer() == null)) {
             var førsteMottattDato = søkaderMottattNylig.stream()
-                .min(Comparator.comparing(ArkivDokument::mottatt))
-                .map(ArkivDokument::mottatt)
+                .min(Comparator.comparing(ArkivDokumentDto::mottatt))
+                .map(ArkivDokumentDto::mottatt)
                 .orElse(null);
             LOG.info("Sak ikke oppdatert. Fant søknad hvor saksnummer er null -> GOSYS. Antall {} Mottatt {}",
                 søkaderMottattNylig.size(), førsteMottattDato);
