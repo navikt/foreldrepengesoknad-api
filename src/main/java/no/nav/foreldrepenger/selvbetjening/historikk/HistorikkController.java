@@ -29,6 +29,7 @@ public class HistorikkController {
 
     @GetMapping
     public List<HistorikkInnslag> historikk() {
+        LOG.info("Kall på /rest/historikk/me/all som går mot fpinfo-historikk");
         return historikk.historikk();
     }
 

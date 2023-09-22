@@ -2,6 +2,8 @@ package no.nav.foreldrepenger.selvbetjening.innsyn.dokument;
 
 import java.util.List;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
@@ -17,7 +19,7 @@ import no.nav.foreldrepenger.selvbetjening.innsyn.Innsyn;
 
 @ProtectedRestController("/rest/dokument")
 public class DokumentArkivController {
-
+    private static final Logger LOG = LoggerFactory.getLogger(DokumentArkivController.class);
     private final DokumentArkivTjeneste dokumentArkivTjeneste;
     private final SafselvbetjeningConnection safselvbetjeningConnection;
     private final Innsyn innsyn;
@@ -35,20 +37,21 @@ public class DokumentArkivController {
         return safselvbetjeningConnection.hentDokument(journalpostId, dokumentId);
     }
 
+    @Deprecated
     @GetMapping(value = "/alle/v2", produces = MediaType.APPLICATION_JSON_VALUE)
+    public List<ArkivDokumentDto> hentDokumentoversiktenV2(@RequestParam @Valid @NotNull Saksnummer saksnummer) {
+        return innsyn.alleDokumenterPåSak(saksnummer);
+    }
+
+    @GetMapping(value = "/alle", produces = MediaType.APPLICATION_JSON_VALUE)
     public List<ArkivDokumentDto> hentDokumentoversikten(@RequestParam @Valid @NotNull Saksnummer saksnummer) {
         return innsyn.alleDokumenterPåSak(saksnummer);
     }
 
     @Deprecated
-    @GetMapping(value = "/alle", produces = MediaType.APPLICATION_JSON_VALUE)
-    public List<ArkivDokument> hentDokumentoversikten() {
-        return dokumentArkivTjeneste.hentDokumentoversikt();
-    }
-
-    @Deprecated
     @GetMapping(value = "/dokumentoversikt", produces = MediaType.APPLICATION_JSON_VALUE)
     public List<ArkivDokument> hentDokumentoversikt() {
+        LOG.info("Kall på /rest/dokument/dokumentoversikt tjeneste");
         return dokumentArkivTjeneste.hentDokumentoversikt();
     }
 }
