@@ -61,6 +61,12 @@ public class InnsynConnection extends AbstractRestConnection {
             .orElse(emptyList());
     }
 
+    public List<ArkivDokumentDto> alleDokumenterPåBruker() {
+        return Optional.ofNullable(getForObject(cfg.alleDokumenter(), ArkivDokumentDto[].class))
+            .map(Arrays::asList)
+            .orElse(emptyList());
+    }
+
     public List<ArkivDokumentDto> alleDokumenterPåSak(Saksnummer saksnummer) {
         return Optional.ofNullable(getForObject(cfg.alleDokumenter(saksnummer), ArkivDokumentDto[].class))
             .map(Arrays::asList)

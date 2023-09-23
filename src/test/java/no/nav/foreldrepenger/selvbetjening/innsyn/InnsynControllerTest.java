@@ -14,22 +14,20 @@ import no.nav.foreldrepenger.common.innsyn.FpSak;
 import no.nav.foreldrepenger.common.innsyn.RettighetType;
 import no.nav.foreldrepenger.common.innsyn.Saker;
 import no.nav.foreldrepenger.common.innsyn.Saksnummer;
-import no.nav.foreldrepenger.selvbetjening.innsyn.dokument.ArkivDokument;
-import no.nav.foreldrepenger.selvbetjening.innsyn.dokument.DokumentArkivTjeneste;
+import no.nav.foreldrepenger.selvbetjening.innsyn.dokument.ArkivDokumentDto;
 
 class InnsynControllerTest {
 
     private static final String FAKE_SAKSNUMMER = "123456789";
     private Innsyn innsyn = mock(Innsyn.class);
-    private DokumentArkivTjeneste dokumentArkivTjeneste = mock(DokumentArkivTjeneste.class);
 
     @Test
     void sakErOppdatertHvisOppdateringstidspunktErEtterMottattidspunktetTilJournalposten() {
-        var innsynController = new InnsynController(innsyn, dokumentArkivTjeneste);
+        var innsynController = new InnsynController(innsyn);
 
         var arkivertSøknadOmForeldrepenger = arkivertSøknadOmForeldrepenger(LocalDateTime.now().minusHours(1), FAKE_SAKSNUMMER);
         var arkiverteDokumenter = List.of(arkivertSøknadOmForeldrepenger);
-        when(dokumentArkivTjeneste.hentDokumentoversikt()).thenReturn(arkiverteDokumenter);
+        when(innsyn.alleDokumenterPåBruker()).thenReturn(arkiverteDokumenter);
         var saker = new Saker(Set.of(fpsak(FAKE_SAKSNUMMER, LocalDateTime.now())), Set.of(), Set.of());
         when(innsyn.hentSaker()).thenReturn(saker);
 
@@ -38,12 +36,12 @@ class InnsynControllerTest {
 
     @Test
     void sakErIkkeOppdatertHvisOppdatertTidspunktetErFørInnsendingstidspunkt() {
-        var innsynController = new InnsynController(innsyn, dokumentArkivTjeneste);
+        var innsynController = new InnsynController(innsyn);
         var søknadOmForeldrepenger1 = arkivertSøknadOmForeldrepenger(LocalDateTime.now().minusHours(1), FAKE_SAKSNUMMER);
         var søknadOmForeldrepenger2 = arkivertSøknadOmForeldrepenger(LocalDateTime.now(), FAKE_SAKSNUMMER);
         var arkiverteDokumenter = List.of(søknadOmForeldrepenger1, søknadOmForeldrepenger2);
 
-        when(dokumentArkivTjeneste.hentDokumentoversikt()).thenReturn(arkiverteDokumenter);
+        when(innsyn.alleDokumenterPåBruker()).thenReturn(arkiverteDokumenter);
 
         var saker = new Saker(Set.of(fpsak(FAKE_SAKSNUMMER, LocalDateTime.now().minusMinutes(30))), Set.of(), Set.of());
         when(innsyn.hentSaker()).thenReturn(saker);
@@ -53,11 +51,11 @@ class InnsynControllerTest {
 
     @Test
     void ingenSakerIFpoversiktMenArkivertSøknadSkalReturnereFalse() {
-        var innsynController = new InnsynController(innsyn, dokumentArkivTjeneste);
+        var innsynController = new InnsynController(innsyn);
 
         var søknadOmForeldrepenger = arkivertSøknadOmForeldrepenger(LocalDateTime.now(), FAKE_SAKSNUMMER);
         var arkiverteDokumenter = List.of(søknadOmForeldrepenger);
-        when(dokumentArkivTjeneste.hentDokumentoversikt()).thenReturn(arkiverteDokumenter);
+        when(innsyn.alleDokumenterPåBruker()).thenReturn(arkiverteDokumenter);
 
         var saker = new Saker(Set.of(), Set.of(), Set.of());
         when(innsyn.hentSaker()).thenReturn(saker);
@@ -67,11 +65,11 @@ class InnsynControllerTest {
 
     @Test
     void ingenSakerMedLiktSaksnummerIFpoversiktMenArkivertSøknadSkalReturnereFalse() {
-        var innsynController = new InnsynController(innsyn, dokumentArkivTjeneste);
+        var innsynController = new InnsynController(innsyn);
 
         var søknadOmForeldrepenger = arkivertSøknadOmForeldrepenger(LocalDateTime.now(), FAKE_SAKSNUMMER);
         var arkiverteDokumenter = List.of(søknadOmForeldrepenger);
-        when(dokumentArkivTjeneste.hentDokumentoversikt()).thenReturn(arkiverteDokumenter);
+        when(innsyn.alleDokumenterPåBruker()).thenReturn(arkiverteDokumenter);
 
         var saker = new Saker(Set.of(fpsak("987654321", LocalDateTime.now().minusMinutes(30))), Set.of(), Set.of());
         when(innsyn.hentSaker()).thenReturn(saker);
@@ -81,12 +79,12 @@ class InnsynControllerTest {
 
     @Test
     void nårSøknadIkkeHarSaksnummerAntarViAtSakenIkkeErOppdatert() {
-        var innsynController = new InnsynController(innsyn, dokumentArkivTjeneste);
+        var innsynController = new InnsynController(innsyn);
 
         var søknadOmForeldrepenger1 = arkivertSøknadOmForeldrepenger(LocalDateTime.now(), null);
         var søknadOmForeldrepenger2 = arkivertSøknadOmForeldrepenger(LocalDateTime.now(), FAKE_SAKSNUMMER);
         var arkiverteDokumenter = List.of(søknadOmForeldrepenger1, søknadOmForeldrepenger2);
-        when(dokumentArkivTjeneste.hentDokumentoversikt()).thenReturn(arkiverteDokumenter);
+        when(innsyn.alleDokumenterPåBruker()).thenReturn(arkiverteDokumenter);
 
         var saker = new Saker(Set.of(fpsak("987654321", LocalDateTime.now().minusMinutes(30))), Set.of(), Set.of());
         when(innsyn.hentSaker()).thenReturn(saker);
@@ -94,16 +92,14 @@ class InnsynControllerTest {
         assertThat(innsynController.erSakOppdatert()).isFalse();
     }
 
-    private static ArkivDokument arkivertSøknadOmForeldrepenger(LocalDateTime mottatt, String saksnummer) {
-        return new ArkivDokument(
-            ArkivDokument.DokumentType.INNGÅENDE_DOKUMENT,
-            mottatt,
-            saksnummer,
+    private static ArkivDokumentDto arkivertSøknadOmForeldrepenger(LocalDateTime mottatt, String saksnummer) {
+        return new ArkivDokumentDto(
             "Søknad om foreldrepenger",
-            null,
+            ArkivDokumentDto.Type.INNGÅENDE_DOKUMENT,
+            saksnummer,
             "12345",
             "123456",
-            true);
+            mottatt);
     }
 
     private static FpSak fpsak(String saksnummer, LocalDateTime oppdateringstidspunkt) {

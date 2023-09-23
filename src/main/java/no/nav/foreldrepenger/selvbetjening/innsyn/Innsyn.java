@@ -22,5 +22,9 @@ public interface Innsyn extends RetryAware {
 
     List<TidslinjeHendelseDto> tidslinje(Saksnummer saksnummer);
 
+    List<ArkivDokumentDto> alleDokumenterPåBruker();
+
     List<ArkivDokumentDto> alleDokumenterPåSak(Saksnummer saksnummer);
+
+
 }

@@ -8,15 +8,12 @@ import no.nav.foreldrepenger.common.domain.Saksnummer;
 import no.nav.foreldrepenger.selvbetjening.http.RetryAware;
 
 @Service
+@Deprecated
 public class HistorikkTjeneste implements RetryAware {
     private final HistorikkConnection connection;
 
     public HistorikkTjeneste(HistorikkConnection connection) {
         this.connection = connection;
-    }
-
-    public List<HistorikkInnslag> historikk() {
-        return connection.hentHistorikk();
     }
 
     public List<String> manglendeVedlegg(Saksnummer saksnr) {

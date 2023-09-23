@@ -27,12 +27,6 @@ public class HistorikkController {
         this.innsyn = innsyn;
     }
 
-    @GetMapping
-    public List<HistorikkInnslag> historikk() {
-        LOG.info("Kall på /rest/historikk/me/all som går mot fpinfo-historikk");
-        return historikk.historikk();
-    }
-
     @GetMapping(path = "/vedlegg")
     public List<String> vedlegg(@Valid @RequestParam("saksnummer") Saksnummer saksnummer) {
         var manglendeVedleggFraFpinfoHistorikk = historikk.manglendeVedlegg(saksnummer);
