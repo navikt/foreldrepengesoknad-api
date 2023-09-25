@@ -5,6 +5,8 @@ import static no.nav.foreldrepenger.selvbetjening.util.URIUtil.uri;
 import java.net.URI;
 
 import org.springframework.boot.context.properties.ConfigurationProperties;
+import org.springframework.web.util.UriComponents;
+import org.springframework.web.util.UriComponentsBuilder;
 
 import no.nav.foreldrepenger.common.domain.Saksnummer;
 import no.nav.foreldrepenger.selvbetjening.util.URIUtil;
@@ -58,8 +60,8 @@ public class InnsynConfig {
         return uri(getBaseUri(), ALLE_DOKUMENTER, URIUtil.queryParam(SAKSNUMMER, saksnummer.value()));
     }
 
-    URI hentDokument() {
-        return uri(getBaseUri(), DOKUMENT);
+    UriComponents hentDokument() {
+        return UriComponentsBuilder.fromUri(baseUri).path(DOKUMENT).build();
     }
 
     private URI getBaseUri() {

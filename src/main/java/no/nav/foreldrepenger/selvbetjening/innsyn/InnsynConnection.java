@@ -77,6 +77,6 @@ public class InnsynConnection extends AbstractRestConnection {
     }
 
     public ResponseEntity<byte[]> hentDokument(JournalpostId journalpostId, DokumentInfoId dokumentId) {
-        return getForEntity(cfg.hentDokument().toString(), byte[].class, journalpostId.value(), dokumentId.value());
+        return getForEntity(cfg.hentDokument().toUriString(), byte[].class, journalpostId.value(), dokumentId.value());
     }
 }
