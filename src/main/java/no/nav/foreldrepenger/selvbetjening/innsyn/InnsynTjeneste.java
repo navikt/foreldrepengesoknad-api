@@ -5,12 +5,16 @@ import java.util.Optional;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
+import org.springframework.web.client.HttpClientErrorException;
 
 import no.nav.foreldrepenger.common.domain.Saksnummer;
 import no.nav.foreldrepenger.common.innsyn.AnnenPartVedtak;
 import no.nav.foreldrepenger.common.innsyn.Saker;
 import no.nav.foreldrepenger.selvbetjening.innsyn.dokument.ArkivDokumentDto;
+import no.nav.foreldrepenger.selvbetjening.innsyn.dokument.DokumentInfoId;
+import no.nav.foreldrepenger.selvbetjening.innsyn.dokument.JournalpostId;
 import no.nav.foreldrepenger.selvbetjening.innsyn.tidslinje.TidslinjeHendelseDto;
 
 @Service
@@ -60,6 +64,16 @@ public class InnsynTjeneste implements Innsyn {
     @Override
     public List<ArkivDokumentDto> alleDokumenterPåSak(Saksnummer saksnummer) {
         return innsynConnection.alleDokumenterPåSak(saksnummer);
+    }
+
+    @Override
+    public ResponseEntity<byte[]> hentDokument(JournalpostId journalpostId, DokumentInfoId dokumentId) {
+        try {
+            return innsynConnection.hentDokument(journalpostId, dokumentId);
+        } catch (HttpClientErrorException.NotFound | HttpClientErrorException.Forbidden e) {
+            LOG.warn("Klarte ikke hente dokument med journalpostid {} og dokumentid {} pga {}", journalpostId.value(), dokumentId.value(), e.getStatusText());
+            return ResponseEntity.notFound().build();
+        }
     }
 
     @Override

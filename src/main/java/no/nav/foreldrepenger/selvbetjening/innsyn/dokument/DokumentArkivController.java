@@ -17,19 +17,17 @@ import no.nav.foreldrepenger.selvbetjening.innsyn.Innsyn;
 
 @ProtectedRestController("/rest/dokument")
 public class DokumentArkivController {
-    private final SafselvbetjeningConnection safselvbetjeningConnection;
     private final Innsyn innsyn;
 
     @Autowired
-    public DokumentArkivController(SafselvbetjeningConnection safselvbetjeningConnection, Innsyn innsyn) {
-        this.safselvbetjeningConnection = safselvbetjeningConnection;
+    public DokumentArkivController(Innsyn innsyn) {
         this.innsyn = innsyn;
     }
 
     @GetMapping(value = "/hent-dokument/{journalpostId}/{dokumentId}")
     public ResponseEntity<byte[]> hentDokumentV2(@Valid @PathVariable("journalpostId") JournalpostId journalpostId,
                                                  @Valid @PathVariable("dokumentId") DokumentInfoId dokumentId) {
-        return safselvbetjeningConnection.hentDokument(journalpostId, dokumentId);
+        return innsyn.hentDokument(journalpostId, dokumentId);
     }
 
     @GetMapping(value = "/alle", produces = MediaType.APPLICATION_JSON_VALUE)
