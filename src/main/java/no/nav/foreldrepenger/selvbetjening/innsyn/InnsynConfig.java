@@ -15,6 +15,7 @@ public class InnsynConfig {
     private static final String SAKER = CONTEXT_PATH + "/saker";
     private static final String ANNENPART_VEDTAK = CONTEXT_PATH + "/annenPart";
     private static final String TIDSLINJE = CONTEXT_PATH + "/tidslinje";
+    private static final String DOKUMENT = CONTEXT_PATH + "/arkiv/hent-dokument/{journalpostId}/{dokumentId}";
     private static final String ALLE_DOKUMENTER = CONTEXT_PATH + "/arkiv/alle";
 
     private static final String OPPGAVER = CONTEXT_PATH + "/oppgaver";
@@ -57,9 +58,14 @@ public class InnsynConfig {
         return uri(getBaseUri(), ALLE_DOKUMENTER, URIUtil.queryParam(SAKSNUMMER, saksnummer.value()));
     }
 
+    URI hentDokument() {
+        return uri(getBaseUri(), DOKUMENT);
+    }
+
     private URI getBaseUri() {
         return baseUri;
     }
+
 
 
 }
