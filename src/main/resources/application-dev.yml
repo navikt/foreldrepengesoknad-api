@@ -35,6 +35,9 @@ no.nav:
           fpoversikt:
             token-exchange:
               audience: dev-gcp:teamforeldrepenger:fpoversikt
+          safselvbetjening:
+            token-exchange:
+              audience: dev-fss:teamdokumenthandtering:safselvbetjening
 
 oppslag:
   uri: https://fpsoknad-mottak.dev-fss-pub.nais.io/api/
@@ -48,3 +51,5 @@ fppdfgen:
   uri: http://fppdfgen
 oversikt:
   uri: http://fpoversikt
+safselvbetjening:
+  baseUri: https://safselvbetjening.dev-fss-pub.nais.io
