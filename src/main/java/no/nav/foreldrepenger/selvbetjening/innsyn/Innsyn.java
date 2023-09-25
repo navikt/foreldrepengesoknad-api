@@ -30,6 +30,5 @@ public interface Innsyn extends RetryAware {
 
     List<ArkivDokumentDto> alleDokumenterPåSak(Saksnummer saksnummer);
 
-
     ResponseEntity<byte[]> hentDokument(JournalpostId journalpostId, DokumentInfoId dokumentId);
 }
