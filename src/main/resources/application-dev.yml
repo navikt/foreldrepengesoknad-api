@@ -41,8 +41,6 @@ no.nav:
 
 oppslag:
   uri: https://fpsoknad-mottak.dev-fss-pub.nais.io/api/
-historikk:
-  uri: https://fpinfo-historikk.dev-fss-pub.nais.io/api/
 mottak:
   uri: https://fpsoknad-mottak.dev-fss-pub.nais.io/api/
 minidialog:

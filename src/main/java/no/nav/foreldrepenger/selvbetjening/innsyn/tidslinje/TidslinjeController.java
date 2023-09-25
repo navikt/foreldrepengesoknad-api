@@ -25,19 +25,16 @@ import no.nav.foreldrepenger.selvbetjening.innsyn.Innsyn;
 public class TidslinjeController {
     private static final Logger LOG = LoggerFactory.getLogger(TidslinjeController.class);
 
-    private final TidslinjeTjeneste tidslinjeTjeneste;
     private final Innsyn innsyn;
 
     @Autowired
-    public TidslinjeController(TidslinjeTjeneste tidslinjeTjeneste, Innsyn innsyn) {
-        this.tidslinjeTjeneste = tidslinjeTjeneste;
+    public TidslinjeController(Innsyn innsyn) {
         this.innsyn = innsyn;
     }
 
     @GetMapping(produces = MediaType.APPLICATION_JSON_VALUE)
     public List<TidslinjeHendelseDto> hentTidslinje(@RequestParam @Valid Saksnummer saksnummer) {
         var oversikt = innsyn.tidslinje(saksnummer);
-        sammenlign(oversikt, saksnummer);
         tidslinjeKonsistensSjekk(oversikt);
         return oversikt;
     }
@@ -80,18 +77,5 @@ public class TidslinjeController {
         return tidslinjeHendelseDto.stream()
             .filter(t -> t.tidslinjeHendelseType().equals(tidslinjeHendelseType))
             .anyMatch(t -> t.opprettet().isBefore(hendelse.opprettet()));
-    }
-
-    private void sammenlign(List<TidslinjeHendelseDto> oversikt, Saksnummer saksnummer) {
-        try {
-            var historikk =  tidslinjeTjeneste.hentTidslinje(saksnummer);
-            if (historikk.equals(oversikt)) {
-                LOG.info("Ingen avvik mellom tidslinje fra fpoversikt og fpinfo-historikk");
-            } else {
-                LOG.info("AVVIK [tidslinje]: Fpinfo-historikk returnerte {}, mens fpoversikt returnerte {} på saksnummer {}", historikk, oversikt, saksnummer.value());
-            }
-        } catch (Exception e) {
-            LOG.info("Noe gikk galt med henting eller sammenligningav av tidlinjen", e);
-        }
     }
 }
