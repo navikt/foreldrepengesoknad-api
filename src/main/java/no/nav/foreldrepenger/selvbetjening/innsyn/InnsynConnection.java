@@ -6,7 +6,6 @@ import java.util.Arrays;
 import java.util.List;
 import java.util.Optional;
 
-import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Component;
 import org.springframework.web.client.HttpClientErrorException;
 import org.springframework.web.client.RestOperations;
@@ -76,7 +75,7 @@ public class InnsynConnection extends AbstractRestConnection {
             .orElse(emptyList());
     }
 
-    public ResponseEntity<byte[]> hentDokument(JournalpostId journalpostId, DokumentInfoId dokumentId) {
-        return getForEntity(cfg.hentDokument().toUriString(), byte[].class, journalpostId.value(), dokumentId.value());
+    public DokumentDto hentDokument(JournalpostId journalpostId, DokumentInfoId dokumentId) {
+        return getForEntity(cfg.hentDokument().toUriString(), DokumentDto.class, journalpostId.value(), dokumentId.value()).getBody();
     }
 }

@@ -3,8 +3,6 @@ package no.nav.foreldrepenger.selvbetjening.innsyn;
 import java.util.List;
 import java.util.Optional;
 
-import org.springframework.http.ResponseEntity;
-
 import no.nav.foreldrepenger.common.domain.Saksnummer;
 import no.nav.foreldrepenger.common.innsyn.AnnenPartVedtak;
 import no.nav.foreldrepenger.common.innsyn.Saker;
@@ -30,5 +28,5 @@ public interface Innsyn extends RetryAware {
 
     List<ArkivDokumentDto> alleDokumenterPåSak(Saksnummer saksnummer);
 
-    ResponseEntity<byte[]> hentDokument(JournalpostId journalpostId, DokumentInfoId dokumentId);
+    DokumentDto hentDokument(JournalpostId journalpostId, DokumentInfoId dokumentId);
 }
