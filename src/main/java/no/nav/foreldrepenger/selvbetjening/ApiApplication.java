@@ -28,9 +28,4 @@ public class ApiApplication {
                 .main(ApiApplication.class)
                 .run(args);
     }
-
-    @PostConstruct
-    public void init(){
-        TimeZone.setDefault(TimeZone.getTimeZone("Europe/Oslo"));
-    }
 }

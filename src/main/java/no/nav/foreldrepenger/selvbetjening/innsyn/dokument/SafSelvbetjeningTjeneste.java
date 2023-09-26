@@ -174,7 +174,7 @@ public class SafSelvbetjeningTjeneste {
 
     private static LocalDateTime tilLocalDateTime(RelevantDato relevantDato) {
         return relevantDato.getDato().toInstant()
-            .atZone(ZoneId.systemDefault())
+            .atZone(ZoneId.of("Europe/Oslo"))
             .toLocalDateTime();
     }
 
