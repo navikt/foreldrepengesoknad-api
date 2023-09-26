@@ -1,7 +1,6 @@
 package no.nav.foreldrepenger.selvbetjening.innsyn.dokument;
 
 import java.time.LocalDateTime;
-import java.time.ZoneId;
 import java.util.List;
 import java.util.Optional;
 import java.util.Set;
@@ -167,15 +166,9 @@ public class SafSelvbetjeningTjeneste {
         }
         return datoer.stream()
             .filter(d -> Datotype.DATO_OPPRETTET.equals(d.getDatotype()))
-            .map(SafSelvbetjeningTjeneste::tilLocalDateTime)
+            .map(RelevantDato::getDato)
             .findFirst()
             .orElseThrow();
-    }
-
-    private static LocalDateTime tilLocalDateTime(RelevantDato relevantDato) {
-        return relevantDato.getDato().toInstant()
-            .atZone(ZoneId.of("Europe/Oslo"))
-            .toLocalDateTime();
     }
 
     private static EnkelJournalpost.DokumentType tilType(Journalposttype journalposttype) {

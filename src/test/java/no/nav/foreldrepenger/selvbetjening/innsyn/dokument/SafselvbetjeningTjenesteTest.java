@@ -5,8 +5,7 @@ import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.when;
 
-import java.time.Instant;
-import java.util.Date;
+import java.time.LocalDateTime;
 import java.util.List;
 
 import org.junit.jupiter.api.BeforeEach;
@@ -178,7 +177,7 @@ class SafselvbetjeningTjenesteTest {
         var sak = new Sak();
         sak.setFagsakId(DUMMY_SAKSNUMMER.value());
         journalpost.setSak(sak);
-        journalpost.setRelevanteDatoer(List.of(new RelevantDato(Date.from(Instant.now()), Datotype.DATO_OPPRETTET)));
+        journalpost.setRelevanteDatoer(List.of(new RelevantDato(LocalDateTime.now(), Datotype.DATO_OPPRETTET)));
         journalpost.setDokumenter(List.of(pdfDokument(dokumentTypeId), xmlDokument(dokumentTypeId)));
         return journalpost;
     }
@@ -192,7 +191,7 @@ class SafselvbetjeningTjenesteTest {
         var sak = new Sak();
         sak.setFagsakId(DUMMY_SAKSNUMMER.value());
         journalpost.setSak(sak);
-        journalpost.setRelevanteDatoer(List.of(new RelevantDato(Date.from(Instant.now()), Datotype.DATO_OPPRETTET)));
+        journalpost.setRelevanteDatoer(List.of(new RelevantDato(LocalDateTime.now(), Datotype.DATO_OPPRETTET)));
         journalpost.setDokumenter(List.of(pdfDokumentBrukerIkkeTilgang(dokumentTypeId)));
         return journalpost;
     }
@@ -206,7 +205,7 @@ class SafselvbetjeningTjenesteTest {
         var sak = new Sak();
         sak.setFagsakId(DUMMY_SAKSNUMMER.value());
         journalpost.setSak(sak);
-        journalpost.setRelevanteDatoer(List.of(new RelevantDato(Date.from(Instant.now()), Datotype.DATO_OPPRETTET)));
+        journalpost.setRelevanteDatoer(List.of(new RelevantDato(LocalDateTime.now(), Datotype.DATO_OPPRETTET)));
         journalpost.setDokumenter(List.of(pdfDokument(dokumentTypeId), xmlDokument(dokumentTypeId)));
         return journalpost;
     }
@@ -220,7 +219,7 @@ class SafselvbetjeningTjenesteTest {
         var sak = new Sak();
         sak.setFagsakId(DUMMY_SAKSNUMMER.value());
         journalpost.setSak(sak);
-        journalpost.setRelevanteDatoer(List.of(new RelevantDato(Date.from(Instant.now()), Datotype.DATO_OPPRETTET)));
+        journalpost.setRelevanteDatoer(List.of(new RelevantDato(LocalDateTime.now(), Datotype.DATO_OPPRETTET)));
         journalpost.setDokumenter(List.of(pdfDokument(dokumentTypeId), xmlDokument(dokumentTypeId)));
         return journalpost;
     }
@@ -231,7 +230,7 @@ class SafselvbetjeningTjenesteTest {
         journalpost.setJournalstatus(Journalstatus.MOTTATT);
         journalpost.setTittel("FEIL_TITTEL");
         journalpost.setJournalpostId("123");
-        journalpost.setRelevanteDatoer(List.of(new RelevantDato(Date.from(Instant.now()), Datotype.DATO_OPPRETTET)));
+        journalpost.setRelevanteDatoer(List.of(new RelevantDato(LocalDateTime.now(), Datotype.DATO_OPPRETTET)));
         journalpost.setDokumenter(List.of(pdfDokument(dokumentTypeId), xmlDokument(dokumentTypeId)));
         return journalpost;
     }
@@ -246,7 +245,7 @@ class SafselvbetjeningTjenesteTest {
         var sak = new Sak();
         sak.setFagsakId(DUMMY_SAKSNUMMER.value());
         journalpost.setSak(sak);
-        journalpost.setRelevanteDatoer(List.of(new RelevantDato(Date.from(Instant.now()), Datotype.DATO_OPPRETTET)));
+        journalpost.setRelevanteDatoer(List.of(new RelevantDato(LocalDateTime.now(), Datotype.DATO_OPPRETTET)));
         journalpost.setDokumenter(List.of(pdfDokument(dokumentType), pdfDokument(DokumentTypeId.I000045)));
         return journalpost;
     }
@@ -260,7 +259,7 @@ class SafselvbetjeningTjenesteTest {
         var sak = new Sak();
         sak.setFagsakId(DUMMY_SAKSNUMMER.value());
         journalpost.setSak(sak);
-        journalpost.setRelevanteDatoer(List.of(new RelevantDato(Date.from(Instant.now()), Datotype.DATO_OPPRETTET)));
+        journalpost.setRelevanteDatoer(List.of(new RelevantDato(LocalDateTime.now(), Datotype.DATO_OPPRETTET)));
         journalpost.setDokumenter(List.of(pdfDokument("INVFOR")));
         return journalpost;
     }
@@ -275,7 +274,7 @@ class SafselvbetjeningTjenesteTest {
         var sak = new Sak();
         sak.setFagsakId(DUMMY_SAKSNUMMER.value());
         journalpost.setSak(sak);
-        journalpost.setRelevanteDatoer(List.of(new RelevantDato(Date.from(Instant.now()), Datotype.DATO_OPPRETTET)));
+        journalpost.setRelevanteDatoer(List.of(new RelevantDato(LocalDateTime.now(), Datotype.DATO_OPPRETTET)));
         journalpost.setDokumenter(List.of(xmlDokument(dokumentType)));
         return journalpost;
     }

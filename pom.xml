@@ -234,7 +234,7 @@
                             <outputDir>${project.build.directory}/generated-sources</outputDir>
                             <modelPackageName>no.nav.safselvbetjening</modelPackageName>
                             <customTypesMapping>
-                                <DateTime>java.util.Date</DateTime>
+                                <DateTime>java.time.LocalDateTime</DateTime>
                             </customTypesMapping>
                             <generateClient>true</generateClient>
                             <generateApis>false</generateApis>
