@@ -7,25 +7,10 @@ import java.util.List;
 public record EnkelJournalpost(String tittel,
                                String journalpostId,
                                String saksnummer,
-                               Bruker bruker,
                                DokumentType type,
                                LocalDateTime mottatt,
                                DokumentTypeId hovedtype,
                                List<Dokument> dokumenter) {
-    public record Bruker(String id, Type type) {
-        public enum Type {
-            AKTOERID,
-            FNR,
-            ORGNR
-        }
-
-        @Override
-        public String toString() {
-            return "Bruker{" + "type=" + type + '}';
-        }
-
-    }
-
     public enum DokumentType {
         INNGÅENDE_DOKUMENT,
         UTGÅENDE_DOKUMENT

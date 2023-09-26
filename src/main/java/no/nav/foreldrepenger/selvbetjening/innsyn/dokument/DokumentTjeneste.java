@@ -1,7 +1,7 @@
 package no.nav.foreldrepenger.selvbetjening.innsyn.dokument;
 
-import static no.nav.foreldrepenger.selvbetjening.innsyn.dokument.ArkivDokumentDto.Type.INNGÅENDE_DOKUMENT;
-import static no.nav.foreldrepenger.selvbetjening.innsyn.dokument.ArkivDokumentDto.Type.UTGÅENDE_DOKUMENT;
+import static no.nav.foreldrepenger.selvbetjening.innsyn.dokument.DokumentDto.Type.INNGÅENDE_DOKUMENT;
+import static no.nav.foreldrepenger.selvbetjening.innsyn.dokument.DokumentDto.Type.UTGÅENDE_DOKUMENT;
 
 import java.util.Comparator;
 import java.util.List;
@@ -13,11 +13,11 @@ import no.nav.foreldrepenger.common.domain.Fødselsnummer;
 import no.nav.foreldrepenger.common.domain.Saksnummer;
 
 @Service
-public class ArkivTjeneste {
+public class DokumentTjeneste {
 
     private final SafSelvbetjeningTjeneste safSelvbetjening;
 
-    public ArkivTjeneste(SafSelvbetjeningTjeneste safSelvbetjening) {
+    public DokumentTjeneste(SafSelvbetjeningTjeneste safSelvbetjening) {
         this.safSelvbetjening = safSelvbetjening;
     }
 
@@ -25,25 +25,25 @@ public class ArkivTjeneste {
         return safSelvbetjening.hentDokument(journalpostId, dokumentId);
     }
 
-    public List<ArkivDokumentDto> alle(Fødselsnummer fødselsnummer) {
+    public List<DokumentDto> alle(Fødselsnummer fødselsnummer) {
         return tilArkivDokumenter(safSelvbetjening.alle(fødselsnummer));
     }
 
-    public List<ArkivDokumentDto> alle(Fødselsnummer fnr, Saksnummer saksnummer) {
+    public List<DokumentDto> alle(Fødselsnummer fnr, Saksnummer saksnummer) {
         return tilArkivDokumenter(safSelvbetjening.alle(fnr, saksnummer));
     }
 
-    private List<ArkivDokumentDto> tilArkivDokumenter(List<EnkelJournalpost> journalposter) {
+    private List<DokumentDto> tilArkivDokumenter(List<EnkelJournalpost> journalposter) {
         return journalposter.stream()
             .flatMap(enkelJournalpost -> enkelJournalpost.dokumenter().stream()
                 .map(dokument -> tilArkivdokument(dokument, enkelJournalpost))
             )
-            .sorted(Comparator.comparing(ArkivDokumentDto::mottatt))
+            .sorted(Comparator.comparing(DokumentDto::mottatt))
             .toList();
     }
 
-    private static ArkivDokumentDto tilArkivdokument(EnkelJournalpost.Dokument dokument, EnkelJournalpost enkelJournalpost) {
-        return new ArkivDokumentDto(
+    private static DokumentDto tilArkivdokument(EnkelJournalpost.Dokument dokument, EnkelJournalpost enkelJournalpost) {
+        return new DokumentDto(
             dokument.tittel() != null ? dokument.tittel() : enkelJournalpost.tittel(),
             tilType(enkelJournalpost.type()),
             enkelJournalpost.saksnummer(),
@@ -53,7 +53,7 @@ public class ArkivTjeneste {
         );
     }
 
-    private static ArkivDokumentDto.Type tilType(EnkelJournalpost.DokumentType type) {
+    private static DokumentDto.Type tilType(EnkelJournalpost.DokumentType type) {
         return switch (type) {
             case INNGÅENDE_DOKUMENT -> INNGÅENDE_DOKUMENT;
             case UTGÅENDE_DOKUMENT -> UTGÅENDE_DOKUMENT;

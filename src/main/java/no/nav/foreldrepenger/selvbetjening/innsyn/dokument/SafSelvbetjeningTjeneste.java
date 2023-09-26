@@ -123,7 +123,6 @@ public class SafSelvbetjeningTjeneste {
             journalpost.getTittel(),
             journalpost.getJournalpostId(),
             journalpost.getSak() != null ? journalpost.getSak().getFagsakId() : null,
-            null,
             innsendingstype,
             tilOpprettetDato(journalpost.getRelevanteDatoer()),
             innsendingstype.equals(EnkelJournalpost.DokumentType.INNGÅENDE_DOKUMENT) ? dokumenttypeFraTittel(journalpost) : DokumentTypeId.URELEVANT,

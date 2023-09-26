@@ -20,7 +20,6 @@ import jakarta.validation.constraints.NotNull;
 import no.nav.foreldrepenger.common.domain.Saksnummer;
 import no.nav.foreldrepenger.common.util.TokenUtil;
 import no.nav.foreldrepenger.selvbetjening.http.ProtectedRestController;
-import no.nav.foreldrepenger.selvbetjening.innsyn.Innsyn;
 
 
 @ProtectedRestController("/rest/innsyn/tidslinje")
@@ -28,35 +27,19 @@ public class TidslinjeController {
     private static final Logger LOG = LoggerFactory.getLogger(TidslinjeController.class);
 
     private final TidslinjeTjeneste tidslinjeTjeneste;
-    private final Innsyn innsyn;
     private final TokenUtil tokenUtil;
 
     @Autowired
-    public TidslinjeController(TidslinjeTjeneste tidslinjeTjeneste, Innsyn innsyn, TokenUtil tokenUtil) {
+    public TidslinjeController(TidslinjeTjeneste tidslinjeTjeneste, TokenUtil tokenUtil) {
         this.tidslinjeTjeneste = tidslinjeTjeneste;
-        this.innsyn = innsyn;
         this.tokenUtil = tokenUtil;
     }
 
     @GetMapping(produces = MediaType.APPLICATION_JSON_VALUE)
     public List<TidslinjeHendelseDto> hentTidslinje(@RequestParam @Valid @NotNull Saksnummer saksnummer) {
-        var oversikt = innsyn.tidslinje(saksnummer);
-        sammenlign(oversikt, saksnummer);
-        tidslinjeKonsistensSjekk(oversikt);
-        return oversikt;
-    }
-
-    private void sammenlign(List<TidslinjeHendelseDto> oversikt, Saksnummer saksnummer) {
-        try {
-            var direkte = tidslinjeTjeneste.tidslinje(tokenUtil.autentisertBrukerOrElseThrowException(), saksnummer);
-            if (direkte.equals(oversikt)) {
-                LOG.info("Ingen avvik i tidslinjen");
-            } else {
-                LOG.info("AVVIK: Oversikt {}, Direkte {}", oversikt, direkte);
-            }
-        } catch (Exception e) {
-            LOG.info("Noe gikk galt med sammenligning av tidslinje", e);
-        }
+        var tidslinje = tidslinjeTjeneste.tidslinje(tokenUtil.autentisertBrukerOrElseThrowException(), saksnummer);
+        tidslinjeKonsistensSjekk(tidslinje);
+        return tidslinje;
     }
 
     private static void tidslinjeKonsistensSjekk(List<TidslinjeHendelseDto> tidslinjeHendelseDto) {

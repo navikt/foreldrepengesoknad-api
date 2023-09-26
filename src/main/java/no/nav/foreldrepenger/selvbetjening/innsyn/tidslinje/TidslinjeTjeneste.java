@@ -13,9 +13,10 @@ import org.springframework.stereotype.Service;
 
 import no.nav.foreldrepenger.common.domain.Fødselsnummer;
 import no.nav.foreldrepenger.common.domain.Saksnummer;
+import no.nav.foreldrepenger.selvbetjening.innsyn.Innsyn;
+import no.nav.foreldrepenger.selvbetjening.innsyn.InntektsmeldingDto;
 import no.nav.foreldrepenger.selvbetjening.innsyn.dokument.EnkelJournalpost;
 import no.nav.foreldrepenger.selvbetjening.innsyn.dokument.SafSelvbetjeningTjeneste;
-import no.nav.foreldrepenger.selvbetjening.innsyn.Innsyn;
 
 @Service
 public class TidslinjeTjeneste {
