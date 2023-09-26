@@ -16,19 +16,16 @@ import jakarta.validation.constraints.NotNull;
 import no.nav.foreldrepenger.common.domain.Saksnummer;
 import no.nav.foreldrepenger.common.util.TokenUtil;
 import no.nav.foreldrepenger.selvbetjening.http.ProtectedRestController;
-import no.nav.foreldrepenger.selvbetjening.innsyn.Innsyn;
 
 @ProtectedRestController("/rest/dokument")
-public class ArkivController {
-    private static final Logger LOG = LoggerFactory.getLogger(ArkivController.class);
-    private final ArkivTjeneste arkivTjeneste;
-    private final Innsyn innsyn;
+public class DokumentController {
+    private static final Logger LOG = LoggerFactory.getLogger(DokumentController.class);
+    private final DokumentTjeneste dokumentTjeneste;
     private final TokenUtil tokenUtil;
 
     @Autowired
-    public ArkivController(ArkivTjeneste arkivTjeneste, Innsyn innsyn, TokenUtil tokenUtil) {
-        this.arkivTjeneste = arkivTjeneste;
-        this.innsyn = innsyn;
+    public DokumentController(DokumentTjeneste dokumentTjeneste, TokenUtil tokenUtil) {
+        this.dokumentTjeneste = dokumentTjeneste;
         this.tokenUtil = tokenUtil;
     }
 
@@ -36,7 +33,7 @@ public class ArkivController {
     public ResponseEntity<byte[]> hentDokumentV2(@Valid @PathVariable("journalpostId") JournalpostId journalpostId,
                                                  @Valid @PathVariable("dokumentId") DokumentInfoId dokumentId) {
         try {
-            var response = arkivTjeneste.hentDokument(journalpostId, dokumentId);
+            var response = dokumentTjeneste.hentDokument(journalpostId, dokumentId);
             LOG.info("Hentet dokument med journalpostid {} og dokumentid {}", journalpostId, dokumentId);
             return response;
         } catch (HttpClientErrorException.NotFound | HttpClientErrorException.Forbidden e) {
@@ -46,23 +43,9 @@ public class ArkivController {
     }
 
     @GetMapping(value = "/alle")
-    public List<ArkivDokumentDto> hentDokumentoversikten(@RequestParam @Valid @NotNull Saksnummer saksnummer) {
-        var oversikt = innsyn.alleDokumenterPåSak(saksnummer);
-        sammenlign(oversikt, saksnummer);
-        LOG.info("Hentet {} dokumenter på sak {}", oversikt.size(), saksnummer.value());
-        return oversikt;
-    }
-
-    private void sammenlign(List<ArkivDokumentDto> oversikt, Saksnummer saksnummer) {
-        try {
-            var direkte = arkivTjeneste.alle(tokenUtil.autentisertBrukerOrElseThrowException(), saksnummer);
-            if (direkte.equals(oversikt)) {
-                LOG.info("Ingen avvik i alle dokumenter");
-            } else {
-                LOG.info("AVVIK dokumenter: Oversikt {}, Direkte {}", oversikt, direkte);
-            }
-        } catch (Exception e) {
-            LOG.info("Noe gikk galt med sammenligning av dokumenter", e);
-        }
+    public List<DokumentDto> hentDokumentoversikten(@RequestParam @Valid @NotNull Saksnummer saksnummer) {
+        var dokumenter = dokumentTjeneste.alle(tokenUtil.autentisertBrukerOrElseThrowException(), saksnummer);
+        LOG.info("Hentet {} dokumenter på sak {}", dokumenter.size(), saksnummer.value());
+        return dokumenter;
     }
 }

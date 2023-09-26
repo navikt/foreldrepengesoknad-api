@@ -13,10 +13,7 @@ import org.springframework.web.client.RestOperations;
 import no.nav.foreldrepenger.common.domain.Saksnummer;
 import no.nav.foreldrepenger.common.innsyn.AnnenPartVedtak;
 import no.nav.foreldrepenger.common.innsyn.Saker;
-import no.nav.foreldrepenger.selvbetjening.innsyn.dokument.ArkivDokumentDto;
 import no.nav.foreldrepenger.selvbetjening.http.AbstractRestConnection;
-import no.nav.foreldrepenger.selvbetjening.innsyn.tidslinje.InntektsmeldingDto;
-import no.nav.foreldrepenger.selvbetjening.innsyn.tidslinje.TidslinjeHendelseDto;
 
 @Component
 public class InnsynConnection extends AbstractRestConnection {
@@ -52,24 +49,6 @@ public class InnsynConnection extends AbstractRestConnection {
 
     public List<TilbakekrevingsInnslag> hentUttalelserOmTilbakekreving() {
         return Optional.ofNullable(getForObject(cfg.uttalelseOmTilbakekrevinger(), TilbakekrevingsInnslag[].class))
-            .map(Arrays::asList)
-            .orElse(emptyList());
-    }
-
-    public List<TidslinjeHendelseDto> tidslinje(Saksnummer saksnummer) {
-        return Optional.ofNullable(getForObject(cfg.tidslinje(saksnummer), TidslinjeHendelseDto[].class))
-            .map(Arrays::asList)
-            .orElse(emptyList());
-    }
-
-    public List<ArkivDokumentDto> alleDokumenterPåBruker() {
-        return Optional.ofNullable(getForObject(cfg.alleDokumenter(), ArkivDokumentDto[].class))
-            .map(Arrays::asList)
-            .orElse(emptyList());
-    }
-
-    public List<ArkivDokumentDto> alleDokumenterPåSak(Saksnummer saksnummer) {
-        return Optional.ofNullable(getForObject(cfg.alleDokumenter(saksnummer), ArkivDokumentDto[].class))
             .map(Arrays::asList)
             .orElse(emptyList());
     }

@@ -18,8 +18,8 @@ import jakarta.validation.Valid;
 import no.nav.foreldrepenger.common.innsyn.AnnenPartVedtak;
 import no.nav.foreldrepenger.common.innsyn.Saker;
 import no.nav.foreldrepenger.common.util.TokenUtil;
-import no.nav.foreldrepenger.selvbetjening.innsyn.dokument.ArkivDokumentDto;
-import no.nav.foreldrepenger.selvbetjening.innsyn.dokument.ArkivTjeneste;
+import no.nav.foreldrepenger.selvbetjening.innsyn.dokument.DokumentDto;
+import no.nav.foreldrepenger.selvbetjening.innsyn.dokument.DokumentTjeneste;
 import no.nav.foreldrepenger.selvbetjening.http.ProtectedRestController;
 
 @ProtectedRestController(INNSYN)
@@ -27,16 +27,16 @@ public class InnsynController {
 
     private static final Logger LOG = LoggerFactory.getLogger(InnsynController.class);
     public static final String INNSYN = "/rest/innsyn/v2";
-    private final static String TITTEL_VED_SØKNAD = "Søknad om";
+    private static final String TITTEL_VED_SØKNAD = "Søknad om";
 
     private final Innsyn innsynTjeneste;
-    private final ArkivTjeneste arkivTjeneste;
+    private final DokumentTjeneste dokumentTjeneste;
     private final TokenUtil tokenUtil;
 
     @Autowired
-    public InnsynController(Innsyn innsyn, ArkivTjeneste arkivTjeneste, TokenUtil tokenUtil) {
+    public InnsynController(Innsyn innsyn, DokumentTjeneste dokumentTjeneste, TokenUtil tokenUtil) {
         this.innsynTjeneste = innsyn;
-        this.arkivTjeneste = arkivTjeneste;
+        this.dokumentTjeneste = dokumentTjeneste;
         this.tokenUtil = tokenUtil;
     }
 
@@ -52,9 +52,9 @@ public class InnsynController {
 
     @GetMapping("/saker/oppdatert")
     public boolean erSakOppdatert() {
-        var dokumenter = arkivTjeneste.alle(tokenUtil.autentisertBrukerOrElseThrowException());
+        var dokumenter = dokumentTjeneste.alle(tokenUtil.autentisertBrukerOrElseThrowException());
         var søkaderMottattNylig = dokumenter.stream()
-            .filter(arkivDokument -> ArkivDokumentDto.Type.INNGÅENDE_DOKUMENT.equals(arkivDokument.type()))
+            .filter(arkivDokument -> DokumentDto.Type.INNGÅENDE_DOKUMENT.equals(arkivDokument.type()))
             .filter(arkivDokument -> arkivDokument.tittel().contains(TITTEL_VED_SØKNAD))
             .filter(arkivDokument -> arkivDokument.mottatt().isAfter(LocalDateTime.now().minusDays(1)))
             .toList();
@@ -65,8 +65,8 @@ public class InnsynController {
 
         if (søkaderMottattNylig.stream().anyMatch(søknad -> søknad.saksnummer() == null)) {
             var førsteMottattDato = søkaderMottattNylig.stream()
-                .min(Comparator.comparing(ArkivDokumentDto::mottatt))
-                .map(ArkivDokumentDto::mottatt)
+                .min(Comparator.comparing(DokumentDto::mottatt))
+                .map(DokumentDto::mottatt)
                 .orElse(null);
             LOG.info("Sak ikke oppdatert. Fant søknad hvor saksnummer er null -> GOSYS. Antall {} Mottatt {}",
                 søkaderMottattNylig.size(), førsteMottattDato);

@@ -7,12 +7,12 @@ import static org.mockito.Mockito.when;
 import java.time.LocalDateTime;
 import java.util.List;
 
+import no.nav.foreldrepenger.selvbetjening.innsyn.InntektsmeldingDto;
+
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
-import no.nav.foreldrepenger.common.domain.AktørId;
 import no.nav.foreldrepenger.common.domain.Fødselsnummer;
-import no.nav.foreldrepenger.common.domain.Orgnummer;
 import no.nav.foreldrepenger.common.domain.Saksnummer;
 import no.nav.foreldrepenger.selvbetjening.innsyn.dokument.DokumentTypeId;
 import no.nav.foreldrepenger.selvbetjening.innsyn.dokument.EnkelJournalpost;
@@ -23,8 +23,6 @@ import no.nav.foreldrepenger.selvbetjening.innsyn.Innsyn;
 public class TidslinjeTjenesteTest {
     private static final Saksnummer DUMMY_SAKSNUMMER = new Saksnummer("0000000");
     private static final Fødselsnummer DUMMY_FNR = new Fødselsnummer("0000000");
-    private static final AktørId DUMMY_AKTØRID = new AktørId("0000000");
-    private static final Orgnummer DUMMY_ORGNUMMER = Orgnummer.MAGIC_ORG;
 
     private TidslinjeTjeneste tjeneste;
     private SafSelvbetjeningTjeneste safselvbetjeningTjeneste;
@@ -181,7 +179,6 @@ public class TidslinjeTjenesteTest {
             DokumentTypeId.I000003.getTittel(),
             "1",
             saksnummer.value(),
-            new EnkelJournalpost.Bruker(DUMMY_AKTØRID.value(), EnkelJournalpost.Bruker.Type.AKTOERID),
             EnkelJournalpost.DokumentType.INNGÅENDE_DOKUMENT, mottatt,
             DokumentTypeId.I000003,
             List.of(
@@ -196,7 +193,6 @@ public class TidslinjeTjenesteTest {
             DokumentTypeId.I000050.getTittel(),
             "2",
             saksnummer.value(),
-            new EnkelJournalpost.Bruker(DUMMY_AKTØRID.value(), EnkelJournalpost.Bruker.Type.AKTOERID),
             EnkelJournalpost.DokumentType.INNGÅENDE_DOKUMENT,
             tidspunkt,
             DokumentTypeId.I000050,
@@ -211,7 +207,6 @@ public class TidslinjeTjenesteTest {
             DokumentTypeId.I000036.getTittel(),
             "3",
             saksnummer.value(),
-            new EnkelJournalpost.Bruker(DUMMY_AKTØRID.value(), EnkelJournalpost.Bruker.Type.AKTOERID),
             EnkelJournalpost.DokumentType.INNGÅENDE_DOKUMENT, tidspunkt,
             DokumentTypeId.I000023,
             List.of(
@@ -226,7 +221,6 @@ public class TidslinjeTjenesteTest {
             DokumentTypeId.I000067.getTittel(),
             "4",
             saksnummer.value(),
-            new EnkelJournalpost.Bruker(DUMMY_ORGNUMMER.value(), EnkelJournalpost.Bruker.Type.ORGNR),
             EnkelJournalpost.DokumentType.INNGÅENDE_DOKUMENT,
             LocalDateTime.now(),
             DokumentTypeId.I000067,
@@ -242,7 +236,6 @@ public class TidslinjeTjenesteTest {
             "Innvilgelsesbrev foreldrepenger",
             "5",
             saksnummer.value(),
-            new EnkelJournalpost.Bruker(DUMMY_AKTØRID.value(), EnkelJournalpost.Bruker.Type.AKTOERID),
             EnkelJournalpost.DokumentType.UTGÅENDE_DOKUMENT, mottatt,
             null, // Todo: Dokumentet har vel ikke en hovedtype her? Elller?
             List.of(
@@ -257,7 +250,6 @@ public class TidslinjeTjenesteTest {
             "Innhente opplysninger",
             "5",
             saksnummer.value(),
-            new EnkelJournalpost.Bruker(DUMMY_AKTØRID.value(), EnkelJournalpost.Bruker.Type.AKTOERID),
             EnkelJournalpost.DokumentType.UTGÅENDE_DOKUMENT, tidspunkt,
             null, // Todo: Dokumentet har vel ikke en hovedtype her? Elller?
             List.of(
@@ -272,7 +264,6 @@ public class TidslinjeTjenesteTest {
             "Etterlys inntektsmelding",
             "6",
             saksnummer.value(),
-            new EnkelJournalpost.Bruker(DUMMY_AKTØRID.value(), EnkelJournalpost.Bruker.Type.AKTOERID),
             EnkelJournalpost.DokumentType.UTGÅENDE_DOKUMENT,
             LocalDateTime.now(),
             null, // Todo: Dokumentet har vel ikke en hovedtype her? Elller?

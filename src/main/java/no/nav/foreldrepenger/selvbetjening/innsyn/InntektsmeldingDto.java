@@ -1,4 +1,4 @@
-package no.nav.foreldrepenger.selvbetjening.innsyn.tidslinje;
+package no.nav.foreldrepenger.selvbetjening.innsyn;
 
 import java.time.LocalDateTime;
 
