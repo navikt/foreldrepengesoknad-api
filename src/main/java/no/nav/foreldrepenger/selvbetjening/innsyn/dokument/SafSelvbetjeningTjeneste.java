@@ -8,6 +8,7 @@ import java.util.Set;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 
@@ -37,6 +38,7 @@ public class SafSelvbetjeningTjeneste {
 
     private final SafSelvbetjeningConnection safKlient;
 
+    @Autowired
     public SafSelvbetjeningTjeneste(SafSelvbetjeningConnection safKlient) {
         this.safKlient = safKlient;
     }

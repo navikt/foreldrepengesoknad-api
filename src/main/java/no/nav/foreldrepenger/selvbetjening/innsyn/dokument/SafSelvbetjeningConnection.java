@@ -1,5 +1,6 @@
 package no.nav.foreldrepenger.selvbetjening.innsyn.dokument;
 
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatusCode;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Component;
@@ -22,7 +23,9 @@ import no.nav.safselvbetjening.DokumentoversiktSelvbetjeningQueryResponse;
 public class SafSelvbetjeningConnection extends AbstractRestConnection {
 
     private final SafSelvbetjeningConfig cfg;
-    protected SafSelvbetjeningConnection(RestOperations operations, SafSelvbetjeningConfig cfg) {
+
+    @Autowired
+    public SafSelvbetjeningConnection(RestOperations operations, SafSelvbetjeningConfig cfg) {
         super(operations);
         this.cfg = cfg;
     }

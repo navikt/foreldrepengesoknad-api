@@ -16,6 +16,7 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 
 import jakarta.validation.Valid;
+import jakarta.validation.constraints.NotNull;
 import no.nav.foreldrepenger.common.domain.Saksnummer;
 import no.nav.foreldrepenger.common.util.TokenUtil;
 import no.nav.foreldrepenger.selvbetjening.http.ProtectedRestController;
@@ -38,7 +39,7 @@ public class TidslinjeController {
     }
 
     @GetMapping(produces = MediaType.APPLICATION_JSON_VALUE)
-    public List<TidslinjeHendelseDto> hentTidslinje(@RequestParam @Valid Saksnummer saksnummer) {
+    public List<TidslinjeHendelseDto> hentTidslinje(@RequestParam @Valid @NotNull Saksnummer saksnummer) {
         var oversikt = innsyn.tidslinje(saksnummer);
         sammenlign(oversikt, saksnummer);
         tidslinjeKonsistensSjekk(oversikt);
