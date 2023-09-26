@@ -5,8 +5,6 @@ import static no.nav.foreldrepenger.selvbetjening.util.URIUtil.uri;
 import java.net.URI;
 
 import org.springframework.boot.context.properties.ConfigurationProperties;
-import org.springframework.web.util.UriComponents;
-import org.springframework.web.util.UriComponentsBuilder;
 
 import no.nav.foreldrepenger.common.domain.Saksnummer;
 import no.nav.foreldrepenger.selvbetjening.util.URIUtil;
@@ -15,9 +13,10 @@ import no.nav.foreldrepenger.selvbetjening.util.URIUtil;
 public class InnsynConfig {
     private static final String CONTEXT_PATH = "api";
     private static final String SAKER = CONTEXT_PATH + "/saker";
+    private static final String INNTEKTSMELDINGER = CONTEXT_PATH + "/inntektsmeldinger";
     private static final String ANNENPART_VEDTAK = CONTEXT_PATH + "/annenPart";
     private static final String TIDSLINJE = CONTEXT_PATH + "/tidslinje";
-    private static final String DOKUMENT = CONTEXT_PATH + "/arkiv/hent-dokument/{journalpostId}/{dokumentId}";
+
     private static final String ALLE_DOKUMENTER = CONTEXT_PATH + "/arkiv/alle";
 
     private static final String OPPGAVER = CONTEXT_PATH + "/oppgaver";
@@ -60,14 +59,11 @@ public class InnsynConfig {
         return uri(getBaseUri(), ALLE_DOKUMENTER, URIUtil.queryParam(SAKSNUMMER, saksnummer.value()));
     }
 
-    UriComponents hentDokument() {
-        return UriComponentsBuilder.fromUri(baseUri).path(DOKUMENT).build();
+    URI inntektsmelding(Saksnummer saksnummer) {
+        return uri(getBaseUri(), INNTEKTSMELDINGER, URIUtil.queryParam(SAKSNUMMER, saksnummer.value()));
     }
 
     private URI getBaseUri() {
         return baseUri;
     }
-
-
-
 }

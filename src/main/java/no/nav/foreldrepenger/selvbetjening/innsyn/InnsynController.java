@@ -17,8 +17,10 @@ import org.springframework.web.bind.annotation.RequestBody;
 import jakarta.validation.Valid;
 import no.nav.foreldrepenger.common.innsyn.AnnenPartVedtak;
 import no.nav.foreldrepenger.common.innsyn.Saker;
-import no.nav.foreldrepenger.selvbetjening.http.ProtectedRestController;
+import no.nav.foreldrepenger.common.util.TokenUtil;
 import no.nav.foreldrepenger.selvbetjening.innsyn.dokument.ArkivDokumentDto;
+import no.nav.foreldrepenger.selvbetjening.innsyn.dokument.ArkivTjeneste;
+import no.nav.foreldrepenger.selvbetjening.http.ProtectedRestController;
 
 @ProtectedRestController(INNSYN)
 public class InnsynController {
@@ -28,10 +30,14 @@ public class InnsynController {
     private final static String TITTEL_VED_SØKNAD = "Søknad om";
 
     private final Innsyn innsynTjeneste;
+    private final ArkivTjeneste arkivTjeneste;
+    private final TokenUtil tokenUtil;
 
     @Autowired
-    public InnsynController(Innsyn innsyn) {
+    public InnsynController(Innsyn innsyn, ArkivTjeneste arkivTjeneste, TokenUtil tokenUtil) {
         this.innsynTjeneste = innsyn;
+        this.arkivTjeneste = arkivTjeneste;
+        this.tokenUtil = tokenUtil;
     }
 
     @GetMapping("/saker")
@@ -39,9 +45,14 @@ public class InnsynController {
         return innsynTjeneste.hentSaker();
     }
 
+    @PostMapping(path = "/annenPartVedtak", consumes = MediaType.APPLICATION_JSON_VALUE)
+    public AnnenPartVedtak annenPartVedtak(@Valid @RequestBody AnnenPartVedtakIdentifikator annenPartVedtakIdentifikator) {
+        return innsynTjeneste.annenPartVedtak(annenPartVedtakIdentifikator).orElse(null);
+    }
+
     @GetMapping("/saker/oppdatert")
     public boolean erSakOppdatert() {
-        var dokumenter = innsynTjeneste.alleDokumenterPåBruker();
+        var dokumenter = arkivTjeneste.alle(tokenUtil.autentisertBrukerOrElseThrowException());
         var søkaderMottattNylig = dokumenter.stream()
             .filter(arkivDokument -> ArkivDokumentDto.Type.INNGÅENDE_DOKUMENT.equals(arkivDokument.type()))
             .filter(arkivDokument -> arkivDokument.tittel().contains(TITTEL_VED_SØKNAD))
@@ -78,12 +89,6 @@ public class InnsynController {
             }
         }
         return true;
-    }
-
-
-    @PostMapping(path = "/annenPartVedtak", consumes = MediaType.APPLICATION_JSON_VALUE)
-    public AnnenPartVedtak annenPartVedtak(@Valid @RequestBody AnnenPartVedtakIdentifikator annenPartVedtakIdentifikator) {
-        return innsynTjeneste.annenPartVedtak(annenPartVedtakIdentifikator).orElse(null);
     }
 }
 

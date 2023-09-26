@@ -47,6 +47,7 @@
 		<jacoco.version>0.8.10</jacoco.version>
 		<gcp.version>0.204.0</gcp.version>
 		<simpleclient.version>0.16.0</simpleclient.version>
+        <graphql-java-codegen.version>5.8.0</graphql-java-codegen.version>
 	</properties>
 	<dependencyManagement>
 		<dependencies>
@@ -151,6 +152,12 @@
             <version>${springdoc.version}</version>
         </dependency>
 
+        <dependency>
+            <groupId>io.github.kobylynskyi</groupId>
+            <artifactId>graphql-codegen-maven-plugin</artifactId>
+            <version>${graphql-java-codegen.version}</version>
+        </dependency>
+
 		<dependency>
 			<groupId>com.github.ben-manes.caffeine</groupId>
 			<artifactId>caffeine</artifactId>
@@ -212,6 +219,35 @@
 					<generateBackupPoms>false</generateBackupPoms>
 				</configuration>
 			</plugin>
+            <plugin>
+                <groupId>io.github.kobylynskyi</groupId>
+                <artifactId>graphql-codegen-maven-plugin</artifactId>
+                <version>${graphql-java-codegen.version}</version>
+                <executions>
+                    <execution>
+                        <goals>
+                            <goal>generate</goal>
+                        </goals>
+                        <phase>validate</phase>
+                        <configuration>
+                            <graphqlSchemaPaths>${project.basedir}/src/main/resources/safselvbetjening/schema.graphql</graphqlSchemaPaths>
+                            <outputDir>${project.build.directory}/generated-sources</outputDir>
+                            <modelPackageName>no.nav.safselvbetjening</modelPackageName>
+                            <customTypesMapping>
+                                <DateTime>java.util.Date</DateTime>
+                            </customTypesMapping>
+                            <generateClient>true</generateClient>
+                            <generateApis>false</generateApis>
+                            <generateBuilder>false</generateBuilder>
+                            <generateToString>true</generateToString>
+                            <generateParameterizedFieldsResolvers>false</generateParameterizedFieldsResolvers>
+                            <addGeneratedAnnotation>true</addGeneratedAnnotation>
+                            <generatedAnnotation>jakarta.annotation.Generated</generatedAnnotation>
+                            <modelValidationAnnotation>@jakarta.validation.constraints.NotNull</modelValidationAnnotation>
+                        </configuration>
+                    </execution>
+                </executions>
+            </plugin>
 			<plugin>
 				<groupId>org.springframework.boot</groupId>
 				<artifactId>spring-boot-maven-plugin</artifactId>

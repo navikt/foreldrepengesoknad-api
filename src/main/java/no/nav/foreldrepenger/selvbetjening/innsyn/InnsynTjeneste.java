@@ -11,8 +11,7 @@ import no.nav.foreldrepenger.common.domain.Saksnummer;
 import no.nav.foreldrepenger.common.innsyn.AnnenPartVedtak;
 import no.nav.foreldrepenger.common.innsyn.Saker;
 import no.nav.foreldrepenger.selvbetjening.innsyn.dokument.ArkivDokumentDto;
-import no.nav.foreldrepenger.selvbetjening.innsyn.dokument.DokumentInfoId;
-import no.nav.foreldrepenger.selvbetjening.innsyn.dokument.JournalpostId;
+import no.nav.foreldrepenger.selvbetjening.innsyn.tidslinje.InntektsmeldingDto;
 import no.nav.foreldrepenger.selvbetjening.innsyn.tidslinje.TidslinjeHendelseDto;
 
 @Service
@@ -65,8 +64,8 @@ public class InnsynTjeneste implements Innsyn {
     }
 
     @Override
-    public DokumentDto hentDokument(JournalpostId journalpostId, DokumentInfoId dokumentId) {
-        return innsynConnection.hentDokument(journalpostId, dokumentId);
+    public List<InntektsmeldingDto> inntektsmeldinger(Saksnummer saksnummer) {
+        return innsynConnection.hentInntekstmeldingFor(saksnummer);
     }
 
     @Override
