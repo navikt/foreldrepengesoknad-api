@@ -1,12 +1,20 @@
 package no.nav.foreldrepenger.selvbetjening.innsyn.dokument;
 
+import static java.util.stream.Collectors.joining;
+
+import java.util.List;
+
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpEntity;
+import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatusCode;
+import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Component;
 import org.springframework.web.client.HttpServerErrorException;
 import org.springframework.web.client.RestOperations;
 
+import com.kobylynskyi.graphql.codegen.model.graphql.GraphQLError;
 import com.kobylynskyi.graphql.codegen.model.graphql.GraphQLOperationRequest;
 import com.kobylynskyi.graphql.codegen.model.graphql.GraphQLRequest;
 import com.kobylynskyi.graphql.codegen.model.graphql.GraphQLResponseProjection;
@@ -43,11 +51,23 @@ public class SafSelvbetjeningConnection extends AbstractRestConnection {
     }
 
     private <T extends GraphQLResult<?>> T query(GraphQLRequest req, Class<T> clazz) {
-        var respons = postForObject(cfg.graphqlPath(), req.toHttpJsonBody(), clazz);
+        var respons = postForObject(cfg.graphqlPath(), new HttpEntity<>(req.toHttpJsonBody(), headersAppliactionJson()), clazz);
         if (respons.hasErrors()) {
-            throw new HttpServerErrorException(HttpStatusCode.valueOf(500), "Feil mot interne systemer."); // TODO
+            håndterError(respons.getErrors());
         }
         return respons;
+    }
+
+    private void  håndterError(List<GraphQLError> errors) {
+        var feilmeldinger = errors.stream().map(GraphQLError::getMessage).collect(joining(","));
+        throw new HttpServerErrorException(HttpStatusCode.valueOf(500), "Internt system [safselvbetjening] feilet med: " + feilmeldinger);
+    }
+
+    private static HttpHeaders headersAppliactionJson() {
+        var headers = new HttpHeaders();
+        headers.setAccept(List.of(MediaType.APPLICATION_JSON));
+        headers.setContentType(MediaType.APPLICATION_JSON);
+        return headers;
     }
 
 }
