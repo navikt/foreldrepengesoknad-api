@@ -13,10 +13,10 @@ import no.nav.foreldrepenger.selvbetjening.util.URIUtil;
 public class InnsynConfig {
     private static final String CONTEXT_PATH = "api";
     private static final String SAKER = CONTEXT_PATH + "/saker";
-    private static final String INNTEKTSMELDINGER = CONTEXT_PATH + "/inntektsmelding";
+    private static final String INNTEKTSMELDINGER = CONTEXT_PATH + "/inntektsmeldinger";
     private static final String ANNENPART_VEDTAK = CONTEXT_PATH + "/annenPart";
     private static final String TIDSLINJE = CONTEXT_PATH + "/tidslinje";
-    private static final String DOKUMENT = CONTEXT_PATH + "/arkiv/hent-dokument/{journalpostId}/{dokumentId}";
+
     private static final String ALLE_DOKUMENTER = CONTEXT_PATH + "/arkiv/alle";
 
     private static final String OPPGAVER = CONTEXT_PATH + "/oppgaver";

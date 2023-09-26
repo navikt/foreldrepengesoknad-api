@@ -29,15 +29,6 @@ no.nav.security.jwt:
       safselvbetjening:
         token-exchange:
           audience: lokal
-      vtp:
-        well-known-url: ${token.x.well.known.url}
-        grant-type: urn:ietf:params:oauth:grant-type:token-exchange
-        authentication:
-          client-id: ${token.x.client.id}
-          client-jwk: ${token.x.private.jwk}
-          client-auth-method: private_key_jwt
-        token-exchange:
-          audience: lokal
   issuer:
     idporten:
       cookie_name: selvbetjening-idtoken
