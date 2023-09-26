@@ -1,12 +1,17 @@
 package no.nav.foreldrepenger.selvbetjening.minidialog;
 
-import java.time.LocalDate;
-import java.time.LocalDateTime;
+import static no.nav.foreldrepenger.common.util.StreamUtil.safeStream;
+
 import java.util.List;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.GetMapping;
 
+import no.nav.foreldrepenger.common.domain.Saksnummer;
+import no.nav.foreldrepenger.selvbetjening.historikk.HistorikkInnslag;
+import no.nav.foreldrepenger.selvbetjening.historikk.MinidialogInnslag;
 import no.nav.foreldrepenger.selvbetjening.http.ProtectedRestController;
 import no.nav.foreldrepenger.selvbetjening.innsyn.Innsyn;
 import no.nav.foreldrepenger.selvbetjening.innsyn.TilbakekrevingsInnslag;
@@ -14,25 +19,43 @@ import no.nav.foreldrepenger.selvbetjening.innsyn.TilbakekrevingsInnslag;
 @ProtectedRestController(MinidialogController.MINIDIALOG_PATH)
 public class MinidialogController {
 
+    private static final Logger LOG = LoggerFactory.getLogger(MinidialogController.class);
     static final String MINIDIALOG_PATH = "/rest/minidialog";
+
+    private final MinidialogTjeneste minidialog;
     private final Innsyn innsyn;
 
     @Autowired
-    public MinidialogController(Innsyn innsyn) {
+    public MinidialogController(MinidialogTjeneste minidialog, Innsyn innsyn) {
+        this.minidialog = minidialog;
         this.innsyn = innsyn;
     }
 
     @GetMapping
     public List<MinidialogInnslag> aktive() {
-        return innsyn.hentUttalelserOmTilbakekreving().stream().map(MinidialogController::map).toList();
+        var aktiveMinidialoger = minidialog.aktive();
+        sammenlign(aktiveMinidialoger);
+        return aktiveMinidialoger;
     }
 
-    private static MinidialogInnslag map(TilbakekrevingsInnslag tilbakekrevingsInnslag) {
-        var opprettet = tilbakekrevingsInnslag.opprettet().atTime(7, 0); //Viser bare dato i frontend
-        return new MinidialogInnslag(tilbakekrevingsInnslag.saksnummer().value(), opprettet, LocalDate.now().plusWeeks(1),
-            tilbakekrevingsInnslag.saksnummer().value());
+
+    private void sammenlign(List<MinidialogInnslag> fraHistorikk) {
+        try {
+            var saksnummreFraHistorikk = safeStream(fraHistorikk).map(HistorikkInnslag::getSaksnr).toList();
+            var saksnummreFraOversikt = safeStream(innsyn.hentUttalelserOmTilbakekreving()).map(TilbakekrevingsInnslag::saksnummer).map(Saksnummer::value).toList();
+
+            if (saksnummreFraHistorikk.size() == saksnummreFraOversikt.size() && saksnummreFraHistorikk.containsAll(saksnummreFraOversikt) && saksnummreFraOversikt.containsAll(saksnummreFraHistorikk)) {
+                LOG.info("Ingen avvik i tilbakekrevingsuttalelser mottatt fra fpoversikt sammenlignet med fpinfo-historikk");
+            } else {
+                LOG.info("AVVIK [tilbakekrevingsuttalelser]: Fpinfo-historikk returnerte {}, mens fpoversikt returnerte {}", saksnummreFraHistorikk, saksnummreFraOversikt);
+            }
+        } catch (Exception e) {
+            LOG.info("Noe gikk galt med sammenligning av tilbakekrevingsuttalelser", e);
+        }
     }
 
-    public record MinidialogInnslag(String saksnr, LocalDateTime opprettet, LocalDate gyldigTil, String dialogId) {
+    @Override
+    public String toString() {
+        return getClass().getSimpleName() + " [minidialog=" + minidialog + "]";
     }
 }

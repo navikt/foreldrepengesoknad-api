@@ -36,6 +36,8 @@ fppdfgen:
   enabled: false
 historikk:
   uri: ${fpinfo-historikk.override.url}
+minidialog:
+  uri: ${fpinfo-historikk.override.url}
 mottak:
   uri: ${fpsoknad-mottak.override.url}
 oppslag:
