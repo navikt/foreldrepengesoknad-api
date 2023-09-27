@@ -77,9 +77,9 @@ public class TidslinjeTjeneste {
             return Optional.of(TidslinjeHendelseDto.TidslinjeHendelseType.UTGÅENDE_INNHENT_OPPLYSNINGER);
         } else if (brevkode.erEtterlysIM()) {
             return Optional.of(TidslinjeHendelseDto.TidslinjeHendelseType.UTGÅENDE_ETTERLYS_INNTEKTSMELDING);
-        } else if (brevkode.erUttalelseTilbakebetaling() && enkelJournalpost.tittel().contains(VARSEL_TILBAKEBETALING_TITTEL)) {
+        } else if (brevkode.erVarselOmTilbakebetaling() && enkelJournalpost.tittel().contains(VARSEL_TILBAKEBETALING_TITTEL)) {
             LOG.info("Varsel om tilbakebetaling returnes {}", enkelJournalpost);
-            return Optional.of(TidslinjeHendelseDto.TidslinjeHendelseType.UTTALELSE_TILBAKEBETALING);
+            return Optional.of(TidslinjeHendelseDto.TidslinjeHendelseType.UTGÅENDE_VARSEL_TILBAKEBETALING);
         } else {
             LOG.info("Ignorerer utgåpende journalpost: {}", enkelJournalpost);
             return Optional.empty();

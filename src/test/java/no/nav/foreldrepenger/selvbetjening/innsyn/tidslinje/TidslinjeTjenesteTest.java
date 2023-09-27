@@ -160,7 +160,7 @@ public class TidslinjeTjenesteTest {
             .hasSize(1)
             .extracting(TidslinjeHendelseDto::tidslinjeHendelseType)
             .containsExactly(
-                TidslinjeHendelseDto.TidslinjeHendelseType.UTTALELSE_TILBAKEBETALING
+                TidslinjeHendelseDto.TidslinjeHendelseType.UTGÅENDE_VARSEL_TILBAKEBETALING
             );
     }
 
@@ -308,7 +308,7 @@ public class TidslinjeTjenesteTest {
             EnkelJournalpost.DokumentType.UTGÅENDE_DOKUMENT, mottatt,
             null,
             List.of(
-                new EnkelJournalpost.Dokument("1", null, EnkelJournalpost.Brevkode.UTTALELSE_TILBAKEBETALING)
+                new EnkelJournalpost.Dokument("1", null, EnkelJournalpost.Brevkode.VARSEL_TILBAKEBETALING)
             )
         );
     }
@@ -321,7 +321,7 @@ public class TidslinjeTjenesteTest {
             EnkelJournalpost.DokumentType.UTGÅENDE_DOKUMENT, mottatt,
             null,
             List.of(
-                new EnkelJournalpost.Dokument("1", null, EnkelJournalpost.Brevkode.UTTALELSE_TILBAKEBETALING)
+                new EnkelJournalpost.Dokument("1", null, EnkelJournalpost.Brevkode.VARSEL_TILBAKEBETALING)
             )
         );
     }

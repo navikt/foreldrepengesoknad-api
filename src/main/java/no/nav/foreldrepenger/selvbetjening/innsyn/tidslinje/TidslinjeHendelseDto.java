@@ -23,7 +23,7 @@ public record TidslinjeHendelseDto(LocalDateTime opprettet,
         VEDTAK,
         UTGÅENDE_INNHENT_OPPLYSNINGER,
         UTGÅENDE_ETTERLYS_INNTEKTSMELDING,
-        UTTALELSE_TILBAKEBETALING
+        UTGÅENDE_VARSEL_TILBAKEBETALING
     }
 
     public record Dokument(String journalpostId, String dokumentId, String tittel) {
