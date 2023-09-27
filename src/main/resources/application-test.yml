@@ -20,9 +20,6 @@ no.nav.security.jwt:
       fpsoknad-mottak:
         token-exchange:
           audience: lokal
-      fpinfo-historikk:
-        token-exchange:
-          audience: lokal
       fpoversikt:
         token-exchange:
           audience: lokal

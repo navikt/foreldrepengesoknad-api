@@ -29,9 +29,6 @@ no.nav:
           fpsoknad-mottak:
             token-exchange:
               audience: dev-fss:teamforeldrepenger:fpsoknad-mottak
-          fpinfo-historikk:
-            token-exchange:
-              audience: dev-fss:teamforeldrepenger:fpinfo-historikk
           fpoversikt:
             token-exchange:
               audience: dev-gcp:teamforeldrepenger:fpoversikt
