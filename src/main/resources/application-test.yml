@@ -46,6 +46,6 @@ oppslag:
 oversikt:
   uri: ${fpoversikt.override.url}
 safselvbetjening:
-  uri: ${saf.override.url}
+  uri: ${saf.override.url}/
 storage:
   passphrase: tullogtøys
