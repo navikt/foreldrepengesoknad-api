@@ -37,8 +37,6 @@ virus:
   enabled: false
 fppdfgen:
   enabled: false
-minidialog:
-  uri: ${fpinfo-historikk.override.url}
 mottak:
   uri: ${fpsoknad-mottak.override.url}
 oppslag:
