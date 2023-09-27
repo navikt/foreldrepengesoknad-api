@@ -3,6 +3,7 @@ package no.nav.foreldrepenger.selvbetjening.innsyn.dokument;
 import java.time.LocalDateTime;
 import java.util.Arrays;
 import java.util.List;
+import java.util.Set;
 
 public record EnkelJournalpost(String tittel,
                                String journalpostId,
@@ -20,6 +21,7 @@ public record EnkelJournalpost(String tittel,
     }
 
     public enum Brevkode {
+        // VEDTAK
         FORELDREPENGER_ANNULLERT("ANUFOR"),
         FORELDREPENGER_AVSLAG("AVSFOR"),
         SVANGERSKAPSPENGER_OPPHØR("OPPSVP"),
@@ -29,10 +31,6 @@ public record EnkelJournalpost(String tittel,
         ENGANGSSTØNAD_AVSLAG("AVSLES"),
         FORELDREPENGER_OPPHØR("OPPFOR"),
         SVANGERSKAPSPENGER_INNVILGELSE("INVSVP"),
-        INNHENTE_OPPLYSNINGER("INNOPP"),
-        ETTERLYS_INNTEKTSMELDING("ELYSIM"),
-        FRITEKSTBREV("FRITEK"),
-
         // Gamle/utdaterte brevkoder funnet i Joark
         VEDTAK_POSITIVT_OLD("000048"),
         VEDTAK_AVSLAG_OLD("000051"),
@@ -40,7 +38,6 @@ public record EnkelJournalpost(String tittel,
         VEDTAK_AVSLAG_FORELDREPENGER_OLD("000080"),
         INNHENTE_OPPLYSNINGER_OLD("000049"),
         ETTERLYS_INNTEKTSMELDING_OLD("000096"),
-
         // Gamle/utdaterte brevkoder med MF_ prefiks funnet i Joark
         VEDTAK_POSITIVT_OLD_MF("MF_000048"),
         VEDTAK_AVSLAG_OLD_MF("MF_000051"),
@@ -48,6 +45,11 @@ public record EnkelJournalpost(String tittel,
         VEDTAK_AVSLAG_FORELDREPENGER_OLD_MF("MF_000080"),
         INNHENTE_OPPLYSNINGER_OLD_MF("MF_000049"),
         ETTERLYS_INNTEKTSMELDING_OLD_MF("MF_000096"),
+
+        FRITEKSTBREV("FRITEK"), // Bare vedtak p.d.
+        INNHENTE_OPPLYSNINGER("INNOPP"),
+        ETTERLYS_INNTEKTSMELDING("ELYSIM"),
+        UTTALELSE_TILBAKEBETALING("FP-TILB"),
 
         // Annet
         FORELDREPENGER_INFO_TIL_ANNEN_FORELDER("INFOAF"),
@@ -82,5 +84,60 @@ public record EnkelJournalpost(String tittel,
                 .findFirst()
                 .orElseThrow();
         }
+
+        private static final Set<Brevkode> VEDTAK_TYPER = Set.of(
+            FORELDREPENGER_ANNULLERT,
+            FORELDREPENGER_AVSLAG,
+            SVANGERSKAPSPENGER_OPPHØR,
+            ENGANGSSTØNAD_INNVILGELSE,
+            SVANGERSKAPSPENGER_AVSLAG,
+            FORELDREPENGER_INNVILGELSE,
+            ENGANGSSTØNAD_AVSLAG,
+            FORELDREPENGER_OPPHØR,
+            SVANGERSKAPSPENGER_INNVILGELSE,
+            VEDTAK_POSITIVT_OLD,
+            VEDTAK_AVSLAG_OLD,
+            VEDTAK_FORELDREPENGER_OLD,
+            VEDTAK_AVSLAG_FORELDREPENGER_OLD,
+            VEDTAK_POSITIVT_OLD_MF,
+            VEDTAK_AVSLAG_OLD_MF,
+            VEDTAK_FORELDREPENGER_OLD_MF,
+            VEDTAK_AVSLAG_FORELDREPENGER_OLD_MF
+        );
+
+
+        private static final Set<Brevkode> INNHENT_OPPLYSNING_TYPER = Set.of(
+            INNHENTE_OPPLYSNINGER,
+            INNHENTE_OPPLYSNINGER_OLD,
+            INNHENTE_OPPLYSNINGER_OLD_MF
+        );
+
+
+        private static final Set<Brevkode> ETTERLYS_INNTEKTSMELDING_TYPER = Set.of(
+            ETTERLYS_INNTEKTSMELDING,
+            ETTERLYS_INNTEKTSMELDING_OLD,
+            ETTERLYS_INNTEKTSMELDING_OLD_MF
+        );
+
+        public boolean erVedtak() {
+            return VEDTAK_TYPER.contains(this);
+        }
+
+        public boolean erInnhentOpplysninger() {
+            return INNHENT_OPPLYSNING_TYPER.contains(this);
+        }
+
+        public boolean erEtterlysIM() {
+            return ETTERLYS_INNTEKTSMELDING_TYPER.contains(this);
+        }
+
+        public boolean erUttalelseTilbakebetaling() {
+            return UTTALELSE_TILBAKEBETALING.equals(this);
+        }
+
+        public boolean erFritekstbrev() {
+            return FRITEKSTBREV.equals(this);
+        }
+
     }
 }

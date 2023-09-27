@@ -7,17 +7,16 @@ import static org.mockito.Mockito.when;
 import java.time.LocalDateTime;
 import java.util.List;
 
-import no.nav.foreldrepenger.selvbetjening.innsyn.InntektsmeldingDto;
-
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
 import no.nav.foreldrepenger.common.domain.Fødselsnummer;
 import no.nav.foreldrepenger.common.domain.Saksnummer;
+import no.nav.foreldrepenger.selvbetjening.innsyn.Innsyn;
+import no.nav.foreldrepenger.selvbetjening.innsyn.InntektsmeldingDto;
 import no.nav.foreldrepenger.selvbetjening.innsyn.dokument.DokumentTypeId;
 import no.nav.foreldrepenger.selvbetjening.innsyn.dokument.EnkelJournalpost;
 import no.nav.foreldrepenger.selvbetjening.innsyn.dokument.SafSelvbetjeningTjeneste;
-import no.nav.foreldrepenger.selvbetjening.innsyn.Innsyn;
 
 
 public class TidslinjeTjenesteTest {
@@ -150,6 +149,33 @@ public class TidslinjeTjenesteTest {
     }
 
     @Test
+    void korrigertUttalelseTilbakebatlingMappersRiktig() {
+        var saksnummer = DUMMY_SAKSNUMMER;
+        when(safselvbetjeningTjeneste.alle(DUMMY_FNR, saksnummer)).thenReturn(List.of(korrigertVarselTilbakebetaling(saksnummer, LocalDateTime.now())));
+        when(innsyn.inntektsmeldinger(saksnummer)).thenReturn(List.of());
+
+        var tidslinje = tjeneste.tidslinje(DUMMY_FNR, saksnummer);
+
+        assertThat(tidslinje)
+            .hasSize(1)
+            .extracting(TidslinjeHendelseDto::tidslinjeHendelseType)
+            .containsExactly(
+                TidslinjeHendelseDto.TidslinjeHendelseType.UTTALELSE_TILBAKEBETALING
+            );
+    }
+
+    @Test
+    void annetUtgåendeBrevFraFpTilbakeSomIkkeErVarselSkalIkkeMappes() {
+        var saksnummer = DUMMY_SAKSNUMMER;
+        when(safselvbetjeningTjeneste.alle(DUMMY_FNR, saksnummer)).thenReturn(List.of(innhentOpplysningTilbake(saksnummer, LocalDateTime.now())));
+        when(innsyn.inntektsmeldinger(saksnummer)).thenReturn(List.of());
+
+        var tidslinje = tjeneste.tidslinje(DUMMY_FNR, saksnummer);
+
+        assertThat(tidslinje).isEmpty();
+    }
+
+    @Test
     void skalFiltrereBortInnteksmeldingFraJoark() {
         var saksnummer = DUMMY_SAKSNUMMER;
         var søknadMedVedlegg = søknadMed1Vedlegg(saksnummer, LocalDateTime.now());
@@ -270,6 +296,32 @@ public class TidslinjeTjenesteTest {
             null,
             List.of(
                 new EnkelJournalpost.Dokument("1", null, EnkelJournalpost.Brevkode.FORELDREPENGER_INNVILGELSE)
+            )
+        );
+    }
+
+    public static EnkelJournalpost innhentOpplysningTilbake(Saksnummer saksnummer, LocalDateTime mottatt) {
+        return new EnkelJournalpost(
+            "Innhent opp",
+            "15",
+            saksnummer.value(),
+            EnkelJournalpost.DokumentType.UTGÅENDE_DOKUMENT, mottatt,
+            null,
+            List.of(
+                new EnkelJournalpost.Dokument("1", null, EnkelJournalpost.Brevkode.UTTALELSE_TILBAKEBETALING)
+            )
+        );
+    }
+
+    public static EnkelJournalpost korrigertVarselTilbakebetaling(Saksnummer saksnummer, LocalDateTime mottatt) {
+        return new EnkelJournalpost(
+            "Korrigert Varsel tilbakebetaling",
+            "15",
+            saksnummer.value(),
+            EnkelJournalpost.DokumentType.UTGÅENDE_DOKUMENT, mottatt,
+            null,
+            List.of(
+                new EnkelJournalpost.Dokument("1", null, EnkelJournalpost.Brevkode.UTTALELSE_TILBAKEBETALING)
             )
         );
     }
