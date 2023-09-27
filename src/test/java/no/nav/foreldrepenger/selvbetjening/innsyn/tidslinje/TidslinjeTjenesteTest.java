@@ -76,6 +76,23 @@ public class TidslinjeTjenesteTest {
     }
 
     @Test
+    void søknadMedFritekstVedtak() {
+        var saksnummer = DUMMY_SAKSNUMMER;
+        var utgåendeVedtakFritekts = utgåendeVedtakFritekts(saksnummer, LocalDateTime.now());
+        when(safselvbetjeningTjeneste.alle(DUMMY_FNR, saksnummer)).thenReturn(
+            List.of(utgåendeVedtakFritekts));
+
+        var tidslinje = tjeneste.tidslinje(DUMMY_FNR, saksnummer);
+
+        assertThat(tidslinje)
+            .hasSize(1)
+            .extracting(TidslinjeHendelseDto::tidslinjeHendelseType)
+            .containsExactly(
+                TidslinjeHendelseDto.TidslinjeHendelseType.VEDTAK
+            );
+    }
+
+    @Test
     void søknadIMEttersendingVedtakEndringssøknadOgDeretterNyttVedtak() {
         var saksnummer = DUMMY_SAKSNUMMER;
         var tidspunkt = LocalDateTime.now();
@@ -230,6 +247,19 @@ public class TidslinjeTjenesteTest {
         );
     }
 
+    public static EnkelJournalpost utgåendeVedtakFritekts(Saksnummer saksnummer, LocalDateTime mottatt) {
+        return new EnkelJournalpost(
+            "Innvilgelsesbrev foreldrepenger",
+            "5",
+            saksnummer.value(),
+            EnkelJournalpost.DokumentType.UTGÅENDE_DOKUMENT, mottatt,
+            null,
+            List.of(
+                new EnkelJournalpost.Dokument("1", null, EnkelJournalpost.Brevkode.FRITEKSTBREV)
+            )
+        );
+    }
+
 
     public static EnkelJournalpost utgåendeVedtak(Saksnummer saksnummer, LocalDateTime mottatt) {
         return new EnkelJournalpost(
@@ -237,7 +267,7 @@ public class TidslinjeTjenesteTest {
             "5",
             saksnummer.value(),
             EnkelJournalpost.DokumentType.UTGÅENDE_DOKUMENT, mottatt,
-            null, // Todo: Dokumentet har vel ikke en hovedtype her? Elller?
+            null,
             List.of(
                 new EnkelJournalpost.Dokument("1", null, EnkelJournalpost.Brevkode.FORELDREPENGER_INNVILGELSE)
             )
@@ -251,7 +281,7 @@ public class TidslinjeTjenesteTest {
             "5",
             saksnummer.value(),
             EnkelJournalpost.DokumentType.UTGÅENDE_DOKUMENT, tidspunkt,
-            null, // Todo: Dokumentet har vel ikke en hovedtype her? Elller?
+            null,
             List.of(
                 new EnkelJournalpost.Dokument("1", null, EnkelJournalpost.Brevkode.INNHENTE_OPPLYSNINGER)
             )
@@ -266,7 +296,7 @@ public class TidslinjeTjenesteTest {
             saksnummer.value(),
             EnkelJournalpost.DokumentType.UTGÅENDE_DOKUMENT,
             LocalDateTime.now(),
-            null, // Todo: Dokumentet har vel ikke en hovedtype her? Elller?
+            null,
             List.of(
                 new EnkelJournalpost.Dokument("1", null, EnkelJournalpost.Brevkode.ETTERLYS_INNTEKTSMELDING)
             )

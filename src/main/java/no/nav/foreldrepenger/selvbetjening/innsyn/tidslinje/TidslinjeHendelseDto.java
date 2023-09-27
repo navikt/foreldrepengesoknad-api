@@ -21,10 +21,6 @@ public record TidslinjeHendelseDto(LocalDateTime opprettet,
         ENDRINGSSØKNAD,
         INNTEKTSMELDING,
         VEDTAK,
-        VEDTAK_FØRSTEGANG,
-        VEDTAK_ENDRING,
-        VEDTAK_TILBAKEKREVING,
-        VENTER_INNTEKTSMELDING,
         UTGÅENDE_INNHENT_OPPLYSNINGER,
         UTGÅENDE_ETTERLYS_INNTEKTSMELDING
     }
