@@ -20,9 +20,6 @@ no.nav.security.jwt:
       fpsoknad-mottak:
         token-exchange:
           audience: lokal
-      fpinfo-historikk:
-        token-exchange:
-          audience: lokal
       fpoversikt:
         token-exchange:
           audience: lokal
@@ -37,8 +34,6 @@ virus:
   enabled: false
 fppdfgen:
   enabled: false
-minidialog:
-  uri: ${fpinfo-historikk.override.url}
 mottak:
   uri: ${fpsoknad-mottak.override.url}
 oppslag:

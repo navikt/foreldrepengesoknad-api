@@ -11,13 +11,6 @@ no.nav:
               client-id: ${token.x.client.id}
               client-jwk: ${token.x.private.jwk}
               client-auth-method: private_key_jwt
-          fpinfo-historikk:
-            well-known-url: ${token.x.well.known.url}
-            grant-type: urn:ietf:params:oauth:grant-type:token-exchange
-            authentication:
-              client-id: ${token.x.client.id}
-              client-jwk: ${token.x.private.jwk}
-              client-auth-method: private_key_jwt
           fpoversikt:
             well-known-url: ${token.x.well.known.url}
             grant-type: urn:ietf:params:oauth:grant-type:token-exchange
