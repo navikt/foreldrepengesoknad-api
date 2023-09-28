@@ -167,7 +167,7 @@ public class TidslinjeTjenesteTest {
     @Test
     void annetUtgåendeBrevFraFpTilbakeSomIkkeErVarselSkalIkkeMappes() {
         var saksnummer = DUMMY_SAKSNUMMER;
-        when(safselvbetjeningTjeneste.alle(DUMMY_FNR, saksnummer)).thenReturn(List.of(innhentOpplysningTilbake(saksnummer, LocalDateTime.now())));
+        when(safselvbetjeningTjeneste.alle(DUMMY_FNR, saksnummer)).thenReturn(List.of(innhentOpplysningTilbakebetaling(saksnummer, LocalDateTime.now())));
         when(innsyn.inntektsmeldinger(saksnummer)).thenReturn(List.of());
 
         var tidslinje = tjeneste.tidslinje(DUMMY_FNR, saksnummer);
@@ -300,7 +300,7 @@ public class TidslinjeTjenesteTest {
         );
     }
 
-    public static EnkelJournalpost innhentOpplysningTilbake(Saksnummer saksnummer, LocalDateTime mottatt) {
+    public static EnkelJournalpost innhentOpplysningTilbakebetaling(Saksnummer saksnummer, LocalDateTime mottatt) {
         return new EnkelJournalpost(
             "Innhent opp",
             "15",
@@ -308,7 +308,7 @@ public class TidslinjeTjenesteTest {
             EnkelJournalpost.DokumentType.UTGÅENDE_DOKUMENT, mottatt,
             null,
             List.of(
-                new EnkelJournalpost.Dokument("1", null, EnkelJournalpost.Brevkode.VARSEL_TILBAKEBETALING)
+                new EnkelJournalpost.Dokument("1", null, EnkelJournalpost.Brevkode.VARSEL_TILBAKEBETALING_FP)
             )
         );
     }
@@ -321,7 +321,7 @@ public class TidslinjeTjenesteTest {
             EnkelJournalpost.DokumentType.UTGÅENDE_DOKUMENT, mottatt,
             null,
             List.of(
-                new EnkelJournalpost.Dokument("1", null, EnkelJournalpost.Brevkode.VARSEL_TILBAKEBETALING)
+                new EnkelJournalpost.Dokument("1", null, EnkelJournalpost.Brevkode.VARSEL_TILBAKEBETALING_FP)
             )
         );
     }

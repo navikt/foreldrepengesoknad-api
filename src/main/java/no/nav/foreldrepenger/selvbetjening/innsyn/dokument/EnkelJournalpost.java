@@ -49,7 +49,9 @@ public record EnkelJournalpost(String tittel,
         FRITEKSTBREV("FRITEK"), // Bare vedtak p.d.
         INNHENTE_OPPLYSNINGER("INNOPP"),
         ETTERLYS_INNTEKTSMELDING("ELYSIM"),
-        VARSEL_TILBAKEBETALING("FP-TILB"),
+        VARSEL_TILBAKEBETALING_FP("FP-TILB"),
+        VARSEL_TILBAKEBETALING_SVP("SVP-TILB"),
+        VARSEL_TILBAKEBETALING_ES("ES-TILB"),
 
         // Annet
         FORELDREPENGER_INFO_TIL_ANNEN_FORELDER("INFOAF"),
@@ -119,6 +121,13 @@ public record EnkelJournalpost(String tittel,
             ETTERLYS_INNTEKTSMELDING_OLD_MF
         );
 
+
+        private static final Set<Brevkode> VARSEL_OM_TILBAKEBETALING = Set.of(
+            VARSEL_TILBAKEBETALING_FP,
+            VARSEL_TILBAKEBETALING_SVP,
+            VARSEL_TILBAKEBETALING_ES
+        );
+
         public boolean erVedtak() {
             return VEDTAK_TYPER.contains(this);
         }
@@ -132,7 +141,7 @@ public record EnkelJournalpost(String tittel,
         }
 
         public boolean erVarselOmTilbakebetaling() {
-            return VARSEL_TILBAKEBETALING.equals(this);
+            return VARSEL_OM_TILBAKEBETALING.contains(this);
         }
 
         public boolean erFritekstbrev() {
