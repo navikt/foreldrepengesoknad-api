@@ -21,6 +21,7 @@ import no.nav.foreldrepenger.selvbetjening.innsyn.dokument.SafSelvbetjeningTjene
 @Service
 public class TidslinjeTjeneste {
     private static final Logger LOG = LoggerFactory.getLogger(TidslinjeTjeneste.class);
+    private static final String VARSEL_TILBAKEBETALING_TITTEL = "Varsel tilbakebetaling";
 
     private final SafSelvbetjeningTjeneste safselvbetjening;
     private final Innsyn innsyn;
@@ -67,20 +68,22 @@ public class TidslinjeTjeneste {
     }
 
     private static Optional<TidslinjeHendelseDto.TidslinjeHendelseType> tidslinjeHendelseTypeUtgåendeDokument(EnkelJournalpost enkelJournalpost) {
-        return switch (enkelJournalpost.dokumenter().stream().findFirst().orElseThrow().brevkode()) { // Alltid bare ett dokument!
-            case FORELDREPENGER_ANNULLERT, FORELDREPENGER_AVSLAG, SVANGERSKAPSPENGER_OPPHØR, ENGANGSSTØNAD_INNVILGELSE, SVANGERSKAPSPENGER_AVSLAG,
-                FORELDREPENGER_INNVILGELSE, ENGANGSSTØNAD_AVSLAG, FORELDREPENGER_OPPHØR, SVANGERSKAPSPENGER_INNVILGELSE,
-                VEDTAK_POSITIVT_OLD, VEDTAK_AVSLAG_OLD, VEDTAK_FORELDREPENGER_OLD, VEDTAK_AVSLAG_FORELDREPENGER_OLD,
-                VEDTAK_POSITIVT_OLD_MF, VEDTAK_AVSLAG_OLD_MF, VEDTAK_FORELDREPENGER_OLD_MF, VEDTAK_AVSLAG_FORELDREPENGER_OLD_MF ->
-                Optional.of(TidslinjeHendelseDto.TidslinjeHendelseType.VEDTAK);
-            case INNHENTE_OPPLYSNINGER, INNHENTE_OPPLYSNINGER_OLD, INNHENTE_OPPLYSNINGER_OLD_MF -> Optional.of(TidslinjeHendelseDto.TidslinjeHendelseType.UTGÅENDE_INNHENT_OPPLYSNINGER);
-            case ETTERLYS_INNTEKTSMELDING, ETTERLYS_INNTEKTSMELDING_OLD, ETTERLYS_INNTEKTSMELDING_OLD_MF -> Optional.of(TidslinjeHendelseDto.TidslinjeHendelseType.UTGÅENDE_ETTERLYS_INNTEKTSMELDING);
-            case FRITEKSTBREV -> Optional.of(TidslinjeHendelseDto.TidslinjeHendelseType.VEDTAK); // TODO: Er riktig nå, men må mappe til riktig brevkode i fpformidling/fpdokgen
-            default -> {
-                LOG.info("Ignorerer utgåpende journalpost med brevkode: {}", enkelJournalpost);
-                yield Optional.empty();
-            }
-        };
+        var brevkode = enkelJournalpost.dokumenter().stream().findFirst().orElseThrow().brevkode();
+        if (brevkode.erVedtak()) {
+            return Optional.of(TidslinjeHendelseDto.TidslinjeHendelseType.VEDTAK);
+        } else if (brevkode.erFritekstbrev()) {
+            return Optional.of(TidslinjeHendelseDto.TidslinjeHendelseType.VEDTAK); // TODO: Er riktig nå, men må mappe til riktig brevkode i fpformidling/fpdokgen
+        } else if (brevkode.erInnhentOpplysninger()) {
+            return Optional.of(TidslinjeHendelseDto.TidslinjeHendelseType.UTGÅENDE_INNHENT_OPPLYSNINGER);
+        } else if (brevkode.erEtterlysIM()) {
+            return Optional.of(TidslinjeHendelseDto.TidslinjeHendelseType.UTGÅENDE_ETTERLYS_INNTEKTSMELDING);
+        } else if (brevkode.erVarselOmTilbakebetaling() && enkelJournalpost.tittel().contains(VARSEL_TILBAKEBETALING_TITTEL)) {
+            LOG.info("Varsel om tilbakebetaling returnes {}", enkelJournalpost);
+            return Optional.of(TidslinjeHendelseDto.TidslinjeHendelseType.UTGÅENDE_VARSEL_TILBAKEBETALING);
+        } else {
+            LOG.info("Ignorerer utgåpende journalpost: {}", enkelJournalpost);
+            return Optional.empty();
+        }
     }
 
     private static Optional<TidslinjeHendelseDto.TidslinjeHendelseType> tidslinjehendelsetype(EnkelJournalpost enkelJournalpost, List<EnkelJournalpost> alleDokumentene) {
