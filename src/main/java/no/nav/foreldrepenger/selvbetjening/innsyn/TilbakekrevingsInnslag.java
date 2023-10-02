@@ -4,5 +4,5 @@ import java.time.LocalDate;
 
 import no.nav.foreldrepenger.common.domain.Saksnummer;
 
-public record TilbakekrevingsInnslag(Saksnummer saksnummer, LocalDate opprettet) {
+public record TilbakekrevingsInnslag(Saksnummer saksnummer, LocalDate opprettet, LocalDate frist) {
 }

@@ -28,9 +28,9 @@ public class MinidialogController {
 
     private static MinidialogInnslag map(TilbakekrevingsInnslag tilbakekrevingsInnslag) {
         return new MinidialogInnslag(tilbakekrevingsInnslag.saksnummer().value(), tilbakekrevingsInnslag.opprettet(),
-            tilbakekrevingsInnslag.saksnummer().value());
+            tilbakekrevingsInnslag.saksnummer().value(), tilbakekrevingsInnslag.frist());
     }
 
-    public record MinidialogInnslag(String saksnr, LocalDate opprettet, String dialogId) {
+    public record MinidialogInnslag(String saksnr, LocalDate opprettet, String dialogId, LocalDate frist) {
     }
 }
