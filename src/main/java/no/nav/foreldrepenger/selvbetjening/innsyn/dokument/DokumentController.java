@@ -37,7 +37,8 @@ public class DokumentController {
             LOG.info("Hentet dokument med journalpostid {} og dokumentid {}", journalpostId, dokumentId);
             return response;
         } catch (HttpClientErrorException.NotFound | HttpClientErrorException.Forbidden e) {
-            LOG.warn("Klarte ikke hente dokument med journalpostid {} og dokumentid {} pga {}", journalpostId.value(), dokumentId.value(), e.getStatusText());
+            LOG.warn("Klarte ikke hente dokument med journalpostid {} og dokumentid {} pga {}", journalpostId.value(), dokumentId.value(),
+                e.getStatusCode(), e);
             return ResponseEntity.notFound().build();
         }
     }
