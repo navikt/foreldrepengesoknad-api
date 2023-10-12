@@ -32,13 +32,23 @@ public class VedleggsHåndteringTjeneste {
 
     public EttersendingFrontend fjernDupliserteVedlegg(EttersendingFrontend ettersending) {
         var alleVedlegg = ettersending.vedlegg();
-        var unikeVedlegg = alleVedlegg.stream()
-                .distinct()
-                .toList();
 
+        var unikeVedlegg = new ArrayList<VedleggFrontend>();
+        long start = System.currentTimeMillis();
+        for (var vedlegg : alleVedlegg) {
+            var vedleggEksistererAllerede = unikeVedlegg.stream()
+                .filter(v -> Objects.equals(vedlegg.getInnsendingsType(), v.getInnsendingsType()))
+                .filter(v -> Objects.equals(vedlegg.getSkjemanummer(), v.getSkjemanummer()))
+                .filter(v -> Objects.equals(vedlegg.getFilesize(), v.getFilesize()))
+                .filter(v -> Arrays.equals(vedlegg.getContent(), v.getContent()))
+                .findFirst();
+            if (vedleggEksistererAllerede.isEmpty()) {
+                unikeVedlegg.add(vedlegg);
+            }
+        }
+        long slutt = System.currentTimeMillis();
         ettersending.vedlegg(konverterTilPDF(unikeVedlegg));
-
-        LOG.info("Fjerner {} dupliserte av totalt {} mottatt.", alleVedlegg.size() - unikeVedlegg.size(), alleVedlegg.size());
+        LOG.info("Fjerner {} dupliserte ettersendte vedlegg av totalt {} mottatt ({}ms).", alleVedlegg.size() - unikeVedlegg.size(), alleVedlegg.size(), slutt - start);
         return ettersending;
     }
 
@@ -69,7 +79,7 @@ public class VedleggsHåndteringTjeneste {
 
         erstattAlleReferanserSomErDuplikater(søknad, duplisertVedleggReferanseTilEksisterendeVedleggReferanseMapping);
         long slutt = System.currentTimeMillis();
-        LOG.info("Fjerner {} dupliserte vedlegg av totalt {} mottatt ({}ms).", alleVedlegg.size() - unikeVedlegg.size(), alleVedlegg.size(), slutt - start);
+        LOG.info("Fjerner {} dupliserte vedlegg fra søknad av totalt {} mottatt ({}ms).", alleVedlegg.size() - unikeVedlegg.size(), alleVedlegg.size(), slutt - start);
         søknad.setVedlegg(konverterTilPDF(unikeVedlegg));
         return søknad;
     }
