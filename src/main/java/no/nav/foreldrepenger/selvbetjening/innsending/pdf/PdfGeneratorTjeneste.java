@@ -9,10 +9,8 @@ import java.util.stream.Stream;
 
 import org.springframework.stereotype.Component;
 
-import no.nav.foreldrepenger.selvbetjening.innsending.domain.tilbakebetaling.TilbakebetalingUttalelse;
 import no.nav.foreldrepenger.selvbetjening.oppslag.OppslagTjeneste;
 import no.nav.foreldrepenger.selvbetjening.oppslag.domain.PersonFrontend;
-import no.nav.foreldrepenger.selvbetjening.oppslag.domain.Søkerinfo;
 
 @Component
 public class PdfGeneratorTjeneste implements PdfGenerator {
@@ -26,16 +24,16 @@ public class PdfGeneratorTjeneste implements PdfGenerator {
     }
 
     @Override
-    public byte[] generate(TilbakebetalingUttalelse uttalelse) {
+    public byte[] generate(no.nav.foreldrepenger.selvbetjening.innsending.dto.ettersendelse.TilbakebetalingUttalelseDto uttalelse) {
         return connection.genererPdf(fra(uttalelse));
     }
 
-    private TilbakebetalingUttalelseDto fra(TilbakebetalingUttalelse uttalelse) {
+    private TilbakebetalingUttalelseDto fra(no.nav.foreldrepenger.selvbetjening.innsending.dto.ettersendelse.TilbakebetalingUttalelseDto uttalelse) {
         var person = oppslagTjeneste.hentSøkerinfo();
         return new TilbakebetalingUttalelseDto(fulltnavn(person.søker()),
             person.søker().fnr(),
             uttalelse.saksnummer(),
-            uttalelse.type(),
+            uttalelse.type().verdi(),
             LocalDateTime.now().format(DateTimeFormatter.ISO_DATE_TIME),
             uttalelse.brukerTekst().tekst());
     }

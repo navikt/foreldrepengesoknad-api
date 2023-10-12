@@ -4,7 +4,7 @@ import static no.nav.foreldrepenger.common.util.StreamUtil.safeStream;
 
 import org.springframework.stereotype.Service;
 
-import no.nav.foreldrepenger.selvbetjening.innsending.domain.VedleggFrontend;
+import no.nav.foreldrepenger.selvbetjening.innsending.dto.VedleggDto;
 import no.nav.foreldrepenger.selvbetjening.mellomlagring.Attachment;
 import no.nav.foreldrepenger.selvbetjening.vedlegg.VedleggSjekker;
 
@@ -18,7 +18,7 @@ public class ClamAvVirusScanner implements VedleggSjekker {
     }
 
     @Override
-    public void sjekk(VedleggFrontend... vedlegg) {
+    public void sjekk(VedleggDto... vedlegg) {
         safeStream(vedlegg)
                 .forEach(v -> connection.scan(v.getContent(), v.getUuid()));
     }

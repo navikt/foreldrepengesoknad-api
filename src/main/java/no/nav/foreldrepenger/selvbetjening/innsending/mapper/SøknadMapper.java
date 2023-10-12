@@ -1,29 +1,41 @@
 package no.nav.foreldrepenger.selvbetjening.innsending.mapper;
 
-import no.nav.foreldrepenger.selvbetjening.innsending.domain.EngangsstønadFrontend;
-import no.nav.foreldrepenger.selvbetjening.innsending.domain.ForeldrepengesøknadFrontend;
-import no.nav.foreldrepenger.selvbetjening.innsending.domain.SvangerskapspengesøknadFrontend;
-import no.nav.foreldrepenger.selvbetjening.innsending.domain.SøknadFrontend;
-
+import static no.nav.foreldrepenger.selvbetjening.innsending.mapper.EndringForeldrepengerMapper.tilEndringForeldrepengesøknad;
 import static no.nav.foreldrepenger.selvbetjening.innsending.mapper.EngangsstønadMapper.tilEngangsstønad;
 import static no.nav.foreldrepenger.selvbetjening.innsending.mapper.ForeldrepengerMapper.tilForeldrepengesøknad;
 import static no.nav.foreldrepenger.selvbetjening.innsending.mapper.SvangerskapspengerMapper.tilSvangerskapspengesøknad;
+
+import no.nav.foreldrepenger.common.domain.Søknad;
+import no.nav.foreldrepenger.common.domain.foreldrepenger.Endringssøknad;
+import no.nav.foreldrepenger.selvbetjening.innsending.dto.endringssøknad.EndringssøknadDto;
+import no.nav.foreldrepenger.selvbetjening.innsending.dto.SøknadDto;
+import no.nav.foreldrepenger.selvbetjening.innsending.dto.endringssøknad.EndringssøknadForeldrepengerDto;
+import no.nav.foreldrepenger.selvbetjening.innsending.dto.engangsstønad.EngangsstønadDto;
+import no.nav.foreldrepenger.selvbetjening.innsending.dto.foreldrepenger.ForeldrepengesøknadDto;
+import no.nav.foreldrepenger.selvbetjening.innsending.dto.svangerskapspenger.SvangerskapspengesøknadDto;
 
 public final class SøknadMapper {
 
     private SøknadMapper() {
     }
 
-    public static no.nav.foreldrepenger.common.domain.Søknad tilSøknad(SøknadFrontend søknadFrontend) {
-        if (søknadFrontend instanceof EngangsstønadFrontend s) {
-            return tilEngangsstønad(s);
+    public static Søknad tilSøknad(SøknadDto søknad) {
+        if (søknad instanceof ForeldrepengesøknadDto f) {
+            return tilForeldrepengesøknad(f);
         }
-        if (søknadFrontend instanceof ForeldrepengesøknadFrontend s) {
-            return tilForeldrepengesøknad(s);
+        if (søknad instanceof EngangsstønadDto e) {
+            return tilEngangsstønad(e);
         }
-        if (søknadFrontend instanceof SvangerskapspengesøknadFrontend s) {
+        if (søknad instanceof SvangerskapspengesøknadDto s) {
             return tilSvangerskapspengesøknad(s);
         }
-        throw new IllegalArgumentException("Ukjent søknad " + søknadFrontend.getClass().getSimpleName());
+        throw new IllegalArgumentException("Ukjent søknad " + søknad.getClass().getSimpleName());
+    }
+
+    public static Endringssøknad tilEndringssøknad(EndringssøknadDto endringssøknad) {
+        if (endringssøknad instanceof EndringssøknadForeldrepengerDto f) {
+            return tilEndringForeldrepengesøknad(f);
+        }
+        throw new IllegalArgumentException("Ukjent søknad " + endringssøknad.getClass().getSimpleName());
     }
 }

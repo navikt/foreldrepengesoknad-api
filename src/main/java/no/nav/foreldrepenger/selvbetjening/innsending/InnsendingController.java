@@ -11,8 +11,9 @@ import org.springframework.web.bind.annotation.RequestBody;
 import jakarta.validation.Valid;
 import no.nav.foreldrepenger.common.domain.Kvittering;
 import no.nav.foreldrepenger.selvbetjening.http.ProtectedRestController;
-import no.nav.foreldrepenger.selvbetjening.innsending.domain.EttersendingFrontend;
-import no.nav.foreldrepenger.selvbetjening.innsending.domain.SøknadFrontend;
+import no.nav.foreldrepenger.selvbetjening.innsending.dto.endringssøknad.EndringssøknadDto;
+import no.nav.foreldrepenger.selvbetjening.innsending.dto.SøknadDto;
+import no.nav.foreldrepenger.selvbetjening.innsending.dto.ettersendelse.EttersendelseDto;
 
 @ProtectedRestController(InnsendingController.INNSENDING_CONTROLLER_PATH)
 public class InnsendingController {
@@ -27,24 +28,24 @@ public class InnsendingController {
     }
 
     @PostMapping
-    public Kvittering sendInn(@Valid @RequestBody SøknadFrontend søknad) {
-        LOG.info("Mottok søknad med målform {} og {} vedlegg", søknad.getSøker().språkkode(), søknad.getVedlegg().size());
+    public Kvittering sendInn(@Valid @RequestBody SøknadDto søknad) {
+        LOG.info("Mottok søknad med målform {} og {} vedlegg", søknad.søker().språkkode(), søknad.vedlegg().size());
         if (LOG.isInfoEnabled() && LOG.isInfoEnabled(CONFIDENTIAL)) {
-            LOG.info(CONFIDENTIAL, "Søker er {}", escapeHtml(søknad.getSøker()));
+            LOG.info(CONFIDENTIAL, "Søker er {}", escapeHtml(søknad.søker()));
         }
         return innsending.sendInn(søknad);
     }
 
     @PostMapping("/ettersend")
-    public Kvittering sendInn(@Valid @RequestBody EttersendingFrontend ettersending) {
+    public Kvittering sendInn(@Valid @RequestBody EttersendelseDto ettersending) {
         LOG.info("Mottok ettersending av {} vedlegg", ettersending.vedlegg().size());
         return innsending.ettersend(ettersending);
     }
 
     @PostMapping("/endre")
-    public Kvittering endre(@Valid @RequestBody SøknadFrontend søknad) {
-        LOG.info("Mottok endringssøknad med {} vedlegg", søknad.getVedlegg().size());
-        return innsending.endre(søknad);
+    public Kvittering endre(@Valid @RequestBody EndringssøknadDto endringssøknad) {
+        LOG.info("Mottok endringssøknad med {} vedlegg", endringssøknad.vedlegg().size());
+        return innsending.endre(endringssøknad);
     }
 
     @Override

@@ -82,7 +82,7 @@
             },
             "type": "uttak",
             "vedlegg": [
-                "V3872008262447517342619654411304222"
+                "V3872008262447517342619654411304221"
             ],
             "ønskerSamtidigUttak": false
         },
@@ -98,7 +98,7 @@
             },
             "type": "uttak",
             "vedlegg": [
-                "V3872008262447517342619654411304223"
+                "V3872008262447517342619654411304222"
             ],
             "ønskerSamtidigUttak": false
         }
@@ -109,7 +109,7 @@
             "content": [10,9,8,7,6,5,4,3,2,1],
             "filename": "logo_mwg.png.png",
             "filesize": 10130,
-            "id": "V3872008262447517342619654411304222",
+            "id": "V3872008262447517342619654411304221",
             "pending": false,
             "skjemanummer": "I000038",
             "innsendingsType": "morsaktivitetdokumentasjon",

@@ -12,7 +12,7 @@ import org.springframework.stereotype.Service;
 
 import com.google.gson.Gson;
 
-import no.nav.foreldrepenger.selvbetjening.innsending.domain.VedleggFrontend;
+import no.nav.foreldrepenger.selvbetjening.innsending.dto.VedleggDto;
 import no.nav.foreldrepenger.selvbetjening.vedlegg.VedleggSjekker;
 
 @Service
@@ -57,7 +57,7 @@ public class KryptertMellomlagring {
         mellomlagring.lagre(KORTTIDS, katalog(), vedlegg.getUuid(), krypto.encrypt(GSON.toJson(vedlegg)));
     }
 
-    public void slettKryptertVedlegg(VedleggFrontend vedlegg) {
+    public void slettKryptertVedlegg(VedleggDto vedlegg) {
         if (vedlegg.getUrl() != null) {
             slettKryptertVedlegg(vedlegg.getUuid());
         }

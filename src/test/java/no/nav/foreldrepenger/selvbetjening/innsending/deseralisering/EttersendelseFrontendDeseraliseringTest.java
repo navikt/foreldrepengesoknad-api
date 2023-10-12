@@ -14,8 +14,9 @@ import org.springframework.test.context.junit.jupiter.SpringExtension;
 import com.fasterxml.jackson.databind.ObjectMapper;
 
 import no.nav.foreldrepenger.selvbetjening.config.JacksonConfiguration;
-import no.nav.foreldrepenger.selvbetjening.innsending.domain.EttersendingFrontend;
-import no.nav.foreldrepenger.selvbetjening.innsending.domain.MutableVedleggReferanse;
+import no.nav.foreldrepenger.selvbetjening.innsending.dto.MutableVedleggReferanseDto;
+import no.nav.foreldrepenger.selvbetjening.innsending.dto.ettersendelse.EttersendelseDto;
+import no.nav.foreldrepenger.selvbetjening.innsending.dto.ettersendelse.YtelseType;
 
 @ExtendWith(SpringExtension.class)
 @ContextConfiguration(classes = JacksonConfiguration.class)
@@ -26,13 +27,13 @@ class EttersendelseFrontendDeseraliseringTest {
 
     @Test
     void ettersendelseSeraliseringVirkerTest() throws IOException {
-        var ettersendelse = mapper.readValue(bytesFra("json/ettersendelse_I000044.json"), EttersendingFrontend.class);
+        var ettersendelse = mapper.readValue(bytesFra("json/ettersendelse_I000044.json"), EttersendelseDto.class);
 
-        assertThat(ettersendelse.type()).isEqualTo("foreldrepenger");
+        assertThat(ettersendelse.type()).isEqualTo(YtelseType.FORELDREPENGER);
         assertThat(ettersendelse.saksnummer().value()).isEqualTo("352003201");
         assertThat(ettersendelse.vedlegg()).hasSize(1);
         var vedlegg = ettersendelse.vedlegg().get(0);
-        assertThat(vedlegg.getId()).isEqualTo(new MutableVedleggReferanse("V090740687265315217194125674862219730"));
+        assertThat(vedlegg.getId()).isEqualTo(new MutableVedleggReferanseDto("V090740687265315217194125674862219730"));
         assertThat(vedlegg.getSkjemanummer()).isEqualTo("I000044");
         assertThat(vedlegg.getContent()).isNull();
         assertThat(vedlegg.getInnsendingsType()).isNull();

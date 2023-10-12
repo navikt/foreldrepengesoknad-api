@@ -19,8 +19,8 @@ import no.nav.foreldrepenger.common.oppslag.dkif.Målform;
 import no.nav.foreldrepenger.selvbetjening.config.JacksonConfiguration;
 import no.nav.foreldrepenger.selvbetjening.innsending.InnsendingConnection;
 import no.nav.foreldrepenger.selvbetjening.innsending.VedleggsHåndteringTjeneste;
-import no.nav.foreldrepenger.selvbetjening.innsending.domain.EngangsstønadFrontend;
-import no.nav.foreldrepenger.selvbetjening.innsending.domain.SøknadFrontend;
+import no.nav.foreldrepenger.selvbetjening.innsending.dto.SøknadDto;
+import no.nav.foreldrepenger.selvbetjening.innsending.dto.engangsstønad.EngangsstønadDto;
 import no.nav.foreldrepenger.selvbetjening.vedlegg.Image2PDFConverter;
 
 
@@ -35,8 +35,8 @@ class EngangstønadTilDtoMapperTest {
 
     @Test
     void EngangsstønadMapperTest() throws IOException {
-        var sf = mapper.readValue(bytesFra("json/engangsstønad.json"), SøknadFrontend.class);
-        assertThat(sf).isNotNull().isInstanceOf(EngangsstønadFrontend.class);
+        var sf = mapper.readValue(bytesFra("json/engangsstønad.json"), SøknadDto.class);
+        assertThat(sf).isNotNull().isInstanceOf(EngangsstønadDto.class);
 
         var søknad = connection.body(sf);
 

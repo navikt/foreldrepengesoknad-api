@@ -10,7 +10,7 @@ import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 import org.springframework.util.unit.DataSize;
 
-import no.nav.foreldrepenger.selvbetjening.innsending.domain.VedleggFrontend;
+import no.nav.foreldrepenger.selvbetjening.innsending.dto.VedleggDto;
 import no.nav.foreldrepenger.selvbetjening.mellomlagring.Attachment;
 
 @Service
@@ -26,7 +26,7 @@ public class StørrelseVedleggSjekker implements VedleggSjekker {
     }
 
     @Override
-    public void sjekk(VedleggFrontend... vedlegg) {
+    public void sjekk(VedleggDto... vedlegg) {
         safeStream(vedlegg).forEach(this::sjekkStørrelse);
         sjekkTotalStørrelse(vedlegg);
     }
@@ -38,17 +38,17 @@ public class StørrelseVedleggSjekker implements VedleggSjekker {
 
     }
 
-    private void sjekkStørrelse(VedleggFrontend vedlegg) {
+    private void sjekkStørrelse(VedleggDto vedlegg) {
         LOG.info("Sjekker størrelse for {}", vedlegg);
         if ((vedlegg.getContent() != null) && (vedlegg.getContent().length > maxEnkelSize.toBytes())) {
             throw new AttachmentTooLargeException(vedlegg, maxEnkelSize);
         }
     }
 
-    private void sjekkTotalStørrelse(VedleggFrontend... vedlegg) {
+    private void sjekkTotalStørrelse(VedleggDto... vedlegg) {
         LOG.info("Sjekker total størrelse for {} vedlegg", vedlegg.length);
         var total = safeStream(vedlegg)
-            .map(VedleggFrontend::getContent)
+            .map(VedleggDto::getContent)
             .filter(Objects::nonNull)
             .mapToLong(v -> v.length)
             .sum();

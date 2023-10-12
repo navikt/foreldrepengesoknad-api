@@ -1,10 +1,13 @@
 package no.nav.foreldrepenger.selvbetjening.innsending;
 
-import com.fasterxml.jackson.databind.ObjectMapper;
-import no.nav.foreldrepenger.selvbetjening.config.JacksonConfiguration;
-import no.nav.foreldrepenger.selvbetjening.innsending.domain.EttersendingFrontend;
-import no.nav.foreldrepenger.selvbetjening.innsending.domain.SøknadFrontend;
-import no.nav.foreldrepenger.selvbetjening.vedlegg.Image2PDFConverter;
+import static no.nav.foreldrepenger.common.util.ResourceHandleUtil.bytesFra;
+import static org.assertj.core.api.Assertions.assertThat;
+import static org.mockito.ArgumentMatchers.any;
+import static org.mockito.Mockito.mock;
+import static org.mockito.Mockito.when;
+
+import java.io.IOException;
+
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -12,13 +15,12 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.junit.jupiter.SpringExtension;
 
-import java.io.IOException;
+import com.fasterxml.jackson.databind.ObjectMapper;
 
-import static no.nav.foreldrepenger.common.util.ResourceHandleUtil.bytesFra;
-import static org.assertj.core.api.Assertions.assertThat;
-import static org.mockito.ArgumentMatchers.any;
-import static org.mockito.Mockito.mock;
-import static org.mockito.Mockito.when;
+import no.nav.foreldrepenger.selvbetjening.config.JacksonConfiguration;
+import no.nav.foreldrepenger.selvbetjening.innsending.dto.SøknadDto;
+import no.nav.foreldrepenger.selvbetjening.innsending.dto.ettersendelse.EttersendelseDto;
+import no.nav.foreldrepenger.selvbetjening.vedlegg.Image2PDFConverter;
 
 @ExtendWith(SpringExtension.class)
 @ContextConfiguration(classes = JacksonConfiguration.class)
@@ -36,80 +38,78 @@ class VedleggsHåndteringTjenesteTest {
 
     @Test
     void søknadSkalVæreLikNårDetIkkeFinnesDupliserteVedlegg() throws IOException {
-        var søknadOrginal = mapper.readValue(bytesFra("json/foreldrepenger_adopsjon_annenInntekt.json"), SøknadFrontend.class);
-        var søknadDupliserteVedleggFjernet = mapper.readValue(bytesFra("json/foreldrepenger_adopsjon_annenInntekt.json"), SøknadFrontend.class); // For å ikke lage kopi
+        var søknadOrginal = mapper.readValue(bytesFra("json/foreldrepenger_adopsjon_annenInntekt.json"), SøknadDto.class);
+        var søknadDupliserteVedleggFjernet = mapper.readValue(bytesFra("json/foreldrepenger_adopsjon_annenInntekt.json"), SøknadDto.class); // For å ikke lage kopi
 
         var vedleggsHåndteringsTjeneste = new VedleggsHåndteringTjeneste(converter);
-        vedleggsHåndteringsTjeneste.fjernDupliserteVedlegg(søknadDupliserteVedleggFjernet);
+        vedleggsHåndteringsTjeneste.fjernDupliserteVedleggFraSøknad(søknadDupliserteVedleggFjernet);
 
-        assertThat(søknadOrginal.getVedlegg()).hasSameSizeAs(søknadDupliserteVedleggFjernet.getVedlegg());
+        assertThat(søknadOrginal.vedlegg()).hasSameSizeAs(søknadDupliserteVedleggFjernet.vedlegg());
         assertThat(søknadOrginal).isEqualTo(søknadDupliserteVedleggFjernet);
     }
 
     @Test
     void fjernerDupliserteVedleggFraSøknad() throws IOException {
-        var søknadOrginal = mapper.readValue(bytesFra("json/foreldrepenger_adopsjon_annenInntekt_dupliserte_vedlegg.json"), SøknadFrontend.class);
-        var søknadDupliserteVedleggFjernet = mapper.readValue(bytesFra("json/foreldrepenger_adopsjon_annenInntekt_dupliserte_vedlegg.json"), SøknadFrontend.class); // For å ikke lage kopi
+        var søknadOrginal = mapper.readValue(bytesFra("json/foreldrepenger_adopsjon_annenInntekt_dupliserte_vedlegg.json"), SøknadDto.class);
+        var søknadDupliserteVedleggFjernet = mapper.readValue(bytesFra("json/foreldrepenger_adopsjon_annenInntekt_dupliserte_vedlegg.json"), SøknadDto.class); // For å ikke lage kopi
 
         var vedleggsHåndteringsTjeneste = new VedleggsHåndteringTjeneste(converter);
-        vedleggsHåndteringsTjeneste.fjernDupliserteVedlegg(søknadDupliserteVedleggFjernet);
+        vedleggsHåndteringsTjeneste.fjernDupliserteVedleggFraSøknad(søknadDupliserteVedleggFjernet);
 
-        assertThat(søknadOrginal.getVedlegg()).hasSize(4);
-        assertThat(søknadOrginal.getBarn().omsorgsovertakelse().stream()
+        assertThat(søknadOrginal.vedlegg()).hasSize(4);
+        assertThat(søknadOrginal.barn().omsorgsovertakelse().stream()
                 .distinct()
                 .count()).isEqualTo(3);
-        assertThat(søknadDupliserteVedleggFjernet.getVedlegg()).hasSize(2);
-        assertThat(søknadDupliserteVedleggFjernet.getBarn().omsorgsovertakelse().stream()
+        assertThat(søknadDupliserteVedleggFjernet.vedlegg()).hasSize(2);
+        assertThat(søknadDupliserteVedleggFjernet.barn().omsorgsovertakelse().stream()
                 .distinct()
                 .count()).isEqualTo(1);
     }
 
     @Test
     void fjernerDupliserteVedleggFraSøknadVedGradering() throws IOException {
-        var søknadOrginal = mapper.readValue(bytesFra("json/foreldrepenger_far_gardering_frilans_duplisert_vedlegg.json"), SøknadFrontend.class);
-        var søknadDupliserteVedleggFjernet = mapper.readValue(bytesFra("json/foreldrepenger_far_gardering_frilans_duplisert_vedlegg.json"), SøknadFrontend.class); // For å ikke lage kopi
+        var søknadOrginal = mapper.readValue(bytesFra("json/foreldrepenger_far_gardering_frilans_duplisert_vedlegg.json"), SøknadDto.class);
+        var søknadDupliserteVedleggFjernet = mapper.readValue(bytesFra("json/foreldrepenger_far_gardering_frilans_duplisert_vedlegg.json"), SøknadDto.class); // For å ikke lage kopi
 
         var vedleggsHåndteringsTjeneste = new VedleggsHåndteringTjeneste(converter);
-        vedleggsHåndteringsTjeneste.fjernDupliserteVedlegg(søknadDupliserteVedleggFjernet);
+        vedleggsHåndteringsTjeneste.fjernDupliserteVedleggFraSøknad(søknadDupliserteVedleggFjernet);
 
-        assertThat(søknadOrginal.getVedlegg()).hasSize(2);
-        assertThat(søknadDupliserteVedleggFjernet.getVedlegg()).hasSize(1);
-        søknadDupliserteVedleggFjernet.setVedlegg(søknadOrginal.getVedlegg());
-        assertThat(søknadDupliserteVedleggFjernet).isEqualTo(søknadOrginal);
+        assertThat(søknadOrginal.vedlegg()).hasSize(2);
+        assertThat(søknadDupliserteVedleggFjernet.vedlegg()).hasSize(1);
     }
 
     @Test
     void skalFjerneDuplikateVedleggFraAnnenInntektOgDokumentasjonAvAktivitetskrav() throws IOException {
-        var søknadOrginal = mapper.readValue(bytesFra("json/foreldrepenger_far_fellesperiode_førstegangstjenste_duplikate_vedlegg.json"), SøknadFrontend.class);
-        var søknadDupliserteVedleggFjernet = mapper.readValue(bytesFra("json/foreldrepenger_far_fellesperiode_førstegangstjenste_duplikate_vedlegg.json"), SøknadFrontend.class); // For å ikke lage kopi
+        var søknadOrginal = mapper.readValue(bytesFra("json/foreldrepenger_far_fellesperiode_førstegangstjenste_duplikate_vedlegg.json"), SøknadDto.class);
+        var søknadDupliserteVedleggFjernet = mapper.readValue(bytesFra("json/foreldrepenger_far_fellesperiode_førstegangstjenste_duplikate_vedlegg.json"), SøknadDto.class); // For å ikke lage kopi
 
         var vedleggsHåndteringsTjeneste = new VedleggsHåndteringTjeneste(converter);
-        vedleggsHåndteringsTjeneste.fjernDupliserteVedlegg(søknadDupliserteVedleggFjernet);
+        vedleggsHåndteringsTjeneste.fjernDupliserteVedleggFraSøknad(søknadDupliserteVedleggFjernet);
 
-        assertThat(søknadOrginal.getVedlegg()).hasSize(9);
-        assertThat(søknadDupliserteVedleggFjernet.getVedlegg()).hasSize(5);
+        assertThat(søknadOrginal.vedlegg()).hasSize(9);
+        assertThat(søknadDupliserteVedleggFjernet.vedlegg()).hasSize(5);
     }
 
     @Test
     void skalIkkeFjerneVedleggDerHvorTypeSkjemaNummerErLiktMensInnholdErForskjellig() throws IOException {
-        var søknadOrginal = mapper.readValue(bytesFra("json/foreldrepenger_far_gardering_frilans_to_vedlegg_samme_type_ulikt_innhold.json"), SøknadFrontend.class);
-        var søknadDupliserteVedleggFjernet = mapper.readValue(bytesFra("json/foreldrepenger_far_gardering_frilans_to_vedlegg_samme_type_ulikt_innhold.json"), SøknadFrontend.class); // For å ikke lage kopi
+        var søknadOrginal = mapper.readValue(bytesFra("json/foreldrepenger_far_gardering_frilans_to_vedlegg_samme_type_ulikt_innhold.json"), SøknadDto.class);
+        var søknadDupliserteVedleggFjernet = mapper.readValue(bytesFra("json/foreldrepenger_far_gardering_frilans_to_vedlegg_samme_type_ulikt_innhold.json"), SøknadDto.class); // For å ikke lage kopi
 
         var vedleggsHåndteringsTjeneste = new VedleggsHåndteringTjeneste(converter);
-        vedleggsHåndteringsTjeneste.fjernDupliserteVedlegg(søknadDupliserteVedleggFjernet);
+        vedleggsHåndteringsTjeneste.fjernDupliserteVedleggFraSøknad(søknadDupliserteVedleggFjernet);
 
-        assertThat(søknadDupliserteVedleggFjernet.getVedlegg()).hasSameSizeAs(søknadOrginal.getVedlegg());
+        assertThat(søknadDupliserteVedleggFjernet.vedlegg()).hasSameSizeAs(søknadOrginal.vedlegg());
         assertThat(søknadDupliserteVedleggFjernet).isEqualTo(søknadOrginal);
     }
 
 
     @Test
     void ettersendingerForblirUendretVedIngenDupliserteVedlegg() throws IOException {
-        var ettersendelseOrginal = mapper.readValue(bytesFra("json/ettersendelse_I000044.json"), EttersendingFrontend.class);
-        var ettersendelseDupliserteVedleggFjernet = mapper.readValue(bytesFra("json/ettersendelse_I000044.json"), EttersendingFrontend.class);
+        var ettersendelseOrginal = mapper.readValue(bytesFra("json/ettersendelse_I000044.json"), EttersendelseDto.class);
+        var ettersendelseDupliserteVedleggFjernet = mapper.readValue(bytesFra("json/ettersendelse_I000044.json"), EttersendelseDto.class);
 
         var vedleggsHåndteringsTjeneste = new VedleggsHåndteringTjeneste(converter);
-        vedleggsHåndteringsTjeneste.fjernDupliserteVedlegg(ettersendelseDupliserteVedleggFjernet);
+        vedleggsHåndteringsTjeneste.fjernDupliserteVedleggFraEttersending(ettersendelseDupliserteVedleggFjernet);
 
         assertThat(ettersendelseOrginal.vedlegg()).hasSameSizeAs(ettersendelseDupliserteVedleggFjernet.vedlegg());
         assertThat(ettersendelseOrginal).isEqualTo(ettersendelseDupliserteVedleggFjernet);
@@ -117,17 +117,14 @@ class VedleggsHåndteringTjenesteTest {
 
     @Test
     void duplikateVedleggFjernesFraEttersending() throws IOException {
-        var ettersendelseOrginal = mapper.readValue(bytesFra("json/ettersendelse_I000044_duplikate_vedlegg.json"), EttersendingFrontend.class);
-        var ettersendelseDupliserteVedleggFjernet = mapper.readValue(bytesFra("json/ettersendelse_I000044_duplikate_vedlegg.json"), EttersendingFrontend.class);
+        var ettersendelseOrginal = mapper.readValue(bytesFra("json/ettersendelse_I000044_duplikate_vedlegg.json"), EttersendelseDto.class);
+        var ettersendelseDupliserteVedleggFjernet = mapper.readValue(bytesFra("json/ettersendelse_I000044_duplikate_vedlegg.json"), EttersendelseDto.class);
 
         var vedleggsHåndteringsTjeneste = new VedleggsHåndteringTjeneste(converter);
-        vedleggsHåndteringsTjeneste.fjernDupliserteVedlegg(ettersendelseDupliserteVedleggFjernet);
+        vedleggsHåndteringsTjeneste.fjernDupliserteVedleggFraEttersending(ettersendelseDupliserteVedleggFjernet);
 
         assertThat(ettersendelseOrginal.vedlegg()).hasSize(3);
         assertThat(ettersendelseDupliserteVedleggFjernet.vedlegg()).hasSize(1);
-
-        ettersendelseDupliserteVedleggFjernet.vedlegg(ettersendelseOrginal.vedlegg());
-        assertThat(ettersendelseOrginal).isEqualTo(ettersendelseDupliserteVedleggFjernet);
     }
 
 }

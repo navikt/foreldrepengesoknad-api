@@ -1,6 +1,7 @@
 package no.nav.foreldrepenger.selvbetjening.innsending;
 
 import static no.nav.foreldrepenger.selvbetjening.innsending.mapper.EttersendingMapper.tilEttersending;
+import static no.nav.foreldrepenger.selvbetjening.innsending.mapper.SøknadMapper.tilEndringssøknad;
 import static no.nav.foreldrepenger.selvbetjening.innsending.mapper.SøknadMapper.tilSøknad;
 import static no.nav.foreldrepenger.selvbetjening.util.StringUtils.escapeHtml;
 
@@ -13,9 +14,11 @@ import org.springframework.web.client.RestOperations;
 
 import no.nav.foreldrepenger.common.domain.Kvittering;
 import no.nav.foreldrepenger.common.domain.Søknad;
+import no.nav.foreldrepenger.common.domain.felles.Ettersending;
 import no.nav.foreldrepenger.selvbetjening.http.AbstractRestConnection;
-import no.nav.foreldrepenger.selvbetjening.innsending.domain.EttersendingFrontend;
-import no.nav.foreldrepenger.selvbetjening.innsending.domain.SøknadFrontend;
+import no.nav.foreldrepenger.selvbetjening.innsending.dto.endringssøknad.EndringssøknadDto;
+import no.nav.foreldrepenger.selvbetjening.innsending.dto.SøknadDto;
+import no.nav.foreldrepenger.selvbetjening.innsending.dto.ettersendelse.EttersendelseDto;
 
 @Component
 public class InnsendingConnection extends AbstractRestConnection {
@@ -30,30 +33,36 @@ public class InnsendingConnection extends AbstractRestConnection {
         this.vedleggshåndtering = vedleggshåndtering;
     }
 
-    public Kvittering sendInn(SøknadFrontend søknad) {
+    public Kvittering sendInn(SøknadDto søknad) {
         return post(config.innsendingURI(), body(søknad));
     }
 
-    public Kvittering ettersend(EttersendingFrontend ettersending) {
+    public Kvittering ettersend(EttersendelseDto ettersending) {
         return post(config.ettersendingURI(), body(ettersending));
     }
 
-    public Kvittering endre(SøknadFrontend søknad) {
-        return post(config.endringURI(), body(søknad));
+    public Kvittering endre(EndringssøknadDto endringssøknad) {
+        return post(config.endringURI(), body(endringssøknad));
     }
 
     private Kvittering post(URI uri, Object body) {
         return postForObject(uri, body, Kvittering.class);
     }
 
-    public Søknad body(SøknadFrontend søknadFrontend) {
-        SECURE_LOGGER.info("{} mottatt fra frontend med følende innhold: {}", søknadFrontend.getType(), escapeHtml(søknadFrontend));
-        søknadFrontend = vedleggshåndtering.fjernDupliserteVedlegg(søknadFrontend);
-        return tilSøknad(søknadFrontend);
+    public Søknad body(SøknadDto søknad) {
+        SECURE_LOGGER.info("{} mottatt fra frontend med følende innhold: {}", søknad.type(), escapeHtml(søknad));
+        vedleggshåndtering.fjernDupliserteVedleggFraSøknad(søknad);
+        return tilSøknad(søknad);
     }
 
-    public no.nav.foreldrepenger.common.domain.felles.Ettersending body(EttersendingFrontend ettersending) {
-        ettersending = vedleggshåndtering.fjernDupliserteVedlegg(ettersending);
+    public Søknad body(EndringssøknadDto endringssøknad) {
+        SECURE_LOGGER.info("{} mottatt fra frontend med følende innhold: {}", endringssøknad.type(), escapeHtml(endringssøknad));
+        vedleggshåndtering.fjernDupliserteVedleggFraSøknad(endringssøknad);
+        return tilEndringssøknad(endringssøknad);
+    }
+
+    public Ettersending body(EttersendelseDto ettersending) {
+        vedleggshåndtering.fjernDupliserteVedleggFraEttersending(ettersending);
         return tilEttersending(ettersending);
     }
 

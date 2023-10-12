@@ -1,22 +1,24 @@
 package no.nav.foreldrepenger.selvbetjening.innsending;
 
-import no.nav.foreldrepenger.common.domain.Kvittering;
-import no.nav.foreldrepenger.selvbetjening.http.RetryAware;
-import no.nav.foreldrepenger.selvbetjening.innsending.domain.EttersendingFrontend;
-import no.nav.foreldrepenger.selvbetjening.innsending.domain.MutableVedleggReferanse;
-import no.nav.foreldrepenger.selvbetjening.innsending.domain.SøknadFrontend;
-import no.nav.foreldrepenger.selvbetjening.innsending.domain.VedleggFrontend;
-import no.nav.foreldrepenger.selvbetjening.innsending.domain.tilbakebetaling.TilbakebetalingUttalelse;
-import no.nav.foreldrepenger.selvbetjening.innsending.pdf.PdfGenerator;
-import no.nav.foreldrepenger.selvbetjening.mellomlagring.KryptertMellomlagring;
-import org.slf4j.Logger;
-import org.springframework.stereotype.Service;
+import static org.slf4j.LoggerFactory.getLogger;
 
 import java.security.SecureRandom;
 import java.util.List;
 import java.util.Random;
 
-import static org.slf4j.LoggerFactory.getLogger;
+import org.slf4j.Logger;
+import org.springframework.stereotype.Service;
+
+import no.nav.foreldrepenger.common.domain.Kvittering;
+import no.nav.foreldrepenger.selvbetjening.http.RetryAware;
+import no.nav.foreldrepenger.selvbetjening.innsending.dto.endringssøknad.EndringssøknadDto;
+import no.nav.foreldrepenger.selvbetjening.innsending.dto.MutableVedleggReferanseDto;
+import no.nav.foreldrepenger.selvbetjening.innsending.dto.SøknadDto;
+import no.nav.foreldrepenger.selvbetjening.innsending.dto.VedleggDto;
+import no.nav.foreldrepenger.selvbetjening.innsending.dto.ettersendelse.EttersendelseDto;
+import no.nav.foreldrepenger.selvbetjening.innsending.dto.ettersendelse.TilbakebetalingUttalelseDto;
+import no.nav.foreldrepenger.selvbetjening.innsending.pdf.PdfGenerator;
+import no.nav.foreldrepenger.selvbetjening.mellomlagring.KryptertMellomlagring;
 
 @Service
 public class InnsendingTjeneste implements RetryAware {
@@ -36,19 +38,19 @@ public class InnsendingTjeneste implements RetryAware {
         this.pdfGenerator = pdfGenerator;
     }
 
-    public Kvittering sendInn(SøknadFrontend søknad) {
-        LOG.info("Sender inn søknad av type {}", søknad.getType());
-        hentMellomlagredeFiler(søknad.getVedlegg());
+    public Kvittering sendInn(SøknadDto søknad) {
+        LOG.info("Sender inn søknad av type {}", søknad.type());
+        hentMellomlagredeFiler(søknad.vedlegg());
         var kvittering = connection.sendInn(søknad);
         slettMellomlagringOgSøknad(søknad);
         LOG.info(RETURNERER_KVITTERING, kvittering);
         return kvittering;
     }
 
-    public Kvittering ettersend(EttersendingFrontend e) {
+    public Kvittering ettersend(EttersendelseDto e) {
         LOG.info("Ettersender for sak {}", e.saksnummer());
         hentMellomlagredeFiler(e.vedlegg());
-        if (e.dialogId() != null) {
+        if (e.erTilbakebetalingUttalelse()) {
             LOG.info("Konverterer tekst til vedleggs-pdf {}", e.brukerTekst().dokumentType());
             e.vedlegg().add(vedleggFra(uttalelseFra(e)));
         }
@@ -58,32 +60,32 @@ public class InnsendingTjeneste implements RetryAware {
         return kvittering;
     }
 
-    public Kvittering endre(SøknadFrontend es) {
-        LOG.info("Endrer søknad av type {}", es.getType());
-        hentMellomlagredeFiler(es.getVedlegg());
+    public Kvittering endre(EndringssøknadDto es) {
+        LOG.info("Endrer søknad av type {}", es.type());
+        hentMellomlagredeFiler(es.vedlegg());
         var kvittering = connection.endre(es);
         slettMellomlagringOgSøknad(es);
         LOG.info(RETURNERER_KVITTERING, kvittering);
         return kvittering;
     }
 
-    private VedleggFrontend vedleggFra(TilbakebetalingUttalelse u) {
-        return new VedleggFrontend(pdfGenerator.generate(u), "Tekst fra bruker", id(), u.brukerTekst().dokumentType());
+    private VedleggDto vedleggFra(TilbakebetalingUttalelseDto u) {
+        return new VedleggDto(pdfGenerator.generate(u), "Tekst fra bruker", id(), u.brukerTekst().dokumentType());
     }
 
-    private static TilbakebetalingUttalelse uttalelseFra(EttersendingFrontend e) {
-        return new TilbakebetalingUttalelse(
+    private static TilbakebetalingUttalelseDto uttalelseFra(EttersendelseDto e) {
+        return new TilbakebetalingUttalelseDto(
             e.type(),
             e.saksnummer(),
             e.dialogId(),
             e.brukerTekst());
     }
 
-    private static MutableVedleggReferanse id() {
-        return new MutableVedleggReferanse("V" + IDGENERATOR.nextLong());
+    private static MutableVedleggReferanseDto id() {
+        return new MutableVedleggReferanseDto("V" + IDGENERATOR.nextLong());
     }
 
-    public void hentMellomlagredeFiler(List<VedleggFrontend> vedlegg) {
+    public void hentMellomlagredeFiler(List<VedleggDto> vedlegg) {
         if (!vedlegg.isEmpty()) {
             LOG.info("Henter mellomlagring for {} vedlegg", vedlegg.size());
             vedlegg.forEach(this::hentVedleggBytes);
@@ -91,14 +93,21 @@ public class InnsendingTjeneste implements RetryAware {
         }
     }
 
-    private void slettMellomlagringOgSøknad(SøknadFrontend søknad) {
+    private void slettMellomlagringOgSøknad(SøknadDto søknad) {
         LOG.info("Sletter mellomlagret søknad og vedlegg");
-        søknad.getVedlegg().forEach(mellomlagring::slettKryptertVedlegg);
+        søknad.vedlegg().forEach(mellomlagring::slettKryptertVedlegg);
         mellomlagring.slettKryptertSøknad();
         LOG.info("Slettet mellomlagret søknad og vedlegg OK");
     }
 
-    private void hentVedleggBytes(VedleggFrontend vedlegg) {
+    private void slettMellomlagringOgSøknad(EndringssøknadDto søknad) {
+        LOG.info("Sletter mellomlagret søknad og vedlegg");
+        søknad.vedlegg().forEach(mellomlagring::slettKryptertVedlegg);
+        mellomlagring.slettKryptertSøknad();
+        LOG.info("Slettet mellomlagret søknad og vedlegg OK");
+    }
+
+    private void hentVedleggBytes(VedleggDto vedlegg) {
         if (vedlegg.getUrl() != null) {
             vedlegg.setContent(mellomlagring.lesKryptertVedlegg(vedlegg.getUuid())
                 .map(a -> a.bytes)

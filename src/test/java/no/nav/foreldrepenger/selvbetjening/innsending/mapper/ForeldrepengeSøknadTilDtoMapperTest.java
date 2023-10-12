@@ -1,11 +1,23 @@
 package no.nav.foreldrepenger.selvbetjening.innsending.mapper;
 
+import static no.nav.foreldrepenger.common.util.ResourceHandleUtil.bytesFra;
+import static org.assertj.core.api.Assertions.assertThat;
+
+import java.io.IOException;
+import java.util.List;
+
+import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.extension.ExtendWith;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.test.context.ContextConfiguration;
+import org.springframework.test.context.junit.jupiter.SpringExtension;
+
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.neovisionaries.i18n.CountryCode;
+
 import no.nav.foreldrepenger.common.domain.BrukerRolle;
 import no.nav.foreldrepenger.common.domain.felles.ProsentAndel;
 import no.nav.foreldrepenger.common.domain.felles.relasjontilbarn.Adopsjon;
-import no.nav.foreldrepenger.common.domain.felles.relasjontilbarn.FremtidigFødsel;
 import no.nav.foreldrepenger.common.domain.felles.relasjontilbarn.Fødsel;
 import no.nav.foreldrepenger.common.domain.foreldrepenger.Endringssøknad;
 import no.nav.foreldrepenger.common.domain.foreldrepenger.Foreldrepenger;
@@ -16,20 +28,11 @@ import no.nav.foreldrepenger.common.oppslag.dkif.Målform;
 import no.nav.foreldrepenger.selvbetjening.config.JacksonConfiguration;
 import no.nav.foreldrepenger.selvbetjening.innsending.InnsendingConnection;
 import no.nav.foreldrepenger.selvbetjening.innsending.VedleggsHåndteringTjeneste;
-import no.nav.foreldrepenger.selvbetjening.innsending.domain.ForeldrepengesøknadFrontend;
-import no.nav.foreldrepenger.selvbetjening.innsending.domain.SøknadFrontend;
+import no.nav.foreldrepenger.selvbetjening.innsending.dto.endringssøknad.EndringssøknadDto;
+import no.nav.foreldrepenger.selvbetjening.innsending.dto.SøknadDto;
+import no.nav.foreldrepenger.selvbetjening.innsending.dto.endringssøknad.EndringssøknadForeldrepengerDto;
+import no.nav.foreldrepenger.selvbetjening.innsending.dto.foreldrepenger.ForeldrepengesøknadDto;
 import no.nav.foreldrepenger.selvbetjening.vedlegg.Image2PDFConverter;
-import org.junit.jupiter.api.Test;
-import org.junit.jupiter.api.extension.ExtendWith;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.test.context.ContextConfiguration;
-import org.springframework.test.context.junit.jupiter.SpringExtension;
-
-import java.io.IOException;
-import java.util.List;
-
-import static no.nav.foreldrepenger.common.util.ResourceHandleUtil.bytesFra;
-import static org.assertj.core.api.Assertions.assertThat;
 
 @ExtendWith(SpringExtension.class)
 @ContextConfiguration(classes = JacksonConfiguration.class)
@@ -43,9 +46,9 @@ class ForeldrepengeSøknadTilDtoMapperTest {
 
     @Test
     void foreldrepengerAdopsjonAnnenInntektTest() throws IOException {
-        var sf = mapper.readValue(bytesFra("json/foreldrepenger_adopsjon_annenInntekt.json"), SøknadFrontend.class);
-        assertThat(sf).isNotNull().isInstanceOf(ForeldrepengesøknadFrontend.class);
-        assertThat(sf.getSaksnummer()).isNull();
+        var sf = (ForeldrepengesøknadDto) mapper.readValue(bytesFra("json/foreldrepenger_adopsjon_annenInntekt.json"), SøknadDto.class);
+        assertThat(sf).isNotNull().isInstanceOf(ForeldrepengesøknadDto.class);
+        assertThat(sf.saksnummer()).isNull();
 
         var søknad = connection.body(sf);
         assertThat(søknad).isNotNull();
@@ -59,7 +62,7 @@ class ForeldrepengeSøknadTilDtoMapperTest {
         assertThat(ytelse.relasjonTilBarn()).isInstanceOf(Adopsjon.class);
         var annenOpptjening = ytelse.opptjening().annenOpptjening();
         assertThat(annenOpptjening).hasSize(1);
-        assertThat(annenOpptjening.get(0).type().name()).isEqualTo(sf.getSøker().andreInntekterSiste10Mnd().get(0).type());
+        assertThat(annenOpptjening.get(0).type().name()).isEqualTo(sf.søker().andreInntekterSiste10Mnd().get(0).type());
         var periode = annenOpptjening.get(0).periode();
         assertThat(periode.fom()).isNotNull();
         assertThat(periode.tom()).isNotNull();
@@ -68,9 +71,9 @@ class ForeldrepengeSøknadTilDtoMapperTest {
 
     @Test
     void farSøkerForeldrepengerMedGraderingPåAlleUttaksPeriodeneOgFrilans() throws IOException {
-        var sf = mapper.readValue(bytesFra("json/foreldrepenger_far_gardering_frilans.json"), SøknadFrontend.class);
-        assertThat(sf).isNotNull().isInstanceOf(ForeldrepengesøknadFrontend.class);
-        assertThat(sf.getSaksnummer()).isNull();
+        var sf = (ForeldrepengesøknadDto)  mapper.readValue(bytesFra("json/foreldrepenger_far_gardering_frilans.json"), SøknadDto.class);
+        assertThat(sf).isNotNull().isInstanceOf(ForeldrepengesøknadDto.class);
+        assertThat(sf.saksnummer()).isNull();
 
         var søknad = connection.body(sf);
         assertThat(søknad).isNotNull();
@@ -109,8 +112,8 @@ class ForeldrepengeSøknadTilDtoMapperTest {
 
     @Test
     void søknadMappesTilIkkeTomtObjektOgUttakMappesKorrektTilGradertUttak() throws IOException {
-        var sf = mapper.readValue(bytesFra("json/foreldrepenger_mor_gradering_egenNæring_og_frilans.json"), SøknadFrontend.class);
-        assertThat(sf).isNotNull().isInstanceOf(ForeldrepengesøknadFrontend.class);
+        var sf = mapper.readValue(bytesFra("json/foreldrepenger_mor_gradering_egenNæring_og_frilans.json"), SøknadDto.class);
+        assertThat(sf).isNotNull().isInstanceOf(ForeldrepengesøknadDto.class);
 
         var søknad = connection.body(sf);
         assertThat(søknad).isNotNull();
@@ -157,8 +160,8 @@ class ForeldrepengeSøknadTilDtoMapperTest {
 
     @Test
     void søknadMedUtsettelseOgUtenlandsoppholdMappesKorrekt() throws IOException {
-        var sf = mapper.readValue(bytesFra("json/foreldrepenger_mor_utsettelse_og_utenlandsopphold.json"), SøknadFrontend.class);
-        assertThat(sf).isNotNull().isInstanceOf(ForeldrepengesøknadFrontend.class);
+        var sf = mapper.readValue(bytesFra("json/foreldrepenger_mor_utsettelse_og_utenlandsopphold.json"), SøknadDto.class);
+        assertThat(sf).isNotNull().isInstanceOf(ForeldrepengesøknadDto.class);
 
         var søknad = connection.body(sf);
         assertThat(søknad).isNotNull();
@@ -191,9 +194,8 @@ class ForeldrepengeSøknadTilDtoMapperTest {
 
     @Test
     void endringsSøknadMapperTest() throws IOException {
-        var sf = mapper.readValue(bytesFra("json/endringssøknad_termin_mor.json"), SøknadFrontend.class);
-        assertThat(sf).isNotNull().isInstanceOf(ForeldrepengesøknadFrontend.class);
-        assertThat(sf.getSaksnummer()).isNotNull();
+        var sf = (EndringssøknadForeldrepengerDto) mapper.readValue(bytesFra("json/endringssøknad_termin_mor.json"), EndringssøknadDto.class);
+        assertThat(sf.saksnummer()).isNotNull();
 
         var søknad = connection.body(sf);
         assertThat(søknad)
@@ -201,8 +203,9 @@ class ForeldrepengeSøknadTilDtoMapperTest {
             .isInstanceOf(Endringssøknad.class);
 
         assertThat(søknad.getYtelse()).isInstanceOf(Foreldrepenger.class);
-        var ytelse = (Foreldrepenger) søknad.getYtelse();
-        assertThat(ytelse.relasjonTilBarn()).isInstanceOf(FremtidigFødsel.class);
+        var foreldrepenger = (Foreldrepenger) søknad.getYtelse();
+        assertThat(foreldrepenger.fordeling().perioder()).hasSize(3);
+
     }
 
 

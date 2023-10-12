@@ -19,7 +19,8 @@ import no.nav.foreldrepenger.common.domain.felles.EttersendingsType;
 import no.nav.foreldrepenger.selvbetjening.config.JacksonConfiguration;
 import no.nav.foreldrepenger.selvbetjening.innsending.InnsendingConnection;
 import no.nav.foreldrepenger.selvbetjening.innsending.VedleggsHåndteringTjeneste;
-import no.nav.foreldrepenger.selvbetjening.innsending.domain.EttersendingFrontend;
+import no.nav.foreldrepenger.selvbetjening.innsending.dto.ettersendelse.EttersendelseDto;
+import no.nav.foreldrepenger.selvbetjening.innsending.dto.ettersendelse.YtelseType;
 import no.nav.foreldrepenger.selvbetjening.vedlegg.Image2PDFConverter;
 
 
@@ -35,7 +36,7 @@ class EttersendingTilDtoMapperTest {
     @Test
     void testEttersendingMapper() {
         var saksnummer = new Saksnummer("952003131");
-        var ettersendelseFraFrontend = new EttersendingFrontend("foreldrepenger", saksnummer, null, null, null);
+        var ettersendelseFraFrontend = new EttersendelseDto(YtelseType.FORELDREPENGER, saksnummer, null, null, null);
         var ettersendelse = connection.body(ettersendelseFraFrontend);
         assertThat(ettersendelse.type()).isEqualTo(EttersendingsType.FORELDREPENGER);
         assertThat(ettersendelse.saksnr()).isEqualTo(saksnummer);
@@ -44,7 +45,7 @@ class EttersendingTilDtoMapperTest {
 
     @Test
     void ettersendelseSeraliseringDeseraliseringTest() throws IOException {
-        var ettersendelseFraFrontend = mapper.readValue(bytesFra("json/ettersendelse_I000044.json"), EttersendingFrontend.class);
+        var ettersendelseFraFrontend = mapper.readValue(bytesFra("json/ettersendelse_I000044.json"), EttersendelseDto.class);
         var ettersendelse = connection.body(ettersendelseFraFrontend);
 
         assertThat(ettersendelse.type()).isEqualTo(EttersendingsType.FORELDREPENGER);
