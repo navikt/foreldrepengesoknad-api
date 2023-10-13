@@ -48,7 +48,6 @@ class ForeldrepengeSøknadTilDtoMapperTest {
     void foreldrepengerAdopsjonAnnenInntektTest() throws IOException {
         var sf = (ForeldrepengesøknadDto) mapper.readValue(bytesFra("json/foreldrepenger_adopsjon_annenInntekt.json"), SøknadDto.class);
         assertThat(sf).isNotNull().isInstanceOf(ForeldrepengesøknadDto.class);
-        assertThat(sf.saksnummer()).isNull();
 
         var søknad = connection.body(sf);
         assertThat(søknad).isNotNull();
@@ -73,7 +72,6 @@ class ForeldrepengeSøknadTilDtoMapperTest {
     void farSøkerForeldrepengerMedGraderingPåAlleUttaksPeriodeneOgFrilans() throws IOException {
         var sf = (ForeldrepengesøknadDto)  mapper.readValue(bytesFra("json/foreldrepenger_far_gardering_frilans.json"), SøknadDto.class);
         assertThat(sf).isNotNull().isInstanceOf(ForeldrepengesøknadDto.class);
-        assertThat(sf.saksnummer()).isNull();
 
         var søknad = connection.body(sf);
         assertThat(søknad).isNotNull();

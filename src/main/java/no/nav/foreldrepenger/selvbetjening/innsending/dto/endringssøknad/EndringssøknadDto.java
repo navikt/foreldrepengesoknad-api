@@ -7,15 +7,19 @@ import java.util.List;
 import com.fasterxml.jackson.annotation.JsonSubTypes;
 import com.fasterxml.jackson.annotation.JsonTypeInfo;
 
+import no.nav.foreldrepenger.selvbetjening.innsending.dto.BarnDto;
+import no.nav.foreldrepenger.selvbetjening.innsending.dto.SøkerDto;
 import no.nav.foreldrepenger.selvbetjening.innsending.dto.VedleggDto;
-import no.nav.foreldrepenger.selvbetjening.innsending.dto.endringssøknad.EndringssøknadForeldrepengerDto;
+import no.nav.foreldrepenger.selvbetjening.innsending.dto.foreldrepenger.Situasjon;
 
 @JsonTypeInfo(use = NAME, property = "type", visible = true)
 @JsonSubTypes({
     @JsonSubTypes.Type(value = EndringssøknadForeldrepengerDto.class, name = "foreldrepenger")
 })
 public interface EndringssøknadDto {
-
+    Situasjon situasjon();
+    BarnDto barn();
+    SøkerDto søker();
     List<VedleggDto> vedlegg();
 
     default String type() {

@@ -1,5 +1,6 @@
 package no.nav.foreldrepenger.selvbetjening.innsending.mapper;
 
+import static no.nav.foreldrepenger.selvbetjening.innsending.mapper.CommonMapper.tilRelasjonTilBarn;
 import static no.nav.foreldrepenger.selvbetjening.innsending.mapper.CommonMapper.tilVedlegg;
 import static no.nav.foreldrepenger.selvbetjening.innsending.mapper.ForeldrepengerMapper.tilLukketPeriodeMedVedlegg;
 import static no.nav.foreldrepenger.selvbetjening.innsending.mapper.ForeldrepengerMapper.tilSøker;
@@ -21,7 +22,7 @@ final class EndringForeldrepengerMapper {
             LocalDate.now(),
             tilSøker(endringssøknadFP.søker()),
             tilYtelse(endringssøknadFP),
-            null,
+            endringssøknadFP.tilleggsopplysninger(),
             tilVedlegg(endringssøknadFP.vedlegg()),
             endringssøknadFP.saksnummer());
     }
@@ -29,7 +30,7 @@ final class EndringForeldrepengerMapper {
     private static Foreldrepenger tilYtelse(EndringssøknadForeldrepengerDto f) {
         return new Foreldrepenger(
             null,
-            null,
+            tilRelasjonTilBarn(f.barn(), f.situasjon()),
             null,
             null,
             null,

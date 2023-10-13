@@ -59,8 +59,8 @@ final class ForeldrepengerMapper {
 
     private static Foreldrepenger tilYtelse(ForeldrepengesøknadDto f) {
         return new Foreldrepenger(
-            tilAnnenForelder(f),
-            tilRelasjonTilBarn(f),
+            tilAnnenForelder(f.annenForelder()),
+            tilRelasjonTilBarn(f.barn(), f.situasjon()),
             tilRettigheter(f),
             Dekningsgrad.fraKode(f.dekningsgrad().verdi()),
             tilOpptjening(f),
@@ -183,8 +183,7 @@ final class ForeldrepengerMapper {
         );
     }
 
-    static AnnenForelder tilAnnenForelder(ForeldrepengesøknadDto søknad) {
-        var annenForelder = søknad.annenForelder();
+    static AnnenForelder tilAnnenForelder(AnnenforelderDto annenForelder) {
         if (annenForelder == null) {
             return new UkjentForelder();
         }

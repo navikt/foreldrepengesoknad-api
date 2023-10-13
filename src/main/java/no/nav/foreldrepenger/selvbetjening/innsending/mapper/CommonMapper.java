@@ -44,6 +44,7 @@ import no.nav.foreldrepenger.selvbetjening.innsending.dto.SøknadDto;
 import no.nav.foreldrepenger.selvbetjening.innsending.dto.TilknyttetPersonDto;
 import no.nav.foreldrepenger.selvbetjening.innsending.dto.UtenlandsoppholdPeriodeDto;
 import no.nav.foreldrepenger.selvbetjening.innsending.dto.VedleggDto;
+import no.nav.foreldrepenger.selvbetjening.innsending.dto.foreldrepenger.Situasjon;
 
 public final class CommonMapper {
 
@@ -97,9 +98,8 @@ public final class CommonMapper {
         );
     }
 
-    static RelasjonTilBarn tilRelasjonTilBarn(SøknadDto søknad) {
-        var barn = søknad.barn();
-        return switch (søknad.situasjon()) {
+    static RelasjonTilBarn tilRelasjonTilBarn(BarnDto barn, Situasjon situasjon) {
+        return switch (situasjon) {
             case FØDSEL -> !isEmpty(barn.fødselsdatoer()) ? tilFødsel(barn) : tilFremtidigFødsel(barn);
             case ADOPSJON -> tilAdopsjon(barn);
             case OMSORGSOVERTAKELSE -> tilOmsorgsovertagelse(barn);

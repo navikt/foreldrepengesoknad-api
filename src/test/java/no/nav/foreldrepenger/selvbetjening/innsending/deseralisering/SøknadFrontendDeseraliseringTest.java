@@ -201,7 +201,7 @@ class SøknadFrontendDeseraliseringTest {
         }
         sendSenere.addAll(opplastet);
 
-        var søknad = new ForeldrepengesøknadDto(null, null, null,
+        var søknad = new ForeldrepengesøknadDto(null, null,
             null, null, null, "", null,
             null, null, sendSenere);
 

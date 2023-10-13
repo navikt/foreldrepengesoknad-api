@@ -11,24 +11,22 @@ import javax.annotation.Nullable;
 import jakarta.validation.Valid;
 import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Pattern;
-import no.nav.foreldrepenger.common.domain.Saksnummer;
-import no.nav.foreldrepenger.selvbetjening.innsending.dto.validering.VedlegglistestørrelseConstraint;
 import no.nav.foreldrepenger.selvbetjening.innsending.dto.BarnDto;
 import no.nav.foreldrepenger.selvbetjening.innsending.dto.SøkerDto;
 import no.nav.foreldrepenger.selvbetjening.innsending.dto.SøknadDto;
 import no.nav.foreldrepenger.selvbetjening.innsending.dto.UtenlandsoppholdDto;
 import no.nav.foreldrepenger.selvbetjening.innsending.dto.VedleggDto;
+import no.nav.foreldrepenger.selvbetjening.innsending.dto.validering.VedlegglistestørrelseConstraint;
 
-public record ForeldrepengesøknadDto(Situasjon situasjon,
-                                     @Valid Saksnummer saksnummer,
+public record ForeldrepengesøknadDto(@NotNull Situasjon situasjon,
+                                     @Valid @NotNull SøkerDto søker,
+                                     @Valid @NotNull BarnDto barn,
                                      @Valid @NotNull AnnenforelderDto annenForelder,
                                      @Valid @NotNull Dekningsgrad dekningsgrad,
+                                     @Pattern(regexp = FRITEKST) String tilleggsopplysninger,
+                                     @Valid @NotNull UtenlandsoppholdDto informasjonOmUtenlandsopphold,
                                      @Valid List<@Valid @NotNull UttaksplanPeriodeDto> uttaksplan,
                                      @Nullable Boolean ønskerJustertUttakVedFødsel,
-                                     @Pattern(regexp = FRITEKST) String tilleggsopplysninger,
-                                     @Valid @NotNull BarnDto barn,
-                                     @Valid @NotNull UtenlandsoppholdDto informasjonOmUtenlandsopphold,
-                                     @Valid @NotNull SøkerDto søker,
                                      @Valid @VedlegglistestørrelseConstraint List<@Valid VedleggDto> vedlegg) implements SøknadDto {
     public ForeldrepengesøknadDto {
         uttaksplan = Optional.ofNullable(uttaksplan).orElse(List.of());
