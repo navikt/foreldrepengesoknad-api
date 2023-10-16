@@ -45,7 +45,7 @@
         <reflections.version>0.10.2</reflections.version>
 		<pdfbox.version>3.0.0</pdfbox.version>
 		<jacoco.version>0.8.10</jacoco.version>
-		<gcp.version>0.205.0</gcp.version>
+		<gcp.version>0.206.0</gcp.version>
 		<simpleclient.version>0.16.0</simpleclient.version>
         <graphql-java-codegen.version>5.8.0</graphql-java-codegen.version>
 	</properties>
