@@ -85,7 +85,7 @@ public class VedleggsHåndteringTjeneste {
                 .filter(v -> !Objects.equals(gjeldendeVedlegg.getId(), v.getId()))
                 .filter(v -> Objects.equals(gjeldendeVedlegg.getInnsendingsType(), v.getInnsendingsType()))
                 .filter(v -> Objects.equals(gjeldendeVedlegg.getSkjemanummer(), v.getSkjemanummer()))
-                .filter(v -> Objects.equals(gjeldendeVedlegg.getFilesize(), v.getFilesize()))
+                .filter(v -> sizeEquals(gjeldendeVedlegg, v))
                 .filter(v -> Arrays.equals(gjeldendeVedlegg.getContent(), v.getContent()))
                 .findFirst();
             if (eksisterende.isPresent()) {
@@ -100,6 +100,12 @@ public class VedleggsHåndteringTjeneste {
             }
         }
         return duplikatTilEksisterende;
+    }
+
+    private static boolean sizeEquals(VedleggDto vedlegg, VedleggDto kandidat) {
+        var vedleggLength = vedlegg.getContent() != null ? vedlegg.getContent().length : 0;
+        var kandidatLength = kandidat.getContent() != null ? vedlegg.getContent().length : 0;
+        return Objects.equals(vedleggLength, kandidatLength);
     }
 
     private static void erstattAlleReferanserSomErDuplikater(EndringssøknadDto endringssøknadDto, HashMap<MutableVedleggReferanseDto, MutableVedleggReferanseDto> nyReferanseMapping) {

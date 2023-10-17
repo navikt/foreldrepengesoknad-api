@@ -9,7 +9,6 @@ import java.util.Objects;
 import com.fasterxml.jackson.annotation.JsonCreator;
 
 import jakarta.validation.Valid;
-import jakarta.validation.constraints.Digits;
 import jakarta.validation.constraints.Pattern;
 
 public class VedleggDto {
@@ -27,16 +26,13 @@ public class VedleggDto {
     @Pattern(regexp = FRITEKST)
     private final String uuid;
     private final URI url;
-    @Digits(integer = 8, fraction = 0)
-    private final Integer filesize;
 
     public VedleggDto(byte[] content, String beskrivelse, MutableVedleggReferanseDto id, String skjemanummer) {
-        this(content, beskrivelse, id, null, skjemanummer, null, null, null);
+        this(content, beskrivelse, id, null, skjemanummer, null, null);
     }
 
     @JsonCreator
-    public VedleggDto(byte[] content, String beskrivelse, MutableVedleggReferanseDto id, String innsendingsType, String skjemanummer, String uuid, URI url,
-                      Integer filesize) {
+    public VedleggDto(byte[] content, String beskrivelse, MutableVedleggReferanseDto id, String innsendingsType, String skjemanummer, String uuid, URI url) {
         this.content = content;
         this.beskrivelse = beskrivelse;
         this.id = id;
@@ -44,7 +40,6 @@ public class VedleggDto {
         this.skjemanummer = skjemanummer;
         this.uuid = uuid;
         this.url = url;
-        this.filesize = filesize;
     }
 
     public VedleggDto kopi() {
@@ -54,8 +49,7 @@ public class VedleggDto {
             this.getInnsendingsType(),
             this.getSkjemanummer(),
             this.getUuid(),
-            this.getUrl(),
-            this.getFilesize());
+            this.getUrl());
     }
 
     public byte[] getContent() {
@@ -90,10 +84,6 @@ public class VedleggDto {
         return url;
     }
 
-    public Integer getFilesize() {
-        return filesize;
-    }
-
     @Override
     public boolean equals(Object o) {
         if (this == o)
@@ -101,15 +91,14 @@ public class VedleggDto {
         if (o == null || getClass() != o.getClass())
             return false;
         VedleggDto that = (VedleggDto) o;
-        return Arrays.equals(content, that.content) &&
-            Objects.equals(innsendingsType, that.innsendingsType) &&
-            Objects.equals(skjemanummer, that.skjemanummer) &&
-            Objects.equals(filesize, that.filesize);
+        return Objects.equals(innsendingsType, that.innsendingsType)
+            && Objects.equals(skjemanummer, that.skjemanummer)
+            && Arrays.equals(content, that.content);
     }
 
     @Override
     public int hashCode() {
-        int result = Objects.hash(innsendingsType, skjemanummer, filesize);
+        int result = Objects.hash(innsendingsType, skjemanummer);
         result = 31 * result + Arrays.hashCode(content);
         return result;
     }
@@ -117,6 +106,6 @@ public class VedleggDto {
     @Override
     public String toString() {
         return "VedleggFrontend{" + "beskrivelse='" + beskrivelse + '\'' + ", id=" + id + ", innsendingsType='" + innsendingsType + '\''
-            + ", skjemanummer='" + skjemanummer + '\'' + ", uuid='" + uuid + '\'' + ", url=" + url + ", filesize=" + filesize + '}';
+            + ", skjemanummer='" + skjemanummer + '\'' + ", uuid='" + uuid + '\'' + ", url=" + url + '}';
     }
 }
