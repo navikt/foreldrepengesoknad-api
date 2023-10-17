@@ -11,7 +11,7 @@ import java.util.List;
 import org.springframework.http.MediaType;
 import org.springframework.stereotype.Service;
 
-import no.nav.foreldrepenger.selvbetjening.innsending.domain.VedleggDto;
+import no.nav.foreldrepenger.selvbetjening.innsending.dto.VedleggDto;
 import no.nav.foreldrepenger.selvbetjening.mellomlagring.Attachment;
 
 @Service

@@ -10,7 +10,7 @@ import java.time.LocalDate;
 import no.nav.foreldrepenger.common.domain.foreldrepenger.Endringssøknad;
 import no.nav.foreldrepenger.common.domain.foreldrepenger.Foreldrepenger;
 import no.nav.foreldrepenger.common.domain.foreldrepenger.fordeling.Fordeling;
-import no.nav.foreldrepenger.selvbetjening.innsending.domain.endringssøknad.EndringssøknadForeldrepengerDto;
+import no.nav.foreldrepenger.selvbetjening.innsending.dto.endringssøknad.EndringssøknadForeldrepengerDto;
 
 final class EndringForeldrepengerMapper {
 

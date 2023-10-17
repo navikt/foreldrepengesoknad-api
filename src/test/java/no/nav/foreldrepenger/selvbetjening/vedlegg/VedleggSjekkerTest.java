@@ -11,8 +11,8 @@ import java.net.URI;
 import java.util.List;
 import java.util.Optional;
 
-import no.nav.foreldrepenger.selvbetjening.innsending.domain.MutableVedleggReferanseDto;
-import no.nav.foreldrepenger.selvbetjening.innsending.domain.VedleggDto;
+import no.nav.foreldrepenger.selvbetjening.innsending.dto.MutableVedleggReferanseDto;
+import no.nav.foreldrepenger.selvbetjening.innsending.dto.VedleggDto;
 
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;

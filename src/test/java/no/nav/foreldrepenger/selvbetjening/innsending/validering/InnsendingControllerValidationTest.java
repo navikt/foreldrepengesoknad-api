@@ -23,11 +23,11 @@ import no.nav.foreldrepenger.selvbetjening.config.JacksonConfiguration;
 import no.nav.foreldrepenger.selvbetjening.error.ApiExceptionHandler;
 import no.nav.foreldrepenger.selvbetjening.innsending.InnsendingController;
 import no.nav.foreldrepenger.selvbetjening.innsending.InnsendingTjeneste;
-import no.nav.foreldrepenger.selvbetjening.innsending.domain.endringssøknad.EndringssøknadDto;
-import no.nav.foreldrepenger.selvbetjening.innsending.domain.SøknadDto;
-import no.nav.foreldrepenger.selvbetjening.innsending.domain.endringssøknad.EndringssøknadForeldrepengerDto;
-import no.nav.foreldrepenger.selvbetjening.innsending.domain.foreldrepenger.ForeldrepengesøknadDto;
-import no.nav.foreldrepenger.selvbetjening.innsending.domain.svangerskapspenger.SvangerskapspengesøknadDto;
+import no.nav.foreldrepenger.selvbetjening.innsending.dto.endringssøknad.EndringssøknadDto;
+import no.nav.foreldrepenger.selvbetjening.innsending.dto.SøknadDto;
+import no.nav.foreldrepenger.selvbetjening.innsending.dto.endringssøknad.EndringssøknadForeldrepengerDto;
+import no.nav.foreldrepenger.selvbetjening.innsending.dto.foreldrepenger.ForeldrepengesøknadDto;
+import no.nav.foreldrepenger.selvbetjening.innsending.dto.svangerskapspenger.SvangerskapspengesøknadDto;
 
 @Import({InnsendingController.class, ApiExceptionHandler.class})
 @WebMvcTest(controllers = InnsendingController.class)

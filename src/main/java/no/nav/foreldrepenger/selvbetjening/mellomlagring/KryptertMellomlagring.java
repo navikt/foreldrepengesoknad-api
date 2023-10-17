@@ -12,7 +12,7 @@ import org.springframework.stereotype.Service;
 
 import com.google.gson.Gson;
 
-import no.nav.foreldrepenger.selvbetjening.innsending.domain.VedleggDto;
+import no.nav.foreldrepenger.selvbetjening.innsending.dto.VedleggDto;
 import no.nav.foreldrepenger.selvbetjening.vedlegg.VedleggSjekker;
 
 @Service

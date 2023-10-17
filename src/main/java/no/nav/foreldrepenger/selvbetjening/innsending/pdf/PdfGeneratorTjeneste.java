@@ -24,11 +24,11 @@ public class PdfGeneratorTjeneste implements PdfGenerator {
     }
 
     @Override
-    public byte[] generate(no.nav.foreldrepenger.selvbetjening.innsending.domain.ettersendelse.TilbakebetalingUttalelseDto uttalelse) {
+    public byte[] generate(no.nav.foreldrepenger.selvbetjening.innsending.dto.ettersendelse.TilbakebetalingUttalelseDto uttalelse) {
         return connection.genererPdf(fra(uttalelse));
     }
 
-    private TilbakebetalingUttalelseDto fra(no.nav.foreldrepenger.selvbetjening.innsending.domain.ettersendelse.TilbakebetalingUttalelseDto uttalelse) {
+    private TilbakebetalingUttalelseDto fra(no.nav.foreldrepenger.selvbetjening.innsending.dto.ettersendelse.TilbakebetalingUttalelseDto uttalelse) {
         var person = oppslagTjeneste.hentSøkerinfo();
         return new TilbakebetalingUttalelseDto(fulltnavn(person.søker()),
             person.søker().fnr(),

@@ -11,12 +11,12 @@ import org.springframework.stereotype.Service;
 
 import no.nav.foreldrepenger.common.domain.Kvittering;
 import no.nav.foreldrepenger.selvbetjening.http.RetryAware;
-import no.nav.foreldrepenger.selvbetjening.innsending.domain.endringssøknad.EndringssøknadDto;
-import no.nav.foreldrepenger.selvbetjening.innsending.domain.MutableVedleggReferanseDto;
-import no.nav.foreldrepenger.selvbetjening.innsending.domain.SøknadDto;
-import no.nav.foreldrepenger.selvbetjening.innsending.domain.VedleggDto;
-import no.nav.foreldrepenger.selvbetjening.innsending.domain.ettersendelse.EttersendelseDto;
-import no.nav.foreldrepenger.selvbetjening.innsending.domain.ettersendelse.TilbakebetalingUttalelseDto;
+import no.nav.foreldrepenger.selvbetjening.innsending.dto.endringssøknad.EndringssøknadDto;
+import no.nav.foreldrepenger.selvbetjening.innsending.dto.MutableVedleggReferanseDto;
+import no.nav.foreldrepenger.selvbetjening.innsending.dto.SøknadDto;
+import no.nav.foreldrepenger.selvbetjening.innsending.dto.VedleggDto;
+import no.nav.foreldrepenger.selvbetjening.innsending.dto.ettersendelse.EttersendelseDto;
+import no.nav.foreldrepenger.selvbetjening.innsending.dto.ettersendelse.TilbakebetalingUttalelseDto;
 import no.nav.foreldrepenger.selvbetjening.innsending.pdf.PdfGenerator;
 import no.nav.foreldrepenger.selvbetjening.mellomlagring.KryptertMellomlagring;
 

@@ -26,9 +26,9 @@ import no.nav.foreldrepenger.common.domain.svangerskapspenger.tilrettelegging.ar
 import no.nav.foreldrepenger.common.domain.svangerskapspenger.tilrettelegging.arbeidsforhold.PrivatArbeidsgiver;
 import no.nav.foreldrepenger.common.domain.svangerskapspenger.tilrettelegging.arbeidsforhold.SelvstendigNæringsdrivende;
 import no.nav.foreldrepenger.common.domain.svangerskapspenger.tilrettelegging.arbeidsforhold.Virksomhet;
-import no.nav.foreldrepenger.selvbetjening.innsending.domain.svangerskapspenger.ArbeidsforholdDto;
-import no.nav.foreldrepenger.selvbetjening.innsending.domain.svangerskapspenger.SvangerskapspengesøknadDto;
-import no.nav.foreldrepenger.selvbetjening.innsending.domain.svangerskapspenger.TilretteleggingDto;
+import no.nav.foreldrepenger.selvbetjening.innsending.dto.svangerskapspenger.ArbeidsforholdDto;
+import no.nav.foreldrepenger.selvbetjening.innsending.dto.svangerskapspenger.SvangerskapspengesøknadDto;
+import no.nav.foreldrepenger.selvbetjening.innsending.dto.svangerskapspenger.TilretteleggingDto;
 
 // TODO: Gå gjennom verdier som er Nullable!
 final class SvangerskapspengerMapper {

@@ -32,10 +32,10 @@ import no.nav.foreldrepenger.common.domain.foreldrepenger.fordeling.Overførings
 import no.nav.foreldrepenger.common.domain.foreldrepenger.fordeling.UtsettelsesPeriode;
 import no.nav.foreldrepenger.common.domain.foreldrepenger.fordeling.UtsettelsesÅrsak;
 import no.nav.foreldrepenger.common.domain.foreldrepenger.fordeling.UttaksPeriode;
-import no.nav.foreldrepenger.selvbetjening.innsending.domain.SøkerDto;
-import no.nav.foreldrepenger.selvbetjening.innsending.domain.foreldrepenger.AnnenforelderDto;
-import no.nav.foreldrepenger.selvbetjening.innsending.domain.foreldrepenger.ForeldrepengesøknadDto;
-import no.nav.foreldrepenger.selvbetjening.innsending.domain.foreldrepenger.UttaksplanPeriodeDto;
+import no.nav.foreldrepenger.selvbetjening.innsending.dto.SøkerDto;
+import no.nav.foreldrepenger.selvbetjening.innsending.dto.foreldrepenger.AnnenforelderDto;
+import no.nav.foreldrepenger.selvbetjening.innsending.dto.foreldrepenger.ForeldrepengesøknadDto;
+import no.nav.foreldrepenger.selvbetjening.innsending.dto.foreldrepenger.UttaksplanPeriodeDto;
 
 final class ForeldrepengerMapper {
 

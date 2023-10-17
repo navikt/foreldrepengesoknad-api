@@ -11,8 +11,8 @@ import no.nav.foreldrepenger.common.domain.Søker;
 import no.nav.foreldrepenger.common.domain.Søknad;
 import no.nav.foreldrepenger.common.domain.Ytelse;
 import no.nav.foreldrepenger.common.domain.engangsstønad.Engangsstønad;
-import no.nav.foreldrepenger.selvbetjening.innsending.domain.SøkerDto;
-import no.nav.foreldrepenger.selvbetjening.innsending.domain.engangsstønad.EngangsstønadDto;
+import no.nav.foreldrepenger.selvbetjening.innsending.dto.SøkerDto;
+import no.nav.foreldrepenger.selvbetjening.innsending.dto.engangsstønad.EngangsstønadDto;
 
 final class EngangsstønadMapper {
 

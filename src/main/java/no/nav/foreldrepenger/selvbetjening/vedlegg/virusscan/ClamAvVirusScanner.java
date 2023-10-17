@@ -4,7 +4,7 @@ import static no.nav.foreldrepenger.common.util.StreamUtil.safeStream;
 
 import org.springframework.stereotype.Service;
 
-import no.nav.foreldrepenger.selvbetjening.innsending.domain.VedleggDto;
+import no.nav.foreldrepenger.selvbetjening.innsending.dto.VedleggDto;
 import no.nav.foreldrepenger.selvbetjening.mellomlagring.Attachment;
 import no.nav.foreldrepenger.selvbetjening.vedlegg.VedleggSjekker;
 

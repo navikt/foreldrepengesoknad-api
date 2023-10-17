@@ -34,17 +34,17 @@ import no.nav.foreldrepenger.common.domain.felles.relasjontilbarn.Fødsel;
 import no.nav.foreldrepenger.common.domain.felles.relasjontilbarn.Omsorgsovertakelse;
 import no.nav.foreldrepenger.common.domain.felles.relasjontilbarn.RelasjonTilBarn;
 import no.nav.foreldrepenger.common.domain.felles.ÅpenPeriode;
-import no.nav.foreldrepenger.selvbetjening.innsending.domain.AnnenInntektDto;
-import no.nav.foreldrepenger.selvbetjening.innsending.domain.BarnDto;
-import no.nav.foreldrepenger.selvbetjening.innsending.domain.FrilansInformasjonDto;
-import no.nav.foreldrepenger.selvbetjening.innsending.domain.FrilansoppdragDto;
-import no.nav.foreldrepenger.selvbetjening.innsending.domain.MutableVedleggReferanseDto;
-import no.nav.foreldrepenger.selvbetjening.innsending.domain.NæringDto;
-import no.nav.foreldrepenger.selvbetjening.innsending.domain.SøknadDto;
-import no.nav.foreldrepenger.selvbetjening.innsending.domain.TilknyttetPersonDto;
-import no.nav.foreldrepenger.selvbetjening.innsending.domain.UtenlandsoppholdPeriodeDto;
-import no.nav.foreldrepenger.selvbetjening.innsending.domain.VedleggDto;
-import no.nav.foreldrepenger.selvbetjening.innsending.domain.foreldrepenger.Situasjon;
+import no.nav.foreldrepenger.selvbetjening.innsending.dto.AnnenInntektDto;
+import no.nav.foreldrepenger.selvbetjening.innsending.dto.BarnDto;
+import no.nav.foreldrepenger.selvbetjening.innsending.dto.FrilansInformasjonDto;
+import no.nav.foreldrepenger.selvbetjening.innsending.dto.FrilansoppdragDto;
+import no.nav.foreldrepenger.selvbetjening.innsending.dto.MutableVedleggReferanseDto;
+import no.nav.foreldrepenger.selvbetjening.innsending.dto.NæringDto;
+import no.nav.foreldrepenger.selvbetjening.innsending.dto.SøknadDto;
+import no.nav.foreldrepenger.selvbetjening.innsending.dto.TilknyttetPersonDto;
+import no.nav.foreldrepenger.selvbetjening.innsending.dto.UtenlandsoppholdPeriodeDto;
+import no.nav.foreldrepenger.selvbetjening.innsending.dto.VedleggDto;
+import no.nav.foreldrepenger.selvbetjening.innsending.dto.foreldrepenger.Situasjon;
 
 public final class CommonMapper {
 

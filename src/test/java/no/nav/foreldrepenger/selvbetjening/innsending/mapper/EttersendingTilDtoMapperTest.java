@@ -21,8 +21,8 @@ import no.nav.foreldrepenger.common.domain.felles.EttersendingsType;
 import no.nav.foreldrepenger.selvbetjening.config.JacksonConfiguration;
 import no.nav.foreldrepenger.selvbetjening.innsending.InnsendingConnection;
 import no.nav.foreldrepenger.selvbetjening.innsending.VedleggsHåndteringTjeneste;
-import no.nav.foreldrepenger.selvbetjening.innsending.domain.ettersendelse.EttersendelseDto;
-import no.nav.foreldrepenger.selvbetjening.innsending.domain.ettersendelse.YtelseType;
+import no.nav.foreldrepenger.selvbetjening.innsending.dto.ettersendelse.EttersendelseDto;
+import no.nav.foreldrepenger.selvbetjening.innsending.dto.ettersendelse.YtelseType;
 import no.nav.foreldrepenger.selvbetjening.vedlegg.Image2PDFConverter;
 
 

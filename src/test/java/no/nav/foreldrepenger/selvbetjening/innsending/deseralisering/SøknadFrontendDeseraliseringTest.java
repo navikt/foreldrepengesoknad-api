@@ -1,8 +1,8 @@
 package no.nav.foreldrepenger.selvbetjening.innsending.deseralisering;
 
 import static no.nav.foreldrepenger.common.util.ResourceHandleUtil.bytesFra;
-import static no.nav.foreldrepenger.selvbetjening.innsending.domain.ettersendelse.YtelseType.FORELDREPENGER;
-import static no.nav.foreldrepenger.selvbetjening.innsending.domain.foreldrepenger.UttaksperiodeType.UTTAK;
+import static no.nav.foreldrepenger.selvbetjening.innsending.dto.ettersendelse.YtelseType.FORELDREPENGER;
+import static no.nav.foreldrepenger.selvbetjening.innsending.dto.foreldrepenger.UttaksperiodeType.UTTAK;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.junit.jupiter.api.Assertions.assertFalse;
 import static org.junit.jupiter.api.Assertions.assertTrue;
@@ -28,13 +28,13 @@ import no.nav.foreldrepenger.common.domain.felles.opptjening.Virksomhetstype;
 import no.nav.foreldrepenger.common.domain.foreldrepenger.fordeling.StønadskontoType;
 import no.nav.foreldrepenger.common.oppslag.dkif.Målform;
 import no.nav.foreldrepenger.selvbetjening.config.JacksonConfiguration;
-import no.nav.foreldrepenger.selvbetjening.innsending.domain.MutableVedleggReferanseDto;
-import no.nav.foreldrepenger.selvbetjening.innsending.domain.SøknadDto;
-import no.nav.foreldrepenger.selvbetjening.innsending.domain.VedleggDto;
-import no.nav.foreldrepenger.selvbetjening.innsending.domain.ettersendelse.EttersendelseDto;
-import no.nav.foreldrepenger.selvbetjening.innsending.domain.foreldrepenger.Dekningsgrad;
-import no.nav.foreldrepenger.selvbetjening.innsending.domain.foreldrepenger.ForeldrepengesøknadDto;
-import no.nav.foreldrepenger.selvbetjening.innsending.domain.foreldrepenger.Situasjon;
+import no.nav.foreldrepenger.selvbetjening.innsending.dto.MutableVedleggReferanseDto;
+import no.nav.foreldrepenger.selvbetjening.innsending.dto.SøknadDto;
+import no.nav.foreldrepenger.selvbetjening.innsending.dto.VedleggDto;
+import no.nav.foreldrepenger.selvbetjening.innsending.dto.ettersendelse.EttersendelseDto;
+import no.nav.foreldrepenger.selvbetjening.innsending.dto.foreldrepenger.Dekningsgrad;
+import no.nav.foreldrepenger.selvbetjening.innsending.dto.foreldrepenger.ForeldrepengesøknadDto;
+import no.nav.foreldrepenger.selvbetjening.innsending.dto.foreldrepenger.Situasjon;
 
 @ExtendWith(SpringExtension.class)
 @ContextConfiguration(classes = JacksonConfiguration.class)
