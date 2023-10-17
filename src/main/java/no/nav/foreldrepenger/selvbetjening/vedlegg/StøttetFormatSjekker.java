@@ -1,17 +1,18 @@
 package no.nav.foreldrepenger.selvbetjening.vedlegg;
 
-import no.nav.foreldrepenger.selvbetjening.innsending.domain.VedleggFrontend;
-import no.nav.foreldrepenger.selvbetjening.mellomlagring.Attachment;
-import org.springframework.http.MediaType;
-import org.springframework.stereotype.Service;
-
-import java.util.List;
-
 import static no.nav.foreldrepenger.common.util.StreamUtil.safeStream;
 import static no.nav.foreldrepenger.selvbetjening.vedlegg.VedleggUtil.mediaType;
 import static org.springframework.http.MediaType.APPLICATION_PDF;
 import static org.springframework.http.MediaType.IMAGE_JPEG;
 import static org.springframework.http.MediaType.IMAGE_PNG;
+
+import java.util.List;
+
+import org.springframework.http.MediaType;
+import org.springframework.stereotype.Service;
+
+import no.nav.foreldrepenger.selvbetjening.innsending.dto.VedleggDto;
+import no.nav.foreldrepenger.selvbetjening.mellomlagring.Attachment;
 
 @Service
 public class StøttetFormatSjekker implements VedleggSjekker {
@@ -19,7 +20,7 @@ public class StøttetFormatSjekker implements VedleggSjekker {
     private static final List<MediaType> supportedTypes = List.of(IMAGE_JPEG, IMAGE_PNG, APPLICATION_PDF);
 
     @Override
-    public void sjekk(VedleggFrontend... vedlegg) {
+    public void sjekk(VedleggDto... vedlegg) {
         safeStream(vedlegg).forEach(v -> check(v.getContent()));
     }
 

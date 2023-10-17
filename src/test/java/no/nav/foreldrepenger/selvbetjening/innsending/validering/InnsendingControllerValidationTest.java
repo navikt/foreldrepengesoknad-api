@@ -1,15 +1,11 @@
 package no.nav.foreldrepenger.selvbetjening.innsending.validering;
 
 
-import com.fasterxml.jackson.databind.ObjectMapper;
-import no.nav.foreldrepenger.common.util.TokenUtil;
-import no.nav.foreldrepenger.selvbetjening.config.JacksonConfiguration;
-import no.nav.foreldrepenger.selvbetjening.error.ApiExceptionHandler;
-import no.nav.foreldrepenger.selvbetjening.innsending.InnsendingController;
-import no.nav.foreldrepenger.selvbetjening.innsending.InnsendingTjeneste;
-import no.nav.foreldrepenger.selvbetjening.innsending.domain.ForeldrepengesøknadFrontend;
-import no.nav.foreldrepenger.selvbetjening.innsending.domain.SvangerskapspengesøknadFrontend;
-import no.nav.foreldrepenger.selvbetjening.innsending.domain.SøknadFrontend;
+import static no.nav.foreldrepenger.common.util.ResourceHandleUtil.bytesFra;
+import static org.assertj.core.api.Assertions.assertThat;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
+import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
+
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
@@ -20,10 +16,18 @@ import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.web.bind.MethodArgumentNotValidException;
 
-import static no.nav.foreldrepenger.common.util.ResourceHandleUtil.bytesFra;
-import static org.assertj.core.api.Assertions.assertThat;
-import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
-import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
+import com.fasterxml.jackson.databind.ObjectMapper;
+
+import no.nav.foreldrepenger.common.util.TokenUtil;
+import no.nav.foreldrepenger.selvbetjening.config.JacksonConfiguration;
+import no.nav.foreldrepenger.selvbetjening.error.ApiExceptionHandler;
+import no.nav.foreldrepenger.selvbetjening.innsending.InnsendingController;
+import no.nav.foreldrepenger.selvbetjening.innsending.InnsendingTjeneste;
+import no.nav.foreldrepenger.selvbetjening.innsending.dto.endringssøknad.EndringssøknadDto;
+import no.nav.foreldrepenger.selvbetjening.innsending.dto.SøknadDto;
+import no.nav.foreldrepenger.selvbetjening.innsending.dto.endringssøknad.EndringssøknadForeldrepengerDto;
+import no.nav.foreldrepenger.selvbetjening.innsending.dto.foreldrepenger.ForeldrepengesøknadDto;
+import no.nav.foreldrepenger.selvbetjening.innsending.dto.svangerskapspenger.SvangerskapspengesøknadDto;
 
 @Import({InnsendingController.class, ApiExceptionHandler.class})
 @WebMvcTest(controllers = InnsendingController.class)
@@ -44,14 +48,14 @@ class InnsendingControllerValidationTest {
 
     @Test
     void foreldrepengesoknadFrilansOgVedleggValidering() throws Exception {
-        var sf = mapper.readValue(bytesFra("json/foreldrepenger_far_gardering_frilans.json"), SøknadFrontend.class);
-        var fpSøknad = (ForeldrepengesøknadFrontend) sf;
+        var sf = mapper.readValue(bytesFra("json/foreldrepenger_far_gardering_frilans.json"), SøknadDto.class);
+        var fpSøknad = (ForeldrepengesøknadDto) sf;
         var result = mvc.perform(post(InnsendingController.INNSENDING_CONTROLLER_PATH)
                 .contentType(MediaType.APPLICATION_JSON)
                 .content(mapper.writeValueAsString(sf)
-                    .replace(fpSøknad.getAnnenForelder().fornavn(), "Ulovlig tegn [≈≈|£©≈[™")
-                    .replace(fpSøknad.getSøker().frilansInformasjon().oppdragForNæreVennerEllerFamilieSiste10Mnd().get(0).navnPåArbeidsgiver(), "Matematiske tegn er ikke lov ∪")
-                    .replaceFirst(fpSøknad.getVedlegg().get(0).getSkjemanummer(), "<scri>sp 202≈≈|0")
+                    .replace(fpSøknad.annenForelder().fornavn(), "Ulovlig tegn [≈≈|£©≈[™")
+                    .replace(fpSøknad.søker().frilansInformasjon().oppdragForNæreVennerEllerFamilieSiste10Mnd().get(0).navnPåArbeidsgiver(), "Matematiske tegn er ikke lov ∪")
+                    .replaceFirst(fpSøknad.vedlegg().get(0).getSkjemanummer(), "<scri>sp 202≈≈|0")
                 ))
             .andExpect(status().isBadRequest())
             .andReturn();
@@ -65,9 +69,9 @@ class InnsendingControllerValidationTest {
 
     @Test
     void foreldrepengesoknadAnnenInntektValidering() throws Exception {
-        var sf = mapper.readValue(bytesFra("json/foreldrepenger_adopsjon_annenInntekt.json"), SøknadFrontend.class);
-        var fpSøknad = (ForeldrepengesøknadFrontend) sf;
-        var annenInntektFrontend = fpSøknad.getSøker().andreInntekterSiste10Mnd().get(0);
+        var sf = mapper.readValue(bytesFra("json/foreldrepenger_adopsjon_annenInntekt.json"), SøknadDto.class);
+        var fpSøknad = (ForeldrepengesøknadDto) sf;
+        var annenInntektFrontend = fpSøknad.søker().andreInntekterSiste10Mnd().get(0);
         var result = mvc.perform(post(InnsendingController.INNSENDING_CONTROLLER_PATH)
                 .contentType(MediaType.APPLICATION_JSON)
                 .content(mapper.writeValueAsString(sf)
@@ -86,9 +90,9 @@ class InnsendingControllerValidationTest {
 
     @Test
     void foreldrepengesoknadEgennæringValidering() throws Exception {
-        var sf = mapper.readValue(bytesFra("json/foreldrepenger_mor_gradering_egenNæring_og_frilans.json"), SøknadFrontend.class);
-        var fpSøknad = (ForeldrepengesøknadFrontend) sf;
-        var egennæring = fpSøknad.getSøker().selvstendigNæringsdrivendeInformasjon().get(0);
+        var sf = mapper.readValue(bytesFra("json/foreldrepenger_mor_gradering_egenNæring_og_frilans.json"), SøknadDto.class);
+        var fpSøknad = (ForeldrepengesøknadDto) sf;
+        var egennæring = fpSøknad.søker().selvstendigNæringsdrivendeInformasjon().get(0);
         var result = mvc.perform(post(InnsendingController.INNSENDING_CONTROLLER_PATH)
                 .contentType(MediaType.APPLICATION_JSON)
                 .content(mapper.writeValueAsString(sf)
@@ -107,13 +111,12 @@ class InnsendingControllerValidationTest {
 
     @Test
     void svangerskapspengerValidering() throws Exception {
-        var sf = mapper.readValue(bytesFra("json/svangerskapspengesøknad.json"), SøknadFrontend.class);
-        var svpSøknad = (SvangerskapspengesøknadFrontend) sf;
-        var tilrettelegging = svpSøknad.getTilrettelegging().get(0);
+        var sf = mapper.readValue(bytesFra("json/svangerskapspengesøknad.json"), SøknadDto.class);
+        var svpSøknad = (SvangerskapspengesøknadDto) sf;
+        var tilrettelegging = svpSøknad.tilrettelegging().get(0);
         var result = mvc.perform(post(InnsendingController.INNSENDING_CONTROLLER_PATH)
                 .contentType(MediaType.APPLICATION_JSON)
                 .content(mapper.writeValueAsString(sf)
-                    .replace(tilrettelegging.type(), "Ulovlig tegn [≈≈|£©≈[™")
                     .replaceFirst(tilrettelegging.vedlegg().get(0).referanse(), "Also ILLEGA @¨¨¨¨ö~~π<>")
                     .replace(tilrettelegging.arbeidsforhold().id(), "Ikke lovlig \u0085")
                 ))
@@ -123,19 +126,18 @@ class InnsendingControllerValidationTest {
         assertThat(result.getResolvedException()).isInstanceOf(MethodArgumentNotValidException.class);
         var error = (MethodArgumentNotValidException) result.getResolvedException();
         assertThat(error).isNotNull();
-        assertThat(error.getBindingResult().getFieldErrors()).hasSize(3);
+        assertThat(error.getBindingResult().getFieldErrors()).hasSize(2);
     }
 
 
     @Test
     void endringssøknadSaksnummerValidering() throws Exception {
-        var sf = mapper.readValue(bytesFra("json/endringssøknad_termin_mor.json"), SøknadFrontend.class);
-        var fpSøknad = (ForeldrepengesøknadFrontend) sf;
-        var result = mvc.perform(post(InnsendingController.INNSENDING_CONTROLLER_PATH)
+        var sf = mapper.readValue(bytesFra("json/endringssøknad_termin_mor.json"), EndringssøknadDto.class);
+        var fpSøknad = (EndringssøknadForeldrepengerDto) sf;
+        var result = mvc.perform(post(InnsendingController.INNSENDING_CONTROLLER_PATH + "/endre")
                 .contentType(MediaType.APPLICATION_JSON)
                 .content(mapper.writeValueAsString(sf)
-                    .replace(fpSøknad.getSaksnummer().value(), "Ulovlig tegn [≈≈|£©≈[™")
-                    .replace(fpSøknad.getSituasjon(), "Lattidattidudadaääö˙[`")
+                    .replace(fpSøknad.saksnummer().value(), "Ulovlig tegn [≈≈|£©≈[™dudadaääö˙[`")
                 ))
             .andExpect(status().isBadRequest())
             .andReturn();
@@ -143,7 +145,7 @@ class InnsendingControllerValidationTest {
         assertThat(result.getResolvedException()).isInstanceOf(MethodArgumentNotValidException.class);
         var error = (MethodArgumentNotValidException) result.getResolvedException();
         assertThat(error).isNotNull();
-        assertThat(error.getBindingResult().getFieldErrors()).hasSize(2);
+        assertThat(error.getBindingResult().getFieldErrors()).hasSize(1);
     }
 
 }

@@ -1,45 +1,42 @@
 package no.nav.foreldrepenger.selvbetjening.innsending.mapper;
 
+import static no.nav.foreldrepenger.selvbetjening.innsending.mapper.CommonMapper.tilMedlemskap;
+import static no.nav.foreldrepenger.selvbetjening.innsending.mapper.CommonMapper.tilRelasjonTilBarn;
+import static no.nav.foreldrepenger.selvbetjening.innsending.mapper.CommonMapper.tilVedlegg;
+
+import java.time.LocalDate;
+
 import no.nav.foreldrepenger.common.domain.BrukerRolle;
 import no.nav.foreldrepenger.common.domain.Søker;
 import no.nav.foreldrepenger.common.domain.Søknad;
 import no.nav.foreldrepenger.common.domain.Ytelse;
 import no.nav.foreldrepenger.common.domain.engangsstønad.Engangsstønad;
-import no.nav.foreldrepenger.selvbetjening.innsending.domain.EngangsstønadFrontend;
-
-import java.time.LocalDate;
-
-import static no.nav.foreldrepenger.selvbetjening.innsending.mapper.CommonMapper.tilMedlemskap;
-import static no.nav.foreldrepenger.selvbetjening.innsending.mapper.CommonMapper.tilRelasjonTilBarn;
-import static no.nav.foreldrepenger.selvbetjening.innsending.mapper.CommonMapper.tilVedlegg;
+import no.nav.foreldrepenger.selvbetjening.innsending.dto.SøkerDto;
+import no.nav.foreldrepenger.selvbetjening.innsending.dto.engangsstønad.EngangsstønadDto;
 
 final class EngangsstønadMapper {
 
     private EngangsstønadMapper() {
     }
 
-    static no.nav.foreldrepenger.common.domain.Søknad tilEngangsstønad(EngangsstønadFrontend e) {
+    static no.nav.foreldrepenger.common.domain.Søknad tilEngangsstønad(EngangsstønadDto e, LocalDate mottattDato) {
         return new Søknad(
-            LocalDate.now(),
-            tilSøker(e),
+            mottattDato,
+            tilSøker(e.søker()),
             tilYtelse(e),
-            e.getTilleggsopplysninger(),
-            tilVedlegg(e.getVedlegg())
+            null,
+            tilVedlegg(e.vedlegg())
         );
     }
 
-    private static Søker tilSøker(EngangsstønadFrontend e) {
-        var søker = e.getSøker();
-        if (søker == null) {
-            throw new IllegalStateException("Kan ikke ha tom søkerobjekt");
-        }
-        return new Søker(BrukerRolle.MOR, søker.språkkode());
+    private static Søker tilSøker(SøkerDto søker) {
+        return new Søker(BrukerRolle.MOR, søker.språkkode()); // TODO: Frontend sender ikke ned søker her. Kan også være Far/Medmor!
     }
 
-    private static Ytelse tilYtelse(EngangsstønadFrontend e) {
+    private static Ytelse tilYtelse(EngangsstønadDto e) {
         return new Engangsstønad(
             tilMedlemskap(e),
-            tilRelasjonTilBarn(e)
+            tilRelasjonTilBarn(e.barn(), e.situasjon())
         );
     }
 }

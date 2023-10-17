@@ -7,18 +7,24 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 import java.util.Objects;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Component;
 
-import no.nav.foreldrepenger.selvbetjening.innsending.domain.EttersendingFrontend;
-import no.nav.foreldrepenger.selvbetjening.innsending.domain.ForeldrepengesøknadFrontend;
-import no.nav.foreldrepenger.selvbetjening.innsending.domain.MutableVedleggReferanse;
-import no.nav.foreldrepenger.selvbetjening.innsending.domain.SvangerskapspengesøknadFrontend;
-import no.nav.foreldrepenger.selvbetjening.innsending.domain.SøknadFrontend;
-import no.nav.foreldrepenger.selvbetjening.innsending.domain.VedleggFrontend;
+import no.nav.foreldrepenger.selvbetjening.innsending.dto.BarnDto;
+import no.nav.foreldrepenger.selvbetjening.innsending.dto.MutableVedleggReferanseDto;
+import no.nav.foreldrepenger.selvbetjening.innsending.dto.SøkerDto;
+import no.nav.foreldrepenger.selvbetjening.innsending.dto.SøknadDto;
+import no.nav.foreldrepenger.selvbetjening.innsending.dto.VedleggDto;
+import no.nav.foreldrepenger.selvbetjening.innsending.dto.endringssøknad.EndringssøknadDto;
+import no.nav.foreldrepenger.selvbetjening.innsending.dto.endringssøknad.EndringssøknadForeldrepengerDto;
+import no.nav.foreldrepenger.selvbetjening.innsending.dto.ettersendelse.EttersendelseDto;
+import no.nav.foreldrepenger.selvbetjening.innsending.dto.foreldrepenger.ForeldrepengesøknadDto;
+import no.nav.foreldrepenger.selvbetjening.innsending.dto.foreldrepenger.UttaksplanPeriodeDto;
+import no.nav.foreldrepenger.selvbetjening.innsending.dto.svangerskapspenger.SvangerskapspengesøknadDto;
 import no.nav.foreldrepenger.selvbetjening.vedlegg.Image2PDFConverter;
 
 @Component
@@ -30,77 +36,90 @@ public class VedleggsHåndteringTjeneste {
         this.converter = converter;
     }
 
-    public EttersendingFrontend fjernDupliserteVedlegg(EttersendingFrontend ettersending) {
-        var alleVedlegg = ettersending.vedlegg();
-        var unikeVedlegg = alleVedlegg.stream()
-                .distinct()
-                .toList();
-
-        ettersending.vedlegg(konverterTilPDF(unikeVedlegg));
-
-        LOG.info("Fjerner {} dupliserte av totalt {} mottatt.", alleVedlegg.size() - unikeVedlegg.size(), alleVedlegg.size());
-        return ettersending;
-    }
-
-    public SøknadFrontend fjernDupliserteVedlegg(SøknadFrontend søknad) {
-        var alleVedlegg = søknad.getVedlegg();
-        if (alleVedlegg.isEmpty()) {
-            return søknad;
+    public void fjernDupliserteVedleggFraEttersending(EttersendelseDto ettersending) {
+        var antallVedleggFørDuplikatsjek = ettersending.vedlegg().size();
+        if (antallVedleggFørDuplikatsjek == 0) {
+            return;
         }
 
-        var duplisertVedleggReferanseTilEksisterendeVedleggReferanseMapping = new HashMap<MutableVedleggReferanse, MutableVedleggReferanse>();
-        var unikeVedlegg = new ArrayList<VedleggFrontend>();
+        finnOgfjernDupliserteVedlegg(ettersending.vedlegg());
+        konverterTilPDF(ettersending.vedlegg());
+        LOG.info("Fjerner {} dupliserte ettersendte vedlegg av totalt {} mottatt",  antallVedleggFørDuplikatsjek - ettersending.vedlegg().size(), antallVedleggFørDuplikatsjek);
+    }
 
-        long start = System.currentTimeMillis();
-        for (var vedlegg : alleVedlegg) {
-            var vedleggEksistererAllerede = unikeVedlegg.stream()
-                    .filter(v -> Objects.equals(vedlegg.getInnsendingsType(), v.getInnsendingsType()))
-                    .filter(v -> Objects.equals(vedlegg.getSkjemanummer(), v.getSkjemanummer()))
-                    .filter(v -> Objects.equals(vedlegg.getFilesize(), v.getFilesize()))
-                    .filter(v -> Arrays.equals(vedlegg.getContent(), v.getContent()))
-                    .findFirst();
+    public void fjernDupliserteVedleggFraSøknad(SøknadDto søknad) {
+        var antallVedleggFørDuplikatsjek = søknad.vedlegg().size();
+        if (antallVedleggFørDuplikatsjek == 0) {
+            return;
+        }
 
-            if (vedleggEksistererAllerede.isPresent()) {
-                duplisertVedleggReferanseTilEksisterendeVedleggReferanseMapping.put(vedlegg.getId(), vedleggEksistererAllerede.get().getId());
-            } else {
-                unikeVedlegg.add(vedlegg);
+        var duplikatTilEksisterende = finnOgfjernDupliserteVedlegg(søknad.vedlegg());
+        erstattAlleReferanserSomErDuplikater(søknad, duplikatTilEksisterende);
+        konverterTilPDF(søknad.vedlegg());
+        LOG.info("Fjerner {} dupliserte vedlegg fra søknad av totalt {} mottatt", antallVedleggFørDuplikatsjek - søknad.vedlegg().size(), antallVedleggFørDuplikatsjek);
+    }
+
+    public void fjernDupliserteVedleggFraSøknad(EndringssøknadDto endringssøknad) {
+        var antallVedleggFørDuplikatsjek = endringssøknad.vedlegg().size();
+        if (antallVedleggFørDuplikatsjek == 0) {
+            return;
+        }
+
+        var duplikatTilEksisterende = finnOgfjernDupliserteVedlegg(endringssøknad.vedlegg());
+        erstattAlleReferanserSomErDuplikater(endringssøknad, duplikatTilEksisterende);
+        konverterTilPDF(endringssøknad.vedlegg());
+        LOG.info("Fjerner {} dupliserte vedlegg fra endringssøknad av totalt {} mottatt", antallVedleggFørDuplikatsjek - endringssøknad.vedlegg().size(), antallVedleggFørDuplikatsjek);
+    }
+
+    private HashMap<MutableVedleggReferanseDto, MutableVedleggReferanseDto> finnOgfjernDupliserteVedlegg(List<VedleggDto> vedlegg) {
+        var duplikatTilEksisterende = finnDupliserteVedlegg(vedlegg);
+        vedlegg.removeIf(vedleggDto -> duplikatTilEksisterende.containsKey(vedleggDto.getId()));
+        return duplikatTilEksisterende;
+    }
+
+    private static HashMap<MutableVedleggReferanseDto, MutableVedleggReferanseDto> finnDupliserteVedlegg(List<VedleggDto> vedlegg) {
+        var kopi = new ArrayList<>(vedlegg);
+        var duplikatTilEksisterende = new HashMap<MutableVedleggReferanseDto, MutableVedleggReferanseDto>();
+        for (var gjeldendeVedlegg : vedlegg) {
+            var eksisterende = kopi.stream()
+                .filter(v -> !Objects.equals(gjeldendeVedlegg.getId(), v.getId()))
+                .filter(v -> Objects.equals(gjeldendeVedlegg.getInnsendingsType(), v.getInnsendingsType()))
+                .filter(v -> Objects.equals(gjeldendeVedlegg.getSkjemanummer(), v.getSkjemanummer()))
+                .filter(v -> Objects.equals(gjeldendeVedlegg.getFilesize(), v.getFilesize()))
+                .filter(v -> Arrays.equals(gjeldendeVedlegg.getContent(), v.getContent()))
+                .findFirst();
+            if (eksisterende.isPresent()) {
+                duplikatTilEksisterende.putIfAbsent(gjeldendeVedlegg.getId(), eksisterende.get().getId());
+                duplikatTilEksisterende.replaceAll((key, value) -> {
+                    if (value.equals(gjeldendeVedlegg.getId())) {
+                        return eksisterende.get().getId();
+                    } else {
+                        return value;
+                    }});
+                kopi.remove(gjeldendeVedlegg);
             }
         }
-
-        erstattAlleReferanserSomErDuplikater(søknad, duplisertVedleggReferanseTilEksisterendeVedleggReferanseMapping);
-        long slutt = System.currentTimeMillis();
-        LOG.info("Fjerner {} dupliserte vedlegg av totalt {} mottatt ({}ms).", alleVedlegg.size() - unikeVedlegg.size(), alleVedlegg.size(), slutt - start);
-        søknad.setVedlegg(konverterTilPDF(unikeVedlegg));
-        return søknad;
+        return duplikatTilEksisterende;
     }
 
-    private static void erstattAlleReferanserSomErDuplikater(SøknadFrontend søknad, HashMap<MutableVedleggReferanse, MutableVedleggReferanse> nyReferanseMapping) {
+    private static void erstattAlleReferanserSomErDuplikater(EndringssøknadDto endringssøknadDto, HashMap<MutableVedleggReferanseDto, MutableVedleggReferanseDto> nyReferanseMapping) {
         for (var gammelReferanse : nyReferanseMapping.entrySet()) {
-            var søker = søknad.getSøker();
-            søker.selvstendigNæringsdrivendeInformasjon().stream()
-                    .flatMap(sn -> sn.vedlegg().stream())
-                    .filter(v -> v.equals(gammelReferanse.getKey()))
-                    .forEach(v -> v.referanse(gammelReferanse.getValue().referanse()));
+            if (endringssøknadDto instanceof EndringssøknadForeldrepengerDto fpEndring) {
+                erstattReferanserSøker(gammelReferanse, fpEndring.søker());
+                erstattReferanserUttaksplan(gammelReferanse, fpEndring.uttaksplan());
+            }
+        }
+    }
 
-            søker.andreInntekterSiste10Mnd().stream()
-                    .flatMap(a -> a.vedlegg().stream())
-                    .filter(v -> v.equals(gammelReferanse.getKey()))
-                    .forEach(v -> v.referanse(gammelReferanse.getValue().referanse()));
+    private static void erstattAlleReferanserSomErDuplikater(SøknadDto søknad, HashMap<MutableVedleggReferanseDto, MutableVedleggReferanseDto> nyReferanseMapping) {
+        for (var gammelReferanse : nyReferanseMapping.entrySet()) {
+            erstattReferanserSøker(gammelReferanse, søknad.søker());
+            erstattReferanserBarn(gammelReferanse, søknad.barn());
 
-            var barn = søknad.getBarn();
-            concat(barn.terminbekreftelse().stream(),
-                    concat(barn.adopsjonsvedtak().stream(),
-                    concat(barn.omsorgsovertakelse().stream(), barn.dokumentasjonAvAleneomsorg().stream())))
-                    .filter(v -> v.equals(gammelReferanse.getKey()))
-                    .forEach(v -> v.referanse(gammelReferanse.getValue().referanse()));
-
-            if (søknad instanceof ForeldrepengesøknadFrontend fpSøknad) {
-                fpSøknad.getUttaksplan().stream()
-                        .flatMap(uttaksplanPeriode -> uttaksplanPeriode.vedlegg().stream())
-                        .filter(v -> v.equals(gammelReferanse.getKey()))
-                        .forEach(v -> v.referanse(gammelReferanse.getValue().referanse()));
-            } else if (søknad instanceof SvangerskapspengesøknadFrontend svpSøknad) {
-                svpSøknad.getTilrettelegging().stream()
+            if (søknad instanceof ForeldrepengesøknadDto fpSøknad) {
+                erstattReferanserUttaksplan(gammelReferanse, fpSøknad.uttaksplan());
+            } else if (søknad instanceof SvangerskapspengesøknadDto svpSøknad) {
+                svpSøknad.tilrettelegging().stream()
                         .flatMap(t -> t.vedlegg().stream())
                         .filter(v -> v.equals(gammelReferanse.getKey()))
                         .forEach(v -> v.referanse(gammelReferanse.getValue().referanse()));
@@ -108,7 +127,34 @@ public class VedleggsHåndteringTjeneste {
         }
     }
 
-    private List<VedleggFrontend> konverterTilPDF(List<VedleggFrontend> vedleggFrontend) {
+    private static void erstattReferanserUttaksplan(Map.Entry<MutableVedleggReferanseDto, MutableVedleggReferanseDto> gammelReferanse, List<UttaksplanPeriodeDto> uttaksplan) {
+        uttaksplan.stream()
+                .flatMap(uttaksplanPeriode -> uttaksplanPeriode.vedlegg().stream())
+                .filter(v -> v.equals(gammelReferanse.getKey()))
+                .forEach(v -> v.referanse(gammelReferanse.getValue().referanse()));
+    }
+
+    private static void erstattReferanserBarn(Map.Entry<MutableVedleggReferanseDto, MutableVedleggReferanseDto> gammelReferanse, BarnDto barn) {
+        concat(barn.terminbekreftelse().stream(),
+                concat(barn.adopsjonsvedtak().stream(),
+                concat(barn.omsorgsovertakelse().stream(), barn.dokumentasjonAvAleneomsorg().stream())))
+                .filter(v -> v.equals(gammelReferanse.getKey()))
+                .forEach(v -> v.referanse(gammelReferanse.getValue().referanse()));
+    }
+
+    private static void erstattReferanserSøker(Map.Entry<MutableVedleggReferanseDto, MutableVedleggReferanseDto> gammelReferanse, SøkerDto søker) {
+        søker.selvstendigNæringsdrivendeInformasjon().stream()
+                .flatMap(sn -> sn.vedlegg().stream())
+                .filter(v -> v.equals(gammelReferanse.getKey()))
+                .forEach(v -> v.referanse(gammelReferanse.getValue().referanse()));
+
+        søker.andreInntekterSiste10Mnd().stream()
+                .flatMap(a -> a.vedlegg().stream())
+                .filter(v -> v.equals(gammelReferanse.getKey()))
+                .forEach(v -> v.referanse(gammelReferanse.getValue().referanse()));
+    }
+
+    private List<VedleggDto> konverterTilPDF(List<VedleggDto> vedleggFrontend) {
         long start = System.currentTimeMillis();
         var unikeVedleggMedInnhold = safeStream(vedleggFrontend).distinct().map(this::convert).toList();
         long slutt = System.currentTimeMillis();
@@ -116,8 +162,8 @@ public class VedleggsHåndteringTjeneste {
         return unikeVedleggMedInnhold;
     }
 
-    private VedleggFrontend convert(VedleggFrontend v) {
-        VedleggFrontend vedlegg = v.kopi();
+    private VedleggDto convert(VedleggDto v) {
+        VedleggDto vedlegg = v.kopi();
         if ((v.getContent() != null) && (v.getContent().length > 0)) {
             vedlegg.setContent(converter.convert(v.getContent()));
         }

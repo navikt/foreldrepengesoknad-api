@@ -7,7 +7,7 @@ import java.util.Arrays;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.stereotype.Component;
 
-import no.nav.foreldrepenger.selvbetjening.innsending.domain.VedleggFrontend;
+import no.nav.foreldrepenger.selvbetjening.innsending.dto.VedleggDto;
 import no.nav.foreldrepenger.selvbetjening.mellomlagring.Attachment;
 
 @Component
@@ -23,7 +23,7 @@ public class DelegerendeVedleggSjekker implements VedleggSjekker {
     }
 
     @Override
-    public void sjekk(VedleggFrontend... vedlegg) {
+    public void sjekk(VedleggDto... vedlegg) {
         safeStream(sjekkere).forEach(s -> s.sjekk(vedlegg));
     }
 

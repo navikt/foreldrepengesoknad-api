@@ -1,16 +1,17 @@
 package no.nav.foreldrepenger.selvbetjening.vedlegg;
 
-import no.nav.foreldrepenger.selvbetjening.innsending.domain.VedleggFrontend;
-import no.nav.foreldrepenger.selvbetjening.mellomlagring.Attachment;
+import static no.nav.foreldrepenger.common.util.StreamUtil.safeStream;
+import static no.nav.foreldrepenger.selvbetjening.vedlegg.VedleggUtil.mediaType;
+import static org.springframework.http.MediaType.APPLICATION_PDF;
+
 import org.apache.pdfbox.Loader;
 import org.apache.pdfbox.pdmodel.encryption.InvalidPasswordException;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Component;
 
-import static no.nav.foreldrepenger.common.util.StreamUtil.safeStream;
-import static no.nav.foreldrepenger.selvbetjening.vedlegg.VedleggUtil.mediaType;
-import static org.springframework.http.MediaType.APPLICATION_PDF;
+import no.nav.foreldrepenger.selvbetjening.innsending.dto.VedleggDto;
+import no.nav.foreldrepenger.selvbetjening.mellomlagring.Attachment;
 
 @Component
 public class PDFEncryptionVedleggSjekker implements VedleggSjekker {
@@ -23,7 +24,7 @@ public class PDFEncryptionVedleggSjekker implements VedleggSjekker {
     }
 
     @Override
-    public void sjekk(VedleggFrontend... vedlegg) {
+    public void sjekk(VedleggDto... vedlegg) {
         safeStream(vedlegg).forEach(v -> check(v.getContent()));
     }
 

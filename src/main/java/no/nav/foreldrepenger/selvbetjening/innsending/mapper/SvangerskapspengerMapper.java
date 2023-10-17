@@ -1,5 +1,15 @@
 package no.nav.foreldrepenger.selvbetjening.innsending.mapper;
 
+import static no.nav.foreldrepenger.selvbetjening.innsending.mapper.CommonMapper.tilMedlemskap;
+import static no.nav.foreldrepenger.selvbetjening.innsending.mapper.CommonMapper.tilOpptjening;
+import static no.nav.foreldrepenger.selvbetjening.innsending.mapper.CommonMapper.tilVedlegg;
+import static no.nav.foreldrepenger.selvbetjening.innsending.mapper.CommonMapper.tilVedleggsreferanse;
+
+import java.time.LocalDate;
+import java.util.List;
+
+import org.springframework.util.CollectionUtils;
+
 import no.nav.foreldrepenger.common.domain.BrukerRolle;
 import no.nav.foreldrepenger.common.domain.Fødselsnummer;
 import no.nav.foreldrepenger.common.domain.Orgnummer;
@@ -16,43 +26,40 @@ import no.nav.foreldrepenger.common.domain.svangerskapspenger.tilrettelegging.ar
 import no.nav.foreldrepenger.common.domain.svangerskapspenger.tilrettelegging.arbeidsforhold.PrivatArbeidsgiver;
 import no.nav.foreldrepenger.common.domain.svangerskapspenger.tilrettelegging.arbeidsforhold.SelvstendigNæringsdrivende;
 import no.nav.foreldrepenger.common.domain.svangerskapspenger.tilrettelegging.arbeidsforhold.Virksomhet;
-import no.nav.foreldrepenger.selvbetjening.innsending.domain.SvangerskapspengesøknadFrontend;
-import org.springframework.util.CollectionUtils;
+import no.nav.foreldrepenger.selvbetjening.innsending.dto.svangerskapspenger.ArbeidsforholdDto;
+import no.nav.foreldrepenger.selvbetjening.innsending.dto.svangerskapspenger.SvangerskapspengesøknadDto;
+import no.nav.foreldrepenger.selvbetjening.innsending.dto.svangerskapspenger.TilretteleggingDto;
 
-import java.time.LocalDate;
-import java.util.List;
-
-import static no.nav.foreldrepenger.selvbetjening.innsending.mapper.CommonMapper.tilMedlemskap;
-import static no.nav.foreldrepenger.selvbetjening.innsending.mapper.CommonMapper.tilOpptjening;
-import static no.nav.foreldrepenger.selvbetjening.innsending.mapper.CommonMapper.tilVedlegg;
-import static no.nav.foreldrepenger.selvbetjening.innsending.mapper.CommonMapper.tilVedleggsreferanse;
-
+// TODO: Gå gjennom verdier som er Nullable!
 final class SvangerskapspengerMapper {
 
     private SvangerskapspengerMapper() {
     }
 
-    static Søknad tilSvangerskapspengesøknad(SvangerskapspengesøknadFrontend s) {
+    static Søknad tilSvangerskapspengesøknad(SvangerskapspengesøknadDto s, LocalDate mottattDato) {
         return new Søknad(
-            LocalDate.now(),
+            mottattDato,
             tilSøker(s),
             tilYtelse(s),
-            s.getTilleggsopplysninger(),
-            tilVedlegg(s.getVedlegg())
+            null,
+            tilVedlegg(s.vedlegg())
         );
     }
 
-    private static Søker tilSøker(SvangerskapspengesøknadFrontend s) {
-        var søker = s.getSøker();
+    private static Søker tilSøker(SvangerskapspengesøknadDto s) {
+        var søker = s.søker();
         if (søker == null) {
             throw new IllegalStateException("Kan ikke ha tom søkerobjekt");
+        }
+        if (søker.rolle() != BrukerRolle.MOR) {
+            throw new IllegalStateException("Forventet at søker var mor, men var " + søker.rolle());
         }
         return new Søker(BrukerRolle.MOR, søker.språkkode());
     }
 
-    public static Svangerskapspenger tilYtelse(SvangerskapspengesøknadFrontend s) {
+    public static Svangerskapspenger tilYtelse(SvangerskapspengesøknadDto s) {
         return new Svangerskapspenger(
-            s.getBarn().termindato(),
+            s.barn().termindato(),
             tilFødselsdato(s),
             tilMedlemskap(s),
             tilOpptjening(s),
@@ -60,29 +67,28 @@ final class SvangerskapspengerMapper {
         );
     }
 
-    private static LocalDate tilFødselsdato(SvangerskapspengesøknadFrontend s) {
-        if (!CollectionUtils.isEmpty(s.getBarn().fødselsdatoer())) {
-            return s.getBarn().fødselsdatoer().get(0);
+    private static LocalDate tilFødselsdato(SvangerskapspengesøknadDto s) {
+        if (!CollectionUtils.isEmpty(s.barn().fødselsdatoer())) {
+            return s.barn().fødselsdatoer().get(0);
         }
         return null;
     }
 
-    private static List<Tilrettelegging> tilTilrettelegging(SvangerskapspengesøknadFrontend s) {
-        return s.getTilrettelegging().stream()
+    private static List<Tilrettelegging> tilTilrettelegging(SvangerskapspengesøknadDto s) {
+        return s.tilrettelegging().stream()
             .map(SvangerskapspengerMapper::tilTilretteleggings)
             .toList();
     }
 
-    private static Tilrettelegging tilTilretteleggings(no.nav.foreldrepenger.selvbetjening.innsending.domain.tilrettelegging.Tilrettelegging tilrettelegging) {
+    private static Tilrettelegging tilTilretteleggings(TilretteleggingDto tilrettelegging) {
         return switch (tilrettelegging.type()) {
-            case "hel" -> tilHelTilrettelegging(tilrettelegging);
-            case "delvis" -> tilDelvisTilrettelegging(tilrettelegging);
-            case "ingen" -> tilIngenTilrettelegging(tilrettelegging);
-            default -> throw new IllegalStateException("Ukjent tilretteleggingstype: " + tilrettelegging.type());
+            case HEL -> tilHelTilrettelegging(tilrettelegging);
+            case DELVIS -> tilDelvisTilrettelegging(tilrettelegging);
+            case INGEN -> tilIngenTilrettelegging(tilrettelegging);
         };
     }
 
-    private static IngenTilrettelegging tilIngenTilrettelegging(no.nav.foreldrepenger.selvbetjening.innsending.domain.tilrettelegging.Tilrettelegging tilrettelegging) {
+    private static IngenTilrettelegging tilIngenTilrettelegging(TilretteleggingDto tilrettelegging) {
         return new IngenTilrettelegging(
             tilArbeidsforhold(tilrettelegging.arbeidsforhold()),
             tilrettelegging.behovForTilretteleggingFom(),
@@ -91,7 +97,7 @@ final class SvangerskapspengerMapper {
         );
     }
 
-    private static DelvisTilrettelegging tilDelvisTilrettelegging(no.nav.foreldrepenger.selvbetjening.innsending.domain.tilrettelegging.Tilrettelegging tilrettelegging) {
+    private static DelvisTilrettelegging tilDelvisTilrettelegging(TilretteleggingDto tilrettelegging) {
         return new DelvisTilrettelegging(
             tilArbeidsforhold(tilrettelegging.arbeidsforhold()),
             tilrettelegging.behovForTilretteleggingFom(),
@@ -101,7 +107,7 @@ final class SvangerskapspengerMapper {
         );
     }
 
-    private static HelTilrettelegging tilHelTilrettelegging(no.nav.foreldrepenger.selvbetjening.innsending.domain.tilrettelegging.Tilrettelegging tilrettelegging) {
+    private static HelTilrettelegging tilHelTilrettelegging(TilretteleggingDto tilrettelegging) {
         return new HelTilrettelegging(
             tilArbeidsforhold(tilrettelegging.arbeidsforhold()),
             tilrettelegging.behovForTilretteleggingFom(),
@@ -110,29 +116,28 @@ final class SvangerskapspengerMapper {
         );
     }
 
-    private static Arbeidsforhold tilArbeidsforhold(no.nav.foreldrepenger.selvbetjening.innsending.domain.tilrettelegging.Arbeidsforhold arbeidsforhold) {
+    private static Arbeidsforhold tilArbeidsforhold(ArbeidsforholdDto arbeidsforhold) {
         return switch (arbeidsforhold.type()) {
-            case "virksomhet" -> tilVirksomhet(arbeidsforhold);
-            case "privat" -> tilPrivatArbeidsgiver(arbeidsforhold);
-            case "selvstendig" -> tilSelvstendigNæringsdrivende(arbeidsforhold);
-            case "frilanser" -> tilFrilanser(arbeidsforhold);
-            default -> throw new IllegalStateException("Ikke støttet arbeidsforholdtype: " + arbeidsforhold.type());
+            case VIRKSOMHET -> tilVirksomhet(arbeidsforhold);
+            case PRIVAT -> tilPrivatArbeidsgiver(arbeidsforhold);
+            case SELVSTENDIG -> tilSelvstendigNæringsdrivende(arbeidsforhold);
+            case FRILANSER -> tilFrilanser(arbeidsforhold);
         };
     }
 
-    private static Frilanser tilFrilanser(no.nav.foreldrepenger.selvbetjening.innsending.domain.tilrettelegging.Arbeidsforhold arbeidsforhold) {
+    private static Frilanser tilFrilanser(ArbeidsforholdDto arbeidsforhold) {
         return new Frilanser(arbeidsforhold.risikofaktorer(), arbeidsforhold.tilretteleggingstiltak());
     }
 
-    private static SelvstendigNæringsdrivende tilSelvstendigNæringsdrivende(no.nav.foreldrepenger.selvbetjening.innsending.domain.tilrettelegging.Arbeidsforhold arbeidsforhold) {
+    private static SelvstendigNæringsdrivende tilSelvstendigNæringsdrivende(ArbeidsforholdDto arbeidsforhold) {
         return new SelvstendigNæringsdrivende(arbeidsforhold.risikofaktorer(), arbeidsforhold.tilretteleggingstiltak());
     }
 
-    private static PrivatArbeidsgiver tilPrivatArbeidsgiver(no.nav.foreldrepenger.selvbetjening.innsending.domain.tilrettelegging.Arbeidsforhold arbeidsforhold) {
+    private static PrivatArbeidsgiver tilPrivatArbeidsgiver(ArbeidsforholdDto arbeidsforhold) {
         return new PrivatArbeidsgiver(new Fødselsnummer(arbeidsforhold.id()));
     }
 
-    private static Virksomhet tilVirksomhet(no.nav.foreldrepenger.selvbetjening.innsending.domain.tilrettelegging.Arbeidsforhold arbeidsforhold) {
+    private static Virksomhet tilVirksomhet(ArbeidsforholdDto arbeidsforhold) {
         return new Virksomhet(new Orgnummer(arbeidsforhold.id()));
     }
 }

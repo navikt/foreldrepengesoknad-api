@@ -16,9 +16,9 @@ import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 
 import no.nav.foreldrepenger.selvbetjening.config.JacksonConfiguration;
-import no.nav.foreldrepenger.selvbetjening.innsending.domain.BarnFrontend;
-import no.nav.foreldrepenger.selvbetjening.innsending.domain.EngangsstønadFrontend;
-import no.nav.foreldrepenger.selvbetjening.innsending.domain.MutableVedleggReferanse;
+import no.nav.foreldrepenger.selvbetjening.innsending.dto.BarnDto;
+import no.nav.foreldrepenger.selvbetjening.innsending.dto.MutableVedleggReferanseDto;
+import no.nav.foreldrepenger.selvbetjening.innsending.dto.engangsstønad.EngangsstønadDto;
 
 @ExtendWith(SpringExtension.class)
 @ContextConfiguration(classes = JacksonConfiguration.class)
@@ -29,18 +29,14 @@ class SerializationTest {
 
     @Test
     void engangstonad_deserialisation() throws IOException {
-        var barn = new BarnFrontend(null, 2,
-            List.of(new MutableVedleggReferanse(LocalDate.now().minusWeeks(6).toString())),
+        var barn = new BarnDto(null, 2,
             LocalDate.now().minusWeeks(1), null,
-            null, null, null, false, false,
+            null, null, false, false, null,
+            List.of(new MutableVedleggReferanseDto(LocalDate.now().minusWeeks(6).toString())),
             null, null, null);
 
 
-        var engangsstønad = new EngangsstønadFrontend(
-            "engangsstønad",
-            null, null,
-            barn,
-            null, null, null, null, null, null);
+        var engangsstønad = new EngangsstønadDto(LocalDate.now(), barn, null, null, null);
         test(engangsstønad);
     }
 

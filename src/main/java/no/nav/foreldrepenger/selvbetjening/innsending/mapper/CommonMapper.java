@@ -1,7 +1,15 @@
 package no.nav.foreldrepenger.selvbetjening.innsending.mapper;
 
+import static java.time.LocalDate.now;
+import static no.nav.foreldrepenger.common.util.StreamUtil.safeStream;
+import static no.nav.foreldrepenger.selvbetjening.util.DateUtil.erNyopprettet;
+import static org.springframework.util.ObjectUtils.isEmpty;
+
+import java.time.LocalDate;
+import java.util.List;
+
 import com.neovisionaries.i18n.CountryCode;
-import no.nav.foreldrepenger.common.domain.Fødselsnummer;
+
 import no.nav.foreldrepenger.common.domain.Orgnummer;
 import no.nav.foreldrepenger.common.domain.felles.DokumentType;
 import no.nav.foreldrepenger.common.domain.felles.InnsendingsType;
@@ -10,10 +18,6 @@ import no.nav.foreldrepenger.common.domain.felles.ProsentAndel;
 import no.nav.foreldrepenger.common.domain.felles.PåkrevdVedlegg;
 import no.nav.foreldrepenger.common.domain.felles.VedleggMetaData;
 import no.nav.foreldrepenger.common.domain.felles.VedleggReferanse;
-import no.nav.foreldrepenger.common.domain.felles.annenforelder.AnnenForelder;
-import no.nav.foreldrepenger.common.domain.felles.annenforelder.NorskForelder;
-import no.nav.foreldrepenger.common.domain.felles.annenforelder.UkjentForelder;
-import no.nav.foreldrepenger.common.domain.felles.annenforelder.UtenlandskForelder;
 import no.nav.foreldrepenger.common.domain.felles.medlemskap.Medlemsskap;
 import no.nav.foreldrepenger.common.domain.felles.medlemskap.Utenlandsopphold;
 import no.nav.foreldrepenger.common.domain.felles.opptjening.AnnenOpptjening;
@@ -30,32 +34,24 @@ import no.nav.foreldrepenger.common.domain.felles.relasjontilbarn.Fødsel;
 import no.nav.foreldrepenger.common.domain.felles.relasjontilbarn.Omsorgsovertakelse;
 import no.nav.foreldrepenger.common.domain.felles.relasjontilbarn.RelasjonTilBarn;
 import no.nav.foreldrepenger.common.domain.felles.ÅpenPeriode;
-import no.nav.foreldrepenger.selvbetjening.innsending.domain.AnnenForelderFrontend;
-import no.nav.foreldrepenger.selvbetjening.innsending.domain.BarnFrontend;
-import no.nav.foreldrepenger.selvbetjening.innsending.domain.MutableVedleggReferanse;
-import no.nav.foreldrepenger.selvbetjening.innsending.domain.SøknadFrontend;
-import no.nav.foreldrepenger.selvbetjening.innsending.domain.UtenlandsoppholdPeriodeFrontend;
-import no.nav.foreldrepenger.selvbetjening.innsending.domain.VedleggFrontend;
-import no.nav.foreldrepenger.selvbetjening.innsending.domain.arbeid.AnnenInntektFrontend;
-import no.nav.foreldrepenger.selvbetjening.innsending.domain.arbeid.FrilansInformasjonFrontend;
-import no.nav.foreldrepenger.selvbetjening.innsending.domain.arbeid.FrilansoppdragFrontend;
-import no.nav.foreldrepenger.selvbetjening.innsending.domain.arbeid.SelvstendigNæringsdrivendeInformasjonFrontend;
-import no.nav.foreldrepenger.selvbetjening.innsending.domain.arbeid.TilknyttetPerson;
-
-import java.time.LocalDate;
-import java.util.List;
-
-import static java.time.LocalDate.now;
-import static no.nav.foreldrepenger.common.util.StreamUtil.safeStream;
-import static no.nav.foreldrepenger.selvbetjening.util.DateUtil.erNyopprettet;
-import static org.springframework.util.ObjectUtils.isEmpty;
+import no.nav.foreldrepenger.selvbetjening.innsending.dto.AnnenInntektDto;
+import no.nav.foreldrepenger.selvbetjening.innsending.dto.BarnDto;
+import no.nav.foreldrepenger.selvbetjening.innsending.dto.FrilansInformasjonDto;
+import no.nav.foreldrepenger.selvbetjening.innsending.dto.FrilansoppdragDto;
+import no.nav.foreldrepenger.selvbetjening.innsending.dto.MutableVedleggReferanseDto;
+import no.nav.foreldrepenger.selvbetjening.innsending.dto.NæringDto;
+import no.nav.foreldrepenger.selvbetjening.innsending.dto.SøknadDto;
+import no.nav.foreldrepenger.selvbetjening.innsending.dto.TilknyttetPersonDto;
+import no.nav.foreldrepenger.selvbetjening.innsending.dto.UtenlandsoppholdPeriodeDto;
+import no.nav.foreldrepenger.selvbetjening.innsending.dto.VedleggDto;
+import no.nav.foreldrepenger.selvbetjening.innsending.dto.foreldrepenger.Situasjon;
 
 public final class CommonMapper {
 
     private CommonMapper() {
     }
 
-    public static List<no.nav.foreldrepenger.common.domain.felles.Vedlegg> tilVedlegg(List<VedleggFrontend> vedlegg) {
+    public static List<no.nav.foreldrepenger.common.domain.felles.Vedlegg> tilVedlegg(List<VedleggDto> vedlegg) {
         return safeStream(vedlegg)
                 .distinct()
                 .map(CommonMapper::tilVedlegg)
@@ -63,7 +59,7 @@ public final class CommonMapper {
     }
 
 
-    public static no.nav.foreldrepenger.common.domain.felles.Vedlegg tilVedlegg(VedleggFrontend vedlegg) {
+    public static no.nav.foreldrepenger.common.domain.felles.Vedlegg tilVedlegg(VedleggDto vedlegg) {
         var vedleggMetadata = new VedleggMetaData(
             tilVedleggsreferanse(vedlegg.getId()),
             vedlegg.getInnsendingsType() != null ? InnsendingsType.valueOf(vedlegg.getInnsendingsType()) : null,
@@ -74,46 +70,26 @@ public final class CommonMapper {
     }
 
 
-    public static List<VedleggReferanse> tilVedleggsreferanse(List<MutableVedleggReferanse> vedleggsreferanser) {
+    public static List<VedleggReferanse> tilVedleggsreferanse(List<MutableVedleggReferanseDto> vedleggsreferanser) {
         return safeStream(vedleggsreferanser)
                 .distinct()
                 .map(CommonMapper::tilVedleggsreferanse)
                 .toList();
     }
 
-    public static VedleggReferanse tilVedleggsreferanse(MutableVedleggReferanse vedleggsreferanse) {
+    public static VedleggReferanse tilVedleggsreferanse(MutableVedleggReferanseDto vedleggsreferanse) {
         return new VedleggReferanse(vedleggsreferanse.referanse());
     }
 
-    static AnnenForelder tilAnnenForelder(SøknadFrontend søknad) {
-        var annenForelder = søknad.getAnnenForelder();
-        if (annenForelder == null) {
-            return new UkjentForelder();
-        }
-        return switch (annenForelder.type()) {
-            case "norsk" -> tilNorskForelder(annenForelder);
-            case "utenlandsk" -> tilUtenlandskForelder(annenForelder);
-            case "ukjent" -> new UkjentForelder();
-            default -> throw new IllegalStateException("Ukjent typeverdi av annenforelder: " + annenForelder.type());
-        };
-    }
-
-    static Medlemsskap tilMedlemskap(SøknadFrontend s) {
-        if (Boolean.TRUE.equals(s.getErEndringssøknad())) {
-            return null;
-        }
-        var opphold = s.getInformasjonOmUtenlandsopphold();
+    static Medlemsskap tilMedlemskap(SøknadDto s) {
+        var opphold = s.informasjonOmUtenlandsopphold();
         return new Medlemsskap(
             tilUtenlandsoppholdsliste(opphold.tidligereOpphold()),
             tilUtenlandsoppholdsliste(opphold.senereOpphold()));
     }
 
-    static Opptjening tilOpptjening(SøknadFrontend s) {
-        if (Boolean.TRUE.equals(s.getErEndringssøknad())) {
-            return null;
-        }
-
-        var søker = s.getSøker();
+    static Opptjening tilOpptjening(SøknadDto s) {
+        var søker = s.søker();
         return new Opptjening(
             tilUtenlandsArbeidsforhold(søker.andreInntekterSiste10Mnd()),
             tilEgenNæring(søker.selvstendigNæringsdrivendeInformasjon()),
@@ -122,20 +98,15 @@ public final class CommonMapper {
         );
     }
 
-    static RelasjonTilBarn tilRelasjonTilBarn(SøknadFrontend søknad) {
-        var barn = søknad.getBarn();
-        if (barn.adopsjonsdato() != null) {
-            return tilAdopsjon(barn);
-        }
-        var situasjon = søknad.getSituasjon();
-        if (isEmpty(situasjon) || situasjon.equals("fødsel")) {
-            var erBarnetFødt = !isEmpty(barn.fødselsdatoer());
-            return erBarnetFødt ? tilFødsel(barn) : tilFremtidigFødsel(barn);
-        }
-        return tilOmsorgsovertagelse(barn);
+    static RelasjonTilBarn tilRelasjonTilBarn(BarnDto barn, Situasjon situasjon) {
+        return switch (situasjon) {
+            case FØDSEL -> !isEmpty(barn.fødselsdatoer()) ? tilFødsel(barn) : tilFremtidigFødsel(barn);
+            case ADOPSJON -> tilAdopsjon(barn);
+            case OMSORGSOVERTAKELSE -> tilOmsorgsovertagelse(barn);
+        };
     }
 
-    static Fødsel tilFødsel(BarnFrontend barn) {
+    static Fødsel tilFødsel(BarnDto barn) {
         return new Fødsel(
             barn.antallBarn(),
             barn.fødselsdatoer(),
@@ -144,7 +115,7 @@ public final class CommonMapper {
         );
     }
 
-    private static Omsorgsovertakelse tilOmsorgsovertagelse(BarnFrontend barn) {
+    private static Omsorgsovertakelse tilOmsorgsovertagelse(BarnDto barn) {
         return new Omsorgsovertakelse(
             barn.antallBarn(),
             barn.foreldreansvarsdato(),
@@ -153,7 +124,7 @@ public final class CommonMapper {
         );
     }
 
-    private static FremtidigFødsel tilFremtidigFødsel(BarnFrontend barn) {
+    private static FremtidigFødsel tilFremtidigFødsel(BarnDto barn) {
         return new FremtidigFødsel(
             barn.antallBarn(),
             barn.termindato(),
@@ -162,7 +133,7 @@ public final class CommonMapper {
         );
     }
 
-    private static Adopsjon tilAdopsjon(BarnFrontend barn) {
+    private static Adopsjon tilAdopsjon(BarnDto barn) {
         return new Adopsjon(
             barn.antallBarn(),
             barn.adopsjonsdato(),
@@ -174,37 +145,21 @@ public final class CommonMapper {
         );
     }
 
-    private static UtenlandskForelder tilUtenlandskForelder(AnnenForelderFrontend annenForelder) {
-        return new UtenlandskForelder(
-            annenForelder.fnr(),
-            land(annenForelder.bostedsland()),
-            navn(annenForelder)
-        );
-    }
-
-    private static NorskForelder tilNorskForelder(AnnenForelderFrontend annenForelder) {
-        return new NorskForelder(new Fødselsnummer(annenForelder.fnr()), navn(annenForelder));
-    }
-
-    private static String navn(AnnenForelderFrontend annenForelder) {
-        return annenForelder.fornavn() + " " + annenForelder.etternavn();
-    }
-
-    private static List<AnnenOpptjening> tilAnnenOpptjening(List<AnnenInntektFrontend> andreInntekterSiste10Mnd) {
+    private static List<AnnenOpptjening> tilAnnenOpptjening(List<AnnenInntektDto> andreInntekterSiste10Mnd) {
         return andreInntekterSiste10Mnd.stream()
             .filter(annenInntekt -> !annenInntekt.type().equals("JOBB_I_UTLANDET"))
             .map(CommonMapper::tilAnnenOpptjening)
             .toList();
     }
 
-    private static AnnenOpptjening tilAnnenOpptjening(AnnenInntektFrontend annenInntekt) {
+    private static AnnenOpptjening tilAnnenOpptjening(AnnenInntektDto annenInntekt) {
         return new AnnenOpptjening(
             annenInntekt.type() != null ? AnnenOpptjeningType.valueOf(annenInntekt.type()) : null,
             new ÅpenPeriode(annenInntekt.tidsperiode().fom(), annenInntekt.tidsperiode().tom()),
             tilVedleggsreferanse(annenInntekt.vedlegg()));
     }
 
-    private static List<UtenlandskArbeidsforhold> tilUtenlandsArbeidsforhold(List<AnnenInntektFrontend> andreInntekterSiste10Mnd) {
+    private static List<UtenlandskArbeidsforhold> tilUtenlandsArbeidsforhold(List<AnnenInntektDto> andreInntekterSiste10Mnd) {
         return andreInntekterSiste10Mnd.stream()
             .filter(annenInntekt -> annenInntekt.type().equals("JOBB_I_UTLANDET"))
             .map(CommonMapper::tilUtenlandsArbeidsforhold)
@@ -212,7 +167,7 @@ public final class CommonMapper {
 
     }
 
-    private static UtenlandskArbeidsforhold tilUtenlandsArbeidsforhold(AnnenInntektFrontend annenInntekt) {
+    private static UtenlandskArbeidsforhold tilUtenlandsArbeidsforhold(AnnenInntektDto annenInntekt) {
         return new UtenlandskArbeidsforhold(
             annenInntekt.arbeidsgiverNavn(),
             new ÅpenPeriode(annenInntekt.tidsperiode().fom(), annenInntekt.tidsperiode().tom()),
@@ -221,13 +176,13 @@ public final class CommonMapper {
         );
     }
 
-    private static List<EgenNæring> tilEgenNæring(List<SelvstendigNæringsdrivendeInformasjonFrontend> selvstendigNæringsdrivendeInformasjon) {
+    private static List<EgenNæring> tilEgenNæring(List<NæringDto> selvstendigNæringsdrivendeInformasjon) {
         return selvstendigNæringsdrivendeInformasjon.stream()
             .map(CommonMapper::tilEgenNæring)
             .toList();
     }
 
-    private static EgenNæring tilEgenNæring(SelvstendigNæringsdrivendeInformasjonFrontend selvstendig) {
+    private static EgenNæring tilEgenNæring(NæringDto selvstendig) {
         var nærRelasjon = false; // TODO: Kan vi ha både regnsskapsfører og revisor? Vi har bare propagert en av delene til nå. Bare regnskapsfører hvis begge er oppgitt.
         List<Regnskapsfører> regnskapsførere = null;
         var regnskapsfører = selvstendig.regnskapsfører();
@@ -270,18 +225,18 @@ public final class CommonMapper {
         );
     }
 
-    private static Orgnummer tilOrgnummer(SelvstendigNæringsdrivendeInformasjonFrontend selvstendig) {
+    private static Orgnummer tilOrgnummer(NæringDto selvstendig) {
         if (selvstendig.registrertINorge()) {
             return selvstendig.organisasjonsnummer() != null ? new Orgnummer(selvstendig.organisasjonsnummer()) : null;
         }
         return null;
     }
 
-    private static Regnskapsfører tilRegnskapsfører(TilknyttetPerson person) {
+    private static Regnskapsfører tilRegnskapsfører(TilknyttetPersonDto person) {
         return new Regnskapsfører(person.navn(), person.telefonnummer());
     }
 
-    private static Frilans tilFrilans(FrilansInformasjonFrontend frilansInformasjon) {
+    private static Frilans tilFrilans(FrilansInformasjonDto frilansInformasjon) {
         if (frilansInformasjon == null)  {
             return null;
         }
@@ -293,23 +248,23 @@ public final class CommonMapper {
             tilFrilansOppdrag(frilansInformasjon.oppdragForNæreVennerEllerFamilieSiste10Mnd()));
     }
 
-    private static List<FrilansOppdrag> tilFrilansOppdrag(List<FrilansoppdragFrontend> oppdragForNæreVennerEllerFamilieSiste10Mnd) {
+    private static List<FrilansOppdrag> tilFrilansOppdrag(List<FrilansoppdragDto> oppdragForNæreVennerEllerFamilieSiste10Mnd) {
         return safeStream(oppdragForNæreVennerEllerFamilieSiste10Mnd)
             .map(CommonMapper::tilFrilansOppdrag)
             .toList();
     }
 
-    private static FrilansOppdrag tilFrilansOppdrag(FrilansoppdragFrontend o) {
+    private static FrilansOppdrag tilFrilansOppdrag(FrilansoppdragDto o) {
         return new FrilansOppdrag(o.navnPåArbeidsgiver(), new ÅpenPeriode(o.tidsperiode().fom(), o.tidsperiode().tom()));
     }
 
-    private static List<Utenlandsopphold> tilUtenlandsoppholdsliste(List<UtenlandsoppholdPeriodeFrontend> tidligereOpphold) {
+    private static List<Utenlandsopphold> tilUtenlandsoppholdsliste(List<UtenlandsoppholdPeriodeDto> tidligereOpphold) {
         return safeStream(tidligereOpphold)
             .map(CommonMapper::tilUtenlandsopphold)
             .toList();
     }
 
-    private static Utenlandsopphold tilUtenlandsopphold(UtenlandsoppholdPeriodeFrontend o) {
+    private static Utenlandsopphold tilUtenlandsopphold(UtenlandsoppholdPeriodeDto o) {
         return new Utenlandsopphold(land(o.land()), new LukketPeriode(o.tidsperiode().fom(), o.tidsperiode().tom()));
     }
 

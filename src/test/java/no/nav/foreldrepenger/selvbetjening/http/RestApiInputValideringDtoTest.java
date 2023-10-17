@@ -26,6 +26,13 @@ import java.util.UUID;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
+import org.junit.jupiter.params.ParameterizedTest;
+import org.junit.jupiter.params.provider.MethodSource;
+
+import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.annotation.JsonProperty;
+import com.fasterxml.jackson.annotation.JsonValue;
+
 import jakarta.validation.Valid;
 import jakarta.validation.constraints.DecimalMax;
 import jakarta.validation.constraints.DecimalMin;
@@ -36,15 +43,8 @@ import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Null;
 import jakarta.validation.constraints.Pattern;
 import jakarta.validation.constraints.Size;
-
-import no.nav.foreldrepenger.selvbetjening.innsending.domain.VedleggFrontend;
-import no.nav.foreldrepenger.selvbetjening.innsending.domain.VedlegglistestørrelseConstraint;
-import org.junit.jupiter.params.ParameterizedTest;
-import org.junit.jupiter.params.provider.MethodSource;
-
-import com.fasterxml.jackson.annotation.JsonIgnore;
-import com.fasterxml.jackson.annotation.JsonProperty;
-import com.fasterxml.jackson.annotation.JsonValue;
+import no.nav.foreldrepenger.selvbetjening.innsending.dto.validering.VedlegglistestørrelseConstraint;
+import no.nav.foreldrepenger.selvbetjening.innsending.dto.VedleggDto;
 
 class RestApiInputValideringDtoTest extends RestApiTestUtil {
 
@@ -122,7 +122,7 @@ class RestApiInputValideringDtoTest extends RestApiTestUtil {
     private static boolean harKorrektvedlegglisteConstraint(Field field) {
         var aktuell = brukerGenerics(field)
             && field.getType().equals(List.class)
-            && field.getGenericType().getTypeName().contains(VedleggFrontend.class.getName());
+            && field.getGenericType().getTypeName().contains(VedleggDto.class.getName());
         return aktuell && field.isAnnotationPresent(VedlegglistestørrelseConstraint.class);
     }
 
@@ -141,7 +141,7 @@ class RestApiInputValideringDtoTest extends RestApiTestUtil {
         }
         return parametre.stream()
             // ikke sjekk nedover i innebygde klasser, det skal brukes annoteringer på tidligere tidspunkt
-            .filter(klasse -> !(klasse.getName().startsWith("java") || klasse.getName().startsWith("org.springframework")))
+            .filter(klasse -> !(klasse.getName().startsWith("java") || klasse.getName().startsWith("org.springframework")) && !klasse.isInterface())
             .collect(Collectors.toSet());
     }
 
