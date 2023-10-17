@@ -187,27 +187,26 @@ class SøknadFrontendDeseraliseringTest {
     }
 
     private boolean validVedleggsliste(int sendSenereVedlegg, int opplastetVedlegg) {
-        List<VedleggDto>  sendSenere = new ArrayList<>();
+        List<VedleggDto> sendSenere = new ArrayList<>();
 
         while (sendSenere.size() < sendSenereVedlegg) {
-            var nyttVedlegg = new VedleggDto(null, "Beskrivelse", new MutableVedleggReferanseDto("Id"), "SEND_SENERE", "Skjemanummer", "xyz", null,
-                null);
+            var nyttVedlegg = new VedleggDto(null, "Beskrivelse", new MutableVedleggReferanseDto("Id"), "SEND_SENERE", "Skjemanummer", "xyz", null);
             sendSenere.add(nyttVedlegg);
         }
 
         List<VedleggDto> opplastet = new ArrayList<>();
         while (opplastet.size() < opplastetVedlegg) {
-            var nyttVedlegg = new VedleggDto(null, "Beskrivelse", new MutableVedleggReferanseDto("Id"), null, "Skjemanummer", "xyz", null, 123);
+            var nyttVedlegg = new VedleggDto(null, "Beskrivelse", new MutableVedleggReferanseDto("Id"), null, "Skjemanummer", "xyz", null);
             opplastet.add(nyttVedlegg);
         }
         sendSenere.addAll(opplastet);
 
-        var søknad = new ForeldrepengesøknadDto(null,null, null,
-            null, null, null, "", null,
-            null, null, sendSenere);
+        var søknad = new ForeldrepengesøknadDto(null, null, null, null, null, null, "", null, null, null, sendSenere);
 
         var constraintViolations = validator.validate(søknad);
-        var match = constraintViolations.stream().anyMatch(cv -> cv.getMessageTemplate().equals("Vedleggslisten kan ikke inneholde flere enn 40 opplastede vedlegg eller 100 vedlegg som skal sendes senere."));
+        var match = constraintViolations.stream()
+            .anyMatch(cv -> cv.getMessageTemplate()
+                .equals("Vedleggslisten kan ikke inneholde flere enn 40 opplastede vedlegg eller 100 vedlegg som skal sendes senere."));
         return !match;
     }
 }
