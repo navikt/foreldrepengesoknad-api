@@ -11,17 +11,17 @@ import no.nav.foreldrepenger.common.domain.Søker;
 import no.nav.foreldrepenger.common.domain.Søknad;
 import no.nav.foreldrepenger.common.domain.Ytelse;
 import no.nav.foreldrepenger.common.domain.engangsstønad.Engangsstønad;
-import no.nav.foreldrepenger.selvbetjening.innsending.dto.SøkerDto;
-import no.nav.foreldrepenger.selvbetjening.innsending.dto.engangsstønad.EngangsstønadDto;
+import no.nav.foreldrepenger.selvbetjening.innsending.domain.SøkerDto;
+import no.nav.foreldrepenger.selvbetjening.innsending.domain.engangsstønad.EngangsstønadDto;
 
 final class EngangsstønadMapper {
 
     private EngangsstønadMapper() {
     }
 
-    static no.nav.foreldrepenger.common.domain.Søknad tilEngangsstønad(EngangsstønadDto e) {
+    static no.nav.foreldrepenger.common.domain.Søknad tilEngangsstønad(EngangsstønadDto e, LocalDate mottattDato) {
         return new Søknad(
-            LocalDate.now(),
+            mottattDato,
             tilSøker(e.søker()),
             tilYtelse(e),
             null,

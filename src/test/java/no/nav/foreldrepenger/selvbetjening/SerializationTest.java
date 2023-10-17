@@ -16,9 +16,9 @@ import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 
 import no.nav.foreldrepenger.selvbetjening.config.JacksonConfiguration;
-import no.nav.foreldrepenger.selvbetjening.innsending.dto.BarnDto;
-import no.nav.foreldrepenger.selvbetjening.innsending.dto.MutableVedleggReferanseDto;
-import no.nav.foreldrepenger.selvbetjening.innsending.dto.engangsstønad.EngangsstønadDto;
+import no.nav.foreldrepenger.selvbetjening.innsending.domain.BarnDto;
+import no.nav.foreldrepenger.selvbetjening.innsending.domain.MutableVedleggReferanseDto;
+import no.nav.foreldrepenger.selvbetjening.innsending.domain.engangsstønad.EngangsstønadDto;
 
 @ExtendWith(SpringExtension.class)
 @ContextConfiguration(classes = JacksonConfiguration.class)
@@ -36,7 +36,7 @@ class SerializationTest {
             null, null, null);
 
 
-        var engangsstønad = new EngangsstønadDto(barn, null, null, null);
+        var engangsstønad = new EngangsstønadDto(LocalDate.now(), barn, null, null, null);
         test(engangsstønad);
     }
 

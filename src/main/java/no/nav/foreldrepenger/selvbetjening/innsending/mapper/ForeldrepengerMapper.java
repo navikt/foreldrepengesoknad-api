@@ -29,23 +29,22 @@ import no.nav.foreldrepenger.common.domain.foreldrepenger.fordeling.OppholdsPeri
 import no.nav.foreldrepenger.common.domain.foreldrepenger.fordeling.Oppholdsårsak;
 import no.nav.foreldrepenger.common.domain.foreldrepenger.fordeling.OverføringsPeriode;
 import no.nav.foreldrepenger.common.domain.foreldrepenger.fordeling.Overføringsårsak;
-import no.nav.foreldrepenger.common.domain.foreldrepenger.fordeling.StønadskontoType;
 import no.nav.foreldrepenger.common.domain.foreldrepenger.fordeling.UtsettelsesPeriode;
 import no.nav.foreldrepenger.common.domain.foreldrepenger.fordeling.UtsettelsesÅrsak;
 import no.nav.foreldrepenger.common.domain.foreldrepenger.fordeling.UttaksPeriode;
-import no.nav.foreldrepenger.selvbetjening.innsending.dto.SøkerDto;
-import no.nav.foreldrepenger.selvbetjening.innsending.dto.foreldrepenger.AnnenforelderDto;
-import no.nav.foreldrepenger.selvbetjening.innsending.dto.foreldrepenger.ForeldrepengesøknadDto;
-import no.nav.foreldrepenger.selvbetjening.innsending.dto.foreldrepenger.UttaksplanPeriodeDto;
+import no.nav.foreldrepenger.selvbetjening.innsending.domain.SøkerDto;
+import no.nav.foreldrepenger.selvbetjening.innsending.domain.foreldrepenger.AnnenforelderDto;
+import no.nav.foreldrepenger.selvbetjening.innsending.domain.foreldrepenger.ForeldrepengesøknadDto;
+import no.nav.foreldrepenger.selvbetjening.innsending.domain.foreldrepenger.UttaksplanPeriodeDto;
 
 final class ForeldrepengerMapper {
 
     private ForeldrepengerMapper() {
     }
 
-    static no.nav.foreldrepenger.common.domain.Søknad tilForeldrepengesøknad(ForeldrepengesøknadDto foreldrepengesøknad) {
+    static no.nav.foreldrepenger.common.domain.Søknad tilForeldrepengesøknad(ForeldrepengesøknadDto foreldrepengesøknad, LocalDate mottattDato) {
         return new Søknad(
-            LocalDate.now(),
+            mottattDato,
             tilSøker(foreldrepengesøknad.søker()),
             tilYtelse(foreldrepengesøknad),
             foreldrepengesøknad.tilleggsopplysninger(),
@@ -113,7 +112,7 @@ final class ForeldrepengerMapper {
             u.tidsperiode().fom(),
             u.tidsperiode().tom(),
             u.årsak() != null ? Overføringsårsak.valueOf(u.årsak()) : null,
-            StønadskontoType.valueSafelyOf(u.konto()),
+            u.konto(),
             tilVedleggsreferanse(u.vedlegg())
         );
     }
@@ -154,7 +153,7 @@ final class ForeldrepengerMapper {
             u.tidsperiode().fom(),
             u.tidsperiode().tom(),
             tilVedleggsreferanse(u.vedlegg()),
-            StønadskontoType.valueSafelyOf(u.konto()),
+            u.konto(),
             u.ønskerSamtidigUttak(),
             u.morsAktivitetIPerioden() != null ? MorsAktivitet.valueOf(u.morsAktivitetIPerioden()) : null,
             u.ønskerFlerbarnsdager(),
@@ -168,7 +167,7 @@ final class ForeldrepengerMapper {
             u.tidsperiode().fom(),
             u.tidsperiode().tom(),
             tilVedleggsreferanse(u.vedlegg()),
-            StønadskontoType.valueSafelyOf(u.konto()),
+            u.konto(),
             u.ønskerSamtidigUttak(),
             u.morsAktivitetIPerioden() != null ? MorsAktivitet.valueOf(u.morsAktivitetIPerioden()) : null,
             u.ønskerFlerbarnsdager(),

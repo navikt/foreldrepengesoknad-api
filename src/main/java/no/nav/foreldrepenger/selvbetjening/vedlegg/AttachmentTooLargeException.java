@@ -4,7 +4,7 @@ import static java.lang.String.format;
 
 import org.springframework.util.unit.DataSize;
 
-import no.nav.foreldrepenger.selvbetjening.innsending.dto.VedleggDto;
+import no.nav.foreldrepenger.selvbetjening.innsending.domain.VedleggDto;
 
 
 public class AttachmentTooLargeException extends AttachmentException {

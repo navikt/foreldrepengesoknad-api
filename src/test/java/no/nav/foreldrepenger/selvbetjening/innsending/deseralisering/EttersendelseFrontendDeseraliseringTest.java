@@ -14,9 +14,9 @@ import org.springframework.test.context.junit.jupiter.SpringExtension;
 import com.fasterxml.jackson.databind.ObjectMapper;
 
 import no.nav.foreldrepenger.selvbetjening.config.JacksonConfiguration;
-import no.nav.foreldrepenger.selvbetjening.innsending.dto.MutableVedleggReferanseDto;
-import no.nav.foreldrepenger.selvbetjening.innsending.dto.ettersendelse.EttersendelseDto;
-import no.nav.foreldrepenger.selvbetjening.innsending.dto.ettersendelse.YtelseType;
+import no.nav.foreldrepenger.selvbetjening.innsending.domain.MutableVedleggReferanseDto;
+import no.nav.foreldrepenger.selvbetjening.innsending.domain.ettersendelse.EttersendelseDto;
+import no.nav.foreldrepenger.selvbetjening.innsending.domain.ettersendelse.YtelseType;
 
 @ExtendWith(SpringExtension.class)
 @ContextConfiguration(classes = JacksonConfiguration.class)

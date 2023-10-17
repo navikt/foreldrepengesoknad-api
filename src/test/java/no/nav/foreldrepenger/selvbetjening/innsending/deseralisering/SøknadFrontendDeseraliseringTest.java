@@ -1,8 +1,8 @@
 package no.nav.foreldrepenger.selvbetjening.innsending.deseralisering;
 
 import static no.nav.foreldrepenger.common.util.ResourceHandleUtil.bytesFra;
-import static no.nav.foreldrepenger.selvbetjening.innsending.dto.ettersendelse.YtelseType.FORELDREPENGER;
-import static no.nav.foreldrepenger.selvbetjening.innsending.dto.foreldrepenger.UttaksperiodeType.UTTAK;
+import static no.nav.foreldrepenger.selvbetjening.innsending.domain.ettersendelse.YtelseType.FORELDREPENGER;
+import static no.nav.foreldrepenger.selvbetjening.innsending.domain.foreldrepenger.UttaksperiodeType.UTTAK;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.junit.jupiter.api.Assertions.assertFalse;
 import static org.junit.jupiter.api.Assertions.assertTrue;
@@ -25,15 +25,16 @@ import jakarta.validation.Validation;
 import jakarta.validation.Validator;
 import no.nav.foreldrepenger.common.domain.BrukerRolle;
 import no.nav.foreldrepenger.common.domain.felles.opptjening.Virksomhetstype;
+import no.nav.foreldrepenger.common.domain.foreldrepenger.fordeling.StønadskontoType;
 import no.nav.foreldrepenger.common.oppslag.dkif.Målform;
 import no.nav.foreldrepenger.selvbetjening.config.JacksonConfiguration;
-import no.nav.foreldrepenger.selvbetjening.innsending.dto.MutableVedleggReferanseDto;
-import no.nav.foreldrepenger.selvbetjening.innsending.dto.SøknadDto;
-import no.nav.foreldrepenger.selvbetjening.innsending.dto.VedleggDto;
-import no.nav.foreldrepenger.selvbetjening.innsending.dto.ettersendelse.EttersendelseDto;
-import no.nav.foreldrepenger.selvbetjening.innsending.dto.foreldrepenger.Dekningsgrad;
-import no.nav.foreldrepenger.selvbetjening.innsending.dto.foreldrepenger.ForeldrepengesøknadDto;
-import no.nav.foreldrepenger.selvbetjening.innsending.dto.foreldrepenger.Situasjon;
+import no.nav.foreldrepenger.selvbetjening.innsending.domain.MutableVedleggReferanseDto;
+import no.nav.foreldrepenger.selvbetjening.innsending.domain.SøknadDto;
+import no.nav.foreldrepenger.selvbetjening.innsending.domain.VedleggDto;
+import no.nav.foreldrepenger.selvbetjening.innsending.domain.ettersendelse.EttersendelseDto;
+import no.nav.foreldrepenger.selvbetjening.innsending.domain.foreldrepenger.Dekningsgrad;
+import no.nav.foreldrepenger.selvbetjening.innsending.domain.foreldrepenger.ForeldrepengesøknadDto;
+import no.nav.foreldrepenger.selvbetjening.innsending.domain.foreldrepenger.Situasjon;
 
 @ExtendWith(SpringExtension.class)
 @ContextConfiguration(classes = JacksonConfiguration.class)
@@ -60,7 +61,7 @@ class SøknadFrontendDeseraliseringTest {
         var uttaksperiode1 = fs.uttaksplan().get(0);
         assertThat(uttaksperiode1.forelder()).isEqualTo("mor");
         assertThat(uttaksperiode1.type()).isEqualTo(UTTAK);
-        assertThat(uttaksperiode1.konto()).isEqualTo("FORELDREPENGER_FØR_FØDSEL");
+        assertThat(uttaksperiode1.konto()).isEqualTo(StønadskontoType.FORELDREPENGER_FØR_FØDSEL);
         assertThat(uttaksperiode1.gradert()).isFalse();
         assertThat(uttaksperiode1.ønskerSamtidigUttak()).isFalse();
         assertThat(uttaksperiode1.tidsperiode()).isNotNull();
@@ -72,7 +73,7 @@ class SøknadFrontendDeseraliseringTest {
         var uttaksperiode2 = fs.uttaksplan().get(1);
         assertThat(uttaksperiode2.forelder()).isEqualTo("mor");
         assertThat(uttaksperiode2.type()).isEqualTo(UTTAK);
-        assertThat(uttaksperiode2.konto()).isEqualTo("FORELDREPENGER");
+        assertThat(uttaksperiode2.konto()).isEqualTo(StønadskontoType.FORELDREPENGER);
         assertThat(uttaksperiode2.gradert()).isFalse();
         assertThat(uttaksperiode2.tidsperiode()).isNotNull();
         assertThat(uttaksperiode2.tidsperiode().fom()).isNotNull();
@@ -82,7 +83,7 @@ class SøknadFrontendDeseraliseringTest {
         var uttaksperiode3 = fs.uttaksplan().get(2);
         assertThat(uttaksperiode3.forelder()).isEqualTo("mor");
         assertThat(uttaksperiode3.type()).isEqualTo(UTTAK);
-        assertThat(uttaksperiode3.konto()).isEqualTo("FORELDREPENGER");
+        assertThat(uttaksperiode3.konto()).isEqualTo(StønadskontoType.FORELDREPENGER);
         assertThat(uttaksperiode3.tidsperiode()).isNotNull();
         assertThat(uttaksperiode3.tidsperiode().fom()).isNotNull();
         assertThat(uttaksperiode3.tidsperiode().tom()).isNotNull();
@@ -201,7 +202,7 @@ class SøknadFrontendDeseraliseringTest {
         }
         sendSenere.addAll(opplastet);
 
-        var søknad = new ForeldrepengesøknadDto(null, null,
+        var søknad = new ForeldrepengesøknadDto(null,null, null,
             null, null, null, "", null,
             null, null, sendSenere);
 

@@ -10,16 +10,16 @@ import java.time.LocalDate;
 import no.nav.foreldrepenger.common.domain.foreldrepenger.Endringssøknad;
 import no.nav.foreldrepenger.common.domain.foreldrepenger.Foreldrepenger;
 import no.nav.foreldrepenger.common.domain.foreldrepenger.fordeling.Fordeling;
-import no.nav.foreldrepenger.selvbetjening.innsending.dto.endringssøknad.EndringssøknadForeldrepengerDto;
+import no.nav.foreldrepenger.selvbetjening.innsending.domain.endringssøknad.EndringssøknadForeldrepengerDto;
 
 final class EndringForeldrepengerMapper {
 
     private EndringForeldrepengerMapper() {
     }
 
-    static Endringssøknad tilEndringForeldrepengesøknad(EndringssøknadForeldrepengerDto endringssøknadFP) {
+    static Endringssøknad tilEndringForeldrepengesøknad(EndringssøknadForeldrepengerDto endringssøknadFP, LocalDate mottattDato) {
         return new Endringssøknad(
-            LocalDate.now(),
+            mottattDato,
             tilSøker(endringssøknadFP.søker()),
             tilYtelse(endringssøknadFP),
             endringssøknadFP.tilleggsopplysninger(),

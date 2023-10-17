@@ -2,12 +2,14 @@ package no.nav.foreldrepenger.selvbetjening.innsending.mapper;
 
 import static no.nav.foreldrepenger.common.util.ResourceHandleUtil.bytesFra;
 import static org.assertj.core.api.Assertions.assertThat;
+import static org.mockito.Mockito.mock;
 
 import java.io.IOException;
 
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.core.env.Environment;
 import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.junit.jupiter.SpringExtension;
 
@@ -19,8 +21,8 @@ import no.nav.foreldrepenger.common.domain.felles.EttersendingsType;
 import no.nav.foreldrepenger.selvbetjening.config.JacksonConfiguration;
 import no.nav.foreldrepenger.selvbetjening.innsending.InnsendingConnection;
 import no.nav.foreldrepenger.selvbetjening.innsending.VedleggsHåndteringTjeneste;
-import no.nav.foreldrepenger.selvbetjening.innsending.dto.ettersendelse.EttersendelseDto;
-import no.nav.foreldrepenger.selvbetjening.innsending.dto.ettersendelse.YtelseType;
+import no.nav.foreldrepenger.selvbetjening.innsending.domain.ettersendelse.EttersendelseDto;
+import no.nav.foreldrepenger.selvbetjening.innsending.domain.ettersendelse.YtelseType;
 import no.nav.foreldrepenger.selvbetjening.vedlegg.Image2PDFConverter;
 
 
@@ -28,7 +30,8 @@ import no.nav.foreldrepenger.selvbetjening.vedlegg.Image2PDFConverter;
 @ContextConfiguration(classes = JacksonConfiguration.class)
 class EttersendingTilDtoMapperTest {
 
-    private final InnsendingConnection connection = new InnsendingConnection(null, null, new VedleggsHåndteringTjeneste(new Image2PDFConverter()));
+    private final Environment env = mock(Environment.class);
+    private final InnsendingConnection connection = new InnsendingConnection(null, env, null, new VedleggsHåndteringTjeneste(new Image2PDFConverter()));
 
     @Autowired
     private ObjectMapper mapper;
