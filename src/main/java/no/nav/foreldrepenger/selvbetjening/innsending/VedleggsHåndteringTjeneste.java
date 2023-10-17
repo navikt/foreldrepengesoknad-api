@@ -42,7 +42,7 @@ public class VedleggsHåndteringTjeneste {
             return;
         }
 
-        fjernDupliserteVedlegg(ettersending.vedlegg());
+        finnOgfjernDupliserteVedlegg(ettersending.vedlegg());
         konverterTilPDF(ettersending.vedlegg());
         LOG.info("Fjerner {} dupliserte ettersendte vedlegg av totalt {} mottatt",  antallVedleggFørDuplikatsjek - ettersending.vedlegg().size(), antallVedleggFørDuplikatsjek);
     }
@@ -53,7 +53,7 @@ public class VedleggsHåndteringTjeneste {
             return;
         }
 
-        var duplikatTilEksisterende = fjernDupliserteVedlegg(søknad.vedlegg());
+        var duplikatTilEksisterende = finnOgfjernDupliserteVedlegg(søknad.vedlegg());
         erstattAlleReferanserSomErDuplikater(søknad, duplikatTilEksisterende);
         konverterTilPDF(søknad.vedlegg());
         LOG.info("Fjerner {} dupliserte vedlegg fra søknad av totalt {} mottatt", antallVedleggFørDuplikatsjek - søknad.vedlegg().size(), antallVedleggFørDuplikatsjek);
@@ -65,13 +65,13 @@ public class VedleggsHåndteringTjeneste {
             return;
         }
 
-        var duplikatTilEksisterende = fjernDupliserteVedlegg(endringssøknad.vedlegg());
+        var duplikatTilEksisterende = finnOgfjernDupliserteVedlegg(endringssøknad.vedlegg());
         erstattAlleReferanserSomErDuplikater(endringssøknad, duplikatTilEksisterende);
         konverterTilPDF(endringssøknad.vedlegg());
         LOG.info("Fjerner {} dupliserte vedlegg fra endringssøknad av totalt {} mottatt", antallVedleggFørDuplikatsjek - endringssøknad.vedlegg().size(), antallVedleggFørDuplikatsjek);
     }
 
-    private HashMap<MutableVedleggReferanseDto, MutableVedleggReferanseDto> fjernDupliserteVedlegg(List<VedleggDto> vedlegg) {
+    private HashMap<MutableVedleggReferanseDto, MutableVedleggReferanseDto> finnOgfjernDupliserteVedlegg(List<VedleggDto> vedlegg) {
         var duplikatTilEksisterende = finnDupliserteVedlegg(vedlegg);
         vedlegg.removeIf(vedleggDto -> duplikatTilEksisterende.containsKey(vedleggDto.getId()));
         return duplikatTilEksisterende;
