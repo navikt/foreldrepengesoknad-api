@@ -73,7 +73,7 @@ public class InnsendingConnection extends AbstractRestConnection {
     }
 
     private LocalDate mottattDato(MottattTidspunkt m) {
-        if (isGcp(env)) {
+        if (isGcp(env) || m.mottattdato()) {
             return LocalDate.now();
         } else {
             return m.mottattdato(); // Brukes av autotest for å spesifisere mottatttidspunkt annet enn dagens dato
