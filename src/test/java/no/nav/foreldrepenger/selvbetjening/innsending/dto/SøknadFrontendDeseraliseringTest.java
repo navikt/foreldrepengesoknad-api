@@ -1,8 +1,8 @@
-package no.nav.foreldrepenger.selvbetjening.innsending.deseralisering;
+package no.nav.foreldrepenger.selvbetjening.innsending.dto;
 
 import static no.nav.foreldrepenger.common.util.ResourceHandleUtil.bytesFra;
 import static no.nav.foreldrepenger.selvbetjening.innsending.dto.ettersendelse.YtelseType.FORELDREPENGER;
-import static no.nav.foreldrepenger.selvbetjening.innsending.dto.foreldrepenger.UttaksperiodeType.UTTAK;
+import static no.nav.foreldrepenger.selvbetjening.innsending.dto.foreldrepenger.UttaksplanPeriodeDto.Type.UTTAK;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.junit.jupiter.api.Assertions.assertFalse;
 import static org.junit.jupiter.api.Assertions.assertTrue;

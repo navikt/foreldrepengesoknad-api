@@ -4,8 +4,6 @@ import java.time.LocalDate;
 import java.util.List;
 import java.util.Optional;
 
-import com.fasterxml.jackson.annotation.JsonValue;
-
 import jakarta.validation.Valid;
 import no.nav.foreldrepenger.selvbetjening.innsending.dto.MutableVedleggReferanseDto;
 
@@ -22,19 +20,8 @@ public record TilretteleggingDto(Type type,
     }
 
     public enum Type {
-        HEL("hel"),
-        DELVIS("delvis"),
-        INGEN("ingen");
-
-        private final String verdi;
-
-        Type(String verdi) {
-            this.verdi = verdi;
-        }
-
-        @JsonValue
-        public String verdi() {
-            return verdi;
-        }
+        HEL,
+        DELVIS,
+        INGEN
     }
 }

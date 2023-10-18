@@ -33,7 +33,7 @@ public class PdfGeneratorTjeneste implements PdfGenerator {
         return new TilbakebetalingUttalelseDto(fulltnavn(person.søker()),
             person.søker().fnr(),
             uttalelse.saksnummer(),
-            uttalelse.type().verdi(),
+            uttalelse.type().name().toLowerCase(),
             LocalDateTime.now().format(DateTimeFormatter.ISO_DATE_TIME),
             uttalelse.brukerTekst().tekst());
     }

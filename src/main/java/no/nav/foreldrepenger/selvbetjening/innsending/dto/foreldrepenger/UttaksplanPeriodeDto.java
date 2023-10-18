@@ -14,7 +14,7 @@ import no.nav.foreldrepenger.selvbetjening.innsending.dto.MutableVedleggReferans
 import no.nav.foreldrepenger.selvbetjening.innsending.dto.ÅpenPeriodeDto;
 
 // TODO: Rydd opp
-public record UttaksplanPeriodeDto(@NotNull UttaksperiodeType type,
+public record UttaksplanPeriodeDto(@NotNull UttaksplanPeriodeDto.Type type,
                                    @Valid ÅpenPeriodeDto tidsperiode,
                                    @Pattern(regexp = BARE_BOKSTAVER) String forelder,
                                    StønadskontoType konto,
@@ -38,6 +38,10 @@ public record UttaksplanPeriodeDto(@NotNull UttaksperiodeType type,
     }
 
     public enum Type {
-
+        UTTAK,
+        UTSETTELSE,
+        OPPHOLD,
+        OVERFØRING,
+        PERIODEUTENUTTAK
     }
 }

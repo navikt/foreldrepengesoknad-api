@@ -101,7 +101,7 @@ final class ForeldrepengerMapper {
         return switch (u.type()) {
             case UTTAK -> tilUttaksPeriode(u);
             case OPPHOLD -> tilOppholdsPeriode(u);
-            case PERIODE_UTEN_UTTAK -> tilFriUtsettelsesPeriode(u); // periodeUtenUttak er ekvivalent med "fri" i mottak
+            case PERIODEUTENUTTAK -> tilFriUtsettelsesPeriode(u); // periodeUtenUttak er ekvivalent med "fri" i mottak
             case UTSETTELSE -> tilUtsettelsesPeriode(u);
             case OVERFØRING -> tilOverføringsPeriode(u);
         };

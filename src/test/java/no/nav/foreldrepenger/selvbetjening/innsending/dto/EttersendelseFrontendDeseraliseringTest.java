@@ -1,4 +1,4 @@
-package no.nav.foreldrepenger.selvbetjening.innsending.deseralisering;
+package no.nav.foreldrepenger.selvbetjening.innsending.dto;
 
 import static no.nav.foreldrepenger.common.util.ResourceHandleUtil.bytesFra;
 import static org.assertj.core.api.Assertions.assertThat;
@@ -14,7 +14,6 @@ import org.springframework.test.context.junit.jupiter.SpringExtension;
 import com.fasterxml.jackson.databind.ObjectMapper;
 
 import no.nav.foreldrepenger.selvbetjening.config.JacksonConfiguration;
-import no.nav.foreldrepenger.selvbetjening.innsending.dto.MutableVedleggReferanseDto;
 import no.nav.foreldrepenger.selvbetjening.innsending.dto.ettersendelse.EttersendelseDto;
 import no.nav.foreldrepenger.selvbetjening.innsending.dto.ettersendelse.YtelseType;
 
