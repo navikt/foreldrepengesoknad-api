@@ -36,7 +36,7 @@ jobs:
     uses: navikt/fp-gha-workflows/.github/workflows/release-drafter.yml@main
     secrets: inherit
 
-  verdikjede-tester:
+  verdikjede:
     name: Verdikjedetester
     if: github.ref_name == 'master'
     needs: build-app
@@ -44,6 +44,15 @@ jobs:
     with:
       build-version: ${{ needs.build-app.outputs.build-version }}
       test-suite: verdikjede
+
+  notify:
+    name: Notify
+    if: github.ref_name == 'master' && (success() || failure()) && !contains(needs.*.result, 'skipped')
+    needs: [build-app, verdikjede]
+    uses: navikt/fp-autotest/.github/workflows/report-and-notify.yml@master
+    with:
+      verdikjede: ${{ needs.verdikjede.outputs.resultat }}
+      build-version: ${{ needs.build-app.outputs.build-version }}
     secrets: inherit
 
   deploy-dev:
@@ -51,7 +60,7 @@ jobs:
     permissions:
       id-token: write
     if: github.ref_name == 'master'
-    needs: [build-app, verdikjede-tester]
+    needs: [build-app, verdikjede]
     uses: navikt/fp-gha-workflows/.github/workflows/deploy.yml@main
     with:
       gar: true
@@ -64,7 +73,7 @@ jobs:
     permissions:
       id-token: write
     if: github.ref_name == 'master'
-    needs: [build-app, verdikjede-tester, deploy-dev]
+    needs: [build-app, verdikjede, deploy-dev]
     uses: navikt/fp-gha-workflows/.github/workflows/deploy.yml@main
     with:
       gar: true
