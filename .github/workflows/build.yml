@@ -26,12 +26,32 @@ jobs:
       push-image: ${{ github.ref_name == 'master' }} # default: false
     secrets: inherit
 
+  release-drafter:
+    name: Update
+    if: github.ref_name == 'master'
+    needs: build-app
+    permissions:
+      contents: write
+      pull-requests: read
+    uses: navikt/fp-gha-workflows/.github/workflows/release-drafter.yml@main
+    secrets: inherit
+
+  verdikjede-tester:
+    name: Verdikjedetester
+    if: github.ref_name == 'master'
+    needs: build-app
+    uses: navikt/fp-autotest/.github/workflows/autotest.yml@master
+    with:
+      build-version: ${{ needs.build-app.outputs.build-version }}
+      test-suite: verdikjede
+    secrets: inherit
+
   deploy-dev:
     name: Deploy dev
     permissions:
       id-token: write
     if: github.ref_name == 'master'
-    needs: build-app
+    needs: [build-app, verdikjede-tester]
     uses: navikt/fp-gha-workflows/.github/workflows/deploy.yml@main
     with:
       gar: true
@@ -44,7 +64,7 @@ jobs:
     permissions:
       id-token: write
     if: github.ref_name == 'master'
-    needs: [build-app, deploy-dev]
+    needs: [build-app, verdikjede-tester, deploy-dev]
     uses: navikt/fp-gha-workflows/.github/workflows/deploy.yml@main
     with:
       gar: true
