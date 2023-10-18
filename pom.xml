@@ -3,17 +3,25 @@
 	xmlns="http://maven.apache.org/POM/4.0.0"
 	xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
 	<modelVersion>4.0.0</modelVersion>
+
+    <parent>
+        <groupId>org.springframework.boot</groupId>
+        <artifactId>spring-boot-starter-parent</artifactId>
+        <version>3.1.4</version>
+    </parent>
+
 	<groupId>no.nav.foreldrepenger.selvbetjening</groupId>
 	<artifactId>foreldrepengesoknad-api</artifactId>
-	<packaging>jar</packaging>
-	<version>0-SNAPSHOT</version>
+	<packaging>pom</packaging>
+    <version>0-SNAPSHOT</version>
 	<name>foreldrepengesoknad-api</name>
 	<description>API for selvbetjening av foreldrepenger og engangsstønad</description>
-	<parent>
-		<groupId>org.springframework.boot</groupId>
-		<artifactId>spring-boot-starter-parent</artifactId>
-		<version>3.1.4</version>
-	</parent>
+
+    <modules>
+        <module>kontrakt</module>
+        <module>domene</module>
+    </modules>
+
 	<licenses>
 		<license>
 			<name>MIT License</name>
@@ -25,7 +33,8 @@
         <java.version>17</java.version>
         <maven.compiler.source>${java.version}</maven.compiler.source>
         <maven.compiler.target>${java.version}</maven.compiler.target>
-		<sonar.projectKey>navikt_foreldrepengesoknad-api</sonar.projectKey>
+        <sonar.moduleKey>${project.artifactId}</sonar.moduleKey>
+        <sonar.projectKey>navikt_foreldrepengesoknad-api</sonar.projectKey>
 		<sonar.organization>navikt</sonar.organization>
 		<sonar.host.url>https://sonarcloud.io</sonar.host.url>
 		<timestamp>${maven.build.timestamp}</timestamp>
@@ -49,163 +58,29 @@
 		<simpleclient.version>0.16.0</simpleclient.version>
         <graphql-java-codegen.version>5.8.0</graphql-java-codegen.version>
 	</properties>
-	<dependencyManagement>
-		<dependencies>
-			<dependency>
-				<groupId>com.google.cloud</groupId>
-				<artifactId>google-cloud-bom</artifactId>
-				<version>${gcp.version}</version>
-				<type>pom</type>
-				<scope>import</scope>
-			</dependency>
-		</dependencies>
-	</dependencyManagement>
-	<dependencies>
-		<dependency>
-			<groupId>no.nav.foreldrepenger</groupId>
-			<artifactId>stonadskonto-regler</artifactId>
-            <version>${stonadskonto-regler.version}</version>
-		</dependency>
-        <dependency>
-            <groupId>no.nav.boot</groupId>
-            <artifactId>boot-conditionals</artifactId>
-            <version>${boot-conditionals.version}</version>
-        </dependency>
-        <dependency>
-            <groupId>no.nav.security</groupId>
-            <artifactId>token-validation-spring</artifactId>
-            <version>${token-validation-version}</version>
-        </dependency>
-        <dependency>
-            <groupId>no.nav.security</groupId>
-            <artifactId>token-client-spring</artifactId>
-            <version>${token-validation-version}</version>
-        </dependency>
-        <dependency>
-            <groupId>no.nav.security</groupId>
-            <artifactId>token-validation-spring-test</artifactId>
-            <version>${token-validation-version}</version>
-            <scope>test</scope>
-        </dependency>
-        <dependency>
-            <groupId>no.nav.foreldrepenger</groupId>
-            <artifactId>fpsoknad-felles</artifactId>
-            <version>${selvbetjening-felles.version}</version>
-        </dependency>
 
-		<dependency>
-			<groupId>com.google.cloud</groupId>
-			<artifactId>google-cloud-storage</artifactId>
-		</dependency>
-		<dependency>
-			<groupId>com.fasterxml.jackson.core</groupId>
-			<artifactId>jackson-databind</artifactId>
-		</dependency>
-		<dependency>
-			<groupId>org.springframework.boot</groupId>
-			<artifactId>spring-boot-configuration-processor</artifactId>
-			<optional>true</optional>
-		</dependency>
-        <dependency>
-            <groupId>org.springframework.boot</groupId>
-            <artifactId>spring-boot-starter-cache</artifactId>
-        </dependency>
-        <dependency>
-            <groupId>org.springframework.boot</groupId>
-            <artifactId>spring-boot-devtools</artifactId>
-            <optional>true</optional>
-        </dependency>
-        <dependency>
-            <groupId>org.springframework.boot</groupId>
-            <artifactId>spring-boot-starter-actuator</artifactId>
-        </dependency>
-        <dependency>
-            <groupId>org.springframework.boot</groupId>
-            <artifactId>spring-boot-starter-aop</artifactId>
-        </dependency>
-        <dependency>
-            <groupId>org.springframework.boot</groupId>
-            <artifactId>spring-boot-starter-web</artifactId>
-        </dependency>
-        <dependency>
-            <groupId>org.springframework.boot</groupId>
-            <artifactId>spring-boot-starter-test</artifactId>
-            <scope>test</scope>
-        </dependency>
-        <dependency>
-            <groupId>org.springframework.retry</groupId>
-            <artifactId>spring-retry</artifactId>
-        </dependency>
-        <dependency>
-            <groupId>org.springframework.boot</groupId>
-            <artifactId>spring-boot-starter-validation</artifactId>
-        </dependency>
+    <dependencyManagement>
+        <dependencies>
+            <dependency>
+                <groupId>com.google.cloud</groupId>
+                <artifactId>google-cloud-bom</artifactId>
+                <version>${gcp.version}</version>
+                <type>pom</type>
+                <scope>import</scope>
+            </dependency>
+            <dependency>
+                <groupId>no.nav.foreldrepenger.selvbetjening</groupId>
+                <artifactId>kontrakt</artifactId>
+                <version>${project.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>no.nav.foreldrepenger</groupId>
+                <artifactId>fpsoknad-felles</artifactId>
+                <version>${selvbetjening-felles.version}</version>
+            </dependency>
+        </dependencies>
+    </dependencyManagement>
 
-        <dependency>
-            <groupId>org.springdoc</groupId>
-            <artifactId>springdoc-openapi-starter-common</artifactId>
-            <version>${springdoc.version}</version>
-        </dependency>
-        <dependency>
-            <groupId>org.springdoc</groupId>
-            <artifactId>springdoc-openapi-starter-webmvc-ui</artifactId>
-            <version>${springdoc.version}</version>
-        </dependency>
-
-        <dependency>
-            <groupId>io.github.kobylynskyi</groupId>
-            <artifactId>graphql-codegen-maven-plugin</artifactId>
-            <version>${graphql-java-codegen.version}</version>
-        </dependency>
-
-		<dependency>
-			<groupId>com.github.ben-manes.caffeine</groupId>
-			<artifactId>caffeine</artifactId>
-		</dependency>
-		<dependency>
-			<groupId>com.neovisionaries</groupId>
-			<artifactId>nv-i18n</artifactId>
-			<version>${nv.version}</version>
-		</dependency>
-		<dependency>
-			<groupId>org.apache.pdfbox</groupId>
-			<artifactId>pdfbox</artifactId>
-			<version>${pdfbox.version}</version>
-		</dependency>
-		<dependency>
-			<groupId>io.micrometer</groupId>
-			<artifactId>micrometer-registry-prometheus</artifactId>
-		</dependency>
-		<dependency>
-			<groupId>io.prometheus</groupId>
-			<artifactId>simpleclient_hotspot</artifactId>
-			<version>${simpleclient.version}</version>
-		</dependency>
-		<dependency>
-			<groupId>net.logstash.logback</groupId>
-			<artifactId>logstash-logback-encoder</artifactId>
-			<version>${logback.logstash.version}</version>
-		</dependency>
-		<dependency>
-			<groupId>org.apache.tika</groupId>
-			<artifactId>tika-core</artifactId>
-			<version>${tika.version}</version>
-		</dependency>
-		<dependency>
-			<groupId>org.aspectj</groupId>
-			<artifactId>aspectjrt</artifactId>
-		</dependency>
-		<dependency>
-			<groupId>org.aspectj</groupId>
-			<artifactId>aspectjweaver</artifactId>
-		</dependency>
-        <dependency>
-            <groupId>org.reflections</groupId>
-            <artifactId>reflections</artifactId>
-            <version>${reflections.version}</version>
-            <scope>test</scope>
-        </dependency>
-    </dependencies>
 	<build>
 		<plugins>
 			<plugin>
@@ -218,46 +93,6 @@
 				<configuration>
 					<generateBackupPoms>false</generateBackupPoms>
 				</configuration>
-			</plugin>
-            <plugin>
-                <groupId>io.github.kobylynskyi</groupId>
-                <artifactId>graphql-codegen-maven-plugin</artifactId>
-                <version>${graphql-java-codegen.version}</version>
-                <executions>
-                    <execution>
-                        <goals>
-                            <goal>generate</goal>
-                        </goals>
-                        <phase>validate</phase>
-                        <configuration>
-                            <graphqlSchemaPaths>${project.basedir}/src/main/resources/safselvbetjening/schema.graphql</graphqlSchemaPaths>
-                            <outputDir>${project.build.directory}/generated-sources</outputDir>
-                            <modelPackageName>no.nav.safselvbetjening</modelPackageName>
-                            <customTypesMapping>
-                                <DateTime>java.time.LocalDateTime</DateTime>
-                            </customTypesMapping>
-                            <generateClient>true</generateClient>
-                            <generateApis>false</generateApis>
-                            <generateBuilder>false</generateBuilder>
-                            <generateToString>true</generateToString>
-                            <generateParameterizedFieldsResolvers>false</generateParameterizedFieldsResolvers>
-                            <addGeneratedAnnotation>true</addGeneratedAnnotation>
-                            <generatedAnnotation>jakarta.annotation.Generated</generatedAnnotation>
-                            <modelValidationAnnotation>@jakarta.validation.constraints.NotNull</modelValidationAnnotation>
-                        </configuration>
-                    </execution>
-                </executions>
-            </plugin>
-			<plugin>
-				<groupId>org.springframework.boot</groupId>
-				<artifactId>spring-boot-maven-plugin</artifactId>
-				<executions>
-					<execution>
-						<goals>
-							<goal>build-info</goal>
-						</goals>
-					</execution>
-				</executions>
 			</plugin>
 			<plugin>
 				<groupId>org.apache.maven.plugins</groupId>
@@ -298,4 +133,12 @@
             </plugin>
 		</plugins>
 	</build>
+
+    <distributionManagement>
+        <repository>
+            <id>github</id>
+            <name>Github navikt Maven Packages</name>
+            <url>https://maven.pkg.github.com/navikt/foreldrepengesoknad-api</url>
+        </repository>
+    </distributionManagement>
 </project>
