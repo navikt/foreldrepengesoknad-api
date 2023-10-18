@@ -8,7 +8,6 @@ import static org.mockito.Mockito.when;
 
 import java.io.IOException;
 
-import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -19,6 +18,7 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 
 import no.nav.foreldrepenger.selvbetjening.config.JacksonConfiguration;
 import no.nav.foreldrepenger.selvbetjening.innsending.dto.SøknadDto;
+import no.nav.foreldrepenger.selvbetjening.innsending.dto.VedleggDto;
 import no.nav.foreldrepenger.selvbetjening.innsending.dto.ettersendelse.EttersendelseDto;
 import no.nav.foreldrepenger.selvbetjening.vedlegg.Image2PDFConverter;
 
@@ -26,15 +26,11 @@ import no.nav.foreldrepenger.selvbetjening.vedlegg.Image2PDFConverter;
 @ContextConfiguration(classes = JacksonConfiguration.class)
 class VedleggsHåndteringTjenesteTest {
 
+    private final byte[] CONVERTET_TO_BYTE = {25, 50, 44, 46};
     @Autowired
     private ObjectMapper mapper;
 
     private final Image2PDFConverter converter = mock(Image2PDFConverter.class);
-
-    @BeforeEach
-    public void setup() {
-        when(converter.convert(any())).thenAnswer(i -> i.getArguments()[0]);
-    }
 
     @Test
     void søknadSkalVæreLikNårDetIkkeFinnesDupliserteVedlegg() throws IOException {
@@ -50,6 +46,7 @@ class VedleggsHåndteringTjenesteTest {
 
     @Test
     void fjernerDupliserteVedleggFraSøknad() throws IOException {
+        when(converter.convert(any())).thenReturn(CONVERTET_TO_BYTE);
         var søknadOrginal = mapper.readValue(bytesFra("json/foreldrepenger_adopsjon_annenInntekt_dupliserte_vedlegg.json"), SøknadDto.class);
         var søknadDupliserteVedleggFjernet = mapper.readValue(bytesFra("json/foreldrepenger_adopsjon_annenInntekt_dupliserte_vedlegg.json"), SøknadDto.class); // For å ikke lage kopi
 
@@ -64,10 +61,14 @@ class VedleggsHåndteringTjenesteTest {
         assertThat(søknadDupliserteVedleggFjernet.barn().omsorgsovertakelse().stream()
                 .distinct()
                 .count()).isEqualTo(1);
+        assertThat(søknadDupliserteVedleggFjernet.vedlegg())
+            .extracting(VedleggDto::getContent)
+            .containsOnly(CONVERTET_TO_BYTE);
     }
 
     @Test
     void fjernerDupliserteVedleggFraSøknadVedGradering() throws IOException {
+        when(converter.convert(any())).thenReturn(CONVERTET_TO_BYTE);
         var søknadOrginal = mapper.readValue(bytesFra("json/foreldrepenger_far_gardering_frilans_duplisert_vedlegg.json"), SøknadDto.class);
         var søknadDupliserteVedleggFjernet = mapper.readValue(bytesFra("json/foreldrepenger_far_gardering_frilans_duplisert_vedlegg.json"), SøknadDto.class); // For å ikke lage kopi
 
@@ -76,10 +77,14 @@ class VedleggsHåndteringTjenesteTest {
 
         assertThat(søknadOrginal.vedlegg()).hasSize(2);
         assertThat(søknadDupliserteVedleggFjernet.vedlegg()).hasSize(1);
+        assertThat(søknadDupliserteVedleggFjernet.vedlegg())
+            .extracting(VedleggDto::getContent)
+            .containsOnly(CONVERTET_TO_BYTE);
     }
 
     @Test
     void skalFjerneDuplikateVedleggFraAnnenInntektOgDokumentasjonAvAktivitetskrav() throws IOException {
+        when(converter.convert(any())).thenReturn(CONVERTET_TO_BYTE);
         var søknadOrginal = mapper.readValue(bytesFra("json/foreldrepenger_far_fellesperiode_førstegangstjenste_duplikate_vedlegg.json"), SøknadDto.class);
         var søknadDupliserteVedleggFjernet = mapper.readValue(bytesFra("json/foreldrepenger_far_fellesperiode_førstegangstjenste_duplikate_vedlegg.json"), SøknadDto.class); // For å ikke lage kopi
 
@@ -88,10 +93,14 @@ class VedleggsHåndteringTjenesteTest {
 
         assertThat(søknadOrginal.vedlegg()).hasSize(9);
         assertThat(søknadDupliserteVedleggFjernet.vedlegg()).hasSize(5);
+        assertThat(søknadDupliserteVedleggFjernet.vedlegg())
+            .extracting(VedleggDto::getContent)
+            .containsOnly(CONVERTET_TO_BYTE, null); // null er SEND_SENERE
     }
 
     @Test
     void skalIkkeFjerneVedleggDerHvorTypeSkjemaNummerErLiktMensInnholdErForskjellig() throws IOException {
+        when(converter.convert(any())).thenAnswer(i -> i.getArguments()[0]);
         var søknadOrginal = mapper.readValue(bytesFra("json/foreldrepenger_far_gardering_frilans_to_vedlegg_samme_type_ulikt_innhold.json"), SøknadDto.class);
         var søknadDupliserteVedleggFjernet = mapper.readValue(bytesFra("json/foreldrepenger_far_gardering_frilans_to_vedlegg_samme_type_ulikt_innhold.json"), SøknadDto.class); // For å ikke lage kopi
 
@@ -117,6 +126,7 @@ class VedleggsHåndteringTjenesteTest {
 
     @Test
     void duplikateVedleggFjernesFraEttersending() throws IOException {
+        when(converter.convert(any())).thenReturn(CONVERTET_TO_BYTE);
         var ettersendelseOrginal = mapper.readValue(bytesFra("json/ettersendelse_I000044_duplikate_vedlegg.json"), EttersendelseDto.class);
         var ettersendelseDupliserteVedleggFjernet = mapper.readValue(bytesFra("json/ettersendelse_I000044_duplikate_vedlegg.json"), EttersendelseDto.class);
 
@@ -125,6 +135,9 @@ class VedleggsHåndteringTjenesteTest {
 
         assertThat(ettersendelseOrginal.vedlegg()).hasSize(3);
         assertThat(ettersendelseDupliserteVedleggFjernet.vedlegg()).hasSize(1);
+        assertThat(ettersendelseDupliserteVedleggFjernet.vedlegg())
+            .extracting(VedleggDto::getContent)
+            .containsOnly(CONVERTET_TO_BYTE);
     }
 
 }

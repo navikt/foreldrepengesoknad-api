@@ -168,10 +168,10 @@ public class VedleggsHåndteringTjeneste {
         return unikeVedleggMedInnhold;
     }
 
-    private VedleggDto convert(VedleggDto v) {
-        VedleggDto vedlegg = v.kopi();
-        if ((v.getContent() != null) && (v.getContent().length > 0)) {
-            vedlegg.setContent(converter.convert(v.getContent()));
+    private VedleggDto convert(VedleggDto vedlegg) {
+        var originalContent = vedlegg.getContent();
+        if (originalContent != null && originalContent.length > 0) {
+            vedlegg.setContent(converter.convert(originalContent));
         }
         return vedlegg;
     }

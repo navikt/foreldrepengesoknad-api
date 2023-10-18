@@ -42,16 +42,6 @@ public class VedleggDto {
         this.url = url;
     }
 
-    public VedleggDto kopi() {
-        return new VedleggDto(null,
-            this.getBeskrivelse(),
-            this.getId(),
-            this.getInnsendingsType(),
-            this.getSkjemanummer(),
-            this.getUuid(),
-            this.getUrl());
-    }
-
     public byte[] getContent() {
         return content;
     }
