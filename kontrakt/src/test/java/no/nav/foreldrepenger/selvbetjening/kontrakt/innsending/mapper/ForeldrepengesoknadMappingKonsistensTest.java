@@ -78,7 +78,7 @@ class ForeldrepengesoknadMappingKonsistensTest {
         assertThat(frilans.periode().fom()).isEqualTo(frilansDto.oppstart());
         assertThat(frilans.harInntektFraFosterhjem()).isEqualTo(frilansDto.driverFosterhjem());
         assertThat(frilans.jobberFremdelesSomFrilans()).isEqualTo(frilansDto.jobberFremdelesSomFrilans());
-        assertThat(frilans.nyOppstartet()).isEqualTo(false); // Oppstart 2 år siden
+        assertThat(frilans.nyOppstartet()).isFalse(); // Oppstart 2 år siden
         assertThat(frilans.frilansOppdrag()).hasSameSizeAs(frilansDto.oppdragForNæreVennerEllerFamilieSiste10Mnd());
 
         // Rettigheter

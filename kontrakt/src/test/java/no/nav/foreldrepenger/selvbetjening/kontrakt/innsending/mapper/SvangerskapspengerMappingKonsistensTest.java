@@ -29,7 +29,7 @@ import no.nav.foreldrepenger.selvbetjening.kontrakt.innsending.util.builder.Søk
 import no.nav.foreldrepenger.selvbetjening.kontrakt.innsending.util.maler.ArbeidsforholdMaler;
 import no.nav.foreldrepenger.selvbetjening.kontrakt.innsending.util.maler.OpptjeningMaler;
 
-public class SvangerskapspengerMappingKonsistensTest {
+class SvangerskapspengerMappingKonsistensTest {
     private static final LocalDate NOW = LocalDate.now();
     private static final Fødselsnummer DUMMY_FNR = new Fødselsnummer("0000000000");
 

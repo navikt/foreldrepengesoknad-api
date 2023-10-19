@@ -18,7 +18,7 @@ import no.nav.foreldrepenger.selvbetjening.kontrakt.innsending.dto.VedleggDto;
 import no.nav.foreldrepenger.selvbetjening.kontrakt.innsending.dto.ettersendelse.EttersendelseDto;
 import no.nav.foreldrepenger.selvbetjening.kontrakt.innsending.dto.ettersendelse.YtelseType;
 
-public class EttersendelseMappingKonsistensTest {
+class EttersendelseMappingKonsistensTest {
 
     @Test
     void testEttersendingMapper() {

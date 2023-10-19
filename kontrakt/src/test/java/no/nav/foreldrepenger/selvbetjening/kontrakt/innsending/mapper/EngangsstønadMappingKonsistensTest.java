@@ -14,7 +14,7 @@ import no.nav.foreldrepenger.selvbetjening.kontrakt.innsending.util.builder.Barn
 import no.nav.foreldrepenger.selvbetjening.kontrakt.innsending.util.builder.EngangsstønadBuilder;
 import no.nav.foreldrepenger.selvbetjening.kontrakt.innsending.util.builder.SøkerBuilder;
 
-public class EngangsstønadMappingKonsistensTest {
+class EngangsstønadMappingKonsistensTest {
     private static final LocalDate NOW = LocalDate.now();
 
     @Test
