@@ -46,12 +46,12 @@ public class UttakplanPeriodeBuilder {
     }
 
     public static UttakplanPeriodeBuilder overføring(Overføringsårsak årsak, StønadskontoType konto, LocalDate fom, LocalDate tom) {
-        return new UttakplanPeriodeBuilder(UttaksplanPeriodeDto.Type.UTTAK, konto, fom, tom)
+        return new UttakplanPeriodeBuilder(UttaksplanPeriodeDto.Type.OVERFØRING, konto, fom, tom)
             .medÅrsak(årsak.name());
     }
 
     public static UttakplanPeriodeBuilder utsettelse(UtsettelsesÅrsak årsak, LocalDate fom, LocalDate tom) {
-        return new UttakplanPeriodeBuilder(UttaksplanPeriodeDto.Type.UTTAK, null, fom, tom)
+        return new UttakplanPeriodeBuilder(UttaksplanPeriodeDto.Type.UTSETTELSE, null, fom, tom)
             .medÅrsak(årsak.name());
     }
 
