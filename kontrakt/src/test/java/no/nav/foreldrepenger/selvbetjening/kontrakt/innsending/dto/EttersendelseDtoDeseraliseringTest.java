@@ -6,27 +6,21 @@ import static org.assertj.core.api.Assertions.assertThat;
 import java.io.IOException;
 
 import org.junit.jupiter.api.Test;
-import org.junit.jupiter.api.extension.ExtendWith;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.test.context.ContextConfiguration;
-import org.springframework.test.context.junit.jupiter.SpringExtension;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 
-import no.nav.foreldrepenger.selvbetjening.config.JacksonConfiguration;
+import no.nav.foreldrepenger.common.mapper.DefaultJsonMapper;
 import no.nav.foreldrepenger.selvbetjening.kontrakt.innsending.dto.ettersendelse.EttersendelseDto;
 import no.nav.foreldrepenger.selvbetjening.kontrakt.innsending.dto.ettersendelse.YtelseType;
 
-@ExtendWith(SpringExtension.class)
-@ContextConfiguration(classes = JacksonConfiguration.class)
-class EttersendelseFrontendDeseraliseringTest {
 
-    @Autowired
-    private ObjectMapper mapper;
+class EttersendelseDtoDeseraliseringTest {
+
+    private static final ObjectMapper MAPPER = DefaultJsonMapper.MAPPER;
 
     @Test
     void ettersendelseSeraliseringVirkerTest() throws IOException {
-        var ettersendelse = mapper.readValue(bytesFra("json/ettersendelse_I000044.json"), EttersendelseDto.class);
+        var ettersendelse = MAPPER.readValue(bytesFra("json/ettersendelse_I000044.json"), EttersendelseDto.class);
 
         assertThat(ettersendelse.type()).isEqualTo(YtelseType.FORELDREPENGER);
         assertThat(ettersendelse.saksnummer().value()).isEqualTo("352003201");

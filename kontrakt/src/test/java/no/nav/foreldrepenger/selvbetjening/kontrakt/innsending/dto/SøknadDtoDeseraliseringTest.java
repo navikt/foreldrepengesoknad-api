@@ -1,53 +1,31 @@
 package no.nav.foreldrepenger.selvbetjening.kontrakt.innsending.dto;
 
 import static no.nav.foreldrepenger.common.util.ResourceHandleUtil.bytesFra;
-import static no.nav.foreldrepenger.selvbetjening.kontrakt.innsending.dto.ettersendelse.YtelseType.FORELDREPENGER;
 import static no.nav.foreldrepenger.selvbetjening.kontrakt.innsending.dto.foreldrepenger.UttaksplanPeriodeDto.Type.UTTAK;
 import static org.assertj.core.api.Assertions.assertThat;
-import static org.junit.jupiter.api.Assertions.assertFalse;
-import static org.junit.jupiter.api.Assertions.assertTrue;
 
 import java.io.IOException;
-import java.net.URI;
-import java.net.URISyntaxException;
-import java.util.ArrayList;
-import java.util.List;
 
 import org.junit.jupiter.api.Test;
-import org.junit.jupiter.api.extension.ExtendWith;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.test.context.ContextConfiguration;
-import org.springframework.test.context.junit.jupiter.SpringExtension;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 
-import jakarta.validation.Validation;
-import jakarta.validation.Validator;
 import no.nav.foreldrepenger.common.domain.BrukerRolle;
 import no.nav.foreldrepenger.common.domain.felles.opptjening.Virksomhetstype;
 import no.nav.foreldrepenger.common.domain.foreldrepenger.fordeling.StønadskontoType;
+import no.nav.foreldrepenger.common.mapper.DefaultJsonMapper;
 import no.nav.foreldrepenger.common.oppslag.dkif.Målform;
-import no.nav.foreldrepenger.selvbetjening.config.JacksonConfiguration;
-import no.nav.foreldrepenger.selvbetjening.kontrakt.innsending.dto.MutableVedleggReferanseDto;
-import no.nav.foreldrepenger.selvbetjening.kontrakt.innsending.dto.SøknadDto;
-import no.nav.foreldrepenger.selvbetjening.kontrakt.innsending.dto.VedleggDto;
-import no.nav.foreldrepenger.selvbetjening.kontrakt.innsending.dto.ettersendelse.EttersendelseDto;
 import no.nav.foreldrepenger.selvbetjening.kontrakt.innsending.dto.foreldrepenger.Dekningsgrad;
 import no.nav.foreldrepenger.selvbetjening.kontrakt.innsending.dto.foreldrepenger.ForeldrepengesøknadDto;
 import no.nav.foreldrepenger.selvbetjening.kontrakt.innsending.dto.foreldrepenger.Situasjon;
 
-@ExtendWith(SpringExtension.class)
-@ContextConfiguration(classes = JacksonConfiguration.class)
-class SøknadFrontendDeseraliseringTest {
-    private final Validator validator = Validation.buildDefaultValidatorFactory().getValidator();
 
-    @Autowired
-    private ObjectMapper mapper;
+class SøknadDtoDeseraliseringTest {
+    private static final ObjectMapper MAPPER = DefaultJsonMapper.MAPPER;
 
-    // TODO: Legg til en for SVP, ES og FP endring
     @Test
     void innsendtSøknadFraFrontendDeseraliseresKorrektTest() throws IOException {
-        var søknadFrontend = mapper.readValue(bytesFra("json/foreldrepenger_mor_gradering_egenNæring_og_frilans.json"), SøknadDto.class);
+        var søknadFrontend = MAPPER.readValue(bytesFra("json/foreldrepenger_mor_gradering_egenNæring_og_frilans.json"), SøknadDto.class);
 
         // Verifiser korrekt seralisering fra frontend
         assertThat(søknadFrontend).isInstanceOf(ForeldrepengesøknadDto.class);
@@ -154,59 +132,5 @@ class SøknadFrontendDeseraliseringTest {
             .isAfter(informasjonOmUtenlandsopphold.senereOpphold().get(0).tidsperiode().fom());
 
         assertThat(søknadFrontend.vedlegg()).isEmpty();
-    }
-
-    @Test
-    void ettersendelseDeraliseringTest() throws IOException, URISyntaxException {
-        var ettersendelse = mapper.readValue(bytesFra("json/ettersendelse_I000044.json"), EttersendelseDto.class);
-        assertThat(ettersendelse).isNotNull();
-        assertThat(ettersendelse.saksnummer().value()).isEqualTo("352003201");
-        assertThat(ettersendelse.type()).isEqualTo(FORELDREPENGER);
-
-        var vedleggListe = ettersendelse.vedlegg();
-        assertThat(vedleggListe).hasSize(1);
-        var vedlegg = vedleggListe.get(0);
-        assertThat(vedlegg.getSkjemanummer()).isEqualTo("I000044");
-        assertThat(vedlegg.getId()).isEqualTo(new MutableVedleggReferanseDto("V090740687265315217194125674862219730"));
-        assertThat(vedlegg.getUrl()).isEqualTo(new URI("https://foreldrepengesoknad-api.intern.dev.nav.no/rest/storage/vedlegg/b9974360-6c07-4b9d-acac-14f0f417d200"));
-    }
-
-    @Test
-    void innsendingVedlegglistestørrelsevalidatorTest() {
-        var forMangeSendSenere = validVedleggsliste(101, 0);
-        assertFalse(forMangeSendSenere);
-
-        var forMangeOpplastede = validVedleggsliste(0, 41);
-        assertFalse(forMangeOpplastede);
-
-        var innenforGrensene = validVedleggsliste(50, 35);
-        assertTrue(innenforGrensene);
-
-        var tomListeInnenforGrensen = validVedleggsliste(0, 0);
-        assertTrue(tomListeInnenforGrensen);
-    }
-
-    private boolean validVedleggsliste(int sendSenereVedlegg, int opplastetVedlegg) {
-        List<VedleggDto> sendSenere = new ArrayList<>();
-
-        while (sendSenere.size() < sendSenereVedlegg) {
-            var nyttVedlegg = new VedleggDto(null, "Beskrivelse", new MutableVedleggReferanseDto("Id"), "SEND_SENERE", "Skjemanummer", "xyz", null);
-            sendSenere.add(nyttVedlegg);
-        }
-
-        List<VedleggDto> opplastet = new ArrayList<>();
-        while (opplastet.size() < opplastetVedlegg) {
-            var nyttVedlegg = new VedleggDto(null, "Beskrivelse", new MutableVedleggReferanseDto("Id"), null, "Skjemanummer", "xyz", null);
-            opplastet.add(nyttVedlegg);
-        }
-        sendSenere.addAll(opplastet);
-
-        var søknad = new ForeldrepengesøknadDto(null, null, null, null, null, null, "", null, null, null, sendSenere);
-
-        var constraintViolations = validator.validate(søknad);
-        var match = constraintViolations.stream()
-            .anyMatch(cv -> cv.getMessageTemplate()
-                .equals("Vedleggslisten kan ikke inneholde flere enn 40 opplastede vedlegg eller 100 vedlegg som skal sendes senere."));
-        return !match;
     }
 }

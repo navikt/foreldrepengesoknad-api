@@ -50,7 +50,8 @@ public class InnsynController {
         return innsynTjeneste.annenPartVedtak(annenPartVedtakIdentifikator).orElse(null);
     }
 
-    @GetMapping("/saker/oppdatert")
+    @GetMapping("/saker"
+        + "/oppdatert")
     public boolean erSakOppdatert() {
         var dokumenter = dokumentTjeneste.alle(tokenUtil.autentisertBrukerOrElseThrowException());
         var søkaderMottattNylig = dokumenter.stream()
