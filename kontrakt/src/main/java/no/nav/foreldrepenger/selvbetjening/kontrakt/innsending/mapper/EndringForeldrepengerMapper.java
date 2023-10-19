@@ -41,7 +41,7 @@ final class EndringForeldrepengerMapper {
 
     private static Fordeling tilFordeling(EndringssøknadForeldrepengerDto f) {
         return new Fordeling(
-            f.annenforelder().erInformertOmSøknaden(),
+            f.annenForelder().erInformertOmSøknaden(),
             tilLukketPeriodeMedVedlegg(f.uttaksplan()),
             f.ønskerJustertUttakVedFødsel()
         );

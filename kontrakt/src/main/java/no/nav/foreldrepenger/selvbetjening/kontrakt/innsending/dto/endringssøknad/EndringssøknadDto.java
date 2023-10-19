@@ -7,6 +7,7 @@ import java.util.List;
 import com.fasterxml.jackson.annotation.JsonSubTypes;
 import com.fasterxml.jackson.annotation.JsonTypeInfo;
 
+import no.nav.foreldrepenger.common.domain.Saksnummer;
 import no.nav.foreldrepenger.selvbetjening.kontrakt.innsending.dto.BarnDto;
 import no.nav.foreldrepenger.selvbetjening.kontrakt.innsending.dto.MottattTidspunkt;
 import no.nav.foreldrepenger.selvbetjening.kontrakt.innsending.dto.SøkerDto;
@@ -19,6 +20,7 @@ import no.nav.foreldrepenger.selvbetjening.kontrakt.innsending.dto.foreldrepenge
 })
 public interface EndringssøknadDto extends MottattTidspunkt {
     Situasjon situasjon();
+    Saksnummer saksnummer();
     BarnDto barn();
     SøkerDto søker();
     List<VedleggDto> vedlegg();
