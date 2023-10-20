@@ -4,6 +4,7 @@ import static no.nav.foreldrepenger.selvbetjening.kontrakt.innsending.mapper.Com
 import static no.nav.foreldrepenger.selvbetjening.kontrakt.innsending.mapper.CommonMapper.tilVedlegg;
 import static no.nav.foreldrepenger.selvbetjening.kontrakt.innsending.mapper.ForeldrepengerMapper.tilAnnenForelder;
 import static no.nav.foreldrepenger.selvbetjening.kontrakt.innsending.mapper.ForeldrepengerMapper.tilLukketPeriodeMedVedlegg;
+import static no.nav.foreldrepenger.selvbetjening.kontrakt.innsending.mapper.ForeldrepengerMapper.tilRettigheter;
 import static no.nav.foreldrepenger.selvbetjening.kontrakt.innsending.mapper.ForeldrepengerMapper.tilSøker;
 
 import java.time.LocalDate;
@@ -32,7 +33,7 @@ final class EndringForeldrepengerMapper {
         return new Foreldrepenger(
             tilAnnenForelder(f.annenForelder()),
             tilRelasjonTilBarn(f.barn(), f.situasjon()),
-            null,
+            tilRettigheter(f.søker(), f.annenForelder()),
             null,
             null,
             tilFordeling(f),

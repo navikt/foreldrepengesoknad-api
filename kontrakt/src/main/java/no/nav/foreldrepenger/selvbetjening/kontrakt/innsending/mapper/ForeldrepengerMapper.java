@@ -60,7 +60,7 @@ final class ForeldrepengerMapper {
         return new Foreldrepenger(
             tilAnnenForelder(f.annenForelder()),
             tilRelasjonTilBarn(f.barn(), f.situasjon()),
-            tilRettigheter(f),
+            tilRettigheter(f.søker(), f.annenForelder()),
             Dekningsgrad.fraKode(f.dekningsgrad().verdi()),
             tilOpptjening(f),
             tilFordeling(f),
@@ -68,9 +68,7 @@ final class ForeldrepengerMapper {
         );
     }
 
-    private static Rettigheter tilRettigheter(ForeldrepengesøknadDto f) {
-        var annenforelder = f.annenForelder();
-        var søker = f.søker();
+    static Rettigheter tilRettigheter(SøkerDto søker, AnnenforelderDto annenforelder) {
         return new Rettigheter(
             annenforelder.harRettPåForeldrepenger(),
             søker.erAleneOmOmsorg(),

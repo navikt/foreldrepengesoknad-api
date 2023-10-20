@@ -58,6 +58,14 @@ class EndrignssøknadFPMappingKonsistensTest {
         var norskforelder = (NorskForelder) foreldrepenger.annenForelder();
         assertThat(norskforelder.fnr().value()).isEqualTo(foreldrepengerDto.annenForelder().fnr());
 
+        // Rettigheter
+        var rettigheter = foreldrepenger.rettigheter();
+        assertThat(rettigheter.harAleneOmsorgForBarnet()).isEqualTo(foreldrepengerDto.søker().erAleneOmOmsorg());
+        assertThat(rettigheter.harAnnenForelderRett()).isEqualTo(foreldrepengerDto.annenForelder().harRettPåForeldrepenger());
+        assertThat(rettigheter.harMorUføretrygd()).isEqualTo(foreldrepengerDto.annenForelder().harMorUføretrygd());
+        assertThat(rettigheter.harAnnenForelderOppholdtSegIEØS()).isEqualTo(foreldrepengerDto.annenForelder().harAnnenForelderOppholdtSegIEØS());
+        assertThat(rettigheter.harAnnenForelderTilsvarendeRettEØS()).isEqualTo(foreldrepengerDto.annenForelder().harAnnenForelderTilsvarendeRettEØS());
+
         // Fordeling
         assertThat(foreldrepenger.fordeling().ønskerJustertUttakVedFødsel()).isEqualTo(foreldrepengerDto.ønskerJustertUttakVedFødsel());
         assertThat(foreldrepenger.fordeling().perioder())
