@@ -12,6 +12,7 @@ import org.junit.jupiter.api.Test;
 import no.nav.foreldrepenger.common.domain.BrukerRolle;
 import no.nav.foreldrepenger.common.domain.Fødselsnummer;
 import no.nav.foreldrepenger.common.domain.Saksnummer;
+import no.nav.foreldrepenger.common.domain.felles.annenforelder.NorskForelder;
 import no.nav.foreldrepenger.common.domain.foreldrepenger.Foreldrepenger;
 import no.nav.foreldrepenger.common.domain.foreldrepenger.fordeling.LukketPeriodeMedVedlegg;
 import no.nav.foreldrepenger.common.domain.foreldrepenger.fordeling.UttaksPeriode;
@@ -52,6 +53,10 @@ class EndrignssøknadFPMappingKonsistensTest {
         assertThat(ytelse).isInstanceOf(Foreldrepenger.class);
         var foreldrepenger = (Foreldrepenger) ytelse;
 
+        // Annenpart
+        assertThat(foreldrepenger.annenForelder()).isInstanceOf(NorskForelder.class);
+        var norskforelder = (NorskForelder) foreldrepenger.annenForelder();
+        assertThat(norskforelder.fnr().value()).isEqualTo(foreldrepengerDto.annenForelder().fnr());
 
         // Fordeling
         assertThat(foreldrepenger.fordeling().ønskerJustertUttakVedFødsel()).isEqualTo(foreldrepengerDto.ønskerJustertUttakVedFødsel());

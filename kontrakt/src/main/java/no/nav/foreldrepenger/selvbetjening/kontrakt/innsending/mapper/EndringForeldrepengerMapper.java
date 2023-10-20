@@ -2,6 +2,7 @@ package no.nav.foreldrepenger.selvbetjening.kontrakt.innsending.mapper;
 
 import static no.nav.foreldrepenger.selvbetjening.kontrakt.innsending.mapper.CommonMapper.tilRelasjonTilBarn;
 import static no.nav.foreldrepenger.selvbetjening.kontrakt.innsending.mapper.CommonMapper.tilVedlegg;
+import static no.nav.foreldrepenger.selvbetjening.kontrakt.innsending.mapper.ForeldrepengerMapper.tilAnnenForelder;
 import static no.nav.foreldrepenger.selvbetjening.kontrakt.innsending.mapper.ForeldrepengerMapper.tilLukketPeriodeMedVedlegg;
 import static no.nav.foreldrepenger.selvbetjening.kontrakt.innsending.mapper.ForeldrepengerMapper.tilSøker;
 
@@ -29,7 +30,7 @@ final class EndringForeldrepengerMapper {
 
     private static Foreldrepenger tilYtelse(EndringssøknadForeldrepengerDto f) {
         return new Foreldrepenger(
-            null,
+            tilAnnenForelder(f.annenForelder()),
             tilRelasjonTilBarn(f.barn(), f.situasjon()),
             null,
             null,

@@ -18,6 +18,8 @@ import com.neovisionaries.i18n.CountryCode;
 
 import no.nav.foreldrepenger.common.domain.BrukerRolle;
 import no.nav.foreldrepenger.common.domain.Fødselsnummer;
+import no.nav.foreldrepenger.common.domain.felles.annenforelder.NorskForelder;
+import no.nav.foreldrepenger.common.domain.felles.annenforelder.UkjentForelder;
 import no.nav.foreldrepenger.common.domain.felles.opptjening.AnnenOpptjening;
 import no.nav.foreldrepenger.common.domain.felles.opptjening.AnnenOpptjeningType;
 import no.nav.foreldrepenger.common.domain.felles.opptjening.UtenlandskArbeidsforhold;
@@ -71,6 +73,11 @@ class ForeldrepengesoknadMappingKonsistensTest {
         assertThat(foreldrepenger.dekningsgrad()).isEqualTo(no.nav.foreldrepenger.common.domain.foreldrepenger.Dekningsgrad.HUNDRE);
         assertThat(foreldrepenger.medlemsskap().isBoddINorge()).isTrue();
         assertThat(foreldrepenger.medlemsskap().isNorgeNeste12()).isTrue();
+
+        // Annenpart
+        assertThat(foreldrepenger.annenForelder()).isInstanceOf(NorskForelder.class);
+        var norskforelder = (NorskForelder) foreldrepenger.annenForelder();
+        assertThat(norskforelder.fnr().value()).isEqualTo(foreldrepengerDto.annenForelder().fnr());
 
         // Frilans
         var frilans = foreldrepenger.opptjening().frilans();
@@ -132,7 +139,7 @@ class ForeldrepengesoknadMappingKonsistensTest {
             .medSøker(new SøkerBuilder(BrukerRolle.MOR)
                 .medAndreInntekterSiste10Mnd(annenOpptjeninger)
                 .build())
-            .medAnnenForelder(AnnenforelderBuilder.annenpartIkkeRettOgMorHarUføretrygd(DUMMY_FNR).build())
+            .medAnnenForelder(AnnenforelderBuilder.ukjentForelder())
             .medBarn(BarnBuilder.adopsjon(LocalDate.now().minusWeeks(2), false).build())
             .build();
         var foreldrepengerDto = ((ForeldrepengesøknadDto) søknadDto);
@@ -147,6 +154,9 @@ class ForeldrepengesoknadMappingKonsistensTest {
         assertThat(ytelse).isInstanceOf(Foreldrepenger.class);
         var foreldrepenger = (Foreldrepenger) ytelse;
         assertThat(foreldrepenger.dekningsgrad()).isEqualTo(no.nav.foreldrepenger.common.domain.foreldrepenger.Dekningsgrad.ÅTTI);
+
+        // Annenpart
+        assertThat(foreldrepenger.annenForelder()).isInstanceOf(UkjentForelder.class);
 
         // Medlemsskap
         assertThat(foreldrepenger.medlemsskap().isBoddINorge()).isFalse();
