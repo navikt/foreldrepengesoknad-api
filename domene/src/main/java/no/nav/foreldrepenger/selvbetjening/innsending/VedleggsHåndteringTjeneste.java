@@ -104,7 +104,7 @@ public class VedleggsHåndteringTjeneste {
 
     private static boolean sizeEquals(VedleggDto vedlegg, VedleggDto kandidat) {
         var vedleggLength = vedlegg.getContent() != null ? vedlegg.getContent().length : 0;
-        var kandidatLength = kandidat.getContent() != null ? vedlegg.getContent().length : 0;
+        var kandidatLength = kandidat.getContent() != null ? kandidat.getContent().length : 0;
         return Objects.equals(vedleggLength, kandidatLength);
     }
 
