@@ -1,6 +1,6 @@
 version: 2
 registries:
-  fp-felles: # Gir tilgang til registre innad i nav med fp-felles som inngang (PATen bestemmer)
+  maven-github:
     type: maven-repository
     url: https://maven.pkg.github.com/navikt/fp-felles
     username: x-access-token
@@ -15,14 +15,23 @@ updates:
   - package-ecosystem: maven
     directory: "/"
     registries:
-      - fp-felles
+      - maven-github
     schedule:
       interval: daily
     open-pull-requests-limit: 20
-    ignore:
-      - dependency-name: "no.nav.vedtak.prosesstask:*"
-        versions: ["x", "x.x"]
-      - dependency-name: "no.nav.foreldrepenger.felles:*"
-        versions: ["x", "x.x"]
-      - dependency-name: "no.nav.foreldrepenger.kontrakter:*"
-        versions: ["x", "x.x"]
+    allow:
+      - dependency-type: "all"
+    groups:
+      prod-deps:
+        dependency-type: "production"
+        exclude-patterns:
+          - "no.nav.*"
+      dev-deps:
+        dependency-type: "development"
+        exclude-patterns:
+          - "no.nav.*"
+      interne-deps:
+        patterns:
+          - "no.nav.*"
+        exclude-patterns:
+          - "no.nav.folketrygdloven.*"
