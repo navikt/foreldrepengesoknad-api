@@ -2,6 +2,10 @@ package no.nav.foreldrepenger.selvbetjening.error;
 
 import com.fasterxml.jackson.annotation.JsonFormat;
 import com.fasterxml.jackson.annotation.JsonInclude;
+
+import no.nav.foreldrepenger.selvbetjening.vedlegg.UserfacingErrormessage;
+
+import org.springframework.context.MessageSource;
 import org.springframework.http.HttpStatusCode;
 import org.springframework.web.bind.MethodArgumentNotValidException;
 
@@ -25,16 +29,22 @@ class ApiError {
     @JsonFormat(with = WRITE_SINGLE_ELEM_ARRAYS_UNWRAPPED)
     private final List<String> messages;
     private final String uuid;
+    private final String userfriendlyMessage;
 
-    ApiError(HttpStatusCode status, Throwable t, Object... objects) {
-        this(status, t, null, objects);
+    ApiError(HttpStatusCode status, Throwable t, MessageSource feilmeldingProvider, Object... objects) {
+        this(status, t, null, feilmeldingProvider, objects);
     }
 
-    ApiError(HttpStatusCode status, Throwable t, String destination, Object... objects) {
+    ApiError(HttpStatusCode status, Throwable t, String destination,  MessageSource feilmeldingProvider, Object... objects) {
         this.timestamp = LocalDateTime.now();
         this.status = status;
         this.messages = messages(t, destination, objects);
+        this.userfriendlyMessage = userfacingMessage(feilmeldingProvider, t);
         this.uuid = callId();
+    }
+
+    private String userfacingMessage(MessageSource feilmeldingProvider, Throwable t) {
+        return t instanceof UserfacingErrormessage message ? message.getUserfacingErrorMessage(feilmeldingProvider) : null;
     }
 
     public String getUuid() {
@@ -51,6 +61,10 @@ class ApiError {
 
     public List<String> getMessages() {
         return messages;
+    }
+
+    public String getUserfriendlyMessage() {
+        return userfriendlyMessage;
     }
 
     private static List<String> messages(Throwable t, String destination, Object... objects) {

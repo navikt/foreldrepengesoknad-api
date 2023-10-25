@@ -2,7 +2,7 @@ package no.nav.foreldrepenger.selvbetjening.vedlegg;
 
 import org.springframework.http.MediaType;
 
-public abstract class AttachmentException extends RuntimeException {
+public abstract class AttachmentException extends RuntimeException implements UserfacingErrormessage {
 
     private final MediaType mediaType;
 

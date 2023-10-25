@@ -20,6 +20,7 @@ import org.apache.catalina.connector.ClientAbortException;
 import org.apache.tomcat.util.http.fileupload.impl.IOFileUploadException;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.context.MessageSource;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatusCode;
 import org.springframework.http.ResponseEntity;
@@ -57,9 +58,12 @@ public class ApiExceptionHandler extends ResponseEntityExceptionHandler {
     private static final Logger SECURE_LOGGER = LoggerFactory.getLogger("secureLogger");
     public static final String REDIRECT_INNLOGGING_VED_MANGLEDE_NIVÅ_ACR = "Required claims not present in token.[acr=idporten-loa-high]";
     private final TokenUtil tokenUtil;
+    private final MessageSource messageSource;
 
-    public ApiExceptionHandler(TokenUtil tokenUtil) {
+
+    public ApiExceptionHandler(TokenUtil tokenUtil, MessageSource messageSource) {
         this.tokenUtil = tokenUtil;
+        this.messageSource = messageSource;
     }
 
     @Override
@@ -204,8 +208,8 @@ public class ApiExceptionHandler extends ResponseEntityExceptionHandler {
         return "(" + error.getField() + ") " + error.getDefaultMessage();
     }
 
-    private static ApiError apiErrorFra(HttpStatusCode status, Exception e, Object... messages) {
-        return new ApiError(status, e, messages);
+    private ApiError apiErrorFra(HttpStatusCode status, Exception e, Object... messages) {
+        return new ApiError(status, e, messageSource, messages);
     }
 
     private static String fullPathTilKaltEndepunkt(WebRequest req) {

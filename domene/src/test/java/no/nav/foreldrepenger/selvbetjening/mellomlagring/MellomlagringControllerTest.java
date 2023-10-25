@@ -11,6 +11,8 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 import java.io.EOFException;
 import java.util.UUID;
 
+import no.nav.foreldrepenger.selvbetjening.config.MessageSourceConfig;
+
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
@@ -36,7 +38,8 @@ import no.nav.foreldrepenger.selvbetjening.vedlegg.Image2PDFConverter;
 @WebMvcTest(controllers = MellomlagringController.class)
 @ContextConfiguration(classes = {
     JacksonConfiguration.class,
-    Image2PDFConverter.class
+    Image2PDFConverter.class,
+    MessageSourceConfig.class
 })
 class MellomlagringControllerTest {
 
