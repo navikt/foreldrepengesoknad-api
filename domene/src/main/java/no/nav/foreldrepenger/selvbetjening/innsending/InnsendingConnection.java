@@ -22,6 +22,7 @@ import no.nav.foreldrepenger.selvbetjening.http.AbstractRestConnection;
 import no.nav.foreldrepenger.selvbetjening.kontrakt.innsending.dto.MottattTidspunkt;
 import no.nav.foreldrepenger.selvbetjening.kontrakt.innsending.dto.SøknadDto;
 import no.nav.foreldrepenger.selvbetjening.kontrakt.innsending.dto.endringssøknad.EndringssøknadDto;
+import no.nav.foreldrepenger.selvbetjening.kontrakt.innsending.dto.engangsstønad.SøknadV2Dto;
 import no.nav.foreldrepenger.selvbetjening.kontrakt.innsending.dto.ettersendelse.EttersendelseDto;
 
 @Component
@@ -43,6 +44,10 @@ public class InnsendingConnection extends AbstractRestConnection {
         return post(config.innsendingURI(), body(søknad));
     }
 
+    public Kvittering sendInn(SøknadV2Dto søknad) {
+        return post(config.innsendingURI(), body(søknad));
+    }
+
     public Kvittering ettersend(EttersendelseDto ettersending) {
         return post(config.ettersendingURI(), body(ettersending));
     }
@@ -53,6 +58,12 @@ public class InnsendingConnection extends AbstractRestConnection {
 
     private Kvittering post(URI uri, Object body) {
         return postForObject(uri, body, Kvittering.class);
+    }
+
+    public Søknad body(SøknadV2Dto søknad) {
+        SECURE_LOGGER.info("Engangsstønad mottatt fra frontend med følende innhold: {}", escapeHtml(søknad));
+        vedleggshåndtering.fjernDupliserteVedleggFraSøknad(søknad);
+        return tilSøknad(søknad, mottattDato(søknad));
     }
 
     public Søknad body(SøknadDto søknad) {

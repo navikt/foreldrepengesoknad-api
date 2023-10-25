@@ -2,6 +2,7 @@ package no.nav.foreldrepenger.selvbetjening.kontrakt.innsending.mapper;
 
 import static no.nav.foreldrepenger.selvbetjening.kontrakt.innsending.mapper.EndringForeldrepengerMapper.tilEndringForeldrepengesøknad;
 import static no.nav.foreldrepenger.selvbetjening.kontrakt.innsending.mapper.EngangsstønadMapper.tilEngangsstønad;
+import static no.nav.foreldrepenger.selvbetjening.kontrakt.innsending.mapper.EngangsstønadMapperV2.tilEngangsstønad;
 import static no.nav.foreldrepenger.selvbetjening.kontrakt.innsending.mapper.ForeldrepengerMapper.tilForeldrepengesøknad;
 import static no.nav.foreldrepenger.selvbetjening.kontrakt.innsending.mapper.SvangerskapspengerMapper.tilSvangerskapspengesøknad;
 
@@ -13,6 +14,8 @@ import no.nav.foreldrepenger.selvbetjening.kontrakt.innsending.dto.SøknadDto;
 import no.nav.foreldrepenger.selvbetjening.kontrakt.innsending.dto.endringssøknad.EndringssøknadDto;
 import no.nav.foreldrepenger.selvbetjening.kontrakt.innsending.dto.endringssøknad.EndringssøknadForeldrepengerDto;
 import no.nav.foreldrepenger.selvbetjening.kontrakt.innsending.dto.engangsstønad.EngangsstønadDto;
+import no.nav.foreldrepenger.selvbetjening.kontrakt.innsending.dto.engangsstønad.EngangsstønadV2Dto;
+import no.nav.foreldrepenger.selvbetjening.kontrakt.innsending.dto.engangsstønad.SøknadV2Dto;
 import no.nav.foreldrepenger.selvbetjening.kontrakt.innsending.dto.foreldrepenger.ForeldrepengesøknadDto;
 import no.nav.foreldrepenger.selvbetjening.kontrakt.innsending.dto.svangerskapspenger.SvangerskapspengesøknadDto;
 
@@ -30,6 +33,13 @@ public final class SøknadMapper {
         }
         if (søknad instanceof SvangerskapspengesøknadDto s) {
             return tilSvangerskapspengesøknad(s, mottattDato);
+        }
+        throw new IllegalArgumentException("Ukjent søknad " + søknad.getClass().getSimpleName());
+    }
+
+    public static Søknad tilSøknad(SøknadV2Dto søknad, LocalDate mottattDato) {
+        if (søknad instanceof EngangsstønadV2Dto e) {
+            return tilEngangsstønad(e, mottattDato);
         }
         throw new IllegalArgumentException("Ukjent søknad " + søknad.getClass().getSimpleName());
     }

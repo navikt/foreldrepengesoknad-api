@@ -21,6 +21,7 @@ import no.nav.foreldrepenger.selvbetjening.kontrakt.innsending.dto.SøknadDto;
 import no.nav.foreldrepenger.selvbetjening.kontrakt.innsending.dto.VedleggDto;
 import no.nav.foreldrepenger.selvbetjening.kontrakt.innsending.dto.endringssøknad.EndringssøknadDto;
 import no.nav.foreldrepenger.selvbetjening.kontrakt.innsending.dto.endringssøknad.EndringssøknadForeldrepengerDto;
+import no.nav.foreldrepenger.selvbetjening.kontrakt.innsending.dto.engangsstønad.SøknadV2Dto;
 import no.nav.foreldrepenger.selvbetjening.kontrakt.innsending.dto.ettersendelse.EttersendelseDto;
 import no.nav.foreldrepenger.selvbetjening.kontrakt.innsending.dto.foreldrepenger.ForeldrepengesøknadDto;
 import no.nav.foreldrepenger.selvbetjening.kontrakt.innsending.dto.foreldrepenger.UttaksplanPeriodeDto;
@@ -45,6 +46,18 @@ public class VedleggsHåndteringTjeneste {
         finnOgfjernDupliserteVedlegg(ettersending.vedlegg());
         konverterTilPDF(ettersending.vedlegg());
         LOG.info("Fjerner {} dupliserte ettersendte vedlegg av totalt {} mottatt",  antallVedleggFørDuplikatsjek - ettersending.vedlegg().size(), antallVedleggFørDuplikatsjek);
+    }
+
+    public void fjernDupliserteVedleggFraSøknad(SøknadV2Dto søknad) {
+        var antallVedleggFørDuplikatsjek = søknad.vedlegg().size();
+        if (antallVedleggFørDuplikatsjek == 0) {
+            return;
+        }
+
+        var duplikatTilEksisterende = finnOgfjernDupliserteVedlegg(søknad.vedlegg());
+        erstattAlleReferanserSomErDuplikater(søknad, duplikatTilEksisterende);
+        konverterTilPDF(søknad.vedlegg());
+        LOG.info("Fjerner {} dupliserte vedlegg fra søknad av totalt {} mottatt", antallVedleggFørDuplikatsjek - søknad.vedlegg().size(), antallVedleggFørDuplikatsjek);
     }
 
     public void fjernDupliserteVedleggFraSøknad(SøknadDto søknad) {
@@ -117,6 +130,12 @@ public class VedleggsHåndteringTjeneste {
         }
     }
 
+    private static void erstattAlleReferanserSomErDuplikater(SøknadV2Dto søknad, HashMap<MutableVedleggReferanseDto, MutableVedleggReferanseDto> nyReferanseMapping) {
+        for (var gammelReferanse : nyReferanseMapping.entrySet()) {
+            erstattReferanserBarn(gammelReferanse, søknad.barn());
+        }
+    }
+
     private static void erstattAlleReferanserSomErDuplikater(SøknadDto søknad, HashMap<MutableVedleggReferanseDto, MutableVedleggReferanseDto> nyReferanseMapping) {
         for (var gammelReferanse : nyReferanseMapping.entrySet()) {
             erstattReferanserSøker(gammelReferanse, søknad.søker());
@@ -146,6 +165,12 @@ public class VedleggsHåndteringTjeneste {
                 concat(barn.omsorgsovertakelse().stream(), barn.dokumentasjonAvAleneomsorg().stream())))
                 .filter(v -> v.equals(gammelReferanse.getKey()))
                 .forEach(v -> v.referanse(gammelReferanse.getValue().referanse()));
+    }
+
+    private static void erstattReferanserBarn(Map.Entry<MutableVedleggReferanseDto, MutableVedleggReferanseDto> gammelReferanse, no.nav.foreldrepenger.selvbetjening.kontrakt.innsending.dto.engangsstønad.BarnDto barn) {
+        barn.vedlegg().stream()
+            .filter(v -> v.equals(gammelReferanse.getKey()))
+            .forEach(v -> v.referanse(gammelReferanse.getValue().referanse()));
     }
 
     private static void erstattReferanserSøker(Map.Entry<MutableVedleggReferanseDto, MutableVedleggReferanseDto> gammelReferanse, SøkerDto søker) {

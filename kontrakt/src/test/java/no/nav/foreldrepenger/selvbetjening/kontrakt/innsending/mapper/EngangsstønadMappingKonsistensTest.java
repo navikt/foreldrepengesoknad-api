@@ -1,6 +1,7 @@
 package no.nav.foreldrepenger.selvbetjening.kontrakt.innsending.mapper;
 
 import static no.nav.foreldrepenger.selvbetjening.kontrakt.innsending.util.maler.MedlemsskapMaler.medlemskapUtlandetForrige12mnd;
+import static no.nav.foreldrepenger.selvbetjening.kontrakt.innsending.util.maler.UtenlandsoppholdMaler.oppholdIUtlandetForrige12mnd;
 import static org.assertj.core.api.Assertions.assertThat;
 
 import java.time.LocalDate;
@@ -10,8 +11,12 @@ import org.junit.jupiter.api.Test;
 import no.nav.foreldrepenger.common.domain.BrukerRolle;
 import no.nav.foreldrepenger.common.domain.engangsstønad.Engangsstønad;
 import no.nav.foreldrepenger.common.domain.felles.relasjontilbarn.Fødsel;
+import no.nav.foreldrepenger.common.oppslag.dkif.Målform;
+import no.nav.foreldrepenger.selvbetjening.kontrakt.innsending.dto.engangsstønad.FødselDto;
 import no.nav.foreldrepenger.selvbetjening.kontrakt.innsending.util.builder.BarnBuilder;
+import no.nav.foreldrepenger.selvbetjening.kontrakt.innsending.util.builder.BarnV2Builder;
 import no.nav.foreldrepenger.selvbetjening.kontrakt.innsending.util.builder.EngangsstønadBuilder;
+import no.nav.foreldrepenger.selvbetjening.kontrakt.innsending.util.builder.EngangsstønadV2Builder;
 import no.nav.foreldrepenger.selvbetjening.kontrakt.innsending.util.builder.SøkerBuilder;
 
 class EngangsstønadMappingKonsistensTest {
@@ -47,5 +52,36 @@ class EngangsstønadMappingKonsistensTest {
         var fødsel = ((Fødsel) relasjonTilBarn);
         assertThat(fødsel.getTermindato()).isEqualTo(barnDto.termindato());
 
+    }
+
+    @Test
+    void engangsstønadV2Konsisens() {
+        var søknadDto = new EngangsstønadV2Builder()
+            .medSpråkkode(Målform.EN)
+            .medUtenlandsopphold(oppholdIUtlandetForrige12mnd())
+            .medBarn(BarnV2Builder.fødsel(1, NOW).build())
+            .build();
+
+        var mappedSøknad = SøknadMapper.tilSøknad(søknadDto, NOW);
+        assertThat(mappedSøknad.getSøker().målform()).isEqualTo(søknadDto.språkkode());
+        assertThat(mappedSøknad.getMottattdato()).isEqualTo(søknadDto.mottattdato());
+
+        var ytelse = mappedSøknad.getYtelse();
+        assertThat(ytelse).isInstanceOf(Engangsstønad.class);
+        var engangsstønad = (Engangsstønad) ytelse;
+
+        // Medlemsskap
+        assertThat(engangsstønad.medlemsskap().isBoddINorge()).isFalse();
+        assertThat(engangsstønad.medlemsskap().isNorgeNeste12()).isTrue();
+
+        // Barn
+        var barnDto = søknadDto.barn();
+        var relasjonTilBarn = engangsstønad.relasjonTilBarn();
+        assertThat(relasjonTilBarn.getAntallBarn()).isEqualTo(barnDto.antallBarn());
+        assertThat(relasjonTilBarn).isInstanceOf(Fødsel.class);
+        var fødsel = ((Fødsel) relasjonTilBarn);
+        var fødselDto = ((FødselDto) barnDto);
+        assertThat(relasjonTilBarn.relasjonsDato()).isEqualTo(fødselDto.fødselsdato());
+        assertThat(fødsel.getTermindato()).isEqualTo(fødselDto.termindato());
     }
 }

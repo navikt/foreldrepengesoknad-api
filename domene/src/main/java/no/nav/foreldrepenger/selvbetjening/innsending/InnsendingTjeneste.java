@@ -11,13 +11,14 @@ import org.springframework.stereotype.Service;
 
 import no.nav.foreldrepenger.common.domain.Kvittering;
 import no.nav.foreldrepenger.selvbetjening.http.RetryAware;
-import no.nav.foreldrepenger.selvbetjening.kontrakt.innsending.dto.endringssøknad.EndringssøknadDto;
+import no.nav.foreldrepenger.selvbetjening.innsending.pdf.PdfGenerator;
 import no.nav.foreldrepenger.selvbetjening.kontrakt.innsending.dto.MutableVedleggReferanseDto;
 import no.nav.foreldrepenger.selvbetjening.kontrakt.innsending.dto.SøknadDto;
 import no.nav.foreldrepenger.selvbetjening.kontrakt.innsending.dto.VedleggDto;
+import no.nav.foreldrepenger.selvbetjening.kontrakt.innsending.dto.endringssøknad.EndringssøknadDto;
+import no.nav.foreldrepenger.selvbetjening.kontrakt.innsending.dto.engangsstønad.SøknadV2Dto;
 import no.nav.foreldrepenger.selvbetjening.kontrakt.innsending.dto.ettersendelse.EttersendelseDto;
 import no.nav.foreldrepenger.selvbetjening.kontrakt.innsending.dto.ettersendelse.TilbakebetalingUttalelseDto;
-import no.nav.foreldrepenger.selvbetjening.innsending.pdf.PdfGenerator;
 import no.nav.foreldrepenger.selvbetjening.mellomlagring.KryptertMellomlagring;
 
 @Service
@@ -42,7 +43,16 @@ public class InnsendingTjeneste implements RetryAware {
         LOG.info("Sender inn søknad av type {}", søknad.type());
         hentMellomlagredeFiler(søknad.vedlegg());
         var kvittering = connection.sendInn(søknad);
-        slettMellomlagringOgSøknad(søknad);
+        slettMellomlagringOgSøknad(søknad.vedlegg());
+        LOG.info(RETURNERER_KVITTERING, kvittering);
+        return kvittering;
+    }
+
+    public Kvittering sendInn(SøknadV2Dto søknad) {
+        LOG.info("Sender inn søknad av type {}", søknad.type());
+        hentMellomlagredeFiler(søknad.vedlegg());
+        var kvittering = connection.sendInn(søknad);
+        slettMellomlagringOgSøknad(søknad.vedlegg());
         LOG.info(RETURNERER_KVITTERING, kvittering);
         return kvittering;
     }
@@ -64,7 +74,7 @@ public class InnsendingTjeneste implements RetryAware {
         LOG.info("Endrer søknad av type {}", es.type());
         hentMellomlagredeFiler(es.vedlegg());
         var kvittering = connection.endre(es);
-        slettMellomlagringOgSøknad(es);
+        slettMellomlagringOgSøknad(es.vedlegg());
         LOG.info(RETURNERER_KVITTERING, kvittering);
         return kvittering;
     }
@@ -93,16 +103,9 @@ public class InnsendingTjeneste implements RetryAware {
         }
     }
 
-    private void slettMellomlagringOgSøknad(SøknadDto søknad) {
+    private void slettMellomlagringOgSøknad(List<VedleggDto> vedlegg) {
         LOG.info("Sletter mellomlagret søknad og vedlegg");
-        søknad.vedlegg().forEach(mellomlagring::slettKryptertVedlegg);
-        mellomlagring.slettKryptertSøknad();
-        LOG.info("Slettet mellomlagret søknad og vedlegg OK");
-    }
-
-    private void slettMellomlagringOgSøknad(EndringssøknadDto søknad) {
-        LOG.info("Sletter mellomlagret søknad og vedlegg");
-        søknad.vedlegg().forEach(mellomlagring::slettKryptertVedlegg);
+        vedlegg.forEach(mellomlagring::slettKryptertVedlegg);
         mellomlagring.slettKryptertSøknad();
         LOG.info("Slettet mellomlagret søknad og vedlegg OK");
     }
@@ -119,5 +122,6 @@ public class InnsendingTjeneste implements RetryAware {
     public String toString() {
         return getClass().getSimpleName() + "[connection=" + connection + ", mellomlagring=" + mellomlagring + "]";
     }
+
 
 }
