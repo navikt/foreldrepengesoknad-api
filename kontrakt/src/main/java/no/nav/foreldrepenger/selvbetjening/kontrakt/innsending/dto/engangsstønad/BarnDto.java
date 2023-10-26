@@ -18,5 +18,5 @@ import no.nav.foreldrepenger.selvbetjening.kontrakt.innsending.dto.MutableVedleg
 })
 public interface BarnDto {
     int antallBarn();
-    List<MutableVedleggReferanseDto> vedlegg();
+    List<MutableVedleggReferanseDto> vedleggreferanser();
 }

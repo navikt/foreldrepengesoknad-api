@@ -90,7 +90,7 @@ final class EngangsstønadMapperV2 {
             barn.antallBarn(),
             List.of(barn.fødselsdato()), // TODO: Fjern liste i mottak!
             barn.termindato(),
-            tilVedleggsreferanse(barn.vedlegg())
+            tilVedleggsreferanse(barn.vedleggreferanser())
         );
     }
 
@@ -99,7 +99,7 @@ final class EngangsstønadMapperV2 {
             barn.antallBarn(),
             barn.termindato(),
             barn.terminbekreftelseDato(),
-            tilVedleggsreferanse(barn.vedlegg())
+            tilVedleggsreferanse(barn.vedleggreferanser())
         );
     }
 
@@ -108,7 +108,7 @@ final class EngangsstønadMapperV2 {
             barn.antallBarn(),
             barn.foreldreansvarsdato(),
             barn.fødselsdatoer(),
-            tilVedleggsreferanse(barn.vedlegg())
+            tilVedleggsreferanse(barn.vedleggreferanser())
         );
     }
 
@@ -118,7 +118,7 @@ final class EngangsstønadMapperV2 {
             barn.adopsjonsdato(),
             barn.adopsjonAvEktefellesBarn(),
             false, // TODO: fjern fra mottak
-            tilVedleggsreferanse(barn.vedlegg()),
+            tilVedleggsreferanse(barn.vedleggreferanser()),
             barn.ankomstdato(),
             barn.fødselsdatoer()
         );

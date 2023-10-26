@@ -15,9 +15,9 @@ import no.nav.foreldrepenger.selvbetjening.kontrakt.innsending.dto.MutableVedleg
 public record OmsorgsovertakelseDto(@Min(1) int antallBarn,
                                     @Size(min = 1, max = 10) List<LocalDate> fødselsdatoer,
                                     @NotNull LocalDate foreldreansvarsdato,
-                                    @Size(max = 15) List<@Valid MutableVedleggReferanseDto> vedlegg) implements BarnDto {
+                                    @Size(max = 15) List<@Valid MutableVedleggReferanseDto> vedleggreferanser) implements BarnDto {
 
     public OmsorgsovertakelseDto {
-        vedlegg = Optional.ofNullable(vedlegg).orElse(emptyList());
+        vedleggreferanser = Optional.ofNullable(vedleggreferanser).orElse(emptyList());
     }
 }

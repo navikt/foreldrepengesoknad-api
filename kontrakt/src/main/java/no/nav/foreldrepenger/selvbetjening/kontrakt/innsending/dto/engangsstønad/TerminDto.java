@@ -15,9 +15,9 @@ import no.nav.foreldrepenger.selvbetjening.kontrakt.innsending.dto.MutableVedleg
 public record TerminDto(@Min(1) int antallBarn,
                         @NotNull LocalDate termindato,
                         LocalDate terminbekreftelseDato,
-                        @Size(max = 15) List<@Valid MutableVedleggReferanseDto> vedlegg) implements BarnDto {
+                        @Size(max = 15) List<@Valid MutableVedleggReferanseDto> vedleggreferanser) implements BarnDto {
 
     public TerminDto {
-        vedlegg = Optional.ofNullable(vedlegg).orElse(emptyList());
+        vedleggreferanser = Optional.ofNullable(vedleggreferanser).orElse(emptyList());
     }
 }

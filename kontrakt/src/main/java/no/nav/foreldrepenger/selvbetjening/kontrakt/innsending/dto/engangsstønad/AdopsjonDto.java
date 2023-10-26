@@ -17,9 +17,9 @@ public record AdopsjonDto(@Min(1) int antallBarn,
                           @NotNull LocalDate adopsjonsdato,
                           LocalDate ankomstdato,
                           @NotNull Boolean adopsjonAvEktefellesBarn,
-                          @Size(max = 15) List<@Valid MutableVedleggReferanseDto> vedlegg) implements BarnDto {
+                          @Size(max = 15) List<@Valid MutableVedleggReferanseDto> vedleggreferanser) implements BarnDto {
 
     public AdopsjonDto {
-        vedlegg = Optional.ofNullable(vedlegg).orElse(emptyList());
+        vedleggreferanser = Optional.ofNullable(vedleggreferanser).orElse(emptyList());
     }
 }

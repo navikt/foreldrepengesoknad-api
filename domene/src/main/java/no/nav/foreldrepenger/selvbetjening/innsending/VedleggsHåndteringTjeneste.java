@@ -168,7 +168,7 @@ public class VedleggsHåndteringTjeneste {
     }
 
     private static void erstattReferanserBarn(Map.Entry<MutableVedleggReferanseDto, MutableVedleggReferanseDto> gammelReferanse, no.nav.foreldrepenger.selvbetjening.kontrakt.innsending.dto.engangsstønad.BarnDto barn) {
-        barn.vedlegg().stream()
+        barn.vedleggreferanser().stream()
             .filter(v -> v.equals(gammelReferanse.getKey()))
             .forEach(v -> v.referanse(gammelReferanse.getValue().referanse()));
     }
