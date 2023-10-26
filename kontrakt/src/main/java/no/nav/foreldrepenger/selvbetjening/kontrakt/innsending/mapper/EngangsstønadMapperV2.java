@@ -117,7 +117,7 @@ final class EngangsstønadMapperV2 {
             barn.antallBarn(),
             barn.adopsjonsdato(),
             barn.adopsjonAvEktefellesBarn(),
-            false, // TODO: fjern fra mottak
+            barn.søkerAdopsjonAlene() != null && barn.søkerAdopsjonAlene(),
             tilVedleggsreferanse(barn.vedleggreferanser()),
             barn.ankomstdato(),
             barn.fødselsdatoer()

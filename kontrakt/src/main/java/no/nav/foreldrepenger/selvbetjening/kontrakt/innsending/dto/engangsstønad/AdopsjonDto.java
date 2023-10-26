@@ -18,6 +18,7 @@ public record AdopsjonDto(@Min(1) @Max(Integer.MAX_VALUE) int antallBarn,
                           @NotNull LocalDate adopsjonsdato,
                           LocalDate ankomstdato,
                           @NotNull Boolean adopsjonAvEktefellesBarn,
+                          Boolean søkerAdopsjonAlene,
                           @Valid @Size(max = 15) List<@Valid MutableVedleggReferanseDto> vedleggreferanser) implements BarnDto {
 
     public AdopsjonDto {

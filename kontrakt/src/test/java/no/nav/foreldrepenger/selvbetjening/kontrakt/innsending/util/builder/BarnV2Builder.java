@@ -76,6 +76,7 @@ public final class BarnV2Builder {
         private LocalDate adopsjonsdato;
         private LocalDate ankomstdato;
         private Boolean adopsjonAvEktefellesBarn;
+        private Boolean søkerAdopsjonAlene;
         private List<MutableVedleggReferanseDto> vedlegg;
 
         public AdopsjonBuilder(int antallBarn) {
@@ -97,6 +98,11 @@ public final class BarnV2Builder {
             return this;
         }
 
+        public AdopsjonBuilder medSøkerAdopsjonAlene(Boolean søkerAdopsjonAlene) {
+            this.søkerAdopsjonAlene = søkerAdopsjonAlene;
+            return this;
+        }
+
         public AdopsjonBuilder medAdopsjonAvEktefellesBarn(Boolean adopsjonAvEktefellesBarn) {
             this.adopsjonAvEktefellesBarn = adopsjonAvEktefellesBarn;
             return this;
@@ -114,6 +120,7 @@ public final class BarnV2Builder {
                 adopsjonsdato,
                 ankomstdato,
                 adopsjonAvEktefellesBarn,
+                søkerAdopsjonAlene,
                 vedlegg
             );
         }
