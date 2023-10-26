@@ -10,6 +10,7 @@ import java.util.Optional;
 import jakarta.validation.Valid;
 import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Pattern;
+import jakarta.validation.constraints.Size;
 import no.nav.foreldrepenger.selvbetjening.kontrakt.innsending.dto.BarnDto;
 import no.nav.foreldrepenger.selvbetjening.kontrakt.innsending.dto.SøkerDto;
 import no.nav.foreldrepenger.selvbetjening.kontrakt.innsending.dto.SøknadDto;
@@ -25,9 +26,9 @@ public record ForeldrepengesøknadDto(LocalDate mottattdato,
                                      @Valid @NotNull Dekningsgrad dekningsgrad,
                                      @Pattern(regexp = FRITEKST) String tilleggsopplysninger,
                                      @Valid @NotNull UtenlandsoppholdDto informasjonOmUtenlandsopphold,
-                                     @Valid List<@Valid @NotNull UttaksplanPeriodeDto> uttaksplan,
+                                     @Valid @Size(max = 200) List<@Valid @NotNull UttaksplanPeriodeDto> uttaksplan,
                                      Boolean ønskerJustertUttakVedFødsel,
-                                     @Valid @VedlegglistestørrelseConstraint List<@Valid VedleggDto> vedlegg) implements SøknadDto {
+                                     @Valid @VedlegglistestørrelseConstraint @Size(max = 100) List<@Valid VedleggDto> vedlegg) implements SøknadDto {
     public ForeldrepengesøknadDto {
         uttaksplan = Optional.ofNullable(uttaksplan).orElse(List.of());
         vedlegg = Optional.ofNullable(vedlegg).map(ArrayList::new).orElse(new ArrayList<>());

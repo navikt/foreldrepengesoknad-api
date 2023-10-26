@@ -7,6 +7,7 @@ import java.util.Optional;
 
 import jakarta.validation.Valid;
 import jakarta.validation.constraints.NotNull;
+import jakarta.validation.constraints.Size;
 import no.nav.foreldrepenger.selvbetjening.kontrakt.innsending.dto.BarnDto;
 import no.nav.foreldrepenger.selvbetjening.kontrakt.innsending.dto.SøkerDto;
 import no.nav.foreldrepenger.selvbetjening.kontrakt.innsending.dto.SøknadDto;
@@ -16,11 +17,11 @@ import no.nav.foreldrepenger.selvbetjening.kontrakt.innsending.dto.foreldrepenge
 import no.nav.foreldrepenger.selvbetjening.kontrakt.innsending.dto.validering.VedlegglistestørrelseConstraint;
 
 public record SvangerskapspengesøknadDto(LocalDate mottattdato,
-                                         @Valid @NotNull List<TilretteleggingDto> tilrettelegging,
+                                         @Valid @NotNull @Size(max = 100) List<TilretteleggingDto> tilrettelegging,
                                          @Valid @NotNull BarnDto barn,
                                          @Valid @NotNull UtenlandsoppholdDto informasjonOmUtenlandsopphold,
                                          @Valid @NotNull SøkerDto søker,
-                                         @Valid @VedlegglistestørrelseConstraint List<@Valid VedleggDto> vedlegg) implements SøknadDto {
+                                         @Valid @VedlegglistestørrelseConstraint @Size(max = 100) List<@Valid VedleggDto> vedlegg) implements SøknadDto {
 
     public SvangerskapspengesøknadDto {
         tilrettelegging = Optional.ofNullable(tilrettelegging).orElse(List.of());

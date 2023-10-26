@@ -28,8 +28,8 @@ public record EndringssøknadForeldrepengerDto(LocalDate mottattdato,
                                               @Valid @NotNull AnnenforelderDto annenForelder,
                                               @Pattern(regexp = FRITEKST) String tilleggsopplysninger,
                                               Boolean ønskerJustertUttakVedFødsel,
-                                              @Valid @Size(max = 100) List<@Valid @NotNull UttaksplanPeriodeDto> uttaksplan,
-                                              @Valid @VedlegglistestørrelseConstraint List<@Valid VedleggDto> vedlegg) implements EndringssøknadDto {
+                                              @Valid @Size(max = 200) List<@Valid @NotNull UttaksplanPeriodeDto> uttaksplan,
+                                              @Valid @VedlegglistestørrelseConstraint @Size(max = 100) List<@Valid VedleggDto> vedlegg) implements EndringssøknadDto {
 
     public EndringssøknadForeldrepengerDto {
         uttaksplan = Optional.ofNullable(uttaksplan).orElse(List.of());
