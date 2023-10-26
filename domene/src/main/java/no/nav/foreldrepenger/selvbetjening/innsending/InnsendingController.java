@@ -11,8 +11,9 @@ import org.springframework.web.bind.annotation.RequestBody;
 import jakarta.validation.Valid;
 import no.nav.foreldrepenger.common.domain.Kvittering;
 import no.nav.foreldrepenger.selvbetjening.http.ProtectedRestController;
-import no.nav.foreldrepenger.selvbetjening.kontrakt.innsending.dto.endringssøknad.EndringssøknadDto;
 import no.nav.foreldrepenger.selvbetjening.kontrakt.innsending.dto.SøknadDto;
+import no.nav.foreldrepenger.selvbetjening.kontrakt.innsending.dto.endringssøknad.EndringssøknadDto;
+import no.nav.foreldrepenger.selvbetjening.kontrakt.innsending.dto.engangsstønad.EngangsstønadV2Dto;
 import no.nav.foreldrepenger.selvbetjening.kontrakt.innsending.dto.ettersendelse.EttersendelseDto;
 
 @ProtectedRestController(InnsendingController.INNSENDING_CONTROLLER_PATH)
@@ -33,6 +34,12 @@ public class InnsendingController {
         if (LOG.isInfoEnabled() && LOG.isInfoEnabled(CONFIDENTIAL)) {
             LOG.info(CONFIDENTIAL, "Søker er {}", escapeHtml(søknad.søker()));
         }
+        return innsending.sendInn(søknad);
+    }
+
+    @PostMapping("/engangssoknad")
+    public Kvittering sendInnEngangsstønad(@Valid @RequestBody EngangsstønadV2Dto søknad) {
+        LOG.info("Mottok engangsstønad med målform {} og {} vedlegg", søknad.språkkode(), søknad.vedlegg().size());
         return innsending.sendInn(søknad);
     }
 

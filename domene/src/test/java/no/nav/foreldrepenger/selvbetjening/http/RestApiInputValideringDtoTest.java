@@ -28,6 +28,9 @@ import java.util.stream.Stream;
 
 import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.MethodSource;
+import org.springframework.beans.factory.config.BeanDefinition;
+import org.springframework.context.annotation.ClassPathScanningCandidateComponentProvider;
+import org.springframework.core.type.filter.AssignableTypeFilter;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonProperty;
@@ -43,8 +46,8 @@ import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Null;
 import jakarta.validation.constraints.Pattern;
 import jakarta.validation.constraints.Size;
-import no.nav.foreldrepenger.selvbetjening.kontrakt.innsending.dto.validering.VedlegglistestørrelseConstraint;
 import no.nav.foreldrepenger.selvbetjening.kontrakt.innsending.dto.VedleggDto;
+import no.nav.foreldrepenger.selvbetjening.kontrakt.innsending.dto.validering.VedlegglistestørrelseConstraint;
 
 class RestApiInputValideringDtoTest extends RestApiTestUtil {
 
@@ -54,7 +57,7 @@ class RestApiInputValideringDtoTest extends RestApiTestUtil {
      */
     @ParameterizedTest
     @MethodSource("finnAlleDtoTyper")
-    void alle_felter_i_objekter_som_brukes_som_inputDTO_skal_enten_ha_valideringsannotering_eller_være_av_godkjent_type(Class<?> dto) {
+    void alle_felter_i_objekter_som_brukes_som_inputDTO_skal_enten_ha_valideringsannotering_eller_være_av_godkjent_type(Class<?> dto) throws ClassNotFoundException {
         Set<Class<?>> validerteKlasser = new HashSet<>(); // trengs for å unngå løkker og unngå å validere samme klasse flere multipliser dobbelt
         validerRekursivt(validerteKlasser, dto, null);
     }
@@ -141,11 +144,11 @@ class RestApiInputValideringDtoTest extends RestApiTestUtil {
         }
         return parametre.stream()
             // ikke sjekk nedover i innebygde klasser, det skal brukes annoteringer på tidligere tidspunkt
-            .filter(klasse -> !(klasse.getName().startsWith("java") || klasse.getName().startsWith("org.springframework")) && !klasse.isInterface())
+            .filter(klasse -> !(klasse.getName().startsWith("java") || klasse.getName().startsWith("org.springframework")))
             .collect(Collectors.toSet());
     }
 
-    private static void validerRekursivt(Set<Class<?>> besøkteKlasser, Class<?> klasse, Class<?> forrigeKlasse) {
+    private static void validerRekursivt(Set<Class<?>> besøkteKlasser, Class<?> klasse, Class<?> forrigeKlasse) throws ClassNotFoundException {
         if (besøkteKlasser.contains(klasse)) {
             return;
         }
@@ -158,6 +161,12 @@ class RestApiInputValideringDtoTest extends RestApiTestUtil {
         }
 
         besøkteKlasser.add(klasse);
+        if (klasse.isInterface()) {
+            var subklasser = hentAlleSubclassesAvInterface(klasse);
+            for (var subklass : subklasser) {
+                validerRekursivt(besøkteKlasser, subklass, forrigeKlasse);
+            }
+        }
 
 
         for (var field : getRelevantFields(klasse)) {
@@ -185,6 +194,19 @@ class RestApiInputValideringDtoTest extends RestApiTestUtil {
             }
         }
     }
+
+    private static Set<? extends Class<?>> hentAlleSubclassesAvInterface(Class<?> klasse) throws ClassNotFoundException {
+        var provider = new ClassPathScanningCandidateComponentProvider(false);
+        provider.addIncludeFilter(new AssignableTypeFilter(klasse));
+        var components = provider.findCandidateComponents("no.nav");
+        Set<Class<?>> set = new HashSet<>();
+        for (BeanDefinition component : components) {
+            Class<?> aClass = Class.forName(component.getBeanClassName());
+            set.add(aClass);
+        }
+        return set;
+    }
+
 
     private static void validerEnum(Field field) {
         var illegal = Stream.of(field.getAnnotations()).filter(a -> !ALLOWED_ENUM_ANNOTATIONS.contains(a.annotationType())).toList();
@@ -215,7 +237,7 @@ class RestApiInputValideringDtoTest extends RestApiTestUtil {
 
     private static Set<Field> getRelevantFields(Class<?> klasse) {
         Set<Field> fields = new LinkedHashSet<>();
-        while (!klasse.isPrimitive() && !(klasse.getName().startsWith("java"))) {
+        while (klasse != null && !klasse.isPrimitive() && !(klasse.getName().startsWith("java"))) {
             fields.addAll(fjernStaticFields(List.of(klasse.getDeclaredFields())));
             klasse = klasse.getSuperclass();
         }

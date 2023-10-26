@@ -7,6 +7,7 @@ import java.util.Optional;
 
 import jakarta.validation.Valid;
 import jakarta.validation.constraints.NotNull;
+import jakarta.validation.constraints.Size;
 import no.nav.foreldrepenger.selvbetjening.kontrakt.innsending.dto.BarnDto;
 import no.nav.foreldrepenger.selvbetjening.kontrakt.innsending.dto.SøkerDto;
 import no.nav.foreldrepenger.selvbetjening.kontrakt.innsending.dto.SøknadDto;
@@ -19,7 +20,7 @@ public record EngangsstønadDto(LocalDate mottattdato,
                                @Valid @NotNull BarnDto barn,
                                @Valid @NotNull UtenlandsoppholdDto informasjonOmUtenlandsopphold,
                                @Valid @NotNull SøkerDto søker,
-                               @Valid @VedlegglistestørrelseConstraint List<@Valid VedleggDto> vedlegg) implements SøknadDto {
+                               @Valid @VedlegglistestørrelseConstraint @Size(max = 100) List<@Valid VedleggDto> vedlegg) implements SøknadDto {
 
     public EngangsstønadDto {
        vedlegg = Optional.ofNullable(vedlegg).map(ArrayList::new).orElse(new ArrayList<>());
