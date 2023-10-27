@@ -1,6 +1,5 @@
 package no.nav.foreldrepenger.selvbetjening.vedlegg;
 
-import static java.util.Arrays.asList;
 import static no.nav.foreldrepenger.selvbetjening.vedlegg.ImageScaler.pdfFraBilde;
 import static no.nav.foreldrepenger.selvbetjening.vedlegg.VedleggUtil.mediaType;
 import static org.springframework.http.MediaType.APPLICATION_PDF;
@@ -42,7 +41,7 @@ public class Image2PDFConverter {
 
         if (supportedMediaTypes.contains(mediaType)) {
             long start = System.currentTimeMillis();
-            var pdfBytes = embedImagesInPdf(bytes);
+            var pdfBytes = konverterBildeTilPdf(bytes, mediaType);
             long slutt = System.currentTimeMillis();
             LOG.info("Konvertering av {} med størrelse {}MB til PDF med størrelse {}MB tok {}ms", mediaType, megabytes(bytes), megabytes(pdfBytes), slutt - start);
             return pdfBytes;
@@ -55,13 +54,9 @@ public class Image2PDFConverter {
             .divide(BigDecimal.valueOf(1000), 2, RoundingMode.HALF_UP);
     }
 
-    private static byte[] embedImagesInPdf(byte[]... images) {
-        return embedImagesInPdf(asList(images));
-    }
-
-    private static byte[] embedImagesInPdf(List<byte[]> images) {
+    private static byte[] konverterBildeTilPdf(byte[] innhold, MediaType mediaType) {
         try (var doc = new PDDocument(); var outputStream = new ByteArrayOutputStream()) {
-            images.forEach(i -> addPDFPageFromImage(doc, i));
+            addPDFPageFromImage(doc, innhold, mediaType);
             doc.save(outputStream);
             return outputStream.toByteArray();
         } catch (Exception e) {
@@ -69,9 +64,9 @@ public class Image2PDFConverter {
         }
     }
 
-    private static void addPDFPageFromImage(PDDocument doc, byte[] orig) {
+    private static void addPDFPageFromImage(PDDocument doc, byte[] orig, MediaType mediaType) {
         try {
-           pdfFraBilde(doc, orig);
+           pdfFraBilde(doc, orig, mediaType);
         } catch (Exception e) {
             throw new AttachmentConversionException("Konvertering av vedlegg feilet", e);
         }

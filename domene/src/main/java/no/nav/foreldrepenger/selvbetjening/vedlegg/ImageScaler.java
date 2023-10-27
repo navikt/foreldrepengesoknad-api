@@ -1,20 +1,24 @@
 package no.nav.foreldrepenger.selvbetjening.vedlegg;
 
-import org.apache.pdfbox.pdmodel.PDDocument;
-import org.apache.pdfbox.pdmodel.PDPage;
-import org.apache.pdfbox.pdmodel.PDPageContentStream;
-import org.apache.pdfbox.pdmodel.common.PDRectangle;
-import org.apache.pdfbox.pdmodel.graphics.image.LosslessFactory;
-import org.apache.pdfbox.util.Matrix;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
-
-import javax.imageio.ImageIO;
 import java.awt.geom.AffineTransform;
 import java.awt.image.BufferedImage;
 import java.io.ByteArrayInputStream;
 import java.io.IOException;
 import java.util.function.Predicate;
+
+import javax.imageio.ImageIO;
+
+import org.apache.pdfbox.pdmodel.PDDocument;
+import org.apache.pdfbox.pdmodel.PDPage;
+import org.apache.pdfbox.pdmodel.PDPageContentStream;
+import org.apache.pdfbox.pdmodel.common.PDRectangle;
+import org.apache.pdfbox.pdmodel.graphics.image.JPEGFactory;
+import org.apache.pdfbox.pdmodel.graphics.image.LosslessFactory;
+import org.apache.pdfbox.pdmodel.graphics.image.PDImageXObject;
+import org.apache.pdfbox.util.Matrix;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+import org.springframework.http.MediaType;
 
 class ImageScaler {
 
@@ -24,13 +28,18 @@ class ImageScaler {
 
     }
 
-    static void pdfFraBilde(PDDocument doc, byte[] image) {
+    static void pdfFraBilde(PDDocument doc, byte[] image, MediaType mediaType) {
         var pdPage = new PDPage(PDRectangle.A4);
         doc.addPage(pdPage);
         try (var pdPageContentStream = new PDPageContentStream(doc, pdPage)) {
             var bufferedImage = ImageIO.read(new ByteArrayInputStream(image));
             var matrix = matrixFromImage(pdPage, bufferedImage);
-            var pdImageXObject = LosslessFactory.createFromImage(doc, bufferedImage);
+            PDImageXObject pdImageXObject;
+            if (mediaType.equals(MediaType.IMAGE_JPEG)) {
+                pdImageXObject = JPEGFactory.createFromImage(doc, bufferedImage);
+            } else {
+                pdImageXObject = LosslessFactory.createFromImage(doc, bufferedImage);
+            }
             pdPageContentStream.drawImage(pdImageXObject, matrix);
         } catch (IOException e) {
             throw new AttachmentConversionException("Konvertering av vedlegg feilet", e);
