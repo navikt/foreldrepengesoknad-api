@@ -9,6 +9,9 @@ import static org.springframework.http.ResponseEntity.noContent;
 import static org.springframework.http.ResponseEntity.notFound;
 import static org.springframework.http.ResponseEntity.ok;
 
+import java.io.IOException;
+
+import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -22,6 +25,7 @@ import org.springframework.web.multipart.MultipartFile;
 import jakarta.validation.Valid;
 import jakarta.validation.constraints.Pattern;
 import no.nav.foreldrepenger.selvbetjening.http.ProtectedRestController;
+import no.nav.foreldrepenger.selvbetjening.vedlegg.Image2PDFConverter;
 
 @ProtectedRestController(MellomlagringController.REST_STORAGE)
 public class MellomlagringController {
@@ -29,9 +33,11 @@ public class MellomlagringController {
     public static final String REST_STORAGE = "/rest/storage";
 
     private final KryptertMellomlagring mellomlagring;
+    private final Image2PDFConverter converter;
 
-    public MellomlagringController(KryptertMellomlagring mellomlagring) {
+    public MellomlagringController(KryptertMellomlagring mellomlagring, Image2PDFConverter converter) {
         this.mellomlagring = mellomlagring;
+        this.converter = converter;
     }
 
     @GetMapping
@@ -61,8 +67,9 @@ public class MellomlagringController {
     }
 
     @PostMapping(path = "/vedlegg", consumes = MULTIPART_FORM_DATA_VALUE)
-    public ResponseEntity<String> lagreVedlegg(@Valid @RequestPart("vedlegg") MultipartFile attachmentMultipartFile) {
-        var attachment = Attachment.of(attachmentMultipartFile);
+    public ResponseEntity<String> lagreVedlegg(@Valid @RequestPart("vedlegg") MultipartFile file) {
+        var pdfBytes = converter.convert(getBytes(file));
+        var attachment = Attachment.of(file.getOriginalFilename(), pdfBytes, MediaType.APPLICATION_PDF);
         mellomlagring.lagreKryptertVedlegg(attachment);
         return created(attachment.uri()).body(attachment.uuid);
     }
@@ -85,4 +92,11 @@ public class MellomlagringController {
         return getClass().getSimpleName() + " [mellomlagringTjeneste=" + mellomlagring + "]";
     }
 
+    private static byte[] getBytes(MultipartFile file) {
+        try {
+            return file.getBytes();
+        } catch (IOException e) {
+            throw new RuntimeException(e);
+        }
+    }
 }

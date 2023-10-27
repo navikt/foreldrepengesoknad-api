@@ -189,7 +189,7 @@ public class VedleggsHåndteringTjeneste {
         long start = System.currentTimeMillis();
         var unikeVedleggMedInnhold = safeStream(vedleggFrontend).distinct().map(this::convert).toList();
         long slutt = System.currentTimeMillis();
-        LOG.info("Konvertering av vedlegg til PDF tok {}ms", slutt - start);
+        LOG.info("Konvertering av {} vedlegg til PDF tok {}ms", vedleggFrontend.size(), slutt - start);
         return unikeVedleggMedInnhold;
     }
 
