@@ -6,8 +6,6 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 
 import java.util.UUID;
 
-import jakarta.validation.ConstraintViolationException;
-
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
@@ -19,13 +17,18 @@ import org.springframework.test.web.servlet.MockMvc;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 
+import jakarta.validation.ConstraintViolationException;
 import no.nav.foreldrepenger.common.util.TokenUtil;
 import no.nav.foreldrepenger.selvbetjening.config.JacksonConfiguration;
 import no.nav.foreldrepenger.selvbetjening.error.ApiExceptionHandler;
+import no.nav.foreldrepenger.selvbetjening.vedlegg.Image2PDFConverter;
 
 @Import({MellomlagringController.class, ApiExceptionHandler.class})
 @WebMvcTest(controllers = MellomlagringController.class)
-@ContextConfiguration(classes = JacksonConfiguration.class)
+@ContextConfiguration(classes = {
+    JacksonConfiguration.class,
+    Image2PDFConverter.class
+})
 class MellomlagringControllerInputValideringTest {
 
     @Autowired
