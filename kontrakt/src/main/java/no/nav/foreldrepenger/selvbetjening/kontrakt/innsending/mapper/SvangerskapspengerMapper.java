@@ -2,7 +2,7 @@ package no.nav.foreldrepenger.selvbetjening.kontrakt.innsending.mapper;
 
 import static no.nav.foreldrepenger.selvbetjening.kontrakt.innsending.mapper.CommonMapper.tilMedlemskap;
 import static no.nav.foreldrepenger.selvbetjening.kontrakt.innsending.mapper.CommonMapper.tilOpptjening;
-import static no.nav.foreldrepenger.selvbetjening.kontrakt.innsending.mapper.CommonMapper.tilVedlegg;
+import static no.nav.foreldrepenger.selvbetjening.kontrakt.innsending.mapper.CommonMapper.tilVedleggUtenInnhold;
 import static no.nav.foreldrepenger.selvbetjening.kontrakt.innsending.mapper.CommonMapper.tilVedleggsreferanse;
 
 import java.time.LocalDate;
@@ -34,13 +34,13 @@ final class SvangerskapspengerMapper {
     private SvangerskapspengerMapper() {
     }
 
-    static Søknad tilSvangerskapspengesøknad(SvangerskapspengesøknadDto s, LocalDate mottattDato) {
+    static Søknad tilSvangerskapspengesøknadVedleggUtenInnhold(SvangerskapspengesøknadDto s, LocalDate mottattDato) {
         return new Søknad(
             mottattDato,
             tilSøker(s),
             tilYtelse(s),
             null,
-            tilVedlegg(s.vedlegg())
+            tilVedleggUtenInnhold(s.vedlegg())
         );
     }
 

@@ -8,6 +8,8 @@ import org.slf4j.LoggerFactory;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 
+import com.fasterxml.jackson.core.JsonProcessingException;
+
 import jakarta.validation.Valid;
 import no.nav.foreldrepenger.common.domain.Kvittering;
 import no.nav.foreldrepenger.selvbetjening.http.ProtectedRestController;
@@ -29,7 +31,7 @@ public class InnsendingController {
     }
 
     @PostMapping
-    public Kvittering sendInn(@Valid @RequestBody SøknadDto søknad) {
+    public Kvittering sendInn(@Valid @RequestBody SøknadDto søknad) throws JsonProcessingException {
         LOG.info("Mottok søknad med målform {} og {} vedlegg", søknad.søker().språkkode(), søknad.vedlegg().size());
         if (LOG.isInfoEnabled() && LOG.isInfoEnabled(CONFIDENTIAL)) {
             LOG.info(CONFIDENTIAL, "Søker er {}", escapeHtml(søknad.søker()));

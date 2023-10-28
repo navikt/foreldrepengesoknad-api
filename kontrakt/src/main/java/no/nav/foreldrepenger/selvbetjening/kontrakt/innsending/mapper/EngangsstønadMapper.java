@@ -2,7 +2,7 @@ package no.nav.foreldrepenger.selvbetjening.kontrakt.innsending.mapper;
 
 import static no.nav.foreldrepenger.selvbetjening.kontrakt.innsending.mapper.CommonMapper.tilMedlemskap;
 import static no.nav.foreldrepenger.selvbetjening.kontrakt.innsending.mapper.CommonMapper.tilRelasjonTilBarn;
-import static no.nav.foreldrepenger.selvbetjening.kontrakt.innsending.mapper.CommonMapper.tilVedlegg;
+import static no.nav.foreldrepenger.selvbetjening.kontrakt.innsending.mapper.CommonMapper.tilVedleggUtenInnhold;
 
 import java.time.LocalDate;
 
@@ -19,13 +19,13 @@ final class EngangsstønadMapper {
     private EngangsstønadMapper() {
     }
 
-    static Søknad tilEngangsstønad(EngangsstønadDto e, LocalDate mottattDato) {
+    static Søknad tilEngangsstønadVedleggUtenInnhold(EngangsstønadDto e, LocalDate mottattDato) {
         return new Søknad(
             mottattDato,
             tilSøker(e.søker()),
             tilYtelse(e),
             null,
-            tilVedlegg(e.vedlegg())
+            tilVedleggUtenInnhold(e.vedlegg())
         );
     }
 

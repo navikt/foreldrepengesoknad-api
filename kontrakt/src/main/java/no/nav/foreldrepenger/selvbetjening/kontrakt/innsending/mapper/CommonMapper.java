@@ -51,6 +51,24 @@ public final class CommonMapper {
     private CommonMapper() {
     }
 
+    public static List<no.nav.foreldrepenger.common.domain.felles.Vedlegg> tilVedleggUtenInnhold(List<VedleggDto> vedlegg) {
+        return safeStream(vedlegg)
+            .distinct()
+            .map(CommonMapper::tilVedleggUtenInnhold)
+            .toList();
+    }
+
+    public static no.nav.foreldrepenger.common.domain.felles.Vedlegg tilVedleggUtenInnhold(VedleggDto vedlegg) {
+        var vedleggMetadata = new VedleggMetaData(
+            tilVedleggsreferanse(vedlegg.getId()),
+            vedlegg.getInnsendingsType() != null ? InnsendingsType.valueOf(vedlegg.getInnsendingsType()) : null,
+            vedlegg.getSkjemanummer() != null ? DokumentType.valueOf(vedlegg.getSkjemanummer()) : null,
+            vedlegg.getBeskrivelse()
+        );
+        return new PåkrevdVedlegg(vedleggMetadata, null);
+    }
+
+
     public static List<no.nav.foreldrepenger.common.domain.felles.Vedlegg> tilVedlegg(List<VedleggDto> vedlegg) {
         return safeStream(vedlegg)
                 .distinct()

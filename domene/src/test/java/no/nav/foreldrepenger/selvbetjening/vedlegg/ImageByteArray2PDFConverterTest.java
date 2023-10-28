@@ -1,19 +1,19 @@
 package no.nav.foreldrepenger.selvbetjening.vedlegg;
 
-import org.apache.tika.Tika;
-import org.junit.jupiter.api.BeforeAll;
-import org.junit.jupiter.api.Test;
-import org.springframework.http.MediaType;
-
-import java.util.Arrays;
-import java.util.List;
-
 import static no.nav.foreldrepenger.selvbetjening.vedlegg.VedleggSjekkerTest.fraResource;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 import static org.springframework.http.MediaType.IMAGE_GIF;
+
+import java.util.Arrays;
+import java.util.List;
+
+import org.apache.tika.Tika;
+import org.junit.jupiter.api.BeforeAll;
+import org.junit.jupiter.api.Test;
+import org.springframework.http.MediaType;
 
 class ImageByteArray2PDFConverterTest {
     private static final byte[] PDFSIGNATURE = { 0x25, 0x50, 0x44, 0x46 };

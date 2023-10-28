@@ -1,10 +1,10 @@
 package no.nav.foreldrepenger.selvbetjening.kontrakt.innsending.mapper;
 
 import static no.nav.foreldrepenger.selvbetjening.kontrakt.innsending.mapper.EndringForeldrepengerMapper.tilEndringForeldrepengesøknad;
-import static no.nav.foreldrepenger.selvbetjening.kontrakt.innsending.mapper.EngangsstønadMapper.tilEngangsstønad;
+import static no.nav.foreldrepenger.selvbetjening.kontrakt.innsending.mapper.EngangsstønadMapper.tilEngangsstønadVedleggUtenInnhold;
 import static no.nav.foreldrepenger.selvbetjening.kontrakt.innsending.mapper.EngangsstønadMapperV2.tilEngangsstønad;
-import static no.nav.foreldrepenger.selvbetjening.kontrakt.innsending.mapper.ForeldrepengerMapper.tilForeldrepengesøknad;
-import static no.nav.foreldrepenger.selvbetjening.kontrakt.innsending.mapper.SvangerskapspengerMapper.tilSvangerskapspengesøknad;
+import static no.nav.foreldrepenger.selvbetjening.kontrakt.innsending.mapper.ForeldrepengerMapper.tilForeldrepengesøknadVedleggUtenInnhold;
+import static no.nav.foreldrepenger.selvbetjening.kontrakt.innsending.mapper.SvangerskapspengerMapper.tilSvangerskapspengesøknadVedleggUtenInnhold;
 
 import java.time.LocalDate;
 
@@ -26,13 +26,13 @@ public final class SøknadMapper {
 
     public static Søknad tilSøknad(SøknadDto søknad, LocalDate mottattDato) {
         if (søknad instanceof ForeldrepengesøknadDto f) {
-            return tilForeldrepengesøknad(f, mottattDato);
+            return tilForeldrepengesøknadVedleggUtenInnhold(f, mottattDato);
         }
         if (søknad instanceof EngangsstønadDto e) {
-            return tilEngangsstønad(e, mottattDato);
+            return tilEngangsstønadVedleggUtenInnhold(e, mottattDato);
         }
         if (søknad instanceof SvangerskapspengesøknadDto s) {
-            return tilSvangerskapspengesøknad(s, mottattDato);
+            return tilSvangerskapspengesøknadVedleggUtenInnhold(s, mottattDato);
         }
         throw new IllegalArgumentException("Ukjent søknad " + søknad.getClass().getSimpleName());
     }
