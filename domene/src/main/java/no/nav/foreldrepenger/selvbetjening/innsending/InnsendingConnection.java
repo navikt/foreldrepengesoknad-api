@@ -56,17 +56,26 @@ public class InnsendingConnection extends AbstractRestConnection {
         this.vedleggshåndtering = vedleggshåndtering;
     }
 
-    public Kvittering sendInnViaMultipart(SøknadDto søknad) throws JsonProcessingException {
+    public Kvittering sendInnViaMultipart(SøknadDto søknad) {
         LOG.info("Sender inn søknad via multipart body {}", søknad.type());
         vedleggshåndtering.fjernDupliserteVedleggFraSøknad(søknad);
 
         var mulitpartBuilder = new MultipartBodyBuilder();
-        mulitpartBuilder.part(BODY_PART_NAME, mapper.writeValueAsString(tilSøknad(søknad, mottattDato(søknad))), APPLICATION_JSON);
+        mulitpartBuilder.part(BODY_PART_NAME, tilJson(søknad), APPLICATION_JSON);
         safeStream(søknad.vedlegg())
             .filter(s -> LASTET_OPP.name().equals(s.getInnsendingsType()))
             .forEach(v -> mulitpartBuilder.part(VEDLEGG_PART_NAME, v.getContent(), APPLICATION_PDF)
                     .headers(headers -> headers.set(VEDLEGG_REFERANSE_HEADER, v.getId().referanse())));
         return postForEntity(config.innsendingV2URI(),  new HttpEntity<>(mulitpartBuilder.build(), headers()), Kvittering.class);
+    }
+
+    private String tilJson(SøknadDto søknad) {
+        try {
+            return mapper.writeValueAsString(tilSøknad(søknad, mottattDato(søknad)));
+        } catch (JsonProcessingException e) {
+            throw new IllegalStateException("Klarte ikke å oversette søknad til JSON!", e);
+        }
+
     }
 
     private static HttpHeaders headers() {

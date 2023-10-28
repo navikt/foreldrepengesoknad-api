@@ -9,8 +9,6 @@ import java.util.Random;
 import org.slf4j.Logger;
 import org.springframework.stereotype.Service;
 
-import com.fasterxml.jackson.core.JsonProcessingException;
-
 import no.nav.foreldrepenger.common.domain.Kvittering;
 import no.nav.foreldrepenger.selvbetjening.http.RetryAware;
 import no.nav.foreldrepenger.selvbetjening.innsending.pdf.PdfGenerator;
@@ -41,7 +39,7 @@ public class InnsendingTjeneste implements RetryAware {
         this.pdfGenerator = pdfGenerator;
     }
 
-    public Kvittering sendInn(SøknadDto søknad) throws JsonProcessingException {
+    public Kvittering sendInn(SøknadDto søknad) {
         LOG.info("Sender inn søknad av type {}", søknad.type());
         hentMellomlagredeFiler(søknad.vedlegg());
         var kvittering = connection.sendInnViaMultipart(søknad);
@@ -116,7 +114,7 @@ public class InnsendingTjeneste implements RetryAware {
         if (vedlegg.getUrl() != null) {
             vedlegg.setContent(mellomlagring.lesKryptertVedlegg(vedlegg.getUuid())
                 .map(a -> a.bytes)
-                .orElse(new byte[] {1, 2, 3, 4, 5}));
+                .orElse(new byte[] {}));
         }
     }
 
