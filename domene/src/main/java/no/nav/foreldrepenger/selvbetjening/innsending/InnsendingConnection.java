@@ -63,7 +63,7 @@ public class InnsendingConnection extends AbstractRestConnection {
         var mulitpartBuilder = new MultipartBodyBuilder();
         mulitpartBuilder.part(BODY_PART_NAME, tilJson(søknad), APPLICATION_JSON);
         safeStream(søknad.vedlegg())
-            .filter(s -> LASTET_OPP.name().equals(s.getInnsendingsType()))
+            .filter(s -> s.getInnsendingsType() == null || LASTET_OPP.name().equals(s.getInnsendingsType()))
             .forEach(v -> mulitpartBuilder.part(VEDLEGG_PART_NAME, v.getContent(), APPLICATION_PDF)
                     .headers(headers -> headers.set(VEDLEGG_REFERANSE_HEADER, v.getId().referanse())));
         return postForEntity(config.innsendingV2URI(),  new HttpEntity<>(mulitpartBuilder.build(), headers()), Kvittering.class);
