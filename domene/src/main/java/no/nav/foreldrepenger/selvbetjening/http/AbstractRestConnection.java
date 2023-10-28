@@ -1,17 +1,17 @@
 package no.nav.foreldrepenger.selvbetjening.http;
 
+import static no.nav.boot.conditionals.EnvUtil.CONFIDENTIAL;
+import static no.nav.foreldrepenger.selvbetjening.util.StringUtils.escapeHtml;
+import static org.springframework.http.HttpStatus.NOT_FOUND;
+
+import java.net.URI;
+
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.http.RequestEntity;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.client.HttpClientErrorException;
 import org.springframework.web.client.RestOperations;
-
-import java.net.URI;
-
-import static no.nav.boot.conditionals.EnvUtil.CONFIDENTIAL;
-import static no.nav.foreldrepenger.selvbetjening.util.StringUtils.escapeHtml;
-import static org.springframework.http.HttpStatus.NOT_FOUND;
 
 public abstract class AbstractRestConnection {
 
@@ -51,6 +51,10 @@ public abstract class AbstractRestConnection {
 
     public <T> T postForObject(URI uri, Object payload, Class<T> responseType) {
         return operations.postForObject(uri, payload, responseType);
+    }
+
+    public <T> T postForEntity(URI uri, Object payload, Class<T> responseType) {
+        return operations.postForEntity(uri, payload, responseType).getBody();
     }
 
     public <T> T putForObject(URI uri, Object payload, Class<T> responseType) {

@@ -9,6 +9,7 @@ import org.springframework.boot.context.properties.ConfigurationProperties;
 @ConfigurationProperties(prefix = "mottak")
 public class InnsendingConfig {
     private static final String SEND = "mottak/send";
+    private static final String SEND_V2 = "mottak/send/v2";
     private static final String ENDRE = "mottak/endre";
     private static final String ETTERSEND = "mottak/ettersend";
 
@@ -20,6 +21,9 @@ public class InnsendingConfig {
 
     URI innsendingURI() {
         return uri(getBaseUri(), SEND);
+    }
+    URI innsendingV2URI() {
+        return uri(getBaseUri(), SEND_V2);
     }
 
     URI endringURI() {
