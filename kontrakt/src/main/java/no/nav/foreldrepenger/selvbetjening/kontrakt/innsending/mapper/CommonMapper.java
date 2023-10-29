@@ -65,7 +65,7 @@ public final class CommonMapper {
             vedlegg.getSkjemanummer() != null ? DokumentType.valueOf(vedlegg.getSkjemanummer()) : null,
             vedlegg.getBeskrivelse()
         );
-        return new PåkrevdVedlegg(vedleggMetadata, null);
+        return new PåkrevdVedlegg(vedleggMetadata, new byte[10]); // TODO: dummy for å sjekke at ting fungerer
     }
 
 
