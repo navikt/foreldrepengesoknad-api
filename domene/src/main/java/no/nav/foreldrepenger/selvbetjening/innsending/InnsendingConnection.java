@@ -6,7 +6,6 @@ import static no.nav.foreldrepenger.common.util.StreamUtil.safeStream;
 import static no.nav.foreldrepenger.selvbetjening.kontrakt.innsending.mapper.EttersendingMapper.tilEttersending;
 import static no.nav.foreldrepenger.selvbetjening.kontrakt.innsending.mapper.SøknadMapper.tilEndringssøknad;
 import static no.nav.foreldrepenger.selvbetjening.kontrakt.innsending.mapper.SøknadMapper.tilSøknad;
-import static no.nav.foreldrepenger.selvbetjening.util.StringUtils.escapeHtml;
 import static org.springframework.http.MediaType.APPLICATION_JSON;
 import static org.springframework.http.MediaType.APPLICATION_PDF;
 import static org.springframework.http.MediaType.MULTIPART_MIXED;
@@ -59,19 +58,19 @@ public class InnsendingConnection extends AbstractRestConnection {
     }
 
     public Kvittering sendInn(SøknadDto søknad) {
-        LOG.info("Sender inn søknad via multipart body {}", søknad.type());
+        SECURE_LOGGER.info("{} mottatt fra frontend med følende innhold: {}", søknad.type(), tilJson(søknad));
         vedleggshåndtering.fjernDupliserteVedleggFraSøknad(søknad);
         return postForEntity(config.innsendingURI(), body(søknad), Kvittering.class);
     }
 
     public Kvittering sendInn(SøknadV2Dto søknad) {
-        SECURE_LOGGER.info("Engangsstønad mottatt fra frontend med følende innhold: {}", escapeHtml(søknad));
+        SECURE_LOGGER.info("Engangsstønad mottatt fra frontend med følende innhold: {}", tilJson(søknad));
         vedleggshåndtering.fjernDupliserteVedleggFraSøknad(søknad);
         return postForEntity(config.innsendingURI(), body(søknad), Kvittering.class);
     }
 
     public Kvittering endre(EndringssøknadDto endringssøknad) {
-        SECURE_LOGGER.info("{} mottatt fra frontend med følende innhold: {}", endringssøknad.type(), escapeHtml(endringssøknad));
+        SECURE_LOGGER.info("{} mottatt fra frontend med følende innhold: {}", endringssøknad.type(), tilJson(endringssøknad));
         vedleggshåndtering.fjernDupliserteVedleggFraSøknad(endringssøknad);
         return postForEntity(config.endringURI(), body(endringssøknad), Kvittering.class);
     }
