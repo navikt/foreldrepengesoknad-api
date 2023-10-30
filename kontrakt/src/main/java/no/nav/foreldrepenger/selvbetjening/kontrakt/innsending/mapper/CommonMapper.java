@@ -51,31 +51,12 @@ public final class CommonMapper {
     private CommonMapper() {
     }
 
-    public static List<no.nav.foreldrepenger.common.domain.felles.Vedlegg> tilVedleggUtenInnhold(List<VedleggDto> vedlegg) {
-        return safeStream(vedlegg)
-            .distinct()
-            .map(CommonMapper::tilVedleggUtenInnhold)
-            .toList();
-    }
-
-    public static no.nav.foreldrepenger.common.domain.felles.Vedlegg tilVedleggUtenInnhold(VedleggDto vedlegg) {
-        var vedleggMetadata = new VedleggMetaData(
-            tilVedleggsreferanse(vedlegg.getId()),
-            vedlegg.getInnsendingsType() != null ? InnsendingsType.valueOf(vedlegg.getInnsendingsType()) : null,
-            vedlegg.getSkjemanummer() != null ? DokumentType.valueOf(vedlegg.getSkjemanummer()) : null,
-            vedlegg.getBeskrivelse()
-        );
-        return new PåkrevdVedlegg(vedleggMetadata, new byte[10]); // TODO: dummy for å sjekke at ting fungerer
-    }
-
-
     public static List<no.nav.foreldrepenger.common.domain.felles.Vedlegg> tilVedlegg(List<VedleggDto> vedlegg) {
         return safeStream(vedlegg)
-                .distinct()
-                .map(CommonMapper::tilVedlegg)
-                .toList();
+            .distinct()
+            .map(CommonMapper::tilVedlegg)
+            .toList();
     }
-
 
     public static no.nav.foreldrepenger.common.domain.felles.Vedlegg tilVedlegg(VedleggDto vedlegg) {
         var vedleggMetadata = new VedleggMetaData(
@@ -84,9 +65,8 @@ public final class CommonMapper {
             vedlegg.getSkjemanummer() != null ? DokumentType.valueOf(vedlegg.getSkjemanummer()) : null,
             vedlegg.getBeskrivelse()
         );
-        return new PåkrevdVedlegg(vedleggMetadata, vedlegg.getContent());
+        return new PåkrevdVedlegg(vedleggMetadata);
     }
-
 
     public static List<VedleggReferanse> tilVedleggsreferanse(List<MutableVedleggReferanseDto> vedleggsreferanser) {
         return safeStream(vedleggsreferanser)

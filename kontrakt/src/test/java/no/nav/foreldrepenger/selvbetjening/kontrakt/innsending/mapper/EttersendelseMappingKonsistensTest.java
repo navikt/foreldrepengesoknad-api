@@ -42,7 +42,7 @@ class EttersendelseMappingKonsistensTest {
         assertThat(ettersendelse.saksnr()).isEqualTo(saksnummer);
         assertThat(ettersendelse.vedlegg())
             .hasSameSizeAs(vedleggerDto)
-            .extracting(Vedlegg::getInnsendingsType)
+            .extracting(v -> v.getMetadata().innsendingsType())
             .containsExactly(LASTET_OPP);
         assertThat(ettersendelse.vedlegg())
             .extracting(Vedlegg::getDokumentType)

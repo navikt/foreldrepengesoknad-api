@@ -3,7 +3,7 @@ package no.nav.foreldrepenger.selvbetjening.kontrakt.innsending.mapper;
 import static no.nav.foreldrepenger.selvbetjening.kontrakt.innsending.mapper.CommonMapper.tilMedlemskap;
 import static no.nav.foreldrepenger.selvbetjening.kontrakt.innsending.mapper.CommonMapper.tilOpptjening;
 import static no.nav.foreldrepenger.selvbetjening.kontrakt.innsending.mapper.CommonMapper.tilRelasjonTilBarn;
-import static no.nav.foreldrepenger.selvbetjening.kontrakt.innsending.mapper.CommonMapper.tilVedleggUtenInnhold;
+import static no.nav.foreldrepenger.selvbetjening.kontrakt.innsending.mapper.CommonMapper.tilVedlegg;
 import static no.nav.foreldrepenger.selvbetjening.kontrakt.innsending.mapper.CommonMapper.tilVedleggsreferanse;
 
 import java.time.LocalDate;
@@ -48,7 +48,7 @@ final class ForeldrepengerMapper {
             tilSøker(foreldrepengesøknad.søker()),
             tilYtelse(foreldrepengesøknad),
             foreldrepengesøknad.tilleggsopplysninger(),
-            tilVedleggUtenInnhold(foreldrepengesøknad.vedlegg())
+            CommonMapper.tilVedlegg(foreldrepengesøknad.vedlegg())
         );
     }
 
