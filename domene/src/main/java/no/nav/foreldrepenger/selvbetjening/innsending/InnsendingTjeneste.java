@@ -114,7 +114,7 @@ public class InnsendingTjeneste implements RetryAware {
         if (vedlegg.getUrl() != null) {
             vedlegg.setContent(mellomlagring.lesKryptertVedlegg(vedlegg.getUuid())
                 .map(a -> a.bytes)
-                .orElse(new byte[20_000_000]));
+                .orElse(new byte[] {}));
         }
     }
 
