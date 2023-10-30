@@ -14,7 +14,7 @@ public final class EttersendingMapper {
         return new no.nav.foreldrepenger.common.domain.felles.Ettersending(
             ettersending.saksnummer(),
             EttersendingsType.valueOf(ettersending.type().name()),
-            tilVedlegg(ettersending.vedlegg()),
+            CommonMapper.tilVedlegg(ettersending.vedlegg()),
             ettersending.dialogId());
     }
 }

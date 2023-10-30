@@ -11,8 +11,8 @@ import static org.springframework.http.MediaType.APPLICATION_JSON;
 import static org.springframework.http.MediaType.APPLICATION_PDF;
 import static org.springframework.http.MediaType.MULTIPART_MIXED;
 
-import java.net.URI;
 import java.time.LocalDate;
+import java.util.List;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -21,6 +21,7 @@ import org.springframework.http.HttpEntity;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.client.MultipartBodyBuilder;
 import org.springframework.stereotype.Component;
+import org.springframework.util.MultiValueMap;
 import org.springframework.web.client.RestOperations;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
@@ -32,6 +33,7 @@ import no.nav.foreldrepenger.common.domain.felles.Ettersending;
 import no.nav.foreldrepenger.selvbetjening.http.AbstractRestConnection;
 import no.nav.foreldrepenger.selvbetjening.kontrakt.innsending.dto.MottattTidspunkt;
 import no.nav.foreldrepenger.selvbetjening.kontrakt.innsending.dto.SøknadDto;
+import no.nav.foreldrepenger.selvbetjening.kontrakt.innsending.dto.VedleggDto;
 import no.nav.foreldrepenger.selvbetjening.kontrakt.innsending.dto.endringssøknad.EndringssøknadDto;
 import no.nav.foreldrepenger.selvbetjening.kontrakt.innsending.dto.engangsstønad.SøknadV2Dto;
 import no.nav.foreldrepenger.selvbetjening.kontrakt.innsending.dto.ettersendelse.EttersendelseDto;
@@ -56,66 +58,92 @@ public class InnsendingConnection extends AbstractRestConnection {
         this.vedleggshåndtering = vedleggshåndtering;
     }
 
-    public Kvittering sendInnViaMultipart(SøknadDto søknad) {
+    public Kvittering sendInn(SøknadDto søknad) {
         LOG.info("Sender inn søknad via multipart body {}", søknad.type());
         vedleggshåndtering.fjernDupliserteVedleggFraSøknad(søknad);
+        return postForEntity(config.innsendingURI(), body(søknad), Kvittering.class);
+    }
 
-        var mulitpartBuilder = new MultipartBodyBuilder();
-        mulitpartBuilder.part(BODY_PART_NAME, tilJson(søknad), APPLICATION_JSON);
-        safeStream(søknad.vedlegg())
-            .filter(s -> s.getInnsendingsType() == null || LASTET_OPP.name().equals(s.getInnsendingsType()))
-            .forEach(v -> mulitpartBuilder.part(VEDLEGG_PART_NAME, v.getContent(), APPLICATION_PDF)
-                    .headers(headers -> headers.set(VEDLEGG_REFERANSE_HEADER, v.getId().referanse())));
-        return postForEntity(config.innsendingV2URI(),  new HttpEntity<>(mulitpartBuilder.build(), headers()), Kvittering.class);
+    public Kvittering sendInn(SøknadV2Dto søknad) {
+        SECURE_LOGGER.info("Engangsstønad mottatt fra frontend med følende innhold: {}", escapeHtml(søknad));
+        vedleggshåndtering.fjernDupliserteVedleggFraSøknad(søknad);
+        return postForEntity(config.innsendingURI(), body(søknad), Kvittering.class);
+    }
+
+    public Kvittering endre(EndringssøknadDto endringssøknad) {
+        SECURE_LOGGER.info("{} mottatt fra frontend med følende innhold: {}", endringssøknad.type(), escapeHtml(endringssøknad));
+        vedleggshåndtering.fjernDupliserteVedleggFraSøknad(endringssøknad);
+        return postForEntity(config.endringURI(), body(endringssøknad), Kvittering.class);
+    }
+
+    public Kvittering ettersend(EttersendelseDto ettersending) {
+        vedleggshåndtering.fjernDupliserteVedleggFraEttersending(ettersending);
+        return postForEntity(config.ettersendingURI(), body(ettersending), Kvittering.class);
+    }
+
+    private HttpEntity<MultiValueMap<String, HttpEntity<?>>> body(SøknadDto søknad) {
+        return body(tilJson(søknad), søknad.vedlegg());
+    }
+
+    private HttpEntity<MultiValueMap<String, HttpEntity<?>>> body(SøknadV2Dto søknad) {
+        return body(tilJson(søknad), søknad.vedlegg());
+    }
+
+    private HttpEntity<MultiValueMap<String, HttpEntity<?>>> body(EndringssøknadDto endringssøknadDto) {
+        return body(tilJson(endringssøknadDto), endringssøknadDto.vedlegg());
+    }
+
+    private HttpEntity<MultiValueMap<String, HttpEntity<?>>> body(EttersendelseDto ettersendelseDto) {
+        return body(tilJson(ettersendelseDto), ettersendelseDto.vedlegg());
     }
 
     private String tilJson(SøknadDto søknad) {
+        return tilJson(tilSøknad(søknad, mottattDato(søknad)));
+    }
+
+    private String tilJson(SøknadV2Dto søknad) {
+        return tilJson(tilSøknad(søknad, mottattDato(søknad)));
+    }
+
+    private String tilJson(EndringssøknadDto endringssøknad) {
+        return tilJson(tilEndringssøknad(endringssøknad, mottattDato(endringssøknad)));
+    }
+
+    private String tilJson(EttersendelseDto ettersendelse) {
+        return tilJson(tilEttersending(ettersendelse));
+    }
+
+    private String tilJson(Søknad søknad) {
         try {
-            return mapper.writeValueAsString(tilSøknad(søknad, mottattDato(søknad)));
+            return mapper.writeValueAsString(søknad);
         } catch (JsonProcessingException e) {
             throw new IllegalStateException("Klarte ikke å oversette søknad til JSON!", e);
         }
+    }
 
+    private String tilJson(Ettersending ettersending) {
+        try {
+            return mapper.writeValueAsString(ettersending);
+        } catch (JsonProcessingException e) {
+            throw new IllegalStateException("Klarte ikke å oversette ettersending til JSON!", e);
+        }
+    }
+
+    private static HttpEntity<MultiValueMap<String, HttpEntity<?>>> body(String jsonBody, List<VedleggDto> vedlegg) {
+        var builder = new MultipartBodyBuilder();
+        builder.part(BODY_PART_NAME, jsonBody, APPLICATION_JSON);
+        safeStream(vedlegg)
+            .filter(v -> v.getInnsendingsType() == null || LASTET_OPP.name().equals(v.getInnsendingsType()))
+            .filter(v -> v.getContent() != null)
+            .forEach(v -> builder.part(VEDLEGG_PART_NAME, v.getContent(), APPLICATION_PDF)
+                    .headers(headers -> headers.set(VEDLEGG_REFERANSE_HEADER, v.getId().referanse())));
+        return new HttpEntity<>(builder.build(), headers());
     }
 
     private static HttpHeaders headers() {
         var headers = new HttpHeaders();
         headers.setContentType(MULTIPART_MIXED);
         return headers;
-    }
-
-
-    public Kvittering sendInn(SøknadV2Dto søknad) {
-        return post(config.innsendingURI(), body(søknad));
-    }
-
-    public Kvittering ettersend(EttersendelseDto ettersending) {
-        return post(config.ettersendingURI(), body(ettersending));
-    }
-
-    public Kvittering endre(EndringssøknadDto endringssøknad) {
-        return post(config.endringURI(), body(endringssøknad));
-    }
-
-    private Kvittering post(URI uri, Object body) {
-        return postForObject(uri, body, Kvittering.class);
-    }
-
-    public Søknad body(SøknadV2Dto søknad) {
-        SECURE_LOGGER.info("Engangsstønad mottatt fra frontend med følende innhold: {}", escapeHtml(søknad));
-        vedleggshåndtering.fjernDupliserteVedleggFraSøknad(søknad);
-        return tilSøknad(søknad, mottattDato(søknad));
-    }
-
-    public Søknad body(EndringssøknadDto endringssøknad) {
-        SECURE_LOGGER.info("{} mottatt fra frontend med følende innhold: {}", endringssøknad.type(), escapeHtml(endringssøknad));
-        vedleggshåndtering.fjernDupliserteVedleggFraSøknad(endringssøknad);
-        return tilEndringssøknad(endringssøknad, mottattDato(endringssøknad));
-    }
-
-    public Ettersending body(EttersendelseDto ettersending) {
-        vedleggshåndtering.fjernDupliserteVedleggFraEttersending(ettersending);
-        return tilEttersending(ettersending);
     }
 
     private LocalDate mottattDato(MottattTidspunkt m) {

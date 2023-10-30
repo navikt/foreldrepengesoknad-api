@@ -42,7 +42,7 @@ public class InnsendingTjeneste implements RetryAware {
     public Kvittering sendInn(SøknadDto søknad) {
         LOG.info("Sender inn søknad av type {}", søknad.type());
         hentMellomlagredeFiler(søknad.vedlegg());
-        var kvittering = connection.sendInnViaMultipart(søknad);
+        var kvittering = connection.sendInn(søknad);
         slettMellomlagringOgSøknad(søknad.vedlegg());
         LOG.info(RETURNERER_KVITTERING, kvittering);
         return kvittering;
@@ -114,7 +114,7 @@ public class InnsendingTjeneste implements RetryAware {
         if (vedlegg.getUrl() != null) {
             vedlegg.setContent(mellomlagring.lesKryptertVedlegg(vedlegg.getUuid())
                 .map(a -> a.bytes)
-                .orElse(new byte[] {}));
+                .orElse(new byte[20_000_000]));
         }
     }
 

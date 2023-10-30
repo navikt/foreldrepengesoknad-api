@@ -25,7 +25,7 @@ final class EndringForeldrepengerMapper {
             tilSøker(endringssøknadFP.søker()),
             tilYtelse(endringssøknadFP),
             endringssøknadFP.tilleggsopplysninger(),
-            tilVedlegg(endringssøknadFP.vedlegg()),
+            CommonMapper.tilVedlegg(endringssøknadFP.vedlegg()),
             endringssøknadFP.saksnummer());
     }
 
