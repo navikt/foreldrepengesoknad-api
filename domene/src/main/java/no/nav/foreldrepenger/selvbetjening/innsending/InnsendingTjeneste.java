@@ -3,6 +3,8 @@ package no.nav.foreldrepenger.selvbetjening.innsending;
 import static org.slf4j.LoggerFactory.getLogger;
 
 import java.security.SecureRandom;
+import java.time.Duration;
+import java.time.Instant;
 import java.util.List;
 import java.util.Random;
 
@@ -24,7 +26,7 @@ import no.nav.foreldrepenger.selvbetjening.mellomlagring.KryptertMellomlagring;
 @Service
 public class InnsendingTjeneste implements RetryAware {
 
-    private static final String RETURNERER_KVITTERING = "Returnerer kvittering {}";
+    private static final String RETURNERER_KVITTERING = "Returnerer kvittering {}. Innsending tok {}ms";
     private static final Logger LOG = getLogger(InnsendingTjeneste.class);
     private static final Random IDGENERATOR = new SecureRandom();
     private final InnsendingConnection connection;
@@ -41,24 +43,31 @@ public class InnsendingTjeneste implements RetryAware {
 
     public Kvittering sendInn(SøknadDto søknad) {
         LOG.info("Sender inn søknad av type {}", søknad.type());
+        var start = Instant.now();
         hentMellomlagredeFiler(søknad.vedlegg());
         var kvittering = connection.sendInn(søknad);
         slettMellomlagringOgSøknad(søknad.vedlegg());
-        LOG.info(RETURNERER_KVITTERING, kvittering);
+        var finish = Instant.now();
+        var ms = Duration.between(start, finish).toMillis();
+        LOG.info(RETURNERER_KVITTERING, kvittering, ms);
         return kvittering;
     }
 
     public Kvittering sendInn(SøknadV2Dto søknad) {
         LOG.info("Sender inn søknad av type {}", søknad.type());
+        var start = Instant.now();
         hentMellomlagredeFiler(søknad.vedlegg());
         var kvittering = connection.sendInn(søknad);
         slettMellomlagringOgSøknad(søknad.vedlegg());
-        LOG.info(RETURNERER_KVITTERING, kvittering);
+        var finish = Instant.now();
+        var ms = Duration.between(start, finish).toMillis();
+        LOG.info(RETURNERER_KVITTERING, kvittering, ms);
         return kvittering;
     }
 
     public Kvittering ettersend(EttersendelseDto e) {
         LOG.info("Ettersender for sak {}", e.saksnummer());
+        var start = Instant.now();
         hentMellomlagredeFiler(e.vedlegg());
         if (e.erTilbakebetalingUttalelse()) {
             LOG.info("Konverterer tekst til vedleggs-pdf {}", e.brukerTekst().dokumentType());
@@ -66,16 +75,21 @@ public class InnsendingTjeneste implements RetryAware {
         }
         var kvittering = connection.ettersend(e);
         e.vedlegg().forEach(mellomlagring::slettKryptertVedlegg);
-        LOG.info(RETURNERER_KVITTERING, kvittering);
+        var finish = Instant.now();
+        var ms = Duration.between(start, finish).toMillis();
+        LOG.info(RETURNERER_KVITTERING, kvittering, ms);
         return kvittering;
     }
 
     public Kvittering endre(EndringssøknadDto es) {
         LOG.info("Endrer søknad av type {}", es.type());
+        var start = Instant.now();
         hentMellomlagredeFiler(es.vedlegg());
         var kvittering = connection.endre(es);
         slettMellomlagringOgSøknad(es.vedlegg());
-        LOG.info(RETURNERER_KVITTERING, kvittering);
+        var finish = Instant.now();
+        var ms = Duration.between(start, finish).toMillis();
+        LOG.info(RETURNERER_KVITTERING, kvittering, ms);
         return kvittering;
     }
 
@@ -97,9 +111,12 @@ public class InnsendingTjeneste implements RetryAware {
 
     public void hentMellomlagredeFiler(List<VedleggDto> vedlegg) {
         if (!vedlegg.isEmpty()) {
+            var start = Instant.now();
             LOG.info("Henter mellomlagring for {} vedlegg", vedlegg.size());
             vedlegg.forEach(this::hentVedleggBytes);
-            LOG.info("Hentet mellomlagring OK for {} vedlegg", vedlegg.size());
+            var finish = Instant.now();
+            var ms = Duration.between(start, finish).toMillis();
+            LOG.info("Hentet mellomlagring OK for {} vedlegg ({}ms)", vedlegg.size(), ms);
         }
     }
 

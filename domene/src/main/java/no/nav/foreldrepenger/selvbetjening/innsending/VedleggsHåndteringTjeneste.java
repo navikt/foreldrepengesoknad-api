@@ -2,6 +2,8 @@ package no.nav.foreldrepenger.selvbetjening.innsending;
 
 import static java.util.stream.Stream.concat;
 import static no.nav.foreldrepenger.common.util.StreamUtil.safeStream;
+import static no.nav.foreldrepenger.selvbetjening.vedlegg.VedleggUtil.mediaType;
+import static org.springframework.http.MediaType.APPLICATION_PDF;
 
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -193,9 +195,16 @@ public class VedleggsHåndteringTjeneste {
         return unikeVedleggMedInnhold;
     }
 
+    @Deprecated // Fungere bare som guard nå hvis mellomlagringen ikke har konvertert til PDF
     private VedleggDto convert(VedleggDto vedlegg) {
         var originalContent = vedlegg.getContent();
-        if (originalContent != null && originalContent.length > 0) {
+        if (originalContent == null || originalContent.length == 0) {
+            return vedlegg;
+        }
+
+        var mediatype = mediaType(vedlegg.getContent());
+        if (!APPLICATION_PDF.equals(mediatype)) {
+            LOG.warn("Utviklerfeil: Mottok noe annet en PDF ved innsending {}. Konvertere til PDF og sender inn.", mediatype);
             vedlegg.setContent(converter.convert(originalContent));
         }
         return vedlegg;
