@@ -1,9 +1,6 @@
 package no.nav.foreldrepenger.selvbetjening.innsending;
 
 import static java.util.stream.Stream.concat;
-import static no.nav.foreldrepenger.common.util.StreamUtil.safeStream;
-import static no.nav.foreldrepenger.selvbetjening.vedlegg.VedleggUtil.mediaType;
-import static org.springframework.http.MediaType.APPLICATION_PDF;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -13,9 +10,9 @@ import java.util.Objects;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.springframework.stereotype.Component;
 
 import no.nav.foreldrepenger.selvbetjening.kontrakt.innsending.dto.BarnDto;
+import no.nav.foreldrepenger.selvbetjening.kontrakt.innsending.dto.Innsending;
 import no.nav.foreldrepenger.selvbetjening.kontrakt.innsending.dto.MutableVedleggReferanseDto;
 import no.nav.foreldrepenger.selvbetjening.kontrakt.innsending.dto.SøkerDto;
 import no.nav.foreldrepenger.selvbetjening.kontrakt.innsending.dto.SøknadDto;
@@ -27,71 +24,42 @@ import no.nav.foreldrepenger.selvbetjening.kontrakt.innsending.dto.ettersendelse
 import no.nav.foreldrepenger.selvbetjening.kontrakt.innsending.dto.foreldrepenger.ForeldrepengesøknadDto;
 import no.nav.foreldrepenger.selvbetjening.kontrakt.innsending.dto.foreldrepenger.UttaksplanPeriodeDto;
 import no.nav.foreldrepenger.selvbetjening.kontrakt.innsending.dto.svangerskapspenger.SvangerskapspengesøknadDto;
-import no.nav.foreldrepenger.selvbetjening.vedlegg.Image2PDFConverter;
 
-@Component
-public class VedleggsHåndteringTjeneste {
+public final class VedleggsHåndteringTjeneste {
     private static final Logger LOG = LoggerFactory.getLogger(VedleggsHåndteringTjeneste.class);
-    private final Image2PDFConverter converter;
 
-    public VedleggsHåndteringTjeneste(Image2PDFConverter converter) {
-        this.converter = converter;
+    private VedleggsHåndteringTjeneste() {
+        // Skal ikke instansieres
     }
 
-    public void fjernDupliserteVedleggFraEttersending(EttersendelseDto ettersending) {
-        var antallVedleggFørDuplikatsjek = ettersending.vedlegg().size();
-        if (antallVedleggFørDuplikatsjek == 0) {
-            return;
+    public static void fjernDupliserteVedleggFraInnsending(Innsending innsending) {
+        var antallVedleggFørDuplikatsjekk = innsending.vedlegg().size();
+        var duplikatTilEksisterende = finnOgfjernDupliserteVedlegg(innsending.vedlegg());
+        if (innsending instanceof SøknadDto søknad) {
+            erstattAlleReferanserSomErDuplikater(søknad, duplikatTilEksisterende);
+        } else if (innsending instanceof SøknadV2Dto søknadV2) {
+            erstattAlleReferanserSomErDuplikater(søknadV2, duplikatTilEksisterende);
+        } else if (innsending instanceof EndringssøknadDto endringssøknad) {
+            erstattAlleReferanserSomErDuplikater(endringssøknad, duplikatTilEksisterende);
+        } else if (innsending instanceof EttersendelseDto) {
+            // Ingen referanser å fjerner for ettersendelse
+        } else {
+            throw new IllegalStateException("Utviklerfeil: Innsending er hverken av type søknad, endring eller ettersendelse!");
         }
 
-        finnOgfjernDupliserteVedlegg(ettersending.vedlegg());
-        konverterTilPDF(ettersending.vedlegg());
-        LOG.info("Fjerner {} dupliserte ettersendte vedlegg av totalt {} mottatt",  antallVedleggFørDuplikatsjek - ettersending.vedlegg().size(), antallVedleggFørDuplikatsjek);
+        LOG.info("Fjernet {} dupliserte vedlegg av totalt {} mottatt",  antallVedleggFørDuplikatsjekk - innsending.vedlegg().size(), antallVedleggFørDuplikatsjekk);
     }
 
-    public void fjernDupliserteVedleggFraSøknad(SøknadV2Dto søknad) {
-        var antallVedleggFørDuplikatsjek = søknad.vedlegg().size();
-        if (antallVedleggFørDuplikatsjek == 0) {
-            return;
+    private static Map<MutableVedleggReferanseDto, MutableVedleggReferanseDto> finnOgfjernDupliserteVedlegg(List<VedleggDto> vedlegg) {
+        if (vedlegg.isEmpty()) {
+            return Map.of();
         }
-
-        var duplikatTilEksisterende = finnOgfjernDupliserteVedlegg(søknad.vedlegg());
-        erstattAlleReferanserSomErDuplikater(søknad, duplikatTilEksisterende);
-        konverterTilPDF(søknad.vedlegg());
-        LOG.info("Fjerner {} dupliserte vedlegg fra søknad av totalt {} mottatt", antallVedleggFørDuplikatsjek - søknad.vedlegg().size(), antallVedleggFørDuplikatsjek);
-    }
-
-    public void fjernDupliserteVedleggFraSøknad(SøknadDto søknad) {
-        var antallVedleggFørDuplikatsjek = søknad.vedlegg().size();
-        if (antallVedleggFørDuplikatsjek == 0) {
-            return;
-        }
-
-        var duplikatTilEksisterende = finnOgfjernDupliserteVedlegg(søknad.vedlegg());
-        erstattAlleReferanserSomErDuplikater(søknad, duplikatTilEksisterende);
-        konverterTilPDF(søknad.vedlegg());
-        LOG.info("Fjerner {} dupliserte vedlegg fra søknad av totalt {} mottatt", antallVedleggFørDuplikatsjek - søknad.vedlegg().size(), antallVedleggFørDuplikatsjek);
-    }
-
-    public void fjernDupliserteVedleggFraSøknad(EndringssøknadDto endringssøknad) {
-        var antallVedleggFørDuplikatsjek = endringssøknad.vedlegg().size();
-        if (antallVedleggFørDuplikatsjek == 0) {
-            return;
-        }
-
-        var duplikatTilEksisterende = finnOgfjernDupliserteVedlegg(endringssøknad.vedlegg());
-        erstattAlleReferanserSomErDuplikater(endringssøknad, duplikatTilEksisterende);
-        konverterTilPDF(endringssøknad.vedlegg());
-        LOG.info("Fjerner {} dupliserte vedlegg fra endringssøknad av totalt {} mottatt", antallVedleggFørDuplikatsjek - endringssøknad.vedlegg().size(), antallVedleggFørDuplikatsjek);
-    }
-
-    private HashMap<MutableVedleggReferanseDto, MutableVedleggReferanseDto> finnOgfjernDupliserteVedlegg(List<VedleggDto> vedlegg) {
         var duplikatTilEksisterende = finnDupliserteVedlegg(vedlegg);
         vedlegg.removeIf(vedleggDto -> duplikatTilEksisterende.containsKey(vedleggDto.getId()));
         return duplikatTilEksisterende;
     }
 
-    private static HashMap<MutableVedleggReferanseDto, MutableVedleggReferanseDto> finnDupliserteVedlegg(List<VedleggDto> vedlegg) {
+    private static Map<MutableVedleggReferanseDto, MutableVedleggReferanseDto> finnDupliserteVedlegg(List<VedleggDto> vedlegg) {
         var kopi = new ArrayList<>(vedlegg);
         var duplikatTilEksisterende = new HashMap<MutableVedleggReferanseDto, MutableVedleggReferanseDto>();
         for (var gjeldendeVedlegg : vedlegg) {
@@ -121,7 +89,7 @@ public class VedleggsHåndteringTjeneste {
         return Objects.equals(vedleggLength, kandidatLength);
     }
 
-    private static void erstattAlleReferanserSomErDuplikater(EndringssøknadDto endringssøknadDto, HashMap<MutableVedleggReferanseDto, MutableVedleggReferanseDto> nyReferanseMapping) {
+    private static void erstattAlleReferanserSomErDuplikater(EndringssøknadDto endringssøknadDto, Map<MutableVedleggReferanseDto, MutableVedleggReferanseDto> nyReferanseMapping) {
         for (var gammelReferanse : nyReferanseMapping.entrySet()) {
             if (endringssøknadDto instanceof EndringssøknadForeldrepengerDto fpEndring) {
                 erstattReferanserSøker(gammelReferanse, fpEndring.søker());
@@ -130,13 +98,13 @@ public class VedleggsHåndteringTjeneste {
         }
     }
 
-    private static void erstattAlleReferanserSomErDuplikater(SøknadV2Dto søknad, HashMap<MutableVedleggReferanseDto, MutableVedleggReferanseDto> nyReferanseMapping) {
+    private static void erstattAlleReferanserSomErDuplikater(SøknadV2Dto søknad, Map<MutableVedleggReferanseDto, MutableVedleggReferanseDto> nyReferanseMapping) {
         for (var gammelReferanse : nyReferanseMapping.entrySet()) {
             erstattReferanserBarn(gammelReferanse, søknad.barn());
         }
     }
 
-    private static void erstattAlleReferanserSomErDuplikater(SøknadDto søknad, HashMap<MutableVedleggReferanseDto, MutableVedleggReferanseDto> nyReferanseMapping) {
+    private static void erstattAlleReferanserSomErDuplikater(SøknadDto søknad, Map<MutableVedleggReferanseDto, MutableVedleggReferanseDto> nyReferanseMapping) {
         for (var gammelReferanse : nyReferanseMapping.entrySet()) {
             erstattReferanserSøker(gammelReferanse, søknad.søker());
             erstattReferanserBarn(gammelReferanse, søknad.barn());
@@ -184,28 +152,4 @@ public class VedleggsHåndteringTjeneste {
                 .filter(v -> v.equals(gammelReferanse.getKey()))
                 .forEach(v -> v.referanse(gammelReferanse.getValue().referanse()));
     }
-
-    private List<VedleggDto> konverterTilPDF(List<VedleggDto> vedleggFrontend) {
-        long start = System.currentTimeMillis();
-        var unikeVedleggMedInnhold = safeStream(vedleggFrontend).distinct().map(this::convert).toList();
-        long slutt = System.currentTimeMillis();
-        LOG.info("Konvertering av {} vedlegg til PDF tok {}ms", vedleggFrontend.size(), slutt - start);
-        return unikeVedleggMedInnhold;
-    }
-
-    @Deprecated // Fungere bare som guard nå hvis mellomlagringen ikke har konvertert til PDF
-    private VedleggDto convert(VedleggDto vedlegg) {
-        var originalContent = vedlegg.getContent();
-        if (originalContent == null || originalContent.length == 0) {
-            return vedlegg;
-        }
-
-        var mediatype = mediaType(vedlegg.getContent());
-        if (!APPLICATION_PDF.equals(mediatype)) {
-            LOG.warn("Utviklerfeil: Mottok noe annet en PDF ved innsending {}. Konvertere til PDF og sender inn.", mediatype);
-            vedlegg.setContent(converter.convert(originalContent));
-        }
-        return vedlegg;
-    }
-
 }

@@ -1,15 +1,7 @@
 package no.nav.foreldrepenger.selvbetjening.innsending;
 
-import static no.nav.boot.conditionals.EnvUtil.CONFIDENTIAL;
-import static no.nav.foreldrepenger.selvbetjening.util.StringUtils.escapeHtml;
-
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
-
-import com.fasterxml.jackson.core.JsonProcessingException;
-import com.fasterxml.jackson.databind.ObjectMapper;
 
 import jakarta.validation.Valid;
 import no.nav.foreldrepenger.common.domain.Kvittering;
@@ -21,55 +13,32 @@ import no.nav.foreldrepenger.selvbetjening.kontrakt.innsending.dto.ettersendelse
 
 @ProtectedRestController(InnsendingController.INNSENDING_CONTROLLER_PATH)
 public class InnsendingController {
-    private static final Logger SECURE_LOGGER = LoggerFactory.getLogger("secureLogger");
-    private static final Logger LOG = LoggerFactory.getLogger(InnsendingController.class);
-
     public static final String INNSENDING_CONTROLLER_PATH = "/rest/soknad";
 
-    private final ObjectMapper mapper;
     private final InnsendingTjeneste innsending;
 
-    public InnsendingController(ObjectMapper mapper, InnsendingTjeneste innsending) {
-        this.mapper = mapper;
+    public InnsendingController(InnsendingTjeneste innsending) {
         this.innsending = innsending;
     }
 
     @PostMapping
     public Kvittering sendInn(@Valid @RequestBody SøknadDto søknad) {
-        SECURE_LOGGER.info("{} mottatt fra frontend med følende innhold: {}", søknad.type(), tilJson(søknad));
-        LOG.info("Mottok søknad med målform {} og {} vedlegg", søknad.søker().språkkode(), søknad.vedlegg().size());
-        if (LOG.isInfoEnabled() && LOG.isInfoEnabled(CONFIDENTIAL)) {
-            LOG.info(CONFIDENTIAL, "Søker er {}", escapeHtml(søknad.søker()));
-        }
         return innsending.sendInn(søknad);
     }
 
     @PostMapping("/engangssoknad")
     public Kvittering sendInnEngangsstønad(@Valid @RequestBody EngangsstønadV2Dto søknad) {
-        SECURE_LOGGER.info("Engangsstønad mottatt fra frontend med følende innhold: {}", tilJson(søknad));
-        LOG.info("Mottok engangsstønad med målform {} og {} vedlegg", søknad.språkkode(), søknad.vedlegg().size());
         return innsending.sendInn(søknad);
     }
 
     @PostMapping("/endre")
     public Kvittering endre(@Valid @RequestBody EndringssøknadDto endringssøknad) {
-        SECURE_LOGGER.info("{} mottatt fra frontend med følende innhold: {}", endringssøknad.type(), tilJson(endringssøknad));
-        LOG.info("Mottok endringssøknad med {} vedlegg", endringssøknad.vedlegg().size());
-        return innsending.endre(endringssøknad);
+        return innsending.sendInn(endringssøknad);
     }
 
     @PostMapping("/ettersend")
     public Kvittering sendInn(@Valid @RequestBody EttersendelseDto ettersending) {
-        LOG.info("Mottok ettersending av {} vedlegg", ettersending.vedlegg().size());
-        return innsending.ettersend(ettersending);
-    }
-
-    private String tilJson(Object innsending) {
-        try {
-            return mapper.writeValueAsString(innsending);
-        } catch (JsonProcessingException e) {
-            return innsending.toString();
-        }
+        return innsending.sendInn(ettersending);
     }
 
     @Override

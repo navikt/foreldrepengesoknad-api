@@ -1,5 +1,6 @@
 package no.nav.foreldrepenger.selvbetjening.innsending;
 
+import static no.nav.foreldrepenger.selvbetjening.innsending.VedleggsHåndteringTjeneste.fjernDupliserteVedleggFraInnsending;
 import static org.slf4j.LoggerFactory.getLogger;
 
 import java.security.SecureRandom;
@@ -9,84 +10,55 @@ import java.util.List;
 import java.util.Random;
 
 import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Service;
+
+import com.fasterxml.jackson.core.JsonProcessingException;
+import com.fasterxml.jackson.databind.ObjectMapper;
 
 import no.nav.foreldrepenger.common.domain.Kvittering;
 import no.nav.foreldrepenger.selvbetjening.http.RetryAware;
 import no.nav.foreldrepenger.selvbetjening.innsending.pdf.PdfGenerator;
+import no.nav.foreldrepenger.selvbetjening.kontrakt.innsending.dto.Innsending;
 import no.nav.foreldrepenger.selvbetjening.kontrakt.innsending.dto.MutableVedleggReferanseDto;
-import no.nav.foreldrepenger.selvbetjening.kontrakt.innsending.dto.SøknadDto;
 import no.nav.foreldrepenger.selvbetjening.kontrakt.innsending.dto.VedleggDto;
-import no.nav.foreldrepenger.selvbetjening.kontrakt.innsending.dto.endringssøknad.EndringssøknadDto;
-import no.nav.foreldrepenger.selvbetjening.kontrakt.innsending.dto.engangsstønad.SøknadV2Dto;
 import no.nav.foreldrepenger.selvbetjening.kontrakt.innsending.dto.ettersendelse.EttersendelseDto;
 import no.nav.foreldrepenger.selvbetjening.kontrakt.innsending.dto.ettersendelse.TilbakebetalingUttalelseDto;
 import no.nav.foreldrepenger.selvbetjening.mellomlagring.KryptertMellomlagring;
 
 @Service
 public class InnsendingTjeneste implements RetryAware {
-
+    private static final Logger SECURE_LOGGER = LoggerFactory.getLogger("secureLogger");
     private static final String RETURNERER_KVITTERING = "Returnerer kvittering {}. Innsending tok {}ms";
     private static final Logger LOG = getLogger(InnsendingTjeneste.class);
     private static final Random IDGENERATOR = new SecureRandom();
     private final InnsendingConnection connection;
     private final KryptertMellomlagring mellomlagring;
     private final PdfGenerator pdfGenerator;
+    private final ObjectMapper mapper;
 
     public InnsendingTjeneste(InnsendingConnection connection,
                               KryptertMellomlagring mellomlagring,
-                              PdfGenerator pdfGenerator) {
+                              PdfGenerator pdfGenerator, ObjectMapper mapper) {
         this.connection = connection;
         this.mellomlagring = mellomlagring;
         this.pdfGenerator = pdfGenerator;
+        this.mapper = mapper;
     }
 
-    public Kvittering sendInn(SøknadDto søknad) {
-        LOG.info("Sender inn søknad av type {}", søknad.type());
+    public Kvittering sendInn(Innsending innsending) {
+        LOG.info("Mottok {} med {} vedlegg", innsending.navn(), innsending.vedlegg().size());
+        SECURE_LOGGER.info("Mottatt {} fra frontend med følende innhold: {}", innsending.navn(), tilJson(innsending));
         var start = Instant.now();
-        hentMellomlagredeFiler(søknad.vedlegg());
-        var kvittering = connection.sendInn(søknad);
-        slettMellomlagringOgSøknad(søknad.vedlegg());
-        var finish = Instant.now();
-        var ms = Duration.between(start, finish).toMillis();
-        LOG.info(RETURNERER_KVITTERING, kvittering, ms);
-        return kvittering;
-    }
-
-    public Kvittering sendInn(SøknadV2Dto søknad) {
-        LOG.info("Sender inn søknad av type {}", søknad.type());
-        var start = Instant.now();
-        hentMellomlagredeFiler(søknad.vedlegg());
-        var kvittering = connection.sendInn(søknad);
-        slettMellomlagringOgSøknad(søknad.vedlegg());
-        var finish = Instant.now();
-        var ms = Duration.between(start, finish).toMillis();
-        LOG.info(RETURNERER_KVITTERING, kvittering, ms);
-        return kvittering;
-    }
-
-    public Kvittering ettersend(EttersendelseDto e) {
-        LOG.info("Ettersender for sak {}", e.saksnummer());
-        var start = Instant.now();
-        hentMellomlagredeFiler(e.vedlegg());
-        if (e.erTilbakebetalingUttalelse()) {
+        var alleVedleggKopi = innsending.vedlegg().stream().toList();
+        hentMellomlagredeFiler(innsending.vedlegg());
+        fjernDupliserteVedleggFraInnsending(innsending);
+        if (innsending instanceof EttersendelseDto e && e.erTilbakebetalingUttalelse()) {
             LOG.info("Konverterer tekst til vedleggs-pdf {}", e.brukerTekst().dokumentType());
             e.vedlegg().add(vedleggFra(uttalelseFra(e)));
         }
-        var kvittering = connection.ettersend(e);
-        e.vedlegg().forEach(mellomlagring::slettKryptertVedlegg);
-        var finish = Instant.now();
-        var ms = Duration.between(start, finish).toMillis();
-        LOG.info(RETURNERER_KVITTERING, kvittering, ms);
-        return kvittering;
-    }
-
-    public Kvittering endre(EndringssøknadDto es) {
-        LOG.info("Endrer søknad av type {}", es.type());
-        var start = Instant.now();
-        hentMellomlagredeFiler(es.vedlegg());
-        var kvittering = connection.endre(es);
-        slettMellomlagringOgSøknad(es.vedlegg());
+        var kvittering = connection.sendInn(innsending);
+        slettMellomlagringOgSøknad(alleVedleggKopi);
         var finish = Instant.now();
         var ms = Duration.between(start, finish).toMillis();
         LOG.info(RETURNERER_KVITTERING, kvittering, ms);
@@ -132,6 +104,14 @@ public class InnsendingTjeneste implements RetryAware {
             vedlegg.setContent(mellomlagring.lesKryptertVedlegg(vedlegg.getUuid())
                 .map(a -> a.bytes)
                 .orElse(new byte[] {}));
+        }
+    }
+
+    private String tilJson(Innsending innsending) {
+        try {
+            return mapper.writeValueAsString(innsending);
+        } catch (JsonProcessingException e) {
+            return innsending.toString();
         }
     }
 

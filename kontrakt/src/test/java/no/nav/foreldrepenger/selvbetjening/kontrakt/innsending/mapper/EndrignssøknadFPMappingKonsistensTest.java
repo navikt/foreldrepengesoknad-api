@@ -13,6 +13,7 @@ import no.nav.foreldrepenger.common.domain.BrukerRolle;
 import no.nav.foreldrepenger.common.domain.Fødselsnummer;
 import no.nav.foreldrepenger.common.domain.Saksnummer;
 import no.nav.foreldrepenger.common.domain.felles.annenforelder.NorskForelder;
+import no.nav.foreldrepenger.common.domain.foreldrepenger.Endringssøknad;
 import no.nav.foreldrepenger.common.domain.foreldrepenger.Foreldrepenger;
 import no.nav.foreldrepenger.common.domain.foreldrepenger.fordeling.LukketPeriodeMedVedlegg;
 import no.nav.foreldrepenger.common.domain.foreldrepenger.fordeling.UttaksPeriode;
@@ -42,7 +43,7 @@ class EndrignssøknadFPMappingKonsistensTest {
             .build();
         var foreldrepengerDto = ((EndringssøknadForeldrepengerDto) søknadDto);
 
-        var mappedSøknad = SøknadMapper.tilEndringssøknad(søknadDto, NOW);
+        var mappedSøknad = (Endringssøknad) SøknadMapper.tilSøknad(søknadDto, NOW);
         assertThat(mappedSøknad.getSaksnr()).isEqualTo(søknadDto.saksnummer());
         assertThat(mappedSøknad.getSøker().søknadsRolle()).isEqualTo(søknadDto.søker().rolle());
         assertThat(mappedSøknad.getSøker().målform()).isEqualTo(søknadDto.søker().språkkode());

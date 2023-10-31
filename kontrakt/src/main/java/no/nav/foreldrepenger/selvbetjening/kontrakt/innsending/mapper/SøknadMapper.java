@@ -10,6 +10,7 @@ import java.time.LocalDate;
 
 import no.nav.foreldrepenger.common.domain.Søknad;
 import no.nav.foreldrepenger.common.domain.foreldrepenger.Endringssøknad;
+import no.nav.foreldrepenger.selvbetjening.kontrakt.innsending.dto.Innsending;
 import no.nav.foreldrepenger.selvbetjening.kontrakt.innsending.dto.SøknadDto;
 import no.nav.foreldrepenger.selvbetjening.kontrakt.innsending.dto.endringssøknad.EndringssøknadDto;
 import no.nav.foreldrepenger.selvbetjening.kontrakt.innsending.dto.endringssøknad.EndringssøknadForeldrepengerDto;
@@ -24,7 +25,19 @@ public final class SøknadMapper {
     private SøknadMapper() {
     }
 
-    public static Søknad tilSøknad(SøknadDto søknad, LocalDate mottattDato) {
+    public static Søknad tilSøknad(Innsending innsending, LocalDate mottattDato) {
+        if (innsending instanceof SøknadDto søknad) {
+            return tilSøknad(søknad, mottattDato);
+        } else if (innsending instanceof SøknadV2Dto søknadV2) {
+            return tilSøknad(søknadV2, mottattDato);
+        } else if (innsending instanceof EndringssøknadDto endrringsøknad) {
+            return tilEndringssøknad(endrringsøknad, mottattDato);
+        }
+        throw new IllegalArgumentException("Utviklerfeil: Ukjent søknad " + innsending.getClass().getSimpleName());
+    }
+
+
+    private static Søknad tilSøknad(SøknadDto søknad, LocalDate mottattDato) {
         if (søknad instanceof ForeldrepengesøknadDto f) {
             return tilForeldrepengesøknadVedleggUtenInnhold(f, mottattDato);
         }
@@ -37,14 +50,14 @@ public final class SøknadMapper {
         throw new IllegalArgumentException("Ukjent søknad " + søknad.getClass().getSimpleName());
     }
 
-    public static Søknad tilSøknad(SøknadV2Dto søknad, LocalDate mottattDato) {
+    private static Søknad tilSøknad(SøknadV2Dto søknad, LocalDate mottattDato) {
         if (søknad instanceof EngangsstønadV2Dto e) {
             return tilEngangsstønad(e, mottattDato);
         }
         throw new IllegalArgumentException("Ukjent søknad " + søknad.getClass().getSimpleName());
     }
 
-    public static Endringssøknad tilEndringssøknad(EndringssøknadDto endringssøknad, LocalDate mottattDato) {
+    private static Endringssøknad tilEndringssøknad(EndringssøknadDto endringssøknad, LocalDate mottattDato) {
         if (endringssøknad instanceof EndringssøknadForeldrepengerDto f) {
             return tilEndringForeldrepengesøknad(f, mottattDato);
         }

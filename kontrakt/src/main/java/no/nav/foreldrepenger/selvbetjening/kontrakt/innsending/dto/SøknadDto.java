@@ -18,13 +18,13 @@ import no.nav.foreldrepenger.selvbetjening.kontrakt.innsending.dto.svangerskapsp
     @JsonSubTypes.Type(value = ForeldrepengesøknadDto.class, name = "foreldrepenger"),
     @JsonSubTypes.Type(value = SvangerskapspengesøknadDto.class, name = "svangerskapspenger")
 })
-public interface SøknadDto extends MottattTidspunkt {
+public interface SøknadDto extends Innsending {
     Situasjon situasjon();
     BarnDto barn();
     SøkerDto søker();
     UtenlandsoppholdDto informasjonOmUtenlandsopphold();
     List<VedleggDto> vedlegg();
-    default String type() {
+    default String navn() {
         if (this instanceof ForeldrepengesøknadDto) return "foreldrepenger";
         if (this instanceof EngangsstønadDto) return "engangsstønad";
         if (this instanceof SvangerskapspengesøknadDto) return "svangerskapspenger";

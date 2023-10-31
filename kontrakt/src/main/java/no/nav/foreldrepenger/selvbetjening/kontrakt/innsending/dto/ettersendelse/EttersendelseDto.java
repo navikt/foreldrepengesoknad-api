@@ -2,6 +2,7 @@ package no.nav.foreldrepenger.selvbetjening.kontrakt.innsending.dto.ettersendels
 
 import static no.nav.foreldrepenger.common.domain.validation.InputValideringRegex.FRITEKST;
 
+import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
@@ -11,13 +12,15 @@ import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Pattern;
 import jakarta.validation.constraints.Size;
 import no.nav.foreldrepenger.common.domain.Saksnummer;
+import no.nav.foreldrepenger.selvbetjening.kontrakt.innsending.dto.Innsending;
 import no.nav.foreldrepenger.selvbetjening.kontrakt.innsending.dto.VedleggDto;
 
-public record EttersendelseDto(@NotNull YtelseType type,
+public record EttersendelseDto(LocalDate mottattdato,
+                               @NotNull YtelseType type,
                                @Valid Saksnummer saksnummer,
                                @Valid BrukerTekstDto brukerTekst,
                                @Pattern(regexp = FRITEKST) String dialogId,
-                               @Valid @Size(max = 40) List<VedleggDto> vedlegg) {
+                               @Valid @Size(max = 40) List<VedleggDto> vedlegg) implements Innsending {
 
     public EttersendelseDto {
         vedlegg = Optional.ofNullable(vedlegg).map(ArrayList::new).orElse(new ArrayList<>());
@@ -25,5 +28,10 @@ public record EttersendelseDto(@NotNull YtelseType type,
 
     public boolean erTilbakebetalingUttalelse() {
         return dialogId != null;
+    }
+
+    @Override
+    public String navn() {
+        return "ettersendelse";
     }
 }

@@ -30,7 +30,7 @@ class SøknadDtoDeseraliseringTest {
         // Verifiser korrekt seralisering fra frontend
         assertThat(søknadFrontend).isInstanceOf(ForeldrepengesøknadDto.class);
         var fs = (ForeldrepengesøknadDto) søknadFrontend;
-        assertThat(fs.type()).isEqualTo("foreldrepenger");
+        assertThat(fs.navn()).isEqualTo("foreldrepenger");
         assertThat(fs.situasjon()).isEqualTo(Situasjon.FØDSEL);
         assertThat(fs.dekningsgrad()).isEqualTo(Dekningsgrad.ÅTTI);
         assertThat(fs.ønskerJustertUttakVedFødsel()).isTrue();
