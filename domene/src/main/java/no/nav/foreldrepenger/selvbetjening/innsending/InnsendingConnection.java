@@ -132,6 +132,7 @@ public class InnsendingConnection extends AbstractRestConnection {
         var builder = new MultipartBodyBuilder();
         builder.part(BODY_PART_NAME, jsonBody, APPLICATION_JSON);
         safeStream(vedlegg)
+            .distinct()
             .filter(v -> v.getInnsendingsType() == null || LASTET_OPP.name().equals(v.getInnsendingsType()))
             .filter(v -> v.getContent() != null)
             .forEach(v -> builder.part(VEDLEGG_PART_NAME, v.getContent(), APPLICATION_PDF)

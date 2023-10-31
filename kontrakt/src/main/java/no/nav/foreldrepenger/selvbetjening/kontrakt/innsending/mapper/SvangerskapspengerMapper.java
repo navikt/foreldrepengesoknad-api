@@ -40,7 +40,7 @@ final class SvangerskapspengerMapper {
             tilSøker(s),
             tilYtelse(s),
             null,
-            CommonMapper.tilVedlegg(s.vedlegg())
+            tilVedlegg(s.vedlegg())
         );
     }
 

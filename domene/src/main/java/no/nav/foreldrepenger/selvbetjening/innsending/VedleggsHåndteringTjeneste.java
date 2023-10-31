@@ -6,7 +6,6 @@ import static no.nav.foreldrepenger.selvbetjening.vedlegg.VedleggUtil.mediaType;
 import static org.springframework.http.MediaType.APPLICATION_PDF;
 
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -101,7 +100,6 @@ public class VedleggsHåndteringTjeneste {
                 .filter(v -> Objects.equals(gjeldendeVedlegg.getInnsendingsType(), v.getInnsendingsType()))
                 .filter(v -> Objects.equals(gjeldendeVedlegg.getSkjemanummer(), v.getSkjemanummer()))
                 .filter(v -> sizeEquals(gjeldendeVedlegg, v))
-                .filter(v -> Arrays.equals(gjeldendeVedlegg.getContent(), v.getContent()))
                 .findFirst();
             if (eksisterende.isPresent()) {
                 duplikatTilEksisterende.putIfAbsent(gjeldendeVedlegg.getId(), eksisterende.get().getId());

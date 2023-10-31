@@ -48,7 +48,7 @@ final class ForeldrepengerMapper {
             tilSøker(foreldrepengesøknad.søker()),
             tilYtelse(foreldrepengesøknad),
             foreldrepengesøknad.tilleggsopplysninger(),
-            CommonMapper.tilVedlegg(foreldrepengesøknad.vedlegg())
+            tilVedlegg(foreldrepengesøknad.vedlegg())
         );
     }
 

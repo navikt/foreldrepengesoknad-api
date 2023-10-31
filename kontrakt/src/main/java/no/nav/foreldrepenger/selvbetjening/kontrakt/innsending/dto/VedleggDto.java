@@ -3,7 +3,6 @@ package no.nav.foreldrepenger.selvbetjening.kontrakt.innsending.dto;
 import static no.nav.foreldrepenger.common.domain.validation.InputValideringRegex.FRITEKST;
 
 import java.net.URI;
-import java.util.Arrays;
 import java.util.Objects;
 
 import com.fasterxml.jackson.annotation.JsonCreator;
@@ -81,16 +80,12 @@ public class VedleggDto {
         if (o == null || getClass() != o.getClass())
             return false;
         VedleggDto that = (VedleggDto) o;
-        return Objects.equals(innsendingsType, that.innsendingsType)
-            && Objects.equals(skjemanummer, that.skjemanummer)
-            && Arrays.equals(content, that.content);
+        return Objects.equals(id, that.id);
     }
 
     @Override
     public int hashCode() {
-        int result = Objects.hash(innsendingsType, skjemanummer);
-        result = 31 * result + Arrays.hashCode(content);
-        return result;
+        return Objects.hash(id);
     }
 
     @Override

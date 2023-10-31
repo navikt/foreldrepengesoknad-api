@@ -40,7 +40,7 @@ final class EngangsstønadMapperV2 {
             tilSøker(e.språkkode()),
             tilYtelse(e),
             null,
-            CommonMapper.tilVedlegg(e.vedlegg())
+            tilVedlegg(e.vedlegg())
         );
     }
 
