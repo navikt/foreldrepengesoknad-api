@@ -13,8 +13,6 @@ import static org.springframework.http.MediaType.MULTIPART_MIXED;
 import java.time.LocalDate;
 import java.util.List;
 
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 import org.springframework.core.env.Environment;
 import org.springframework.http.HttpEntity;
 import org.springframework.http.HttpHeaders;
@@ -27,8 +25,6 @@ import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 
 import no.nav.foreldrepenger.common.domain.Kvittering;
-import no.nav.foreldrepenger.common.domain.Søknad;
-import no.nav.foreldrepenger.common.domain.felles.Ettersending;
 import no.nav.foreldrepenger.selvbetjening.http.AbstractRestConnection;
 import no.nav.foreldrepenger.selvbetjening.kontrakt.innsending.dto.MottattTidspunkt;
 import no.nav.foreldrepenger.selvbetjening.kontrakt.innsending.dto.SøknadDto;
@@ -39,7 +35,6 @@ import no.nav.foreldrepenger.selvbetjening.kontrakt.innsending.dto.ettersendelse
 
 @Component
 public class InnsendingConnection extends AbstractRestConnection {
-    private static final Logger SECURE_LOGGER = LoggerFactory.getLogger("secureLogger");
     private static final String BODY_PART_NAME = "body";
     private static final String VEDLEGG_PART_NAME = "vedlegg";
     private static final String VEDLEGG_REFERANSE_HEADER = "vedleggsreferanse";
@@ -58,19 +53,16 @@ public class InnsendingConnection extends AbstractRestConnection {
     }
 
     public Kvittering sendInn(SøknadDto søknad) {
-        SECURE_LOGGER.info("{} mottatt fra frontend med følende innhold: {}", søknad.type(), tilJson(søknad));
         vedleggshåndtering.fjernDupliserteVedleggFraSøknad(søknad);
         return postForEntity(config.innsendingURI(), body(søknad), Kvittering.class);
     }
 
     public Kvittering sendInn(SøknadV2Dto søknad) {
-        SECURE_LOGGER.info("Engangsstønad mottatt fra frontend med følende innhold: {}", tilJson(søknad));
         vedleggshåndtering.fjernDupliserteVedleggFraSøknad(søknad);
         return postForEntity(config.innsendingURI(), body(søknad), Kvittering.class);
     }
 
     public Kvittering endre(EndringssøknadDto endringssøknad) {
-        SECURE_LOGGER.info("{} mottatt fra frontend med følende innhold: {}", endringssøknad.type(), tilJson(endringssøknad));
         vedleggshåndtering.fjernDupliserteVedleggFraSøknad(endringssøknad);
         return postForEntity(config.endringURI(), body(endringssøknad), Kvittering.class);
     }
@@ -112,19 +104,11 @@ public class InnsendingConnection extends AbstractRestConnection {
         return tilJson(tilEttersending(ettersendelse));
     }
 
-    private String tilJson(Søknad søknad) {
+    private String tilJson(Object innsending) {
         try {
-            return mapper.writeValueAsString(søknad);
+            return mapper.writeValueAsString(innsending);
         } catch (JsonProcessingException e) {
-            throw new IllegalStateException("Klarte ikke å oversette søknad til JSON!", e);
-        }
-    }
-
-    private String tilJson(Ettersending ettersending) {
-        try {
-            return mapper.writeValueAsString(ettersending);
-        } catch (JsonProcessingException e) {
-            throw new IllegalStateException("Klarte ikke å oversette ettersending til JSON!", e);
+            throw new IllegalStateException("Klarte ikke å oversette innsending til JSON!", e);
         }
     }
 
