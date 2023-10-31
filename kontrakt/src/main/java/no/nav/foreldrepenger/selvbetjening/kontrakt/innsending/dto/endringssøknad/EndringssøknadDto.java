@@ -9,7 +9,7 @@ import com.fasterxml.jackson.annotation.JsonTypeInfo;
 
 import no.nav.foreldrepenger.common.domain.Saksnummer;
 import no.nav.foreldrepenger.selvbetjening.kontrakt.innsending.dto.BarnDto;
-import no.nav.foreldrepenger.selvbetjening.kontrakt.innsending.dto.MottattTidspunkt;
+import no.nav.foreldrepenger.selvbetjening.kontrakt.innsending.dto.Innsending;
 import no.nav.foreldrepenger.selvbetjening.kontrakt.innsending.dto.SøkerDto;
 import no.nav.foreldrepenger.selvbetjening.kontrakt.innsending.dto.VedleggDto;
 import no.nav.foreldrepenger.selvbetjening.kontrakt.innsending.dto.foreldrepenger.Situasjon;
@@ -18,15 +18,15 @@ import no.nav.foreldrepenger.selvbetjening.kontrakt.innsending.dto.foreldrepenge
 @JsonSubTypes({
     @JsonSubTypes.Type(value = EndringssøknadForeldrepengerDto.class, name = "foreldrepenger")
 })
-public interface EndringssøknadDto extends MottattTidspunkt {
+public interface EndringssøknadDto extends Innsending {
     Situasjon situasjon();
     Saksnummer saksnummer();
     BarnDto barn();
     SøkerDto søker();
     List<VedleggDto> vedlegg();
 
-    default String type() {
-        if (this instanceof EndringssøknadForeldrepengerDto) return "foreldrepenger";
+    default String navn() {
+        if (this instanceof EndringssøknadForeldrepengerDto) return "endringssøknad foreldrepenger";
         throw new IllegalStateException("Utvikerfeil: Kan ikke ha en annen ytelse enn fp!");
     }
 }

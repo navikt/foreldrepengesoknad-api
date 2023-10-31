@@ -35,7 +35,7 @@ class EttersendelseMappingKonsistensTest {
             )
         );
 
-        var ettersendelseFraFrontend = new EttersendelseDto(YtelseType.FORELDREPENGER, saksnummer, null, null, vedleggerDto);
+        var ettersendelseFraFrontend = new EttersendelseDto(null, YtelseType.FORELDREPENGER, saksnummer, null, null, vedleggerDto);
         assertThat(ettersendelseFraFrontend.erTilbakebetalingUttalelse()).isFalse();
         var ettersendelse = EttersendingMapper.tilEttersending(ettersendelseFraFrontend);
         assertThat(ettersendelse.type()).isEqualTo(EttersendingsType.FORELDREPENGER);

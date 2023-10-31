@@ -11,26 +11,31 @@ import java.net.URI;
 import java.util.List;
 import java.util.Optional;
 
-import no.nav.foreldrepenger.selvbetjening.kontrakt.innsending.dto.MutableVedleggReferanseDto;
-import no.nav.foreldrepenger.selvbetjening.kontrakt.innsending.dto.VedleggDto;
-
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.core.io.ClassPathResource;
 import org.springframework.http.MediaType;
+import org.springframework.test.context.ContextConfiguration;
 import org.springframework.util.unit.DataSize;
 
+import com.fasterxml.jackson.databind.ObjectMapper;
+
+import no.nav.foreldrepenger.selvbetjening.config.JacksonConfiguration;
 import no.nav.foreldrepenger.selvbetjening.innsending.InnsendingConnection;
 import no.nav.foreldrepenger.selvbetjening.innsending.InnsendingTjeneste;
 import no.nav.foreldrepenger.selvbetjening.innsending.pdf.PdfGenerator;
+import no.nav.foreldrepenger.selvbetjening.kontrakt.innsending.dto.MutableVedleggReferanseDto;
+import no.nav.foreldrepenger.selvbetjening.kontrakt.innsending.dto.VedleggDto;
 import no.nav.foreldrepenger.selvbetjening.mellomlagring.Attachment;
 import no.nav.foreldrepenger.selvbetjening.mellomlagring.KryptertMellomlagring;
 import no.nav.foreldrepenger.selvbetjening.vedlegg.virusscan.ClamAvVirusScanner;
 import no.nav.foreldrepenger.selvbetjening.vedlegg.virusscan.VirusScanConnection;
 
 @ExtendWith(MockitoExtension.class)
+@ContextConfiguration(classes = JacksonConfiguration.class)
 class VedleggSjekkerTest {
 
     @Mock
@@ -41,6 +46,8 @@ class VedleggSjekkerTest {
     private PdfGenerator pdfGenerator;
     @Mock
     private VirusScanConnection virusScanConnection;
+    @Autowired
+    ObjectMapper mapper;
 
     private static final StørrelseVedleggSjekker sjekker = new StørrelseVedleggSjekker(DataSize.ofMegabytes(7), DataSize.ofMegabytes(3));
 
@@ -123,7 +130,7 @@ class VedleggSjekkerTest {
         var vedlegg = vedlegg(1);
         var vedleggene = List.of(vedlegg);
 
-        var innsendingTjeneste = new InnsendingTjeneste(connection, mellomlagring, pdfGenerator);
+        var innsendingTjeneste = new InnsendingTjeneste(connection, mellomlagring, pdfGenerator, mapper);
         when(mellomlagring.lesKryptertVedlegg(vedlegg.getUuid())).thenReturn(Optional.of(attachment(1)));
 
         innsendingTjeneste.hentMellomlagredeFiler(vedleggene);
