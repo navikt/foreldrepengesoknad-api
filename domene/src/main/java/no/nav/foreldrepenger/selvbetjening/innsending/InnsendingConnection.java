@@ -3,6 +3,7 @@ package no.nav.foreldrepenger.selvbetjening.innsending;
 import static no.nav.boot.conditionals.EnvUtil.isGcp;
 import static no.nav.foreldrepenger.common.domain.felles.InnsendingsType.LASTET_OPP;
 import static no.nav.foreldrepenger.common.util.StreamUtil.safeStream;
+import static no.nav.foreldrepenger.selvbetjening.kontrakt.innsending.mapper.EttersendingMapper.tilEttersending;
 import static no.nav.foreldrepenger.selvbetjening.kontrakt.innsending.mapper.SøknadMapper.tilSøknad;
 import static no.nav.foreldrepenger.selvbetjening.vedlegg.VedleggUtil.mediaType;
 import static org.springframework.http.MediaType.APPLICATION_JSON;
@@ -26,7 +27,11 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import no.nav.foreldrepenger.common.domain.Kvittering;
 import no.nav.foreldrepenger.selvbetjening.http.AbstractRestConnection;
 import no.nav.foreldrepenger.selvbetjening.kontrakt.innsending.dto.Innsending;
+import no.nav.foreldrepenger.selvbetjening.kontrakt.innsending.dto.SøknadDto;
 import no.nav.foreldrepenger.selvbetjening.kontrakt.innsending.dto.VedleggDto;
+import no.nav.foreldrepenger.selvbetjening.kontrakt.innsending.dto.endringssøknad.EndringssøknadDto;
+import no.nav.foreldrepenger.selvbetjening.kontrakt.innsending.dto.engangsstønad.SøknadV2Dto;
+import no.nav.foreldrepenger.selvbetjening.kontrakt.innsending.dto.ettersendelse.EttersendelseDto;
 
 @Component
 public class InnsendingConnection extends AbstractRestConnection {
@@ -46,14 +51,31 @@ public class InnsendingConnection extends AbstractRestConnection {
     }
 
     public Kvittering sendInn(Innsending innsending) {
-        return postForEntity(config.innsendingURI(), body(innsending), Kvittering.class);
+        if (innsending instanceof SøknadDto || innsending instanceof SøknadV2Dto) {
+            return postForEntity(config.innsendingURI(), body(innsending), Kvittering.class);
+        } else if (innsending instanceof EndringssøknadDto) {
+            return postForEntity(config.endringURI(), body(innsending), Kvittering.class);
+        } else if (innsending instanceof EttersendelseDto ettersendelse) {
+            return postForEntity(config.ettersendingURI(), body(ettersendelse), Kvittering.class);
+        } else {
+            throw new IllegalStateException("Utviklerfeil: Innsending støtter bare søknad, endringssøknad og ettersendelse");
+        }
     }
 
     private HttpEntity<MultiValueMap<String, HttpEntity<?>>> body(Innsending innsending) {
         return body(tilJson(innsending), innsending.vedlegg());
     }
+
+    private HttpEntity<MultiValueMap<String, HttpEntity<?>>> body(EttersendelseDto ettersendelse) {
+        return body(tilJson(ettersendelse), ettersendelse.vedlegg());
+    }
+
     private String tilJson(Innsending innsending) {
         return tilJson(tilSøknad(innsending, mottattDato(innsending)));
+    }
+
+    private String tilJson(EttersendelseDto ettersendelse) {
+        return tilJson(tilEttersending(ettersendelse));
     }
 
     private static HttpEntity<MultiValueMap<String, HttpEntity<?>>> body(String jsonBody, List<VedleggDto> vedlegg) {
