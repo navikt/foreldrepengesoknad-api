@@ -15,11 +15,10 @@ import no.nav.foreldrepenger.selvbetjening.kontrakt.innsending.dto.BarnDto;
 import no.nav.foreldrepenger.selvbetjening.kontrakt.innsending.dto.Innsending;
 import no.nav.foreldrepenger.selvbetjening.kontrakt.innsending.dto.MutableVedleggReferanseDto;
 import no.nav.foreldrepenger.selvbetjening.kontrakt.innsending.dto.SøkerDto;
-import no.nav.foreldrepenger.selvbetjening.kontrakt.innsending.dto.SøknadDto;
 import no.nav.foreldrepenger.selvbetjening.kontrakt.innsending.dto.VedleggDto;
 import no.nav.foreldrepenger.selvbetjening.kontrakt.innsending.dto.endringssøknad.EndringssøknadDto;
 import no.nav.foreldrepenger.selvbetjening.kontrakt.innsending.dto.endringssøknad.EndringssøknadForeldrepengerDto;
-import no.nav.foreldrepenger.selvbetjening.kontrakt.innsending.dto.engangsstønad.SøknadV2Dto;
+import no.nav.foreldrepenger.selvbetjening.kontrakt.innsending.v2.dto.SøknadDto;
 import no.nav.foreldrepenger.selvbetjening.kontrakt.innsending.dto.ettersendelse.EttersendelseDto;
 import no.nav.foreldrepenger.selvbetjening.kontrakt.innsending.dto.foreldrepenger.ForeldrepengesøknadDto;
 import no.nav.foreldrepenger.selvbetjening.kontrakt.innsending.dto.foreldrepenger.UttaksplanPeriodeDto;
@@ -35,9 +34,9 @@ public final class VedleggsHåndteringTjeneste {
     public static void fjernDupliserteVedleggFraInnsending(Innsending innsending) {
         var antallVedleggFørDuplikatsjekk = innsending.vedlegg().size();
         var duplikatTilEksisterende = finnOgfjernDupliserteVedlegg(innsending.vedlegg());
-        if (innsending instanceof SøknadDto søknad) {
+        if (innsending instanceof no.nav.foreldrepenger.selvbetjening.kontrakt.innsending.dto.SøknadDto søknad) {
             erstattAlleReferanserSomErDuplikater(søknad, duplikatTilEksisterende);
-        } else if (innsending instanceof SøknadV2Dto søknadV2) {
+        } else if (innsending instanceof SøknadDto søknadV2) {
             erstattAlleReferanserSomErDuplikater(søknadV2, duplikatTilEksisterende);
         } else if (innsending instanceof EndringssøknadDto endringssøknad) {
             erstattAlleReferanserSomErDuplikater(endringssøknad, duplikatTilEksisterende);
@@ -98,13 +97,13 @@ public final class VedleggsHåndteringTjeneste {
         }
     }
 
-    private static void erstattAlleReferanserSomErDuplikater(SøknadV2Dto søknad, Map<MutableVedleggReferanseDto, MutableVedleggReferanseDto> nyReferanseMapping) {
+    private static void erstattAlleReferanserSomErDuplikater(SøknadDto søknad, Map<MutableVedleggReferanseDto, MutableVedleggReferanseDto> nyReferanseMapping) {
         for (var gammelReferanse : nyReferanseMapping.entrySet()) {
             erstattReferanserBarn(gammelReferanse, søknad.barn());
         }
     }
 
-    private static void erstattAlleReferanserSomErDuplikater(SøknadDto søknad, Map<MutableVedleggReferanseDto, MutableVedleggReferanseDto> nyReferanseMapping) {
+    private static void erstattAlleReferanserSomErDuplikater(no.nav.foreldrepenger.selvbetjening.kontrakt.innsending.dto.SøknadDto søknad, Map<MutableVedleggReferanseDto, MutableVedleggReferanseDto> nyReferanseMapping) {
         for (var gammelReferanse : nyReferanseMapping.entrySet()) {
             erstattReferanserSøker(gammelReferanse, søknad.søker());
             erstattReferanserBarn(gammelReferanse, søknad.barn());
@@ -135,7 +134,7 @@ public final class VedleggsHåndteringTjeneste {
                 .forEach(v -> v.referanse(gammelReferanse.getValue().referanse()));
     }
 
-    private static void erstattReferanserBarn(Map.Entry<MutableVedleggReferanseDto, MutableVedleggReferanseDto> gammelReferanse, no.nav.foreldrepenger.selvbetjening.kontrakt.innsending.dto.engangsstønad.BarnDto barn) {
+    private static void erstattReferanserBarn(Map.Entry<MutableVedleggReferanseDto, MutableVedleggReferanseDto> gammelReferanse, no.nav.foreldrepenger.selvbetjening.kontrakt.innsending.v2.dto.BarnDto barn) {
         barn.vedleggreferanser().stream()
             .filter(v -> v.equals(gammelReferanse.getKey()))
             .forEach(v -> v.referanse(gammelReferanse.getValue().referanse()));

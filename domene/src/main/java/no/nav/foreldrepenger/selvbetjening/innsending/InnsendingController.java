@@ -8,7 +8,7 @@ import no.nav.foreldrepenger.common.domain.Kvittering;
 import no.nav.foreldrepenger.selvbetjening.http.ProtectedRestController;
 import no.nav.foreldrepenger.selvbetjening.kontrakt.innsending.dto.SøknadDto;
 import no.nav.foreldrepenger.selvbetjening.kontrakt.innsending.dto.endringssøknad.EndringssøknadDto;
-import no.nav.foreldrepenger.selvbetjening.kontrakt.innsending.dto.engangsstønad.EngangsstønadV2Dto;
+import no.nav.foreldrepenger.selvbetjening.kontrakt.innsending.v2.dto.engangsstønad.EngangsstønadDto;
 import no.nav.foreldrepenger.selvbetjening.kontrakt.innsending.dto.ettersendelse.EttersendelseDto;
 
 @ProtectedRestController(InnsendingController.INNSENDING_CONTROLLER_PATH)
@@ -27,7 +27,7 @@ public class InnsendingController {
     }
 
     @PostMapping("/engangssoknad")
-    public Kvittering sendInnEngangsstønad(@Valid @RequestBody EngangsstønadV2Dto søknad) {
+    public Kvittering sendInnEngangsstønad(@Valid @RequestBody EngangsstønadDto søknad) {
         return innsending.sendInn(søknad);
     }
 

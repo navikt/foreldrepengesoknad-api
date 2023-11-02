@@ -1,4 +1,4 @@
-package no.nav.foreldrepenger.selvbetjening.kontrakt.innsending.mapper;
+package no.nav.foreldrepenger.selvbetjening.kontrakt.innsending.v2.mapper;
 
 import static no.nav.foreldrepenger.common.util.StreamUtil.safeStream;
 import static no.nav.foreldrepenger.selvbetjening.kontrakt.innsending.mapper.CommonMapper.tilVedlegg;
@@ -21,20 +21,20 @@ import no.nav.foreldrepenger.common.domain.felles.relasjontilbarn.Fødsel;
 import no.nav.foreldrepenger.common.domain.felles.relasjontilbarn.Omsorgsovertakelse;
 import no.nav.foreldrepenger.common.domain.felles.relasjontilbarn.RelasjonTilBarn;
 import no.nav.foreldrepenger.common.oppslag.dkif.Målform;
-import no.nav.foreldrepenger.selvbetjening.kontrakt.innsending.dto.engangsstønad.AdopsjonDto;
-import no.nav.foreldrepenger.selvbetjening.kontrakt.innsending.dto.engangsstønad.BarnDto;
-import no.nav.foreldrepenger.selvbetjening.kontrakt.innsending.dto.engangsstønad.EngangsstønadV2Dto;
-import no.nav.foreldrepenger.selvbetjening.kontrakt.innsending.dto.engangsstønad.FødselDto;
-import no.nav.foreldrepenger.selvbetjening.kontrakt.innsending.dto.engangsstønad.OmsorgsovertakelseDto;
-import no.nav.foreldrepenger.selvbetjening.kontrakt.innsending.dto.engangsstønad.TerminDto;
-import no.nav.foreldrepenger.selvbetjening.kontrakt.innsending.dto.engangsstønad.UtenlandsoppholdDto;
+import no.nav.foreldrepenger.selvbetjening.kontrakt.innsending.v2.dto.AdopsjonDto;
+import no.nav.foreldrepenger.selvbetjening.kontrakt.innsending.v2.dto.BarnDto;
+import no.nav.foreldrepenger.selvbetjening.kontrakt.innsending.v2.dto.engangsstønad.EngangsstønadDto;
+import no.nav.foreldrepenger.selvbetjening.kontrakt.innsending.v2.dto.FødselDto;
+import no.nav.foreldrepenger.selvbetjening.kontrakt.innsending.v2.dto.OmsorgsovertakelseDto;
+import no.nav.foreldrepenger.selvbetjening.kontrakt.innsending.v2.dto.TerminDto;
+import no.nav.foreldrepenger.selvbetjening.kontrakt.innsending.v2.dto.UtenlandsoppholdDto;
 
-final class EngangsstønadMapperV2 {
+public final class EngangsstønadMapperV2 {
 
     private EngangsstønadMapperV2() {
     }
 
-    static Søknad tilEngangsstønad(EngangsstønadV2Dto e, LocalDate mottattDato) {
+    public static Søknad tilEngangsstønad(EngangsstønadDto e, LocalDate mottattDato) {
         return new Søknad(
             mottattDato,
             tilSøker(e.språkkode()),
@@ -48,7 +48,7 @@ final class EngangsstønadMapperV2 {
         return new Søker(BrukerRolle.MOR, språkkode); // TODO: Frontend sender ikke ned søker her. Kan også være Far/Medmor!
     }
 
-    private static Ytelse tilYtelse(EngangsstønadV2Dto e) {
+    private static Ytelse tilYtelse(EngangsstønadDto e) {
         return new Engangsstønad(
             tilMedlemskap(e.utenlandsopphold()),
             tilRelasjonTilBarn(e.barn())

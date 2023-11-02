@@ -7,7 +7,7 @@ import java.util.List;
 
 import com.neovisionaries.i18n.CountryCode;
 
-import no.nav.foreldrepenger.selvbetjening.kontrakt.innsending.dto.engangsstønad.UtenlandsoppholdDto;
+import no.nav.foreldrepenger.selvbetjening.kontrakt.innsending.v2.dto.UtenlandsoppholdDto;
 
 public final class UtenlandsoppholdMaler {
 

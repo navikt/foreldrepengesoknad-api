@@ -15,7 +15,7 @@ public class UttakplanPeriodeBuilder {
     UttaksplanPeriodeDto.Type type;
     ÅpenPeriodeDto tidsperiode;
     String forelder;
-    StønadskontoType konto;
+    UttaksplanPeriodeDto.KontoType konto;
     String morsAktivitetIPerioden;
     String årsak;
     Double samtidigUttakProsent;
@@ -61,7 +61,7 @@ public class UttakplanPeriodeBuilder {
 
     private UttakplanPeriodeBuilder(UttaksplanPeriodeDto.Type type, StønadskontoType konto, LocalDate fom, LocalDate tom) {
         this.type = type;
-        this.konto = konto;
+        this.konto = tilKontoType(konto);
         this.tidsperiode = new ÅpenPeriodeDto(fom, tom);
     }
 
@@ -76,7 +76,7 @@ public class UttakplanPeriodeBuilder {
     }
 
     public UttakplanPeriodeBuilder medKonto(StønadskontoType konto) {
-        this.konto = konto;
+        this.konto = tilKontoType(konto);
         return this;
     }
 
@@ -143,6 +143,17 @@ public class UttakplanPeriodeBuilder {
     public UttakplanPeriodeBuilder medVedlegg(List<MutableVedleggReferanseDto> vedlegg) {
         this.vedlegg = vedlegg;
         return this;
+    }
+
+    public static UttaksplanPeriodeDto.KontoType tilKontoType(StønadskontoType konto) {
+        return switch (konto) {
+            case IKKE_SATT -> null;
+            case FELLESPERIODE -> UttaksplanPeriodeDto.KontoType.FELLESPERIODE;
+            case MØDREKVOTE -> UttaksplanPeriodeDto.KontoType.MØDREKVOTE;
+            case FEDREKVOTE -> UttaksplanPeriodeDto.KontoType.FEDREKVOTE;
+            case FORELDREPENGER -> UttaksplanPeriodeDto.KontoType.FORELDREPENGER;
+            case FORELDREPENGER_FØR_FØDSEL -> UttaksplanPeriodeDto.KontoType.FORELDREPENGER_FØR_FØDSEL;
+        };
     }
 
     public UttaksplanPeriodeDto build() {

@@ -12,7 +12,6 @@ import jakarta.validation.constraints.Min;
 import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Pattern;
 import jakarta.validation.constraints.Size;
-import no.nav.foreldrepenger.common.domain.foreldrepenger.fordeling.StønadskontoType;
 import no.nav.foreldrepenger.selvbetjening.kontrakt.innsending.dto.MutableVedleggReferanseDto;
 import no.nav.foreldrepenger.selvbetjening.kontrakt.innsending.dto.ÅpenPeriodeDto;
 
@@ -20,7 +19,7 @@ import no.nav.foreldrepenger.selvbetjening.kontrakt.innsending.dto.ÅpenPeriodeD
 public record UttaksplanPeriodeDto(@NotNull UttaksplanPeriodeDto.Type type,
                                    @Valid ÅpenPeriodeDto tidsperiode,
                                    @Pattern(regexp = BARE_BOKSTAVER) String forelder,
-                                   StønadskontoType konto,
+                                   KontoType konto,
                                    @Pattern(regexp = "^[\\p{Digit}\\p{L}_]*$") String morsAktivitetIPerioden,
                                    @Pattern(regexp = "^[\\p{Digit}\\p{L}_]*$") String årsak,
                                    @Min(0) @Max(100) Double samtidigUttakProsent,
@@ -46,5 +45,13 @@ public record UttaksplanPeriodeDto(@NotNull UttaksplanPeriodeDto.Type type,
         OPPHOLD,
         OVERFØRING,
         PERIODEUTENUTTAK
+    }
+
+    public enum KontoType {
+        FELLESPERIODE,
+        MØDREKVOTE,
+        FEDREKVOTE,
+        FORELDREPENGER,
+        FORELDREPENGER_FØR_FØDSEL
     }
 }

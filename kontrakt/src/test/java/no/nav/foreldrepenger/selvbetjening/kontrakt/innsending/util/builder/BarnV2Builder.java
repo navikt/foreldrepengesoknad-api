@@ -4,10 +4,10 @@ import java.time.LocalDate;
 import java.util.List;
 
 import no.nav.foreldrepenger.selvbetjening.kontrakt.innsending.dto.MutableVedleggReferanseDto;
-import no.nav.foreldrepenger.selvbetjening.kontrakt.innsending.dto.engangsstønad.AdopsjonDto;
-import no.nav.foreldrepenger.selvbetjening.kontrakt.innsending.dto.engangsstønad.FødselDto;
-import no.nav.foreldrepenger.selvbetjening.kontrakt.innsending.dto.engangsstønad.OmsorgsovertakelseDto;
-import no.nav.foreldrepenger.selvbetjening.kontrakt.innsending.dto.engangsstønad.TerminDto;
+import no.nav.foreldrepenger.selvbetjening.kontrakt.innsending.v2.dto.AdopsjonDto;
+import no.nav.foreldrepenger.selvbetjening.kontrakt.innsending.v2.dto.FødselDto;
+import no.nav.foreldrepenger.selvbetjening.kontrakt.innsending.v2.dto.OmsorgsovertakelseDto;
+import no.nav.foreldrepenger.selvbetjening.kontrakt.innsending.v2.dto.TerminDto;
 
 public final class BarnV2Builder {
 

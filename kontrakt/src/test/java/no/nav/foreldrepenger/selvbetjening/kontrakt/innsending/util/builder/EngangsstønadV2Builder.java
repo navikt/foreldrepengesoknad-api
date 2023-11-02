@@ -5,9 +5,9 @@ import java.util.List;
 
 import no.nav.foreldrepenger.common.oppslag.dkif.Målform;
 import no.nav.foreldrepenger.selvbetjening.kontrakt.innsending.dto.VedleggDto;
-import no.nav.foreldrepenger.selvbetjening.kontrakt.innsending.dto.engangsstønad.BarnDto;
-import no.nav.foreldrepenger.selvbetjening.kontrakt.innsending.dto.engangsstønad.EngangsstønadV2Dto;
-import no.nav.foreldrepenger.selvbetjening.kontrakt.innsending.dto.engangsstønad.UtenlandsoppholdDto;
+import no.nav.foreldrepenger.selvbetjening.kontrakt.innsending.v2.dto.BarnDto;
+import no.nav.foreldrepenger.selvbetjening.kontrakt.innsending.v2.dto.engangsstønad.EngangsstønadDto;
+import no.nav.foreldrepenger.selvbetjening.kontrakt.innsending.v2.dto.UtenlandsoppholdDto;
 
 
 public class EngangsstønadV2Builder {
@@ -43,9 +43,9 @@ public class EngangsstønadV2Builder {
         return this;
     }
 
-    public EngangsstønadV2Dto build() {
+    public EngangsstønadDto build() {
         if (mottattdato == null) mottattdato = LocalDate.now();
-        return new EngangsstønadV2Dto(
+        return new EngangsstønadDto(
             mottattdato,
             språkkode,
             barn,

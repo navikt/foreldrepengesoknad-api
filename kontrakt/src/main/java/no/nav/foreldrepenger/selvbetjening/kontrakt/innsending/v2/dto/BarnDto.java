@@ -1,4 +1,4 @@
-package no.nav.foreldrepenger.selvbetjening.kontrakt.innsending.dto.engangsstønad;
+package no.nav.foreldrepenger.selvbetjening.kontrakt.innsending.v2.dto;
 
 import static com.fasterxml.jackson.annotation.JsonTypeInfo.Id.NAME;
 

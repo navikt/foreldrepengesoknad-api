@@ -32,8 +32,7 @@ import no.nav.foreldrepenger.common.domain.foreldrepenger.fordeling.Overførings
 import no.nav.foreldrepenger.common.mapper.DefaultJsonMapper;
 import no.nav.foreldrepenger.common.oppslag.dkif.Målform;
 import no.nav.foreldrepenger.selvbetjening.kontrakt.innsending.dto.endringssøknad.EndringssøknadForeldrepengerDto;
-import no.nav.foreldrepenger.selvbetjening.kontrakt.innsending.dto.engangsstønad.EngangsstønadDto;
-import no.nav.foreldrepenger.selvbetjening.kontrakt.innsending.dto.engangsstønad.EngangsstønadV2Dto;
+import no.nav.foreldrepenger.selvbetjening.kontrakt.innsending.v2.dto.engangsstønad.EngangsstønadDto;
 import no.nav.foreldrepenger.selvbetjening.kontrakt.innsending.dto.foreldrepenger.Dekningsgrad;
 import no.nav.foreldrepenger.selvbetjening.kontrakt.innsending.dto.foreldrepenger.ForeldrepengesøknadDto;
 import no.nav.foreldrepenger.selvbetjening.kontrakt.innsending.dto.svangerskapspenger.SvangerskapspengesøknadDto;
@@ -195,7 +194,7 @@ class SøknadDtoJacksonRountripTest {
             .medBarn(BarnBuilder.fødsel(1, NOW).build())
             .build();
 
-        assertThat(søknad).isInstanceOf(EngangsstønadDto.class);
+        assertThat(søknad).isInstanceOf(no.nav.foreldrepenger.selvbetjening.kontrakt.innsending.dto.engangsstønad.EngangsstønadDto.class);
         test(søknad);
     }
 
@@ -207,7 +206,7 @@ class SøknadDtoJacksonRountripTest {
             .medBarn(BarnV2Builder.fødsel(1, NOW).build())
             .build();
 
-        assertThat(søknad).isInstanceOf(EngangsstønadV2Dto.class);
+        assertThat(søknad).isInstanceOf(EngangsstønadDto.class);
         test(søknad);
     }
 

@@ -27,10 +27,9 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import no.nav.foreldrepenger.common.domain.Kvittering;
 import no.nav.foreldrepenger.selvbetjening.http.AbstractRestConnection;
 import no.nav.foreldrepenger.selvbetjening.kontrakt.innsending.dto.Innsending;
-import no.nav.foreldrepenger.selvbetjening.kontrakt.innsending.dto.SøknadDto;
 import no.nav.foreldrepenger.selvbetjening.kontrakt.innsending.dto.VedleggDto;
 import no.nav.foreldrepenger.selvbetjening.kontrakt.innsending.dto.endringssøknad.EndringssøknadDto;
-import no.nav.foreldrepenger.selvbetjening.kontrakt.innsending.dto.engangsstønad.SøknadV2Dto;
+import no.nav.foreldrepenger.selvbetjening.kontrakt.innsending.v2.dto.SøknadDto;
 import no.nav.foreldrepenger.selvbetjening.kontrakt.innsending.dto.ettersendelse.EttersendelseDto;
 
 @Component
@@ -51,7 +50,7 @@ public class InnsendingConnection extends AbstractRestConnection {
     }
 
     public Kvittering sendInn(Innsending innsending) {
-        if (innsending instanceof SøknadDto || innsending instanceof SøknadV2Dto) {
+        if (innsending instanceof no.nav.foreldrepenger.selvbetjening.kontrakt.innsending.dto.SøknadDto || innsending instanceof SøknadDto) {
             return postForEntity(config.innsendingURI(), body(innsending), Kvittering.class);
         } else if (innsending instanceof EndringssøknadDto) {
             return postForEntity(config.endringURI(), body(innsending), Kvittering.class);

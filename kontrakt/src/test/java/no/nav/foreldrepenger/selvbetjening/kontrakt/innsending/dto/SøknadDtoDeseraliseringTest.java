@@ -12,12 +12,12 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 
 import no.nav.foreldrepenger.common.domain.BrukerRolle;
 import no.nav.foreldrepenger.common.domain.felles.opptjening.Virksomhetstype;
-import no.nav.foreldrepenger.common.domain.foreldrepenger.fordeling.StønadskontoType;
 import no.nav.foreldrepenger.common.mapper.DefaultJsonMapper;
 import no.nav.foreldrepenger.common.oppslag.dkif.Målform;
 import no.nav.foreldrepenger.selvbetjening.kontrakt.innsending.dto.foreldrepenger.Dekningsgrad;
 import no.nav.foreldrepenger.selvbetjening.kontrakt.innsending.dto.foreldrepenger.ForeldrepengesøknadDto;
 import no.nav.foreldrepenger.selvbetjening.kontrakt.innsending.dto.foreldrepenger.Situasjon;
+import no.nav.foreldrepenger.selvbetjening.kontrakt.innsending.dto.foreldrepenger.UttaksplanPeriodeDto;
 
 
 class SøknadDtoDeseraliseringTest {
@@ -39,7 +39,7 @@ class SøknadDtoDeseraliseringTest {
         var uttaksperiode1 = fs.uttaksplan().get(0);
         assertThat(uttaksperiode1.forelder()).isEqualTo("mor");
         assertThat(uttaksperiode1.type()).isEqualTo(UTTAK);
-        assertThat(uttaksperiode1.konto()).isEqualTo(StønadskontoType.FORELDREPENGER_FØR_FØDSEL);
+        assertThat(uttaksperiode1.konto()).isEqualTo(UttaksplanPeriodeDto.KontoType.FORELDREPENGER_FØR_FØDSEL);
         assertThat(uttaksperiode1.gradert()).isFalse();
         assertThat(uttaksperiode1.ønskerSamtidigUttak()).isFalse();
         assertThat(uttaksperiode1.tidsperiode()).isNotNull();
@@ -51,7 +51,7 @@ class SøknadDtoDeseraliseringTest {
         var uttaksperiode2 = fs.uttaksplan().get(1);
         assertThat(uttaksperiode2.forelder()).isEqualTo("mor");
         assertThat(uttaksperiode2.type()).isEqualTo(UTTAK);
-        assertThat(uttaksperiode2.konto()).isEqualTo(StønadskontoType.FORELDREPENGER);
+        assertThat(uttaksperiode2.konto()).isEqualTo(UttaksplanPeriodeDto.KontoType.FORELDREPENGER);
         assertThat(uttaksperiode2.gradert()).isFalse();
         assertThat(uttaksperiode2.tidsperiode()).isNotNull();
         assertThat(uttaksperiode2.tidsperiode().fom()).isNotNull();
@@ -61,7 +61,7 @@ class SøknadDtoDeseraliseringTest {
         var uttaksperiode3 = fs.uttaksplan().get(2);
         assertThat(uttaksperiode3.forelder()).isEqualTo("mor");
         assertThat(uttaksperiode3.type()).isEqualTo(UTTAK);
-        assertThat(uttaksperiode3.konto()).isEqualTo(StønadskontoType.FORELDREPENGER);
+        assertThat(uttaksperiode3.konto()).isEqualTo(UttaksplanPeriodeDto.KontoType.FORELDREPENGER);
         assertThat(uttaksperiode3.tidsperiode()).isNotNull();
         assertThat(uttaksperiode3.tidsperiode().fom()).isNotNull();
         assertThat(uttaksperiode3.tidsperiode().tom()).isNotNull();

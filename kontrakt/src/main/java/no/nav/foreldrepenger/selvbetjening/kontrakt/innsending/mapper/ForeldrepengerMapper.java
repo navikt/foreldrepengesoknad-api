@@ -1,5 +1,10 @@
 package no.nav.foreldrepenger.selvbetjening.kontrakt.innsending.mapper;
 
+import static no.nav.foreldrepenger.common.domain.foreldrepenger.fordeling.StønadskontoType.FEDREKVOTE;
+import static no.nav.foreldrepenger.common.domain.foreldrepenger.fordeling.StønadskontoType.FELLESPERIODE;
+import static no.nav.foreldrepenger.common.domain.foreldrepenger.fordeling.StønadskontoType.FORELDREPENGER;
+import static no.nav.foreldrepenger.common.domain.foreldrepenger.fordeling.StønadskontoType.FORELDREPENGER_FØR_FØDSEL;
+import static no.nav.foreldrepenger.common.domain.foreldrepenger.fordeling.StønadskontoType.MØDREKVOTE;
 import static no.nav.foreldrepenger.selvbetjening.kontrakt.innsending.mapper.CommonMapper.tilMedlemskap;
 import static no.nav.foreldrepenger.selvbetjening.kontrakt.innsending.mapper.CommonMapper.tilOpptjening;
 import static no.nav.foreldrepenger.selvbetjening.kontrakt.innsending.mapper.CommonMapper.tilRelasjonTilBarn;
@@ -29,6 +34,7 @@ import no.nav.foreldrepenger.common.domain.foreldrepenger.fordeling.OppholdsPeri
 import no.nav.foreldrepenger.common.domain.foreldrepenger.fordeling.Oppholdsårsak;
 import no.nav.foreldrepenger.common.domain.foreldrepenger.fordeling.OverføringsPeriode;
 import no.nav.foreldrepenger.common.domain.foreldrepenger.fordeling.Overføringsårsak;
+import no.nav.foreldrepenger.common.domain.foreldrepenger.fordeling.StønadskontoType;
 import no.nav.foreldrepenger.common.domain.foreldrepenger.fordeling.UtsettelsesPeriode;
 import no.nav.foreldrepenger.common.domain.foreldrepenger.fordeling.UtsettelsesÅrsak;
 import no.nav.foreldrepenger.common.domain.foreldrepenger.fordeling.UttaksPeriode;
@@ -110,7 +116,7 @@ final class ForeldrepengerMapper {
             u.tidsperiode().fom(),
             u.tidsperiode().tom(),
             u.årsak() != null ? Overføringsårsak.valueOf(u.årsak()) : null,
-            u.konto(),
+            tilStønadskontoType(u.konto()),
             tilVedleggsreferanse(u.vedlegg())
         );
     }
@@ -151,7 +157,7 @@ final class ForeldrepengerMapper {
             u.tidsperiode().fom(),
             u.tidsperiode().tom(),
             tilVedleggsreferanse(u.vedlegg()),
-            u.konto(),
+            tilStønadskontoType(u.konto()),
             u.ønskerSamtidigUttak(),
             u.morsAktivitetIPerioden() != null ? MorsAktivitet.valueOf(u.morsAktivitetIPerioden()) : null,
             u.ønskerFlerbarnsdager(),
@@ -165,7 +171,7 @@ final class ForeldrepengerMapper {
             u.tidsperiode().fom(),
             u.tidsperiode().tom(),
             tilVedleggsreferanse(u.vedlegg()),
-            u.konto(),
+            tilStønadskontoType(u.konto()),
             u.ønskerSamtidigUttak(),
             u.morsAktivitetIPerioden() != null ? MorsAktivitet.valueOf(u.morsAktivitetIPerioden()) : null,
             u.ønskerFlerbarnsdager(),
@@ -179,6 +185,20 @@ final class ForeldrepengerMapper {
             u.justeresVedFødsel()
         );
     }
+
+    private static StønadskontoType tilStønadskontoType(UttaksplanPeriodeDto.KontoType konto) {
+        if (konto == null) {
+            return StønadskontoType.IKKE_SATT;
+        }
+        return switch (konto) {
+            case FELLESPERIODE -> FELLESPERIODE;
+            case MØDREKVOTE -> MØDREKVOTE;
+            case FEDREKVOTE -> FEDREKVOTE;
+            case FORELDREPENGER -> FORELDREPENGER;
+            case FORELDREPENGER_FØR_FØDSEL -> FORELDREPENGER_FØR_FØDSEL;
+        };
+    }
+
 
     static AnnenForelder tilAnnenForelder(AnnenforelderDto annenForelder) {
         if (annenForelder == null) {
