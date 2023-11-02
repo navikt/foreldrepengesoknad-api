@@ -68,7 +68,7 @@ final class ForeldrepengerMapper {
             tilRelasjonTilBarn(f.barn(), f.situasjon()),
             tilRettigheter(f.søker(), f.annenForelder()),
             Dekningsgrad.fraKode(f.dekningsgrad().verdi()),
-            tilOpptjening(f),
+            tilOpptjening(f.søker()),
             tilFordeling(f),
             tilOppholdIUtlandet(f)
         );
@@ -186,7 +186,7 @@ final class ForeldrepengerMapper {
         );
     }
 
-    private static StønadskontoType tilStønadskontoType(UttaksplanPeriodeDto.KontoType konto) {
+    public static StønadskontoType tilStønadskontoType(UttaksplanPeriodeDto.KontoType konto) {
         if (konto == null) {
             return StønadskontoType.IKKE_SATT;
         }
@@ -220,7 +220,9 @@ final class ForeldrepengerMapper {
     }
 
     private static NorskForelder tilNorskForelder(AnnenforelderDto annenForelder) {
-        return new NorskForelder(new Fødselsnummer(annenForelder.fnr()), navn(annenForelder));
+        return new NorskForelder(
+            new Fødselsnummer(annenForelder.fnr()),
+            navn(annenForelder));
     }
 
     private static String navn(AnnenforelderDto annenForelder) {

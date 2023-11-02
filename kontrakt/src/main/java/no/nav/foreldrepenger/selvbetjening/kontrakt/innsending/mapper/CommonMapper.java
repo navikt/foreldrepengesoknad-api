@@ -38,6 +38,7 @@ import no.nav.foreldrepenger.selvbetjening.kontrakt.innsending.dto.BarnDto;
 import no.nav.foreldrepenger.selvbetjening.kontrakt.innsending.dto.FrilansInformasjonDto;
 import no.nav.foreldrepenger.selvbetjening.kontrakt.innsending.dto.MutableVedleggReferanseDto;
 import no.nav.foreldrepenger.selvbetjening.kontrakt.innsending.dto.NæringDto;
+import no.nav.foreldrepenger.selvbetjening.kontrakt.innsending.dto.SøkerDto;
 import no.nav.foreldrepenger.selvbetjening.kontrakt.innsending.dto.SøknadDto;
 import no.nav.foreldrepenger.selvbetjening.kontrakt.innsending.dto.TilknyttetPersonDto;
 import no.nav.foreldrepenger.selvbetjening.kontrakt.innsending.dto.UtenlandsoppholdPeriodeDto;
@@ -85,8 +86,7 @@ public final class CommonMapper {
         return new Utenlandsopphold(tilUtenlandsoppholdsliste(opphold));
     }
 
-    static Opptjening tilOpptjening(SøknadDto s) {
-        var søker = s.søker();
+    public static Opptjening tilOpptjening(SøkerDto søker) {
         return new Opptjening(
             tilUtenlandsArbeidsforhold(søker.andreInntekterSiste10Mnd()),
             tilEgenNæring(søker.selvstendigNæringsdrivendeInformasjon()),

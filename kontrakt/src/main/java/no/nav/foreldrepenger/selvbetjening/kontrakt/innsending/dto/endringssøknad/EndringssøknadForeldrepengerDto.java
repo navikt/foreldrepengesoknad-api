@@ -20,6 +20,7 @@ import no.nav.foreldrepenger.selvbetjening.kontrakt.innsending.dto.foreldrepenge
 import no.nav.foreldrepenger.selvbetjening.kontrakt.innsending.dto.foreldrepenger.UttaksplanPeriodeDto;
 import no.nav.foreldrepenger.selvbetjening.kontrakt.innsending.dto.validering.VedlegglistestørrelseConstraint;
 
+@Deprecated
 public record EndringssøknadForeldrepengerDto(LocalDate mottattdato,
                                               @NotNull Situasjon situasjon,
                                               @Valid @NotNull Saksnummer saksnummer,

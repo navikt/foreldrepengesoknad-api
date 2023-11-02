@@ -135,7 +135,7 @@ public class VedleggSjekkerTest {
         var innsendingTjeneste = new InnsendingTjeneste(connection, mellomlagring, pdfGenerator, mapper);
         when(mellomlagring.lesKryptertVedlegg(vedlegg.getUuid(), Ytelse.ENGANGSSTONAD)).thenReturn(Optional.of(megabytes(1)));
 
-        var innsending = new EngangsstønadDto(null, null, null, null, vedleggene);
+        var innsending = new EngangsstønadDto(null, null, null, null, null, vedleggene);
         innsendingTjeneste.hentMellomlagredeFiler(innsending);
 
         var nyVedleggHeltLik = vedlegg(1);

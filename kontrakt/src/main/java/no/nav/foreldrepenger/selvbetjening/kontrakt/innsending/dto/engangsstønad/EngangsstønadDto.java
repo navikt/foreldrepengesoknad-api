@@ -16,6 +16,7 @@ import no.nav.foreldrepenger.selvbetjening.kontrakt.innsending.dto.VedleggDto;
 import no.nav.foreldrepenger.selvbetjening.kontrakt.innsending.dto.foreldrepenger.Situasjon;
 import no.nav.foreldrepenger.selvbetjening.kontrakt.innsending.dto.validering.VedlegglistestørrelseConstraint;
 
+@Deprecated
 public record EngangsstønadDto(LocalDate mottattdato,
                                @Valid @NotNull BarnDto barn,
                                @Valid @NotNull UtenlandsoppholdDto informasjonOmUtenlandsopphold,

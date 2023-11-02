@@ -1,4 +1,4 @@
-package no.nav.foreldrepenger.selvbetjening.kontrakt.innsending.util.builder;
+package no.nav.foreldrepenger.selvbetjening.kontrakt.innsending.v2.util.builder;
 
 import java.time.LocalDate;
 import java.util.List;
@@ -9,7 +9,7 @@ import no.nav.foreldrepenger.selvbetjening.kontrakt.innsending.v2.dto.FødselDto
 import no.nav.foreldrepenger.selvbetjening.kontrakt.innsending.v2.dto.OmsorgsovertakelseDto;
 import no.nav.foreldrepenger.selvbetjening.kontrakt.innsending.v2.dto.TerminDto;
 
-public final class BarnV2Builder {
+public final class BarnBuilder {
 
     public static FødselBuilder fødsel(int antallBarn, LocalDate fødselsdato) {
         return new FødselBuilder(antallBarn)

@@ -12,6 +12,7 @@ import no.nav.foreldrepenger.selvbetjening.kontrakt.innsending.dto.foreldrepenge
 import no.nav.foreldrepenger.selvbetjening.kontrakt.innsending.dto.foreldrepenger.Situasjon;
 import no.nav.foreldrepenger.selvbetjening.kontrakt.innsending.dto.svangerskapspenger.SvangerskapspengesøknadDto;
 
+@Deprecated
 @JsonTypeInfo(use = NAME, property = "type", visible = true)
 @JsonSubTypes({
     @JsonSubTypes.Type(value = EngangsstønadDto.class, name = "engangsstønad"),
