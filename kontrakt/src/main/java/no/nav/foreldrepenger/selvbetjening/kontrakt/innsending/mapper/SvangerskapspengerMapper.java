@@ -60,7 +60,7 @@ final class SvangerskapspengerMapper {
             s.barn().termindato(),
             tilFødselsdato(s),
             tilMedlemskap(s),
-            tilOpptjening(s),
+            tilOpptjening(s.søker()),
             tilTilrettelegging(s)
         );
     }

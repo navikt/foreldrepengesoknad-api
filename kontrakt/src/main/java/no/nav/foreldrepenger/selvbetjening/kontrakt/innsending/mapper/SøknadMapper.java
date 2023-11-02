@@ -2,9 +2,10 @@ package no.nav.foreldrepenger.selvbetjening.kontrakt.innsending.mapper;
 
 import static no.nav.foreldrepenger.selvbetjening.kontrakt.innsending.mapper.EndringForeldrepengerMapper.tilEndringForeldrepengesøknad;
 import static no.nav.foreldrepenger.selvbetjening.kontrakt.innsending.mapper.EngangsstønadMapper.tilEngangsstønadVedleggUtenInnhold;
-import static no.nav.foreldrepenger.selvbetjening.kontrakt.innsending.v2.mapper.EngangsstønadMapperV2.tilEngangsstønad;
 import static no.nav.foreldrepenger.selvbetjening.kontrakt.innsending.mapper.ForeldrepengerMapper.tilForeldrepengesøknadVedleggUtenInnhold;
 import static no.nav.foreldrepenger.selvbetjening.kontrakt.innsending.mapper.SvangerskapspengerMapper.tilSvangerskapspengesøknadVedleggUtenInnhold;
+import static no.nav.foreldrepenger.selvbetjening.kontrakt.innsending.v2.mapper.EngangsstønadMapper.tilEngangsstønad;
+import static no.nav.foreldrepenger.selvbetjening.kontrakt.innsending.v2.mapper.ForeldrepengerMapper.tilForeldrepengesøknad;
 
 import java.time.LocalDate;
 
@@ -13,10 +14,10 @@ import no.nav.foreldrepenger.common.domain.foreldrepenger.Endringssøknad;
 import no.nav.foreldrepenger.selvbetjening.kontrakt.innsending.dto.Innsending;
 import no.nav.foreldrepenger.selvbetjening.kontrakt.innsending.dto.endringssøknad.EndringssøknadDto;
 import no.nav.foreldrepenger.selvbetjening.kontrakt.innsending.dto.endringssøknad.EndringssøknadForeldrepengerDto;
-import no.nav.foreldrepenger.selvbetjening.kontrakt.innsending.v2.dto.engangsstønad.EngangsstønadDto;
-import no.nav.foreldrepenger.selvbetjening.kontrakt.innsending.v2.dto.SøknadDto;
-import no.nav.foreldrepenger.selvbetjening.kontrakt.innsending.dto.foreldrepenger.ForeldrepengesøknadDto;
 import no.nav.foreldrepenger.selvbetjening.kontrakt.innsending.dto.svangerskapspenger.SvangerskapspengesøknadDto;
+import no.nav.foreldrepenger.selvbetjening.kontrakt.innsending.v2.dto.SøknadDto;
+import no.nav.foreldrepenger.selvbetjening.kontrakt.innsending.v2.dto.engangsstønad.EngangsstønadDto;
+import no.nav.foreldrepenger.selvbetjening.kontrakt.innsending.v2.dto.foreldrepenger.ForeldrepengesøknadDto;
 
 public final class SøknadMapper {
 
@@ -35,7 +36,7 @@ public final class SøknadMapper {
     }
 
     private static Søknad tilSøknad(no.nav.foreldrepenger.selvbetjening.kontrakt.innsending.dto.SøknadDto søknad, LocalDate mottattDato) {
-        if (søknad instanceof ForeldrepengesøknadDto f) {
+        if (søknad instanceof no.nav.foreldrepenger.selvbetjening.kontrakt.innsending.dto.foreldrepenger.ForeldrepengesøknadDto f) {
             return tilForeldrepengesøknadVedleggUtenInnhold(f, mottattDato);
         }
         if (søknad instanceof no.nav.foreldrepenger.selvbetjening.kontrakt.innsending.dto.engangsstønad.EngangsstønadDto e) {
@@ -50,6 +51,9 @@ public final class SøknadMapper {
     private static Søknad tilSøknad(SøknadDto søknad, LocalDate mottattDato) {
         if (søknad instanceof EngangsstønadDto e) {
             return tilEngangsstønad(e, mottattDato);
+        }
+        if (søknad instanceof ForeldrepengesøknadDto f) {
+            return tilForeldrepengesøknad(f, mottattDato);
         }
         throw new IllegalArgumentException("Ukjent søknad " + søknad.getClass().getSimpleName());
     }

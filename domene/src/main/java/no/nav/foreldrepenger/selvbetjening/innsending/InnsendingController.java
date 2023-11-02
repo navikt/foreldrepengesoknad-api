@@ -8,8 +8,9 @@ import no.nav.foreldrepenger.common.domain.Kvittering;
 import no.nav.foreldrepenger.selvbetjening.http.ProtectedRestController;
 import no.nav.foreldrepenger.selvbetjening.kontrakt.innsending.dto.SøknadDto;
 import no.nav.foreldrepenger.selvbetjening.kontrakt.innsending.dto.endringssøknad.EndringssøknadDto;
-import no.nav.foreldrepenger.selvbetjening.kontrakt.innsending.v2.dto.engangsstønad.EngangsstønadDto;
 import no.nav.foreldrepenger.selvbetjening.kontrakt.innsending.dto.ettersendelse.EttersendelseDto;
+import no.nav.foreldrepenger.selvbetjening.kontrakt.innsending.v2.dto.engangsstønad.EngangsstønadDto;
+import no.nav.foreldrepenger.selvbetjening.kontrakt.innsending.v2.dto.foreldrepenger.ForeldrepengesøknadDto;
 
 @ProtectedRestController(InnsendingController.INNSENDING_CONTROLLER_PATH)
 public class InnsendingController {
@@ -23,6 +24,11 @@ public class InnsendingController {
 
     @PostMapping
     public Kvittering sendInn(@Valid @RequestBody SøknadDto søknad) {
+        return innsending.sendInn(søknad);
+    }
+
+    @PostMapping("/foreldrepenger")
+    public Kvittering sendInnForeldrepengesøknad(@Valid @RequestBody ForeldrepengesøknadDto søknad) {
         return innsending.sendInn(søknad);
     }
 

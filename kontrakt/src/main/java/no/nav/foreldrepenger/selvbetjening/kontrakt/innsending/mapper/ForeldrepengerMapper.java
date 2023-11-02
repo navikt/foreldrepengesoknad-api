@@ -68,7 +68,7 @@ final class ForeldrepengerMapper {
             tilRelasjonTilBarn(f.barn(), f.situasjon()),
             tilRettigheter(f.søker(), f.annenForelder()),
             Dekningsgrad.fraKode(f.dekningsgrad().verdi()),
-            tilOpptjening(f),
+            tilOpptjening(f.søker()),
             tilFordeling(f),
             tilMedlemskap(f)
         );
@@ -220,7 +220,9 @@ final class ForeldrepengerMapper {
     }
 
     private static NorskForelder tilNorskForelder(AnnenforelderDto annenForelder) {
-        return new NorskForelder(new Fødselsnummer(annenForelder.fnr()), navn(annenForelder));
+        return new NorskForelder(
+            new Fødselsnummer(annenForelder.fnr()),
+            navn(annenForelder));
     }
 
     private static String navn(AnnenforelderDto annenForelder) {
