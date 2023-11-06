@@ -38,13 +38,13 @@ import no.nav.foreldrepenger.selvbetjening.kontrakt.innsending.v2.dto.foreldrepe
 import no.nav.foreldrepenger.selvbetjening.kontrakt.innsending.v2.dto.foreldrepenger.annenpart.AnnenForelderDto;
 import no.nav.foreldrepenger.selvbetjening.kontrakt.innsending.v2.dto.foreldrepenger.annenpart.NorskForelderDto;
 import no.nav.foreldrepenger.selvbetjening.kontrakt.innsending.v2.dto.foreldrepenger.annenpart.UtenlandskForelderDto;
-import no.nav.foreldrepenger.selvbetjening.kontrakt.innsending.v2.dto.foreldrepenger.uttaksplan.FriUtsettelsesPeriodeDto;
 import no.nav.foreldrepenger.selvbetjening.kontrakt.innsending.v2.dto.foreldrepenger.uttaksplan.GradertUttaksPeriodeDto;
 import no.nav.foreldrepenger.selvbetjening.kontrakt.innsending.v2.dto.foreldrepenger.uttaksplan.KontoType;
 import no.nav.foreldrepenger.selvbetjening.kontrakt.innsending.v2.dto.foreldrepenger.uttaksplan.OppholdsPeriodeDto;
 import no.nav.foreldrepenger.selvbetjening.kontrakt.innsending.v2.dto.foreldrepenger.uttaksplan.OverføringsPeriodeDto;
 import no.nav.foreldrepenger.selvbetjening.kontrakt.innsending.v2.dto.foreldrepenger.uttaksplan.UtsettelsesPeriodeDto;
 import no.nav.foreldrepenger.selvbetjening.kontrakt.innsending.v2.dto.foreldrepenger.uttaksplan.UttaksPeriodeDto;
+import no.nav.foreldrepenger.selvbetjening.kontrakt.innsending.v2.dto.foreldrepenger.uttaksplan.UttaksplanDto;
 import no.nav.foreldrepenger.selvbetjening.kontrakt.innsending.v2.dto.foreldrepenger.uttaksplan.Uttaksplanperiode;
 
 
@@ -74,12 +74,21 @@ public final class ForeldrepengerMapper {
             tilRettigheter(f.søker(), f.annenForelder()),
             Dekningsgrad.fraKode(f.dekningsgrad().verdi()),
             tilOpptjening(f.søker()),
-            tilUttaksplan(f),
+            tilUttaksplan(f.uttaksplan(), f.annenForelder()),
             tilMedlemskap(f.utenlandsopphold())
         );
     }
 
     static Rettigheter tilRettigheter(SøkerDto søker, AnnenForelderDto annenforelder) {
+        if (annenforelder == null) {
+            return new Rettigheter(
+                false,
+                søker.erAleneOmOmsorg(),
+                null,
+                null,
+                null
+            );
+        }
         var annenpartsRettigheter = annenforelder.rettigheter();
         return new Rettigheter(
             annenpartsRettigheter.harRettPåForeldrepenger(),
@@ -90,10 +99,9 @@ public final class ForeldrepengerMapper {
     }
 
 
-    private static Fordeling tilUttaksplan(ForeldrepengesøknadDto f) {
-        var uttaksplan = f.uttaksplan();
+    static Fordeling tilUttaksplan(UttaksplanDto uttaksplan, AnnenForelderDto annenforelder) {
         return new Fordeling(
-            erAnnenpartInformert(f.annenForelder()),
+            erAnnenpartInformert(annenforelder),
             tilLukketPeriodeMedVedlegg(uttaksplan.uttaksperioder()),
             uttaksplan.ønskerJustertUttakVedFødsel()
         );
@@ -126,10 +134,10 @@ public final class ForeldrepengerMapper {
             return tilOppholdsPeriode(opphold);
         }
         if (u instanceof UtsettelsesPeriodeDto utsettelse) {
-            return tilUtsettelsesPeriode(utsettelse);
-        }
-        if (u instanceof FriUtsettelsesPeriodeDto friutsettelse) {
-            return tilFriUtsettelsesPeriode(friutsettelse);
+            return switch (utsettelse.type()) {
+                case UTSETTELSE -> tilUtsettelsesPeriode(utsettelse);
+                case FRI -> tilFriUtsettelsesPeriode(utsettelse);
+            };
         }
         throw new IllegalStateException("Utviklerfeil: Ugyldig uttaksperiode " + u);
     }
@@ -144,7 +152,7 @@ public final class ForeldrepengerMapper {
         );
     }
 
-    private static FriUtsettelsesPeriode tilFriUtsettelsesPeriode(FriUtsettelsesPeriodeDto u) {
+    private static FriUtsettelsesPeriode tilFriUtsettelsesPeriode(UtsettelsesPeriodeDto u) {
         return new FriUtsettelsesPeriode(
             u.fom(),
             u.tom(),
@@ -181,9 +189,9 @@ public final class ForeldrepengerMapper {
             u.tom(),
             tilVedleggsreferanse(u.vedleggsreferanser()),
             tilStønadskontoType(u.konto()),
-            u.ønskerSamtidigUttak(),
+            u.ønskerSamtidigUttak() != null && u.ønskerSamtidigUttak(),
             u.morsAktivitetIPerioden(),
-            u.ønskerFlerbarnsdager(),
+            u.ønskerFlerbarnsdager() != null && u.ønskerFlerbarnsdager(),
             u.samtidigUttakProsent() != null ? ProsentAndel.valueOf(u.samtidigUttakProsent()) : null,
             u.justeresVedFødsel()
         );
@@ -195,12 +203,12 @@ public final class ForeldrepengerMapper {
             u.tom(),
             tilVedleggsreferanse(u.vedleggsreferanser()),
             tilStønadskontoType(u.konto()),
-            u.ønskerSamtidigUttak(),
+            u.ønskerSamtidigUttak() != null && u.ønskerSamtidigUttak(),
             u.morsAktivitetIPerioden(),
-            u.ønskerFlerbarnsdager(),
+            u.ønskerFlerbarnsdager() != null && u.ønskerFlerbarnsdager(),
             u.samtidigUttakProsent() != null ? ProsentAndel.valueOf(u.samtidigUttakProsent()) : null,
             u.stillingsprosent() != null ? ProsentAndel.valueOf(u.stillingsprosent()) : null,
-            u.erArbeidstaker(),
+            u.erArbeidstaker() != null && u.erArbeidstaker(),
             u.orgnumre(),
             true,
             u.erFrilanser(),

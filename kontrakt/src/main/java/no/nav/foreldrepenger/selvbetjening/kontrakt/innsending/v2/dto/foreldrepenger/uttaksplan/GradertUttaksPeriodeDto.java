@@ -23,7 +23,7 @@ public record GradertUttaksPeriodeDto(@NotNull LocalDate fom,
                                       Boolean ønskerFlerbarnsdager,
                                       @Min(0) @Max(100) Double samtidigUttakProsent,
 
-                                      @Min(0) @Max(100) Double stillingsprosent,
+                                      @NotNull @Min(0) @Max(100) Double stillingsprosent,
                                       Boolean erArbeidstaker,
                                       Boolean erFrilanser,
                                       Boolean erSelvstendig,

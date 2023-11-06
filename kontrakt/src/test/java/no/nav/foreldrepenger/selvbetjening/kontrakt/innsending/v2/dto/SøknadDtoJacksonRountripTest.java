@@ -1,16 +1,14 @@
-package no.nav.foreldrepenger.selvbetjening.kontrakt.innsending.dto;
+package no.nav.foreldrepenger.selvbetjening.kontrakt.innsending.v2.dto;
 
 import static no.nav.foreldrepenger.common.domain.foreldrepenger.fordeling.StønadskontoType.FELLESPERIODE;
 import static no.nav.foreldrepenger.common.domain.foreldrepenger.fordeling.StønadskontoType.FORELDREPENGER_FØR_FØDSEL;
 import static no.nav.foreldrepenger.common.domain.foreldrepenger.fordeling.StønadskontoType.MØDREKVOTE;
-import static no.nav.foreldrepenger.selvbetjening.kontrakt.innsending.util.builder.TilretteleggingBuilder.delvis;
-import static no.nav.foreldrepenger.selvbetjening.kontrakt.innsending.util.builder.TilretteleggingBuilder.hel;
-import static no.nav.foreldrepenger.selvbetjening.kontrakt.innsending.util.builder.TilretteleggingBuilder.ingen;
-import static no.nav.foreldrepenger.selvbetjening.kontrakt.innsending.util.builder.UttakplanPeriodeBuilder.gradert;
-import static no.nav.foreldrepenger.selvbetjening.kontrakt.innsending.util.builder.UttakplanPeriodeBuilder.overføring;
-import static no.nav.foreldrepenger.selvbetjening.kontrakt.innsending.util.builder.UttakplanPeriodeBuilder.uttak;
-import static no.nav.foreldrepenger.selvbetjening.kontrakt.innsending.util.maler.MedlemsskapMaler.medlemskapUtlandetForrige12mnd;
-import static no.nav.foreldrepenger.selvbetjening.kontrakt.innsending.util.maler.MedlemsskapMaler.medlemsskapNorge;
+import static no.nav.foreldrepenger.selvbetjening.kontrakt.innsending.v2.util.builder.TilretteleggingBuilder.delvis;
+import static no.nav.foreldrepenger.selvbetjening.kontrakt.innsending.v2.util.builder.TilretteleggingBuilder.hel;
+import static no.nav.foreldrepenger.selvbetjening.kontrakt.innsending.v2.util.builder.TilretteleggingBuilder.ingen;
+import static no.nav.foreldrepenger.selvbetjening.kontrakt.innsending.v2.util.builder.UttakplanPeriodeBuilder.gradert;
+import static no.nav.foreldrepenger.selvbetjening.kontrakt.innsending.v2.util.builder.UttakplanPeriodeBuilder.overføring;
+import static no.nav.foreldrepenger.selvbetjening.kontrakt.innsending.v2.util.builder.UttakplanPeriodeBuilder.uttak;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 
@@ -30,19 +28,22 @@ import no.nav.foreldrepenger.common.domain.Orgnummer;
 import no.nav.foreldrepenger.common.domain.Saksnummer;
 import no.nav.foreldrepenger.common.domain.foreldrepenger.fordeling.Overføringsårsak;
 import no.nav.foreldrepenger.common.mapper.DefaultJsonMapper;
-import no.nav.foreldrepenger.selvbetjening.kontrakt.innsending.dto.endringssøknad.EndringssøknadForeldrepengerDto;
-import no.nav.foreldrepenger.selvbetjening.kontrakt.innsending.dto.foreldrepenger.Dekningsgrad;
-import no.nav.foreldrepenger.selvbetjening.kontrakt.innsending.dto.foreldrepenger.ForeldrepengesøknadDto;
-import no.nav.foreldrepenger.selvbetjening.kontrakt.innsending.dto.svangerskapspenger.SvangerskapspengesøknadDto;
-import no.nav.foreldrepenger.selvbetjening.kontrakt.innsending.util.builder.AnnenforelderBuilder;
-import no.nav.foreldrepenger.selvbetjening.kontrakt.innsending.util.builder.BarnBuilder;
-import no.nav.foreldrepenger.selvbetjening.kontrakt.innsending.util.builder.EndringssøknadBuilder;
-import no.nav.foreldrepenger.selvbetjening.kontrakt.innsending.util.builder.EngangsstønadBuilder;
-import no.nav.foreldrepenger.selvbetjening.kontrakt.innsending.util.builder.ForeldrepengerBuilder;
-import no.nav.foreldrepenger.selvbetjening.kontrakt.innsending.util.builder.SvangerskapspengerBuilder;
-import no.nav.foreldrepenger.selvbetjening.kontrakt.innsending.util.builder.SøkerBuilder;
-import no.nav.foreldrepenger.selvbetjening.kontrakt.innsending.util.maler.ArbeidsforholdMaler;
-import no.nav.foreldrepenger.selvbetjening.kontrakt.innsending.util.maler.OpptjeningMaler;
+import no.nav.foreldrepenger.common.oppslag.dkif.Målform;
+import no.nav.foreldrepenger.selvbetjening.kontrakt.innsending.v2.dto.endringssøknad.EndringssøknadForeldrepengerDto;
+import no.nav.foreldrepenger.selvbetjening.kontrakt.innsending.v2.dto.engangsstønad.EngangsstønadDto;
+import no.nav.foreldrepenger.selvbetjening.kontrakt.innsending.v2.dto.foreldrepenger.Dekningsgrad;
+import no.nav.foreldrepenger.selvbetjening.kontrakt.innsending.v2.dto.foreldrepenger.ForeldrepengesøknadDto;
+import no.nav.foreldrepenger.selvbetjening.kontrakt.innsending.v2.dto.svangerskapspenger.SvangerskapspengesøknadDto;
+import no.nav.foreldrepenger.selvbetjening.kontrakt.innsending.v2.util.builder.AnnenforelderBuilder;
+import no.nav.foreldrepenger.selvbetjening.kontrakt.innsending.v2.util.builder.BarnBuilder;
+import no.nav.foreldrepenger.selvbetjening.kontrakt.innsending.v2.util.builder.EndringssøknadBuilder;
+import no.nav.foreldrepenger.selvbetjening.kontrakt.innsending.v2.util.builder.EngangsstønadBuilder;
+import no.nav.foreldrepenger.selvbetjening.kontrakt.innsending.v2.util.builder.ForeldrepengerBuilder;
+import no.nav.foreldrepenger.selvbetjening.kontrakt.innsending.v2.util.builder.SvangerskapspengerBuilder;
+import no.nav.foreldrepenger.selvbetjening.kontrakt.innsending.v2.util.builder.SøkerBuilder;
+import no.nav.foreldrepenger.selvbetjening.kontrakt.innsending.v2.util.maler.ArbeidsforholdMaler;
+import no.nav.foreldrepenger.selvbetjening.kontrakt.innsending.v2.util.maler.OpptjeningMaler;
+import no.nav.foreldrepenger.selvbetjening.kontrakt.innsending.v2.util.maler.UtenlandsoppholdMaler;
 
 /**
  * Skal verifisere at seralisering => deseralisering av objektet ikke mister noe data på veien.
@@ -60,9 +61,9 @@ class SøknadDtoJacksonRountripTest {
             uttak(FELLESPERIODE, NOW.minusWeeks(8), NOW.plusWeeks(5)).build()
         );
         var søknad = new ForeldrepengerBuilder()
-            .medFordeling(uttak)
+            .medUttaksplan(uttak)
             .medDekningsgrad(Dekningsgrad.HUNDRE)
-            .medMedlemsskap(medlemsskapNorge())
+            .medUtenlandsopphold(UtenlandsoppholdMaler.oppholdBareINorge())
             .medSøker(new SøkerBuilder(BrukerRolle.FAR).build())
             .medAnnenForelder(AnnenforelderBuilder.norskMedRettighetNorge(DUMMY_FNR).build())
             .medBarn(BarnBuilder.fødsel(1, LocalDate.now().minusWeeks(2)).build())
@@ -80,9 +81,9 @@ class SøknadDtoJacksonRountripTest {
             uttak(FELLESPERIODE, NOW.plusWeeks(15), NOW.plusWeeks(31).minusDays(1)).build()
         );
         var søknad = new ForeldrepengerBuilder()
-            .medFordeling(uttak)
+            .medUttaksplan(uttak)
             .medDekningsgrad(Dekningsgrad.ÅTTI)
-            .medMedlemsskap(medlemsskapNorge())
+            .medUtenlandsopphold(UtenlandsoppholdMaler.oppholdBareINorge())
             .medSøker(new SøkerBuilder(BrukerRolle.MOR)
                 .medAndreInntekterSiste10Mnd(List.of(OpptjeningMaler.utenlandskArbeidsforhold(CountryCode.US)))
                 .build())
@@ -102,9 +103,9 @@ class SøknadDtoJacksonRountripTest {
             gradert(FELLESPERIODE, NOW.plusWeeks(15), NOW.plusWeeks(45).minusDays(1), 55.0).build()
         );
         var søknad = new ForeldrepengerBuilder()
-            .medFordeling(uttak)
+            .medUttaksplan(uttak)
             .medDekningsgrad(Dekningsgrad.HUNDRE)
-            .medMedlemsskap(medlemsskapNorge())
+            .medUtenlandsopphold(UtenlandsoppholdMaler.oppholdBareINorge())
             .medSøker(new SøkerBuilder(BrukerRolle.MOR)
                 .medFrilansInformasjon(OpptjeningMaler.frilansOpptjening())
                 .build())
@@ -127,9 +128,9 @@ class SøknadDtoJacksonRountripTest {
                 .build()
         );
         var søknad = new ForeldrepengerBuilder()
-            .medFordeling(uttak)
+            .medUttaksplan(uttak)
             .medDekningsgrad(Dekningsgrad.HUNDRE)
-            .medMedlemsskap(medlemsskapNorge())
+            .medUtenlandsopphold(UtenlandsoppholdMaler.oppholdBareINorge())
             .medSøker(new SøkerBuilder(BrukerRolle.MOR)
                 .medFrilansInformasjon(OpptjeningMaler.frilansOpptjening())
                 .medSelvstendigNæringsdrivendeInformasjon(List.of(OpptjeningMaler.egenNaeringOpptjening(orgnummerNæring)))
@@ -149,9 +150,9 @@ class SøknadDtoJacksonRountripTest {
             uttak(FELLESPERIODE, NOW.plusWeeks(15), NOW.plusWeeks(45).minusDays(1)).build()
         );
         var søknad = new ForeldrepengerBuilder()
-            .medFordeling(uttak)
+            .medUttaksplan(uttak)
             .medDekningsgrad(Dekningsgrad.HUNDRE)
-            .medMedlemsskap(medlemskapUtlandetForrige12mnd())
+            .medUtenlandsopphold(UtenlandsoppholdMaler.oppholdIUtlandetForrige12mnd())
             .medSøker(new SøkerBuilder(BrukerRolle.MOR)
                 .medErAleneOmOmsorg(true)
                 .build())
@@ -167,11 +168,11 @@ class SøknadDtoJacksonRountripTest {
     void svangerskapspengerRountripTest() throws IOException {
         var tilrettelegginger = List.of(
             hel(NOW.minusMonths(1), NOW.minusMonths(1), ArbeidsforholdMaler.selvstendigNæringsdrivende()).build(),
-            delvis(NOW, NOW, ArbeidsforholdMaler.privatArbeidsgiver(DUMMY_FNR.value()), 55.0).build(),
+            delvis(NOW, NOW, ArbeidsforholdMaler.privatArbeidsgiver(DUMMY_FNR), 55.0).build(),
             ingen(NOW.plusWeeks(1), NOW.plusWeeks(1), ArbeidsforholdMaler.virksomhet(Orgnummer.MAGIC_ORG)).build()
         );
         var søknad = new SvangerskapspengerBuilder(tilrettelegginger)
-            .medMedlemsskap(medlemskapUtlandetForrige12mnd())
+            .medUtenlandsopphold(UtenlandsoppholdMaler.oppholdIUtlandetForrige12mnd())
             .medSøker(new SøkerBuilder(BrukerRolle.MOR)
                 .medSelvstendigNæringsdrivendeInformasjon(List.of(OpptjeningMaler.egenNaeringOpptjening(Orgnummer.MAGIC_ORG.value())))
                 .build())
@@ -184,22 +185,22 @@ class SøknadDtoJacksonRountripTest {
 
     @Test
     void engangsstønadRountripTest() throws IOException {
-        var søknad = new EngangsstønadBuilder().medSøker(new SøkerBuilder(BrukerRolle.MOR).build())
-            .medMedlemsskap(medlemskapUtlandetForrige12mnd())
+        var søknad = new EngangsstønadBuilder()
+            .medSpråkkode(Målform.NB)
+            .medUtenlandsopphold(UtenlandsoppholdMaler.oppholdIUtlandetForrige12mnd())
             .medBarn(BarnBuilder.fødsel(1, NOW).build())
             .build();
 
-        assertThat(søknad).isInstanceOf(no.nav.foreldrepenger.selvbetjening.kontrakt.innsending.dto.engangsstønad.EngangsstønadDto.class);
+        assertThat(søknad).isInstanceOf(EngangsstønadDto.class);
         test(søknad);
     }
-
     @Test
     void endringssøknadFpRountripTest() throws IOException {
         var uttak = List.of(
             uttak(FELLESPERIODE, NOW.minusWeeks(8), NOW.plusWeeks(5)).build()
         );
         var søknad = new EndringssøknadBuilder(new Saksnummer("1"))
-            .medFordeling(uttak)
+            .medUttaksplan(uttak)
             .medSøker(new SøkerBuilder(BrukerRolle.MOR)
                 .medErAleneOmOmsorg(true)
                 .build())

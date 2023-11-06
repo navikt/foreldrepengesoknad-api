@@ -21,7 +21,6 @@ import no.nav.foreldrepenger.selvbetjening.kontrakt.innsending.dto.MutableVedleg
     @JsonSubTypes.Type(value = OverføringsPeriodeDto.class, name = "overføring"),
     @JsonSubTypes.Type(value = OppholdsPeriodeDto.class, name = "opphold"),
     @JsonSubTypes.Type(value = UtsettelsesPeriodeDto.class, name = "utsettelse"),
-    @JsonSubTypes.Type(value = FriUtsettelsesPeriodeDto.class, name = "periodeutenuttak")
 })
 public interface Uttaksplanperiode {
     LocalDate fom();

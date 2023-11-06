@@ -186,7 +186,7 @@ final class ForeldrepengerMapper {
         );
     }
 
-    private static StønadskontoType tilStønadskontoType(UttaksplanPeriodeDto.KontoType konto) {
+    public static StønadskontoType tilStønadskontoType(UttaksplanPeriodeDto.KontoType konto) {
         if (konto == null) {
             return StønadskontoType.IKKE_SATT;
         }

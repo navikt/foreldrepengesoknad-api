@@ -19,7 +19,7 @@ final class EndringForeldrepengerMapper {
     private EndringForeldrepengerMapper() {
     }
 
-    static Endringssøknad tilEndringForeldrepengesøknad(EndringssøknadForeldrepengerDto endringssøknadFP, LocalDate mottattDato) {
+    static Endringssøknad tilEndringForeldrepengesøknadUtenVedleggInnhold(EndringssøknadForeldrepengerDto endringssøknadFP, LocalDate mottattDato) {
         return new Endringssøknad(
             mottattDato,
             tilSøker(endringssøknadFP.søker()),

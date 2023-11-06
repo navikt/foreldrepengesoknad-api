@@ -10,11 +10,15 @@ import no.nav.foreldrepenger.common.domain.foreldrepenger.fordeling.MorsAktivite
 import no.nav.foreldrepenger.common.domain.foreldrepenger.fordeling.UtsettelsesÅrsak;
 import no.nav.foreldrepenger.selvbetjening.kontrakt.innsending.dto.MutableVedleggReferanseDto;
 
-public record UtsettelsesPeriodeDto(@NotNull LocalDate fom,
+public record UtsettelsesPeriodeDto(@NotNull Type type,
+                                    @NotNull LocalDate fom,
                                     @NotNull LocalDate tom,
-                                    @NotNull KontoType konto,
                                     @NotNull UtsettelsesÅrsak årsak,
                                     MorsAktivitet morsAktivitetIPerioden,
                                     Boolean erArbeidstaker,
                                     @Size(max = 100) List<@Valid @NotNull MutableVedleggReferanseDto> vedleggsreferanser) implements Uttaksplanperiode {
+    public enum Type {
+        UTSETTELSE,
+        FRI
+    }
 }

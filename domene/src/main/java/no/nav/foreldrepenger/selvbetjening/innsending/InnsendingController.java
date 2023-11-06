@@ -9,8 +9,10 @@ import no.nav.foreldrepenger.selvbetjening.http.ProtectedRestController;
 import no.nav.foreldrepenger.selvbetjening.kontrakt.innsending.dto.SøknadDto;
 import no.nav.foreldrepenger.selvbetjening.kontrakt.innsending.dto.endringssøknad.EndringssøknadDto;
 import no.nav.foreldrepenger.selvbetjening.kontrakt.innsending.dto.ettersendelse.EttersendelseDto;
+import no.nav.foreldrepenger.selvbetjening.kontrakt.innsending.v2.dto.endringssøknad.EndringssøknadForeldrepengerDto;
 import no.nav.foreldrepenger.selvbetjening.kontrakt.innsending.v2.dto.engangsstønad.EngangsstønadDto;
 import no.nav.foreldrepenger.selvbetjening.kontrakt.innsending.v2.dto.foreldrepenger.ForeldrepengesøknadDto;
+import no.nav.foreldrepenger.selvbetjening.kontrakt.innsending.v2.dto.svangerskapspenger.SvangerskapspengesøknadDto;
 
 @ProtectedRestController(InnsendingController.INNSENDING_CONTROLLER_PATH)
 public class InnsendingController {
@@ -32,6 +34,11 @@ public class InnsendingController {
         return innsending.sendInn(søknad);
     }
 
+    @PostMapping("/svangerskapspenger")
+    public Kvittering sendInnForeldrepengesøknad(@Valid @RequestBody SvangerskapspengesøknadDto søknad) {
+        return innsending.sendInn(søknad);
+    }
+
     @PostMapping("/engangssoknad")
     public Kvittering sendInnEngangsstønad(@Valid @RequestBody EngangsstønadDto søknad) {
         return innsending.sendInn(søknad);
@@ -39,6 +46,11 @@ public class InnsendingController {
 
     @PostMapping("/endre")
     public Kvittering endre(@Valid @RequestBody EndringssøknadDto endringssøknad) {
+        return innsending.sendInn(endringssøknad);
+    }
+
+    @PostMapping("/endre/foreldrepenger")
+    public Kvittering endre(@Valid @RequestBody EndringssøknadForeldrepengerDto endringssøknad) {
         return innsending.sendInn(endringssøknad);
     }
 
