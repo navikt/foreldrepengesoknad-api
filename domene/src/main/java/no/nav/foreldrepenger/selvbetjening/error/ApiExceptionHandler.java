@@ -1,17 +1,20 @@
 package no.nav.foreldrepenger.selvbetjening.error;
 
-import jakarta.validation.ConstraintViolationException;
-import no.nav.foreldrepenger.common.error.UnexpectedInputException;
-import no.nav.foreldrepenger.common.util.TokenUtil;
-import no.nav.foreldrepenger.selvbetjening.innsyn.UmydigBrukerException;
-import no.nav.foreldrepenger.selvbetjening.uttak.ManglendeFamiliehendelseException;
-import no.nav.foreldrepenger.selvbetjening.vedlegg.AttachmentException;
-import no.nav.foreldrepenger.selvbetjening.vedlegg.AttachmentPasswordProtectedException;
-import no.nav.foreldrepenger.selvbetjening.vedlegg.AttachmentTooLargeException;
-import no.nav.foreldrepenger.selvbetjening.vedlegg.AttachmentsTooLargeException;
-import no.nav.security.token.support.core.exceptions.JwtTokenInvalidClaimException;
-import no.nav.security.token.support.core.exceptions.JwtTokenValidatorException;
-import no.nav.security.token.support.spring.validation.interceptor.JwtTokenUnauthorizedException;
+import static no.nav.foreldrepenger.common.util.StreamUtil.safeStream;
+import static org.springframework.core.NestedExceptionUtils.getMostSpecificCause;
+import static org.springframework.http.HttpStatus.BAD_REQUEST;
+import static org.springframework.http.HttpStatus.CONFLICT;
+import static org.springframework.http.HttpStatus.FORBIDDEN;
+import static org.springframework.http.HttpStatus.INTERNAL_SERVER_ERROR;
+import static org.springframework.http.HttpStatus.NOT_ACCEPTABLE;
+import static org.springframework.http.HttpStatus.NOT_FOUND;
+import static org.springframework.http.HttpStatus.PAYLOAD_TOO_LARGE;
+import static org.springframework.http.HttpStatus.UNAUTHORIZED;
+import static org.springframework.http.HttpStatus.UNPROCESSABLE_ENTITY;
+
+import java.util.Optional;
+
+import org.apache.catalina.connector.ClientAbortException;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.http.HttpHeaders;
@@ -31,19 +34,18 @@ import org.springframework.web.multipart.MultipartException;
 import org.springframework.web.servlet.NoHandlerFoundException;
 import org.springframework.web.servlet.mvc.method.annotation.ResponseEntityExceptionHandler;
 
-import java.util.Optional;
-
-import static no.nav.foreldrepenger.common.util.StreamUtil.safeStream;
-import static org.springframework.core.NestedExceptionUtils.getMostSpecificCause;
-import static org.springframework.http.HttpStatus.BAD_REQUEST;
-import static org.springframework.http.HttpStatus.CONFLICT;
-import static org.springframework.http.HttpStatus.FORBIDDEN;
-import static org.springframework.http.HttpStatus.INTERNAL_SERVER_ERROR;
-import static org.springframework.http.HttpStatus.NOT_ACCEPTABLE;
-import static org.springframework.http.HttpStatus.NOT_FOUND;
-import static org.springframework.http.HttpStatus.PAYLOAD_TOO_LARGE;
-import static org.springframework.http.HttpStatus.UNAUTHORIZED;
-import static org.springframework.http.HttpStatus.UNPROCESSABLE_ENTITY;
+import jakarta.validation.ConstraintViolationException;
+import no.nav.foreldrepenger.common.error.UnexpectedInputException;
+import no.nav.foreldrepenger.common.util.TokenUtil;
+import no.nav.foreldrepenger.selvbetjening.innsyn.UmydigBrukerException;
+import no.nav.foreldrepenger.selvbetjening.uttak.ManglendeFamiliehendelseException;
+import no.nav.foreldrepenger.selvbetjening.vedlegg.AttachmentException;
+import no.nav.foreldrepenger.selvbetjening.vedlegg.AttachmentPasswordProtectedException;
+import no.nav.foreldrepenger.selvbetjening.vedlegg.AttachmentTooLargeException;
+import no.nav.foreldrepenger.selvbetjening.vedlegg.AttachmentsTooLargeException;
+import no.nav.security.token.support.core.exceptions.JwtTokenInvalidClaimException;
+import no.nav.security.token.support.core.exceptions.JwtTokenValidatorException;
+import no.nav.security.token.support.spring.validation.interceptor.JwtTokenUnauthorizedException;
 
 @ControllerAdvice
 public class ApiExceptionHandler extends ResponseEntityExceptionHandler {
@@ -78,6 +80,15 @@ public class ApiExceptionHandler extends ResponseEntityExceptionHandler {
             .map(ApiExceptionHandler::errorMessage)
             .toList();
         return logAndHandle(BAD_REQUEST, e, req, headers, feltMedValideringsFeil);
+    }
+
+    @ExceptionHandler
+    public ResponseEntity<Object> handleClientAbortException(ClientAbortException e, WebRequest req) {
+        if (req instanceof ServletWebRequest s && s.getResponse() != null && s.getResponse().isCommitted()) {
+            LOG.info("Response already committed. Ignoring: {}", e.getClass().getSimpleName(), e);
+            return null;
+        }
+        return logAndHandle(BAD_REQUEST, e, req);
     }
 
     @ExceptionHandler
