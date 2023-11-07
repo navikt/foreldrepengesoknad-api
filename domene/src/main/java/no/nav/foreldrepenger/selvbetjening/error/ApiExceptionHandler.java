@@ -85,7 +85,7 @@ public class ApiExceptionHandler extends ResponseEntityExceptionHandler {
     @ExceptionHandler
     public ResponseEntity<Object> handleClientAbortException(ClientAbortException e, WebRequest req) {
         if (req instanceof ServletWebRequest s && s.getResponse() != null && s.getResponse().isCommitted()) {
-            LOG.info("Response already committed. Ignoring: {}", e, e);
+            LOG.info("Response already committed. Ignoring: {}", e.getClass().getSimpleName(), e);
             return null;
         }
         return logAndHandle(BAD_REQUEST, e, req);
