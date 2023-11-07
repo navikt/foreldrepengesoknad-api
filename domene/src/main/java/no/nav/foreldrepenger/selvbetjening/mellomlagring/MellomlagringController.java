@@ -10,6 +10,7 @@ import static org.springframework.http.ResponseEntity.notFound;
 import static org.springframework.http.ResponseEntity.ok;
 
 import java.io.IOException;
+import java.util.List;
 
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
@@ -23,7 +24,10 @@ import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.multipart.MultipartFile;
 
 import jakarta.validation.Valid;
+import jakarta.validation.constraints.NotEmpty;
+import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Pattern;
+import jakarta.validation.constraints.Size;
 import no.nav.foreldrepenger.selvbetjening.http.ProtectedRestController;
 import no.nav.foreldrepenger.selvbetjening.vedlegg.Image2PDFConverter;
 
@@ -53,6 +57,7 @@ public class MellomlagringController {
         mellomlagring.lagreKryptertSøknad(soknad);
     }
 
+
     @DeleteMapping
     @ResponseStatus(NO_CONTENT)
     public void slettSøknad() {
@@ -73,6 +78,13 @@ public class MellomlagringController {
         mellomlagring.lagreKryptertVedlegg(attachment);
         return created(attachment.uri()).body(attachment.uuid);
     }
+
+    @DeleteMapping("/vedlegg")
+    @ResponseStatus(NO_CONTENT)
+    public void slettVedlegg(@Valid @Size(max = 1) List<@Pattern(regexp = FRITEKST) @NotNull @NotEmpty String> uuid) {
+        uuid.forEach(mellomlagring::slettKryptertVedlegg);
+    }
+
 
     @DeleteMapping("/vedlegg/{key}")
     @ResponseStatus(NO_CONTENT)

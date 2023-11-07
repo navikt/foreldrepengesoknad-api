@@ -93,6 +93,9 @@ public class InnsendingConnection extends AbstractRestConnection {
     }
 
     private static void guardIkkePDF(VedleggDto vedlegg) {
+        if (vedlegg.getContent().length == 0) { // TODO: Midlertidig fiks til frontend tar over jobben for sletting av mellomlagret tilstand
+            return;
+        }
         var mediatype = mediaType(vedlegg.getContent());
         if (!APPLICATION_PDF.equals(mediatype)) {
             throw new IllegalStateException("Utviklerfeil: Mottok noe annet en PDF ved innsending " + mediatype);
