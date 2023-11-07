@@ -58,13 +58,11 @@ public class MellomlagringController {
     }
 
 
-    @DeleteMapping()
+    @DeleteMapping
     @ResponseStatus(NO_CONTENT)
     public void slettSøknad() {
         mellomlagring.slettKryptertSøknad();
     }
-
-
 
     @GetMapping("/vedlegg/{key}")
     public ResponseEntity<byte[]> lesVedlegg(@PathVariable("key") @Pattern(regexp = FRITEKST) String key) {
