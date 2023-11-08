@@ -1,6 +1,7 @@
 package no.nav.foreldrepenger.selvbetjening.mellomlagring;
 
 import static no.nav.foreldrepenger.common.domain.validation.InputValideringRegex.FRITEKST;
+import static org.springframework.http.HttpStatus.NOT_ACCEPTABLE;
 import static org.springframework.http.HttpStatus.NO_CONTENT;
 import static org.springframework.http.MediaType.APPLICATION_JSON_VALUE;
 import static org.springframework.http.MediaType.MULTIPART_FORM_DATA_VALUE;
@@ -21,6 +22,7 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestPart;
 import org.springframework.web.bind.annotation.ResponseStatus;
+import org.springframework.web.client.HttpServerErrorException;
 import org.springframework.web.multipart.MultipartFile;
 
 import jakarta.validation.Valid;
@@ -73,7 +75,7 @@ public class MellomlagringController {
 
     @PostMapping(path = "/vedlegg", consumes = MULTIPART_FORM_DATA_VALUE)
     public ResponseEntity<String> lagreVedlegg(@Valid @RequestPart("vedlegg") MultipartFile file) {
-        var pdfBytes = converter.convert(getBytes(file));
+        var pdfBytes = converter.convert(getBytesNullSjekk(file));
         var attachment = Attachment.of(file.getOriginalFilename(), pdfBytes, MediaType.APPLICATION_PDF);
         mellomlagring.lagreKryptertVedlegg(attachment);
         return created(attachment.uri()).body(attachment.uuid);
@@ -104,11 +106,19 @@ public class MellomlagringController {
         return getClass().getSimpleName() + " [mellomlagringTjeneste=" + mellomlagring + "]";
     }
 
-    private static byte[] getBytes(MultipartFile file) {
+    private static byte[] getBytesNullSjekk(MultipartFile file) {
+        var bytes = getBytesFraMultipart(file);
+        if (bytes.length == 0) {
+            throw new HttpServerErrorException(NOT_ACCEPTABLE, "Kan ikke mellomlagre vedlegg som ikke har innhold");
+        }
+        return bytes;
+    }
+
+    private static byte[] getBytesFraMultipart(MultipartFile file) {
         try {
             return file.getBytes();
         } catch (IOException e) {
-            throw new RuntimeException(e);
+            throw new IllegalStateException("Klarte ikke hente innhold for mellomlagret vedlegg", e);
         }
     }
 }
