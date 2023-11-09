@@ -3,7 +3,6 @@ package no.nav.foreldrepenger.selvbetjening.kontrakt.innsending.mapper;
 import static no.nav.foreldrepenger.selvbetjening.kontrakt.innsending.mapper.CommonMapper.tilMedlemskap;
 import static no.nav.foreldrepenger.selvbetjening.kontrakt.innsending.mapper.CommonMapper.tilOpptjening;
 import static no.nav.foreldrepenger.selvbetjening.kontrakt.innsending.mapper.CommonMapper.tilVedlegg;
-import static no.nav.foreldrepenger.selvbetjening.kontrakt.innsending.mapper.CommonMapper.tilVedleggsreferanse;
 
 import java.time.LocalDate;
 import java.util.List;
@@ -90,7 +89,7 @@ final class SvangerskapspengerMapper {
             tilArbeidsforhold(tilrettelegging.arbeidsforhold()),
             tilrettelegging.behovForTilretteleggingFom(),
             tilrettelegging.slutteArbeidFom(),
-            tilVedleggsreferanse(tilrettelegging.vedlegg())
+            List.of()
         );
     }
 
@@ -100,7 +99,7 @@ final class SvangerskapspengerMapper {
             tilrettelegging.behovForTilretteleggingFom(),
             tilrettelegging.tilrettelagtArbeidFom(),
             tilrettelegging.stillingsprosent() != null ? ProsentAndel.valueOf(tilrettelegging.stillingsprosent()) : null,
-            tilVedleggsreferanse(tilrettelegging.vedlegg())
+            List.of()
         );
     }
 
@@ -109,7 +108,7 @@ final class SvangerskapspengerMapper {
             tilArbeidsforhold(tilrettelegging.arbeidsforhold()),
             tilrettelegging.behovForTilretteleggingFom(),
             tilrettelegging.tilrettelagtArbeidFom(),
-            tilVedleggsreferanse(tilrettelegging.vedlegg())
+            List.of()
         );
     }
 

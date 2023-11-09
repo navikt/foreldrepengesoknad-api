@@ -3,7 +3,6 @@ package no.nav.foreldrepenger.selvbetjening.kontrakt.innsending.util.builder;
 import java.time.LocalDate;
 import java.util.List;
 
-import no.nav.foreldrepenger.selvbetjening.kontrakt.innsending.dto.MutableVedleggReferanseDto;
 import no.nav.foreldrepenger.selvbetjening.kontrakt.innsending.v2.dto.AdopsjonDto;
 import no.nav.foreldrepenger.selvbetjening.kontrakt.innsending.v2.dto.FødselDto;
 import no.nav.foreldrepenger.selvbetjening.kontrakt.innsending.v2.dto.OmsorgsovertakelseDto;
@@ -39,7 +38,6 @@ public final class BarnV2Builder {
         private int antallBarn;
         private LocalDate termindato;
         private LocalDate terminbekreftelseDato;
-        private List<MutableVedleggReferanseDto> vedlegg;
 
         public TerminBuilder(int antallBarn) {
             this.antallBarn = antallBarn;
@@ -55,17 +53,11 @@ public final class BarnV2Builder {
             return this;
         }
 
-        public TerminBuilder medVedlegg(List<MutableVedleggReferanseDto> vedlegg) {
-            this.vedlegg = vedlegg;
-            return this;
-        }
-
         public TerminDto build() {
             return new TerminDto(
                 antallBarn,
                 termindato,
-                terminbekreftelseDato,
-                vedlegg
+                terminbekreftelseDato
             );
         }
     }
@@ -77,7 +69,6 @@ public final class BarnV2Builder {
         private LocalDate ankomstdato;
         private Boolean adopsjonAvEktefellesBarn;
         private Boolean søkerAdopsjonAlene;
-        private List<MutableVedleggReferanseDto> vedlegg;
 
         public AdopsjonBuilder(int antallBarn) {
             this.antallBarn = antallBarn;
@@ -108,11 +99,6 @@ public final class BarnV2Builder {
             return this;
         }
 
-        public AdopsjonBuilder medVedlegg(List<MutableVedleggReferanseDto> vedlegg) {
-            this.vedlegg = vedlegg;
-            return this;
-        }
-
         public AdopsjonDto build() {
             return new AdopsjonDto(
                 antallBarn,
@@ -120,8 +106,7 @@ public final class BarnV2Builder {
                 adopsjonsdato,
                 ankomstdato,
                 adopsjonAvEktefellesBarn,
-                søkerAdopsjonAlene,
-                vedlegg
+                søkerAdopsjonAlene
             );
         }
     }
@@ -130,7 +115,6 @@ public final class BarnV2Builder {
         private int antallBarn;
         private List<LocalDate> fødselsdatoer;
         private LocalDate foreldreansvarsdato;
-        private List<MutableVedleggReferanseDto> vedlegg;
 
         public OmsorgsovertakelseBuilder(int antallBarn) {
             this.antallBarn = antallBarn;
@@ -146,17 +130,11 @@ public final class BarnV2Builder {
             return this;
         }
 
-        public OmsorgsovertakelseBuilder medVedlegg(List<MutableVedleggReferanseDto> vedlegg) {
-            this.vedlegg = vedlegg;
-            return this;
-        }
-
         public OmsorgsovertakelseDto build() {
             return new OmsorgsovertakelseDto(
                 antallBarn,
                 fødselsdatoer,
-                foreldreansvarsdato,
-                vedlegg
+                foreldreansvarsdato
             );
         }
     }
@@ -166,7 +144,6 @@ public final class BarnV2Builder {
         private int antallBarn;
         private LocalDate fødselsdato;
         private LocalDate termindato;
-        private List<MutableVedleggReferanseDto> vedlegg;
 
         public FødselBuilder(int antallBarn) {
             this.antallBarn = antallBarn;
@@ -182,17 +159,11 @@ public final class BarnV2Builder {
             return this;
         }
 
-        public FødselBuilder medVedlegg(List<MutableVedleggReferanseDto> vedlegg) {
-            this.vedlegg = vedlegg;
-            return this;
-        }
-
         public FødselDto build() {
             return new FødselDto(
                 antallBarn,
                 fødselsdato,
-                termindato,
-                vedlegg
+                termindato
             );
         }
     }
