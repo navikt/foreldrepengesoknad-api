@@ -9,7 +9,6 @@ import static no.nav.foreldrepenger.selvbetjening.kontrakt.innsending.mapper.Com
 import static no.nav.foreldrepenger.selvbetjening.kontrakt.innsending.mapper.CommonMapper.tilOpptjening;
 import static no.nav.foreldrepenger.selvbetjening.kontrakt.innsending.mapper.CommonMapper.tilRelasjonTilBarn;
 import static no.nav.foreldrepenger.selvbetjening.kontrakt.innsending.mapper.CommonMapper.tilVedlegg;
-import static no.nav.foreldrepenger.selvbetjening.kontrakt.innsending.mapper.CommonMapper.tilVedleggsreferanse;
 
 import java.time.LocalDate;
 import java.util.List;
@@ -117,7 +116,7 @@ final class ForeldrepengerMapper {
             u.tidsperiode().tom(),
             u.årsak() != null ? Overføringsårsak.valueOf(u.årsak()) : null,
             tilStønadskontoType(u.konto()),
-            tilVedleggsreferanse(u.vedlegg())
+            List.of()
         );
     }
 
@@ -128,7 +127,7 @@ final class ForeldrepengerMapper {
             u.erArbeidstaker(),
             UtsettelsesÅrsak.valueOf(u.årsak()),
             u.morsAktivitetIPerioden() != null ? MorsAktivitet.valueOf(u.morsAktivitetIPerioden()) : null,
-            tilVedleggsreferanse(u.vedlegg())
+            List.of()
         );
     }
 
@@ -139,7 +138,7 @@ final class ForeldrepengerMapper {
             u.erArbeidstaker(),
             UtsettelsesÅrsak.valueOf(u.årsak()),
             u.morsAktivitetIPerioden() != null ? MorsAktivitet.valueOf(u.morsAktivitetIPerioden()) : null,
-            tilVedleggsreferanse(u.vedlegg())
+            List.of()
         );
     }
 
@@ -148,7 +147,7 @@ final class ForeldrepengerMapper {
             u.tidsperiode().fom(),
             u.tidsperiode().tom(),
             u.årsak() != null ? Oppholdsårsak.valueOf(u.årsak()) : null,
-            tilVedleggsreferanse(u.vedlegg())
+            List.of()
         );
     }
 
@@ -156,7 +155,7 @@ final class ForeldrepengerMapper {
         return new UttaksPeriode(
             u.tidsperiode().fom(),
             u.tidsperiode().tom(),
-            tilVedleggsreferanse(u.vedlegg()),
+            List.of(),
             tilStønadskontoType(u.konto()),
             u.ønskerSamtidigUttak(),
             u.morsAktivitetIPerioden() != null ? MorsAktivitet.valueOf(u.morsAktivitetIPerioden()) : null,
@@ -170,7 +169,7 @@ final class ForeldrepengerMapper {
         return new GradertUttaksPeriode(
             u.tidsperiode().fom(),
             u.tidsperiode().tom(),
-            tilVedleggsreferanse(u.vedlegg()),
+            List.of(),
             tilStønadskontoType(u.konto()),
             u.ønskerSamtidigUttak(),
             u.morsAktivitetIPerioden() != null ? MorsAktivitet.valueOf(u.morsAktivitetIPerioden()) : null,
