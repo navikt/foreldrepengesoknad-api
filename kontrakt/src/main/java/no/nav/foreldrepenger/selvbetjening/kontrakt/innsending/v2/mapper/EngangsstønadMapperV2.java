@@ -2,6 +2,7 @@ package no.nav.foreldrepenger.selvbetjening.kontrakt.innsending.v2.mapper;
 
 import static no.nav.foreldrepenger.common.util.StreamUtil.safeStream;
 import static no.nav.foreldrepenger.selvbetjening.kontrakt.innsending.mapper.CommonMapper.tilVedlegg;
+import static no.nav.foreldrepenger.selvbetjening.kontrakt.innsending.mapper.CommonMapper.tilVedleggsreferanse;
 
 import java.time.LocalDate;
 import java.util.List;
@@ -22,11 +23,11 @@ import no.nav.foreldrepenger.common.domain.felles.relasjontilbarn.RelasjonTilBar
 import no.nav.foreldrepenger.common.oppslag.dkif.Målform;
 import no.nav.foreldrepenger.selvbetjening.kontrakt.innsending.v2.dto.AdopsjonDto;
 import no.nav.foreldrepenger.selvbetjening.kontrakt.innsending.v2.dto.BarnDto;
+import no.nav.foreldrepenger.selvbetjening.kontrakt.innsending.v2.dto.engangsstønad.EngangsstønadDto;
 import no.nav.foreldrepenger.selvbetjening.kontrakt.innsending.v2.dto.FødselDto;
 import no.nav.foreldrepenger.selvbetjening.kontrakt.innsending.v2.dto.OmsorgsovertakelseDto;
 import no.nav.foreldrepenger.selvbetjening.kontrakt.innsending.v2.dto.TerminDto;
 import no.nav.foreldrepenger.selvbetjening.kontrakt.innsending.v2.dto.UtenlandsoppholdDto;
-import no.nav.foreldrepenger.selvbetjening.kontrakt.innsending.v2.dto.engangsstønad.EngangsstønadDto;
 
 public final class EngangsstønadMapperV2 {
 
@@ -89,7 +90,7 @@ public final class EngangsstønadMapperV2 {
             barn.antallBarn(),
             List.of(barn.fødselsdato()), // TODO: Fjern liste i mottak!
             barn.termindato(),
-            List.of()
+            tilVedleggsreferanse(barn.vedleggreferanser())
         );
     }
 
@@ -98,7 +99,7 @@ public final class EngangsstønadMapperV2 {
             barn.antallBarn(),
             barn.termindato(),
             barn.terminbekreftelseDato(),
-            List.of()
+            tilVedleggsreferanse(barn.vedleggreferanser())
         );
     }
 
@@ -107,7 +108,7 @@ public final class EngangsstønadMapperV2 {
             barn.antallBarn(),
             barn.foreldreansvarsdato(),
             barn.fødselsdatoer(),
-            List.of()
+            tilVedleggsreferanse(barn.vedleggreferanser())
         );
     }
 
@@ -117,7 +118,7 @@ public final class EngangsstønadMapperV2 {
             barn.adopsjonsdato(),
             barn.adopsjonAvEktefellesBarn(),
             barn.søkerAdopsjonAlene() != null && barn.søkerAdopsjonAlene(),
-            List.of(),
+            tilVedleggsreferanse(barn.vedleggreferanser()),
             barn.ankomstdato(),
             barn.fødselsdatoer()
         );

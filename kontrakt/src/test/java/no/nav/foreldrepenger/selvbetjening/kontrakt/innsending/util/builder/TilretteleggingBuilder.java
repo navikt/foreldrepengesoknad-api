@@ -1,7 +1,9 @@
 package no.nav.foreldrepenger.selvbetjening.kontrakt.innsending.util.builder;
 
 import java.time.LocalDate;
+import java.util.List;
 
+import no.nav.foreldrepenger.selvbetjening.kontrakt.innsending.dto.MutableVedleggReferanseDto;
 import no.nav.foreldrepenger.selvbetjening.kontrakt.innsending.dto.svangerskapspenger.ArbeidsforholdDto;
 import no.nav.foreldrepenger.selvbetjening.kontrakt.innsending.dto.svangerskapspenger.TilretteleggingDto;
 
@@ -12,6 +14,7 @@ public class TilretteleggingBuilder {
     private LocalDate behovForTilretteleggingFom;
     private LocalDate tilrettelagtArbeidFom;
     private LocalDate slutteArbeidFom;
+    private List<MutableVedleggReferanseDto> vedlegg;
 
     public static TilretteleggingBuilder hel(LocalDate behovForTilretteleggingFom, LocalDate tilrettelagtArbeidFom, ArbeidsforholdDto arbeidsforhold) {
         return new TilretteleggingBuilder(TilretteleggingDto.Type.HEL)
@@ -67,6 +70,11 @@ public class TilretteleggingBuilder {
         return this;
     }
 
+    public TilretteleggingBuilder medVedlegg(List<MutableVedleggReferanseDto> vedlegg) {
+        this.vedlegg = vedlegg;
+        return this;
+    }
+
     public TilretteleggingDto build() {
         return new TilretteleggingDto(
             type,
@@ -74,7 +82,8 @@ public class TilretteleggingBuilder {
             stillingsprosent,
             behovForTilretteleggingFom,
             tilrettelagtArbeidFom,
-            slutteArbeidFom
+            slutteArbeidFom,
+            vedlegg
         );
     }
 }

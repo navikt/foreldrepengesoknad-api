@@ -23,6 +23,7 @@ public record NæringDto(boolean harBlittYrkesaktivILøpetAvDeTreSisteFerdiglikn
                         @Digits(integer = 9, fraction = 0) int næringsinntekt,
                         @Valid @Size(max = 10) List<Virksomhetstype> næringstyper,
                         @Pattern(regexp = BARE_BOKSTAVER) String registrertILand,
+                        @Valid @Size(max = 15) List<@Valid MutableVedleggReferanseDto> vedlegg,
                         LocalDate oppstartsdato,
                         @Valid NæringsinntektInformasjonDto endringAvNæringsinntektInformasjon,
                         @NotNull @Pattern(regexp = FRITEKST) String navnPåNæringen,
@@ -32,5 +33,6 @@ public record NæringDto(boolean harBlittYrkesaktivILøpetAvDeTreSisteFerdiglikn
                         @Valid TilknyttetPersonDto revisor) {
     public NæringDto {
         næringstyper = Optional.ofNullable(næringstyper).orElse(emptyList());
+        vedlegg = Optional.ofNullable(vedlegg).orElse(emptyList());
     }
 }

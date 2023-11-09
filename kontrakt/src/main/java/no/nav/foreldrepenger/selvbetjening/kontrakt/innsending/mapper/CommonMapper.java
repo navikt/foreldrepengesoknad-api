@@ -38,6 +38,7 @@ import no.nav.foreldrepenger.selvbetjening.kontrakt.innsending.dto.AnnenInntektD
 import no.nav.foreldrepenger.selvbetjening.kontrakt.innsending.dto.BarnDto;
 import no.nav.foreldrepenger.selvbetjening.kontrakt.innsending.dto.FrilansInformasjonDto;
 import no.nav.foreldrepenger.selvbetjening.kontrakt.innsending.dto.FrilansoppdragDto;
+import no.nav.foreldrepenger.selvbetjening.kontrakt.innsending.dto.MutableVedleggReferanseDto;
 import no.nav.foreldrepenger.selvbetjening.kontrakt.innsending.dto.NæringDto;
 import no.nav.foreldrepenger.selvbetjening.kontrakt.innsending.dto.SøknadDto;
 import no.nav.foreldrepenger.selvbetjening.kontrakt.innsending.dto.TilknyttetPersonDto;
@@ -59,12 +60,23 @@ public final class CommonMapper {
 
     public static no.nav.foreldrepenger.common.domain.felles.Vedlegg tilVedlegg(VedleggDto vedlegg) {
         var vedleggMetadata = new VedleggMetaData(
-            new VedleggReferanse(vedlegg.getId().referanse()),
+            tilVedleggsreferanse(vedlegg.getId()),
             vedlegg.getInnsendingsType() != null ? InnsendingsType.valueOf(vedlegg.getInnsendingsType()) : null,
             vedlegg.getSkjemanummer() != null ? DokumentType.valueOf(vedlegg.getSkjemanummer()) : null,
             vedlegg.getBeskrivelse()
         );
         return new PåkrevdVedlegg(vedleggMetadata);
+    }
+
+    public static List<VedleggReferanse> tilVedleggsreferanse(List<MutableVedleggReferanseDto> vedleggsreferanser) {
+        return safeStream(vedleggsreferanser)
+                .distinct()
+                .map(CommonMapper::tilVedleggsreferanse)
+                .toList();
+    }
+
+    public static VedleggReferanse tilVedleggsreferanse(MutableVedleggReferanseDto vedleggsreferanse) {
+        return new VedleggReferanse(vedleggsreferanse.referanse());
     }
 
     static Medlemsskap tilMedlemskap(SøknadDto s) {
@@ -97,7 +109,7 @@ public final class CommonMapper {
             barn.antallBarn(),
             barn.fødselsdatoer(),
             barn.termindato(),
-            List.of()
+            tilVedleggsreferanse(barn.getAlleVedlegg())
         );
     }
 
@@ -106,7 +118,7 @@ public final class CommonMapper {
             barn.antallBarn(),
             barn.foreldreansvarsdato(),
             barn.fødselsdatoer(),
-            List.of()
+            tilVedleggsreferanse(barn.getAlleVedlegg())
         );
     }
 
@@ -115,7 +127,7 @@ public final class CommonMapper {
             barn.antallBarn(),
             barn.termindato(),
             barn.terminbekreftelseDato(),
-            List.of()
+            tilVedleggsreferanse(barn.getAlleVedlegg())
         );
     }
 
@@ -125,7 +137,7 @@ public final class CommonMapper {
             barn.adopsjonsdato(),
             barn.adopsjonAvEktefellesBarn(),
             barn.søkerAdopsjonAlene(),
-            List.of(),
+            tilVedleggsreferanse(barn.getAlleVedlegg()),
             barn.ankomstdato(),
             barn.fødselsdatoer()
         );
@@ -142,7 +154,7 @@ public final class CommonMapper {
         return new AnnenOpptjening(
             annenInntekt.type() != null ? AnnenOpptjeningType.valueOf(annenInntekt.type()) : null,
             new ÅpenPeriode(annenInntekt.tidsperiode().fom(), annenInntekt.tidsperiode().tom()),
-            List.of());
+            tilVedleggsreferanse(annenInntekt.vedlegg()));
     }
 
     private static List<UtenlandskArbeidsforhold> tilUtenlandsArbeidsforhold(List<AnnenInntektDto> andreInntekterSiste10Mnd) {
@@ -157,7 +169,7 @@ public final class CommonMapper {
         return new UtenlandskArbeidsforhold(
             annenInntekt.arbeidsgiverNavn(),
             new ÅpenPeriode(annenInntekt.tidsperiode().fom(), annenInntekt.tidsperiode().tom()),
-            List.of(),
+            tilVedleggsreferanse(annenInntekt.vedlegg()),
             land(annenInntekt.land())
         );
     }
@@ -207,7 +219,7 @@ public final class CommonMapper {
             selvstendig.oppstartsdato(),
             beskrivelseEndring,
             selvstendig.stillingsprosent() != null ? ProsentAndel.valueOf(selvstendig.stillingsprosent()) : null,
-            List.of()
+            tilVedleggsreferanse(selvstendig.vedlegg())
         );
     }
 

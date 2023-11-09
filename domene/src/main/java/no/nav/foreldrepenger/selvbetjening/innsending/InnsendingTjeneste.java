@@ -20,6 +20,7 @@ import no.nav.foreldrepenger.common.domain.Kvittering;
 import no.nav.foreldrepenger.selvbetjening.http.RetryAware;
 import no.nav.foreldrepenger.selvbetjening.innsending.pdf.PdfGenerator;
 import no.nav.foreldrepenger.selvbetjening.kontrakt.innsending.dto.Innsending;
+import no.nav.foreldrepenger.selvbetjening.kontrakt.innsending.dto.MutableVedleggReferanseDto;
 import no.nav.foreldrepenger.selvbetjening.kontrakt.innsending.dto.VedleggDto;
 import no.nav.foreldrepenger.selvbetjening.kontrakt.innsending.dto.ettersendelse.EttersendelseDto;
 import no.nav.foreldrepenger.selvbetjening.kontrakt.innsending.dto.ettersendelse.TilbakebetalingUttalelseDto;
@@ -76,8 +77,8 @@ public class InnsendingTjeneste implements RetryAware {
             e.brukerTekst());
     }
 
-    private static VedleggDto.Referanse id() {
-        return new VedleggDto.Referanse("V" + IDGENERATOR.nextLong());
+    private static MutableVedleggReferanseDto id() {
+        return new MutableVedleggReferanseDto("V" + IDGENERATOR.nextLong());
     }
 
     public void hentMellomlagredeFiler(List<VedleggDto> vedlegg) {

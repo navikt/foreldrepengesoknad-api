@@ -12,6 +12,7 @@ import jakarta.validation.constraints.Min;
 import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Pattern;
 import jakarta.validation.constraints.Size;
+import no.nav.foreldrepenger.selvbetjening.kontrakt.innsending.dto.MutableVedleggReferanseDto;
 import no.nav.foreldrepenger.selvbetjening.kontrakt.innsending.dto.ÅpenPeriodeDto;
 
 // TODO: Rydd opp
@@ -30,10 +31,12 @@ public record UttaksplanPeriodeDto(@NotNull UttaksplanPeriodeDto.Type type,
                                    boolean ønskerFlerbarnsdager,
                                    boolean ønskerSamtidigUttak,
                                    Boolean justeresVedFødsel,
-                                   @Valid @Size(max = 15) List<@Pattern(regexp = FRITEKST) String> orgnumre) {
+                                   @Valid @Size(max = 15) List<@Pattern(regexp = FRITEKST) String> orgnumre,
+                                   @Valid @Size(max = 20) List<@Valid MutableVedleggReferanseDto> vedlegg) {
 
     public UttaksplanPeriodeDto {
         orgnumre = Optional.ofNullable(orgnumre).orElse(List.of());
+        vedlegg = Optional.ofNullable(vedlegg).orElse(List.of());
     }
 
     public enum Type {

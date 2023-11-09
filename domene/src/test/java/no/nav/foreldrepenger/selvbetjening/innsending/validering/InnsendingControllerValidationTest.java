@@ -76,6 +76,7 @@ class InnsendingControllerValidationTest {
                 .contentType(MediaType.APPLICATION_JSON)
                 .content(mapper.writeValueAsString(sf)
                     .replace(annenInntektFrontend.arbeidsgiverNavn(), "Ulovlig tegn [≈≈|£©≈[™")
+                    .replaceFirst(annenInntektFrontend.vedlegg().get(0).referanse(), "Also ILLEGA @¨¨¨¨ö~~π<>")
                 ))
             .andExpect(status().isBadRequest())
             .andReturn();
@@ -83,7 +84,7 @@ class InnsendingControllerValidationTest {
         assertThat(result.getResolvedException()).isInstanceOf(MethodArgumentNotValidException.class);
         var error = (MethodArgumentNotValidException) result.getResolvedException();
         assertThat(error).isNotNull();
-        assertThat(error.getBindingResult().getFieldErrors()).hasSize(1);
+        assertThat(error.getBindingResult().getFieldErrors()).hasSize(2);
     }
 
 
@@ -116,6 +117,7 @@ class InnsendingControllerValidationTest {
         var result = mvc.perform(post(InnsendingController.INNSENDING_CONTROLLER_PATH)
                 .contentType(MediaType.APPLICATION_JSON)
                 .content(mapper.writeValueAsString(sf)
+                    .replaceFirst(tilrettelegging.vedlegg().get(0).referanse(), "Also ILLEGA @¨¨¨¨ö~~π<>")
                     .replace(tilrettelegging.arbeidsforhold().id(), "Ikke lovlig \u0085")
                 ))
             .andExpect(status().isBadRequest())
@@ -124,7 +126,7 @@ class InnsendingControllerValidationTest {
         assertThat(result.getResolvedException()).isInstanceOf(MethodArgumentNotValidException.class);
         var error = (MethodArgumentNotValidException) result.getResolvedException();
         assertThat(error).isNotNull();
-        assertThat(error.getBindingResult().getFieldErrors()).hasSize(1);
+        assertThat(error.getBindingResult().getFieldErrors()).hasSize(2);
     }
 
 

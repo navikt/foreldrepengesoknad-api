@@ -72,6 +72,7 @@ public final class OpptjeningMaler {
                 næringsInntekt.intValue(),
                 List.of(Virksomhetstype.ANNEN),
                 CountryCode.NO.getAlpha3(),
+                List.of(),
                 LocalDate.now().minusYears(4),
                 endringAvNæring,
                 "Navnet på Næring",
@@ -89,7 +90,8 @@ public final class OpptjeningMaler {
                 landKode.getAlpha2(),
                 "elskap AS",
                 new ÅpenPeriodeDto(LocalDate.now().minusYears(4), LocalDate.now()),
-                false
+                false,
+                List.of()
         );
     }
 

@@ -7,10 +7,7 @@ import java.util.Objects;
 
 import com.fasterxml.jackson.annotation.JsonCreator;
 
-import com.fasterxml.jackson.annotation.JsonValue;
-
 import jakarta.validation.Valid;
-import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Pattern;
 
 public class VedleggDto {
@@ -20,7 +17,7 @@ public class VedleggDto {
     private final String beskrivelse;
 
     @Valid
-    private final VedleggDto.Referanse id;
+    private final MutableVedleggReferanseDto id;
     @Pattern(regexp = "^[\\p{Digit}\\p{L}_]*$")
     private final String innsendingsType;
     @Pattern(regexp = "^[\\p{Digit}\\p{L}]*$")
@@ -29,12 +26,12 @@ public class VedleggDto {
     private final String uuid;
     private final URI url;
 
-    public VedleggDto(byte[] content, String beskrivelse, Referanse id, String skjemanummer) {
+    public VedleggDto(byte[] content, String beskrivelse, MutableVedleggReferanseDto id, String skjemanummer) {
         this(content, beskrivelse, id, null, skjemanummer, null, null);
     }
 
     @JsonCreator
-    public VedleggDto(byte[] content, String beskrivelse, Referanse id, String innsendingsType, String skjemanummer, String uuid, URI url) {
+    public VedleggDto(byte[] content, String beskrivelse, MutableVedleggReferanseDto id, String innsendingsType, String skjemanummer, String uuid, URI url) {
         this.content = content;
         this.beskrivelse = beskrivelse;
         this.id = id;
@@ -56,7 +53,7 @@ public class VedleggDto {
         return beskrivelse;
     }
 
-    public Referanse getId() {
+    public MutableVedleggReferanseDto getId() {
         return id;
     }
 
@@ -95,8 +92,5 @@ public class VedleggDto {
     public String toString() {
         return "VedleggFrontend{" + "beskrivelse='" + beskrivelse + '\'' + ", id=" + id + ", innsendingsType='" + innsendingsType + '\''
             + ", skjemanummer='" + skjemanummer + '\'' + ", uuid='" + uuid + '\'' + ", url=" + url + '}';
-    }
-
-    public record Referanse(@JsonValue @NotNull @Pattern(regexp = "^[\\p{Digit}\\p{L}-_]*$") String referanse) {
     }
 }
