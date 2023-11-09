@@ -42,7 +42,6 @@ import no.nav.foreldrepenger.selvbetjening.kontrakt.innsending.dto.AnnenInntektD
 import no.nav.foreldrepenger.selvbetjening.kontrakt.innsending.dto.BarnDto;
 import no.nav.foreldrepenger.selvbetjening.kontrakt.innsending.dto.FrilansInformasjonDto;
 import no.nav.foreldrepenger.selvbetjening.kontrakt.innsending.dto.FrilansoppdragDto;
-import no.nav.foreldrepenger.selvbetjening.kontrakt.innsending.dto.MutableVedleggReferanseDto;
 import no.nav.foreldrepenger.selvbetjening.kontrakt.innsending.dto.NæringDto;
 import no.nav.foreldrepenger.selvbetjening.kontrakt.innsending.dto.SøknadDto;
 import no.nav.foreldrepenger.selvbetjening.kontrakt.innsending.dto.TilknyttetPersonDto;
@@ -172,7 +171,7 @@ public final class CommonMapper {
             barn.antallBarn(),
             barn.fødselsdatoer(),
             barn.termindato(),
-            tilVedleggsreferanse(barn.getAlleVedlegg())
+            List.of()
         );
     }
 
@@ -181,7 +180,7 @@ public final class CommonMapper {
             barn.antallBarn(),
             barn.foreldreansvarsdato(),
             barn.fødselsdatoer(),
-            tilVedleggsreferanse(barn.getAlleVedlegg())
+            List.of()
         );
     }
 
@@ -190,7 +189,7 @@ public final class CommonMapper {
             barn.antallBarn(),
             barn.termindato(),
             barn.terminbekreftelseDato(),
-            tilVedleggsreferanse(barn.getAlleVedlegg())
+            List.of()
         );
     }
 
@@ -200,7 +199,7 @@ public final class CommonMapper {
             barn.adopsjonsdato(),
             barn.adopsjonAvEktefellesBarn(),
             barn.søkerAdopsjonAlene(),
-            tilVedleggsreferanse(barn.getAlleVedlegg()),
+            List.of(),
             barn.ankomstdato(),
             barn.fødselsdatoer()
         );
@@ -217,7 +216,7 @@ public final class CommonMapper {
         return new AnnenOpptjening(
             annenInntekt.type() != null ? AnnenOpptjeningType.valueOf(annenInntekt.type()) : null,
             new ÅpenPeriode(annenInntekt.tidsperiode().fom(), annenInntekt.tidsperiode().tom()),
-            tilVedleggsreferanse(annenInntekt.vedlegg()));
+            List.of());
     }
 
     private static List<UtenlandskArbeidsforhold> tilUtenlandsArbeidsforhold(List<AnnenInntektDto> andreInntekterSiste10Mnd) {
@@ -232,7 +231,7 @@ public final class CommonMapper {
         return new UtenlandskArbeidsforhold(
             annenInntekt.arbeidsgiverNavn(),
             new ÅpenPeriode(annenInntekt.tidsperiode().fom(), annenInntekt.tidsperiode().tom()),
-            tilVedleggsreferanse(annenInntekt.vedlegg()),
+            List.of(),
             land(annenInntekt.land())
         );
     }
@@ -282,7 +281,7 @@ public final class CommonMapper {
             selvstendig.oppstartsdato(),
             beskrivelseEndring,
             selvstendig.stillingsprosent() != null ? ProsentAndel.valueOf(selvstendig.stillingsprosent()) : null,
-            tilVedleggsreferanse(selvstendig.vedlegg())
+            List.of()
         );
     }
 

@@ -43,13 +43,7 @@ class VedleggsHåndteringTjenesteTest {
         VedleggsHåndteringTjeneste.fjernDupliserteVedleggFraInnsending(søknadDupliserteVedleggFjernet);
 
         assertThat(søknadOrginal.vedlegg()).hasSize(4);
-        assertThat(søknadOrginal.barn().omsorgsovertakelse().stream()
-                .distinct()
-                .count()).isEqualTo(3);
         assertThat(søknadDupliserteVedleggFjernet.vedlegg()).hasSize(2);
-        assertThat(søknadDupliserteVedleggFjernet.barn().omsorgsovertakelse().stream()
-                .distinct()
-                .count()).isEqualTo(1);
     }
 
     @Test

@@ -2,12 +2,8 @@ package no.nav.foreldrepenger.selvbetjening.kontrakt.innsending.v2.dto;
 
 import static com.fasterxml.jackson.annotation.JsonTypeInfo.Id.NAME;
 
-import java.util.List;
-
 import com.fasterxml.jackson.annotation.JsonSubTypes;
 import com.fasterxml.jackson.annotation.JsonTypeInfo;
-
-import no.nav.foreldrepenger.selvbetjening.kontrakt.innsending.dto.MutableVedleggReferanseDto;
 
 @JsonTypeInfo(use = NAME, property = "type", visible = true)
 @JsonSubTypes({
@@ -18,5 +14,4 @@ import no.nav.foreldrepenger.selvbetjening.kontrakt.innsending.dto.MutableVedleg
 })
 public interface BarnDto {
     int antallBarn();
-    List<MutableVedleggReferanseDto> vedleggreferanser();
 }
