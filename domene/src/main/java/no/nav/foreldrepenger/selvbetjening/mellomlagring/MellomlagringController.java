@@ -27,7 +27,6 @@ import org.springframework.web.multipart.MultipartFile;
 
 import jakarta.validation.Valid;
 import jakarta.validation.constraints.NotEmpty;
-import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Pattern;
 import jakarta.validation.constraints.Size;
 import no.nav.foreldrepenger.selvbetjening.http.ProtectedRestController;
@@ -83,7 +82,7 @@ public class MellomlagringController {
 
     @DeleteMapping("/vedlegg")
     @ResponseStatus(NO_CONTENT)
-    public void slettVedlegg(@Valid @Size(max = 1) List<@Pattern(regexp = FRITEKST) @NotNull @NotEmpty String> uuid) {
+    public void slettVedlegg(@Valid @RequestBody @Size(max = 1) List<@Pattern(regexp = FRITEKST) @NotEmpty String> uuid) {
         uuid.forEach(mellomlagring::slettKryptertVedlegg);
     }
 
