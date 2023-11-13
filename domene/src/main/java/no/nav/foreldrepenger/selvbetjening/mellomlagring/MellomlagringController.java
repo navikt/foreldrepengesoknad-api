@@ -82,7 +82,7 @@ public class MellomlagringController {
 
     @DeleteMapping("/vedlegg")
     @ResponseStatus(NO_CONTENT)
-    public void slettVedlegg(@Valid @RequestBody @Size(max = 1) List<@Pattern(regexp = FRITEKST) @NotEmpty String> uuid) {
+    public void slettVedlegg(@Valid @RequestBody @Size(min = 1) List<@Pattern(regexp = FRITEKST) @NotEmpty String> uuid) {
         uuid.forEach(mellomlagring::slettKryptertVedlegg);
     }
 
