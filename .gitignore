@@ -18,4 +18,3 @@ target
 *.log
 reports/
 .DS_Store
-.java-version
