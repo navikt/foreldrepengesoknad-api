@@ -12,9 +12,12 @@ import static org.springframework.http.HttpStatus.PAYLOAD_TOO_LARGE;
 import static org.springframework.http.HttpStatus.UNAUTHORIZED;
 import static org.springframework.http.HttpStatus.UNPROCESSABLE_ENTITY;
 
+import java.io.EOFException;
 import java.util.Optional;
+import java.util.Set;
 
 import org.apache.catalina.connector.ClientAbortException;
+import org.apache.tomcat.util.http.fileupload.impl.IOFileUploadException;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.http.HttpHeaders;
@@ -116,9 +119,22 @@ public class ApiExceptionHandler extends ResponseEntityExceptionHandler {
         return logAndHandle(UNPROCESSABLE_ENTITY, e, req);
     }
 
-    @ExceptionHandler({ MultipartException.class, MaxUploadSizeExceededException.class, AttachmentTooLargeException.class, AttachmentsTooLargeException.class })
+    @ExceptionHandler({ AttachmentTooLargeException.class, AttachmentsTooLargeException.class })
     public ResponseEntity<Object> handleTooLargeAttchment(Exception e, WebRequest req) {
         return logAndHandle(PAYLOAD_TOO_LARGE, e, req);
+    }
+
+    @ExceptionHandler({ MultipartException.class })
+    public ResponseEntity<Object> handleMultipartException(Exception e, WebRequest req) {
+        final var networkIssues = Set.of(IOFileUploadException.class, ClientAbortException.class, EOFException.class);
+        var mostSpecificCause = getMostSpecificCause(e);
+        if (networkIssues.contains(mostSpecificCause.getClass())) {
+            return catchAll(e, req);
+        } else if (mostSpecificCause instanceof MaxUploadSizeExceededException) {
+            return handleTooLargeAttchment(e, req);
+        } else {
+            return logAndHandle(UNPROCESSABLE_ENTITY, e, req);
+        }
     }
 
     @ExceptionHandler

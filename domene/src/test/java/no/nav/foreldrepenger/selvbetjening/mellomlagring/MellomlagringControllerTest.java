@@ -1,9 +1,14 @@
 package no.nav.foreldrepenger.selvbetjening.mellomlagring;
 
 import static org.assertj.core.api.Assertions.assertThat;
+import static org.mockito.ArgumentMatchers.any;
+import static org.mockito.Mockito.doThrow;
+import static org.springframework.http.MediaType.MULTIPART_FORM_DATA_VALUE;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.multipart;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
+import java.io.EOFException;
 import java.util.UUID;
 
 import org.junit.jupiter.api.Test;
@@ -12,8 +17,11 @@ import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.context.annotation.Import;
 import org.springframework.http.MediaType;
+import org.springframework.mock.web.MockMultipartFile;
 import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.web.servlet.MockMvc;
+import org.springframework.util.unit.DataSize;
+import org.springframework.web.multipart.MultipartException;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 
@@ -21,6 +29,7 @@ import jakarta.validation.ConstraintViolationException;
 import no.nav.foreldrepenger.common.util.TokenUtil;
 import no.nav.foreldrepenger.selvbetjening.config.JacksonConfiguration;
 import no.nav.foreldrepenger.selvbetjening.error.ApiExceptionHandler;
+import no.nav.foreldrepenger.selvbetjening.vedlegg.AttachmentTooLargeException;
 import no.nav.foreldrepenger.selvbetjening.vedlegg.Image2PDFConverter;
 
 @Import({MellomlagringController.class, ApiExceptionHandler.class})
@@ -29,7 +38,7 @@ import no.nav.foreldrepenger.selvbetjening.vedlegg.Image2PDFConverter;
     JacksonConfiguration.class,
     Image2PDFConverter.class
 })
-class MellomlagringControllerInputValideringTest {
+class MellomlagringControllerTest {
 
     @Autowired
     private MockMvc mvc;
@@ -39,6 +48,9 @@ class MellomlagringControllerInputValideringTest {
 
     @MockBean
     private KryptertMellomlagring kryptertMellomlagring;
+
+    @MockBean
+    private Image2PDFConverter converter;
 
     @MockBean
     private TokenUtil tokenUtil;
@@ -62,6 +74,26 @@ class MellomlagringControllerInputValideringTest {
             .andReturn();
 
         assertThat(result.getResolvedException()).isInstanceOf(ConstraintViolationException.class);
+    }
+
+    @Test
+    void skalMappeNettverksrelatertExceptionTilGeneriskException() throws Exception {
+        var wrappedConnectivityException = new MultipartException("simulert wrapped connectivity exception", new EOFException());
+        doThrow(wrappedConnectivityException).when(converter).convert(any());
+        var file = new MockMultipartFile("vedlegg", "filename.pdf", MULTIPART_FORM_DATA_VALUE, "file content".getBytes());
+
+        mvc.perform(multipart(MellomlagringController.REST_STORAGE + "/vedlegg").file(file))
+            .andExpect(status().isInternalServerError())
+            .andReturn();
+    }
+
+    @Test
+    void skalMappeAttachmentsTooLargeExceptionTil413() throws Exception {
+        doThrow(new AttachmentTooLargeException(DataSize.ofMegabytes(2), DataSize.ofMegabytes(1))).when(converter).convert(any());
+        var file = new MockMultipartFile("vedlegg", "filename.pdf", MULTIPART_FORM_DATA_VALUE, "file content".getBytes());
+        mvc.perform(multipart(MellomlagringController.REST_STORAGE + "/vedlegg").file(file))
+            .andExpect(status().isPayloadTooLarge())
+            .andReturn();
     }
 
 }
