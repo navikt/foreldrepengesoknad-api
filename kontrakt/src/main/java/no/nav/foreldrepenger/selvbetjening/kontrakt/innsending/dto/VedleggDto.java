@@ -3,12 +3,16 @@ package no.nav.foreldrepenger.selvbetjening.kontrakt.innsending.dto;
 import static no.nav.foreldrepenger.common.domain.validation.InputValideringRegex.FRITEKST;
 
 import java.net.URI;
+import java.util.List;
 import java.util.Objects;
 
 import com.fasterxml.jackson.annotation.JsonCreator;
 
 import jakarta.validation.Valid;
+import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Pattern;
+import jakarta.validation.constraints.Size;
+import no.nav.foreldrepenger.selvbetjening.kontrakt.innsending.dto.svangerskapspenger.ArbeidsforholdDto;
 
 public class VedleggDto {
 
@@ -16,6 +20,12 @@ public class VedleggDto {
     @Pattern(regexp = FRITEKST)
     private final String beskrivelse;
 
+    @Pattern(regexp = FRITEKST)
+    private final String filename;
+    @Valid
+    private final Dokumenterer hvaDokumentererVedlegg;
+
+    @Deprecated
     @Valid
     private final MutableVedleggReferanseDto id;
     @Pattern(regexp = "^[\\p{Digit}\\p{L}_]*$")
@@ -24,14 +34,17 @@ public class VedleggDto {
     private final String skjemanummer;
     @Pattern(regexp = FRITEKST)
     private final String uuid;
+    @Deprecated
     private final URI url;
 
+
     public VedleggDto(byte[] content, String beskrivelse, MutableVedleggReferanseDto id, String skjemanummer) {
-        this(content, beskrivelse, id, null, skjemanummer, null, null);
+        this(content, beskrivelse, id, null, skjemanummer, null, null, null, null);
     }
 
     @JsonCreator
-    public VedleggDto(byte[] content, String beskrivelse, MutableVedleggReferanseDto id, String innsendingsType, String skjemanummer, String uuid, URI url) {
+    public VedleggDto(byte[] content, String beskrivelse, MutableVedleggReferanseDto id, String innsendingsType, String skjemanummer, String uuid, URI url, String filename,
+                      Dokumenterer hvaDokumentererVedlegg) {
         this.content = content;
         this.beskrivelse = beskrivelse;
         this.id = id;
@@ -39,6 +52,8 @@ public class VedleggDto {
         this.skjemanummer = skjemanummer;
         this.uuid = uuid;
         this.url = url;
+        this.filename = filename;
+        this.hvaDokumentererVedlegg = hvaDokumentererVedlegg;
     }
 
     public byte[] getContent() {
@@ -51,6 +66,10 @@ public class VedleggDto {
 
     public String getBeskrivelse() {
         return beskrivelse;
+    }
+
+    public String getFilename() {
+        return filename;
     }
 
     public MutableVedleggReferanseDto getId() {
@@ -73,6 +92,10 @@ public class VedleggDto {
         return url;
     }
 
+    public Dokumenterer getHvaDokumentererVedlegg() {
+        return hvaDokumentererVedlegg;
+    }
+
     @Override
     public boolean equals(Object o) {
         if (this == o)
@@ -92,5 +115,14 @@ public class VedleggDto {
     public String toString() {
         return "VedleggFrontend{" + "beskrivelse='" + beskrivelse + '\'' + ", id=" + id + ", innsendingsType='" + innsendingsType + '\''
             + ", skjemanummer='" + skjemanummer + '\'' + ", uuid='" + uuid + '\'' + ", url=" + url + '}';
+    }
+
+    public record Dokumenterer(@NotNull Type type,
+                               @Valid ArbeidsforholdDto arbeidsforhold,
+                               @Valid @Size(max = 100) List<@Valid @NotNull ÅpenPeriodeDto> perioder) {
+        public enum Type {
+            UTTAK,
+            TILRETTELEGGING,
+        }
     }
 }

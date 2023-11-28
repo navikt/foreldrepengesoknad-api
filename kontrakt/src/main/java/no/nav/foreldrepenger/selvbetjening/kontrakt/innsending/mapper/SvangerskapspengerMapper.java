@@ -113,7 +113,7 @@ final class SvangerskapspengerMapper {
         );
     }
 
-    private static Arbeidsforhold tilArbeidsforhold(ArbeidsforholdDto arbeidsforhold) {
+    public static Arbeidsforhold tilArbeidsforhold(ArbeidsforholdDto arbeidsforhold) {
         return switch (arbeidsforhold.type()) {
             case VIRKSOMHET -> tilVirksomhet(arbeidsforhold);
             case PRIVAT -> tilPrivatArbeidsgiver(arbeidsforhold);
