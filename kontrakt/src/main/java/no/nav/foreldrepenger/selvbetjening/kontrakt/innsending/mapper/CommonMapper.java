@@ -67,17 +67,24 @@ public final class CommonMapper {
     public static no.nav.foreldrepenger.common.domain.felles.Vedlegg tilVedlegg(VedleggDto vedlegg) {
         var vedleggMetadata = new VedleggMetaData(
             tilVedleggsreferanse(vedlegg.getId()),
-            vedlegg.getUuid() != null ? UUID.fromString(vedlegg.getUuid()) : null,
+            tilUuid(vedlegg.getUuid()),
             vedlegg.getInnsendingsType() != null ? InnsendingsType.valueOf(vedlegg.getInnsendingsType()) : null,
             vedlegg.getSkjemanummer() != null ? DokumentType.valueOf(vedlegg.getSkjemanummer()) : null,
             vedlegg.getFilename(),
-            tilHvaDokumentererVedlegg(vedlegg.getHvaDokumentererVedlegg()),
+            tilDokumenterer(vedlegg.getDokumenterer()),
             vedlegg.getBeskrivelse()
         );
         return new PåkrevdVedlegg(vedleggMetadata);
     }
 
-    private static VedleggMetaData.Dokumenterer tilHvaDokumentererVedlegg(VedleggDto.Dokumenterer hvaDokumentererVedlegg) {
+    private static UUID tilUuid(String uuid) {
+        if (uuid == null) {
+            return UUID.randomUUID();
+        }
+        return UUID.fromString(uuid);
+    }
+
+    private static VedleggMetaData.Dokumenterer tilDokumenterer(VedleggDto.Dokumenterer hvaDokumentererVedlegg) {
         if (hvaDokumentererVedlegg == null) {
             return null;
         }

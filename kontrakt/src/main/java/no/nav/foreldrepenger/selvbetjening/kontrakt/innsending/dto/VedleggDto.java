@@ -23,7 +23,7 @@ public class VedleggDto {
     @Pattern(regexp = FRITEKST)
     private final String filename;
     @Valid
-    private final Dokumenterer hvaDokumentererVedlegg;
+    private final Dokumenterer dokumenterer;
 
     @Deprecated
     @Valid
@@ -44,7 +44,7 @@ public class VedleggDto {
 
     @JsonCreator
     public VedleggDto(byte[] content, String beskrivelse, MutableVedleggReferanseDto id, String innsendingsType, String skjemanummer, String uuid, URI url, String filename,
-                      Dokumenterer hvaDokumentererVedlegg) {
+                      Dokumenterer dokumenterer) {
         this.content = content;
         this.beskrivelse = beskrivelse;
         this.id = id;
@@ -53,7 +53,7 @@ public class VedleggDto {
         this.uuid = uuid;
         this.url = url;
         this.filename = filename;
-        this.hvaDokumentererVedlegg = hvaDokumentererVedlegg;
+        this.dokumenterer = dokumenterer;
     }
 
     public byte[] getContent() {
@@ -92,8 +92,8 @@ public class VedleggDto {
         return url;
     }
 
-    public Dokumenterer getHvaDokumentererVedlegg() {
-        return hvaDokumentererVedlegg;
+    public Dokumenterer getDokumenterer() {
+        return dokumenterer;
     }
 
     @Override
