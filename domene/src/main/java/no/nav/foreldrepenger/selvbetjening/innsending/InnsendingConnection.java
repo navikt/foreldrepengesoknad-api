@@ -37,6 +37,7 @@ public class InnsendingConnection extends AbstractRestConnection {
     private static final String BODY_PART_NAME = "body";
     private static final String VEDLEGG_PART_NAME = "vedlegg";
     private static final String VEDLEGG_REFERANSE_HEADER = "vedleggsreferanse";
+    private static final String VEDLEGG_UUID_HEADER = "vedleggsid";
 
     private final ObjectMapper mapper;
     private final Environment env;
@@ -86,10 +87,17 @@ public class InnsendingConnection extends AbstractRestConnection {
             .filter(v -> v.getContent() != null)
             .forEach(v -> {
                 guardIkkePDF(v);
-                builder.part(VEDLEGG_PART_NAME, v.getContent(), APPLICATION_PDF).headers(headers -> headers.set(VEDLEGG_REFERANSE_HEADER, v.getId().referanse()));
+                builder.part(VEDLEGG_PART_NAME, v.getContent(), APPLICATION_PDF).headers(headers -> headers(v, headers));
             });
 
         return new HttpEntity<>(builder.build(), headers());
+    }
+
+    private static void headers(VedleggDto v, HttpHeaders headers) {
+        headers.set(VEDLEGG_REFERANSE_HEADER, v.getId().referanse());
+        if (v.getUuid() != null) {
+            headers.set(VEDLEGG_UUID_HEADER, v.getUuid());
+        }
     }
 
     private static void guardIkkePDF(VedleggDto vedlegg) {
