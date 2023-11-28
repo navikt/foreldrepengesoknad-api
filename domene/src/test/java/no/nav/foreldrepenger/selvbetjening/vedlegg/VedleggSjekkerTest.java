@@ -7,7 +7,6 @@ import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.doThrow;
 import static org.mockito.Mockito.when;
 
-import java.net.URI;
 import java.util.List;
 import java.util.Optional;
 
@@ -27,7 +26,6 @@ import no.nav.foreldrepenger.selvbetjening.config.JacksonConfiguration;
 import no.nav.foreldrepenger.selvbetjening.innsending.InnsendingConnection;
 import no.nav.foreldrepenger.selvbetjening.innsending.InnsendingTjeneste;
 import no.nav.foreldrepenger.selvbetjening.innsending.pdf.PdfGenerator;
-import no.nav.foreldrepenger.selvbetjening.kontrakt.innsending.dto.MutableVedleggReferanseDto;
 import no.nav.foreldrepenger.selvbetjening.kontrakt.innsending.dto.VedleggDto;
 import no.nav.foreldrepenger.selvbetjening.mellomlagring.Attachment;
 import no.nav.foreldrepenger.selvbetjening.mellomlagring.KryptertMellomlagring;
@@ -139,11 +137,10 @@ class VedleggSjekkerTest {
         assertThat(vedleggene).hasSize(1);
         assertThat(vedleggene.get(0).getContent()).isEqualTo(nyVedleggHeltLik.getContent());
         assertThat(vedleggene.get(0).getBeskrivelse()).isEqualTo(nyVedleggHeltLik.getBeskrivelse());
-        assertThat(vedleggene.get(0).getId()).isEqualTo(nyVedleggHeltLik.getId());
+        assertThat(vedleggene.get(0).getUuid()).isEqualTo(nyVedleggHeltLik.getUuid());
         assertThat(vedleggene.get(0).getInnsendingsType()).isEqualTo(nyVedleggHeltLik.getInnsendingsType()).isNull();
         assertThat(vedleggene.get(0).getSkjemanummer()).isEqualTo(nyVedleggHeltLik.getSkjemanummer());
         assertThat(vedleggene.get(0).getUuid()).isEqualTo(nyVedleggHeltLik.getUuid());
-        assertThat(vedleggene.get(0).getUrl()).isEqualTo(nyVedleggHeltLik.getUrl());
     }
 
     private static Attachment attachment(int megabytes) {
@@ -154,7 +151,7 @@ class VedleggSjekkerTest {
     private static VedleggDto vedlegg(int megabytes) {
         var uuid = "802e2ce7-8106-46cf-afdb-2aecc2b6de7c";
         var content = new byte[((int) DataSize.ofMegabytes(megabytes).toBytes())];
-        return new VedleggDto(content, "En stoooor pdf!", new MutableVedleggReferanseDto("V00001"), null, "I000038", uuid, URI.create("https://foreldrepengesoknad-api.intern.dev.nav.no/" + uuid), "fil.pdf", null);
+        return new VedleggDto(content, "En stoooor pdf!", null, "I000038", uuid, "fil.pdf", null);
     }
 
     public static byte[] fraResource(String classPathResource) {

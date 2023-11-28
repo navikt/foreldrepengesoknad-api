@@ -88,8 +88,7 @@ final class SvangerskapspengerMapper {
         return new IngenTilrettelegging(
             tilArbeidsforhold(tilrettelegging.arbeidsforhold()),
             tilrettelegging.behovForTilretteleggingFom(),
-            tilrettelegging.slutteArbeidFom(),
-            List.of()
+            tilrettelegging.slutteArbeidFom()
         );
     }
 
@@ -98,8 +97,7 @@ final class SvangerskapspengerMapper {
             tilArbeidsforhold(tilrettelegging.arbeidsforhold()),
             tilrettelegging.behovForTilretteleggingFom(),
             tilrettelegging.tilrettelagtArbeidFom(),
-            tilrettelegging.stillingsprosent() != null ? ProsentAndel.valueOf(tilrettelegging.stillingsprosent()) : null,
-            List.of()
+            tilrettelegging.stillingsprosent() != null ? ProsentAndel.valueOf(tilrettelegging.stillingsprosent()) : null
         );
     }
 
@@ -107,8 +105,7 @@ final class SvangerskapspengerMapper {
         return new HelTilrettelegging(
             tilArbeidsforhold(tilrettelegging.arbeidsforhold()),
             tilrettelegging.behovForTilretteleggingFom(),
-            tilrettelegging.tilrettelagtArbeidFom(),
-            List.of()
+            tilrettelegging.tilrettelagtArbeidFom()
         );
     }
 

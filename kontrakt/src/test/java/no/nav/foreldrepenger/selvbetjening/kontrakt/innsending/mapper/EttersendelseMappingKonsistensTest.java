@@ -3,7 +3,6 @@ package no.nav.foreldrepenger.selvbetjening.kontrakt.innsending.mapper;
 import static no.nav.foreldrepenger.common.domain.felles.InnsendingsType.LASTET_OPP;
 import static org.assertj.core.api.Assertions.assertThat;
 
-import java.net.URI;
 import java.util.List;
 import java.util.UUID;
 
@@ -26,11 +25,9 @@ class EttersendelseMappingKonsistensTest {
             new VedleggDto(
                 new byte[] {52, 12, 12, 32, 32, 32, 31, 2},
                 "beskrivelse",
-                new VedleggDto.Referanse("123456789"),
                 LASTET_OPP.name(),
                 "I000044",
                 UUID.randomUUID().toString(),
-                URI.create("https://foreldrepengesoknad-api.intern.dev.nav.no/rest/storage/vedlegg/b9974360-6c07-4b9d-acac-14f0f417d200"),
                 "ettersending.jpg",
                 null)
         );
@@ -48,7 +45,7 @@ class EttersendelseMappingKonsistensTest {
             .extracting(Vedlegg::getDokumentType)
             .containsExactly(DokumentType.I000044);
         var metadataVedlegg = ettersendelse.vedlegg().get(0).getMetadata();
-        assertThat(metadataVedlegg.id().referanse()).isEqualTo(vedleggerDto.get(0).getId().referanse());
+        assertThat(metadataVedlegg.uuid().toString()).isEqualTo(vedleggerDto.get(0).getUuid());
         assertThat(metadataVedlegg.dokumentType()).isEqualTo(DokumentType.I000044);
     }
 }

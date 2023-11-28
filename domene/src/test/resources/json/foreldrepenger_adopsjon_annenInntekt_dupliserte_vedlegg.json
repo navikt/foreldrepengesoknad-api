@@ -106,7 +106,7 @@
             "innsendingsType": "omsorgsovertakelse",
             "uploaded": true,
             "url": "https://foreldrepengesoknad-api.intern.dev.nav.no/rest/storage/vedlegg/7005c937-8114-4af4-b19c-18143db92025",
-            "uuid": "7005c937-8114-4af4-b19c-18143db92025"
+            "uuid": "a005c937-8114-4af4-b19c-18143db92025"
         },
         {
             "file": {},
@@ -119,7 +119,7 @@
             "innsendingsType": "omsorgsovertakelse",
             "uploaded": true,
             "url": "https://foreldrepengesoknad-api.intern.dev.nav.no/rest/storage/vedlegg/7005c937-8114-4af4-b19c-18143db92025",
-            "uuid": "7005c937-8114-4af4-b19c-18143db92025"
+            "uuid": "b00c937-8114-4af4-b19c-18143db92025"
         },
         {
             "file": {},
@@ -132,7 +132,7 @@
             "innsendingsType": "omsorgsovertakelse",
             "uploaded": true,
             "url": "https://foreldrepengesoknad-api.intern.dev.nav.no/rest/storage/vedlegg/7005c937-8114-4af4-b19c-18143db92025",
-            "uuid": "7005c937-8114-4af4-b19c-18143db92025"
+            "uuid": "c005c937-8114-4af4-b19c-18143db92025"
         }
     ]
 }

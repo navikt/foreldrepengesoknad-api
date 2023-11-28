@@ -4,10 +4,10 @@ import static org.assertj.core.api.Assertions.assertThat;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.UUID;
 
 import org.junit.jupiter.api.Test;
 
-import no.nav.foreldrepenger.selvbetjening.kontrakt.innsending.dto.MutableVedleggReferanseDto;
 import no.nav.foreldrepenger.selvbetjening.kontrakt.innsending.dto.VedleggDto;
 
 class VedlegglistestørrelseValidatorTest {
@@ -45,13 +45,13 @@ class VedlegglistestørrelseValidatorTest {
         List<VedleggDto> sendSenere = new ArrayList<>();
 
         while (sendSenere.size() < sendSenereVedlegg) {
-            var nyttVedlegg = new VedleggDto(null, "Beskrivelse", new MutableVedleggReferanseDto("Id"), "SEND_SENERE", "Skjemanummer", "xyz", null, "fil.pdf", null);
+            var nyttVedlegg = new VedleggDto(null, "Beskrivelse", "SEND_SENERE", "Skjemanummer", UUID.randomUUID().toString(), "fil.pdf", null);
             sendSenere.add(nyttVedlegg);
         }
 
         List<VedleggDto> opplastet = new ArrayList<>();
         while (opplastet.size() < opplastetVedlegg) {
-            var nyttVedlegg = new VedleggDto(null, "Beskrivelse", new MutableVedleggReferanseDto("Id"), null, "Skjemanummer", "xyz", null, "filnavn.png", null);
+            var nyttVedlegg = new VedleggDto(null, "Beskrivelse", null, "Skjemanummer", UUID.randomUUID().toString(), "filnavn.png", null);
             opplastet.add(nyttVedlegg);
         }
         sendSenere.addAll(opplastet);

@@ -30,21 +30,21 @@ public final class VedleggsHåndteringTjeneste {
             return;
         }
         var duplikatTilEksisterende = finnDupliserteVedlegg(vedlegg);
-        vedlegg.removeIf(vedleggDto -> duplikatTilEksisterende.contains(vedleggDto.getId()));
+        vedlegg.removeIf(vedleggDto -> duplikatTilEksisterende.contains(vedleggDto.getUuid()));
     }
 
-    private static Set<VedleggDto.Referanse> finnDupliserteVedlegg(List<VedleggDto> vedlegg) {
+    private static Set<String> finnDupliserteVedlegg(List<VedleggDto> vedlegg) {
         var kopi = new ArrayList<>(vedlegg);
-        var duplikater = new HashSet<VedleggDto.Referanse>();
+        var duplikater = new HashSet<String>();
         for (var gjeldendeVedlegg : vedlegg) {
             var eksisterende = kopi.stream()
-                .filter(v -> !Objects.equals(gjeldendeVedlegg.getId(), v.getId()))
+                .filter(v -> !Objects.equals(gjeldendeVedlegg.getUuid(), v.getUuid()))
                 .filter(v -> Objects.equals(gjeldendeVedlegg.getInnsendingsType(), v.getInnsendingsType()))
                 .filter(v -> Objects.equals(gjeldendeVedlegg.getSkjemanummer(), v.getSkjemanummer()))
                 .filter(v -> sizeEquals(gjeldendeVedlegg, v))
                 .findFirst();
             if (eksisterende.isPresent()) {
-                duplikater.add(eksisterende.get().getId());
+                duplikater.add(eksisterende.get().getUuid());
                 kopi.remove(gjeldendeVedlegg);
             }
         }

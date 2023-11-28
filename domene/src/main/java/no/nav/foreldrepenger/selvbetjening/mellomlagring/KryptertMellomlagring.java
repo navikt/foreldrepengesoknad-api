@@ -58,7 +58,7 @@ public class KryptertMellomlagring {
     }
 
     public void slettKryptertVedlegg(VedleggDto vedlegg) {
-        if (vedlegg.getUrl() != null) {
+        if (vedlegg.getUuid() != null) {
             slettKryptertVedlegg(vedlegg.getUuid());
         }
     }

@@ -65,7 +65,7 @@ public class InnsendingTjeneste implements RetryAware {
     }
 
     private VedleggDto vedleggFra(TilbakebetalingUttalelseDto u) {
-        return new VedleggDto(pdfGenerator.generate(u), "Tekst fra bruker", id(), u.brukerTekst().dokumentType());
+        return new VedleggDto(pdfGenerator.generate(u), "Tekst fra bruker", u.brukerTekst().dokumentType());
     }
 
     private static TilbakebetalingUttalelseDto uttalelseFra(EttersendelseDto e) {
@@ -74,10 +74,6 @@ public class InnsendingTjeneste implements RetryAware {
             e.saksnummer(),
             e.dialogId(),
             e.brukerTekst());
-    }
-
-    private static VedleggDto.Referanse id() {
-        return new VedleggDto.Referanse("V" + IDGENERATOR.nextLong());
     }
 
     public void hentMellomlagredeFiler(List<VedleggDto> vedlegg) {
@@ -104,7 +100,7 @@ public class InnsendingTjeneste implements RetryAware {
     }
 
     private void hentVedleggBytes(VedleggDto vedlegg) {
-        if (vedlegg.getUrl() != null) {
+        if (vedlegg.getUuid() != null) {
             vedlegg.setContent(mellomlagring.lesKryptertVedlegg(vedlegg.getUuid())
                 .map(a -> a.bytes)
                 .orElse(new byte[] {}));

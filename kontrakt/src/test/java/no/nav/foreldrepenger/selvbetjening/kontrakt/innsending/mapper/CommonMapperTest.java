@@ -14,7 +14,6 @@ import no.nav.foreldrepenger.common.domain.Orgnummer;
 import no.nav.foreldrepenger.common.domain.felles.DokumentType;
 import no.nav.foreldrepenger.common.domain.felles.VedleggMetaData;
 import no.nav.foreldrepenger.common.domain.svangerskapspenger.tilrettelegging.arbeidsforhold.Virksomhet;
-import no.nav.foreldrepenger.selvbetjening.kontrakt.innsending.dto.MutableVedleggReferanseDto;
 import no.nav.foreldrepenger.selvbetjening.kontrakt.innsending.dto.VedleggDto;
 import no.nav.foreldrepenger.selvbetjening.kontrakt.innsending.dto.svangerskapspenger.ArbeidsforholdDto;
 import no.nav.foreldrepenger.selvbetjening.kontrakt.innsending.dto.ÅpenPeriodeDto;
@@ -28,7 +27,7 @@ class CommonMapperTest {
         var vedleggDto = vedlegg(uttak());
         var vedleggMappet  = CommonMapper.tilVedlegg(vedleggDto);
 
-        assertThat(vedleggMappet.getId()).isEqualTo(vedleggDto.getId().referanse());
+        assertThat(vedleggMappet.getId()).isEqualTo(vedleggDto.getUuid());
         assertThat(vedleggMappet.getMetadata().innsendingsType()).isEqualTo(LASTET_OPP);
         assertThat(vedleggMappet.getDokumentType()).isEqualTo(DOKUMENTTYPE);
         assertThat(vedleggMappet.getMetadata().hvaDokumentererVedlegg().type()).isEqualTo(VedleggMetaData.Dokumenterer.Type.UTTAK);
@@ -40,7 +39,7 @@ class CommonMapperTest {
         var vedleggDto = vedlegg(tilrettelegging());
         var vedleggMappet  = CommonMapper.tilVedlegg(vedleggDto);
 
-        assertThat(vedleggMappet.getId()).isEqualTo(vedleggDto.getId().referanse());
+        assertThat(vedleggMappet.getId()).isEqualTo(vedleggDto.getUuid());
         assertThat(vedleggMappet.getMetadata().innsendingsType()).isEqualTo(LASTET_OPP);
         assertThat(vedleggMappet.getDokumentType()).isEqualTo(DOKUMENTTYPE);
         assertThat(vedleggMappet.getMetadata().hvaDokumentererVedlegg().type()).isEqualTo(VedleggMetaData.Dokumenterer.Type.TILRETTELEGGING);
@@ -53,7 +52,7 @@ class CommonMapperTest {
         var vedleggDto = vedlegg(annet());
         var vedleggMappet  = CommonMapper.tilVedlegg(vedleggDto);
 
-        assertThat(vedleggMappet.getId()).isEqualTo(vedleggDto.getId().referanse());
+        assertThat(vedleggMappet.getId()).isEqualTo(vedleggDto.getUuid());
         assertThat(vedleggMappet.getMetadata().innsendingsType()).isEqualTo(LASTET_OPP);
         assertThat(vedleggMappet.getDokumentType()).isEqualTo(DOKUMENTTYPE);
         assertThat(vedleggMappet.getMetadata().hvaDokumentererVedlegg()).isNull();
@@ -65,11 +64,9 @@ class CommonMapperTest {
         return new VedleggDto(
             null,
             "Beskrivelse",
-            new MutableVedleggReferanseDto("V123456789"),
             "LASTET_OPP",
             DOKUMENTTYPE.name(),
             UUID.randomUUID().toString(),
-            null,
             "Filen_min.pdf",
             dokumenterer
             );

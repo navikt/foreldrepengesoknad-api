@@ -26,7 +26,7 @@ class EttersendelseDtoDeseraliseringTest {
         assertThat(ettersendelse.saksnummer().value()).isEqualTo("352003201");
         assertThat(ettersendelse.vedlegg()).hasSize(1);
         var vedlegg = ettersendelse.vedlegg().get(0);
-        assertThat(vedlegg.getId()).isEqualTo(new VedleggDto.Referanse("V090740687265315217194125674862219730"));
+        assertThat(vedlegg.getUuid()).isEqualTo("b9974360-6c07-4b9d-acac-14f0f417d200");
         assertThat(vedlegg.getSkjemanummer()).isEqualTo("I000044");
         assertThat(vedlegg.getContent()).isNull();
         assertThat(vedlegg.getInnsendingsType()).isNull();

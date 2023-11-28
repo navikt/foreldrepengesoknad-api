@@ -88,8 +88,7 @@ public final class EngangsstønadMapperV2 {
         return new Fødsel(
             barn.antallBarn(),
             List.of(barn.fødselsdato()), // TODO: Fjern liste i mottak!
-            barn.termindato(),
-            List.of()
+            barn.termindato()
         );
     }
 
@@ -97,8 +96,7 @@ public final class EngangsstønadMapperV2 {
         return new FremtidigFødsel(
             barn.antallBarn(),
             barn.termindato(),
-            barn.terminbekreftelseDato(),
-            List.of()
+            barn.terminbekreftelseDato()
         );
     }
 
@@ -106,8 +104,7 @@ public final class EngangsstønadMapperV2 {
         return new Omsorgsovertakelse(
             barn.antallBarn(),
             barn.foreldreansvarsdato(),
-            barn.fødselsdatoer(),
-            List.of()
+            barn.fødselsdatoer()
         );
     }
 
@@ -117,7 +114,6 @@ public final class EngangsstønadMapperV2 {
             barn.adopsjonsdato(),
             barn.adopsjonAvEktefellesBarn(),
             barn.søkerAdopsjonAlene() != null && barn.søkerAdopsjonAlene(),
-            List.of(),
             barn.ankomstdato(),
             barn.fødselsdatoer()
         );

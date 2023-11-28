@@ -115,8 +115,7 @@ final class ForeldrepengerMapper {
             u.tidsperiode().fom(),
             u.tidsperiode().tom(),
             u.årsak() != null ? Overføringsårsak.valueOf(u.årsak()) : null,
-            tilStønadskontoType(u.konto()),
-            List.of()
+            tilStønadskontoType(u.konto())
         );
     }
 
@@ -126,8 +125,7 @@ final class ForeldrepengerMapper {
             u.tidsperiode().tom(),
             u.erArbeidstaker(),
             UtsettelsesÅrsak.valueOf(u.årsak()),
-            u.morsAktivitetIPerioden() != null ? MorsAktivitet.valueOf(u.morsAktivitetIPerioden()) : null,
-            List.of()
+            u.morsAktivitetIPerioden() != null ? MorsAktivitet.valueOf(u.morsAktivitetIPerioden()) : null
         );
     }
 
@@ -137,8 +135,7 @@ final class ForeldrepengerMapper {
             u.tidsperiode().tom(),
             u.erArbeidstaker(),
             UtsettelsesÅrsak.valueOf(u.årsak()),
-            u.morsAktivitetIPerioden() != null ? MorsAktivitet.valueOf(u.morsAktivitetIPerioden()) : null,
-            List.of()
+            u.morsAktivitetIPerioden() != null ? MorsAktivitet.valueOf(u.morsAktivitetIPerioden()) : null
         );
     }
 
@@ -146,8 +143,7 @@ final class ForeldrepengerMapper {
         return new OppholdsPeriode(
             u.tidsperiode().fom(),
             u.tidsperiode().tom(),
-            u.årsak() != null ? Oppholdsårsak.valueOf(u.årsak()) : null,
-            List.of()
+            u.årsak() != null ? Oppholdsårsak.valueOf(u.årsak()) : null
         );
     }
 
@@ -155,7 +151,6 @@ final class ForeldrepengerMapper {
         return new UttaksPeriode(
             u.tidsperiode().fom(),
             u.tidsperiode().tom(),
-            List.of(),
             tilStønadskontoType(u.konto()),
             u.ønskerSamtidigUttak(),
             u.morsAktivitetIPerioden() != null ? MorsAktivitet.valueOf(u.morsAktivitetIPerioden()) : null,
@@ -169,7 +164,6 @@ final class ForeldrepengerMapper {
         return new GradertUttaksPeriode(
             u.tidsperiode().fom(),
             u.tidsperiode().tom(),
-            List.of(),
             tilStønadskontoType(u.konto()),
             u.ønskerSamtidigUttak(),
             u.morsAktivitetIPerioden() != null ? MorsAktivitet.valueOf(u.morsAktivitetIPerioden()) : null,
