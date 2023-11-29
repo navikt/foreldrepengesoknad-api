@@ -50,7 +50,6 @@ public class InnsendingTjeneste implements RetryAware {
         LOG.info("Mottok {} med {} vedlegg", innsending.navn(), innsending.vedlegg().size());
         SECURE_LOGGER.info("Mottatt {} fra frontend med følende innhold: {}", innsending.navn(), tilJson(innsending));
         var start = Instant.now();
-        var alleVedleggKopi = innsending.vedlegg().stream().toList();
         hentMellomlagredeFiler(innsending.vedlegg());
         fjernDupliserteVedleggFraInnsending(innsending);
         if (innsending instanceof EttersendelseDto e && e.erTilbakebetalingUttalelse()) {
@@ -58,7 +57,6 @@ public class InnsendingTjeneste implements RetryAware {
             e.vedlegg().add(vedleggFra(uttalelseFra(e)));
         }
         var kvittering = connection.sendInn(innsending);
-        slettMellomlagredeVedleggOgSøknad(alleVedleggKopi);
         var finish = Instant.now();
         var ms = Duration.between(start, finish).toMillis();
         LOG.info(RETURNERER_KVITTERING, kvittering, ms);
@@ -89,18 +87,6 @@ public class InnsendingTjeneste implements RetryAware {
             var finish = Instant.now();
             var ms = Duration.between(start, finish).toMillis();
             LOG.info("Hentet mellomlagring OK for {} vedlegg ({}ms)", vedlegg.size(), ms);
-        }
-    }
-
-    @Deprecated
-    private void slettMellomlagredeVedleggOgSøknad(List<VedleggDto> vedlegg) {
-        try {
-            LOG.info("Sletter mellomlagret søknad og vedlegg");
-            vedlegg.forEach(mellomlagring::slettKryptertVedlegg);
-            mellomlagring.slettKryptertSøknad();
-            LOG.info("Slettet mellomlagret søknad og vedlegg OK");
-        } catch (Exception e) {
-            LOG.warn("Noe gikk galt med sletting av mellomlagret søknad/vedlegg", e);
         }
     }
 
