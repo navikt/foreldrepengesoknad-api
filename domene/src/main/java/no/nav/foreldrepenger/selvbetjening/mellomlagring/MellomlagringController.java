@@ -1,6 +1,9 @@
 package no.nav.foreldrepenger.selvbetjening.mellomlagring;
 
 import static no.nav.foreldrepenger.common.domain.validation.InputValideringRegex.FRITEKST;
+import static no.nav.foreldrepenger.selvbetjening.mellomlagring.Ytelse.FORELDREPENGER;
+import static no.nav.foreldrepenger.selvbetjening.mellomlagring.Ytelse.IKKE_OPPGITT;
+import static org.slf4j.LoggerFactory.getLogger;
 import static org.springframework.http.HttpStatus.NOT_ACCEPTABLE;
 import static org.springframework.http.HttpStatus.NO_CONTENT;
 import static org.springframework.http.MediaType.APPLICATION_JSON_VALUE;
@@ -13,6 +16,7 @@ import static org.springframework.http.ResponseEntity.ok;
 import java.io.IOException;
 import java.util.List;
 
+import org.slf4j.Logger;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.DeleteMapping;
@@ -34,7 +38,7 @@ import no.nav.foreldrepenger.selvbetjening.vedlegg.Image2PDFConverter;
 
 @ProtectedRestController(MellomlagringController.REST_STORAGE)
 public class MellomlagringController {
-
+    private static final Logger LOG = getLogger(MellomlagringController.class);
     public static final String REST_STORAGE = "/rest/storage";
 
     private final KryptertMellomlagring mellomlagring;
@@ -45,24 +49,50 @@ public class MellomlagringController {
         this.converter = converter;
     }
 
+    @Deprecated
     @GetMapping
     public ResponseEntity<String> lesSøknad() {
-        return mellomlagring.lesKryptertSøknad()
-                .map(s -> ok().body(s))
-                .orElse(noContent().build());
+        var gammel = mellomlagring.lesKryptertSøknad(IKKE_OPPGITT);
+        if (gammel.isPresent()) {
+            LOG.info("Sletter mellomlagret søknad på gammelt endepunkt");
+            lagreSøknadYtelse(FORELDREPENGER, gammel.get());
+            slettSøknad(IKKE_OPPGITT);
+            return ok().body(gammel.get());
+        }
+        return lesSøknad(FORELDREPENGER);
     }
 
-    @PostMapping(consumes = APPLICATION_JSON_VALUE)
-    @ResponseStatus(NO_CONTENT)
-    public void lagreSøknad(@RequestBody String soknad) {
-        mellomlagring.lagreKryptertSøknad(soknad);
-    }
-
-
+    @Deprecated
     @DeleteMapping
     @ResponseStatus(NO_CONTENT)
     public void slettSøknad() {
-        mellomlagring.slettKryptertSøknad();
+        slettSøknad(IKKE_OPPGITT);
+        slettSøknad(FORELDREPENGER);
+    }
+
+    @Deprecated
+    @PostMapping(consumes = APPLICATION_JSON_VALUE)
+    @ResponseStatus(NO_CONTENT)
+    public void lagreSøknad(@RequestBody String soknad) {
+        lagreSøknadYtelse(FORELDREPENGER, soknad);
+    }
+
+    @GetMapping(path = "/{ytelse}")
+    public ResponseEntity<String> lesSøknad(@PathVariable("ytelse") @Valid Ytelse ytelse) {
+        return mellomlagring.lesKryptertSøknad(ytelse)
+            .map(s -> ok().body(s))
+            .orElse(noContent().build());
+    }
+
+    @DeleteMapping(path = "/{ytelse}")
+    @ResponseStatus(NO_CONTENT)
+    public void slettSøknad(@PathVariable("ytelse") @Valid Ytelse ytelse) {
+        mellomlagring.slettKryptertSøknad(ytelse);
+    }
+
+    @PostMapping(path = "/{ytelse}", consumes = APPLICATION_JSON_VALUE)
+    public void lagreSøknadYtelse(@PathVariable("ytelse") @Valid Ytelse ytelse, @RequestBody String søknad) {
+        mellomlagring.lagreKryptertSøknad(søknad, ytelse);
     }
 
     @GetMapping("/vedlegg/{key}")

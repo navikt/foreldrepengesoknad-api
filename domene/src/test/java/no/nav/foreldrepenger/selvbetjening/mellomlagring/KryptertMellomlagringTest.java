@@ -49,13 +49,45 @@ class KryptertMellomlagringTest {
 
     @Test
     void TestKryptertSøknad() {
-        km.lagreKryptertSøknad("Søknad");
-        var lest = km.lesKryptertSøknad();
+        var ytelse = Ytelse.IKKE_OPPGITT;
+        km.lagreKryptertSøknad("Søknad", ytelse);
+        var lest = km.lesKryptertSøknad(ytelse);
         assertThat(lest).isPresent();
         assertThat(lest.get()).contains("Søknad");
-        km.slettKryptertSøknad();
-        assertThat(km.lesKryptertSøknad()).isNotPresent();
+        km.slettKryptertSøknad(ytelse);
+        assertThat(km.lesKryptertSøknad(ytelse)).isNotPresent();
     }
+
+    @Test
+    void TestKryptertSøknadEngangssøknad() {
+        var ytelse = Ytelse.ENGANGSSTØNAD;
+        km.lagreKryptertSøknad("Søknad", ytelse);
+        var lest = km.lesKryptertSøknad(ytelse);
+        assertThat(lest).isPresent();
+        assertThat(lest.get()).contains("Søknad");
+        km.slettKryptertSøknad(ytelse);
+        assertThat(km.lesKryptertSøknad(ytelse)).isNotPresent();
+    }
+
+    @Test
+    void slettingAvMellomlagretESSkalIkkeSletteMellomlagretFP() {
+        km.lagreKryptertSøknad("Søknad FP", Ytelse.FORELDREPENGER);
+        km.lagreKryptertSøknad("Søknad ES", Ytelse.ENGANGSSTØNAD);
+
+        var mellomlagretFP = km.lesKryptertSøknad(Ytelse.FORELDREPENGER);
+        var mellomlagretES = km.lesKryptertSøknad(Ytelse.ENGANGSSTØNAD);
+
+        assertThat(mellomlagretFP).isPresent();
+        assertThat(mellomlagretFP.get()).isEqualTo("Søknad FP");
+        assertThat(mellomlagretES).isPresent();
+        assertThat(mellomlagretES.get()).isEqualTo("Søknad ES");
+
+        km.slettKryptertSøknad(Ytelse.ENGANGSSTØNAD);
+        assertThat(km.lesKryptertSøknad(Ytelse.FORELDREPENGER)).isPresent();
+        assertThat(km.lesKryptertSøknad(Ytelse.ENGANGSSTØNAD)).isNotPresent();
+    }
+
+
 
     @Test
     void TestKryptertVedlegg() {
@@ -66,7 +98,7 @@ class KryptertMellomlagringTest {
         assertThat(lest).isPresent();
         assertEquals(original, lest.get());
         km.slettKryptertVedlegg(original.getUuid());
-        assertThat(km.lesKryptertSøknad()).isNotPresent();
+        assertThat(km.lesKryptertSøknad(Ytelse.IKKE_OPPGITT)).isNotPresent();
     }
 
     private static byte[] generatePdf() {

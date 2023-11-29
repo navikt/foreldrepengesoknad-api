@@ -5,20 +5,15 @@ import static no.nav.foreldrepenger.selvbetjening.vedlegg.DelegerendeVedleggSjek
 
 import java.util.Optional;
 
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.stereotype.Service;
 
 import com.google.gson.Gson;
 
-import no.nav.foreldrepenger.selvbetjening.kontrakt.innsending.dto.VedleggDto;
 import no.nav.foreldrepenger.selvbetjening.vedlegg.VedleggSjekker;
 
 @Service
 public class KryptertMellomlagring {
-
-    private static final Logger LOG = LoggerFactory.getLogger(KryptertMellomlagring.class);
     private static final String SØKNAD = "soknad";
     private static final Gson GSON = new Gson();
     private final Mellomlagring mellomlagring;
@@ -33,17 +28,17 @@ public class KryptertMellomlagring {
         this.sjekker = sjekker;
     }
 
-    public Optional<String> lesKryptertSøknad() {
-        return mellomlagring.les(KORTTIDS, katalog(), SØKNAD)
+    public Optional<String> lesKryptertSøknad(Ytelse ytelse) {
+        return mellomlagring.les(KORTTIDS, katalog(), utledNøkkel(ytelse))
             .map(krypto::decrypt);
     }
 
-    public void lagreKryptertSøknad(String søknad) {
-        mellomlagring.lagre(KORTTIDS, katalog(), SØKNAD, krypto.encrypt(søknad));
+    public void lagreKryptertSøknad(String søknad, Ytelse ytelse) {
+        mellomlagring.lagre(KORTTIDS, katalog(), utledNøkkel(ytelse), krypto.encrypt(søknad));
     }
 
-    public void slettKryptertSøknad() {
-        mellomlagring.slett(KORTTIDS, katalog(), SØKNAD);
+    public void slettKryptertSøknad(Ytelse ytelse) {
+        mellomlagring.slett(KORTTIDS, katalog(), utledNøkkel(ytelse));
     }
 
     public Optional<Attachment> lesKryptertVedlegg(String key) {
@@ -57,12 +52,6 @@ public class KryptertMellomlagring {
         mellomlagring.lagre(KORTTIDS, katalog(), vedlegg.getUuid(), krypto.encrypt(GSON.toJson(vedlegg)));
     }
 
-    public void slettKryptertVedlegg(VedleggDto vedlegg) {
-        if (vedlegg.getUrl() != null) {
-            slettKryptertVedlegg(vedlegg.getUuid());
-        }
-    }
-
     public void slettKryptertVedlegg(String uuid) {
         if (uuid != null) {
             mellomlagring.slett(KORTTIDS, katalog(), uuid);
@@ -71,6 +60,13 @@ public class KryptertMellomlagring {
 
     private String katalog() {
         return krypto.katalognavn();
+    }
+
+    private static String utledNøkkel(Ytelse ytelse) {
+        return switch (ytelse) {
+            case FORELDREPENGER, SVANGERSKAPSPENGER, ENGANGSSTØNAD -> ytelse.name();
+            case IKKE_OPPGITT -> SØKNAD;
+        };
     }
 
     @Override
