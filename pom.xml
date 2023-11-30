@@ -7,7 +7,7 @@
     <parent>
         <groupId>org.springframework.boot</groupId>
         <artifactId>spring-boot-starter-parent</artifactId>
-        <version>3.1.5</version>
+        <version>3.2.0</version>
     </parent>
 
 	<groupId>no.nav.foreldrepenger.selvbetjening</groupId>
@@ -56,7 +56,7 @@
 		<jacoco.version>0.8.11</jacoco.version>
 		<gcp.version>0.208.0</gcp.version>
 		<simpleclient.version>0.16.0</simpleclient.version>
-        <graphql-java-codegen.version>5.8.0</graphql-java-codegen.version>
+        <graphql-java-codegen.version>5.9.0</graphql-java-codegen.version>
 	</properties>
 
     <dependencyManagement>
