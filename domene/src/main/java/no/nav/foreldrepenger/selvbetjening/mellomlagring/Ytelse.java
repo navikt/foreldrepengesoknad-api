@@ -3,6 +3,6 @@ package no.nav.foreldrepenger.selvbetjening.mellomlagring;
 public enum Ytelse {
     FORELDREPENGER,
     SVANGERSKAPSPENGER,
-    ENGANGSSTØNAD,
+    ENGANGSSTONAD,
     IKKE_OPPGITT
 }

@@ -64,7 +64,7 @@ public class KryptertMellomlagring {
 
     private static String utledNøkkel(Ytelse ytelse) {
         return switch (ytelse) {
-            case FORELDREPENGER, SVANGERSKAPSPENGER, ENGANGSSTØNAD -> ytelse.name();
+            case FORELDREPENGER, SVANGERSKAPSPENGER, ENGANGSSTONAD -> ytelse.name();
             case IKKE_OPPGITT -> SØKNAD;
         };
     }

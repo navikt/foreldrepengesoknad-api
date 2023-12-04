@@ -60,7 +60,7 @@ class KryptertMellomlagringTest {
 
     @Test
     void TestKryptertSøknadEngangssøknad() {
-        var ytelse = Ytelse.ENGANGSSTØNAD;
+        var ytelse = Ytelse.ENGANGSSTONAD;
         km.lagreKryptertSøknad("Søknad", ytelse);
         var lest = km.lesKryptertSøknad(ytelse);
         assertThat(lest).isPresent();
@@ -72,19 +72,19 @@ class KryptertMellomlagringTest {
     @Test
     void slettingAvMellomlagretESSkalIkkeSletteMellomlagretFP() {
         km.lagreKryptertSøknad("Søknad FP", Ytelse.FORELDREPENGER);
-        km.lagreKryptertSøknad("Søknad ES", Ytelse.ENGANGSSTØNAD);
+        km.lagreKryptertSøknad("Søknad ES", Ytelse.ENGANGSSTONAD);
 
         var mellomlagretFP = km.lesKryptertSøknad(Ytelse.FORELDREPENGER);
-        var mellomlagretES = km.lesKryptertSøknad(Ytelse.ENGANGSSTØNAD);
+        var mellomlagretES = km.lesKryptertSøknad(Ytelse.ENGANGSSTONAD);
 
         assertThat(mellomlagretFP).isPresent();
         assertThat(mellomlagretFP.get()).isEqualTo("Søknad FP");
         assertThat(mellomlagretES).isPresent();
         assertThat(mellomlagretES.get()).isEqualTo("Søknad ES");
 
-        km.slettKryptertSøknad(Ytelse.ENGANGSSTØNAD);
+        km.slettKryptertSøknad(Ytelse.ENGANGSSTONAD);
         assertThat(km.lesKryptertSøknad(Ytelse.FORELDREPENGER)).isPresent();
-        assertThat(km.lesKryptertSøknad(Ytelse.ENGANGSSTØNAD)).isNotPresent();
+        assertThat(km.lesKryptertSøknad(Ytelse.ENGANGSSTONAD)).isNotPresent();
     }
 
 
