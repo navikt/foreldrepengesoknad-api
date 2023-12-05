@@ -9,11 +9,6 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 import java.util.Locale;
 import java.util.function.Supplier;
 
-import no.nav.boot.conditionals.ConditionalOnNotProd;
-import no.nav.foreldrepenger.selvbetjening.config.MessageSourceConfig;
-import no.nav.foreldrepenger.selvbetjening.vedlegg.AttachmentTypeUnsupportedException;
-
-import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -28,16 +23,16 @@ import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.junit.jupiter.SpringExtension;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.request.MockHttpServletRequestBuilder;
-import org.springframework.test.web.servlet.setup.MockMvcBuilders;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
+import no.nav.boot.conditionals.ConditionalOnNotProd;
 import no.nav.foreldrepenger.common.util.TokenUtil;
 import no.nav.foreldrepenger.selvbetjening.config.JacksonConfiguration;
+import no.nav.foreldrepenger.selvbetjening.config.MessageSourceConfig;
 import no.nav.foreldrepenger.selvbetjening.vedlegg.AttachmentPasswordProtectedException;
-
-import org.springframework.web.context.WebApplicationContext;
+import no.nav.foreldrepenger.selvbetjening.vedlegg.AttachmentTypeUnsupportedException;
 
 @Import({ApiExceptionHandler.class})
 @WebMvcTest(controllers = TestController.class)
@@ -52,19 +47,11 @@ class LocalizedExceptionHandlerTest {
     @MockBean
     private TokenUtil tokenUtil;
 
-    //@Autowired
+    @Autowired
     private MockMvc mockMvc;
 
     @Autowired
     private MutableSupplier<Exception> exceptionSupplier;
-
-    @Autowired
-    private WebApplicationContext webApplicationContext;
-
-    @BeforeEach
-    public void setup() {
-        mockMvc = MockMvcBuilders.webAppContextSetup(webApplicationContext).build();
-    }
 
     @Test
     void skalMappeApiFeilmeldingMedVisningsvennligFelt() throws Exception {
