@@ -63,7 +63,12 @@ public class GCPMellomlagring implements Mellomlagring {
 
     @Override
     public void slett(String katalog, String key, boolean mappestruktur) {
-        storage.delete(blobFra(mellomlagringBøtte, katalog, key, mappestruktur));
+        var blob = storage.get(mellomlagringBøtte.navn(), key(katalog, key, mappestruktur));
+        if (blob != null) {
+            storage.delete(blob.getBlobId());
+        } else {
+            LOG.info("Fant ikke vedlegg med nøkkel {}", key(katalog, key, mappestruktur));
+        }
     }
 
     @Override
@@ -73,13 +78,16 @@ public class GCPMellomlagring implements Mellomlagring {
             Storage.BlobListOption.prefix(katalog),
             Storage.BlobListOption.currentDirectory()
         );
-        var batch = storage.batch();
-        for (var blob : blobs.iterateAll()) {
-            batch.delete(blob.getBlobId());
-        }
-        batch.submit();
 
-        LOG.info("Alle blobs i bøtte {} med prefiks {} er blitt slettet", mellomlagringBøtte.navn(), katalog);
+        if (blobs.streamAll().findAny().isPresent()) {
+            var batch = storage.batch();
+            for (var blob : blobs.iterateAll()) {
+                batch.delete(blob.getBlobId());
+            }
+            batch.submit();
+
+            LOG.info("Alle blobs i bøtte {} med prefiks {} er blitt slettet", mellomlagringBøtte.navn(), katalog);
+        }
     }
 
     @PostConstruct
