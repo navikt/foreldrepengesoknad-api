@@ -40,15 +40,15 @@ public class GCPMellomlagring implements Mellomlagring {
     }
 
     @Override
-    public void lagre(String katalog, String key, String value) {
-        storage.create(BlobInfo.newBuilder(blobFra(mellomlagringBøtte, katalog, key))
+    public void lagre(String katalog, String key, String value, boolean mappestruktur) {
+        storage.create(BlobInfo.newBuilder(blobFra(mellomlagringBøtte, katalog, key, mappestruktur))
                 .setContentType(APPLICATION_JSON_VALUE).build(), value.getBytes(UTF_8));
     }
 
     @Override
-    public Optional<String> les(String katalog, String key) {
+    public Optional<String> les(String katalog, String key, boolean mappestruktur) {
         try {
-            return Optional.ofNullable(storage.get(mellomlagringBøtte.navn(), key(katalog, key)))
+            return Optional.ofNullable(storage.get(mellomlagringBøtte.navn(), key(katalog, key, mappestruktur)))
                     .map(Blob::getContent)
                     .map(b -> new String(b, UTF_8));
         } catch (StorageException e) {
@@ -62,8 +62,24 @@ public class GCPMellomlagring implements Mellomlagring {
     }
 
     @Override
-    public void slett(String katalog, String key) {
-        storage.delete(blobFra(mellomlagringBøtte, katalog, key));
+    public void slett(String katalog, String key, boolean mappestruktur) {
+        storage.delete(blobFra(mellomlagringBøtte, katalog, key, mappestruktur));
+    }
+
+    @Override
+    public void slettAll(String katalog) {
+        var blobs = storage.list(
+            mellomlagringBøtte.navn(),
+            Storage.BlobListOption.prefix(katalog),
+            Storage.BlobListOption.currentDirectory()
+        );
+        var batch = storage.batch();
+        for (var blob : blobs.iterateAll()) {
+            batch.delete(blob.getBlobId());
+        }
+        batch.submit();
+
+        LOG.info("Alle blobs i bøtte {} med prefiks {} er blitt slettet", mellomlagringBøtte.navn(), katalog);
     }
 
     @PostConstruct
@@ -71,11 +87,14 @@ public class GCPMellomlagring implements Mellomlagring {
         storage.get(mellomlagringBøtte.navn());
     }
 
-    private static BlobId blobFra(Bøtte bøtte, String katalog, String key) {
-        return BlobId.of(bøtte.navn(), key(katalog, key));
+    private static BlobId blobFra(Bøtte bøtte, String katalog, String key, boolean mappestruktur) {
+        return BlobId.of(bøtte.navn(), key(katalog, key, mappestruktur));
     }
 
-    private static String key(String directory, String key) {
+    private static String key(String directory, String key, boolean mappestruktur) {
+        if (mappestruktur) {
+            return directory + key;
+        }
         return directory + "_" + key;
     }
 }
