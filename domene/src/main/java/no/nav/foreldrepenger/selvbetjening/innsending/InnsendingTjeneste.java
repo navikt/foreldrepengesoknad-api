@@ -6,7 +6,6 @@ import static org.slf4j.LoggerFactory.getLogger;
 import java.security.SecureRandom;
 import java.time.Duration;
 import java.time.Instant;
-import java.util.List;
 import java.util.Random;
 
 import org.slf4j.Logger;
@@ -22,9 +21,14 @@ import no.nav.foreldrepenger.selvbetjening.innsending.pdf.PdfGenerator;
 import no.nav.foreldrepenger.selvbetjening.kontrakt.innsending.dto.Innsending;
 import no.nav.foreldrepenger.selvbetjening.kontrakt.innsending.dto.MutableVedleggReferanseDto;
 import no.nav.foreldrepenger.selvbetjening.kontrakt.innsending.dto.VedleggDto;
+import no.nav.foreldrepenger.selvbetjening.kontrakt.innsending.dto.endringssøknad.EndringssøknadForeldrepengerDto;
+import no.nav.foreldrepenger.selvbetjening.kontrakt.innsending.dto.engangsstønad.EngangsstønadDto;
 import no.nav.foreldrepenger.selvbetjening.kontrakt.innsending.dto.ettersendelse.EttersendelseDto;
 import no.nav.foreldrepenger.selvbetjening.kontrakt.innsending.dto.ettersendelse.TilbakebetalingUttalelseDto;
+import no.nav.foreldrepenger.selvbetjening.kontrakt.innsending.dto.foreldrepenger.ForeldrepengesøknadDto;
+import no.nav.foreldrepenger.selvbetjening.kontrakt.innsending.dto.svangerskapspenger.SvangerskapspengesøknadDto;
 import no.nav.foreldrepenger.selvbetjening.mellomlagring.KryptertMellomlagring;
+import no.nav.foreldrepenger.selvbetjening.mellomlagring.Ytelse;
 
 @Service
 public class InnsendingTjeneste implements RetryAware {
@@ -50,7 +54,7 @@ public class InnsendingTjeneste implements RetryAware {
         LOG.info("Mottok {} med {} vedlegg", innsending.navn(), innsending.vedlegg().size());
         SECURE_LOGGER.info("Mottatt {} fra frontend med følende innhold: {}", innsending.navn(), tilJson(innsending));
         var start = Instant.now();
-        hentMellomlagredeFiler(innsending.vedlegg());
+        hentMellomlagredeFiler(innsending);
         fjernDupliserteVedleggFraInnsending(innsending);
         if (innsending instanceof EttersendelseDto e && e.erTilbakebetalingUttalelse()) {
             LOG.info("Konverterer tekst til vedleggs-pdf {}", e.brukerTekst().dokumentType());
@@ -79,23 +83,40 @@ public class InnsendingTjeneste implements RetryAware {
         return new MutableVedleggReferanseDto("V" + IDGENERATOR.nextLong());
     }
 
-    public void hentMellomlagredeFiler(List<VedleggDto> vedlegg) {
+    public void hentMellomlagredeFiler(Innsending innsending) {
+        var vedlegg = innsending.vedlegg();
         if (!vedlegg.isEmpty()) {
             var start = Instant.now();
             LOG.info("Henter mellomlagring for {} vedlegg", vedlegg.size());
-            vedlegg.forEach(this::hentVedleggBytes);
+            for (var vedleggDto : vedlegg) {
+                hentVedleggBytes(vedleggDto, innsending);
+            }
             var finish = Instant.now();
             var ms = Duration.between(start, finish).toMillis();
             LOG.info("Hentet mellomlagring OK for {} vedlegg ({}ms)", vedlegg.size(), ms);
         }
     }
 
-    private void hentVedleggBytes(VedleggDto vedlegg) {
+    private void hentVedleggBytes(VedleggDto vedlegg, Innsending innsending) {
         if (vedlegg.getUrl() != null) {
-            vedlegg.setContent(mellomlagring.lesKryptertVedlegg(vedlegg.getUuid())
+            var ytelse = tilYtelse(innsending);
+            vedlegg.setContent(mellomlagring.lesKryptertVedlegg(vedlegg.getUuid(), ytelse)
                 .map(a -> a.bytes)
                 .orElse(new byte[] {}));
         }
+    }
+
+    private Ytelse tilYtelse(Innsending innsending) {
+        if (innsending instanceof ForeldrepengesøknadDto || innsending instanceof EndringssøknadForeldrepengerDto) {
+            return Ytelse.FORELDREPENGER;
+        }
+        if (innsending instanceof EngangsstønadDto || innsending instanceof no.nav.foreldrepenger.selvbetjening.kontrakt.innsending.v2.dto.engangsstønad.EngangsstønadDto) {
+            return Ytelse.ENGANGSSTONAD;
+        }
+        if (innsending instanceof SvangerskapspengesøknadDto) {
+            return Ytelse.SVANGERSKAPSPENGER;
+        }
+        return Ytelse.IKKE_OPPGITT;
     }
 
     private String tilJson(Innsending innsending) {

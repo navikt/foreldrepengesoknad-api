@@ -17,7 +17,7 @@ public class MellomlagringKrypto {
         this.tokenUtil = tokenUtil;
     }
 
-    public String katalognavn() {
+    public String mappenavn() {
         return hexBinary(encrypt(tokenUtil.getSubject()).getBytes());
     }
 

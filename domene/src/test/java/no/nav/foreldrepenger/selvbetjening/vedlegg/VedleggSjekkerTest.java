@@ -29,8 +29,10 @@ import no.nav.foreldrepenger.selvbetjening.innsending.InnsendingTjeneste;
 import no.nav.foreldrepenger.selvbetjening.innsending.pdf.PdfGenerator;
 import no.nav.foreldrepenger.selvbetjening.kontrakt.innsending.dto.MutableVedleggReferanseDto;
 import no.nav.foreldrepenger.selvbetjening.kontrakt.innsending.dto.VedleggDto;
+import no.nav.foreldrepenger.selvbetjening.kontrakt.innsending.v2.dto.engangsstønad.EngangsstønadDto;
 import no.nav.foreldrepenger.selvbetjening.mellomlagring.Attachment;
 import no.nav.foreldrepenger.selvbetjening.mellomlagring.KryptertMellomlagring;
+import no.nav.foreldrepenger.selvbetjening.mellomlagring.Ytelse;
 import no.nav.foreldrepenger.selvbetjening.vedlegg.virusscan.ClamAvVirusScanner;
 import no.nav.foreldrepenger.selvbetjening.vedlegg.virusscan.VirusScanConnection;
 
@@ -131,9 +133,10 @@ class VedleggSjekkerTest {
         var vedleggene = List.of(vedlegg);
 
         var innsendingTjeneste = new InnsendingTjeneste(connection, mellomlagring, pdfGenerator, mapper);
-        when(mellomlagring.lesKryptertVedlegg(vedlegg.getUuid())).thenReturn(Optional.of(attachment(1)));
+        when(mellomlagring.lesKryptertVedlegg(vedlegg.getUuid(), Ytelse.ENGANGSSTONAD)).thenReturn(Optional.of(attachment(1)));
 
-        innsendingTjeneste.hentMellomlagredeFiler(vedleggene);
+        var innsending = new EngangsstønadDto(null, null, null, null, vedleggene);
+        innsendingTjeneste.hentMellomlagredeFiler(innsending);
 
         var nyVedleggHeltLik = vedlegg(1);
         assertThat(vedleggene).hasSize(1);
