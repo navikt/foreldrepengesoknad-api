@@ -18,35 +18,37 @@ import com.google.cloud.storage.Storage;
 import com.google.cloud.storage.StorageException;
 import com.google.cloud.storage.StorageOptions;
 
+import jakarta.annotation.PostConstruct;
 import no.nav.boot.conditionals.ConditionalOnGCP;
 
 @Component
 @ConditionalOnGCP
-public class GCPMellomlagring extends AbstractMellomlagringTjeneste {
+public class GCPMellomlagring implements Mellomlagring {
 
     private static final Logger LOG = LoggerFactory.getLogger(GCPMellomlagring.class);
 
     private final Storage storage;
+    private final Bøtte mellomlagringBøtte;
 
     public GCPMellomlagring(Bøtte mellomlagringBøtte, RetrySettings retrySettings) {
-        super(mellomlagringBøtte);
         this.storage = StorageOptions
                 .newBuilder()
                 .setRetrySettings(retrySettings)
                 .build()
                 .getService();
+        this.mellomlagringBøtte = mellomlagringBøtte;
     }
 
     @Override
-    protected void doLagre(String bøttenavn, String katalog, String key, String value) {
-        storage.create(BlobInfo.newBuilder(blobFra(bøttenavn, katalog, key))
+    public void lagre(String katalog, String key, String value) {
+        storage.create(BlobInfo.newBuilder(blobFra(mellomlagringBøtte, katalog, key))
                 .setContentType(APPLICATION_JSON_VALUE).build(), value.getBytes(UTF_8));
     }
 
     @Override
-    protected Optional<String> doLes(String bøtte, String katalog, String key) {
+    public Optional<String> les(String katalog, String key) {
         try {
-            return Optional.ofNullable(storage.get(bøtte, key(katalog, key)))
+            return Optional.ofNullable(storage.get(mellomlagringBøtte.navn(), key(katalog, key)))
                     .map(Blob::getContent)
                     .map(b -> new String(b, UTF_8));
         } catch (StorageException e) {
@@ -60,16 +62,20 @@ public class GCPMellomlagring extends AbstractMellomlagringTjeneste {
     }
 
     @Override
-    protected void doSlett(String bøtte, String katalog, String key) {
-        storage.delete(blobFra(bøtte, katalog, key));
+    public void slett(String katalog, String key) {
+        storage.delete(blobFra(mellomlagringBøtte, katalog, key));
     }
 
-    @Override
-    protected void validerBøtte(Bøtte bøtte) {
-        storage.get(bøtte.navn());
+    @PostConstruct
+    void valider() {
+        storage.get(mellomlagringBøtte.navn());
     }
 
-    private static BlobId blobFra(String bøttenavn, String katalog, String key) {
-        return BlobId.of(bøttenavn, key(katalog, key));
+    private static BlobId blobFra(Bøtte bøtte, String katalog, String key) {
+        return BlobId.of(bøtte.navn(), key(katalog, key));
+    }
+
+    private static String key(String directory, String key) {
+        return directory + "_" + key;
     }
 }

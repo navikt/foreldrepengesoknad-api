@@ -1,6 +1,5 @@
 package no.nav.foreldrepenger.selvbetjening.mellomlagring;
 
-import static no.nav.foreldrepenger.selvbetjening.mellomlagring.MellomlagringType.KORTTIDS;
 import static no.nav.foreldrepenger.selvbetjening.vedlegg.DelegerendeVedleggSjekker.DELEGERENDE;
 
 import java.util.Optional;
@@ -29,32 +28,32 @@ public class KryptertMellomlagring {
     }
 
     public Optional<String> lesKryptertSøknad(Ytelse ytelse) {
-        return mellomlagring.les(KORTTIDS, katalog(), utledNøkkel(ytelse))
+        return mellomlagring.les(katalog(), utledNøkkel(ytelse))
             .map(krypto::decrypt);
     }
 
     public void lagreKryptertSøknad(String søknad, Ytelse ytelse) {
-        mellomlagring.lagre(KORTTIDS, katalog(), utledNøkkel(ytelse), krypto.encrypt(søknad));
+        mellomlagring.lagre(katalog(), utledNøkkel(ytelse), krypto.encrypt(søknad));
     }
 
     public void slettKryptertSøknad(Ytelse ytelse) {
-        mellomlagring.slett(KORTTIDS, katalog(), utledNøkkel(ytelse));
+        mellomlagring.slett(katalog(), utledNøkkel(ytelse));
     }
 
     public Optional<Attachment> lesKryptertVedlegg(String key) {
-        return mellomlagring.les(KORTTIDS, katalog(), key)
+        return mellomlagring.les(katalog(), key)
             .map(krypto::decrypt)
             .map(v -> GSON.fromJson(v, Attachment.class));
     }
 
     public void lagreKryptertVedlegg(Attachment vedlegg) {
         sjekker.sjekk(vedlegg);
-        mellomlagring.lagre(KORTTIDS, katalog(), vedlegg.getUuid(), krypto.encrypt(GSON.toJson(vedlegg)));
+        mellomlagring.lagre(katalog(), vedlegg.getUuid(), krypto.encrypt(GSON.toJson(vedlegg)));
     }
 
     public void slettKryptertVedlegg(String uuid) {
         if (uuid != null) {
-            mellomlagring.slett(KORTTIDS, katalog(), uuid);
+            mellomlagring.slett(katalog(), uuid);
         }
     }
 

@@ -6,10 +6,9 @@ import no.nav.foreldrepenger.selvbetjening.http.RetryAware;
 
 public interface Mellomlagring extends RetryAware {
 
-    void lagre(MellomlagringType type, String katalog, String key, String value);
+    void lagre(String katalog, String key, String value);
 
-    Optional<String> les(MellomlagringType type, String directory, String key);
+    Optional<String> les(String directory, String key);
 
-    void slett(MellomlagringType type, String directory, String key);
-
+    void slett(String directory, String key);
 }
