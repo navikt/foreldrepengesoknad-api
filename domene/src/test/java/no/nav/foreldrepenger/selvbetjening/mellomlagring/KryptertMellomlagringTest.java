@@ -33,14 +33,12 @@ class KryptertMellomlagringTest {
     ClamAvVirusScanner scanner;
     @Mock
     TokenUtil util;
-    @Mock
-    Bøtte bøtte;
     private KryptertMellomlagring km;
 
     @BeforeEach
     void beforeEach() {
         when(util.getSubject()).thenReturn("01010111111");
-        var mellomlagring = new InMemoryMellomlagring(bøtte);
+        var mellomlagring = new InMemoryMellomlagring();
         km = new KryptertMellomlagring(mellomlagring,
                 new MellomlagringKrypto("passphrase", util),
                 new DelegerendeVedleggSjekker(new StørrelseVedleggSjekker(DataSize.ofMegabytes(32), DataSize.ofMegabytes(8)), scanner,
