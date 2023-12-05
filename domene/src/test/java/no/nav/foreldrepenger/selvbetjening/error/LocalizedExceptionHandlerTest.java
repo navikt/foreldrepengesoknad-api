@@ -57,7 +57,7 @@ class LocalizedExceptionHandlerTest {
     void skalMappeApiFeilmeldingMedVisningsvennligFelt() throws Exception {
         exceptionSupplier.setDelegate(AttachmentPasswordProtectedException::new);
         test(get("/exception"),
-            "Vedlegget kan ikke behandles ettersom det er passordbeskyttet. Vennligst prøv igjen med et annet vedlegg.");
+            "Vedlegget er passordbeskyttet og kan ikke behandles. Vennligst prøv igjen med et vedlegg uten passordbeskyttelse.");
 
         exceptionSupplier.setDelegate(() -> new AttachmentTypeUnsupportedException(MediaType.IMAGE_GIF));
         test(get("/exception"), "Vedlegg av typen image/gif er ikke støttet.");
@@ -70,14 +70,17 @@ class LocalizedExceptionHandlerTest {
         test(engelskRequest, "The attachment cannot be processed as it is password protected. Please try again with a different attachment.");
 
         var norskRequest = get("/exception").locale(BOKMÅL_LOCALE);
-        test(norskRequest, "Vedlegget kan ikke behandles ettersom det er passordbeskyttet. Vennligst prøv igjen med et annet vedlegg.");
+        test(norskRequest, "Vedlegget er passordbeskyttet og kan ikke behandles. Vennligst prøv igjen med et vedlegg uten passordbeskyttelse.");
+
+        var nynorskRequest = get("/exception").locale(Locale.forLanguageTag("nn-NO"));
+        test(nynorskRequest, "Vedlegget er passordbeskytta og kan ikkje behandlast. Ver venleg og prøv igjen med eit vedlegg utan passordbeskyttelse.");
     }
 
     @Test
     void skalBrukeNorskSomFallbackLocale() throws Exception {
         exceptionSupplier.setDelegate(AttachmentPasswordProtectedException::new);
         var engelskRequest = get("/exception").locale(Locale.FRANCE);
-        test(engelskRequest, "Vedlegget kan ikke behandles ettersom det er passordbeskyttet. Vennligst prøv igjen med et annet vedlegg.");
+        test(engelskRequest, "Vedlegget er passordbeskyttet og kan ikke behandles. Vennligst prøv igjen med et vedlegg uten passordbeskyttelse.");
     }
 
     private void test(MockHttpServletRequestBuilder requestBuilder, String expectedValue) throws Exception {
