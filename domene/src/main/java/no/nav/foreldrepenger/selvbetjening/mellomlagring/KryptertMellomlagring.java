@@ -76,7 +76,7 @@ public class KryptertMellomlagring {
             if (!ytelse.equals(Ytelse.IKKE_OPPGITT)) {
                 LOG.info("Ersatter mellomlagret vedlegg under IKKE_OPPGITT med oppgitt ytelsen {}", ytelse);
                 mellomlagring.lagre(ytelsespesifikkMappe(ytelse), key, ikkeOppgitt.get(), true);
-                mellomlagring.slett(ytelsespesifikkMappe(Ytelse.IKKE_OPPGITT), key, false);
+                mellomlagring.slett(ytelsespesifikkMappe(Ytelse.IKKE_OPPGITT), key, true);
             }
             return ikkeOppgitt
                 .map(krypto::decrypt)
