@@ -4,14 +4,12 @@ import java.util.HashMap;
 import java.util.Map;
 import java.util.Optional;
 
-import org.springframework.boot.autoconfigure.condition.ConditionalOnMissingBean;
 import org.springframework.stereotype.Service;
 
 import no.nav.boot.conditionals.ConditionalOnLocalOrTest;
 
 @Service
 @ConditionalOnLocalOrTest
-@ConditionalOnMissingBean
 public class InMemoryMellomlagring implements Mellomlagring {
 
     private final Map<String, String> store;
