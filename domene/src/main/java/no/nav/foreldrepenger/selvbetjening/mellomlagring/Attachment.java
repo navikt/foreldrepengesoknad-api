@@ -1,6 +1,5 @@
 package no.nav.foreldrepenger.selvbetjening.mellomlagring;
 
-import java.io.IOException;
 import java.net.URI;
 import java.util.Arrays;
 import java.util.Objects;
@@ -9,7 +8,6 @@ import java.util.UUID;
 import org.springframework.http.MediaType;
 import org.springframework.util.unit.DataSize;
 import org.springframework.util.unit.DataUnit;
-import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 
 import no.nav.foreldrepenger.selvbetjening.vedlegg.AttachmentTooLargeException;
@@ -34,21 +32,8 @@ public class Attachment {
             throw new AttachmentTooLargeException(size, MAX_VEDLEGG_SIZE);
         }
     }
-
-    public static Attachment of(MultipartFile file) {
-        return of(file.getOriginalFilename(), getBytes(file), MediaType.valueOf(file.getContentType()));
-    }
-
     public static Attachment of(String fileName, byte[] bytes, MediaType mediaType) {
         return new Attachment(fileName, bytes, mediaType);
-    }
-
-    private static byte[] getBytes(MultipartFile file) {
-        try {
-            return file.getBytes();
-        } catch (IOException e) {
-            throw new RuntimeException(e);
-        }
     }
 
     public URI uri() {

@@ -1,5 +1,6 @@
 package no.nav.foreldrepenger.selvbetjening.mellomlagring;
 
+import static no.nav.foreldrepenger.selvbetjening.vedlegg.DelegerendeVedleggSjekker.DELEGERENDE;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.doThrow;
@@ -13,6 +14,7 @@ import java.util.UUID;
 
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.context.annotation.Import;
@@ -32,6 +34,7 @@ import no.nav.foreldrepenger.selvbetjening.config.MessageSourceConfig;
 import no.nav.foreldrepenger.selvbetjening.error.ApiExceptionHandler;
 import no.nav.foreldrepenger.selvbetjening.vedlegg.AttachmentTooLargeException;
 import no.nav.foreldrepenger.selvbetjening.vedlegg.Image2PDFConverter;
+import no.nav.foreldrepenger.selvbetjening.vedlegg.VedleggSjekker;
 
 @Import({MellomlagringController.class, ApiExceptionHandler.class})
 @WebMvcTest(controllers = MellomlagringController.class)
@@ -50,6 +53,10 @@ class MellomlagringControllerTest {
 
     @MockBean
     private KryptertMellomlagring kryptertMellomlagring;
+
+    @MockBean
+    @Qualifier(DELEGERENDE)
+    private VedleggSjekker vedleggSjekker;
 
     @MockBean
     private Image2PDFConverter converter;

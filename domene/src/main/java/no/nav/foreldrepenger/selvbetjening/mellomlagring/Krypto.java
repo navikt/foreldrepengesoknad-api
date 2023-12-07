@@ -39,6 +39,21 @@ public class Krypto {
             throw new RuntimeException("Error while encrypting text", ex);
         }
     }
+    public byte[] encryptVedlegg(byte[] innhold) {
+        try {
+            return cipher(ENCRYPT_MODE).doFinal(innhold);
+        } catch (Exception ex) {
+            throw new RuntimeException("Error while encrypting bytes", ex);
+        }
+    }
+
+    public byte[] decryptVedlegg(byte[] encrypted) {
+        try {
+            return cipher(DECRYPT_MODE).doFinal(encrypted);
+        } catch (Exception ex) {
+            throw new RuntimeException("Error while decrypting text", ex);
+        }
+    }
 
     public String decrypt(String encrypted) {
         try {
@@ -48,8 +63,7 @@ public class Krypto {
         }
     }
 
-    private Cipher cipher(int mode) throws NoSuchAlgorithmException, NoSuchPaddingException, InvalidKeyException,
-            InvalidAlgorithmParameterException {
+    private Cipher cipher(int mode) throws NoSuchAlgorithmException, NoSuchPaddingException, InvalidKeyException, InvalidAlgorithmParameterException {
         var cipher = Cipher.getInstance(ALGO);
         cipher.init(mode, key, new GCMParameterSpec(128, iv.getBytes()));
         return cipher;

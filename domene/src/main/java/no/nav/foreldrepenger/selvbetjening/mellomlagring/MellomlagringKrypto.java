@@ -25,8 +25,16 @@ public class MellomlagringKrypto {
         return new Krypto(passphrase, tokenUtil.getSubject()).encrypt(plaintext);
     }
 
+    public byte[] encryptVedlegg(byte[] innhold) {
+        return new Krypto(passphrase, tokenUtil.getSubject()).encryptVedlegg(innhold);
+    }
+
     public String decrypt(String encrypted) {
         return new Krypto(passphrase, tokenUtil.getSubject()).decrypt(encrypted);
+    }
+
+    public byte[] decryptVedlegg(byte[] encrypted) {
+        return new Krypto(passphrase, tokenUtil.getSubject()).decryptVedlegg(encrypted);
     }
 
     public String hexBinary(byte[] data) {
