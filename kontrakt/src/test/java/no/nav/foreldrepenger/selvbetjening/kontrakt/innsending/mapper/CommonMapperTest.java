@@ -70,8 +70,7 @@ class CommonMapperTest {
             DOKUMENTTYPE.name(),
             UUID.randomUUID().toString(),
             null,
-            "Filen_min.pdf",
-            dokumenterer
+                dokumenterer
             );
     }
 

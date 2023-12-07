@@ -157,7 +157,8 @@ class VedleggSjekkerTest {
     private static VedleggDto vedlegg(int megabytes) {
         var uuid = "802e2ce7-8106-46cf-afdb-2aecc2b6de7c";
         var content = new byte[((int) DataSize.ofMegabytes(megabytes).toBytes())];
-        return new VedleggDto(content, "En stoooor pdf!", new MutableVedleggReferanseDto("V00001"), null, "I000038", uuid, URI.create("https://foreldrepengesoknad-api.intern.dev.nav.no/" + uuid), "fil.pdf", null);
+        return new VedleggDto(content, "En stoooor pdf!", new MutableVedleggReferanseDto("V00001"), null, "I000038", uuid, URI.create("https://foreldrepengesoknad-api.intern.dev.nav.no/" + uuid),
+            null);
     }
 
     public static byte[] fraResource(String classPathResource) {

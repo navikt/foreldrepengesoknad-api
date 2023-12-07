@@ -20,8 +20,6 @@ public class VedleggDto {
     @Pattern(regexp = FRITEKST)
     private final String beskrivelse;
 
-    @Pattern(regexp = FRITEKST)
-    private final String filename;
     @Valid
     private final Dokumenterer dokumenterer;
 
@@ -39,11 +37,11 @@ public class VedleggDto {
 
 
     public VedleggDto(byte[] content, String beskrivelse, MutableVedleggReferanseDto id, String skjemanummer) {
-        this(content, beskrivelse, id, null, skjemanummer, null, null, null, null);
+        this(content, beskrivelse, id, null, skjemanummer, null, null, null);
     }
 
     @JsonCreator
-    public VedleggDto(byte[] content, String beskrivelse, MutableVedleggReferanseDto id, String innsendingsType, String skjemanummer, String uuid, URI url, String filename,
+    public VedleggDto(byte[] content, String beskrivelse, MutableVedleggReferanseDto id, String innsendingsType, String skjemanummer, String uuid, URI url,
                       Dokumenterer dokumenterer) {
         this.content = content;
         this.beskrivelse = beskrivelse;
@@ -52,7 +50,6 @@ public class VedleggDto {
         this.skjemanummer = skjemanummer;
         this.uuid = uuid;
         this.url = url;
-        this.filename = filename;
         this.dokumenterer = dokumenterer;
     }
 
@@ -66,10 +63,6 @@ public class VedleggDto {
 
     public String getBeskrivelse() {
         return beskrivelse;
-    }
-
-    public String getFilename() {
-        return filename;
     }
 
     public MutableVedleggReferanseDto getId() {

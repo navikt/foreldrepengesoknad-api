@@ -32,8 +32,7 @@ class EttersendelseMappingKonsistensTest {
                 "I000044",
                 UUID.randomUUID().toString(),
                 URI.create("https://foreldrepengesoknad-api.intern.dev.nav.no/rest/storage/vedlegg/b9974360-6c07-4b9d-acac-14f0f417d200"),
-                "ettersending.jpg",
-                null)
+                    null)
         );
 
         var ettersendelseFraFrontend = new EttersendelseDto(null, YtelseType.FORELDREPENGER, saksnummer, null, null, vedleggerDto);

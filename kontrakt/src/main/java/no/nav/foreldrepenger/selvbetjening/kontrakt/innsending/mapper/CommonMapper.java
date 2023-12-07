@@ -70,7 +70,7 @@ public final class CommonMapper {
             tilUuid(vedlegg.getUuid()),
             vedlegg.getInnsendingsType() != null ? InnsendingsType.valueOf(vedlegg.getInnsendingsType()) : null,
             vedlegg.getSkjemanummer() != null ? DokumentType.valueOf(vedlegg.getSkjemanummer()) : null,
-            vedlegg.getFilename(),
+            null,
             tilDokumenterer(vedlegg.getDokumenterer()),
             vedlegg.getBeskrivelse()
         );
