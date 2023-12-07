@@ -3,13 +3,10 @@ package no.nav.foreldrepenger.selvbetjening.kontrakt.innsending.mapper;
 import static java.time.LocalDate.now;
 import static java.time.Month.OCTOBER;
 import static java.time.temporal.TemporalAdjusters.firstDayOfYear;
-import static no.nav.foreldrepenger.common.domain.felles.VedleggMetaData.Dokumenterer.Type.TILRETTELEGGING;
-import static no.nav.foreldrepenger.common.domain.felles.VedleggMetaData.Dokumenterer.Type.UTTAK;
 import static no.nav.foreldrepenger.common.util.StreamUtil.safeStream;
 
 import java.time.LocalDate;
 import java.util.List;
-import java.util.UUID;
 
 import com.neovisionaries.i18n.CountryCode;
 
@@ -37,7 +34,6 @@ import no.nav.foreldrepenger.common.domain.felles.relasjontilbarn.Fødsel;
 import no.nav.foreldrepenger.common.domain.felles.relasjontilbarn.Omsorgsovertakelse;
 import no.nav.foreldrepenger.common.domain.felles.relasjontilbarn.RelasjonTilBarn;
 import no.nav.foreldrepenger.common.domain.felles.ÅpenPeriode;
-import no.nav.foreldrepenger.common.domain.svangerskapspenger.tilrettelegging.arbeidsforhold.Arbeidsforhold;
 import no.nav.foreldrepenger.selvbetjening.kontrakt.innsending.dto.AnnenInntektDto;
 import no.nav.foreldrepenger.selvbetjening.kontrakt.innsending.dto.BarnDto;
 import no.nav.foreldrepenger.selvbetjening.kontrakt.innsending.dto.FrilansInformasjonDto;
@@ -49,8 +45,6 @@ import no.nav.foreldrepenger.selvbetjening.kontrakt.innsending.dto.TilknyttetPer
 import no.nav.foreldrepenger.selvbetjening.kontrakt.innsending.dto.UtenlandsoppholdPeriodeDto;
 import no.nav.foreldrepenger.selvbetjening.kontrakt.innsending.dto.VedleggDto;
 import no.nav.foreldrepenger.selvbetjening.kontrakt.innsending.dto.foreldrepenger.Situasjon;
-import no.nav.foreldrepenger.selvbetjening.kontrakt.innsending.dto.svangerskapspenger.ArbeidsforholdDto;
-import no.nav.foreldrepenger.selvbetjening.kontrakt.innsending.dto.ÅpenPeriodeDto;
 
 public final class CommonMapper {
 
@@ -67,68 +61,11 @@ public final class CommonMapper {
     public static no.nav.foreldrepenger.common.domain.felles.Vedlegg tilVedlegg(VedleggDto vedlegg) {
         var vedleggMetadata = new VedleggMetaData(
             tilVedleggsreferanse(vedlegg.getId()),
-            tilUuid(vedlegg.getUuid()),
             vedlegg.getInnsendingsType() != null ? InnsendingsType.valueOf(vedlegg.getInnsendingsType()) : null,
             vedlegg.getSkjemanummer() != null ? DokumentType.valueOf(vedlegg.getSkjemanummer()) : null,
-            null,
-            tilDokumenterer(vedlegg.getDokumenterer()),
             vedlegg.getBeskrivelse()
         );
         return new PåkrevdVedlegg(vedleggMetadata);
-    }
-
-    private static UUID tilUuid(String uuid) {
-        if (uuid == null) {
-            return UUID.randomUUID();
-        }
-        return UUID.fromString(uuid);
-    }
-
-    private static VedleggMetaData.Dokumenterer tilDokumenterer(VedleggDto.Dokumenterer hvaDokumentererVedlegg) {
-        if (hvaDokumentererVedlegg == null) {
-            return null;
-        }
-        return switch (hvaDokumentererVedlegg.type()) {
-            case UTTAK -> tilDokumentererUttak(hvaDokumentererVedlegg);
-            case TILRETTELEGGING -> tilDokumentererTilrettelegging(hvaDokumentererVedlegg);
-        };
-    }
-
-    private static VedleggMetaData.Dokumenterer tilDokumentererUttak(VedleggDto.Dokumenterer hvaDokumentererVedlegg) {
-        return new VedleggMetaData.Dokumenterer(
-            tilType(hvaDokumentererVedlegg.type()),
-            null,
-            tilPerioder(hvaDokumentererVedlegg.perioder())
-        );
-    }
-
-    private static VedleggMetaData.Dokumenterer tilDokumentererTilrettelegging(VedleggDto.Dokumenterer hvaDokumentererVedlegg) {
-        return new VedleggMetaData.Dokumenterer(
-            tilType(hvaDokumentererVedlegg.type()),
-            tilArbeidsforholdSvp(hvaDokumentererVedlegg.arbeidsforhold()),
-            null
-        );
-    }
-
-    private static List<LukketPeriode> tilPerioder(List<ÅpenPeriodeDto> perioder) {
-        return perioder.stream()
-            .map(CommonMapper::tilLukketPeriode)
-            .toList();
-    }
-
-    private static LukketPeriode tilLukketPeriode(ÅpenPeriodeDto periode) {
-        return new LukketPeriode(periode.fom(), periode.tom());
-    }
-
-    private static Arbeidsforhold tilArbeidsforholdSvp(ArbeidsforholdDto arbeidsforhold) {
-        return SvangerskapspengerMapper.tilArbeidsforhold(arbeidsforhold);
-    }
-
-    private static VedleggMetaData.Dokumenterer.Type tilType(VedleggDto.Dokumenterer.Type type) {
-        return switch (type) {
-            case UTTAK -> UTTAK;
-            case TILRETTELEGGING -> TILRETTELEGGING;
-        };
     }
 
     public static List<VedleggReferanse> tilVedleggsreferanse(List<MutableVedleggReferanseDto> vedleggsreferanser) {

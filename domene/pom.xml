@@ -18,6 +18,12 @@
             <artifactId>kontrakt</artifactId>
         </dependency>
         <dependency>
+            <groupId>no.nav.foreldrepenger.selvbetjening</groupId>
+            <artifactId>kontrakt</artifactId>
+            <type>test-jar</type>
+            <scope>test</scope>
+        </dependency>
+        <dependency>
             <groupId>no.nav.foreldrepenger</groupId>
             <artifactId>stonadskonto-regler</artifactId>
             <version>${stonadskonto-regler.version}</version>

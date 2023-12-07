@@ -28,10 +28,10 @@ public record BarnDto(@Valid @Size(max = 10) List<LocalDate> fødselsdatoer,
                       @Valid @Size(max = 15) List<MutableVedleggReferanseDto> dokumentasjonAvAleneomsorg) {
     public BarnDto {
         fødselsdatoer = Optional.ofNullable(fødselsdatoer).orElse(emptyList());
-        terminbekreftelse = Optional.ofNullable(terminbekreftelse).orElse(emptyList());
-        adopsjonsvedtak = Optional.ofNullable(adopsjonsvedtak).orElse(emptyList());
-        omsorgsovertakelse = Optional.ofNullable(omsorgsovertakelse).orElse(emptyList());
-        dokumentasjonAvAleneomsorg = Optional.ofNullable(dokumentasjonAvAleneomsorg).orElse(emptyList());
+        terminbekreftelse = Optional.ofNullable(terminbekreftelse).map(ArrayList::new).orElse(new ArrayList<>());
+        adopsjonsvedtak = Optional.ofNullable(adopsjonsvedtak).map(ArrayList::new).orElse(new ArrayList<>());
+        omsorgsovertakelse = Optional.ofNullable(omsorgsovertakelse).map(ArrayList::new).orElse(new ArrayList<>());
+        dokumentasjonAvAleneomsorg = Optional.ofNullable(dokumentasjonAvAleneomsorg).map(ArrayList::new).orElse(new ArrayList<>());
     }
     @JsonIgnore
     public List<MutableVedleggReferanseDto> getAlleVedlegg() {

@@ -1,5 +1,6 @@
 package no.nav.foreldrepenger.selvbetjening.innsending;
 
+import static no.nav.foreldrepenger.selvbetjening.innsending.VedleggReferanseMapperTjeneste.leggVedleggsreferanserTilSøknad;
 import static no.nav.foreldrepenger.selvbetjening.innsending.VedleggsHåndteringTjeneste.fjernDupliserteVedleggFraInnsending;
 import static org.slf4j.LoggerFactory.getLogger;
 
@@ -55,6 +56,7 @@ public class InnsendingTjeneste implements RetryAware {
         SECURE_LOGGER.info("Mottatt {} fra frontend med følende innhold: {}", innsending.navn(), tilJson(innsending));
         var start = Instant.now();
         hentMellomlagredeFiler(innsending);
+        leggVedleggsreferanserTilSøknad(innsending);
         fjernDupliserteVedleggFraInnsending(innsending);
         if (innsending instanceof EttersendelseDto e && e.erTilbakebetalingUttalelse()) {
             LOG.info("Konverterer tekst til vedleggs-pdf {}", e.brukerTekst().dokumentType());
