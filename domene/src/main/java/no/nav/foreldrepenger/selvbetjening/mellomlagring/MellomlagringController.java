@@ -1,8 +1,6 @@
 package no.nav.foreldrepenger.selvbetjening.mellomlagring;
 
 import static no.nav.foreldrepenger.common.domain.validation.InputValideringRegex.FRITEKST;
-import static no.nav.foreldrepenger.selvbetjening.mellomlagring.Ytelse.FORELDREPENGER;
-import static org.slf4j.LoggerFactory.getLogger;
 import static org.springframework.http.HttpStatus.NOT_ACCEPTABLE;
 import static org.springframework.http.HttpStatus.NO_CONTENT;
 import static org.springframework.http.MediaType.APPLICATION_JSON_VALUE;
@@ -13,9 +11,7 @@ import static org.springframework.http.ResponseEntity.notFound;
 import static org.springframework.http.ResponseEntity.ok;
 
 import java.io.IOException;
-import java.util.List;
 
-import org.slf4j.Logger;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.DeleteMapping;
@@ -29,15 +25,12 @@ import org.springframework.web.client.HttpServerErrorException;
 import org.springframework.web.multipart.MultipartFile;
 
 import jakarta.validation.Valid;
-import jakarta.validation.constraints.NotEmpty;
 import jakarta.validation.constraints.Pattern;
-import jakarta.validation.constraints.Size;
 import no.nav.foreldrepenger.selvbetjening.http.ProtectedRestController;
 import no.nav.foreldrepenger.selvbetjening.vedlegg.Image2PDFConverter;
 
 @ProtectedRestController(MellomlagringController.REST_STORAGE)
 public class MellomlagringController {
-    private static final Logger LOG = getLogger(MellomlagringController.class);
     public static final String REST_STORAGE = "/rest/storage";
 
     private final KryptertMellomlagring mellomlagring;
@@ -62,8 +55,7 @@ public class MellomlagringController {
 
     @DeleteMapping(path = "/{ytelse}")
     @ResponseStatus(NO_CONTENT)
-    public void slettSøknad(@PathVariable("ytelse") @Valid Ytelse ytelse) {
-        mellomlagring.slettKryptertSøknad(ytelse); // Deprecated
+    public void slettMellomlagring(@PathVariable("ytelse") @Valid Ytelse ytelse) {
         mellomlagring.slettMellomlagring(ytelse);
     }
 
@@ -94,67 +86,6 @@ public class MellomlagringController {
     public void slettVedlegg(@PathVariable("key") @Pattern(regexp = FRITEKST) String key,
                              @PathVariable("ytelse") @Valid Ytelse ytelse) {
         mellomlagring.slettKryptertVedlegg(key, ytelse);
-    }
-
-    @Deprecated
-    @GetMapping
-    public ResponseEntity<String> lesSøknad() {
-        LOG.info("Kall på deprecated endepunkt GET /soknad");
-        return lesSøknad(FORELDREPENGER);
-    }
-
-    @Deprecated
-    @DeleteMapping
-    @ResponseStatus(NO_CONTENT)
-    public void slettSøknad() {
-        LOG.info("Kall på deprecated endepunkt DELETE /soknad");
-        slettSøknad(FORELDREPENGER);
-    }
-
-    @Deprecated
-    @PostMapping(consumes = APPLICATION_JSON_VALUE)
-    @ResponseStatus(NO_CONTENT)
-    public void lagreSøknad(@RequestBody String soknad) {
-        LOG.info("Kall på deprecated endepunkt POST /soknad");
-        lagreSøknadYtelse(FORELDREPENGER, soknad);
-    }
-
-
-    @Deprecated
-    @GetMapping("/vedlegg/{key}")
-    public ResponseEntity<byte[]> lesVedlegg(@PathVariable("key") @Pattern(regexp = FRITEKST) String key) {
-        LOG.info("Kall på deprecated endepunkt GET /vedlegg/{key}");
-        return mellomlagring.lesKryptertVedlegg(key, Ytelse.IKKE_OPPGITT)
-                .map(this::found)
-                .orElse(notFound().build());
-    }
-
-    @Deprecated
-    @PostMapping(path = "/vedlegg", consumes = MULTIPART_FORM_DATA_VALUE)
-    public ResponseEntity<String> lagreVedlegg(@Valid @RequestPart("vedlegg") MultipartFile file) {
-        LOG.info("Kall på deprecated endepunkt POST /vedlegg");
-        var pdfBytes = converter.convert(getBytesNullSjekk(file));
-        var attachment = Attachment.of(file.getOriginalFilename(), pdfBytes, MediaType.APPLICATION_PDF);
-        mellomlagring.lagreKryptertVedlegg(attachment, Ytelse.IKKE_OPPGITT);
-        return created(attachment.uri()).body(attachment.uuid);
-    }
-
-    @Deprecated
-    @DeleteMapping("/vedlegg")
-    @ResponseStatus(NO_CONTENT)
-    public void slettVedlegg(@Valid @RequestBody @Size(min = 1, max = 100) List<@Pattern(regexp = FRITEKST) @NotEmpty String> uuid) {
-        LOG.info("Kall på deprecated endepunkt DELETE /vedlegg liste");
-        for (var key : uuid) {
-            mellomlagring.slettKryptertVedlegg(key, Ytelse.IKKE_OPPGITT);
-        }
-    }
-
-
-    @DeleteMapping("/vedlegg/{key}")
-    @ResponseStatus(NO_CONTENT)
-    public void slettVedlegg(@PathVariable("key") @Pattern(regexp = FRITEKST) String key) {
-        LOG.info("Kall på deprecated endepunkt DELETE /vedlegg/{key}");
-        mellomlagring.slettKryptertVedlegg(key, Ytelse.IKKE_OPPGITT);
     }
 
     private ResponseEntity<byte[]> found(Attachment att) {

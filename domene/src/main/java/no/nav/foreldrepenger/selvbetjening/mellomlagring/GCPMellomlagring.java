@@ -40,15 +40,15 @@ public class GCPMellomlagring implements Mellomlagring {
     }
 
     @Override
-    public void lagre(String katalog, String key, String value, boolean mappestruktur) {
-        storage.create(BlobInfo.newBuilder(blobFra(mellomlagringBøtte, katalog, key, mappestruktur))
+    public void lagre(String katalog, String key, String value) {
+        storage.create(BlobInfo.newBuilder(blobFra(mellomlagringBøtte, katalog, key))
                 .setContentType(APPLICATION_JSON_VALUE).build(), value.getBytes(UTF_8));
     }
 
     @Override
-    public boolean eksisterer(String katalog, String key, boolean mappestruktur) {
+    public boolean eksisterer(String katalog, String key) {
         try {
-            return Optional.ofNullable(storage.get(mellomlagringBøtte.navn(), key(katalog, key, mappestruktur))).isPresent();
+            return Optional.ofNullable(storage.get(mellomlagringBøtte.navn(), key(katalog, key))).isPresent();
         } catch (StorageException e) {
             if (NOT_FOUND.value() == e.getCode()) {
                 LOG.info("Katalog {} ikke funnet, ({})", katalog, e);
@@ -60,9 +60,9 @@ public class GCPMellomlagring implements Mellomlagring {
     }
 
     @Override
-    public Optional<String> les(String katalog, String key, boolean mappestruktur) {
+    public Optional<String> les(String katalog, String key) {
         try {
-            return Optional.ofNullable(storage.get(mellomlagringBøtte.navn(), key(katalog, key, mappestruktur)))
+            return Optional.ofNullable(storage.get(mellomlagringBøtte.navn(), key(katalog, key)))
                     .map(Blob::getContent)
                     .map(b -> new String(b, UTF_8));
         } catch (StorageException e) {
@@ -76,8 +76,8 @@ public class GCPMellomlagring implements Mellomlagring {
     }
 
     @Override
-    public void slett(String katalog, String key, boolean mappestruktur) {
-        var objektName = key(katalog, key, mappestruktur);
+    public void slett(String katalog, String key) {
+        var objektName = key(katalog, key);
         var blob = storage.get(mellomlagringBøtte.navn(), objektName);
         if (blob != null) {
             LOG.info("Sletter mellomlagring med id {}", objektName);
@@ -111,14 +111,11 @@ public class GCPMellomlagring implements Mellomlagring {
         storage.get(mellomlagringBøtte.navn());
     }
 
-    private static BlobId blobFra(Bøtte bøtte, String katalog, String key, boolean mappestruktur) {
-        return BlobId.of(bøtte.navn(), key(katalog, key, mappestruktur));
+    private static BlobId blobFra(Bøtte bøtte, String katalog, String key) {
+        return BlobId.of(bøtte.navn(), key(katalog, key));
     }
 
-    private static String key(String directory, String key, boolean mappestruktur) {
-        if (mappestruktur) {
-            return directory + key;
-        }
-        return directory + "_" + key;
+    private static String key(String directory, String key) {
+        return directory + key;
     }
 }
