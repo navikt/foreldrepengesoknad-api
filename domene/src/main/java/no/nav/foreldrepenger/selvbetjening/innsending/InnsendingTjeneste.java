@@ -61,6 +61,7 @@ public class InnsendingTjeneste implements RetryAware {
             e.vedlegg().add(vedleggFra(uttalelseFra(e)));
         }
         var kvittering = connection.sendInn(innsending);
+        mellomlagring.slettMellomlagring(tilYtelse(innsending)); // Deprecated (kan fjernes etter frontend har implementert sletting mellomlagring for alle ytelsene)
         var finish = Instant.now();
         var ms = Duration.between(start, finish).toMillis();
         LOG.info(RETURNERER_KVITTERING, kvittering, ms);
