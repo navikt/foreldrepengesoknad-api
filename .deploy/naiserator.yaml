@@ -54,10 +54,10 @@ spec:
     {{/each}}
   resources:
     limits:
-      cpu: 1500m
-      memory: 4096Mi
+      cpu: "{{limits.cpu}}"
+      memory: "{{limits.mem}}"
     requests:
-      cpu: 100m
-      memory: 2560Mi
+      cpu: "{{requests.cpu}}"
+      memory: "{{requests.mem}}"
   secureLogs:
     enabled: true
