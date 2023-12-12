@@ -44,11 +44,11 @@ class VedleggReferanseMapperTjenesteTest {
 
     @Test
     void foreldrepengerMedUttaksdokumentasjon() {
-        var NOW = LocalDate.now();
+        var now = LocalDate.now();
         var uttak = List.of(
-            uttak(FORELDREPENGER_FØR_FØDSEL, NOW.minusWeeks(3), NOW.minusDays(1)).build(),
-            uttak(MØDREKVOTE, NOW, NOW.plusWeeks(15).minusDays(1)).build(),
-            gradert(FELLESPERIODE, NOW.plusWeeks(15), NOW.plusWeeks(45).minusDays(1), 33.3).build()
+            uttak(FORELDREPENGER_FØR_FØDSEL, now.minusWeeks(3), now.minusDays(1)).build(),
+            uttak(MØDREKVOTE, now, now.plusWeeks(15).minusDays(1)).build(),
+            gradert(FELLESPERIODE, now.plusWeeks(15), now.plusWeeks(45).minusDays(1), 33.3).build()
         );
 
         var annenInntekt = new AnnenInntektDto(
