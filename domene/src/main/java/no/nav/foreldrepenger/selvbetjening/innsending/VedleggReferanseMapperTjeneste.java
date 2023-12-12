@@ -12,6 +12,7 @@ import no.nav.foreldrepenger.selvbetjening.kontrakt.innsending.dto.Innsending;
 import no.nav.foreldrepenger.selvbetjening.kontrakt.innsending.dto.MutableVedleggReferanseDto;
 import no.nav.foreldrepenger.selvbetjening.kontrakt.innsending.dto.VedleggDto;
 import no.nav.foreldrepenger.selvbetjening.kontrakt.innsending.dto.engangsstønad.EngangsstønadDto;
+import no.nav.foreldrepenger.selvbetjening.kontrakt.innsending.dto.ettersendelse.EttersendelseDto;
 import no.nav.foreldrepenger.selvbetjening.kontrakt.innsending.dto.foreldrepenger.ForeldrepengesøknadDto;
 import no.nav.foreldrepenger.selvbetjening.kontrakt.innsending.dto.foreldrepenger.UttaksplanPeriodeDto;
 import no.nav.foreldrepenger.selvbetjening.kontrakt.innsending.dto.svangerskapspenger.SvangerskapspengesøknadDto;
@@ -25,7 +26,7 @@ public class VedleggReferanseMapperTjeneste {
     }
 
     public static void leggVedleggsreferanserTilSøknad(Innsending innsending) {
-        if (innsending.vedlegg().isEmpty()) {
+        if (innsending.vedlegg().isEmpty() || innsending instanceof EttersendelseDto) {
             return;
         }
 
@@ -92,7 +93,6 @@ public class VedleggReferanseMapperTjeneste {
                 case OPPTJENING -> leggVedleggTilAnnenInntekt(foreldrepenger.søker().andreInntekterSiste10Mnd(), vedlegg);
                 case UTTAK -> leggVedleggTilUttak(foreldrepenger.uttaksplan(), vedlegg);
                 case TILRETTELEGGING -> throw new UnsupportedOperationException("Utviklerfeil: Foreldrepenger har ikke tilrettelegging!");
-
             }
         }
     }
