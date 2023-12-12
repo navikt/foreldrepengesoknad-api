@@ -6,5 +6,13 @@
   "external": [
     "fpsoknad-mottak.dev-fss-pub.nais.io",
     "safselvbetjening.dev-fss-pub.nais.io"
-  ]
+  ],
+  "limits": {
+    "cpu": "1500m",
+    "mem": "4096Mi"
+  },
+  "requests": {
+    "cpu": "100m",
+    "mem": "1024Mi"
+  }
 }

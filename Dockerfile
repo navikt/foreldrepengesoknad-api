@@ -10,6 +10,7 @@ COPY domene/target/app.jar .
 
 ENV JAVA_OPTS="-XX:MaxRAMPercentage=75 \
     -XX:+PrintCommandLineFlags \
+    -XX:ActiveProcessorCount=2 \
     -Duser.timezone=Europe/Oslo \
     --add-opens java.base/java.time=ALL-UNNAMED"
 
