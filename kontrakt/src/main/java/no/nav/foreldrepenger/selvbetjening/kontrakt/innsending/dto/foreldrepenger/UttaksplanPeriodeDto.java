@@ -3,6 +3,7 @@ package no.nav.foreldrepenger.selvbetjening.kontrakt.innsending.dto.foreldrepeng
 import static no.nav.foreldrepenger.common.domain.validation.InputValideringRegex.BARE_BOKSTAVER;
 import static no.nav.foreldrepenger.common.domain.validation.InputValideringRegex.FRITEKST;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 
@@ -36,7 +37,7 @@ public record UttaksplanPeriodeDto(@NotNull UttaksplanPeriodeDto.Type type,
 
     public UttaksplanPeriodeDto {
         orgnumre = Optional.ofNullable(orgnumre).orElse(List.of());
-        vedlegg = Optional.ofNullable(vedlegg).orElse(List.of());
+        vedlegg = Optional.ofNullable(vedlegg).map(ArrayList::new).orElse(new ArrayList<>());
     }
 
     public enum Type {

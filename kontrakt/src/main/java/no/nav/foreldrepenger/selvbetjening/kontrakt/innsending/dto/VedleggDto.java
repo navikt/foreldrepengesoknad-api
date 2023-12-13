@@ -17,15 +17,14 @@ import no.nav.foreldrepenger.selvbetjening.kontrakt.innsending.dto.svangerskapsp
 public class VedleggDto {
 
     private byte[] content;
+    @Valid
+    private MutableVedleggReferanseDto id;
+
+
     @Pattern(regexp = FRITEKST)
     private final String beskrivelse;
-
     @Valid
     private final Dokumenterer dokumenterer;
-
-    @Deprecated
-    @Valid
-    private final MutableVedleggReferanseDto id;
     @Pattern(regexp = "^[\\p{Digit}\\p{L}_]*$")
     private final String innsendingsType;
     @Pattern(regexp = "^[\\p{Digit}\\p{L}]*$")
@@ -61,13 +60,18 @@ public class VedleggDto {
         this.content = content;
     }
 
+    public MutableVedleggReferanseDto getId() {
+        return id;
+    }
+
+    public void setId(MutableVedleggReferanseDto id) {
+        this.id = id;
+    }
+
     public String getBeskrivelse() {
         return beskrivelse;
     }
 
-    public MutableVedleggReferanseDto getId() {
-        return id;
-    }
 
     public String getInnsendingsType() {
         return innsendingsType;
@@ -114,6 +118,8 @@ public class VedleggDto {
                                @Valid ArbeidsforholdDto arbeidsforhold,
                                @Valid @Size(max = 100) List<@Valid @NotNull ÅpenPeriodeDto> perioder) {
         public enum Type {
+            BARN,
+            OPPTJENING,
             UTTAK,
             TILRETTELEGGING,
         }
