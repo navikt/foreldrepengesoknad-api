@@ -49,7 +49,7 @@ public class Image2PDFConverter {
         throw new AttachmentTypeUnsupportedException(mediaType);
     }
 
-    private static BigDecimal megabytes(byte[] bytes) {
+    public static BigDecimal megabytes(byte[] bytes) {
         return BigDecimal.valueOf(DataSize.ofBytes(bytes.length).toKilobytes())
             .divide(BigDecimal.valueOf(1000), 2, RoundingMode.HALF_UP);
     }

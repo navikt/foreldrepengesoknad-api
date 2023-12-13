@@ -1,6 +1,7 @@
 package no.nav.foreldrepenger.selvbetjening.mellomlagring;
 
 import static no.nav.foreldrepenger.selvbetjening.vedlegg.DelegerendeVedleggSjekker.DELEGERENDE;
+import static no.nav.foreldrepenger.selvbetjening.vedlegg.Image2PDFConverter.megabytes;
 
 import java.util.Optional;
 
@@ -89,6 +90,7 @@ public class KryptertMellomlagring {
     }
 
     public void lagreKryptertVedlegg(Attachment vedlegg, Ytelse ytelse) {
+        LOG.info("Mellomlagrer vedlegg med opprinnelig PDF størrelse lik {}MB", megabytes(vedlegg.bytes));
         sjekker.sjekk(vedlegg);
         mellomlagring.lagre(ytelsespesifikkMappe(ytelse), vedlegg.getUuid(), krypto.encrypt(GSON.toJson(vedlegg)), true);
     }
