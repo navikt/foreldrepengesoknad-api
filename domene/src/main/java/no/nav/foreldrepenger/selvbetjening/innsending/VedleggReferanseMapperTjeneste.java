@@ -64,10 +64,10 @@ public class VedleggReferanseMapperTjeneste {
 
 
 
-    private static void leggVedleggsreferanserTilSøknad(no.nav.foreldrepenger.selvbetjening.kontrakt.innsending.v2.dto.engangsstønad.EngangsstønadDto foreldrepenger) {
-        for (var vedlegg : foreldrepenger.vedlegg()) {
+    private static void leggVedleggsreferanserTilSøknad(no.nav.foreldrepenger.selvbetjening.kontrakt.innsending.v2.dto.engangsstønad.EngangsstønadDto engangsstønad) {
+        for (var vedlegg : engangsstønad.vedlegg()) {
             switch (vedlegg.getDokumenterer().type()) {
-                case BARN -> leggVedleggTilBarn(foreldrepenger.barn(), vedlegg);
+                case BARN -> leggVedleggTilBarn(engangsstønad.barn(), vedlegg);
                 case OPPTJENING -> throw new UnsupportedOperationException("Utviklerfeil: Engangstønad har ikke annen inntektskilde!");
                 case UTTAK -> throw new UnsupportedOperationException("Utviklerfeil: Engangstønad har ikke uttak!");
                 case TILRETTELEGGING -> throw new UnsupportedOperationException("Utviklerfeil: Engangstønad har ikke tilrettelegging!");
@@ -75,11 +75,11 @@ public class VedleggReferanseMapperTjeneste {
         }
     }
 
-    private static void leggVedleggsreferanserTilSøknad(EngangsstønadDto foreldrepenger) {
-        for (var vedlegg : foreldrepenger.vedlegg()) {
+    private static void leggVedleggsreferanserTilSøknad(EngangsstønadDto engangsstønad) {
+        for (var vedlegg : engangsstønad.vedlegg()) {
             switch (vedlegg.getDokumenterer().type()) {
-                case BARN -> leggVedleggTilBarn(foreldrepenger.barn(), vedlegg);
-                case OPPTJENING -> leggVedleggTilAnnenInntekt(foreldrepenger.søker().andreInntekterSiste10Mnd(), vedlegg);
+                case BARN -> leggVedleggTilBarn(engangsstønad.barn(), vedlegg);
+                case OPPTJENING -> leggVedleggTilAnnenInntekt(engangsstønad.søker().andreInntekterSiste10Mnd(), vedlegg);
                 case UTTAK -> throw new UnsupportedOperationException("Utviklerfeil: Engangstønad har ikke uttak!");
                 case TILRETTELEGGING -> throw new UnsupportedOperationException("Utviklerfeil: Engangstønad har ikke tilrettelegging!");
             }
