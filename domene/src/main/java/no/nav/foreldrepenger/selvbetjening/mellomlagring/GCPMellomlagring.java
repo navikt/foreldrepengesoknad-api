@@ -46,6 +46,20 @@ public class GCPMellomlagring implements Mellomlagring {
     }
 
     @Override
+    public boolean eksisterer(String katalog, String key, boolean mappestruktur) {
+        try {
+            return Optional.ofNullable(storage.get(mellomlagringBøtte.navn(), key(katalog, key, mappestruktur))).isPresent();
+        } catch (StorageException e) {
+            if (NOT_FOUND.value() == e.getCode()) {
+                LOG.info("Katalog {} ikke funnet, ({})", katalog, e);
+                return false;
+            }
+            LOG.warn("Katalog {} ikke funnet, ({})", katalog, e.getCode(), e);
+            throw e;
+        }
+    }
+
+    @Override
     public Optional<String> les(String katalog, String key, boolean mappestruktur) {
         try {
             return Optional.ofNullable(storage.get(mellomlagringBøtte.navn(), key(katalog, key, mappestruktur)))
@@ -53,7 +67,7 @@ public class GCPMellomlagring implements Mellomlagring {
                     .map(b -> new String(b, UTF_8));
         } catch (StorageException e) {
             if (NOT_FOUND.value() == e.getCode()) {
-                LOG.trace("Katalog {} ikke funnet, ({})", katalog, e);
+                LOG.info("Katalog {} ikke funnet, ({})", katalog, e);
                 return Optional.empty();
             }
             LOG.warn("Katalog {} ikke funnet, ({})", katalog, e.getCode(), e);

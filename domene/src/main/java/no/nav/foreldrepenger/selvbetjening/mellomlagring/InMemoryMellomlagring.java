@@ -27,6 +27,11 @@ public class InMemoryMellomlagring implements Mellomlagring {
     }
 
     @Override
+    public boolean eksisterer(String katalog, String key, boolean mappestruktur) {
+        return store.containsKey(key(katalog, key));
+    }
+
+    @Override
     public Optional<String> les(String katalog, String key, boolean mappestruktur) {
         return Optional.ofNullable(store.get(key(katalog, key)));
     }
