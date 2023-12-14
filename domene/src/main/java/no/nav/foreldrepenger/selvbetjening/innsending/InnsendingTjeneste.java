@@ -10,7 +10,6 @@ import java.time.Instant;
 import java.util.Random;
 
 import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Service;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
@@ -33,7 +32,7 @@ import no.nav.foreldrepenger.selvbetjening.mellomlagring.Ytelse;
 
 @Service
 public class InnsendingTjeneste implements RetryAware {
-    private static final Logger SECURE_LOGGER = LoggerFactory.getLogger("secureLogger");
+    private static final Logger SECURE_LOGGER = getLogger("secureLogger");
     private static final String RETURNERER_KVITTERING = "Returnerer kvittering {}. Innsending tok {}ms";
     private static final Logger LOG = getLogger(InnsendingTjeneste.class);
     private static final Random IDGENERATOR = new SecureRandom();
@@ -118,6 +117,13 @@ public class InnsendingTjeneste implements RetryAware {
         }
         if (innsending instanceof SvangerskapspengesøknadDto) {
             return Ytelse.SVANGERSKAPSPENGER;
+        }
+        if (innsending instanceof EttersendelseDto ettersendelse) {
+            return switch (ettersendelse.type()) {
+                case FORELDREPENGER -> Ytelse.FORELDREPENGER;
+                case SVANGERSKAPSPENGER -> Ytelse.SVANGERSKAPSPENGER;
+                case ENGANGSSTØNAD -> Ytelse.ENGANGSSTONAD;
+            };
         }
         return Ytelse.IKKE_OPPGITT;
     }
