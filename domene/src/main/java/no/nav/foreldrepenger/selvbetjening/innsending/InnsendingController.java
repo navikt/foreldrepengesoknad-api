@@ -31,6 +31,11 @@ public class InnsendingController {
         return innsending.sendInn(søknad);
     }
 
+    @PostMapping("/engangsstonad")
+    public Kvittering sendInnEngangsstonad(@Valid @RequestBody EngangsstønadDto søknad) {
+        return innsending.sendInn(søknad);
+    }
+
     @PostMapping("/endre")
     public Kvittering endre(@Valid @RequestBody EndringssøknadDto endringssøknad) {
         return innsending.sendInn(endringssøknad);
