@@ -2,6 +2,7 @@ package no.nav.foreldrepenger.selvbetjening.mellomlagring;
 
 import static no.nav.foreldrepenger.selvbetjening.mellomlagring.Ytelse.FORELDREPENGER;
 import static no.nav.foreldrepenger.selvbetjening.mellomlagring.Ytelse.IKKE_OPPGITT;
+import static no.nav.foreldrepenger.selvbetjening.mellomlagring.Ytelse.SVANGERSKAPSPENGER;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.mockito.Mockito.when;
@@ -50,6 +51,38 @@ class KryptertMellomlagringTest {
         km = new KryptertMellomlagring(mellomlagring, krypto,
                 new DelegerendeVedleggSjekker(new StørrelseVedleggSjekker(DataSize.ofMegabytes(32), DataSize.ofMegabytes(8)), scanner,
                         new PDFEncryptionVedleggSjekker()));
+    }
+
+    @Test
+    void finnesAktivMellomlagringPåForForeldrepengerPåBruker() {
+        km.lagreKryptertSøknad("Søknad", FORELDREPENGER);
+
+        var aktivMellomlagring = km.finnesAktivMellomlagring();
+
+        assertThat(aktivMellomlagring.engangsstonad()).isFalse();
+        assertThat(aktivMellomlagring.foreldrepenger()).isTrue();
+        assertThat(aktivMellomlagring.svangerskapspenger()).isFalse();
+    }
+
+    @Test
+    void finnesAktivMellomlagringPåFlereYtelserPåBruker() {
+        km.lagreKryptertSøknad("Søknad foreldrepenger", FORELDREPENGER);
+        km.lagreKryptertSøknad("Søknad svangerskapspenger", SVANGERSKAPSPENGER);
+
+        var aktivMellomlagring = km.finnesAktivMellomlagring();
+
+        assertThat(aktivMellomlagring.engangsstonad()).isFalse();
+        assertThat(aktivMellomlagring.foreldrepenger()).isTrue();
+        assertThat(aktivMellomlagring.svangerskapspenger()).isTrue();
+    }
+
+    @Test
+    void finnesIkkeAktivMellomlagringPåBruker() {
+        var aktivMellomlagring = km.finnesAktivMellomlagring();
+
+        assertThat(aktivMellomlagring.engangsstonad()).isFalse();
+        assertThat(aktivMellomlagring.foreldrepenger()).isFalse();
+        assertThat(aktivMellomlagring.svangerskapspenger()).isFalse();
     }
 
     @Test

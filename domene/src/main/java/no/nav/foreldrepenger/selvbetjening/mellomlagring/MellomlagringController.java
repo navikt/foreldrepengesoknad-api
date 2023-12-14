@@ -48,6 +48,11 @@ public class MellomlagringController {
         this.converter = converter;
     }
 
+    @GetMapping(path = "/aktive")
+    public ResponseEntity<AktivMellomlagringDto> finnesDetAktivMellomlagring() {
+        return ok().body(mellomlagring.finnesAktivMellomlagring());
+    }
+
     @GetMapping(path = "/{ytelse}")
     public ResponseEntity<String> lesSøknad(@PathVariable("ytelse") @Valid Ytelse ytelse) {
         return mellomlagring.lesKryptertSøknad(ytelse)

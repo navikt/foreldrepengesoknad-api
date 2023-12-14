@@ -31,6 +31,13 @@ public class KryptertMellomlagring {
         this.sjekker = sjekker;
     }
 
+    public AktivMellomlagringDto finnesAktivMellomlagring() {
+        var esEksisterer = mellomlagring.eksisterer(ytelsespesifikkMappe(Ytelse.ENGANGSSTONAD), SØKNAD, true);
+        var fpEksisterer = mellomlagring.eksisterer(ytelsespesifikkMappe(Ytelse.FORELDREPENGER), SØKNAD, true);
+        var svpEksisterer = mellomlagring.eksisterer(ytelsespesifikkMappe(Ytelse.SVANGERSKAPSPENGER), SØKNAD, true);
+        return new AktivMellomlagringDto(esEksisterer, fpEksisterer, svpEksisterer);
+    }
+
     public Optional<String> lesKryptertSøknad(Ytelse ytelse) {
         var gammel = mellomlagring.les(krypto.mappenavn(), utledNøkkel(ytelse), false); // Deprecated
         if (gammel.isPresent()) {
