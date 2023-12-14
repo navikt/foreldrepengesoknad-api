@@ -1,7 +1,6 @@
 package no.nav.foreldrepenger.selvbetjening.mellomlagring;
 
 import static no.nav.foreldrepenger.selvbetjening.mellomlagring.Ytelse.FORELDREPENGER;
-import static no.nav.foreldrepenger.selvbetjening.mellomlagring.Ytelse.IKKE_OPPGITT;
 import static no.nav.foreldrepenger.selvbetjening.mellomlagring.Ytelse.SVANGERSKAPSPENGER;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.junit.jupiter.api.Assertions.assertEquals;
@@ -23,8 +22,6 @@ import org.springframework.http.MediaType;
 import org.springframework.mock.web.MockMultipartFile;
 import org.springframework.util.unit.DataSize;
 
-import com.google.gson.Gson;
-
 import no.nav.foreldrepenger.common.error.UnexpectedInputException;
 import no.nav.foreldrepenger.common.util.TokenUtil;
 import no.nav.foreldrepenger.selvbetjening.vedlegg.DelegerendeVedleggSjekker;
@@ -39,15 +36,14 @@ class KryptertMellomlagringTest {
     ClamAvVirusScanner scanner;
     @Mock
     TokenUtil util;
+
     private KryptertMellomlagring km;
-    private InMemoryMellomlagring mellomlagring;
-    private MellomlagringKrypto krypto;
 
     @BeforeEach
     void beforeEach() {
         when(util.getSubject()).thenReturn("01010111111");
-        mellomlagring = new InMemoryMellomlagring();
-        krypto = new MellomlagringKrypto("passphrase", util);
+        var mellomlagring = new InMemoryMellomlagring();
+        var krypto = new MellomlagringKrypto("passphrase", util);
         km = new KryptertMellomlagring(mellomlagring, krypto,
                 new DelegerendeVedleggSjekker(new StørrelseVedleggSjekker(DataSize.ofMegabytes(32), DataSize.ofMegabytes(8)), scanner,
                         new PDFEncryptionVedleggSjekker()));
@@ -108,22 +104,6 @@ class KryptertMellomlagringTest {
     }
 
     @Test
-    void mellomlagretSøknadPåGammelFormatSkalErtattesMedNyttFormat() {
-        mellomlagring.lagre(krypto.mappenavn(), FORELDREPENGER.name(), krypto.encrypt("Søknad verdi"), false);
-
-        var lest1 = km.lesKryptertSøknad(FORELDREPENGER);
-        assertThat(lest1).isPresent();
-        assertThat(lest1.get()).contains("Søknad");
-
-        var lest2 = km.lesKryptertSøknad(FORELDREPENGER);
-        assertThat(lest2).isPresent();
-        assertThat(lest2.get()).isEqualTo(lest1.get());
-
-        km.slettKryptertSøknad(FORELDREPENGER);
-        assertThat(km.lesKryptertSøknad(FORELDREPENGER)).isNotPresent();
-    }
-
-    @Test
     void slettingAvMellomlagretESSkalIkkeSletteMellomlagretFP() {
         km.lagreKryptertSøknad("Søknad FP", FORELDREPENGER);
         km.lagreKryptertSøknad("Søknad ES", Ytelse.ENGANGSSTONAD);
@@ -140,39 +120,6 @@ class KryptertMellomlagringTest {
         assertThat(km.lesKryptertSøknad(FORELDREPENGER)).isPresent();
         assertThat(km.lesKryptertSøknad(Ytelse.ENGANGSSTONAD)).isNotPresent();
     }
-
-    @Test
-    void mellomlagretVedleggPåGammelFormatSkalErtattesMedNyttFormat() {
-        var vedlegg = Attachment.of("filen.pdf", new byte[]{1,2,3,4,5,6,7,8}, MediaType.APPLICATION_PDF);
-        mellomlagring.lagre(krypto.mappenavn(), vedlegg.getUuid(), krypto.encrypt(new Gson().toJson(vedlegg)), false); // Lagrer på gammelt format
-
-        var lest1 = km.lesKryptertVedlegg(vedlegg.getUuid(), FORELDREPENGER);
-        assertThat(lest1).contains(vedlegg);
-
-        var lest2 =  km.lesKryptertVedlegg(vedlegg.getUuid(), FORELDREPENGER);
-        assertThat(lest2).contains(lest1.get());
-
-        km.slettKryptertSøknad(FORELDREPENGER);
-        assertThat(km.lesKryptertSøknad(FORELDREPENGER)).isNotPresent();
-    }
-
-
-    @Test
-    void mellomlagringAvVedleddSkalSletteGamleFilerOgOpprettePåNyttFormat() {
-        var vedlegg = Attachment.of("filen.pdf", new byte[]{1,2,3,4,5,6,7,8}, MediaType.APPLICATION_PDF);
-        mellomlagring.lagre(krypto.mappenavn(), vedlegg.getUuid(), krypto.encrypt(new Gson().toJson(vedlegg)), false); // Lagrer på gammelt format
-
-        var lest1 = km.lesKryptertVedlegg(vedlegg.getUuid(), IKKE_OPPGITT);
-        assertThat(lest1).contains(vedlegg);
-
-        var lest2 =  km.lesKryptertVedlegg(vedlegg.getUuid(), FORELDREPENGER);
-        assertThat(lest2).contains(lest1.get());
-
-        km.slettKryptertSøknad(FORELDREPENGER);
-        assertThat(km.lesKryptertSøknad(FORELDREPENGER)).isNotPresent();
-        assertThat(km.lesKryptertSøknad(IKKE_OPPGITT)).isNotPresent();
-    }
-
 
     @Test
     void mellomlagringVedleggLagreLesSlettRoundtripTest() {

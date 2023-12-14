@@ -11,8 +11,6 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 import java.io.EOFException;
 import java.util.UUID;
 
-import no.nav.foreldrepenger.selvbetjening.config.MessageSourceConfig;
-
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
@@ -30,6 +28,7 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import jakarta.validation.ConstraintViolationException;
 import no.nav.foreldrepenger.common.util.TokenUtil;
 import no.nav.foreldrepenger.selvbetjening.config.JacksonConfiguration;
+import no.nav.foreldrepenger.selvbetjening.config.MessageSourceConfig;
 import no.nav.foreldrepenger.selvbetjening.error.ApiExceptionHandler;
 import no.nav.foreldrepenger.selvbetjening.vedlegg.AttachmentTooLargeException;
 import no.nav.foreldrepenger.selvbetjening.vedlegg.Image2PDFConverter;
@@ -61,7 +60,7 @@ class MellomlagringControllerTest {
     @Test
     void hentVedleggOkMedUUID() throws Exception {
         var key = UUID.randomUUID();
-        var result = mvc.perform(get(MellomlagringController.REST_STORAGE + "/vedlegg/{key}", key)
+        var result = mvc.perform(get(MellomlagringController.REST_STORAGE + "/" + Ytelse.FORELDREPENGER + "/vedlegg/{key}", key)
                 .contentType(MediaType.APPLICATION_JSON))
             .andExpect(status().isNotFound())
             .andReturn();
@@ -71,7 +70,7 @@ class MellomlagringControllerTest {
     @Test
     void hentVedleggHiverExceptionMedUlovligKey() throws Exception {
         var key = "<Special=key∁\uD835\uDD4A>";
-        var result = mvc.perform(get(MellomlagringController.REST_STORAGE + "/vedlegg/{key}", key)
+        var result = mvc.perform(get(MellomlagringController.REST_STORAGE + "/" + Ytelse.FORELDREPENGER + "/vedlegg/{key}", key)
             .contentType(MediaType.APPLICATION_JSON))
             .andExpect(status().isBadRequest())
             .andReturn();
@@ -85,7 +84,7 @@ class MellomlagringControllerTest {
         doThrow(wrappedConnectivityException).when(converter).convert(any());
         var file = new MockMultipartFile("vedlegg", "filename.pdf", MULTIPART_FORM_DATA_VALUE, "file content".getBytes());
 
-        mvc.perform(multipart(MellomlagringController.REST_STORAGE + "/vedlegg").file(file))
+        mvc.perform(multipart(MellomlagringController.REST_STORAGE + "/" + Ytelse.FORELDREPENGER + "/vedlegg").file(file))
             .andExpect(status().isInternalServerError())
             .andReturn();
     }
@@ -94,7 +93,7 @@ class MellomlagringControllerTest {
     void skalMappeAttachmentsTooLargeExceptionTil413() throws Exception {
         doThrow(new AttachmentTooLargeException(DataSize.ofMegabytes(2), DataSize.ofMegabytes(1))).when(converter).convert(any());
         var file = new MockMultipartFile("vedlegg", "filename.pdf", MULTIPART_FORM_DATA_VALUE, "file content".getBytes());
-        mvc.perform(multipart(MellomlagringController.REST_STORAGE + "/vedlegg").file(file))
+        mvc.perform(multipart(MellomlagringController.REST_STORAGE + "/" + Ytelse.FORELDREPENGER + "/vedlegg").file(file))
             .andExpect(status().isPayloadTooLarge())
             .andReturn();
     }
