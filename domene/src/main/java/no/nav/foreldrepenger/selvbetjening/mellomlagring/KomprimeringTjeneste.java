@@ -13,7 +13,7 @@ public class KomprimeringTjeneste {
         try (var outputStream = new GZIPOutputStream(arrayOutputStream)){
             outputStream.write(pdf);
         } catch (IOException e) {
-            throw new RuntimeException(e);
+            throw new IllegalStateException("Noe gikk galt med komprimering av vedlegg ved mellomlagring", e);
         }
         return arrayOutputStream.toByteArray();
     }
@@ -23,7 +23,7 @@ public class KomprimeringTjeneste {
         try (var inputStream = new GZIPInputStream(arrayInputStream)){
             return inputStream.readAllBytes();
         } catch (IOException e) {
-            throw new RuntimeException(e);
+            throw new IllegalStateException("Noe gikk galt med dekomprimering av vedlegg ved mellomlagring",e);
         }
     }
 }
