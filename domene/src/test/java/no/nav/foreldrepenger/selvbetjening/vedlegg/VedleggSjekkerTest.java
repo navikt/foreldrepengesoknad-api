@@ -38,7 +38,7 @@ import no.nav.foreldrepenger.selvbetjening.vedlegg.virusscan.VirusScanConnection
 
 @ExtendWith(MockitoExtension.class)
 @ContextConfiguration(classes = JacksonConfiguration.class)
-class VedleggSjekkerTest {
+public class VedleggSjekkerTest {
 
     @Mock
     private InnsendingConnection connection;
@@ -133,7 +133,7 @@ class VedleggSjekkerTest {
         var vedleggene = List.of(vedlegg);
 
         var innsendingTjeneste = new InnsendingTjeneste(connection, mellomlagring, pdfGenerator, mapper);
-        when(mellomlagring.lesKryptertVedlegg(vedlegg.getUuid(), Ytelse.ENGANGSSTONAD)).thenReturn(Optional.of(attachment(1)));
+        when(mellomlagring.lesKryptertVedlegg(vedlegg.getUuid(), Ytelse.ENGANGSSTONAD)).thenReturn(Optional.of(megabytes(1)));
 
         var innsending = new EngangsstønadDto(null, null, null, null, vedleggene);
         innsendingTjeneste.hentMellomlagredeFiler(innsending);
@@ -150,13 +150,18 @@ class VedleggSjekkerTest {
     }
 
     private static Attachment attachment(int megabytes) {
-        var content = new byte[((int) DataSize.ofMegabytes(megabytes).toBytes())];
+        var content = megabytes(megabytes);
         return Attachment.of("en pdf", content, MediaType.APPLICATION_PDF);
+    }
+
+    private static byte[] megabytes(int megabytes) {
+        var content = new byte[((int) DataSize.ofMegabytes(megabytes).toBytes())];
+        return content;
     }
 
     private static VedleggDto vedlegg(int megabytes) {
         var uuid = "802e2ce7-8106-46cf-afdb-2aecc2b6de7c";
-        var content = new byte[((int) DataSize.ofMegabytes(megabytes).toBytes())];
+        var content = megabytes(megabytes);
         return new VedleggDto(content, "En stoooor pdf!", new MutableVedleggReferanseDto("V00001"), null, "I000038", uuid, URI.create("https://foreldrepengesoknad-api.intern.dev.nav.no/" + uuid),
             null);
     }

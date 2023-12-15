@@ -51,7 +51,7 @@ public class Image2PDFConverter {
 
     public static BigDecimal megabytes(byte[] bytes) {
         return BigDecimal.valueOf(DataSize.ofBytes(bytes.length).toKilobytes())
-            .divide(BigDecimal.valueOf(1000), 2, RoundingMode.HALF_UP);
+            .divide(BigDecimal.valueOf(1000), 3, RoundingMode.HALF_UP);
     }
 
     private static byte[] konverterBildeTilPdf(byte[] innhold, MediaType mediaType) {

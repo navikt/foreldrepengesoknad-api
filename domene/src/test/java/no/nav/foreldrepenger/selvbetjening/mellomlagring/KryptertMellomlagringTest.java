@@ -2,51 +2,36 @@ package no.nav.foreldrepenger.selvbetjening.mellomlagring;
 
 import static no.nav.foreldrepenger.selvbetjening.mellomlagring.Ytelse.FORELDREPENGER;
 import static no.nav.foreldrepenger.selvbetjening.mellomlagring.Ytelse.SVANGERSKAPSPENGER;
+import static no.nav.foreldrepenger.selvbetjening.vedlegg.VedleggSjekkerTest.fraResource;
 import static org.assertj.core.api.Assertions.assertThat;
-import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.mockito.Mockito.when;
 
-import java.io.ByteArrayOutputStream;
-
-import org.apache.pdfbox.pdmodel.PDDocument;
-import org.apache.pdfbox.pdmodel.PDPage;
-import org.apache.pdfbox.pdmodel.PDPageContentStream;
-import org.apache.pdfbox.pdmodel.font.PDType1Font;
-import org.apache.pdfbox.pdmodel.font.Standard14Fonts;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 import org.springframework.http.MediaType;
-import org.springframework.mock.web.MockMultipartFile;
-import org.springframework.util.unit.DataSize;
 
-import no.nav.foreldrepenger.common.error.UnexpectedInputException;
+import com.google.gson.Gson;
+
 import no.nav.foreldrepenger.common.util.TokenUtil;
-import no.nav.foreldrepenger.selvbetjening.vedlegg.DelegerendeVedleggSjekker;
-import no.nav.foreldrepenger.selvbetjening.vedlegg.PDFEncryptionVedleggSjekker;
-import no.nav.foreldrepenger.selvbetjening.vedlegg.StørrelseVedleggSjekker;
-import no.nav.foreldrepenger.selvbetjening.vedlegg.virusscan.ClamAvVirusScanner;
 
 @ExtendWith(MockitoExtension.class)
 class KryptertMellomlagringTest {
-
-    @Mock
-    ClamAvVirusScanner scanner;
     @Mock
     TokenUtil util;
 
     private KryptertMellomlagring km;
+    private MellomlagringKrypto krypto;
+    private Mellomlagring mellomlagring;
 
     @BeforeEach
     void beforeEach() {
         when(util.getSubject()).thenReturn("01010111111");
-        var mellomlagring = new InMemoryMellomlagring();
-        var krypto = new MellomlagringKrypto("passphrase", util);
-        km = new KryptertMellomlagring(mellomlagring, krypto,
-                new DelegerendeVedleggSjekker(new StørrelseVedleggSjekker(DataSize.ofMegabytes(32), DataSize.ofMegabytes(8)), scanner,
-                        new PDFEncryptionVedleggSjekker()));
+        mellomlagring = new InMemoryMellomlagring();
+        krypto = new MellomlagringKrypto("passphrase", util);
+        km = new KryptertMellomlagring(mellomlagring, krypto);
     }
 
     @Test
@@ -82,12 +67,14 @@ class KryptertMellomlagringTest {
     }
 
     @Test
-    void TestKryptertSøknad() {
-        var ytelse = Ytelse.IKKE_OPPGITT;
+    void kryptertForeldrepengeSøknadRoundtripTest() {
+        var ytelse = FORELDREPENGER;
         km.lagreKryptertSøknad("Søknad", ytelse);
+
         var lest = km.lesKryptertSøknad(ytelse);
         assertThat(lest).isPresent();
         assertThat(lest.get()).contains("Søknad");
+
         km.slettKryptertSøknad(ytelse);
         assertThat(km.lesKryptertSøknad(ytelse)).isNotPresent();
     }
@@ -96,9 +83,11 @@ class KryptertMellomlagringTest {
     void TestKryptertSøknadEngangssøknad() {
         var ytelse = Ytelse.ENGANGSSTONAD;
         km.lagreKryptertSøknad("Søknad", ytelse);
+
         var lest = km.lesKryptertSøknad(ytelse);
         assertThat(lest).isPresent();
         assertThat(lest.get()).contains("Søknad");
+
         km.slettKryptertSøknad(ytelse);
         assertThat(km.lesKryptertSøknad(ytelse)).isNotPresent();
     }
@@ -123,46 +112,28 @@ class KryptertMellomlagringTest {
 
     @Test
     void mellomlagringVedleggLagreLesSlettRoundtripTest() {
-        var vedlegg = Attachment.of("filen.pdf", new byte[]{1,2,3,4,5,6,7,8}, MediaType.APPLICATION_PDF);
+        var vedlegg = Attachment.of("filen.pdf", fraResource("pdf/junit-test.pdf"), MediaType.APPLICATION_PDF);
         km.lagreKryptertVedlegg(vedlegg, FORELDREPENGER);
 
         var lest = km.lesKryptertVedlegg(vedlegg.getUuid(), FORELDREPENGER);
-        assertThat(lest).contains(vedlegg);
+        assertThat(lest).contains(vedlegg.getBytes());
 
         km.slettKryptertSøknad(FORELDREPENGER);
         assertThat(km.lesKryptertSøknad(FORELDREPENGER)).isNotPresent();
     }
 
     @Test
-    void TestKryptertVedlegg() {
-        var pdf = generatePdf();
-        var original = Attachment.of(new MockMultipartFile("vedlegg", "originalt vedlegg", "application/pdf", pdf));
-        km.lagreKryptertVedlegg(original, Ytelse.IKKE_OPPGITT);
-        var lest = km.lesKryptertVedlegg(original.getUuid(), Ytelse.IKKE_OPPGITT);
-        assertThat(lest).isPresent();
-        assertEquals(original, lest.get());
-        km.slettKryptertVedlegg(original.getUuid(), Ytelse.IKKE_OPPGITT);
-        assertThat(km.lesKryptertSøknad(Ytelse.IKKE_OPPGITT)).isNotPresent();
-    }
+    void gammelMellomlagringAvVedleggSkalDecryptersDeseralisersOgLagresTilNyttElementUtenBase64OgSeralisering() {
+        var vedlegg = Attachment.of("filen.pdf", new byte[]{1,2,3,4,5,6,7,8}, MediaType.APPLICATION_PDF);
+        var mappenavnGammelStruktur = km.ytelsespesifikkMappe(FORELDREPENGER);
+        mellomlagring.lagre(mappenavnGammelStruktur, vedlegg.getUuid(), krypto.encrypt(new Gson().toJson(vedlegg)));
 
-    private static byte[] generatePdf() {
+        assertThat(mellomlagring.les(mappenavnGammelStruktur, vedlegg.getUuid())).isPresent();
+        var lest = km.lesKryptertVedlegg(vedlegg.getUuid(), FORELDREPENGER);
+        assertThat(lest).contains(vedlegg.getBytes());
+        assertThat(mellomlagring.les(mappenavnGammelStruktur, vedlegg.getUuid())).isEmpty();
 
-        try (var document = new PDDocument(); var baos = new ByteArrayOutputStream()) {
-
-            var page = new PDPage();
-            document.addPage(page);
-
-            var contentStream = new PDPageContentStream(document, page);
-
-            contentStream.setFont(new PDType1Font(Standard14Fonts.FontName.COURIER), 12);
-            contentStream.beginText();
-            contentStream.showText("test");
-            contentStream.endText();
-            contentStream.close();
-            document.save(baos);
-            return baos.toByteArray();
-        } catch (Exception e) {
-            throw new UnexpectedInputException("Kunne ikke lage PDF", e);
-        }
+        km.slettKryptertSøknad(FORELDREPENGER);
+        assertThat(km.lesKryptertSøknad(FORELDREPENGER)).isNotPresent();
     }
 }

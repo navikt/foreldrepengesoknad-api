@@ -15,7 +15,8 @@ import no.nav.boot.conditionals.ConditionalOnLocalOrTest;
 @ConditionalOnMissingBean(GCPMellomlagring.class)
 public class InMemoryMellomlagring implements Mellomlagring {
 
-    private final Map<String, String> store;
+    private final Map<String, Object> store;
+
 
     public InMemoryMellomlagring() {
         store = new HashMap<>();
@@ -27,13 +28,23 @@ public class InMemoryMellomlagring implements Mellomlagring {
     }
 
     @Override
+    public void lagreVedlegg(String katalog, String key, byte[] value) {
+        store.put(key(katalog, key), value);
+    }
+
+    @Override
     public boolean eksisterer(String katalog, String key) {
         return store.containsKey(key(katalog, key));
     }
 
     @Override
     public Optional<String> les(String katalog, String key) {
-        return Optional.ofNullable(store.get(key(katalog, key)));
+        return Optional.ofNullable(((String) store.get(key(katalog, key))));
+    }
+
+    @Override
+    public Optional<byte[]> lesVedlegg(String katalog, String key) {
+        return Optional.ofNullable(((byte[]) store.get(key(katalog, key))));
     }
 
     @Override

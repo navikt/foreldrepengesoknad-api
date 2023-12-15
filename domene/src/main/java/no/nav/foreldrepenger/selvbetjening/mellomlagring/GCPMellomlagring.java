@@ -3,6 +3,7 @@ package no.nav.foreldrepenger.selvbetjening.mellomlagring;
 import static java.nio.charset.StandardCharsets.UTF_8;
 import static org.springframework.http.HttpStatus.NOT_FOUND;
 import static org.springframework.http.MediaType.APPLICATION_JSON_VALUE;
+import static org.springframework.http.MediaType.APPLICATION_OCTET_STREAM_VALUE;
 
 import java.util.Optional;
 
@@ -18,7 +19,6 @@ import com.google.cloud.storage.Storage;
 import com.google.cloud.storage.StorageException;
 import com.google.cloud.storage.StorageOptions;
 
-import jakarta.annotation.PostConstruct;
 import no.nav.boot.conditionals.ConditionalOnGCP;
 
 @Component
@@ -46,6 +46,12 @@ public class GCPMellomlagring implements Mellomlagring {
     }
 
     @Override
+    public void lagreVedlegg(String katalog, String key, byte[] value) {
+        storage.create(BlobInfo.newBuilder(blobFra(mellomlagringBøtte, katalog, key))
+            .setContentType(APPLICATION_OCTET_STREAM_VALUE).build(), value);
+    }
+
+    @Override
     public boolean eksisterer(String katalog, String key) {
         try {
             return Optional.ofNullable(storage.get(mellomlagringBøtte.navn(), key(katalog, key))).isPresent();
@@ -68,6 +74,20 @@ public class GCPMellomlagring implements Mellomlagring {
         } catch (StorageException e) {
             if (NOT_FOUND.value() == e.getCode()) {
                 LOG.info("Katalog {} ikke funnet, ({})", katalog, e);
+                return Optional.empty();
+            }
+            LOG.warn("Katalog {} ikke funnet, ({})", katalog, e.getCode(), e);
+            throw e;
+        }
+    }
+
+    @Override
+    public Optional<byte[]> lesVedlegg(String katalog, String key) {
+        try {
+            return Optional.ofNullable(storage.get(mellomlagringBøtte.navn(), key(katalog, key))).map(Blob::getContent);
+        } catch (StorageException e) {
+            if (NOT_FOUND.value() == e.getCode()) {
+                LOG.trace("Katalog {} ikke funnet, ({})", katalog, e);
                 return Optional.empty();
             }
             LOG.warn("Katalog {} ikke funnet, ({})", katalog, e.getCode(), e);
@@ -104,11 +124,6 @@ public class GCPMellomlagring implements Mellomlagring {
             batch.submit();
             LOG.info("Alle blobs i bøtte {} med prefiks {} er blitt slettet", mellomlagringBøtte.navn(), katalog);
         }
-    }
-
-    @PostConstruct
-    void valider() {
-        storage.get(mellomlagringBøtte.navn());
     }
 
     private static BlobId blobFra(Bøtte bøtte, String katalog, String key) {

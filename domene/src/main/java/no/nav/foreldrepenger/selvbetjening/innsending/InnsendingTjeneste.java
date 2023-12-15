@@ -101,10 +101,7 @@ public class InnsendingTjeneste implements RetryAware {
 
     private void hentVedleggBytes(VedleggDto vedlegg, Innsending innsending) {
         if (vedlegg.getUrl() != null) {
-            var ytelse = tilYtelse(innsending);
-            vedlegg.setContent(mellomlagring.lesKryptertVedlegg(vedlegg.getUuid(), ytelse)
-                .map(a -> a.bytes)
-                .orElse(new byte[] {}));
+            vedlegg.setContent(mellomlagring.lesKryptertVedlegg(vedlegg.getUuid(), tilYtelse(innsending)).orElse(new byte[] {}));
         }
     }
 
@@ -125,7 +122,7 @@ public class InnsendingTjeneste implements RetryAware {
                 case ENGANGSSTØNAD -> Ytelse.ENGANGSSTONAD;
             };
         }
-        return Ytelse.IKKE_OPPGITT;
+        throw new IllegalStateException("Utviklerfeil: Fant ikke ytelse på innsending: " + innsending);
     }
 
     private String tilJson(Innsending innsending) {

@@ -1,6 +1,7 @@
 package no.nav.foreldrepenger.selvbetjening.mellomlagring;
 
 import static no.nav.foreldrepenger.common.domain.validation.InputValideringRegex.FRITEKST;
+import static no.nav.foreldrepenger.selvbetjening.vedlegg.DelegerendeVedleggSjekker.DELEGERENDE;
 import static org.springframework.http.HttpStatus.NOT_ACCEPTABLE;
 import static org.springframework.http.HttpStatus.NO_CONTENT;
 import static org.springframework.http.MediaType.APPLICATION_JSON_VALUE;
@@ -12,6 +13,7 @@ import static org.springframework.http.ResponseEntity.ok;
 
 import java.io.IOException;
 
+import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.DeleteMapping;
@@ -28,6 +30,7 @@ import jakarta.validation.Valid;
 import jakarta.validation.constraints.Pattern;
 import no.nav.foreldrepenger.selvbetjening.http.ProtectedRestController;
 import no.nav.foreldrepenger.selvbetjening.vedlegg.Image2PDFConverter;
+import no.nav.foreldrepenger.selvbetjening.vedlegg.VedleggSjekker;
 
 @ProtectedRestController(MellomlagringController.REST_STORAGE)
 public class MellomlagringController {
@@ -35,10 +38,12 @@ public class MellomlagringController {
 
     private final KryptertMellomlagring mellomlagring;
     private final Image2PDFConverter converter;
+    private final VedleggSjekker sjekker;
 
-    public MellomlagringController(KryptertMellomlagring mellomlagring, Image2PDFConverter converter) {
+    public MellomlagringController(KryptertMellomlagring mellomlagring, Image2PDFConverter converter, @Qualifier(DELEGERENDE) VedleggSjekker sjekker) {
         this.mellomlagring = mellomlagring;
         this.converter = converter;
+        this.sjekker = sjekker;
     }
 
     @GetMapping(path = "/aktive")
@@ -77,27 +82,23 @@ public class MellomlagringController {
                                                @PathVariable("ytelse") @Valid Ytelse ytelse) {
         var pdfBytes = converter.convert(getBytesNullSjekk(file));
         var attachment = Attachment.of(file.getOriginalFilename(), pdfBytes, MediaType.APPLICATION_PDF);
+        sjekker.sjekk(attachment);
         mellomlagring.lagreKryptertVedlegg(attachment, ytelse);
         return created(attachment.uri()).body(attachment.uuid);
     }
 
     @DeleteMapping("/{ytelse}/vedlegg/{key}")
     @ResponseStatus(NO_CONTENT)
-    public void slettVedlegg(@PathVariable("key") @Pattern(regexp = FRITEKST) String key,
-                             @PathVariable("ytelse") @Valid Ytelse ytelse) {
+    public void slettVedlegg(@PathVariable("ytelse") @Valid Ytelse ytelse,
+                             @PathVariable("key") @Pattern(regexp = FRITEKST) String key) {
         mellomlagring.slettKryptertVedlegg(key, ytelse);
     }
 
-    private ResponseEntity<byte[]> found(Attachment att) {
+    private ResponseEntity<byte[]> found(byte[] innhold) {
         return ok()
-                .contentType(att.getContentType())
-                .contentLength(att.getSize().toBytes())
-                .body(att.getBytes());
-    }
-
-    @Override
-    public String toString() {
-        return getClass().getSimpleName() + " [mellomlagringTjeneste=" + mellomlagring + "]";
+                .contentType(MediaType.APPLICATION_PDF)
+                .contentLength(innhold.length)
+                .body(innhold);
     }
 
     private static byte[] getBytesNullSjekk(MultipartFile file) {
