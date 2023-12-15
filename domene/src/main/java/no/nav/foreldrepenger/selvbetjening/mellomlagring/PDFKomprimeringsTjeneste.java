@@ -6,9 +6,9 @@ import java.io.IOException;
 import java.util.zip.GZIPInputStream;
 import java.util.zip.GZIPOutputStream;
 
-public class KomprimeringTjeneste {
+public class PDFKomprimeringsTjeneste {
 
-    public static byte[] compress(byte[] pdf) {
+    public static byte[] komprimer(byte[] pdf) {
         var arrayOutputStream = new ByteArrayOutputStream();
         try (var outputStream = new GZIPOutputStream(arrayOutputStream)){
             outputStream.write(pdf);
@@ -18,7 +18,7 @@ public class KomprimeringTjeneste {
         return arrayOutputStream.toByteArray();
     }
 
-    public static byte[] decompress(byte[] compressedPDF) {
+    public static byte[] dekomprimer(byte[] compressedPDF) {
         var arrayInputStream = new ByteArrayInputStream(compressedPDF);
         try (var inputStream = new GZIPInputStream(arrayInputStream)){
             return inputStream.readAllBytes();

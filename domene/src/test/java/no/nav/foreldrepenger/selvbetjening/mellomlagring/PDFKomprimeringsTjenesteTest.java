@@ -15,9 +15,9 @@ import org.slf4j.LoggerFactory;
 import no.nav.foreldrepenger.common.util.TokenUtil;
 
 @ExtendWith(MockitoExtension.class)
-class KomprimeringTjenesteTest {
+class PDFKomprimeringsTjenesteTest {
 
-    private static final Logger LOG = LoggerFactory.getLogger(KomprimeringTjenesteTest.class);
+    private static final Logger LOG = LoggerFactory.getLogger(PDFKomprimeringsTjenesteTest.class);
     @Mock
     TokenUtil util;
 
@@ -26,10 +26,10 @@ class KomprimeringTjenesteTest {
         when(util.getSubject()).thenReturn("01010111111");
         var krypto = new MellomlagringKrypto("passphrase", util);
         var bytes = fraResource("pdf/spring-framework-reference.pdf");
-        var compress = KomprimeringTjeneste.compress(bytes);
+        var compress = PDFKomprimeringsTjeneste.komprimer(bytes);
         var kryptert = krypto.encryptVedlegg(compress);
         var dekryptert = krypto.decryptVedlegg(kryptert);
-        var decompressed = KomprimeringTjeneste.decompress(dekryptert);
+        var decompressed = PDFKomprimeringsTjeneste.dekomprimer(dekryptert);
         assertThat(bytes).isEqualTo(decompressed);
 
         LOG.info("Fra {} til {}", megabytes(decompressed), megabytes(compress));
@@ -38,8 +38,8 @@ class KomprimeringTjenesteTest {
     @Test
     void name1() {
         var bytes = fraResource("pdf/spring-framework-reference.pdf");
-        var compress = KomprimeringTjeneste.compress(bytes);
-        var decompressed = KomprimeringTjeneste.decompress(compress);
+        var compress = PDFKomprimeringsTjeneste.komprimer(bytes);
+        var decompressed = PDFKomprimeringsTjeneste.dekomprimer(compress);
         assertThat(bytes).isEqualTo(decompressed);
 
         LOG.info("Fra {} til {}", megabytes(decompressed), megabytes(compress));
