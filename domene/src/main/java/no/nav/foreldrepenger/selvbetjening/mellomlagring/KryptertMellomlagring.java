@@ -9,13 +9,10 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Service;
 
-import com.google.gson.Gson;
-
 @Service
 public class KryptertMellomlagring {
     private static final Logger LOG = LoggerFactory.getLogger(KryptertMellomlagring.class);
     private static final String SØKNAD = "soknad";
-    private static final Gson GSON = new Gson(); // Deprecated
     private final Mellomlagring mellomlagring;
     private final MellomlagringKrypto krypto;
 
@@ -40,22 +37,7 @@ public class KryptertMellomlagring {
         mellomlagring.lagre(ytelsespesifikkMappe(ytelse), SØKNAD, krypto.encrypt(søknad));
     }
 
-    public void slettKryptertSøknad(Ytelse ytelse) {
-        mellomlagring.slett(ytelsespesifikkMappe(ytelse), SØKNAD);
-    }
-
     public Optional<byte[]> lesKryptertVedlegg(String key, Ytelse ytelse) {
-        var gammel =  mellomlagring.les(ytelsespesifikkMappe(ytelse), key)
-            .map(krypto::decrypt)
-            .map(v -> GSON.fromJson(v, Attachment.class))
-            .map(Attachment::getBytes);
-        if (gammel.isPresent()) {
-            LOG.info("Fant vedlegg mellomlagret på gammel format. Lagrer på nytt format.");
-            mellomlagring.lagreVedlegg(ytelsespesifikkMappeVedlegg(ytelse), key, krypto.encryptVedlegg(gammel.get()));
-            mellomlagring.slett(ytelsespesifikkMappe(ytelse), key);
-            return gammel;
-        }
-
         return mellomlagring.lesVedlegg(ytelsespesifikkMappeVedlegg(ytelse), key)
             .map(krypto::decryptVedlegg);
     }
@@ -74,14 +56,14 @@ public class KryptertMellomlagring {
         }
     }
 
-    public void slettKryptertVedlegg(String uuid, Ytelse ytelse) {
-        if (uuid != null) {
-            mellomlagring.slett(ytelsespesifikkMappe(ytelse), uuid);
-        }
-    }
-
     public void slettMellomlagring(Ytelse ytelse) {
         mellomlagring.slettAll(ytelsespesifikkMappe(ytelse));
+    }
+
+    public void slettKryptertVedlegg(String uuid, Ytelse ytelse) {
+        if (uuid != null) {
+            mellomlagring.slett(ytelsespesifikkMappeVedlegg(ytelse), uuid);
+        }
     }
 
     protected String ytelsespesifikkMappe(Ytelse ytelse) {

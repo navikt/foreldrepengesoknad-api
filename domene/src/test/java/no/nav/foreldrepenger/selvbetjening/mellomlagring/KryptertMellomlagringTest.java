@@ -13,8 +13,6 @@ import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 import org.springframework.http.MediaType;
 
-import com.google.gson.Gson;
-
 import no.nav.foreldrepenger.common.util.TokenUtil;
 
 @ExtendWith(MockitoExtension.class)
@@ -23,14 +21,12 @@ class KryptertMellomlagringTest {
     TokenUtil util;
 
     private KryptertMellomlagring km;
-    private MellomlagringKrypto krypto;
-    private Mellomlagring mellomlagring;
 
     @BeforeEach
     void beforeEach() {
         when(util.getSubject()).thenReturn("01010111111");
-        mellomlagring = new InMemoryMellomlagring();
-        krypto = new MellomlagringKrypto("passphrase", util);
+        var mellomlagring = new InMemoryMellomlagring();
+        var krypto = new MellomlagringKrypto("passphrase", util);
         km = new KryptertMellomlagring(mellomlagring, krypto);
     }
 
@@ -75,7 +71,7 @@ class KryptertMellomlagringTest {
         assertThat(lest).isPresent();
         assertThat(lest.get()).contains("Søknad");
 
-        km.slettKryptertSøknad(ytelse);
+        km.slettMellomlagring(ytelse);
         assertThat(km.lesKryptertSøknad(ytelse)).isNotPresent();
     }
 
@@ -88,7 +84,7 @@ class KryptertMellomlagringTest {
         assertThat(lest).isPresent();
         assertThat(lest.get()).contains("Søknad");
 
-        km.slettKryptertSøknad(ytelse);
+        km.slettMellomlagring(ytelse);
         assertThat(km.lesKryptertSøknad(ytelse)).isNotPresent();
     }
 
@@ -105,7 +101,7 @@ class KryptertMellomlagringTest {
         assertThat(mellomlagretES).isPresent();
         assertThat(mellomlagretES.get()).isEqualTo("Søknad ES");
 
-        km.slettKryptertSøknad(Ytelse.ENGANGSSTONAD);
+        km.slettMellomlagring(Ytelse.ENGANGSSTONAD);
         assertThat(km.lesKryptertSøknad(FORELDREPENGER)).isPresent();
         assertThat(km.lesKryptertSøknad(Ytelse.ENGANGSSTONAD)).isNotPresent();
     }
@@ -118,22 +114,7 @@ class KryptertMellomlagringTest {
         var lest = km.lesKryptertVedlegg(vedlegg.getUuid(), FORELDREPENGER);
         assertThat(lest).contains(vedlegg.getBytes());
 
-        km.slettKryptertSøknad(FORELDREPENGER);
-        assertThat(km.lesKryptertSøknad(FORELDREPENGER)).isNotPresent();
-    }
-
-    @Test
-    void gammelMellomlagringAvVedleggSkalDecryptersDeseralisersOgLagresTilNyttElementUtenBase64OgSeralisering() {
-        var vedlegg = Attachment.of("filen.pdf", new byte[]{1,2,3,4,5,6,7,8}, MediaType.APPLICATION_PDF);
-        var mappenavnGammelStruktur = km.ytelsespesifikkMappe(FORELDREPENGER);
-        mellomlagring.lagre(mappenavnGammelStruktur, vedlegg.getUuid(), krypto.encrypt(new Gson().toJson(vedlegg)));
-
-        assertThat(mellomlagring.les(mappenavnGammelStruktur, vedlegg.getUuid())).isPresent();
-        var lest = km.lesKryptertVedlegg(vedlegg.getUuid(), FORELDREPENGER);
-        assertThat(lest).contains(vedlegg.getBytes());
-        assertThat(mellomlagring.les(mappenavnGammelStruktur, vedlegg.getUuid())).isEmpty();
-
-        km.slettKryptertSøknad(FORELDREPENGER);
+        km.slettMellomlagring(FORELDREPENGER);
         assertThat(km.lesKryptertSøknad(FORELDREPENGER)).isNotPresent();
     }
 }
