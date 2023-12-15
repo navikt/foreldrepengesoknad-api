@@ -112,7 +112,7 @@ class KryptertMellomlagringTest {
 
     @Test
     void mellomlagringVedleggLagreLesSlettRoundtripTest() {
-        var vedlegg = Attachment.of("filen.pdf", fraResource("pdf/junit-test.pdf"), MediaType.APPLICATION_PDF);
+        var vedlegg = Attachment.of("filen.pdf", fraResource("pdf/spring-framework-reference.pdf"), MediaType.APPLICATION_PDF);
         km.lagreKryptertVedlegg(vedlegg, FORELDREPENGER);
 
         var lest = km.lesKryptertVedlegg(vedlegg.getUuid(), FORELDREPENGER);

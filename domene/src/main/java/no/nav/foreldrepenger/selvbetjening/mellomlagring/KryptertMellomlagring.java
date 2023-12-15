@@ -56,11 +56,13 @@ public class KryptertMellomlagring {
         }
 
         return mellomlagring.lesVedlegg(ytelsespesifikkMappeVedlegg(ytelse), key)
-            .map(krypto::decryptVedlegg);
+            .map(krypto::decryptVedlegg)
+            .map(KomprimeringTjeneste::decompress);
     }
 
     public void lagreKryptertVedlegg(Attachment vedlegg, Ytelse ytelse) {
-        var kryptertVedlegg = krypto.encryptVedlegg(vedlegg.getBytes());
+        var compressPDF = KomprimeringTjeneste.compress(vedlegg.getBytes());
+        var kryptertVedlegg = krypto.encryptVedlegg(compressPDF);
         mellomlagring.lagreVedlegg(ytelsespesifikkMappeVedlegg(ytelse), vedlegg.getUuid(), kryptertVedlegg);
 
         var opprinneligStørrelse = megabytes(vedlegg.bytes);
