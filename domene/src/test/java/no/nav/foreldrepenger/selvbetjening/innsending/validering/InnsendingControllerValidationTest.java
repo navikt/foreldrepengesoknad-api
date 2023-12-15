@@ -54,7 +54,6 @@ class InnsendingControllerValidationTest {
                 .contentType(MediaType.APPLICATION_JSON)
                 .content(mapper.writeValueAsString(sf)
                     .replace(fpSøknad.annenForelder().fornavn(), "Ulovlig tegn [≈≈|£©≈[™")
-                    .replace(fpSøknad.søker().frilansInformasjon().oppdragForNæreVennerEllerFamilieSiste10Mnd().get(0).navnPåArbeidsgiver(), "Matematiske tegn er ikke lov ∪")
                     .replaceFirst(fpSøknad.vedlegg().get(0).getSkjemanummer(), "<scri>sp 202≈≈|0")
                 ))
             .andExpect(status().isBadRequest())
@@ -63,7 +62,7 @@ class InnsendingControllerValidationTest {
         assertThat(result.getResolvedException()).isInstanceOf(MethodArgumentNotValidException.class);
         var error = (MethodArgumentNotValidException) result.getResolvedException();
         assertThat(error).isNotNull();
-        assertThat(error.getBindingResult().getFieldErrors()).hasSize(3);
+        assertThat(error.getBindingResult().getFieldErrors()).hasSize(2);
     }
 
 

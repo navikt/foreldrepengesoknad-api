@@ -83,14 +83,6 @@ class SøknadDtoDeseraliseringTest {
         var frilansInformasjon = søker.frilansInformasjon();
         assertThat(frilansInformasjon).isNotNull();
         assertThat(frilansInformasjon.oppstart()).isNotNull();
-        assertThat(frilansInformasjon.driverFosterhjem()).isFalse();
-        assertThat(frilansInformasjon.oppdragForNæreVennerEllerFamilieSiste10Mnd()).hasSize(1);
-        var frilansoppdrag = frilansInformasjon.oppdragForNæreVennerEllerFamilieSiste10Mnd().get(0);
-        assertThat(frilansoppdrag.navnPåArbeidsgiver()).isEqualTo("Klara Klukk");
-        assertThat(frilansoppdrag.tidsperiode()).isNotNull();
-        assertThat(frilansoppdrag.tidsperiode().fom()).isNotNull();
-        assertThat(frilansoppdrag.tidsperiode().tom()).isNotNull()
-            .isAfter(frilansoppdrag.tidsperiode().fom());
 
         var selvstendigNæringsdrivendeInfo = søker.selvstendigNæringsdrivendeInformasjon();
         assertThat(selvstendigNæringsdrivendeInfo).hasSize(1);

@@ -36,18 +36,7 @@
     "søker": {
         "erAleneOmOmsorg": true,
         "frilansInformasjon": {
-            "driverFosterhjem": false,
-            "harJobbetForNærVennEllerFamilieSiste10Mnd": true,
             "jobberFremdelesSomFrilans": true,
-            "oppdragForNæreVennerEllerFamilieSiste10Mnd": [
-                {
-                    "navnPåArbeidsgiver": "Klara Klukk",
-                    "tidsperiode": {
-                        "fom": "2021-10-13T00:00:00.000Z",
-                        "tom": "2021-11-12T00:00:00.000Z"
-                    }
-                }
-            ],
             "oppstart": "2021-05-05T00:00:00.000Z"
         },
         "harHattAnnenInntektSiste10Mnd": false,
