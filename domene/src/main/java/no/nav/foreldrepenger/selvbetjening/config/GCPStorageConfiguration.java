@@ -32,9 +32,7 @@ public class GCPStorageConfiguration {
     }
 
     @Bean
-    public Bøtte tmpBøtte(
-        @Value("${mellomlagring.tmp.navn:mellomlagring}") String navn,
-        @Value("${mellomlagring.tmp.levetid:1d}") java.time.Duration levetid) {
-        return new Bøtte(navn, levetid);
+    public Bøtte mellomlagringsbøtte(@Value("${mellomlagring.tmp.navn:mellomlagring}") String navn) {
+        return new Bøtte(navn);
     }
 }

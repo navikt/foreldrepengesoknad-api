@@ -1,17 +1,11 @@
 package no.nav.foreldrepenger.selvbetjening.mellomlagring;
 
-import static no.nav.foreldrepenger.selvbetjening.vedlegg.Image2PDFConverter.megabytes;
-
-import java.math.RoundingMode;
 import java.util.Optional;
 
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Service;
 
 @Service
 public class KryptertMellomlagring {
-    private static final Logger LOG = LoggerFactory.getLogger(KryptertMellomlagring.class);
     private static final String SØKNAD = "soknad";
     private final Mellomlagring mellomlagring;
     private final MellomlagringKrypto krypto;
@@ -43,17 +37,7 @@ public class KryptertMellomlagring {
     }
 
     public void lagreKryptertVedlegg(Attachment vedlegg, Ytelse ytelse) {
-        var kryptertVedlegg = krypto.encryptVedlegg(vedlegg.getBytes());
-        mellomlagring.lagreVedlegg(ytelsespesifikkMappeVedlegg(ytelse), vedlegg.getUuid(), kryptertVedlegg);
-
-        var opprinneligStørrelse = megabytes(vedlegg.bytes);
-        var kryptert = megabytes(kryptertVedlegg);
-        try {
-            var økning = kryptert.divide(opprinneligStørrelse, 2, RoundingMode.HALF_UP);
-            LOG.info("Mellomlagret vedlegg med opprinnelig PDF størrelse lik {}MB og endelig størrelse lik {}MB (x{})", opprinneligStørrelse, kryptert, økning);
-        } catch (Exception e) {
-            LOG.info("Mellomlagret vedlegg med opprinnelig PDF størrelse lik {}MB og endelig størrelse lik {}MB", opprinneligStørrelse, kryptert);
-        }
+        mellomlagring.lagreVedlegg(ytelsespesifikkMappeVedlegg(ytelse), vedlegg.getUuid(), krypto.encryptVedlegg(vedlegg.getBytes()));
     }
 
     public void slettMellomlagring(Ytelse ytelse) {
