@@ -50,6 +50,7 @@ public class KryptertMellomlagring {
             .map(v -> GSON.fromJson(v, Attachment.class))
             .map(Attachment::getBytes);
         if (gammel.isPresent()) {
+            LOG.info("Fant vedlegg mellomlagret på gammel format. Lagrer på nytt format.");
             mellomlagring.lagreVedlegg(ytelsespesifikkMappeVedlegg(ytelse), key, krypto.encryptVedlegg(gammel.get()));
             mellomlagring.slett(ytelsespesifikkMappe(ytelse), key);
             return gammel;
