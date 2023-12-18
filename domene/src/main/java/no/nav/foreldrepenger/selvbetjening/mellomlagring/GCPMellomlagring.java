@@ -1,7 +1,6 @@
 package no.nav.foreldrepenger.selvbetjening.mellomlagring;
 
 import static java.nio.charset.StandardCharsets.UTF_8;
-import static org.springframework.http.HttpStatus.NOT_FOUND;
 import static org.springframework.http.MediaType.APPLICATION_JSON_VALUE;
 import static org.springframework.http.MediaType.APPLICATION_OCTET_STREAM_VALUE;
 
@@ -11,13 +10,10 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Component;
 
-import com.google.api.gax.retrying.RetrySettings;
 import com.google.cloud.storage.Blob;
 import com.google.cloud.storage.BlobId;
 import com.google.cloud.storage.BlobInfo;
 import com.google.cloud.storage.Storage;
-import com.google.cloud.storage.StorageException;
-import com.google.cloud.storage.StorageOptions;
 
 import no.nav.boot.conditionals.ConditionalOnGCP;
 
@@ -27,16 +23,12 @@ public class GCPMellomlagring implements Mellomlagring {
 
     private static final Logger LOG = LoggerFactory.getLogger(GCPMellomlagring.class);
 
-    private final Storage storage;
     private final Bøtte mellomlagringBøtte;
+    private final Storage storage;
 
-    public GCPMellomlagring(Bøtte mellomlagringBøtte, RetrySettings retrySettings) {
-        this.storage = StorageOptions
-                .newBuilder()
-                .setRetrySettings(retrySettings)
-                .build()
-                .getService();
+    public GCPMellomlagring(Bøtte mellomlagringBøtte, Storage storage) {
         this.mellomlagringBøtte = mellomlagringBøtte;
+        this.storage = storage;
     }
 
     @Override
@@ -53,46 +45,19 @@ public class GCPMellomlagring implements Mellomlagring {
 
     @Override
     public boolean eksisterer(String katalog, String key) {
-        try {
-            return Optional.ofNullable(storage.get(mellomlagringBøtte.navn(), key(katalog, key))).isPresent();
-        } catch (StorageException e) {
-            if (NOT_FOUND.value() == e.getCode()) {
-                LOG.info("Katalog {} ikke funnet, ({})", katalog, e);
-                return false;
-            }
-            LOG.warn("Katalog {} ikke funnet, ({})", katalog, e.getCode(), e);
-            throw e;
-        }
+        return Optional.ofNullable(storage.get(mellomlagringBøtte.navn(), key(katalog, key))).isPresent();
     }
 
     @Override
     public Optional<String> les(String katalog, String key) {
-        try {
-            return Optional.ofNullable(storage.get(mellomlagringBøtte.navn(), key(katalog, key)))
-                    .map(Blob::getContent)
-                    .map(b -> new String(b, UTF_8));
-        } catch (StorageException e) {
-            if (NOT_FOUND.value() == e.getCode()) {
-                LOG.info("Katalog {} ikke funnet, ({})", katalog, e);
-                return Optional.empty();
-            }
-            LOG.warn("Katalog {} ikke funnet, ({})", katalog, e.getCode(), e);
-            throw e;
-        }
+        return Optional.ofNullable(storage.get(mellomlagringBøtte.navn(), key(katalog, key)))
+            .map(Blob::getContent)
+            .map(b -> new String(b, UTF_8));
     }
 
     @Override
     public Optional<byte[]> lesVedlegg(String katalog, String key) {
-        try {
-            return Optional.ofNullable(storage.get(mellomlagringBøtte.navn(), key(katalog, key))).map(Blob::getContent);
-        } catch (StorageException e) {
-            if (NOT_FOUND.value() == e.getCode()) {
-                LOG.trace("Katalog {} ikke funnet, ({})", katalog, e);
-                return Optional.empty();
-            }
-            LOG.warn("Katalog {} ikke funnet, ({})", katalog, e.getCode(), e);
-            throw e;
-        }
+        return Optional.ofNullable(storage.get(mellomlagringBøtte.navn(), key(katalog, key))).map(Blob::getContent);
     }
 
     @Override
@@ -100,8 +65,8 @@ public class GCPMellomlagring implements Mellomlagring {
         var objektName = key(katalog, key);
         var blob = storage.get(mellomlagringBøtte.navn(), objektName);
         if (blob != null) {
-            LOG.info("Sletter mellomlagring med id {}", objektName);
-            storage.delete(mellomlagringBøtte.navn(), objektName);
+            LOG.info("Sletter mellomlagring med id {}", blob.getBlobId());
+            storage.delete(blob.getBlobId());
         } else {
             LOG.info("Kunne ikke finne mellomlagring som skulle slettes med id {}", objektName);
         }
