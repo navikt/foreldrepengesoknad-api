@@ -5,10 +5,7 @@
         "harJobbetSomFrilansSiste10Mnd": true,
         "frilansInformasjon": {
             "oppstart": "2019-12-10T00:00:00.000Z",
-            "jobberFremdelesSomFrilans": true,
-            "harJobbetForNærVennEllerFamilieSiste10Mnd": false,
-            "driverFosterhjem": false,
-            "oppdragForNæreVennerEllerFamilieSiste10Mnd": []
+            "jobberFremdelesSomFrilans": true
         },
         "harJobbetSomSelvstendigNæringsdrivendeSiste10Mnd": false,
         "harHattAnnenInntektSiste10Mnd": false,

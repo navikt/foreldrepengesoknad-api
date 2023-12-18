@@ -83,10 +83,7 @@ class ForeldrepengesoknadMappingKonsistensTest {
         var frilans = foreldrepenger.opptjening().frilans();
         var frilansDto = foreldrepengerDto.søker().frilansInformasjon();
         assertThat(frilans.periode().fom()).isEqualTo(frilansDto.oppstart());
-        assertThat(frilans.harInntektFraFosterhjem()).isEqualTo(frilansDto.driverFosterhjem());
         assertThat(frilans.jobberFremdelesSomFrilans()).isEqualTo(frilansDto.jobberFremdelesSomFrilans());
-        assertThat(frilans.nyOppstartet()).isFalse(); // Oppstart 2 år siden
-        assertThat(frilans.frilansOppdrag()).hasSameSizeAs(frilansDto.oppdragForNæreVennerEllerFamilieSiste10Mnd());
 
         // Rettigheter
         var rettigheter = foreldrepenger.rettigheter();

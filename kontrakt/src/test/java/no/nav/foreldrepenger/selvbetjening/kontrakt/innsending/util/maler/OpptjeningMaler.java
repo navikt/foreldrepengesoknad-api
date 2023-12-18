@@ -9,7 +9,6 @@ import no.nav.foreldrepenger.common.domain.felles.opptjening.AnnenOpptjeningType
 import no.nav.foreldrepenger.common.domain.felles.opptjening.Virksomhetstype;
 import no.nav.foreldrepenger.selvbetjening.kontrakt.innsending.dto.AnnenInntektDto;
 import no.nav.foreldrepenger.selvbetjening.kontrakt.innsending.dto.FrilansInformasjonDto;
-import no.nav.foreldrepenger.selvbetjening.kontrakt.innsending.dto.FrilansoppdragDto;
 import no.nav.foreldrepenger.selvbetjening.kontrakt.innsending.dto.NæringDto;
 import no.nav.foreldrepenger.selvbetjening.kontrakt.innsending.dto.NæringsinntektInformasjonDto;
 import no.nav.foreldrepenger.selvbetjening.kontrakt.innsending.dto.TilknyttetPersonDto;
@@ -21,18 +20,7 @@ public final class OpptjeningMaler {
     }
 
     public static FrilansInformasjonDto frilansOpptjening() {
-        return frilansOpptjening(LocalDate.now().minusYears(2), LocalDate.now());
-    }
-
-    public static FrilansInformasjonDto frilansOpptjening(LocalDate fom, LocalDate tom) {
-        var åpenPeriodeDto = new ÅpenPeriodeDto(fom, tom);
-        var frilansoppdrag = new FrilansoppdragDto("Thai take away", åpenPeriodeDto);
-        return new FrilansInformasjonDto(
-                fom,
-                false,
-                false,
-                List.of(frilansoppdrag)
-        );
+        return new FrilansInformasjonDto(LocalDate.now().minusYears(2), false);
     }
 
     public static NæringDto egenNaeringOpptjening(String orgnummer) {

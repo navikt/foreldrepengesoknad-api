@@ -24,7 +24,6 @@ import no.nav.foreldrepenger.common.domain.felles.opptjening.AnnenOpptjening;
 import no.nav.foreldrepenger.common.domain.felles.opptjening.AnnenOpptjeningType;
 import no.nav.foreldrepenger.common.domain.felles.opptjening.EgenNæring;
 import no.nav.foreldrepenger.common.domain.felles.opptjening.Frilans;
-import no.nav.foreldrepenger.common.domain.felles.opptjening.FrilansOppdrag;
 import no.nav.foreldrepenger.common.domain.felles.opptjening.Opptjening;
 import no.nav.foreldrepenger.common.domain.felles.opptjening.Regnskapsfører;
 import no.nav.foreldrepenger.common.domain.felles.opptjening.UtenlandskArbeidsforhold;
@@ -37,7 +36,6 @@ import no.nav.foreldrepenger.common.domain.felles.ÅpenPeriode;
 import no.nav.foreldrepenger.selvbetjening.kontrakt.innsending.dto.AnnenInntektDto;
 import no.nav.foreldrepenger.selvbetjening.kontrakt.innsending.dto.BarnDto;
 import no.nav.foreldrepenger.selvbetjening.kontrakt.innsending.dto.FrilansInformasjonDto;
-import no.nav.foreldrepenger.selvbetjening.kontrakt.innsending.dto.FrilansoppdragDto;
 import no.nav.foreldrepenger.selvbetjening.kontrakt.innsending.dto.MutableVedleggReferanseDto;
 import no.nav.foreldrepenger.selvbetjening.kontrakt.innsending.dto.NæringDto;
 import no.nav.foreldrepenger.selvbetjening.kontrakt.innsending.dto.SøknadDto;
@@ -235,25 +233,10 @@ public final class CommonMapper {
     }
 
     private static Frilans tilFrilans(FrilansInformasjonDto frilansInformasjon) {
-        if (frilansInformasjon == null)  {
+        if (frilansInformasjon == null) {
             return null;
         }
-        return new Frilans(
-            new ÅpenPeriode(frilansInformasjon.oppstart()),
-            frilansInformasjon.driverFosterhjem(),
-            frilansInformasjon.oppstart().isAfter(now().minusMonths(3)),
-            frilansInformasjon.jobberFremdelesSomFrilans(),
-            tilFrilansOppdrag(frilansInformasjon.oppdragForNæreVennerEllerFamilieSiste10Mnd()));
-    }
-
-    private static List<FrilansOppdrag> tilFrilansOppdrag(List<FrilansoppdragDto> oppdragForNæreVennerEllerFamilieSiste10Mnd) {
-        return safeStream(oppdragForNæreVennerEllerFamilieSiste10Mnd)
-            .map(CommonMapper::tilFrilansOppdrag)
-            .toList();
-    }
-
-    private static FrilansOppdrag tilFrilansOppdrag(FrilansoppdragDto o) {
-        return new FrilansOppdrag(o.navnPåArbeidsgiver(), new ÅpenPeriode(o.tidsperiode().fom(), o.tidsperiode().tom()));
+        return new Frilans(new ÅpenPeriode(frilansInformasjon.oppstart()), frilansInformasjon.jobberFremdelesSomFrilans());
     }
 
     private static List<Utenlandsopphold> tilUtenlandsoppholdsliste(List<UtenlandsoppholdPeriodeDto> tidligereOpphold) {
