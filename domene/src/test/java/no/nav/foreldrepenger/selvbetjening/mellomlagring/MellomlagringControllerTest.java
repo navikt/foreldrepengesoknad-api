@@ -1,9 +1,11 @@
 package no.nav.foreldrepenger.selvbetjening.mellomlagring;
 
 import static no.nav.foreldrepenger.selvbetjening.vedlegg.DelegerendeVedleggSjekker.DELEGERENDE;
+import static no.nav.foreldrepenger.selvbetjening.vedlegg.VedleggSjekkerTest.fraResource;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.doThrow;
+import static org.mockito.Mockito.when;
 import static org.springframework.http.MediaType.MULTIPART_FORM_DATA_VALUE;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.multipart;
@@ -63,6 +65,19 @@ class MellomlagringControllerTest {
 
     @MockBean
     private TokenUtil tokenUtil;
+
+    @Test
+    void opplastingAvVedleggReturnererUUID() throws Exception {
+        when(converter.convert(any())).thenAnswer(i -> i.getArguments()[0]);
+        var pdf = fraResource("pdf/jks.jpg");
+        var vedlegg = new MockMultipartFile("vedlegg", pdf);
+        var result = mvc.perform(multipart(MellomlagringController.REST_STORAGE + "/" + Ytelse.FORELDREPENGER + "/vedlegg")
+                .file(vedlegg))
+            .andExpect(status().isCreated())
+            .andReturn();
+        assertThat(result.getResolvedException()).isNull();
+        assertThat(result.getResponse().getContentAsString()).isNotNull();
+    }
 
     @Test
     void hentVedleggOkMedUUID() throws Exception {

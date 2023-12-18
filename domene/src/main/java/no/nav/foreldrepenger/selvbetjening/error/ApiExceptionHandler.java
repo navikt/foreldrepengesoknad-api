@@ -90,15 +90,6 @@ public class ApiExceptionHandler extends ResponseEntityExceptionHandler {
     }
 
     @ExceptionHandler
-    public ResponseEntity<Object> handleClientAbortException(ClientAbortException e, WebRequest req) {
-        if (req instanceof ServletWebRequest s && s.getResponse() != null && s.getResponse().isCommitted()) {
-            LOG.info("Response already committed. Ignoring: {}", e.getClass().getSimpleName(), e);
-            return null;
-        }
-        return logAndHandle(BAD_REQUEST, e, req);
-    }
-
-    @ExceptionHandler
     public ResponseEntity<Object> handleConstraintViolationException(ConstraintViolationException e, WebRequest req) {
         return logAndHandle(BAD_REQUEST, e, req);
     }
@@ -171,6 +162,12 @@ public class ApiExceptionHandler extends ResponseEntityExceptionHandler {
     }
 
     private ResponseEntity<Object> logAndHandle(HttpStatusCode status, Exception e, WebRequest req, HttpHeaders headers, Object... messages) {
+        if (erClientAbortException(e)) {
+            var path = fullPathTilKaltEndepunkt(req);
+            LOG.info("[{}] {} {}", path, status, "Client aborted request!", e);
+            return null;
+        }
+
         var apiError = apiErrorFra(status, e, messages);
         logException(status, e, req, apiError);
         return handleExceptionInternal(e, apiError, headers, status, req);
@@ -178,6 +175,7 @@ public class ApiExceptionHandler extends ResponseEntityExceptionHandler {
 
     private void logException(HttpStatusCode status, Exception e, WebRequest req, ApiError apiError) {
         var path = fullPathTilKaltEndepunkt(req);
+
         if (loggExceptionPåInfoNivå(e)) {
             LOG.info("[{}] {} {}", path, status, apiError.getMessages(), e);
         } else {
@@ -188,6 +186,20 @@ public class ApiExceptionHandler extends ResponseEntityExceptionHandler {
                 LOG.warn("[{}] {} {}", path, status, apiError.getMessages(), e);
             }
         }
+    }
+
+    private static boolean erClientAbortException(Exception e) {
+        if (e instanceof ClientAbortException) {
+            return true;
+        }
+
+        for (var cause = e.getCause(); cause != null; cause = cause.getCause()) {
+            if (cause instanceof ClientAbortException) {
+                return true;
+            }
+        }
+
+        return false;
     }
 
     private boolean loggExceptionPåInfoNivå(Exception e) {
