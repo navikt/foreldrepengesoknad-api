@@ -164,7 +164,7 @@ public class ApiExceptionHandler extends ResponseEntityExceptionHandler {
     private ResponseEntity<Object> logAndHandle(HttpStatusCode status, Exception e, WebRequest req, HttpHeaders headers, Object... messages) {
         if (erClientAbortException(e)) {
             var path = fullPathTilKaltEndepunkt(req);
-            LOG.info("[{}] {} {}", path, status, "Client aborted request!", e);
+            LOG.info("[{}] {}", path, "Client aborted request!", e);
             return null;
         }
 
