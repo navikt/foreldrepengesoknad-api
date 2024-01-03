@@ -36,7 +36,7 @@ public class VedleggReferanseMapperTjeneste {
         }
 
         LOG.info("Mottok søknad med vedlegg som inneholder dokumenterer-felt. Legger til vedleggsreferanser.");
-        innsending.vedlegg().forEach(vedlegg -> vedlegg.setId(new MutableVedleggReferanseDto(UUID.randomUUID().toString())));
+        innsending.vedlegg().forEach(vedlegg -> vedlegg.setId(genererVedleggsreferanse()));
         if (innsending instanceof ForeldrepengesøknadDto foreldrepengesøknad) {
             leggVedleggsreferanserTilSøknad(foreldrepengesøknad);
         }
@@ -49,6 +49,10 @@ public class VedleggReferanseMapperTjeneste {
         if (innsending instanceof SvangerskapspengesøknadDto svp) {
             leggVedleggsreferanserTilSøknad(svp);
         }
+    }
+
+    private static MutableVedleggReferanseDto genererVedleggsreferanse() {
+        return new MutableVedleggReferanseDto("V" + UUID.randomUUID());
     }
 
     private static void leggVedleggsreferanserTilSøknad(SvangerskapspengesøknadDto foreldrepenger) {
