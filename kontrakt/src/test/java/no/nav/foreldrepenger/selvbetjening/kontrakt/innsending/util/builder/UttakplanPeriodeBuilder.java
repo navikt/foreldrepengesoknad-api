@@ -61,7 +61,7 @@ public class UttakplanPeriodeBuilder {
 
     private UttakplanPeriodeBuilder(UttaksplanPeriodeDto.Type type, StønadskontoType konto, LocalDate fom, LocalDate tom) {
         this.type = type;
-        this.konto = tilKontoType(konto);
+        this.konto = konto == null ? tilKontoType(StønadskontoType.IKKE_SATT) : tilKontoType(konto);
         this.tidsperiode = new ÅpenPeriodeDto(fom, tom);
     }
 
