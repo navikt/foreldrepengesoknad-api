@@ -13,8 +13,8 @@ public class PdfGeneratorConfig {
     private final String path;
     private final boolean enabled;
 
-    public PdfGeneratorConfig(@DefaultValue("http://fppdfgen") URI uri,
-                              @DefaultValue("api/v1/genpdf/tilbakebetaling/uttalelse") String path,
+    public PdfGeneratorConfig(@DefaultValue("http://fpdokgen") URI uri,
+                              @DefaultValue("template/selvbetjening-tilsvar-tilbakebetalingvarsel/template_nb/create-pdf-variation") String path,
                               @DefaultValue("true") boolean enabled) {
         this.uri = uri;
         this.path = path;

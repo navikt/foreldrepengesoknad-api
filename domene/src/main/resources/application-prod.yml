@@ -31,7 +31,7 @@ oppslag:
 mottak:
   uri: https://fpsoknad-mottak.prod-fss-pub.nais.io/api/
 pdfgenerator:
-  uri: http://fppdfgen
+  uri: http://fpdokgen
 oversikt:
   uri: http://fpoversikt
 safselvbetjening:

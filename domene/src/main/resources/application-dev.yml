@@ -43,7 +43,6 @@ mottak:
   uri: https://fpsoknad-mottak.dev-fss-pub.nais.io/api/
 pdfgenerator:
   uri: http://fpdokgen
-  path: template/selvbetjening-tilsvar-tilbakebetalingvarsel/template_en/create-pdf-variation
 oversikt:
   uri: http://fpoversikt
 safselvbetjening:
