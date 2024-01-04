@@ -25,7 +25,6 @@ spec:
   accessPolicy:
     outbound:
       rules:
-        - application: fppdfgen
         - application: fpdokgen
         - application: fpoversikt
         - application: clamav
