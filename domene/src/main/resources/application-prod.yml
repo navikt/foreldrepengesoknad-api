@@ -30,7 +30,7 @@ oppslag:
   uri: https://fpsoknad-mottak.prod-fss-pub.nais.io/api/
 mottak:
   uri: https://fpsoknad-mottak.prod-fss-pub.nais.io/api/
-fppdfgen:
+pdfgenerator:
   uri: http://fppdfgen
 oversikt:
   uri: http://fpoversikt

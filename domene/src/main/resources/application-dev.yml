@@ -41,8 +41,9 @@ oppslag:
   uri: https://fpsoknad-mottak.dev-fss-pub.nais.io/api/
 mottak:
   uri: https://fpsoknad-mottak.dev-fss-pub.nais.io/api/
-fppdfgen:
-  uri: http://fppdfgen
+pdfgenerator:
+  uri: http://fpdokgen
+  path: template/selvbetjening-tilsvar-tilbakebetalingvarsel/template_en/create-pdf-variation
 oversikt:
   uri: http://fpoversikt
 safselvbetjening:
