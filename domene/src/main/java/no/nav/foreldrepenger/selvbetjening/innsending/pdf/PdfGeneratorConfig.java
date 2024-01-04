@@ -7,21 +7,22 @@ import java.net.URI;
 import org.springframework.boot.context.properties.ConfigurationProperties;
 import org.springframework.boot.context.properties.bind.DefaultValue;
 
-@ConfigurationProperties(prefix = "fppdfgen")
+@ConfigurationProperties(prefix = "pdfgenerator")
 public class PdfGeneratorConfig {
-
-    private static final String TILBAKEBETALING_UTTALELSE = "api/v1/genpdf/tilbakebetaling/uttalelse";
     private final URI uri;
+    private final String path;
     private final boolean enabled;
 
     public PdfGeneratorConfig(@DefaultValue("http://fppdfgen") URI uri,
+                              @DefaultValue("api/v1/genpdf/tilbakebetaling/uttalelse") String path,
                               @DefaultValue("true") boolean enabled) {
         this.uri = uri;
+        this.path = path;
         this.enabled = enabled;
     }
 
     URI tilbakebetalingURI() {
-        return uri(uri, TILBAKEBETALING_UTTALELSE);
+        return uri(uri, path);
     }
 
     public boolean isEnabled() {

@@ -26,6 +26,7 @@ spec:
     outbound:
       rules:
         - application: fppdfgen
+        - application: fpdokgen
         - application: fpoversikt
         - application: clamav
           namespace: nais-system

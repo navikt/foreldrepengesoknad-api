@@ -32,7 +32,7 @@ no.nav.security.jwt:
 
 virus:
   enabled: false
-fppdfgen:
+pdfgenerator:
   enabled: false
 mottak:
   uri: ${fpsoknad-mottak.override.url}
