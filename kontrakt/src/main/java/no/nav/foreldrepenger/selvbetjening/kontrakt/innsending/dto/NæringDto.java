@@ -11,7 +11,6 @@ import java.util.Optional;
 
 import jakarta.validation.Valid;
 import jakarta.validation.constraints.Digits;
-import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Pattern;
 import jakarta.validation.constraints.Size;
 import no.nav.foreldrepenger.common.domain.felles.opptjening.Virksomhetstype;
@@ -26,7 +25,7 @@ public record NæringDto(boolean harBlittYrkesaktivILøpetAvDeTreSisteFerdiglikn
                         @Valid @Size(max = 15) List<@Valid MutableVedleggReferanseDto> vedlegg,
                         LocalDate oppstartsdato,
                         @Valid NæringsinntektInformasjonDto endringAvNæringsinntektInformasjon,
-                        @NotNull @Pattern(regexp = FRITEKST) String navnPåNæringen,
+                        @Pattern(regexp = FRITEKST) String navnPåNæringen,
                         @Pattern(regexp = ORGNUMMER) String organisasjonsnummer,
                         @Valid ÅpenPeriodeDto tidsperiode,
                         @Valid TilknyttetPersonDto regnskapsfører,
