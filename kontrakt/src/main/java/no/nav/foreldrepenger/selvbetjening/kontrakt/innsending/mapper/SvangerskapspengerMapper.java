@@ -1,6 +1,6 @@
 package no.nav.foreldrepenger.selvbetjening.kontrakt.innsending.mapper;
 
-import static no.nav.foreldrepenger.selvbetjening.kontrakt.innsending.mapper.CommonMapper.tilMedlemskap;
+import static no.nav.foreldrepenger.selvbetjening.kontrakt.innsending.mapper.CommonMapper.tilOppholdIUtlandet;
 import static no.nav.foreldrepenger.selvbetjening.kontrakt.innsending.mapper.CommonMapper.tilOpptjening;
 import static no.nav.foreldrepenger.selvbetjening.kontrakt.innsending.mapper.CommonMapper.tilVedlegg;
 import static no.nav.foreldrepenger.selvbetjening.kontrakt.innsending.mapper.CommonMapper.tilVedleggsreferanse;
@@ -59,7 +59,8 @@ final class SvangerskapspengerMapper {
         return new Svangerskapspenger(
             s.barn().termindato(),
             tilFødselsdato(s),
-            tilMedlemskap(s),
+            null,
+            tilOppholdIUtlandet(s),
             tilOpptjening(s),
             tilTilrettelegging(s)
         );

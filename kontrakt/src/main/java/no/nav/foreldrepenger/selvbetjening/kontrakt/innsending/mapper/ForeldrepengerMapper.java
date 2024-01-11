@@ -5,7 +5,7 @@ import static no.nav.foreldrepenger.common.domain.foreldrepenger.fordeling.Støn
 import static no.nav.foreldrepenger.common.domain.foreldrepenger.fordeling.StønadskontoType.FORELDREPENGER;
 import static no.nav.foreldrepenger.common.domain.foreldrepenger.fordeling.StønadskontoType.FORELDREPENGER_FØR_FØDSEL;
 import static no.nav.foreldrepenger.common.domain.foreldrepenger.fordeling.StønadskontoType.MØDREKVOTE;
-import static no.nav.foreldrepenger.selvbetjening.kontrakt.innsending.mapper.CommonMapper.tilMedlemskap;
+import static no.nav.foreldrepenger.selvbetjening.kontrakt.innsending.mapper.CommonMapper.tilOppholdIUtlandet;
 import static no.nav.foreldrepenger.selvbetjening.kontrakt.innsending.mapper.CommonMapper.tilOpptjening;
 import static no.nav.foreldrepenger.selvbetjening.kontrakt.innsending.mapper.CommonMapper.tilRelasjonTilBarn;
 import static no.nav.foreldrepenger.selvbetjening.kontrakt.innsending.mapper.CommonMapper.tilVedlegg;
@@ -70,7 +70,8 @@ final class ForeldrepengerMapper {
             Dekningsgrad.fraKode(f.dekningsgrad().verdi()),
             tilOpptjening(f),
             tilFordeling(f),
-            tilMedlemskap(f)
+            null,
+            tilOppholdIUtlandet(f)
         );
     }
 

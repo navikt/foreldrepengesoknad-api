@@ -7,6 +7,7 @@ import static no.nav.foreldrepenger.common.util.StreamUtil.safeStream;
 
 import java.time.LocalDate;
 import java.util.List;
+import java.util.stream.Stream;
 
 import com.neovisionaries.i18n.CountryCode;
 
@@ -18,7 +19,7 @@ import no.nav.foreldrepenger.common.domain.felles.ProsentAndel;
 import no.nav.foreldrepenger.common.domain.felles.PåkrevdVedlegg;
 import no.nav.foreldrepenger.common.domain.felles.VedleggMetaData;
 import no.nav.foreldrepenger.common.domain.felles.VedleggReferanse;
-import no.nav.foreldrepenger.common.domain.felles.medlemskap.Medlemsskap;
+import no.nav.foreldrepenger.common.domain.felles.medlemskap.OppholdIUtlandet;
 import no.nav.foreldrepenger.common.domain.felles.medlemskap.Utenlandsopphold;
 import no.nav.foreldrepenger.common.domain.felles.opptjening.AnnenOpptjening;
 import no.nav.foreldrepenger.common.domain.felles.opptjening.AnnenOpptjeningType;
@@ -77,11 +78,12 @@ public final class CommonMapper {
         return new VedleggReferanse(vedleggsreferanse.referanse());
     }
 
-    static Medlemsskap tilMedlemskap(SøknadDto s) {
-        var opphold = s.informasjonOmUtenlandsopphold();
-        return new Medlemsskap(
-            tilUtenlandsoppholdsliste(opphold.tidligereOpphold()),
-            tilUtenlandsoppholdsliste(opphold.senereOpphold()));
+    static OppholdIUtlandet tilOppholdIUtlandet(SøknadDto s) {
+        var opphold = Stream.concat(
+            safeStream(s.informasjonOmUtenlandsopphold().tidligereOpphold()),
+            safeStream(s.informasjonOmUtenlandsopphold().senereOpphold())
+        ).toList();
+        return new OppholdIUtlandet(tilUtenlandsoppholdsliste(opphold));
     }
 
     static Opptjening tilOpptjening(SøknadDto s) {

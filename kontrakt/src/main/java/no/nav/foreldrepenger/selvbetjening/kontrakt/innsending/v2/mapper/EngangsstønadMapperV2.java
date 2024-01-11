@@ -6,6 +6,7 @@ import static no.nav.foreldrepenger.selvbetjening.kontrakt.innsending.mapper.Com
 
 import java.time.LocalDate;
 import java.util.List;
+import java.util.stream.Stream;
 
 import no.nav.foreldrepenger.common.domain.BrukerRolle;
 import no.nav.foreldrepenger.common.domain.Søker;
@@ -13,7 +14,7 @@ import no.nav.foreldrepenger.common.domain.Søknad;
 import no.nav.foreldrepenger.common.domain.Ytelse;
 import no.nav.foreldrepenger.common.domain.engangsstønad.Engangsstønad;
 import no.nav.foreldrepenger.common.domain.felles.LukketPeriode;
-import no.nav.foreldrepenger.common.domain.felles.medlemskap.Medlemsskap;
+import no.nav.foreldrepenger.common.domain.felles.medlemskap.OppholdIUtlandet;
 import no.nav.foreldrepenger.common.domain.felles.medlemskap.Utenlandsopphold;
 import no.nav.foreldrepenger.common.domain.felles.relasjontilbarn.Adopsjon;
 import no.nav.foreldrepenger.common.domain.felles.relasjontilbarn.FremtidigFødsel;
@@ -23,11 +24,12 @@ import no.nav.foreldrepenger.common.domain.felles.relasjontilbarn.RelasjonTilBar
 import no.nav.foreldrepenger.common.oppslag.dkif.Målform;
 import no.nav.foreldrepenger.selvbetjening.kontrakt.innsending.v2.dto.AdopsjonDto;
 import no.nav.foreldrepenger.selvbetjening.kontrakt.innsending.v2.dto.BarnDto;
-import no.nav.foreldrepenger.selvbetjening.kontrakt.innsending.v2.dto.engangsstønad.EngangsstønadDto;
 import no.nav.foreldrepenger.selvbetjening.kontrakt.innsending.v2.dto.FødselDto;
 import no.nav.foreldrepenger.selvbetjening.kontrakt.innsending.v2.dto.OmsorgsovertakelseDto;
+import no.nav.foreldrepenger.selvbetjening.kontrakt.innsending.v2.dto.SøknadDto;
 import no.nav.foreldrepenger.selvbetjening.kontrakt.innsending.v2.dto.TerminDto;
 import no.nav.foreldrepenger.selvbetjening.kontrakt.innsending.v2.dto.UtenlandsoppholdDto;
+import no.nav.foreldrepenger.selvbetjening.kontrakt.innsending.v2.dto.engangsstønad.EngangsstønadDto;
 
 public final class EngangsstønadMapperV2 {
 
@@ -50,15 +52,18 @@ public final class EngangsstønadMapperV2 {
 
     private static Ytelse tilYtelse(EngangsstønadDto e) {
         return new Engangsstønad(
-            tilMedlemskap(e.utenlandsopphold()),
+            null,
+            tilOppholdIUtlandet(e),
             tilRelasjonTilBarn(e.barn())
         );
     }
 
-    static Medlemsskap tilMedlemskap(UtenlandsoppholdDto utenlandsopphol) {
-        return new Medlemsskap(
-            tilUtenlandsoppholdsliste(utenlandsopphol.utenlandsoppholdSiste12Mnd()),
-            tilUtenlandsoppholdsliste(utenlandsopphol.utenlandsoppholdNeste12Mnd()));
+    static OppholdIUtlandet tilOppholdIUtlandet(SøknadDto s) {
+        var opphold = Stream.concat(
+            safeStream(s.utenlandsopphold().utenlandsoppholdSiste12Mnd()),
+            safeStream(s.utenlandsopphold().utenlandsoppholdNeste12Mnd())
+        ).toList();
+        return new OppholdIUtlandet(tilUtenlandsoppholdsliste(opphold));
     }
 
     private static List<Utenlandsopphold> tilUtenlandsoppholdsliste(List<UtenlandsoppholdDto.Periode> opphold) {
