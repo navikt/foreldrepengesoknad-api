@@ -8,16 +8,18 @@ import java.time.LocalDate;
 
 import org.junit.jupiter.api.Test;
 
+import com.neovisionaries.i18n.CountryCode;
+
 import no.nav.foreldrepenger.common.domain.BrukerRolle;
 import no.nav.foreldrepenger.common.domain.engangsstønad.Engangsstønad;
 import no.nav.foreldrepenger.common.domain.felles.relasjontilbarn.Fødsel;
 import no.nav.foreldrepenger.common.oppslag.dkif.Målform;
-import no.nav.foreldrepenger.selvbetjening.kontrakt.innsending.v2.dto.FødselDto;
 import no.nav.foreldrepenger.selvbetjening.kontrakt.innsending.util.builder.BarnBuilder;
 import no.nav.foreldrepenger.selvbetjening.kontrakt.innsending.util.builder.BarnV2Builder;
 import no.nav.foreldrepenger.selvbetjening.kontrakt.innsending.util.builder.EngangsstønadBuilder;
 import no.nav.foreldrepenger.selvbetjening.kontrakt.innsending.util.builder.EngangsstønadV2Builder;
 import no.nav.foreldrepenger.selvbetjening.kontrakt.innsending.util.builder.SøkerBuilder;
+import no.nav.foreldrepenger.selvbetjening.kontrakt.innsending.v2.dto.FødselDto;
 
 class EngangsstønadMappingKonsistensTest {
     private static final LocalDate NOW = LocalDate.now();
@@ -40,8 +42,9 @@ class EngangsstønadMappingKonsistensTest {
         var engangsstønad = (Engangsstønad) ytelse;
 
         // Medlemsskap
-        assertThat(engangsstønad.medlemsskap().isBoddINorge()).isFalse();
-        assertThat(engangsstønad.medlemsskap().isNorgeNeste12()).isTrue();
+        assertThat(engangsstønad.utenlandsopphold().opphold()).hasSize(1);
+        assertThat(engangsstønad.utenlandsopphold().landVedDato(LocalDate.now().plusMonths(1))).isEqualByComparingTo(CountryCode.NO);
+        assertThat(engangsstønad.utenlandsopphold().landVedDato(LocalDate.now().minusMonths(1))).isNotEqualByComparingTo(CountryCode.NO);
 
         // Barn
         var barnDto = søknadDto.barn();
@@ -71,8 +74,9 @@ class EngangsstønadMappingKonsistensTest {
         var engangsstønad = (Engangsstønad) ytelse;
 
         // Medlemsskap
-        assertThat(engangsstønad.medlemsskap().isBoddINorge()).isFalse();
-        assertThat(engangsstønad.medlemsskap().isNorgeNeste12()).isTrue();
+        assertThat(engangsstønad.utenlandsopphold().opphold()).hasSize(1);
+        assertThat(engangsstønad.utenlandsopphold().landVedDato(LocalDate.now().plusMonths(1))).isEqualByComparingTo(CountryCode.NO);
+        assertThat(engangsstønad.utenlandsopphold().landVedDato(LocalDate.now().minusMonths(1))).isNotEqualByComparingTo(CountryCode.NO);
 
         // Barn
         var barnDto = søknadDto.barn();

@@ -1,6 +1,6 @@
 package no.nav.foreldrepenger.selvbetjening.kontrakt.innsending.mapper;
 
-import static no.nav.foreldrepenger.selvbetjening.kontrakt.innsending.mapper.CommonMapper.tilMedlemskap;
+import static no.nav.foreldrepenger.selvbetjening.kontrakt.innsending.mapper.CommonMapper.tilOppholdIUtlandet;
 import static no.nav.foreldrepenger.selvbetjening.kontrakt.innsending.mapper.CommonMapper.tilRelasjonTilBarn;
 import static no.nav.foreldrepenger.selvbetjening.kontrakt.innsending.mapper.CommonMapper.tilVedlegg;
 
@@ -35,7 +35,7 @@ final class EngangsstønadMapper {
 
     private static Ytelse tilYtelse(EngangsstønadDto e) {
         return new Engangsstønad(
-            tilMedlemskap(e),
+            tilOppholdIUtlandet(e),
             tilRelasjonTilBarn(e.barn(), e.situasjon())
         );
     }

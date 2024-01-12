@@ -7,6 +7,7 @@ import static no.nav.foreldrepenger.common.util.StreamUtil.safeStream;
 
 import java.time.LocalDate;
 import java.util.List;
+import java.util.stream.Stream;
 
 import com.neovisionaries.i18n.CountryCode;
 
@@ -18,7 +19,6 @@ import no.nav.foreldrepenger.common.domain.felles.ProsentAndel;
 import no.nav.foreldrepenger.common.domain.felles.PåkrevdVedlegg;
 import no.nav.foreldrepenger.common.domain.felles.VedleggMetaData;
 import no.nav.foreldrepenger.common.domain.felles.VedleggReferanse;
-import no.nav.foreldrepenger.common.domain.felles.medlemskap.Medlemsskap;
 import no.nav.foreldrepenger.common.domain.felles.medlemskap.Utenlandsopphold;
 import no.nav.foreldrepenger.common.domain.felles.opptjening.AnnenOpptjening;
 import no.nav.foreldrepenger.common.domain.felles.opptjening.AnnenOpptjeningType;
@@ -77,11 +77,12 @@ public final class CommonMapper {
         return new VedleggReferanse(vedleggsreferanse.referanse());
     }
 
-    static Medlemsskap tilMedlemskap(SøknadDto s) {
-        var opphold = s.informasjonOmUtenlandsopphold();
-        return new Medlemsskap(
-            tilUtenlandsoppholdsliste(opphold.tidligereOpphold()),
-            tilUtenlandsoppholdsliste(opphold.senereOpphold()));
+    static Utenlandsopphold tilOppholdIUtlandet(SøknadDto s) {
+        var opphold = Stream.concat(
+            safeStream(s.informasjonOmUtenlandsopphold().tidligereOpphold()),
+            safeStream(s.informasjonOmUtenlandsopphold().senereOpphold())
+        ).toList();
+        return new Utenlandsopphold(tilUtenlandsoppholdsliste(opphold));
     }
 
     static Opptjening tilOpptjening(SøknadDto s) {
@@ -239,14 +240,14 @@ public final class CommonMapper {
         return new Frilans(new ÅpenPeriode(frilansInformasjon.oppstart()), frilansInformasjon.jobberFremdelesSomFrilans());
     }
 
-    private static List<Utenlandsopphold> tilUtenlandsoppholdsliste(List<UtenlandsoppholdPeriodeDto> tidligereOpphold) {
+    private static List<Utenlandsopphold.Opphold> tilUtenlandsoppholdsliste(List<UtenlandsoppholdPeriodeDto> tidligereOpphold) {
         return safeStream(tidligereOpphold)
             .map(CommonMapper::tilUtenlandsopphold)
             .toList();
     }
 
-    private static Utenlandsopphold tilUtenlandsopphold(UtenlandsoppholdPeriodeDto o) {
-        return new Utenlandsopphold(land(o.land()), new LukketPeriode(o.tidsperiode().fom(), o.tidsperiode().tom()));
+    private static Utenlandsopphold.Opphold tilUtenlandsopphold(UtenlandsoppholdPeriodeDto o) {
+        return new Utenlandsopphold.Opphold(land(o.land()), new LukketPeriode(o.tidsperiode().fom(), o.tidsperiode().tom()));
     }
 
     public static CountryCode land(String land) {

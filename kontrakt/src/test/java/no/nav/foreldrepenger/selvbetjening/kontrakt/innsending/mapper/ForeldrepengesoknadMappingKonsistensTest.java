@@ -71,8 +71,7 @@ class ForeldrepengesoknadMappingKonsistensTest {
         assertThat(ytelse).isInstanceOf(Foreldrepenger.class);
         var foreldrepenger = (Foreldrepenger) ytelse;
         assertThat(foreldrepenger.dekningsgrad()).isEqualTo(no.nav.foreldrepenger.common.domain.foreldrepenger.Dekningsgrad.HUNDRE);
-        assertThat(foreldrepenger.medlemsskap().isBoddINorge()).isTrue();
-        assertThat(foreldrepenger.medlemsskap().isNorgeNeste12()).isTrue();
+        assertThat(foreldrepenger.utenlandsopphold().opphold()).isEmpty();
 
         // Annenpart
         assertThat(foreldrepenger.annenForelder()).isInstanceOf(NorskForelder.class);
@@ -156,8 +155,9 @@ class ForeldrepengesoknadMappingKonsistensTest {
         assertThat(foreldrepenger.annenForelder()).isInstanceOf(UkjentForelder.class);
 
         // Medlemsskap
-        assertThat(foreldrepenger.medlemsskap().isBoddINorge()).isFalse();
-        assertThat(foreldrepenger.medlemsskap().isNorgeNeste12()).isTrue();
+        assertThat(foreldrepenger.utenlandsopphold().landVedDato(LocalDate.now())).isEqualByComparingTo(CountryCode.US);
+        assertThat(foreldrepenger.utenlandsopphold().landVedDato(LocalDate.now().plusMonths(1))).isEqualByComparingTo(CountryCode.NO);
+        assertThat(foreldrepenger.utenlandsopphold().opphold()).hasSize(1);
 
         // AnnenOpptjening
         assertThat(foreldrepenger.opptjening().annenOpptjening()).hasSize(1)
