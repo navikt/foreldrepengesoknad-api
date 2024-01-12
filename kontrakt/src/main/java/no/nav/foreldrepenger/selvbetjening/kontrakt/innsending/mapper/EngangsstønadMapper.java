@@ -35,7 +35,6 @@ final class EngangsstønadMapper {
 
     private static Ytelse tilYtelse(EngangsstønadDto e) {
         return new Engangsstønad(
-            null,
             tilOppholdIUtlandet(e),
             tilRelasjonTilBarn(e.barn(), e.situasjon())
         );

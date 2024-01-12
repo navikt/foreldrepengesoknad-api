@@ -59,7 +59,6 @@ final class SvangerskapspengerMapper {
         return new Svangerskapspenger(
             s.barn().termindato(),
             tilFødselsdato(s),
-            null,
             tilOppholdIUtlandet(s),
             tilOpptjening(s),
             tilTilrettelegging(s)

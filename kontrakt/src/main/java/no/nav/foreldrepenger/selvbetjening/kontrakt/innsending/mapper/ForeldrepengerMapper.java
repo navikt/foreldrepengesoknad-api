@@ -70,7 +70,6 @@ final class ForeldrepengerMapper {
             Dekningsgrad.fraKode(f.dekningsgrad().verdi()),
             tilOpptjening(f),
             tilFordeling(f),
-            null,
             tilOppholdIUtlandet(f)
         );
     }

@@ -14,7 +14,6 @@ import no.nav.foreldrepenger.common.domain.Søknad;
 import no.nav.foreldrepenger.common.domain.Ytelse;
 import no.nav.foreldrepenger.common.domain.engangsstønad.Engangsstønad;
 import no.nav.foreldrepenger.common.domain.felles.LukketPeriode;
-import no.nav.foreldrepenger.common.domain.felles.medlemskap.OppholdIUtlandet;
 import no.nav.foreldrepenger.common.domain.felles.medlemskap.Utenlandsopphold;
 import no.nav.foreldrepenger.common.domain.felles.relasjontilbarn.Adopsjon;
 import no.nav.foreldrepenger.common.domain.felles.relasjontilbarn.FremtidigFødsel;
@@ -52,28 +51,27 @@ public final class EngangsstønadMapperV2 {
 
     private static Ytelse tilYtelse(EngangsstønadDto e) {
         return new Engangsstønad(
-            null,
             tilOppholdIUtlandet(e),
             tilRelasjonTilBarn(e.barn())
         );
     }
 
-    static OppholdIUtlandet tilOppholdIUtlandet(SøknadDto s) {
+    static Utenlandsopphold tilOppholdIUtlandet(SøknadDto s) {
         var opphold = Stream.concat(
             safeStream(s.utenlandsopphold().utenlandsoppholdSiste12Mnd()),
             safeStream(s.utenlandsopphold().utenlandsoppholdNeste12Mnd())
         ).toList();
-        return new OppholdIUtlandet(tilUtenlandsoppholdsliste(opphold));
+        return new Utenlandsopphold(tilUtenlandsoppholdsliste(opphold));
     }
 
-    private static List<Utenlandsopphold> tilUtenlandsoppholdsliste(List<UtenlandsoppholdDto.Periode> opphold) {
+    private static List<Utenlandsopphold.Opphold> tilUtenlandsoppholdsliste(List<UtenlandsoppholdDto.Periode> opphold) {
         return safeStream(opphold)
             .map(EngangsstønadMapperV2::tilUtenlandsopphold)
             .toList();
     }
 
-    private static Utenlandsopphold tilUtenlandsopphold(UtenlandsoppholdDto.Periode o) {
-        return new Utenlandsopphold(o.landkode(), new LukketPeriode(o.fom(), o.tom()));
+    private static Utenlandsopphold.Opphold tilUtenlandsopphold(UtenlandsoppholdDto.Periode o) {
+        return new Utenlandsopphold.Opphold(o.landkode(), new LukketPeriode(o.fom(), o.tom()));
     }
 
     static RelasjonTilBarn tilRelasjonTilBarn(BarnDto barn) {

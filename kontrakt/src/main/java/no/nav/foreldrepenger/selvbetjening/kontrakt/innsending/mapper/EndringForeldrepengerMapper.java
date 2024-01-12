@@ -37,7 +37,6 @@ final class EndringForeldrepengerMapper {
             null,
             null,
             tilFordeling(f),
-            null,
             null
         );
     }
