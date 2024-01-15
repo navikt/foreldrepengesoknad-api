@@ -11,6 +11,7 @@ import no.nav.foreldrepenger.selvbetjening.kontrakt.innsending.dto.BarnDto;
 import no.nav.foreldrepenger.selvbetjening.kontrakt.innsending.dto.Innsending;
 import no.nav.foreldrepenger.selvbetjening.kontrakt.innsending.dto.MutableVedleggReferanseDto;
 import no.nav.foreldrepenger.selvbetjening.kontrakt.innsending.dto.VedleggDto;
+import no.nav.foreldrepenger.selvbetjening.kontrakt.innsending.dto.endringssøknad.EndringssøknadForeldrepengerDto;
 import no.nav.foreldrepenger.selvbetjening.kontrakt.innsending.dto.engangsstønad.EngangsstønadDto;
 import no.nav.foreldrepenger.selvbetjening.kontrakt.innsending.dto.ettersendelse.EttersendelseDto;
 import no.nav.foreldrepenger.selvbetjening.kontrakt.innsending.dto.foreldrepenger.ForeldrepengesøknadDto;
@@ -48,6 +49,9 @@ public class VedleggReferanseMapperTjeneste {
         }
         if (innsending instanceof SvangerskapspengesøknadDto svp) {
             leggVedleggsreferanserTilSøknad(svp);
+        }
+        if (innsending instanceof EndringssøknadForeldrepengerDto endringFP) {
+            leggVedleggsreferanserTilSøknad(endringFP);
         }
     }
 
@@ -91,6 +95,17 @@ public class VedleggReferanseMapperTjeneste {
     }
 
     private static void leggVedleggsreferanserTilSøknad(ForeldrepengesøknadDto foreldrepenger) {
+        for (var vedlegg : foreldrepenger.vedlegg()) {
+            switch (vedlegg.getDokumenterer().type()) {
+                case BARN -> leggVedleggTilBarn(foreldrepenger.barn(), vedlegg);
+                case OPPTJENING -> leggVedleggTilAnnenInntekt(foreldrepenger.søker().andreInntekterSiste10Mnd(), vedlegg);
+                case UTTAK -> leggVedleggTilUttak(foreldrepenger.uttaksplan(), vedlegg);
+                case TILRETTELEGGING -> throw new UnsupportedOperationException("Utviklerfeil: Foreldrepenger har ikke tilrettelegging!");
+            }
+        }
+    }
+
+    private static void leggVedleggsreferanserTilSøknad(EndringssøknadForeldrepengerDto foreldrepenger) {
         for (var vedlegg : foreldrepenger.vedlegg()) {
             switch (vedlegg.getDokumenterer().type()) {
                 case BARN -> leggVedleggTilBarn(foreldrepenger.barn(), vedlegg);
