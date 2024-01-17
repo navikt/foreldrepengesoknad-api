@@ -1,18 +1,11 @@
 package no.nav.foreldrepenger.selvbetjening.kontrakt.innsending.v2.mapper;
 
 import static no.nav.foreldrepenger.common.util.StreamUtil.safeStream;
-import static no.nav.foreldrepenger.selvbetjening.kontrakt.innsending.mapper.CommonMapper.tilVedlegg;
 import static no.nav.foreldrepenger.selvbetjening.kontrakt.innsending.mapper.CommonMapper.tilVedleggsreferanse;
 
-import java.time.LocalDate;
 import java.util.List;
 import java.util.stream.Stream;
 
-import no.nav.foreldrepenger.common.domain.BrukerRolle;
-import no.nav.foreldrepenger.common.domain.Søker;
-import no.nav.foreldrepenger.common.domain.Søknad;
-import no.nav.foreldrepenger.common.domain.Ytelse;
-import no.nav.foreldrepenger.common.domain.engangsstønad.Engangsstønad;
 import no.nav.foreldrepenger.common.domain.felles.LukketPeriode;
 import no.nav.foreldrepenger.common.domain.felles.medlemskap.Utenlandsopphold;
 import no.nav.foreldrepenger.common.domain.felles.relasjontilbarn.Adopsjon;
@@ -20,7 +13,6 @@ import no.nav.foreldrepenger.common.domain.felles.relasjontilbarn.FremtidigFøds
 import no.nav.foreldrepenger.common.domain.felles.relasjontilbarn.Fødsel;
 import no.nav.foreldrepenger.common.domain.felles.relasjontilbarn.Omsorgsovertakelse;
 import no.nav.foreldrepenger.common.domain.felles.relasjontilbarn.RelasjonTilBarn;
-import no.nav.foreldrepenger.common.oppslag.dkif.Målform;
 import no.nav.foreldrepenger.selvbetjening.kontrakt.innsending.v2.dto.AdopsjonDto;
 import no.nav.foreldrepenger.selvbetjening.kontrakt.innsending.v2.dto.BarnDto;
 import no.nav.foreldrepenger.selvbetjening.kontrakt.innsending.v2.dto.FødselDto;
@@ -28,45 +20,38 @@ import no.nav.foreldrepenger.selvbetjening.kontrakt.innsending.v2.dto.Omsorgsove
 import no.nav.foreldrepenger.selvbetjening.kontrakt.innsending.v2.dto.SøknadDto;
 import no.nav.foreldrepenger.selvbetjening.kontrakt.innsending.v2.dto.TerminDto;
 import no.nav.foreldrepenger.selvbetjening.kontrakt.innsending.v2.dto.UtenlandsoppholdDto;
-import no.nav.foreldrepenger.selvbetjening.kontrakt.innsending.v2.dto.engangsstønad.EngangsstønadDto;
+import no.nav.foreldrepenger.selvbetjening.kontrakt.innsending.v2.dto.UtenlandsoppholdsperiodeDto;
 
-public final class EngangsstønadMapperV2 {
+public final class CommonMapper {
 
-    private EngangsstønadMapperV2() {
-    }
-
-    public static Søknad tilEngangsstønad(EngangsstønadDto e, LocalDate mottattDato) {
-        return new Søknad(
-            mottattDato,
-            tilSøker(e.språkkode()),
-            tilYtelse(e),
-            null,
-            tilVedlegg(e.vedlegg())
-        );
-    }
-
-    private static Søker tilSøker(Målform språkkode) {
-        return new Søker(BrukerRolle.MOR, språkkode); // TODO: Frontend sender ikke ned søker her. Kan også være Far/Medmor!
-    }
-
-    private static Ytelse tilYtelse(EngangsstønadDto e) {
-        return new Engangsstønad(
-            tilOppholdIUtlandet(e),
-            tilRelasjonTilBarn(e.barn())
-        );
+    private CommonMapper() {
     }
 
     static Utenlandsopphold tilOppholdIUtlandet(SøknadDto s) {
-        var opphold = Stream.concat(
-            safeStream(s.utenlandsopphold().utenlandsoppholdSiste12Mnd()),
-            safeStream(s.utenlandsopphold().utenlandsoppholdNeste12Mnd())
-        ).toList();
-        return new Utenlandsopphold(tilUtenlandsoppholdsliste(opphold));
+        if (s.utenlandsopphold() != null) {
+            var opphold = Stream.concat(
+                safeStream(s.utenlandsopphold().utenlandsoppholdSiste12Mnd()),
+                safeStream(s.utenlandsopphold().utenlandsoppholdNeste12Mnd())
+            ).toList();
+            return new Utenlandsopphold(tilUtenlandsoppholdsliste(opphold));
+        } else {
+            return new Utenlandsopphold(tilUtenlandsoppholds(s.oppholdIUtlandet()));
+        }
+    }
+
+    private static List<Utenlandsopphold.Opphold> tilUtenlandsoppholds(List<UtenlandsoppholdsperiodeDto> perioder) {
+        return safeStream(perioder)
+            .map(CommonMapper::tilUtenlandsopphold)
+            .toList();
+    }
+
+    private static Utenlandsopphold.Opphold tilUtenlandsopphold(UtenlandsoppholdsperiodeDto oppholdsperiode) {
+        return new Utenlandsopphold.Opphold(oppholdsperiode.landkode(), new LukketPeriode(oppholdsperiode.fom(), oppholdsperiode.tom()));
     }
 
     private static List<Utenlandsopphold.Opphold> tilUtenlandsoppholdsliste(List<UtenlandsoppholdDto.Periode> opphold) {
         return safeStream(opphold)
-            .map(EngangsstønadMapperV2::tilUtenlandsopphold)
+            .map(CommonMapper::tilUtenlandsopphold)
             .toList();
     }
 
@@ -88,7 +73,7 @@ public final class EngangsstønadMapperV2 {
         }
     }
 
-    static Fødsel tilFødsel(FødselDto barn) {
+    private static Fødsel tilFødsel(FødselDto barn) {
         return new Fødsel(
             barn.antallBarn(),
             List.of(barn.fødselsdato()), // TODO: Fjern liste i mottak!

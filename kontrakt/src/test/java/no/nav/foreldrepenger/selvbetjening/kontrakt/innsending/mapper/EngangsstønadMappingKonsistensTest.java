@@ -1,7 +1,7 @@
 package no.nav.foreldrepenger.selvbetjening.kontrakt.innsending.mapper;
 
 import static no.nav.foreldrepenger.selvbetjening.kontrakt.innsending.util.maler.MedlemsskapMaler.medlemskapUtlandetForrige12mnd;
-import static no.nav.foreldrepenger.selvbetjening.kontrakt.innsending.util.maler.UtenlandsoppholdMaler.oppholdIUtlandetForrige12mnd;
+import static no.nav.foreldrepenger.selvbetjening.kontrakt.innsending.v2.util.maler.UtenlandsoppholdMaler.oppholdIUtlandetForrige12mnd;
 import static org.assertj.core.api.Assertions.assertThat;
 
 import java.time.LocalDate;
@@ -15,9 +15,7 @@ import no.nav.foreldrepenger.common.domain.engangsstønad.Engangsstønad;
 import no.nav.foreldrepenger.common.domain.felles.relasjontilbarn.Fødsel;
 import no.nav.foreldrepenger.common.oppslag.dkif.Målform;
 import no.nav.foreldrepenger.selvbetjening.kontrakt.innsending.util.builder.BarnBuilder;
-import no.nav.foreldrepenger.selvbetjening.kontrakt.innsending.util.builder.BarnV2Builder;
 import no.nav.foreldrepenger.selvbetjening.kontrakt.innsending.util.builder.EngangsstønadBuilder;
-import no.nav.foreldrepenger.selvbetjening.kontrakt.innsending.util.builder.EngangsstønadV2Builder;
 import no.nav.foreldrepenger.selvbetjening.kontrakt.innsending.util.builder.SøkerBuilder;
 import no.nav.foreldrepenger.selvbetjening.kontrakt.innsending.v2.dto.FødselDto;
 
@@ -59,10 +57,10 @@ class EngangsstønadMappingKonsistensTest {
 
     @Test
     void engangsstønadV2Konsisens() {
-        var søknadDto = new EngangsstønadV2Builder()
+        var søknadDto = new no.nav.foreldrepenger.selvbetjening.kontrakt.innsending.v2.util.builder.EngangsstønadBuilder()
             .medSpråkkode(Målform.EN)
             .medUtenlandsopphold(oppholdIUtlandetForrige12mnd())
-            .medBarn(BarnV2Builder.fødsel(1, NOW).build())
+            .medBarn(no.nav.foreldrepenger.selvbetjening.kontrakt.innsending.v2.util.builder.BarnBuilder.fødsel(1, NOW).build())
             .build();
 
         var mappedSøknad = SøknadMapper.tilSøknad(søknadDto, NOW);

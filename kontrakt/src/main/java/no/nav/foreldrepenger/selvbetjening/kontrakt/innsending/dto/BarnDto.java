@@ -11,9 +11,10 @@ import com.fasterxml.jackson.annotation.JsonIgnore;
 
 import jakarta.validation.Valid;
 import jakarta.validation.constraints.Digits;
+import jakarta.validation.constraints.PastOrPresent;
 import jakarta.validation.constraints.Size;
 
-public record BarnDto(@Valid @Size(max = 10) List<LocalDate> fødselsdatoer,
+public record BarnDto(@Valid @Size(max = 10) List<@PastOrPresent LocalDate> fødselsdatoer,
                       @Digits(integer = 2, fraction = 0) int antallBarn,
                       LocalDate termindato,
                       LocalDate terminbekreftelseDato,

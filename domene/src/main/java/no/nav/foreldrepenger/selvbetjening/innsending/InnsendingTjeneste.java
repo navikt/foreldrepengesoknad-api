@@ -1,7 +1,6 @@
 package no.nav.foreldrepenger.selvbetjening.innsending;
 
 import static no.nav.foreldrepenger.selvbetjening.innsending.VedleggReferanseMapperTjeneste.leggVedleggsreferanserTilSøknad;
-import static no.nav.foreldrepenger.selvbetjening.innsending.VedleggsHåndteringTjeneste.fjernDupliserteVedleggFraInnsending;
 import static org.slf4j.LoggerFactory.getLogger;
 
 import java.security.SecureRandom;
@@ -56,11 +55,6 @@ public class InnsendingTjeneste implements RetryAware {
         var start = Instant.now();
         hentMellomlagredeFiler(innsending);
         leggVedleggsreferanserTilSøknad(innsending);
-        fjernDupliserteVedleggFraInnsending(innsending);
-        if (innsending instanceof EttersendelseDto e && e.erTilbakebetalingUttalelse()) {
-            LOG.info("Konverterer tekst til vedleggs-pdf {}", e.brukerTekst().dokumentType());
-            e.vedlegg().add(vedleggFra(uttalelseFra(e)));
-        }
         var kvittering = connection.sendInn(innsending);
         mellomlagring.slettMellomlagring(tilYtelse(innsending)); // Deprecated (kan fjernes etter frontend har implementert sletting mellomlagring for alle ytelsene)
         var finish = Instant.now();
@@ -68,6 +62,23 @@ public class InnsendingTjeneste implements RetryAware {
         LOG.info(RETURNERER_KVITTERING, kvittering, ms);
         return kvittering;
     }
+
+    public Kvittering ettersend(EttersendelseDto ettersendelse) {
+        LOG.info("Mottok ettersendelse med {} vedlegg", ettersendelse.vedlegg().size());
+        var start = Instant.now();
+        if (ettersendelse.erTilbakebetalingUttalelse()) {
+            LOG.info("Konverterer tekst til vedleggs-pdf {}", ettersendelse.brukerTekst().dokumentType());
+            ettersendelse.vedlegg().add(vedleggFra(uttalelseFra(ettersendelse)));
+        } else {
+            hentMellomlagredeFiler(ettersendelse);
+        }
+        var kvittering = connection.ettersend(ettersendelse);
+        var finish = Instant.now();
+        var ms = Duration.between(start, finish).toMillis();
+        LOG.info(RETURNERER_KVITTERING, kvittering, ms);
+        return kvittering;
+    }
+
 
     private VedleggDto vedleggFra(TilbakebetalingUttalelseDto u) {
         return new VedleggDto(pdfGenerator.generate(u), "Tekst fra bruker", id(), u.brukerTekst().dokumentType());
@@ -106,14 +117,17 @@ public class InnsendingTjeneste implements RetryAware {
     }
 
     private Ytelse tilYtelse(Innsending innsending) {
-        if (innsending instanceof ForeldrepengesøknadDto || innsending instanceof EndringssøknadForeldrepengerDto) {
+        if (innsending instanceof ForeldrepengesøknadDto || innsending instanceof no.nav.foreldrepenger.selvbetjening.kontrakt.innsending.v2.dto.foreldrepenger.ForeldrepengesøknadDto) {
             return Ytelse.FORELDREPENGER;
         }
         if (innsending instanceof EngangsstønadDto || innsending instanceof no.nav.foreldrepenger.selvbetjening.kontrakt.innsending.v2.dto.engangsstønad.EngangsstønadDto) {
             return Ytelse.ENGANGSSTONAD;
         }
-        if (innsending instanceof SvangerskapspengesøknadDto) {
+        if (innsending instanceof SvangerskapspengesøknadDto || innsending instanceof no.nav.foreldrepenger.selvbetjening.kontrakt.innsending.v2.dto.svangerskapspenger.SvangerskapspengesøknadDto) {
             return Ytelse.SVANGERSKAPSPENGER;
+        }
+        if (innsending instanceof EndringssøknadForeldrepengerDto || innsending instanceof no.nav.foreldrepenger.selvbetjening.kontrakt.innsending.v2.dto.endringssøknad.EndringssøknadForeldrepengerDto) {
+            return Ytelse.FORELDREPENGER;
         }
         if (innsending instanceof EttersendelseDto ettersendelse) {
             return switch (ettersendelse.type()) {

@@ -16,6 +16,7 @@ import no.nav.foreldrepenger.selvbetjening.kontrakt.innsending.dto.VedleggDto;
 import no.nav.foreldrepenger.selvbetjening.kontrakt.innsending.dto.foreldrepenger.Situasjon;
 import no.nav.foreldrepenger.selvbetjening.kontrakt.innsending.dto.validering.VedlegglistestørrelseConstraint;
 
+@Deprecated
 public record SvangerskapspengesøknadDto(LocalDate mottattdato,
                                          @Valid @NotNull @Size(max = 100) List<TilretteleggingDto> tilrettelegging,
                                          @Valid @NotNull BarnDto barn,

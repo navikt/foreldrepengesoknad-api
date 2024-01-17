@@ -28,7 +28,7 @@ import no.nav.foreldrepenger.common.domain.Kvittering;
 import no.nav.foreldrepenger.selvbetjening.http.AbstractRestConnection;
 import no.nav.foreldrepenger.selvbetjening.kontrakt.innsending.dto.Innsending;
 import no.nav.foreldrepenger.selvbetjening.kontrakt.innsending.dto.VedleggDto;
-import no.nav.foreldrepenger.selvbetjening.kontrakt.innsending.dto.endringssøknad.EndringssøknadDto;
+import no.nav.foreldrepenger.selvbetjening.kontrakt.innsending.v2.dto.endringssøknad.EndringssøknadDto;
 import no.nav.foreldrepenger.selvbetjening.kontrakt.innsending.v2.dto.SøknadDto;
 import no.nav.foreldrepenger.selvbetjening.kontrakt.innsending.dto.ettersendelse.EttersendelseDto;
 
@@ -53,13 +53,15 @@ public class InnsendingConnection extends AbstractRestConnection {
     public Kvittering sendInn(Innsending innsending) {
         if (innsending instanceof no.nav.foreldrepenger.selvbetjening.kontrakt.innsending.dto.SøknadDto || innsending instanceof SøknadDto) {
             return postForEntity(config.innsendingURI(), body(innsending), Kvittering.class);
-        } else if (innsending instanceof EndringssøknadDto) {
+        } else if (innsending instanceof no.nav.foreldrepenger.selvbetjening.kontrakt.innsending.dto.endringssøknad.EndringssøknadDto || innsending instanceof EndringssøknadDto) {
             return postForEntity(config.endringURI(), body(innsending), Kvittering.class);
-        } else if (innsending instanceof EttersendelseDto ettersendelse) {
-            return postForEntity(config.ettersendingURI(), body(ettersendelse), Kvittering.class);
         } else {
             throw new IllegalStateException("Utviklerfeil: Innsending støtter bare søknad, endringssøknad og ettersendelse");
         }
+    }
+
+    public Kvittering ettersend(EttersendelseDto ettersendelse) {
+        return postForEntity(config.ettersendingURI(), body(ettersendelse), Kvittering.class);
     }
 
     private HttpEntity<MultiValueMap<String, HttpEntity<?>>> body(Innsending innsending) {

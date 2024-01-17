@@ -1,4 +1,4 @@
-package no.nav.foreldrepenger.selvbetjening.kontrakt.innsending.util.builder;
+package no.nav.foreldrepenger.selvbetjening.kontrakt.innsending.v2.util.builder;
 
 import java.time.LocalDate;
 import java.util.List;
@@ -6,39 +6,46 @@ import java.util.List;
 import no.nav.foreldrepenger.common.oppslag.dkif.Målform;
 import no.nav.foreldrepenger.selvbetjening.kontrakt.innsending.dto.VedleggDto;
 import no.nav.foreldrepenger.selvbetjening.kontrakt.innsending.v2.dto.BarnDto;
-import no.nav.foreldrepenger.selvbetjening.kontrakt.innsending.v2.dto.engangsstønad.EngangsstønadDto;
 import no.nav.foreldrepenger.selvbetjening.kontrakt.innsending.v2.dto.UtenlandsoppholdDto;
+import no.nav.foreldrepenger.selvbetjening.kontrakt.innsending.v2.dto.UtenlandsoppholdsperiodeDto;
+import no.nav.foreldrepenger.selvbetjening.kontrakt.innsending.v2.dto.engangsstønad.EngangsstønadDto;
 
 
-public class EngangsstønadV2Builder {
+public class EngangsstønadBuilder {
     private LocalDate mottattdato;
     private Målform språkkode;
     private BarnDto barn;
     private UtenlandsoppholdDto utenlandsopphold;
+    private List<UtenlandsoppholdsperiodeDto> oppholdIUtlandet;
     private List<VedleggDto> vedlegg;
 
 
-    public EngangsstønadV2Builder medMottattdato(LocalDate mottattdato) {
+    public EngangsstønadBuilder medMottattdato(LocalDate mottattdato) {
         this.mottattdato = mottattdato;
         return this;
     }
 
-    public EngangsstønadV2Builder medSpråkkode(Målform språkkode) {
+    public EngangsstønadBuilder medSpråkkode(Målform språkkode) {
         this.språkkode = språkkode;
         return this;
     }
 
-    public EngangsstønadV2Builder medBarn(BarnDto barn) {
+    public EngangsstønadBuilder medBarn(BarnDto barn) {
         this.barn = barn;
         return this;
     }
 
-    public EngangsstønadV2Builder medUtenlandsopphold(UtenlandsoppholdDto utenlandsopphold) {
+    public EngangsstønadBuilder medOppholdIUtlandet(List<UtenlandsoppholdsperiodeDto> oppholdIUtlandet) {
+        this.oppholdIUtlandet = oppholdIUtlandet;
+        return this;
+    }
+
+    public EngangsstønadBuilder medUtenlandsopphold(UtenlandsoppholdDto utenlandsopphold) {
         this.utenlandsopphold = utenlandsopphold;
         return this;
     }
 
-    public EngangsstønadV2Builder medVedlegg(List<VedleggDto> vedlegg) {
+    public EngangsstønadBuilder medVedlegg(List<VedleggDto> vedlegg) {
         this.vedlegg = vedlegg;
         return this;
     }
@@ -50,6 +57,7 @@ public class EngangsstønadV2Builder {
             språkkode,
             barn,
             utenlandsopphold,
+            oppholdIUtlandet,
             vedlegg
         );
     }

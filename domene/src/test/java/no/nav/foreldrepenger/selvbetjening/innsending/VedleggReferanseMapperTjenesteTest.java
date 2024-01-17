@@ -30,13 +30,12 @@ import no.nav.foreldrepenger.selvbetjening.kontrakt.innsending.dto.svangerskapsp
 import no.nav.foreldrepenger.selvbetjening.kontrakt.innsending.dto.ÅpenPeriodeDto;
 import no.nav.foreldrepenger.selvbetjening.kontrakt.innsending.util.builder.AnnenforelderBuilder;
 import no.nav.foreldrepenger.selvbetjening.kontrakt.innsending.util.builder.BarnBuilder;
-import no.nav.foreldrepenger.selvbetjening.kontrakt.innsending.util.builder.BarnV2Builder;
-import no.nav.foreldrepenger.selvbetjening.kontrakt.innsending.util.builder.EngangsstønadV2Builder;
 import no.nav.foreldrepenger.selvbetjening.kontrakt.innsending.util.builder.ForeldrepengerBuilder;
 import no.nav.foreldrepenger.selvbetjening.kontrakt.innsending.util.builder.SvangerskapspengerBuilder;
 import no.nav.foreldrepenger.selvbetjening.kontrakt.innsending.util.builder.SøkerBuilder;
 import no.nav.foreldrepenger.selvbetjening.kontrakt.innsending.util.builder.TilretteleggingBuilder;
 import no.nav.foreldrepenger.selvbetjening.kontrakt.innsending.util.maler.ArbeidsforholdMaler;
+import no.nav.foreldrepenger.selvbetjening.kontrakt.innsending.v2.util.builder.EngangsstønadBuilder;
 
 class VedleggReferanseMapperTjenesteTest {
 
@@ -96,9 +95,9 @@ class VedleggReferanseMapperTjenesteTest {
             null
         );
         var vedlegg = vedlegg(dokumenterer);
-        var engangstønad = new EngangsstønadV2Builder()
+        var engangstønad = new EngangsstønadBuilder()
             .medSpråkkode(Målform.NB)
-            .medBarn(BarnV2Builder.adopsjon(LocalDate.now().minusWeeks(2), false).build())
+            .medBarn(no.nav.foreldrepenger.selvbetjening.kontrakt.innsending.v2.util.builder.BarnBuilder.adopsjon(LocalDate.now().minusWeeks(2), false).build())
             .medVedlegg(List.of(vedlegg))
             .build();
 
