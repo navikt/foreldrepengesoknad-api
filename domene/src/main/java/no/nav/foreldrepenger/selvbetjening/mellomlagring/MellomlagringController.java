@@ -2,7 +2,6 @@ package no.nav.foreldrepenger.selvbetjening.mellomlagring;
 
 import static no.nav.foreldrepenger.common.domain.validation.InputValideringRegex.FRITEKST;
 import static no.nav.foreldrepenger.selvbetjening.vedlegg.DelegerendeVedleggSjekker.DELEGERENDE;
-import static org.springframework.http.HttpStatus.NOT_ACCEPTABLE;
 import static org.springframework.http.HttpStatus.NO_CONTENT;
 import static org.springframework.http.MediaType.APPLICATION_JSON_VALUE;
 import static org.springframework.http.MediaType.MULTIPART_FORM_DATA_VALUE;
@@ -23,7 +22,6 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestPart;
 import org.springframework.web.bind.annotation.ResponseStatus;
-import org.springframework.web.client.HttpServerErrorException;
 import org.springframework.web.multipart.MultipartFile;
 
 import jakarta.validation.Valid;
@@ -104,7 +102,7 @@ public class MellomlagringController {
     private static byte[] getBytesNullSjekk(MultipartFile file) {
         var bytes = getBytesFraMultipart(file);
         if (bytes.length == 0) {
-            throw new HttpServerErrorException(NOT_ACCEPTABLE, "Kan ikke mellomlagre vedlegg som ikke har innhold");
+            throw new AttachmentEmptyException("Kan ikke mellomlagre vedlegg som ikke har innhold");
         }
         return bytes;
     }
