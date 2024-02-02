@@ -111,7 +111,7 @@ public class GCPMellomlagring implements Mellomlagring {
             var batch = storage.batch();
             for (var blob : blobs.iterateAll()) {
                 LOG.trace("Legger til {} for sletting i batch", blob.getName());
-                batch.update(blob);
+                batch.delete(blob.getBlobId());
             }
             batch.submit();
             LOG.info("Alle blobs i bøtte {} med prefiks {} er blitt slettet", mellomlagringBøtte.navn(), katalog);
