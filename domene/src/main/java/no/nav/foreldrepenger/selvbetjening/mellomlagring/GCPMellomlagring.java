@@ -4,6 +4,7 @@ import static java.nio.charset.StandardCharsets.UTF_8;
 import static org.springframework.http.MediaType.APPLICATION_JSON_VALUE;
 import static org.springframework.http.MediaType.APPLICATION_OCTET_STREAM_VALUE;
 
+import java.time.OffsetDateTime;
 import java.util.Optional;
 
 import org.slf4j.Logger;
@@ -33,14 +34,20 @@ public class GCPMellomlagring implements Mellomlagring {
 
     @Override
     public void lagre(String katalog, String key, String value) {
-        storage.create(BlobInfo.newBuilder(blobFra(mellomlagringBøtte, katalog, key))
-                .setContentType(APPLICATION_JSON_VALUE).build(), value.getBytes(UTF_8));
+        var blob = BlobInfo.newBuilder(blobFra(mellomlagringBøtte, katalog, key))
+            .setContentType(APPLICATION_JSON_VALUE)
+            .setCustomTimeOffsetDateTime(OffsetDateTime.now())
+            .build();
+        storage.create(blob, value.getBytes(UTF_8));
     }
 
     @Override
     public void lagreVedlegg(String katalog, String key, byte[] value) {
-        storage.create(BlobInfo.newBuilder(blobFra(mellomlagringBøtte, katalog, key))
-            .setContentType(APPLICATION_OCTET_STREAM_VALUE).build(), value);
+        var blob = BlobInfo.newBuilder(blobFra(mellomlagringBøtte, katalog, key))
+            .setContentType(APPLICATION_OCTET_STREAM_VALUE)
+            .setCustomTimeOffsetDateTime(OffsetDateTime.now())
+            .build();
+        storage.create(blob, value);
     }
 
     @Override
@@ -73,6 +80,26 @@ public class GCPMellomlagring implements Mellomlagring {
     }
 
     @Override
+    public void oppdaterMellomlagredeVedleggOgSøknad(String katalog) {
+        var blobs = storage.list(
+            mellomlagringBøtte.navn(),
+            Storage.BlobListOption.prefix(katalog),
+            Storage.BlobListOption.currentDirectory()
+        );
+
+        if (blobs.streamAll().findAny().isPresent()) {
+            var batch = storage.batch();
+            for (var blob : blobs.iterateAll()) {
+                LOG.trace("Legger til {} for oppdatering i batch", blob.getName());
+                var nyBlob = blob.toBuilder().setCustomTimeOffsetDateTime(OffsetDateTime.now()).build();
+                batch.update(nyBlob);
+            }
+            batch.submit();
+            LOG.info("Alle blobs i bøtte {} med prefiks {} er oppdatert", mellomlagringBøtte.navn(), katalog);
+        }
+    }
+
+    @Override
     public void slettAll(String katalog) {
         var blobs = storage.list(
             mellomlagringBøtte.navn(),
@@ -84,7 +111,7 @@ public class GCPMellomlagring implements Mellomlagring {
             var batch = storage.batch();
             for (var blob : blobs.iterateAll()) {
                 LOG.trace("Legger til {} for sletting i batch", blob.getName());
-                batch.delete(blob.getBlobId());
+                batch.update(blob);
             }
             batch.submit();
             LOG.info("Alle blobs i bøtte {} med prefiks {} er blitt slettet", mellomlagringBøtte.navn(), katalog);

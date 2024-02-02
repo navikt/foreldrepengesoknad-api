@@ -62,6 +62,11 @@ public class InMemoryMellomlagring implements Mellomlagring {
         }
     }
 
+    @Override
+    public void oppdaterMellomlagredeVedleggOgSøknad(String katalog) {
+        // do nothign
+    }
+
     private static String key(String directory, String key) {
         return directory + key;
     }

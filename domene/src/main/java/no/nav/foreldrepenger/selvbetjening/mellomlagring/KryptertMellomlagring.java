@@ -29,6 +29,7 @@ public class KryptertMellomlagring {
 
     public void lagreKryptertSøknad(String søknad, Ytelse ytelse) {
         mellomlagring.lagre(ytelsespesifikkMappe(ytelse), SØKNAD, krypto.encrypt(søknad));
+        mellomlagring.oppdaterMellomlagredeVedleggOgSøknad(ytelsespesifikkMappe(ytelse));
     }
 
     public Optional<byte[]> lesKryptertVedlegg(String key, Ytelse ytelse) {
