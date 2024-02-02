@@ -66,11 +66,10 @@ public class InnsendingTjeneste implements RetryAware {
     public Kvittering ettersend(EttersendelseDto ettersendelse) {
         LOG.info("Mottok ettersendelse med {} vedlegg", ettersendelse.vedlegg().size());
         var start = Instant.now();
+        hentMellomlagredeFiler(ettersendelse);
         if (ettersendelse.erTilbakebetalingUttalelse()) {
             LOG.info("Konverterer tekst til vedleggs-pdf {}", ettersendelse.brukerTekst().dokumentType());
             ettersendelse.vedlegg().add(vedleggFra(uttalelseFra(ettersendelse)));
-        } else {
-            hentMellomlagredeFiler(ettersendelse);
         }
         var kvittering = connection.ettersend(ettersendelse);
         var finish = Instant.now();
