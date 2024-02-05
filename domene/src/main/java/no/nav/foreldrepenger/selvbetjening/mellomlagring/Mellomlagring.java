@@ -17,4 +17,6 @@ public interface Mellomlagring extends RetryAware {
     void slett(String directory, String key);
 
     void slettAll(String katalog);
+
+    void oppdaterMellomlagredeVedleggOgSøknad(String katalog);
 }

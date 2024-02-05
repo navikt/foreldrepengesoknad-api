@@ -111,7 +111,9 @@ public class InnsendingTjeneste implements RetryAware {
 
     private void hentVedleggBytes(VedleggDto vedlegg, Innsending innsending) {
         if (vedlegg.getUrl() != null) {
-            vedlegg.setContent(mellomlagring.lesKryptertVedlegg(vedlegg.getUuid(), tilYtelse(innsending)).orElse(new byte[] {}));
+            var innhold = mellomlagring.lesKryptertVedlegg(vedlegg.getUuid(), tilYtelse(innsending))
+                .orElseThrow(() -> new IllegalStateException("Fant ikke mellomlagret vedlegg med uuid " + vedlegg.getUuid()));
+            vedlegg.setContent(innhold);
         }
     }
 
