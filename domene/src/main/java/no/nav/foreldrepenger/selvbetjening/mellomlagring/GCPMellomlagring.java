@@ -83,8 +83,7 @@ public class GCPMellomlagring implements Mellomlagring {
     public void oppdaterMellomlagredeVedleggOgSøknad(String katalog) {
         var blobs = storage.list(
             mellomlagringBøtte.navn(),
-            Storage.BlobListOption.prefix(katalog),
-            Storage.BlobListOption.currentDirectory()
+            Storage.BlobListOption.prefix(katalog)
         );
 
         if (blobs.streamAll().findAny().isPresent()) {
@@ -103,8 +102,7 @@ public class GCPMellomlagring implements Mellomlagring {
     public void slettAll(String katalog) {
         var blobs = storage.list(
             mellomlagringBøtte.navn(),
-            Storage.BlobListOption.prefix(katalog),
-            Storage.BlobListOption.currentDirectory()
+            Storage.BlobListOption.prefix(katalog)
         );
 
         if (blobs.streamAll().findAny().isPresent()) {
