@@ -20,8 +20,6 @@ spec:
   gcp:
     buckets:
       - name: {{tmpbucket}}
-        lifecycleCondition:
-          daysSinceCustomTime: 1
   accessPolicy:
     outbound:
       rules:
