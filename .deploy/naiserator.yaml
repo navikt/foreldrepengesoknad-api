@@ -21,7 +21,7 @@ spec:
     buckets:
       - name: {{tmpbucket}}
         lifecycleCondition:
-          age: 1
+          daysSinceCustomTime: 1
   accessPolicy:
     outbound:
       rules:
