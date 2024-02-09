@@ -19,11 +19,13 @@ import java.util.Optional;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.boot.autoconfigure.web.client.RestTemplateBuilderConfigurer;
 import org.springframework.boot.web.client.RestTemplateBuilder;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.context.annotation.Primary;
 import org.springframework.core.annotation.Order;
 import org.springframework.http.client.ClientHttpRequestInterceptor;
 import org.springframework.retry.RetryCallback;
@@ -40,8 +42,8 @@ import no.nav.security.token.support.client.spring.oauth2.OAuth2ClientRequestInt
 
 @Configuration
 public class RestClientConfiguration implements WebMvcConfigurer {
-    private static final Duration READ_TIMEOUT = Duration.ofSeconds(40);
-    private static final Duration CONNECT_TIMEOUT = Duration.ofSeconds(10);
+
+    public static final String LONG_TIMEOUT = "longTimeoutResttemplate";
     private static final Logger LOG = LoggerFactory.getLogger(RestClientConfiguration.class);
 
     private final String[] allowedOrigins;
@@ -51,10 +53,20 @@ public class RestClientConfiguration implements WebMvcConfigurer {
     }
 
     @Bean
-    public RestOperations customRestTemplate(RestTemplateBuilder b, ClientHttpRequestInterceptor... interceptors) {
+    @Qualifier(LONG_TIMEOUT)
+    public RestOperations longTimeoutRestTemplate(RestTemplateBuilder b, ClientHttpRequestInterceptor... interceptors) {
         return b.interceptors(interceptors)
-            .setConnectTimeout(CONNECT_TIMEOUT)
-            .setReadTimeout(READ_TIMEOUT)
+            .setConnectTimeout(Duration.ofSeconds(5))
+            .setReadTimeout(Duration.ofSeconds(40))
+            .build();
+    }
+
+    @Bean
+    @Primary
+    public RestOperations regularTimeoutRestTemplate(RestTemplateBuilder b, ClientHttpRequestInterceptor... interceptors) {
+        return b.interceptors(interceptors)
+            .setConnectTimeout(Duration.ofSeconds(5))
+            .setReadTimeout(Duration.ofSeconds(10))
             .build();
     }
 
@@ -63,7 +75,7 @@ public class RestClientConfiguration implements WebMvcConfigurer {
         // RestTemplateBuilder tas inn av DefaultOAuth2HttpClient. Setter default timeout verdier for denne.
         return configurer.configure(new RestTemplateBuilder())
             .setConnectTimeout(Duration.ofSeconds(5))
-            .setReadTimeout(Duration.ofSeconds(15));
+            .setReadTimeout(Duration.ofSeconds(10));
     }
 
     @Bean

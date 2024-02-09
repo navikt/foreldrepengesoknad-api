@@ -3,6 +3,7 @@ package no.nav.foreldrepenger.selvbetjening.innsending;
 import static no.nav.boot.conditionals.EnvUtil.isGcp;
 import static no.nav.foreldrepenger.common.domain.felles.InnsendingsType.LASTET_OPP;
 import static no.nav.foreldrepenger.common.util.StreamUtil.safeStream;
+import static no.nav.foreldrepenger.selvbetjening.http.RestClientConfiguration.LONG_TIMEOUT;
 import static no.nav.foreldrepenger.selvbetjening.kontrakt.innsending.mapper.EttersendingMapper.tilEttersending;
 import static no.nav.foreldrepenger.selvbetjening.kontrakt.innsending.mapper.SøknadMapper.tilSøknad;
 import static no.nav.foreldrepenger.selvbetjening.vedlegg.VedleggUtil.mediaType;
@@ -13,6 +14,7 @@ import static org.springframework.http.MediaType.MULTIPART_MIXED;
 import java.time.LocalDate;
 import java.util.List;
 
+import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.core.env.Environment;
 import org.springframework.http.HttpEntity;
 import org.springframework.http.HttpHeaders;
@@ -43,7 +45,10 @@ public class InnsendingConnection extends AbstractRestConnection {
     private final Environment env;
     private final InnsendingConfig config;
 
-    public InnsendingConnection(RestOperations operations, ObjectMapper mapper, Environment env, InnsendingConfig config) {
+    public InnsendingConnection(@Qualifier(LONG_TIMEOUT) RestOperations operations,
+                                ObjectMapper mapper,
+                                Environment env,
+                                InnsendingConfig config) {
         super(operations);
         this.mapper = mapper;
         this.env = env;
