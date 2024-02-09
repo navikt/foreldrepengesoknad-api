@@ -1,9 +1,11 @@
 package no.nav.foreldrepenger.selvbetjening.vedlegg.virusscan;
 
+import static no.nav.foreldrepenger.selvbetjening.http.RestClientConfiguration.LONG_TIMEOUT;
 import static no.nav.foreldrepenger.selvbetjening.vedlegg.virusscan.Result.OK;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.stereotype.Component;
 import org.springframework.web.client.RestOperations;
 
@@ -17,7 +19,7 @@ public class VirusScanConnection extends AbstractRestConnection {
 
     private final VirusScanConfig config;
 
-    public VirusScanConnection(RestOperations operations, VirusScanConfig config) {
+    public VirusScanConnection(@Qualifier(LONG_TIMEOUT) RestOperations operations, VirusScanConfig config) {
         super(operations);
         this.config = config;
     }
