@@ -52,6 +52,7 @@ server:
   servlet:
     context-path: /
   forward-headers-strategy: native
+  shutdown: graceful
 spring:
   cloud.discovery.enabled: false
   cache:
