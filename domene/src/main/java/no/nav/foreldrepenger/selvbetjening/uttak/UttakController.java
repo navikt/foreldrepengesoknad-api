@@ -69,6 +69,7 @@ public class UttakController {
         var morHarRettEllerEØS = morHarRett || (!erMor && harAnnenForelderTilsvarendeRettEØS);
         var bareFarHarRett = farHarRett && !morHarRettEllerEØS;
         var aleneomsorg = (erMor && morHarAleneomsorg) || (!erMor && farHarAleneomsorg);
+        var gjelderFødsel = omsorgsovertakelseDato == null;
         var minsterettGrunnlag = new BeregnMinsterettGrunnlag.Builder().antallBarn(antallBarn)
             .minsterett(minsterett)
             .mor(erMor)
@@ -76,6 +77,7 @@ public class UttakController {
             .aleneomsorg(aleneomsorg)
             .morHarUføretrygd(morHarUføretrygd)
             .dekningsgrad(dekningsgradOversatt)
+            .gjelderFødsel(gjelderFødsel)
             .familieHendelseDato(familiehendelse(fødselsdato, termindato, omsorgsovertakelseDato))
             .familieHendelseDatoNesteSak(familieHendelseDatoNesteSak)
             .build();
