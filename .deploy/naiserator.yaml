@@ -43,6 +43,9 @@ spec:
   readiness:
     path: /internal/actuator/health/readiness
     initialDelay: 15
+  preStopHook:
+    http:
+      path: /internal/preStop
   prometheus:
     enabled: true
     path: /internal/actuator/prometheus

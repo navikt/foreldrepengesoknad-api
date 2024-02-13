@@ -15,8 +15,8 @@ import static org.assertj.core.api.Assertions.assertThat;
 
 class RestApiSikredeEndepunktTest extends RestApiTestUtil {
 
-    private static final List<Class<?>> UNNTATT_RESTCONTROLLER = List.of(UttakController.class);
-    private static final String ENDEPUNKT_SOM_KAN_VÆRE_UNPROTECTED = "ping";
+    private static final List<Class<?>> UNNTATT_RESTCONTROLLER = List.of(UttakController.class, PreStopHookController.class);
+    private static final List<String> ENDEPUNKT_SOM_KAN_VÆRE_UNPROTECTED = List.of("ping", "preStop");
 
     @Test
     void sjekkAtProtectedRestControllerIkkeHarUbeskyttetAnnotering() {
@@ -59,7 +59,7 @@ class RestApiSikredeEndepunktTest extends RestApiTestUtil {
     }
 
     private boolean erEndepunktUnprotected(Method metode) {
-        if (metode.isAnnotationPresent(ConditionalOnNotProd.class) || metode.getName().equalsIgnoreCase(ENDEPUNKT_SOM_KAN_VÆRE_UNPROTECTED)) {
+        if (metode.isAnnotationPresent(ConditionalOnNotProd.class) || ENDEPUNKT_SOM_KAN_VÆRE_UNPROTECTED.stream().anyMatch(ep -> ep.equalsIgnoreCase(metode.getName()))) {
             return false;
         }
         return metode.isAnnotationPresent(Unprotected.class);
