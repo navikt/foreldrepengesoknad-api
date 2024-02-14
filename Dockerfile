@@ -8,6 +8,7 @@ WORKDIR /app
 # Dependencies and config is bundled in jar file
 COPY domene/target/app.jar .
 
+ENV TZ=Europe/Oslo
 ENV JAVA_OPTS="-XX:MaxRAMPercentage=75 \
     -XX:+PrintCommandLineFlags \
     -XX:ActiveProcessorCount=2 \
