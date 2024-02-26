@@ -1,5 +1,6 @@
 package no.nav.foreldrepenger.selvbetjening.innsyn.tidslinje;
 
+import static no.nav.foreldrepenger.selvbetjening.innsyn.dokument.EnkelJournalpost.Brevkode.FORELDREPENGER_FEIL_PRAKSIS_UTSETTELSE_INFOBREV;
 import static no.nav.foreldrepenger.selvbetjening.innsyn.dokument.EnkelJournalpost.DokumentType.INNGÅENDE_DOKUMENT;
 
 import java.util.Comparator;
@@ -80,6 +81,8 @@ public class TidslinjeTjeneste {
         } else if (brevkode.erVarselOmTilbakebetaling() && enkelJournalpost.tittel().contains(VARSEL_TILBAKEBETALING_TITTEL)) {
             LOG.info("Varsel om tilbakebetaling returnes {}", enkelJournalpost);
             return Optional.of(TidslinjeHendelseDto.TidslinjeHendelseType.UTGÅENDE_VARSEL_TILBAKEBETALING);
+        } else if (brevkode.equals(FORELDREPENGER_FEIL_PRAKSIS_UTSETTELSE_INFOBREV)) {
+            return Optional.of(TidslinjeHendelseDto.TidslinjeHendelseType.FORELDREPENGER_FEIL_PRAKSIS_UTSETTELSE_INFOBREV);
         } else {
             LOG.info("Ignorerer utgåpende journalpost: {}", enkelJournalpost);
             return Optional.empty();

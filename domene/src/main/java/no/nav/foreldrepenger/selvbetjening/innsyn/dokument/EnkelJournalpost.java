@@ -31,6 +31,7 @@ public record EnkelJournalpost(String tittel,
         ENGANGSSTØNAD_AVSLAG("AVSLES"),
         FORELDREPENGER_OPPHØR("OPPFOR"),
         SVANGERSKAPSPENGER_INNVILGELSE("INVSVP"),
+
         // Gamle/utdaterte brevkoder funnet i Joark
         VEDTAK_POSITIVT_OLD("000048"),
         VEDTAK_AVSLAG_OLD("000051"),
@@ -38,6 +39,7 @@ public record EnkelJournalpost(String tittel,
         VEDTAK_AVSLAG_FORELDREPENGER_OLD("000080"),
         INNHENTE_OPPLYSNINGER_OLD("000049"),
         ETTERLYS_INNTEKTSMELDING_OLD("000096"),
+
         // Gamle/utdaterte brevkoder med MF_ prefiks funnet i Joark
         VEDTAK_POSITIVT_OLD_MF("MF_000048"),
         VEDTAK_AVSLAG_OLD_MF("MF_000051"),
@@ -49,6 +51,7 @@ public record EnkelJournalpost(String tittel,
         FRITEKSTBREV("FRITEK"), // Bare vedtak p.d.
         INNHENTE_OPPLYSNINGER("INNOPP"),
         ETTERLYS_INNTEKTSMELDING("ELYSIM"),
+        FORELDREPENGER_FEIL_PRAKSIS_UTSETTELSE_INFOBREV("INFOPU"),
         VARSEL_TILBAKEBETALING_FP("FP-TILB"),
         VARSEL_TILBAKEBETALING_SVP("SVP-TILB"),
         VARSEL_TILBAKEBETALING_ES("ES-TILB"),
