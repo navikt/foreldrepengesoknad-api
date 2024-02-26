@@ -1,7 +1,7 @@
 package no.nav.foreldrepenger.selvbetjening.innsyn.tidslinje;
 
 import static no.nav.foreldrepenger.selvbetjening.innsyn.dokument.EnkelJournalpost.Brevkode.FORELDREPENGER_FEIL_PRAKSIS_UTSETTELSE_INFOBREV;
-import static no.nav.foreldrepenger.selvbetjening.innsyn.dokument.EnkelJournalpost.DokumentType.INNGÅENDE_DOKUMENT;
+import static no.nav.foreldrepenger.selvbetjening.innsyn.dokument.EnkelJournalpost.Type.INNGÅENDE_DOKUMENT;
 
 import java.util.Comparator;
 import java.util.List;
@@ -35,7 +35,7 @@ public class TidslinjeTjeneste {
 
     public List<TidslinjeHendelseDto> tidslinje(Fødselsnummer fødselsnummer, Saksnummer saksnummer) {
         var alleDokumenterFraSaf = safselvbetjening.alle(fødselsnummer, saksnummer).stream()
-            .filter(journalpost -> !(INNGÅENDE_DOKUMENT.equals(journalpost.type()) && journalpost.hovedtype().erInntektsmelding()))
+            .filter(journalpost -> !(INNGÅENDE_DOKUMENT.equals(journalpost.type()) && journalpost.hovedtype() != null && journalpost.hovedtype().erInntektsmelding()))
             .toList();
         var mappedeDokumenter = alleDokumenterFraSaf.stream()
             .map(journalpost -> tilTidslinjeHendelse(journalpost, alleDokumenterFraSaf))
@@ -48,7 +48,7 @@ public class TidslinjeTjeneste {
     }
 
     private static Optional<TidslinjeHendelseDto> tilTidslinjeHendelse(EnkelJournalpost enkelJournalpost, List<EnkelJournalpost> alleDokumentene) {
-        if (enkelJournalpost.type().equals(EnkelJournalpost.DokumentType.UTGÅENDE_DOKUMENT)) {
+        if (enkelJournalpost.type().equals(EnkelJournalpost.Type.UTGÅENDE_DOKUMENT)) {
             return tidslinjeHendelseTypeUtgåendeDokument(enkelJournalpost)
                 .map(hendelseType -> new TidslinjeHendelseDto(
                     enkelJournalpost.mottatt(),
@@ -90,13 +90,18 @@ public class TidslinjeTjeneste {
     }
 
     private static Optional<TidslinjeHendelseDto.TidslinjeHendelseType> tidslinjehendelsetype(EnkelJournalpost enkelJournalpost, List<EnkelJournalpost> alleDokumentene) {
-        if (enkelJournalpost.hovedtype().erFørstegangssøknad()) {
+        var dokumentType = enkelJournalpost.hovedtype();
+        if (dokumentType == null) {
+            LOG.info("Ignorer inngående journalpost med dokumenttype: {}", enkelJournalpost);
+            return Optional.empty();
+        }
+        if (dokumentType.erFørstegangssøknad()) {
             return Optional.of(erNyFørstegangssøknad(enkelJournalpost, alleDokumentene) ?
                 TidslinjeHendelseDto.TidslinjeHendelseType.FØRSTEGANGSSØKNAD_NY :
                 TidslinjeHendelseDto.TidslinjeHendelseType.FØRSTEGANGSSØKNAD);
-        } else if (enkelJournalpost.hovedtype().erEndringssøknad()) {
+        } else if (dokumentType.erEndringssøknad()) {
             return Optional.of(TidslinjeHendelseDto.TidslinjeHendelseType.ENDRINGSSØKNAD);
-        } else if (enkelJournalpost.hovedtype().erVedlegg() || enkelJournalpost.hovedtype().erUttalelseOmTilbakekreving()) {
+        } else if (dokumentType.erVedlegg() || dokumentType.erUttalelseOmTilbakekreving()) {
             return  Optional.of(TidslinjeHendelseDto.TidslinjeHendelseType.ETTERSENDING);
         } else {
             LOG.info("Ignorer inngående journalpost med dokumenttype: {}", enkelJournalpost);
@@ -107,7 +112,7 @@ public class TidslinjeTjeneste {
     private static boolean erNyFørstegangssøknad(EnkelJournalpost enkelJournalpost, List<EnkelJournalpost> alleDokumentene) {
         return alleDokumentene.stream()
             .filter(j -> INNGÅENDE_DOKUMENT.equals(j.type()))
-            .filter(journalpost -> journalpost.hovedtype().erFørstegangssøknad())
+            .filter(journalpost -> journalpost.hovedtype() != null && journalpost.hovedtype().erFørstegangssøknad())
             .anyMatch(journalpost -> journalpost.mottatt().isBefore(enkelJournalpost.mottatt()));
     }
 

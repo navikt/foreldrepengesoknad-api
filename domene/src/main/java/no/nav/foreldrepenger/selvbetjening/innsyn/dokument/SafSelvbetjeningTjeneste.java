@@ -13,6 +13,7 @@ import org.springframework.stereotype.Service;
 
 import no.nav.foreldrepenger.common.domain.Fødselsnummer;
 import no.nav.foreldrepenger.common.domain.Saksnummer;
+import no.nav.foreldrepenger.common.domain.felles.DokumentType;
 import no.nav.safselvbetjening.Datotype;
 import no.nav.safselvbetjening.DokumentInfo;
 import no.nav.safselvbetjening.DokumentInfoResponseProjection;
@@ -125,7 +126,7 @@ public class SafSelvbetjeningTjeneste {
             journalpost.getSak() != null ? journalpost.getSak().getFagsakId() : null,
             innsendingstype,
             tilOpprettetDato(journalpost.getRelevanteDatoer()),
-            innsendingstype.equals(EnkelJournalpost.DokumentType.INNGÅENDE_DOKUMENT) ? dokumenttypeFraTittel(journalpost) : DokumentTypeId.URELEVANT,
+            innsendingstype.equals(EnkelJournalpost.Type.INNGÅENDE_DOKUMENT) ? dokumenttypeFraTittel(journalpost) : null,
             tilDokumenter(pdfDokument, journalpost.getJournalposttype())
         );
     }
@@ -170,23 +171,23 @@ public class SafSelvbetjeningTjeneste {
             .orElseThrow();
     }
 
-    private static EnkelJournalpost.DokumentType tilType(Journalposttype journalposttype) {
+    private static EnkelJournalpost.Type tilType(Journalposttype journalposttype) {
         return switch (journalposttype) {
-            case I -> EnkelJournalpost.DokumentType.INNGÅENDE_DOKUMENT;
-            case U -> EnkelJournalpost.DokumentType.UTGÅENDE_DOKUMENT;
+            case I -> EnkelJournalpost.Type.INNGÅENDE_DOKUMENT;
+            case U -> EnkelJournalpost.Type.UTGÅENDE_DOKUMENT;
             case N -> throw new IllegalStateException("Utviklerfeil: Skal filterer bort notater før mapping!");
         };
     }
 
-    private static DokumentTypeId dokumenttypeFraTittel(Journalpost journalpost) {
+    private static DokumentType dokumenttypeFraTittel(Journalpost journalpost) {
         return utledFraTittel(journalpost.getTittel())
             .or(() -> utledFraTittel(journalpost.getDokumenter().stream().findFirst().orElseThrow().getTittel()))
-            .orElse(DokumentTypeId.UKJENT);
+            .orElse(null);
     }
 
-    private static Optional<DokumentTypeId> utledFraTittel(String tittel) {
+    private static Optional<DokumentType> utledFraTittel(String tittel) {
         try {
-            return Optional.of(DokumentTypeId.fraTittel(tittel));
+            return Optional.of(DokumentType.fraTittel(tittel));
         } catch (Exception e) {
             LOG.info("Klarte ikke utlede dokumentTypeId fra SAF tittel: {}", tittel);
             return Optional.empty();

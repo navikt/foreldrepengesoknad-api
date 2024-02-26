@@ -12,9 +12,9 @@ import org.junit.jupiter.api.Test;
 
 import no.nav.foreldrepenger.common.domain.Fødselsnummer;
 import no.nav.foreldrepenger.common.domain.Saksnummer;
+import no.nav.foreldrepenger.common.domain.felles.DokumentType;
 import no.nav.foreldrepenger.selvbetjening.innsyn.Innsyn;
 import no.nav.foreldrepenger.selvbetjening.innsyn.InntektsmeldingDto;
-import no.nav.foreldrepenger.selvbetjening.innsyn.dokument.DokumentTypeId;
 import no.nav.foreldrepenger.selvbetjening.innsyn.dokument.EnkelJournalpost;
 import no.nav.foreldrepenger.selvbetjening.innsyn.dokument.SafSelvbetjeningTjeneste;
 
@@ -219,56 +219,56 @@ public class TidslinjeTjenesteTest {
 
     public static EnkelJournalpost søknadMed1Vedlegg(Saksnummer saksnummer, LocalDateTime mottatt) {
         return new EnkelJournalpost(
-            DokumentTypeId.I000003.getTittel(),
+            DokumentType.I000003.getTittel(),
             "1",
             saksnummer.value(),
-            EnkelJournalpost.DokumentType.INNGÅENDE_DOKUMENT, mottatt,
-            DokumentTypeId.I000003,
+            EnkelJournalpost.Type.INNGÅENDE_DOKUMENT, mottatt,
+            DokumentType.I000003,
             List.of(
-                new EnkelJournalpost.Dokument("1", DokumentTypeId.I000003.getTittel(), null),
-                new EnkelJournalpost.Dokument("2", DokumentTypeId.I000036.getTittel(), null)
+                new EnkelJournalpost.Dokument("1", DokumentType.I000003.getTittel(), null),
+                new EnkelJournalpost.Dokument("2", DokumentType.I000036.getTittel(), null)
             )
         );
     }
 
     public static EnkelJournalpost endringssøknadUtenVedlegg(Saksnummer saksnummer, LocalDateTime tidspunkt) {
         return new EnkelJournalpost(
-            DokumentTypeId.I000050.getTittel(),
+            DokumentType.I000050.getTittel(),
             "2",
             saksnummer.value(),
-            EnkelJournalpost.DokumentType.INNGÅENDE_DOKUMENT,
+            EnkelJournalpost.Type.INNGÅENDE_DOKUMENT,
             tidspunkt,
-            DokumentTypeId.I000050,
+            DokumentType.I000050,
             List.of(
-                new EnkelJournalpost.Dokument("1", DokumentTypeId.I000050.getTittel(), null)
+                new EnkelJournalpost.Dokument("1", DokumentType.I000050.getTittel(), null)
             )
         );
     }
 
     public static EnkelJournalpost ettersender2Vedlegg(Saksnummer saksnummer, LocalDateTime tidspunkt) {
         return new EnkelJournalpost(
-            DokumentTypeId.I000036.getTittel(),
+            DokumentType.I000036.getTittel(),
             "3",
             saksnummer.value(),
-            EnkelJournalpost.DokumentType.INNGÅENDE_DOKUMENT, tidspunkt,
-            DokumentTypeId.I000023,
+            EnkelJournalpost.Type.INNGÅENDE_DOKUMENT, tidspunkt,
+            DokumentType.I000023,
             List.of(
-                new EnkelJournalpost.Dokument("1", DokumentTypeId.I000023.getTittel(), null),
-                new EnkelJournalpost.Dokument("2", DokumentTypeId.I000036.getTittel(), null)
+                new EnkelJournalpost.Dokument("1", DokumentType.I000023.getTittel(), null),
+                new EnkelJournalpost.Dokument("2", DokumentType.I000036.getTittel(), null)
             )
         );
     }
 
     public static EnkelJournalpost innteksmeldingJournalpost(Saksnummer saksnummer) {
         return new EnkelJournalpost(
-            DokumentTypeId.I000067.getTittel(),
+            DokumentType.I000067.getTittel(),
             "4",
             saksnummer.value(),
-            EnkelJournalpost.DokumentType.INNGÅENDE_DOKUMENT,
+            EnkelJournalpost.Type.INNGÅENDE_DOKUMENT,
             LocalDateTime.now(),
-            DokumentTypeId.I000067,
+            DokumentType.I000067,
             List.of(
-                new EnkelJournalpost.Dokument("1", DokumentTypeId.I000067.getTittel(), null)
+                new EnkelJournalpost.Dokument("1", DokumentType.I000067.getTittel(), null)
             )
         );
     }
@@ -278,7 +278,7 @@ public class TidslinjeTjenesteTest {
             "Innvilgelsesbrev foreldrepenger",
             "5",
             saksnummer.value(),
-            EnkelJournalpost.DokumentType.UTGÅENDE_DOKUMENT, mottatt,
+            EnkelJournalpost.Type.UTGÅENDE_DOKUMENT, mottatt,
             null,
             List.of(
                 new EnkelJournalpost.Dokument("1", null, EnkelJournalpost.Brevkode.FRITEKSTBREV)
@@ -292,7 +292,7 @@ public class TidslinjeTjenesteTest {
             "Innvilgelsesbrev foreldrepenger",
             "5",
             saksnummer.value(),
-            EnkelJournalpost.DokumentType.UTGÅENDE_DOKUMENT, mottatt,
+            EnkelJournalpost.Type.UTGÅENDE_DOKUMENT, mottatt,
             null,
             List.of(
                 new EnkelJournalpost.Dokument("1", null, EnkelJournalpost.Brevkode.FORELDREPENGER_INNVILGELSE)
@@ -305,7 +305,7 @@ public class TidslinjeTjenesteTest {
             "Innhent opp",
             "15",
             saksnummer.value(),
-            EnkelJournalpost.DokumentType.UTGÅENDE_DOKUMENT, mottatt,
+            EnkelJournalpost.Type.UTGÅENDE_DOKUMENT, mottatt,
             null,
             List.of(
                 new EnkelJournalpost.Dokument("1", null, EnkelJournalpost.Brevkode.VARSEL_TILBAKEBETALING_FP)
@@ -318,7 +318,7 @@ public class TidslinjeTjenesteTest {
             "Korrigert Varsel tilbakebetaling",
             "15",
             saksnummer.value(),
-            EnkelJournalpost.DokumentType.UTGÅENDE_DOKUMENT, mottatt,
+            EnkelJournalpost.Type.UTGÅENDE_DOKUMENT, mottatt,
             null,
             List.of(
                 new EnkelJournalpost.Dokument("1", null, EnkelJournalpost.Brevkode.VARSEL_TILBAKEBETALING_FP)
@@ -332,7 +332,7 @@ public class TidslinjeTjenesteTest {
             "Innhente opplysninger",
             "5",
             saksnummer.value(),
-            EnkelJournalpost.DokumentType.UTGÅENDE_DOKUMENT, tidspunkt,
+            EnkelJournalpost.Type.UTGÅENDE_DOKUMENT, tidspunkt,
             null,
             List.of(
                 new EnkelJournalpost.Dokument("1", null, EnkelJournalpost.Brevkode.INNHENTE_OPPLYSNINGER)
@@ -346,7 +346,7 @@ public class TidslinjeTjenesteTest {
             "Etterlys inntektsmelding",
             "6",
             saksnummer.value(),
-            EnkelJournalpost.DokumentType.UTGÅENDE_DOKUMENT,
+            EnkelJournalpost.Type.UTGÅENDE_DOKUMENT,
             LocalDateTime.now(),
             null,
             List.of(

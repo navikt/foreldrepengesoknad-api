@@ -13,6 +13,7 @@ import org.junit.jupiter.api.Test;
 
 import no.nav.foreldrepenger.common.domain.Fødselsnummer;
 import no.nav.foreldrepenger.common.domain.Saksnummer;
+import no.nav.foreldrepenger.common.domain.felles.DokumentType;
 import no.nav.safselvbetjening.Datotype;
 import no.nav.safselvbetjening.DokumentInfo;
 import no.nav.safselvbetjening.Dokumentoversikt;
@@ -40,7 +41,7 @@ class SafselvbetjeningTjenesteTest {
 
     @Test
     void skalIkkeReturnereJournalposterAvTypenNotat() {
-        var journalførtSøknad = journalførtSøknad(DokumentTypeId.I000001);
+        var journalførtSøknad = journalførtSøknad(DokumentType.I000001);
         var journalførtNotat = notat();
         var journalposterFraSaf = List.of(journalførtSøknad, journalførtNotat);
         var fagsak = new Fagsak(journalposterFraSaf, DUMMY_SAKSNUMMER.value(), null, null);
@@ -55,7 +56,7 @@ class SafselvbetjeningTjenesteTest {
 
     @Test
     void skalBareReturnerJournalposterMedDokumenterAvTypenPDF() {
-        var journalførtSøknad = journalførtSøknad(DokumentTypeId.I000001);
+        var journalførtSøknad = journalførtSøknad(DokumentType.I000001);
         var journalførtEttersending = journalførtEttersending();
         var journalførtVedtak = journalførtVedtak();
         var journalførtDokumentBareXML = journalførtDokumentBareXML();
@@ -80,7 +81,7 @@ class SafselvbetjeningTjenesteTest {
 
     @Test
     void skalUtledeDokumentTypeIdFraTittelPåDokumentetHvisIkkeJournalpostTittelenTreffer() {
-        var dokumentTypeId = DokumentTypeId.I000001;
+        var dokumentTypeId = DokumentType.I000001;
         var journalposterFraSaf = List.of(journalførtSøknadRarTittelPåJournalpostRiktigTittelPåDokument(dokumentTypeId));
         var fagsak = new Fagsak(journalposterFraSaf, DUMMY_SAKSNUMMER.value(), null, null);
         var dokumentoversikt = new Dokumentoversikt(null, List.of(fagsak), null);
@@ -103,7 +104,7 @@ class SafselvbetjeningTjenesteTest {
 
     @Test
     void skalUtledeFraDokumentTittelHvisAltEllersFeiler() {
-        var dokumentTypeId = DokumentTypeId.I000001;
+        var dokumentTypeId = DokumentType.I000001;
         var journalposterFraSaf = List.of(journalpostUgyldigTittelUtenTilleggsinfoMenRiktigDokumentTittel(dokumentTypeId));
         var fagsak = new Fagsak(journalposterFraSaf, DUMMY_SAKSNUMMER.value(), null, null);
         var dokumentoversikt = new Dokumentoversikt(null, List.of(fagsak), null);
@@ -125,7 +126,7 @@ class SafselvbetjeningTjenesteTest {
 
     @Test
     void skalIkkeReturnereDokumenterHvorBrukerIkkeHarTilgang() {
-        var dokumentTypeId = DokumentTypeId.I000001;
+        var dokumentTypeId = DokumentType.I000001;
         var journalposterFraSaf = List.of(journalførtDokumentBrukerIkkeTilgang(dokumentTypeId));
         var fagsak = new Fagsak(journalposterFraSaf, DUMMY_SAKSNUMMER.value(), null, null);
         var dokumentoversikt = new Dokumentoversikt(null, List.of(fagsak), null);
@@ -138,8 +139,8 @@ class SafselvbetjeningTjenesteTest {
 
     @Test
     void skalReturnerAlleJournalposterUavhengigAvSaksnummer() {
-        var journalpostMedSaksnummer = journalførtSøknad(DokumentTypeId.I000001);
-        var journalpostMedAnnnetSaksnummer = journalførtSøknad(DokumentTypeId.I000001);
+        var journalpostMedSaksnummer = journalførtSøknad(DokumentType.I000001);
+        var journalpostMedAnnnetSaksnummer = journalførtSøknad(DokumentType.I000001);
         journalpostMedAnnnetSaksnummer.setSak(new Sak(DUMMY_SAKSNUMMER.value(), null, null));
         var journalposterFraSaf = List.of(journalpostMedSaksnummer, journalpostMedAnnnetSaksnummer);
         var dokumentoversikt = new Dokumentoversikt(null, null, journalposterFraSaf);
@@ -152,7 +153,7 @@ class SafselvbetjeningTjenesteTest {
 
     @Test
     void skalReturnerJournalposterSomIkkeHarEnSakstilknyning() {
-        var journalposterFraSaf = List.of(journalpostUtenSakstilknytning(DokumentTypeId.I000001));
+        var journalposterFraSaf = List.of(journalpostUtenSakstilknytning(DokumentType.I000001));
         var dokumentoversikt = new Dokumentoversikt(null, null, journalposterFraSaf);
         when(saf.dokumentoversiktSelvbetjening(any(), any())).thenReturn(dokumentoversikt);
 
@@ -168,7 +169,7 @@ class SafselvbetjeningTjenesteTest {
         return journalførtNotat;
     }
 
-    private static Journalpost journalførtSøknad(DokumentTypeId dokumentTypeId) {
+    private static Journalpost journalførtSøknad(DokumentType dokumentTypeId) {
         var journalpost = new Journalpost();
         journalpost.setJournalposttype(Journalposttype.I);
         journalpost.setJournalstatus(Journalstatus.MOTTATT);
@@ -182,7 +183,7 @@ class SafselvbetjeningTjenesteTest {
         return journalpost;
     }
 
-    private static Journalpost journalførtDokumentBrukerIkkeTilgang(DokumentTypeId dokumentTypeId) {
+    private static Journalpost journalførtDokumentBrukerIkkeTilgang(DokumentType dokumentTypeId) {
         var journalpost = new Journalpost();
         journalpost.setJournalposttype(Journalposttype.I);
         journalpost.setJournalstatus(Journalstatus.MOTTATT);
@@ -196,7 +197,7 @@ class SafselvbetjeningTjenesteTest {
         return journalpost;
     }
 
-    private static Journalpost journalførtSøknadRarTittelPåJournalpostRiktigTittelPåDokument(DokumentTypeId dokumentTypeId) {
+    private static Journalpost journalførtSøknadRarTittelPåJournalpostRiktigTittelPåDokument(DokumentType dokumentTypeId) {
         var journalpost = new Journalpost();
         journalpost.setJournalposttype(Journalposttype.I);
         journalpost.setJournalstatus(Journalstatus.MOTTATT);
@@ -210,7 +211,7 @@ class SafselvbetjeningTjenesteTest {
         return journalpost;
     }
 
-    private static Journalpost journalpostUgyldigTittelUtenTilleggsinfoMenRiktigDokumentTittel(DokumentTypeId dokumentTypeId) {
+    private static Journalpost journalpostUgyldigTittelUtenTilleggsinfoMenRiktigDokumentTittel(DokumentType dokumentTypeId) {
         var journalpost = new Journalpost();
         journalpost.setJournalposttype(Journalposttype.I);
         journalpost.setJournalstatus(Journalstatus.MOTTATT);
@@ -224,7 +225,7 @@ class SafselvbetjeningTjenesteTest {
         return journalpost;
     }
 
-    private static Journalpost journalpostUtenSakstilknytning(DokumentTypeId dokumentTypeId) {
+    private static Journalpost journalpostUtenSakstilknytning(DokumentType dokumentTypeId) {
         var journalpost = new Journalpost();
         journalpost.setJournalposttype(Journalposttype.I);
         journalpost.setJournalstatus(Journalstatus.MOTTATT);
@@ -239,14 +240,14 @@ class SafselvbetjeningTjenesteTest {
         var journalpost = new Journalpost();
         journalpost.setJournalposttype(Journalposttype.I);
         journalpost.setJournalstatus(Journalstatus.MOTTATT);
-        var dokumentType = DokumentTypeId.I000042;
+        var dokumentType = DokumentType.I000042;
         journalpost.setTittel(dokumentType.getTittel());
         journalpost.setJournalpostId("123");
         var sak = new Sak();
         sak.setFagsakId(DUMMY_SAKSNUMMER.value());
         journalpost.setSak(sak);
         journalpost.setRelevanteDatoer(List.of(new RelevantDato(LocalDateTime.now(), Datotype.DATO_OPPRETTET)));
-        journalpost.setDokumenter(List.of(pdfDokument(dokumentType), pdfDokument(DokumentTypeId.I000045)));
+        journalpost.setDokumenter(List.of(pdfDokument(dokumentType), pdfDokument(DokumentType.I000045)));
         return journalpost;
     }
 
@@ -268,7 +269,7 @@ class SafselvbetjeningTjenesteTest {
         var journalpost = new Journalpost();
         journalpost.setJournalposttype(Journalposttype.I);
         journalpost.setJournalstatus(Journalstatus.MOTTATT);
-        var dokumentType = DokumentTypeId.I000060;
+        var dokumentType = DokumentType.I000060;
         journalpost.setTittel(dokumentType.getTittel());
         journalpost.setJournalpostId("123");
         var sak = new Sak();
@@ -291,7 +292,7 @@ class SafselvbetjeningTjenesteTest {
         return dokument;
     }
 
-    private static DokumentInfo pdfDokument(DokumentTypeId dokumentTypeId) {
+    private static DokumentInfo pdfDokument(DokumentType dokumentTypeId) {
         var dokument = new DokumentInfo();
         dokument.setDokumentInfoId("123");
         dokument.setTittel(dokumentTypeId.getTittel());
@@ -303,7 +304,7 @@ class SafselvbetjeningTjenesteTest {
         return dokument;
     }
 
-    private static DokumentInfo pdfDokumentBrukerIkkeTilgang(DokumentTypeId dokumentTypeId) {
+    private static DokumentInfo pdfDokumentBrukerIkkeTilgang(DokumentType dokumentTypeId) {
         var dokument = new DokumentInfo();
         dokument.setDokumentInfoId("123");
         dokument.setTittel(dokumentTypeId.getTittel());
@@ -315,7 +316,7 @@ class SafselvbetjeningTjenesteTest {
         return dokument;
     }
 
-    private static DokumentInfo xmlDokument(DokumentTypeId dokumentTypeId) {
+    private static DokumentInfo xmlDokument(DokumentType dokumentTypeId) {
         var dokument = new DokumentInfo();
         dokument.setDokumentInfoId("456");
         dokument.setTittel(dokumentTypeId.getTittel());
