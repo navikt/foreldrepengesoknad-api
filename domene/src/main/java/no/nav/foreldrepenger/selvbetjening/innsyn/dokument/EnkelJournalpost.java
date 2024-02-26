@@ -5,14 +5,16 @@ import java.util.Arrays;
 import java.util.List;
 import java.util.Set;
 
+import no.nav.foreldrepenger.common.domain.felles.DokumentType;
+
 public record EnkelJournalpost(String tittel,
                                String journalpostId,
                                String saksnummer,
-                               DokumentType type,
+                               Type type,
                                LocalDateTime mottatt,
-                               DokumentTypeId hovedtype,
+                               DokumentType hovedtype,
                                List<Dokument> dokumenter) {
-    public enum DokumentType {
+    public enum Type {
         INNGÅENDE_DOKUMENT,
         UTGÅENDE_DOKUMENT
     }

@@ -53,7 +53,7 @@ public class DokumentTjeneste {
         );
     }
 
-    private static DokumentDto.Type tilType(EnkelJournalpost.DokumentType type) {
+    private static DokumentDto.Type tilType(EnkelJournalpost.Type type) {
         return switch (type) {
             case INNGÅENDE_DOKUMENT -> INNGÅENDE_DOKUMENT;
             case UTGÅENDE_DOKUMENT -> UTGÅENDE_DOKUMENT;
