@@ -13,6 +13,8 @@ import no.nav.foreldrepenger.common.domain.felles.relasjontilbarn.FremtidigFøds
 import no.nav.foreldrepenger.common.domain.felles.relasjontilbarn.Fødsel;
 import no.nav.foreldrepenger.common.domain.felles.relasjontilbarn.Omsorgsovertakelse;
 import no.nav.foreldrepenger.common.domain.felles.relasjontilbarn.RelasjonTilBarn;
+import no.nav.foreldrepenger.selvbetjening.kontrakt.innsending.dto.VedleggDto;
+import no.nav.foreldrepenger.selvbetjening.kontrakt.innsending.mapper.DokumentasjonReferanseMapper;
 import no.nav.foreldrepenger.selvbetjening.kontrakt.innsending.v2.dto.AdopsjonDto;
 import no.nav.foreldrepenger.selvbetjening.kontrakt.innsending.v2.dto.BarnDto;
 import no.nav.foreldrepenger.selvbetjening.kontrakt.innsending.v2.dto.FødselDto;
@@ -59,54 +61,54 @@ public final class CommonMapper {
         return new Utenlandsopphold.Opphold(o.landkode(), new LukketPeriode(o.fom(), o.tom()));
     }
 
-    static RelasjonTilBarn tilRelasjonTilBarn(BarnDto barn) {
+    static RelasjonTilBarn tilRelasjonTilBarn(BarnDto barn, List<VedleggDto> vedlegg) {
         if (barn instanceof FødselDto f) {
-            return tilFødsel(f);
+            return tilFødsel(f, vedlegg);
         } else if (barn instanceof TerminDto t) {
-            return tilFremtidigFødsel(t);
+            return tilFremtidigFødsel(t, vedlegg);
         } else if (barn instanceof AdopsjonDto a) {
-            return tilAdopsjon(a);
+            return tilAdopsjon(a, vedlegg);
         } else if (barn instanceof OmsorgsovertakelseDto o) {
-            return tilOmsorgsovertagelse(o);
+            return tilOmsorgsovertagelse(o, vedlegg);
         } else {
             throw new IllegalStateException("Utviklerfeil: Skal ikke være mulig med annen type barn enn fødsel, termin, adopsjon eller omsorgsovertakelse");
         }
     }
 
-    private static Fødsel tilFødsel(FødselDto barn) {
+    private static Fødsel tilFødsel(FødselDto barn, List<VedleggDto> vedlegg) {
         return new Fødsel(
             barn.antallBarn(),
             List.of(barn.fødselsdato()), // TODO: Fjern liste i mottak!
             barn.termindato(),
-            tilVedleggsreferanse(barn.vedleggreferanser())
+            tilVedleggsreferanse(DokumentasjonReferanseMapper.dokumentasjonSomDokumentererBarn(vedlegg))
         );
     }
 
-    private static FremtidigFødsel tilFremtidigFødsel(TerminDto barn) {
+    private static FremtidigFødsel tilFremtidigFødsel(TerminDto barn, List<VedleggDto> vedlegg) {
         return new FremtidigFødsel(
             barn.antallBarn(),
             barn.termindato(),
             barn.terminbekreftelseDato(),
-            tilVedleggsreferanse(barn.vedleggreferanser())
+            tilVedleggsreferanse(DokumentasjonReferanseMapper.dokumentasjonSomDokumentererBarn(vedlegg))
         );
     }
 
-    private static Omsorgsovertakelse tilOmsorgsovertagelse(OmsorgsovertakelseDto barn) {
+    private static Omsorgsovertakelse tilOmsorgsovertagelse(OmsorgsovertakelseDto barn, List<VedleggDto> vedlegg) {
         return new Omsorgsovertakelse(
             barn.antallBarn(),
             barn.foreldreansvarsdato(),
             barn.fødselsdatoer(),
-            tilVedleggsreferanse(barn.vedleggreferanser())
+            tilVedleggsreferanse(DokumentasjonReferanseMapper.dokumentasjonSomDokumentererBarn(vedlegg))
         );
     }
 
-    private static Adopsjon tilAdopsjon(AdopsjonDto barn) {
+    private static Adopsjon tilAdopsjon(AdopsjonDto barn, List<VedleggDto> vedlegg) {
         return new Adopsjon(
             barn.antallBarn(),
             barn.adopsjonsdato(),
             barn.adopsjonAvEktefellesBarn(),
             barn.søkerAdopsjonAlene() != null && barn.søkerAdopsjonAlene(),
-            tilVedleggsreferanse(barn.vedleggreferanser()),
+            tilVedleggsreferanse(DokumentasjonReferanseMapper.dokumentasjonSomDokumentererBarn(vedlegg)),
             barn.ankomstdato(),
             barn.fødselsdatoer()
         );

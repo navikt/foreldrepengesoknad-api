@@ -4,6 +4,7 @@ import static no.nav.foreldrepenger.common.domain.foreldrepenger.fordeling.Støn
 import static no.nav.foreldrepenger.common.domain.foreldrepenger.fordeling.StønadskontoType.FORELDREPENGER_FØR_FØDSEL;
 import static no.nav.foreldrepenger.common.domain.foreldrepenger.fordeling.StønadskontoType.MØDREKVOTE;
 import static no.nav.foreldrepenger.selvbetjening.kontrakt.innsending.util.builder.UttakplanPeriodeBuilder.gradert;
+import static no.nav.foreldrepenger.selvbetjening.kontrakt.innsending.util.builder.UttakplanPeriodeBuilder.utsettelse;
 import static no.nav.foreldrepenger.selvbetjening.kontrakt.innsending.util.builder.UttakplanPeriodeBuilder.uttak;
 import static no.nav.foreldrepenger.selvbetjening.kontrakt.innsending.util.maler.MedlemsskapMaler.medlemskapUtlandetForrige12mnd;
 import static no.nav.foreldrepenger.selvbetjening.kontrakt.innsending.util.maler.MedlemsskapMaler.medlemsskapNorge;
@@ -18,6 +19,7 @@ import com.neovisionaries.i18n.CountryCode;
 
 import no.nav.foreldrepenger.common.domain.BrukerRolle;
 import no.nav.foreldrepenger.common.domain.Fødselsnummer;
+import no.nav.foreldrepenger.common.domain.felles.VedleggReferanse;
 import no.nav.foreldrepenger.common.domain.felles.annenforelder.NorskForelder;
 import no.nav.foreldrepenger.common.domain.felles.annenforelder.UkjentForelder;
 import no.nav.foreldrepenger.common.domain.felles.opptjening.AnnenOpptjening;
@@ -26,9 +28,11 @@ import no.nav.foreldrepenger.common.domain.felles.opptjening.UtenlandskArbeidsfo
 import no.nav.foreldrepenger.common.domain.foreldrepenger.Foreldrepenger;
 import no.nav.foreldrepenger.common.domain.foreldrepenger.fordeling.GradertUttaksPeriode;
 import no.nav.foreldrepenger.common.domain.foreldrepenger.fordeling.LukketPeriodeMedVedlegg;
+import no.nav.foreldrepenger.common.domain.foreldrepenger.fordeling.UtsettelsesÅrsak;
 import no.nav.foreldrepenger.common.domain.foreldrepenger.fordeling.UttaksPeriode;
 import no.nav.foreldrepenger.selvbetjening.kontrakt.innsending.dto.foreldrepenger.Dekningsgrad;
 import no.nav.foreldrepenger.selvbetjening.kontrakt.innsending.dto.foreldrepenger.ForeldrepengesøknadDto;
+import no.nav.foreldrepenger.selvbetjening.kontrakt.innsending.dto.ÅpenPeriodeDto;
 import no.nav.foreldrepenger.selvbetjening.kontrakt.innsending.util.builder.AnnenforelderBuilder;
 import no.nav.foreldrepenger.selvbetjening.kontrakt.innsending.util.builder.BarnBuilder;
 import no.nav.foreldrepenger.selvbetjening.kontrakt.innsending.util.builder.ForeldrepengerBuilder;
@@ -197,7 +201,65 @@ class ForeldrepengesoknadMappingKonsistensTest {
                 uttak.get(1).tidsperiode().tom(),
                 uttak.get(2).tidsperiode().tom()
             );
+    }
 
+    @Test
+    void foreldrepengerVedleggReferanseMappingKonsistensTest() {
+        var uttak = List.of(
+            uttak(FORELDREPENGER_FØR_FØDSEL, NOW.minusWeeks(3), NOW.minusDays(1)).build(),
+            utsettelse(UtsettelsesÅrsak.SYKDOM, NOW, NOW.plusWeeks(1).minusDays(1)).build(),
+            utsettelse(UtsettelsesÅrsak.INSTITUSJONSOPPHOLD_SØKER, NOW.plusWeeks(1), NOW.plusWeeks(3).minusDays(1)).build(),
+            uttak(MØDREKVOTE, NOW.plusWeeks(3), NOW.plusWeeks(4).minusDays(1)).build(),
+            utsettelse(UtsettelsesÅrsak.SYKDOM, NOW.plusWeeks(4), NOW.plusWeeks(6).minusDays(1)).build(),
+            uttak(MØDREKVOTE, NOW.plusWeeks(6), NOW.plusWeeks(15).minusDays(1)).build()
+        );
+        var utenlandskOpptjening = OpptjeningMaler.utenlandskArbeidsforhold(CountryCode.US);
+        var annenNorskOpptjening = OpptjeningMaler.annenInntektNorsk(AnnenOpptjeningType.SLUTTPAKKE, new ÅpenPeriodeDto(LocalDate.now().minusYears(1), LocalDate.now()));
 
+        var vedlegg1 = DokumentasjonUtil.vedlegg(DokumentasjonUtil.barn());
+        var vedlegg2 = DokumentasjonUtil.vedlegg(DokumentasjonUtil.uttaksperioder(
+            List.of(
+                new ÅpenPeriodeDto(NOW, NOW.plusWeeks(1).minusDays(1)),
+                new ÅpenPeriodeDto(NOW.plusWeeks(4), NOW.plusWeeks(6).minusDays(1))
+            )
+        ));
+        var vedlegg3 = DokumentasjonUtil.vedlegg(DokumentasjonUtil.uttaksperiode(NOW.plusWeeks(1), NOW.plusWeeks(3).minusDays(1)));
+        var vedlegg4 = DokumentasjonUtil.vedlegg(DokumentasjonUtil.opptjening(utenlandskOpptjening.tidsperiode()));
+        var vedlegg5 = DokumentasjonUtil.vedlegg(DokumentasjonUtil.opptjening(annenNorskOpptjening.tidsperiode()));
+
+        var søknadDto = new ForeldrepengerBuilder()
+            .medFordeling(uttak)
+            .medØnskerJustertUttakVedFødsel(true)
+            .medDekningsgrad(Dekningsgrad.ÅTTI)
+            .medMedlemsskap(medlemskapUtlandetForrige12mnd())
+            .medSøker(new SøkerBuilder(BrukerRolle.MOR)
+                .medAndreInntekterSiste10Mnd(List.of(utenlandskOpptjening, annenNorskOpptjening))
+                .build())
+            .medAnnenForelder(AnnenforelderBuilder.ukjentForelder())
+            .medBarn(BarnBuilder.adopsjon(LocalDate.now().minusWeeks(2), false).build())
+            .medVedlegg(List.of(vedlegg1, vedlegg2, vedlegg3, vedlegg4, vedlegg5))
+            .build();
+        var mappedSøknad = SøknadMapper.tilSøknad(søknadDto, NOW);
+        var foreldrepenger = (Foreldrepenger) mappedSøknad.getYtelse();
+
+        assertThat(mappedSøknad.getVedlegg()).hasSameSizeAs(søknadDto.vedlegg());
+        assertThat(vedlegg1.referanse().verdi()).isNotNull();
+        assertThat(foreldrepenger.relasjonTilBarn().getVedlegg()).extracting(VedleggReferanse::referanse)
+            .containsExactly(vedlegg1.referanse().verdi());
+
+        assertThat(foreldrepenger.fordeling().perioder().get(0).getVedlegg()).isEmpty();
+        assertThat(foreldrepenger.fordeling().perioder().get(1).getVedlegg()).extracting(VedleggReferanse::referanse)
+            .containsExactly(vedlegg2.referanse().verdi());
+        assertThat(foreldrepenger.fordeling().perioder().get(2).getVedlegg()).extracting(VedleggReferanse::referanse)
+            .containsExactly(vedlegg3.referanse().verdi());
+        assertThat(foreldrepenger.fordeling().perioder().get(3).getVedlegg()).isEmpty();
+        assertThat(foreldrepenger.fordeling().perioder().get(4).getVedlegg()).extracting(VedleggReferanse::referanse)
+            .containsExactly(vedlegg2.referanse().verdi());
+        assertThat(foreldrepenger.fordeling().perioder().get(5).getVedlegg()).isEmpty();
+
+        assertThat(foreldrepenger.opptjening().utenlandskArbeidsforhold().getFirst().vedlegg()).extracting(VedleggReferanse::referanse)
+            .containsExactly(vedlegg4.referanse().verdi());
+        assertThat(foreldrepenger.opptjening().annenOpptjening().getFirst().vedlegg()).extracting(VedleggReferanse::referanse)
+            .containsExactly(vedlegg5.referanse().verdi());
     }
 }

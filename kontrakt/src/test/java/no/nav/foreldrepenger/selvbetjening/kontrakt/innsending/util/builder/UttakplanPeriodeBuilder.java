@@ -7,7 +7,6 @@ import no.nav.foreldrepenger.common.domain.foreldrepenger.fordeling.Oppholdsårs
 import no.nav.foreldrepenger.common.domain.foreldrepenger.fordeling.Overføringsårsak;
 import no.nav.foreldrepenger.common.domain.foreldrepenger.fordeling.StønadskontoType;
 import no.nav.foreldrepenger.common.domain.foreldrepenger.fordeling.UtsettelsesÅrsak;
-import no.nav.foreldrepenger.selvbetjening.kontrakt.innsending.dto.MutableVedleggReferanseDto;
 import no.nav.foreldrepenger.selvbetjening.kontrakt.innsending.dto.foreldrepenger.UttaksplanPeriodeDto;
 import no.nav.foreldrepenger.selvbetjening.kontrakt.innsending.dto.ÅpenPeriodeDto;
 
@@ -28,7 +27,6 @@ public class UttakplanPeriodeBuilder {
     boolean ønskerSamtidigUttak;
     Boolean justeresVedFødsel;
     List<String> orgnumre;
-    List<MutableVedleggReferanseDto> vedlegg;
 
     public static UttakplanPeriodeBuilder uttak(StønadskontoType konto, LocalDate fom, LocalDate tom) {
         return new UttakplanPeriodeBuilder(UttaksplanPeriodeDto.Type.UTTAK, konto, fom, tom);
@@ -140,11 +138,6 @@ public class UttakplanPeriodeBuilder {
         return this;
     }
 
-    public UttakplanPeriodeBuilder medVedlegg(List<MutableVedleggReferanseDto> vedlegg) {
-        this.vedlegg = vedlegg;
-        return this;
-    }
-
     public static UttaksplanPeriodeDto.KontoType tilKontoType(StønadskontoType konto) {
         return switch (konto) {
             case IKKE_SATT -> null;
@@ -173,8 +166,7 @@ public class UttakplanPeriodeBuilder {
             ønskerFlerbarnsdager,
             ønskerSamtidigUttak,
             justeresVedFødsel,
-            orgnumre,
-            vedlegg
+            orgnumre
         );
     }
 }

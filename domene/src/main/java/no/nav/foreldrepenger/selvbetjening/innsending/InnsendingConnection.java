@@ -1,18 +1,15 @@
 package no.nav.foreldrepenger.selvbetjening.innsending;
 
 import static no.nav.boot.conditionals.EnvUtil.isGcp;
-import static no.nav.foreldrepenger.common.domain.felles.InnsendingsType.LASTET_OPP;
-import static no.nav.foreldrepenger.common.util.StreamUtil.safeStream;
 import static no.nav.foreldrepenger.selvbetjening.http.RestClientConfiguration.LONG_TIMEOUT;
 import static no.nav.foreldrepenger.selvbetjening.kontrakt.innsending.mapper.EttersendingMapper.tilEttersending;
 import static no.nav.foreldrepenger.selvbetjening.kontrakt.innsending.mapper.SøknadMapper.tilSøknad;
-import static no.nav.foreldrepenger.selvbetjening.vedlegg.VedleggUtil.mediaType;
 import static org.springframework.http.MediaType.APPLICATION_JSON;
 import static org.springframework.http.MediaType.APPLICATION_PDF;
 import static org.springframework.http.MediaType.MULTIPART_MIXED;
 
 import java.time.LocalDate;
-import java.util.List;
+import java.util.Map;
 
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.core.env.Environment;
@@ -29,17 +26,16 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import no.nav.foreldrepenger.common.domain.Kvittering;
 import no.nav.foreldrepenger.selvbetjening.http.AbstractRestConnection;
 import no.nav.foreldrepenger.selvbetjening.kontrakt.innsending.dto.Innsending;
-import no.nav.foreldrepenger.selvbetjening.kontrakt.innsending.dto.VedleggDto;
-import no.nav.foreldrepenger.selvbetjening.kontrakt.innsending.v2.dto.endringssøknad.EndringssøknadDto;
-import no.nav.foreldrepenger.selvbetjening.kontrakt.innsending.v2.dto.SøknadDto;
+import no.nav.foreldrepenger.selvbetjening.kontrakt.innsending.dto.VedleggReferanse;
 import no.nav.foreldrepenger.selvbetjening.kontrakt.innsending.dto.ettersendelse.EttersendelseDto;
+import no.nav.foreldrepenger.selvbetjening.kontrakt.innsending.v2.dto.SøknadDto;
+import no.nav.foreldrepenger.selvbetjening.kontrakt.innsending.v2.dto.endringssøknad.EndringssøknadDto;
 
 @Component
 public class InnsendingConnection extends AbstractRestConnection {
     private static final String BODY_PART_NAME = "body";
     private static final String VEDLEGG_PART_NAME = "vedlegg";
     private static final String VEDLEGG_REFERANSE_HEADER = "vedleggsreferanse";
-    private static final String VEDLEGG_UUID_HEADER = "vedleggsid";
 
     private final ObjectMapper mapper;
     private final Environment env;
@@ -55,26 +51,26 @@ public class InnsendingConnection extends AbstractRestConnection {
         this.config = config;
     }
 
-    public Kvittering sendInn(Innsending innsending) {
+    public Kvittering sendInn(Innsending innsending, Map<VedleggReferanse, byte[]> vedleggsinnhold) {
         if (innsending instanceof no.nav.foreldrepenger.selvbetjening.kontrakt.innsending.dto.SøknadDto || innsending instanceof SøknadDto) {
-            return postForEntity(config.innsendingURI(), body(innsending), Kvittering.class);
+            return postForEntity(config.innsendingURI(), body(innsending, vedleggsinnhold), Kvittering.class);
         } else if (innsending instanceof no.nav.foreldrepenger.selvbetjening.kontrakt.innsending.dto.endringssøknad.EndringssøknadDto || innsending instanceof EndringssøknadDto) {
-            return postForEntity(config.endringURI(), body(innsending), Kvittering.class);
+            return postForEntity(config.endringURI(), body(innsending, vedleggsinnhold), Kvittering.class);
         } else {
             throw new IllegalStateException("Utviklerfeil: Innsending støtter bare søknad, endringssøknad og ettersendelse");
         }
     }
 
-    public Kvittering ettersend(EttersendelseDto ettersendelse) {
-        return postForEntity(config.ettersendingURI(), body(ettersendelse), Kvittering.class);
+    public Kvittering ettersend(EttersendelseDto ettersendelse, Map<VedleggReferanse, byte[]> vedleggsinnhold) {
+        return postForEntity(config.ettersendingURI(), body(ettersendelse, vedleggsinnhold), Kvittering.class);
     }
 
-    private HttpEntity<MultiValueMap<String, HttpEntity<?>>> body(Innsending innsending) {
-        return body(tilJson(innsending), innsending.vedlegg());
+    private HttpEntity<MultiValueMap<String, HttpEntity<?>>> body(Innsending innsending, Map<VedleggReferanse, byte[]> vedleggsinnhold) {
+        return body(tilJson(innsending), vedleggsinnhold);
     }
 
-    private HttpEntity<MultiValueMap<String, HttpEntity<?>>> body(EttersendelseDto ettersendelse) {
-        return body(tilJson(ettersendelse), ettersendelse.vedlegg());
+    private HttpEntity<MultiValueMap<String, HttpEntity<?>>> body(EttersendelseDto ettersendelse, Map<VedleggReferanse, byte[]> vedleggsinnhold) {
+        return body(tilJson(ettersendelse), vedleggsinnhold);
     }
 
     private String tilJson(Innsending innsending) {
@@ -85,33 +81,12 @@ public class InnsendingConnection extends AbstractRestConnection {
         return tilJson(tilEttersending(ettersendelse));
     }
 
-    private static HttpEntity<MultiValueMap<String, HttpEntity<?>>> body(String jsonBody, List<VedleggDto> vedlegg) {
+    private static HttpEntity<MultiValueMap<String, HttpEntity<?>>> body(String jsonBody, Map<VedleggReferanse, byte[]> vedleggsinnhold) {
         var builder = new MultipartBodyBuilder();
         builder.part(BODY_PART_NAME, jsonBody, APPLICATION_JSON);
-        safeStream(vedlegg)
-            .distinct()
-            .filter(v -> v.getInnsendingsType() == null || LASTET_OPP.name().equals(v.getInnsendingsType()))
-            .filter(v -> v.getContent() != null)
-            .forEach(v -> {
-                guardIkkePDF(v);
-                builder.part(VEDLEGG_PART_NAME, v.getContent(), APPLICATION_PDF).headers(headers -> headers(v, headers));
-            });
-
+        vedleggsinnhold.forEach((key, value) ->
+            builder.part(VEDLEGG_PART_NAME, value, APPLICATION_PDF).headers(headers -> headers.set(VEDLEGG_REFERANSE_HEADER, key.verdi())));
         return new HttpEntity<>(builder.build(), headers());
-    }
-
-    private static void headers(VedleggDto v, HttpHeaders headers) {
-        headers.set(VEDLEGG_REFERANSE_HEADER, v.getId().referanse());
-        if (v.getUuid() != null) {
-            headers.set(VEDLEGG_UUID_HEADER, v.getUuid());
-        }
-    }
-
-    private static void guardIkkePDF(VedleggDto vedlegg) {
-        var mediatype = mediaType(vedlegg.getContent());
-        if (!APPLICATION_PDF.equals(mediatype)) {
-            throw new IllegalStateException("Utviklerfeil: Mottok noe annet en PDF ved innsending " + mediatype);
-        }
     }
 
     private static HttpHeaders headers() {

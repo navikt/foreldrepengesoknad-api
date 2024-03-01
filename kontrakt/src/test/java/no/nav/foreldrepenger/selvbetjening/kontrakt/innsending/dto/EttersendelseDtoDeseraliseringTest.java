@@ -1,5 +1,6 @@
 package no.nav.foreldrepenger.selvbetjening.kontrakt.innsending.dto;
 
+import static no.nav.foreldrepenger.common.domain.felles.DokumentType.I000044;
 import static no.nav.foreldrepenger.common.util.ResourceHandleUtil.bytesFra;
 import static org.assertj.core.api.Assertions.assertThat;
 
@@ -25,10 +26,9 @@ class EttersendelseDtoDeseraliseringTest {
         assertThat(ettersendelse.type()).isEqualTo(YtelseType.FORELDREPENGER);
         assertThat(ettersendelse.saksnummer().value()).isEqualTo("352003201");
         assertThat(ettersendelse.vedlegg()).hasSize(1);
-        var vedlegg = ettersendelse.vedlegg().get(0);
-        assertThat(vedlegg.getId()).isEqualTo(new MutableVedleggReferanseDto("V090740687265315217194125674862219730"));
-        assertThat(vedlegg.getSkjemanummer()).isEqualTo("I000044");
-        assertThat(vedlegg.getContent()).isNull();
-        assertThat(vedlegg.getInnsendingsType()).isNull();
+        var vedlegg = ettersendelse.vedlegg().getFirst();
+        assertThat(vedlegg.referanse().verdi()).isNotNull().startsWith("V");
+        assertThat(vedlegg.skjemanummer()).isEqualTo(I000044);
+        assertThat(vedlegg.innsendingsType()).isNull();
     }
 }

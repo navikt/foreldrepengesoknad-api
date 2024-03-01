@@ -4,14 +4,12 @@ import static com.fasterxml.jackson.annotation.JsonTypeInfo.As.PROPERTY;
 import static com.fasterxml.jackson.annotation.JsonTypeInfo.Id.NAME;
 
 import java.time.LocalDate;
-import java.util.List;
 
 import com.fasterxml.jackson.annotation.JsonPropertyOrder;
 import com.fasterxml.jackson.annotation.JsonSubTypes;
 import com.fasterxml.jackson.annotation.JsonTypeInfo;
 
 import jakarta.validation.constraints.AssertTrue;
-import no.nav.foreldrepenger.selvbetjening.kontrakt.innsending.dto.MutableVedleggReferanseDto;
 
 @JsonPropertyOrder({ "fom", "tom" })
 @JsonTypeInfo(use = NAME, include = PROPERTY, property = "type")
@@ -25,7 +23,6 @@ import no.nav.foreldrepenger.selvbetjening.kontrakt.innsending.dto.MutableVedleg
 public interface Uttaksplanperiode {
     LocalDate fom();
     LocalDate tom();
-    List<MutableVedleggReferanseDto> vedleggsreferanser();
 
     @AssertTrue(message = "FOM dato må være etter TOM dato!")
     default boolean isFomAfterTom() { //NOSONAR TODO

@@ -102,10 +102,6 @@ class SøknadDtoDeseraliseringTest {
         assertThat(barn.fødselsdatoer()).hasSize(1);
         assertThat(barn.antallBarn()).isEqualTo(1);
         assertThat(barn.termindato()).isNotNull();
-        assertThat(barn.terminbekreftelse()).isEmpty();
-        assertThat(barn.adopsjonsvedtak()).isEmpty();
-        assertThat(barn.omsorgsovertakelse()).isEmpty();
-        assertThat(barn.dokumentasjonAvAleneomsorg()).isEmpty();
 
         var annenForelder = fs.annenForelder();
         assertThat(annenForelder).isNotNull();

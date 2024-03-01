@@ -22,6 +22,8 @@ import no.nav.foreldrepenger.common.domain.svangerskapspenger.tilrettelegging.ar
 import no.nav.foreldrepenger.common.domain.svangerskapspenger.tilrettelegging.arbeidsforhold.PrivatArbeidsgiver;
 import no.nav.foreldrepenger.common.domain.svangerskapspenger.tilrettelegging.arbeidsforhold.SelvstendigNæringsdrivende;
 import no.nav.foreldrepenger.common.domain.svangerskapspenger.tilrettelegging.arbeidsforhold.Virksomhet;
+import no.nav.foreldrepenger.selvbetjening.kontrakt.innsending.dto.VedleggDto;
+import no.nav.foreldrepenger.selvbetjening.kontrakt.innsending.mapper.DokumentasjonReferanseMapper;
 import no.nav.foreldrepenger.selvbetjening.kontrakt.innsending.v2.dto.AdopsjonDto;
 import no.nav.foreldrepenger.selvbetjening.kontrakt.innsending.v2.dto.BarnDto;
 import no.nav.foreldrepenger.selvbetjening.kontrakt.innsending.v2.dto.FødselDto;
@@ -45,33 +47,31 @@ public final class SvangerskapspengerMapper {
     }
 
     public static Søknad tilSvangerskapspengesøknad(SvangerskapspengesøknadDto s, LocalDate mottattDato) {
+        var vedlegg = s.vedlegg();
         return new Søknad(
             mottattDato,
             tilSøker(s),
-            tilYtelse(s),
+            tilYtelse(s, vedlegg),
             null,
-            tilVedlegg(s.vedlegg())
+            tilVedlegg(vedlegg)
         );
     }
 
     private static Søker tilSøker(SvangerskapspengesøknadDto s) {
         var søker = s.søker();
-        if (søker == null) {
-            throw new IllegalStateException("Kan ikke ha tom søkerobjekt");
-        }
         if (søker.rolle() != BrukerRolle.MOR) {
             throw new IllegalStateException("Forventet at søker var mor, men var " + søker.rolle());
         }
         return new Søker(BrukerRolle.MOR, søker.språkkode());
     }
 
-    public static Svangerskapspenger tilYtelse(SvangerskapspengesøknadDto s) {
+    public static Svangerskapspenger tilYtelse(SvangerskapspengesøknadDto s, List<VedleggDto> vedlegg) {
         return new Svangerskapspenger(
             tilTermindato(s.barn()),
             tilFødselsdato(s.barn()),
             tilOppholdIUtlandet(s),
-            tilOpptjening(s.søker()),
-            tilTilrettelegging(s)
+            tilOpptjening(s.søker(), vedlegg),
+            tilTilrettelegging(s, vedlegg)
         );
     }
 
@@ -102,50 +102,50 @@ public final class SvangerskapspengerMapper {
         return null;
     }
 
-    private static List<Tilrettelegging> tilTilrettelegging(SvangerskapspengesøknadDto s) {
+    private static List<Tilrettelegging> tilTilrettelegging(SvangerskapspengesøknadDto s, List<VedleggDto> vedlegg) {
         return s.tilrettelegging().stream()
-            .map(SvangerskapspengerMapper::tilTilretteleggings)
+            .map(tilrettelegging -> tilTilretteleggings(tilrettelegging, vedlegg))
             .toList();
     }
 
-    private static Tilrettelegging tilTilretteleggings(TilretteleggingDto tilrettelegging) {
+    private static Tilrettelegging tilTilretteleggings(TilretteleggingDto tilrettelegging, List<VedleggDto> vedlegg) {
         if (tilrettelegging instanceof HelTilretteleggingDto hel) {
-            return tilHelTilrettelegging(hel);
+            return tilHelTilrettelegging(hel, vedlegg);
         }
         if (tilrettelegging instanceof DelvisTilretteleggingDto del) {
-            return tilDelvisTilrettelegging(del);
+            return tilDelvisTilrettelegging(del, vedlegg);
         }
         if (tilrettelegging instanceof IngenTilretteleggingDto ingen) {
-            return tilIngenTilrettelegging(ingen);
+            return tilIngenTilrettelegging(ingen, vedlegg);
         }
         throw new IllegalStateException("Utviklerfeil: Tilrettelegging kan bare være hel, delvis eller ingen, men er " + tilrettelegging);
     }
 
-    private static IngenTilrettelegging tilIngenTilrettelegging(IngenTilretteleggingDto tilrettelegging) {
+    private static IngenTilrettelegging tilIngenTilrettelegging(IngenTilretteleggingDto tilrettelegging, List<VedleggDto> vedlegg) {
         return new IngenTilrettelegging(
             tilArbeidsforhold(tilrettelegging.arbeidsforhold()),
             tilrettelegging.behovForTilretteleggingFom(),
             tilrettelegging.slutteArbeidFom(),
-            tilVedleggsreferanse(tilrettelegging.vedleggsreferanser())
+            tilVedleggsreferanse(DokumentasjonReferanseMapper.dokumentasjonSomDokumentererTilrettelegggingAv(vedlegg, tilrettelegging.arbeidsforhold()))
         );
     }
 
-    private static DelvisTilrettelegging tilDelvisTilrettelegging(DelvisTilretteleggingDto tilrettelegging) {
+    private static DelvisTilrettelegging tilDelvisTilrettelegging(DelvisTilretteleggingDto tilrettelegging, List<VedleggDto> vedlegg) {
         return new DelvisTilrettelegging(
             tilArbeidsforhold(tilrettelegging.arbeidsforhold()),
             tilrettelegging.behovForTilretteleggingFom(),
             tilrettelegging.tilrettelagtArbeidFom(),
-            tilrettelegging.stillingsprosent() != null ? ProsentAndel.valueOf(tilrettelegging.stillingsprosent()) : null,
-            tilVedleggsreferanse(tilrettelegging.vedleggsreferanser())
+            ProsentAndel.valueOf(tilrettelegging.stillingsprosent()),
+            tilVedleggsreferanse(DokumentasjonReferanseMapper.dokumentasjonSomDokumentererTilrettelegggingAv(vedlegg, tilrettelegging.arbeidsforhold()))
         );
     }
 
-    private static HelTilrettelegging tilHelTilrettelegging(HelTilretteleggingDto tilrettelegging) {
+    private static HelTilrettelegging tilHelTilrettelegging(HelTilretteleggingDto tilrettelegging, List<VedleggDto> vedlegg) {
         return new HelTilrettelegging(
             tilArbeidsforhold(tilrettelegging.arbeidsforhold()),
             tilrettelegging.behovForTilretteleggingFom(),
             tilrettelegging.tilrettelagtArbeidFom(),
-            tilVedleggsreferanse(tilrettelegging.vedleggsreferanser())
+            tilVedleggsreferanse(DokumentasjonReferanseMapper.dokumentasjonSomDokumentererTilrettelegggingAv(vedlegg, tilrettelegging.arbeidsforhold()))
         );
     }
 

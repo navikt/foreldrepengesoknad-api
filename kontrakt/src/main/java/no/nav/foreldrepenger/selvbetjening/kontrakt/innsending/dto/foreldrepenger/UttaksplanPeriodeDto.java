@@ -3,7 +3,6 @@ package no.nav.foreldrepenger.selvbetjening.kontrakt.innsending.dto.foreldrepeng
 import static no.nav.foreldrepenger.common.domain.validation.InputValideringRegex.BARE_BOKSTAVER;
 import static no.nav.foreldrepenger.common.domain.validation.InputValideringRegex.FRITEKST;
 
-import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 
@@ -13,7 +12,6 @@ import jakarta.validation.constraints.Min;
 import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Pattern;
 import jakarta.validation.constraints.Size;
-import no.nav.foreldrepenger.selvbetjening.kontrakt.innsending.dto.MutableVedleggReferanseDto;
 import no.nav.foreldrepenger.selvbetjening.kontrakt.innsending.dto.ÅpenPeriodeDto;
 
 // TODO: Rydd opp
@@ -32,12 +30,10 @@ public record UttaksplanPeriodeDto(@NotNull UttaksplanPeriodeDto.Type type,
                                    boolean ønskerFlerbarnsdager,
                                    boolean ønskerSamtidigUttak,
                                    Boolean justeresVedFødsel,
-                                   @Valid @Size(max = 15) List<@Pattern(regexp = FRITEKST) String> orgnumre,
-                                   @Valid @Size(max = 20) List<@Valid MutableVedleggReferanseDto> vedlegg) {
+                                   @Valid @Size(max = 15) List<@Pattern(regexp = FRITEKST) String> orgnumre) {
 
     public UttaksplanPeriodeDto {
         orgnumre = Optional.ofNullable(orgnumre).orElse(List.of());
-        vedlegg = Optional.ofNullable(vedlegg).map(ArrayList::new).orElse(new ArrayList<>());
     }
 
     public enum Type {

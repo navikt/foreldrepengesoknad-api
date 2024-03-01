@@ -8,10 +8,12 @@ import static no.nav.foreldrepenger.selvbetjening.kontrakt.innsending.mapper.For
 import static no.nav.foreldrepenger.selvbetjening.kontrakt.innsending.mapper.ForeldrepengerMapper.tilSøker;
 
 import java.time.LocalDate;
+import java.util.List;
 
 import no.nav.foreldrepenger.common.domain.foreldrepenger.Endringssøknad;
 import no.nav.foreldrepenger.common.domain.foreldrepenger.Foreldrepenger;
 import no.nav.foreldrepenger.common.domain.foreldrepenger.fordeling.Fordeling;
+import no.nav.foreldrepenger.selvbetjening.kontrakt.innsending.dto.VedleggDto;
 import no.nav.foreldrepenger.selvbetjening.kontrakt.innsending.dto.endringssøknad.EndringssøknadForeldrepengerDto;
 
 final class EndringForeldrepengerMapper {
@@ -20,31 +22,32 @@ final class EndringForeldrepengerMapper {
     }
 
     static Endringssøknad tilEndringForeldrepengesøknadUtenVedleggInnhold(EndringssøknadForeldrepengerDto endringssøknadFP, LocalDate mottattDato) {
+        var vedlegg = endringssøknadFP.vedlegg();
         return new Endringssøknad(
             mottattDato,
             tilSøker(endringssøknadFP.søker()),
-            tilYtelse(endringssøknadFP),
+            tilYtelse(endringssøknadFP, vedlegg),
             endringssøknadFP.tilleggsopplysninger(),
-            tilVedlegg(endringssøknadFP.vedlegg()),
+            tilVedlegg(vedlegg),
             endringssøknadFP.saksnummer());
     }
 
-    private static Foreldrepenger tilYtelse(EndringssøknadForeldrepengerDto f) {
+    private static Foreldrepenger tilYtelse(EndringssøknadForeldrepengerDto f, List<VedleggDto> vedlegg) {
         return new Foreldrepenger(
             tilAnnenForelder(f.annenForelder()),
-            tilRelasjonTilBarn(f.barn(), f.situasjon()),
+            tilRelasjonTilBarn(f.barn(), f.situasjon(), vedlegg),
             tilRettigheter(f.søker(), f.annenForelder()),
             null,
             null,
-            tilFordeling(f),
+            tilFordeling(f, vedlegg),
             null
         );
     }
 
-    private static Fordeling tilFordeling(EndringssøknadForeldrepengerDto f) {
+    private static Fordeling tilFordeling(EndringssøknadForeldrepengerDto f, List<VedleggDto> vedlegg) {
         return new Fordeling(
             f.annenForelder().erInformertOmSøknaden(),
-            tilLukketPeriodeMedVedlegg(f.uttaksplan()),
+            tilLukketPeriodeMedVedlegg(f.uttaksplan(), vedlegg),
             f.ønskerJustertUttakVedFødsel()
         );
     }
