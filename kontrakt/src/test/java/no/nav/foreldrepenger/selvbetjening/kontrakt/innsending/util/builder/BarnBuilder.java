@@ -4,7 +4,6 @@ import java.time.LocalDate;
 import java.util.List;
 
 import no.nav.foreldrepenger.selvbetjening.kontrakt.innsending.dto.BarnDto;
-import no.nav.foreldrepenger.selvbetjening.kontrakt.innsending.dto.MutableVedleggReferanseDto;
 import no.nav.foreldrepenger.selvbetjening.kontrakt.innsending.dto.foreldrepenger.Situasjon;
 
 public class BarnBuilder {
@@ -18,10 +17,6 @@ public class BarnBuilder {
     boolean adopsjonAvEktefellesBarn;
     boolean søkerAdopsjonAlene;
     LocalDate foreldreansvarsdato;
-    List<MutableVedleggReferanseDto> terminbekreftelse;
-    List<MutableVedleggReferanseDto> adopsjonsvedtak;
-    List<MutableVedleggReferanseDto> omsorgsovertakelse;
-    List<MutableVedleggReferanseDto> dokumentasjonAvAleneomsorg;
 
     public static BarnBuilder fødsel(int antallBarn, LocalDate fødselsdato) {
         return new BarnBuilder(antallBarn)
@@ -106,26 +101,6 @@ public class BarnBuilder {
         return this;
     }
 
-    public BarnBuilder medTerminbekreftelse(List<MutableVedleggReferanseDto> terminbekreftelse) {
-        this.terminbekreftelse = terminbekreftelse;
-        return this;
-    }
-
-    public BarnBuilder medAdopsjonsvedtak(List<MutableVedleggReferanseDto> adopsjonsvedtak) {
-        this.adopsjonsvedtak = adopsjonsvedtak;
-        return this;
-    }
-
-    public BarnBuilder medOmsorgsovertakelse(List<MutableVedleggReferanseDto> omsorgsovertakelse) {
-        this.omsorgsovertakelse = omsorgsovertakelse;
-        return this;
-    }
-
-    public BarnBuilder medDokumentasjonAvAleneomsorg(List<MutableVedleggReferanseDto> dokumentasjonAvAleneomsorg) {
-        this.dokumentasjonAvAleneomsorg = dokumentasjonAvAleneomsorg;
-        return this;
-    }
-
     public BarnHelper build() {
         return new BarnHelper(
             new BarnDto(
@@ -137,11 +112,7 @@ public class BarnBuilder {
                 ankomstdato,
                 adopsjonAvEktefellesBarn,
                 søkerAdopsjonAlene,
-                foreldreansvarsdato,
-                terminbekreftelse,
-                adopsjonsvedtak,
-                omsorgsovertakelse,
-                dokumentasjonAvAleneomsorg
+                foreldreansvarsdato
             ),
             situasjon);
     }

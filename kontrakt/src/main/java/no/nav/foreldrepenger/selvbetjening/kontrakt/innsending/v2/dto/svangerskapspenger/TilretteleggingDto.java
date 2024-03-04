@@ -4,12 +4,10 @@ import static com.fasterxml.jackson.annotation.JsonTypeInfo.As.PROPERTY;
 import static com.fasterxml.jackson.annotation.JsonTypeInfo.Id.NAME;
 
 import java.time.LocalDate;
-import java.util.List;
 
 import com.fasterxml.jackson.annotation.JsonSubTypes;
 import com.fasterxml.jackson.annotation.JsonTypeInfo;
 
-import no.nav.foreldrepenger.selvbetjening.kontrakt.innsending.dto.MutableVedleggReferanseDto;
 import no.nav.foreldrepenger.selvbetjening.kontrakt.innsending.v2.dto.svangerskapspenger.arbeidsforhold.ArbeidsforholdDto;
 
 @JsonTypeInfo(use = NAME, include = PROPERTY, property = "type")
@@ -22,5 +20,4 @@ public interface TilretteleggingDto {
 
     ArbeidsforholdDto arbeidsforhold();
     LocalDate behovForTilretteleggingFom();
-    List<MutableVedleggReferanseDto> vedleggsreferanser();
 }

@@ -37,11 +37,15 @@ public final class OpptjeningMaler {
     }
 
     public static AnnenInntektDto utenlandskArbeidsforhold(CountryCode landKode) {
-        return lagUtenlandskArbeidsforhold(landKode, AnnenOpptjeningType.JOBB_I_UTLANDET);
+        return lagUtenlandskArbeidsforhold(landKode, AnnenOpptjeningType.JOBB_I_UTLANDET, new ÅpenPeriodeDto(LocalDate.now().minusYears(4), LocalDate.now()));
     }
 
     public static AnnenInntektDto annenInntektNorsk(AnnenOpptjeningType type) {
-        return lagUtenlandskArbeidsforhold(CountryCode.NO, type);
+        return lagUtenlandskArbeidsforhold(CountryCode.NO, type, new ÅpenPeriodeDto(LocalDate.now().minusYears(4), LocalDate.now()));
+    }
+
+    public static AnnenInntektDto annenInntektNorsk(AnnenOpptjeningType type, ÅpenPeriodeDto periode) {
+        return lagUtenlandskArbeidsforhold(CountryCode.NO, type, periode);
     }
 
 
@@ -60,7 +64,6 @@ public final class OpptjeningMaler {
                 næringsInntekt.intValue(),
                 List.of(Virksomhetstype.ANNEN),
                 CountryCode.NO.getAlpha3(),
-                List.of(),
                 LocalDate.now().minusYears(4),
                 endringAvNæring,
                 "Navnet på Næring",
@@ -72,14 +75,13 @@ public final class OpptjeningMaler {
 
     }
 
-    private static AnnenInntektDto lagUtenlandskArbeidsforhold(CountryCode landKode, AnnenOpptjeningType type) {
+    private static AnnenInntektDto lagUtenlandskArbeidsforhold(CountryCode landKode, AnnenOpptjeningType type, ÅpenPeriodeDto periode) {
         return new AnnenInntektDto(
                 type.name(),
                 landKode.getAlpha2(),
                 "elskap AS",
-                new ÅpenPeriodeDto(LocalDate.now().minusYears(4), LocalDate.now()),
-                false,
-                List.of()
+                periode,
+                false
         );
     }
 

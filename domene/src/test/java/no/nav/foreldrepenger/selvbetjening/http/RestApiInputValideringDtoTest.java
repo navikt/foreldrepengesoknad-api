@@ -47,6 +47,7 @@ import jakarta.validation.constraints.Null;
 import jakarta.validation.constraints.Pattern;
 import jakarta.validation.constraints.Size;
 import no.nav.foreldrepenger.selvbetjening.kontrakt.innsending.dto.VedleggDto;
+import no.nav.foreldrepenger.selvbetjening.kontrakt.innsending.dto.VedleggReferanse;
 import no.nav.foreldrepenger.selvbetjening.kontrakt.innsending.dto.validering.VedlegglistestørrelseConstraint;
 
 class RestApiInputValideringDtoTest extends RestApiTestUtil {
@@ -79,6 +80,7 @@ class RestApiInputValideringDtoTest extends RestApiTestUtil {
             // Enforces av UUID og URI selv
             put(UUID.class, List.of(emptyList()));
             put(URI.class, List.of(emptyList()));
+            put(VedleggReferanse.class, List.of());
         }
     };
 

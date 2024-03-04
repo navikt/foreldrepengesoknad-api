@@ -1,9 +1,7 @@
 package no.nav.foreldrepenger.selvbetjening.kontrakt.innsending.v2.util.builder;
 
 import java.time.LocalDate;
-import java.util.List;
 
-import no.nav.foreldrepenger.selvbetjening.kontrakt.innsending.dto.MutableVedleggReferanseDto;
 import no.nav.foreldrepenger.selvbetjening.kontrakt.innsending.v2.dto.svangerskapspenger.DelvisTilretteleggingDto;
 import no.nav.foreldrepenger.selvbetjening.kontrakt.innsending.v2.dto.svangerskapspenger.HelTilretteleggingDto;
 import no.nav.foreldrepenger.selvbetjening.kontrakt.innsending.v2.dto.svangerskapspenger.IngenTilretteleggingDto;
@@ -33,7 +31,6 @@ public class TilretteleggingBuilder {
         private final LocalDate behovForTilretteleggingFom;
         private ArbeidsforholdDto arbeidsforhold;
         private LocalDate tilrettelagtArbeidFom;
-        private List<MutableVedleggReferanseDto> vedleggsreferanser;
 
         public HelTilretteleggingBuilder(LocalDate behovForTilretteleggingFom) {
             this.behovForTilretteleggingFom = behovForTilretteleggingFom;
@@ -49,17 +46,11 @@ public class TilretteleggingBuilder {
             return this;
         }
 
-        public HelTilretteleggingBuilder medVedleggsreferanser(List<MutableVedleggReferanseDto> vedleggsreferanser) {
-            this.vedleggsreferanser = vedleggsreferanser;
-            return this;
-        }
-
         public TilretteleggingDto build() {
             return new HelTilretteleggingDto(
                 arbeidsforhold,
                 behovForTilretteleggingFom,
-                tilrettelagtArbeidFom,
-                vedleggsreferanser
+                tilrettelagtArbeidFom
             );
         }
     }
@@ -69,7 +60,6 @@ public class TilretteleggingBuilder {
         private ArbeidsforholdDto arbeidsforhold;
         private LocalDate tilrettelagtArbeidFom;
         private Double stillingsprosent;
-        private List<MutableVedleggReferanseDto> vedleggsreferanser;
 
         public DelvisTilretteleggingBuilder(LocalDate behovForTilretteleggingFom) {
             this.behovForTilretteleggingFom = behovForTilretteleggingFom;
@@ -90,18 +80,12 @@ public class TilretteleggingBuilder {
             return this;
         }
 
-        public DelvisTilretteleggingBuilder medVedleggsreferanser(List<MutableVedleggReferanseDto> vedleggsreferanser) {
-            this.vedleggsreferanser = vedleggsreferanser;
-            return this;
-        }
-
         public TilretteleggingDto build() {
             return new DelvisTilretteleggingDto(
                 arbeidsforhold,
                 behovForTilretteleggingFom,
                 tilrettelagtArbeidFom,
-                stillingsprosent,
-                vedleggsreferanser
+                stillingsprosent
             );
         }
     }
@@ -110,7 +94,6 @@ public class TilretteleggingBuilder {
         private final LocalDate behovForTilretteleggingFom;
         private ArbeidsforholdDto arbeidsforhold;
         private LocalDate slutteArbeidFom;
-        private List<MutableVedleggReferanseDto> vedleggsreferanser;
 
         public IngenTilretteleggingBuilder(LocalDate behovForTilretteleggingFom) {
             this.behovForTilretteleggingFom = behovForTilretteleggingFom;
@@ -126,17 +109,11 @@ public class TilretteleggingBuilder {
             return this;
         }
 
-        public IngenTilretteleggingBuilder medVedleggsreferanser(List<MutableVedleggReferanseDto> vedleggsreferanser) {
-            this.vedleggsreferanser = vedleggsreferanser;
-            return this;
-        }
-
         public TilretteleggingDto build() {
             return new IngenTilretteleggingDto(
                 arbeidsforhold,
                 behovForTilretteleggingFom,
-                slutteArbeidFom,
-                vedleggsreferanser
+                slutteArbeidFom
             );
         }
     }

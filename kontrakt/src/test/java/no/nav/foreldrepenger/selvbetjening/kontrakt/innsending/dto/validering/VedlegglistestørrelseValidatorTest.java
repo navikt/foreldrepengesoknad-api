@@ -1,13 +1,15 @@
 package no.nav.foreldrepenger.selvbetjening.kontrakt.innsending.dto.validering;
 
+import static no.nav.foreldrepenger.common.domain.felles.InnsendingsType.SEND_SENERE;
 import static org.assertj.core.api.Assertions.assertThat;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.UUID;
 
 import org.junit.jupiter.api.Test;
 
-import no.nav.foreldrepenger.selvbetjening.kontrakt.innsending.dto.MutableVedleggReferanseDto;
+import no.nav.foreldrepenger.common.domain.felles.DokumentType;
 import no.nav.foreldrepenger.selvbetjening.kontrakt.innsending.dto.VedleggDto;
 
 class VedlegglistestørrelseValidatorTest {
@@ -45,13 +47,13 @@ class VedlegglistestørrelseValidatorTest {
         List<VedleggDto> sendSenere = new ArrayList<>();
 
         while (sendSenere.size() < sendSenereVedlegg) {
-            var nyttVedlegg = new VedleggDto(null, "Beskrivelse", new MutableVedleggReferanseDto("Id"), "SEND_SENERE", "Skjemanummer", "xyz", null, null);
+            var nyttVedlegg = new VedleggDto(UUID.randomUUID(), DokumentType.I000050, SEND_SENERE, "Beskrivelse", null);
             sendSenere.add(nyttVedlegg);
         }
 
         List<VedleggDto> opplastet = new ArrayList<>();
         while (opplastet.size() < opplastetVedlegg) {
-            var nyttVedlegg = new VedleggDto(null, "Beskrivelse", new MutableVedleggReferanseDto("Id"), null, "Skjemanummer", "xyz", null, null);
+            var nyttVedlegg = new VedleggDto(UUID.randomUUID(),  DokumentType.I000050, null, "Beskrivelse", null);
             opplastet.add(nyttVedlegg);
         }
         sendSenere.addAll(opplastet);

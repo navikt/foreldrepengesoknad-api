@@ -24,6 +24,7 @@ import no.nav.foreldrepenger.common.domain.svangerskapspenger.tilrettelegging.ar
 import no.nav.foreldrepenger.common.domain.svangerskapspenger.tilrettelegging.arbeidsforhold.PrivatArbeidsgiver;
 import no.nav.foreldrepenger.common.domain.svangerskapspenger.tilrettelegging.arbeidsforhold.SelvstendigNæringsdrivende;
 import no.nav.foreldrepenger.common.domain.svangerskapspenger.tilrettelegging.arbeidsforhold.Virksomhet;
+import no.nav.foreldrepenger.selvbetjening.kontrakt.innsending.dto.VedleggDto;
 import no.nav.foreldrepenger.selvbetjening.kontrakt.innsending.dto.svangerskapspenger.ArbeidsforholdDto;
 import no.nav.foreldrepenger.selvbetjening.kontrakt.innsending.dto.svangerskapspenger.SvangerskapspengesøknadDto;
 import no.nav.foreldrepenger.selvbetjening.kontrakt.innsending.dto.svangerskapspenger.TilretteleggingDto;
@@ -35,12 +36,13 @@ final class SvangerskapspengerMapper {
     }
 
     static Søknad tilSvangerskapspengesøknadVedleggUtenInnhold(SvangerskapspengesøknadDto s, LocalDate mottattDato) {
+        var vedlegg = s.vedlegg();
         return new Søknad(
             mottattDato,
             tilSøker(s),
-            tilYtelse(s),
+            tilYtelse(s, vedlegg),
             null,
-            tilVedlegg(s.vedlegg())
+            tilVedlegg(vedlegg)
         );
     }
 
@@ -55,13 +57,13 @@ final class SvangerskapspengerMapper {
         return new Søker(BrukerRolle.MOR, søker.språkkode());
     }
 
-    public static Svangerskapspenger tilYtelse(SvangerskapspengesøknadDto s) {
+    public static Svangerskapspenger tilYtelse(SvangerskapspengesøknadDto s, List<VedleggDto> vedlegg) {
         return new Svangerskapspenger(
             s.barn().termindato(),
             tilFødselsdato(s),
             tilOppholdIUtlandet(s),
-            tilOpptjening(s.søker()),
-            tilTilrettelegging(s)
+            tilOpptjening(s.søker(), vedlegg),
+            tilTilrettelegging(s, vedlegg)
         );
     }
 
@@ -71,45 +73,45 @@ final class SvangerskapspengerMapper {
             .orElse(null);
     }
 
-    private static List<Tilrettelegging> tilTilrettelegging(SvangerskapspengesøknadDto s) {
+    private static List<Tilrettelegging> tilTilrettelegging(SvangerskapspengesøknadDto s, List<VedleggDto> vedlegg) {
         return s.tilrettelegging().stream()
-            .map(SvangerskapspengerMapper::tilTilretteleggings)
+            .map(tilrettelegging -> tilTilretteleggings(tilrettelegging, vedlegg))
             .toList();
     }
 
-    private static Tilrettelegging tilTilretteleggings(TilretteleggingDto tilrettelegging) {
+    private static Tilrettelegging tilTilretteleggings(TilretteleggingDto tilrettelegging, List<VedleggDto> vedlegg) {
         return switch (tilrettelegging.type()) {
-            case HEL -> tilHelTilrettelegging(tilrettelegging);
-            case DELVIS -> tilDelvisTilrettelegging(tilrettelegging);
-            case INGEN -> tilIngenTilrettelegging(tilrettelegging);
+            case HEL -> tilHelTilrettelegging(tilrettelegging, vedlegg);
+            case DELVIS -> tilDelvisTilrettelegging(tilrettelegging, vedlegg);
+            case INGEN -> tilIngenTilrettelegging(tilrettelegging, vedlegg);
         };
     }
 
-    private static IngenTilrettelegging tilIngenTilrettelegging(TilretteleggingDto tilrettelegging) {
+    private static IngenTilrettelegging tilIngenTilrettelegging(TilretteleggingDto tilrettelegging, List<VedleggDto> vedlegg) {
         return new IngenTilrettelegging(
             tilArbeidsforhold(tilrettelegging.arbeidsforhold()),
             tilrettelegging.behovForTilretteleggingFom(),
             tilrettelegging.slutteArbeidFom(),
-            tilVedleggsreferanse(tilrettelegging.vedlegg())
+            tilVedleggsreferanse(DokumentasjonReferanseMapper.dokumentasjonSomDokumentererTilrettelegggingAv(vedlegg, tilrettelegging.arbeidsforhold()))
         );
     }
 
-    private static DelvisTilrettelegging tilDelvisTilrettelegging(TilretteleggingDto tilrettelegging) {
+    private static DelvisTilrettelegging tilDelvisTilrettelegging(TilretteleggingDto tilrettelegging, List<VedleggDto> vedlegg) {
         return new DelvisTilrettelegging(
             tilArbeidsforhold(tilrettelegging.arbeidsforhold()),
             tilrettelegging.behovForTilretteleggingFom(),
             tilrettelegging.tilrettelagtArbeidFom(),
             tilrettelegging.stillingsprosent() != null ? ProsentAndel.valueOf(tilrettelegging.stillingsprosent()) : null,
-            tilVedleggsreferanse(tilrettelegging.vedlegg())
+            tilVedleggsreferanse(DokumentasjonReferanseMapper.dokumentasjonSomDokumentererTilrettelegggingAv(vedlegg, tilrettelegging.arbeidsforhold()))
         );
     }
 
-    private static HelTilrettelegging tilHelTilrettelegging(TilretteleggingDto tilrettelegging) {
+    private static HelTilrettelegging tilHelTilrettelegging(TilretteleggingDto tilrettelegging, List<VedleggDto> vedlegg) {
         return new HelTilrettelegging(
             tilArbeidsforhold(tilrettelegging.arbeidsforhold()),
             tilrettelegging.behovForTilretteleggingFom(),
             tilrettelegging.tilrettelagtArbeidFom(),
-            tilVedleggsreferanse(tilrettelegging.vedlegg())
+            tilVedleggsreferanse(DokumentasjonReferanseMapper.dokumentasjonSomDokumentererTilrettelegggingAv(vedlegg, tilrettelegging.arbeidsforhold()))
         );
     }
 

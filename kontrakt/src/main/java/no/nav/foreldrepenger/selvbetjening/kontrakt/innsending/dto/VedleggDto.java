@@ -2,116 +2,33 @@ package no.nav.foreldrepenger.selvbetjening.kontrakt.innsending.dto;
 
 import static no.nav.foreldrepenger.common.domain.validation.InputValideringRegex.FRITEKST;
 
-import java.net.URI;
 import java.util.List;
-import java.util.Objects;
+import java.util.UUID;
 
 import com.fasterxml.jackson.annotation.JsonCreator;
+import com.fasterxml.jackson.annotation.JsonIgnore;
 
 import jakarta.validation.Valid;
 import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Pattern;
 import jakarta.validation.constraints.Size;
+import no.nav.foreldrepenger.common.domain.felles.DokumentType;
+import no.nav.foreldrepenger.common.domain.felles.InnsendingsType;
 import no.nav.foreldrepenger.selvbetjening.kontrakt.innsending.dto.svangerskapspenger.ArbeidsforholdDto;
 
-public class VedleggDto {
-
-    private byte[] content;
-    @Valid
-    private MutableVedleggReferanseDto id;
-
-
-    @Pattern(regexp = FRITEKST)
-    private final String beskrivelse;
-    @Valid
-    private final Dokumenterer dokumenterer;
-    @Pattern(regexp = "^[\\p{Digit}\\p{L}_]*$")
-    private final String innsendingsType;
-    @Pattern(regexp = "^[\\p{Digit}\\p{L}]*$")
-    private final String skjemanummer;
-    @Pattern(regexp = FRITEKST)
-    private final String uuid;
-    @Deprecated
-    private final URI url;
-
-
-    public VedleggDto(byte[] content, String beskrivelse, MutableVedleggReferanseDto id, String skjemanummer) {
-        this(content, beskrivelse, id, null, skjemanummer, null, null, null);
+public record VedleggDto(UUID uuid,
+                         @NotNull DokumentType skjemanummer,
+                         InnsendingsType innsendingsType,
+                         @Pattern(regexp = FRITEKST) String beskrivelse,
+                         @Valid Dokumenterer dokumenterer,
+                         @JsonIgnore VedleggReferanse referanse) {
+    public VedleggDto {
+        referanse = VedleggReferanse.fra(uuid);
     }
 
     @JsonCreator
-    public VedleggDto(byte[] content, String beskrivelse, MutableVedleggReferanseDto id, String innsendingsType, String skjemanummer, String uuid, URI url,
-                      Dokumenterer dokumenterer) {
-        this.content = content;
-        this.beskrivelse = beskrivelse;
-        this.id = id;
-        this.innsendingsType = innsendingsType;
-        this.skjemanummer = skjemanummer;
-        this.uuid = uuid;
-        this.url = url;
-        this.dokumenterer = dokumenterer;
-    }
-
-    public byte[] getContent() {
-        return content;
-    }
-
-    public void setContent(byte[] content) {
-        this.content = content;
-    }
-
-    public MutableVedleggReferanseDto getId() {
-        return id;
-    }
-
-    public void setId(MutableVedleggReferanseDto id) {
-        this.id = id;
-    }
-
-    public String getBeskrivelse() {
-        return beskrivelse;
-    }
-
-
-    public String getInnsendingsType() {
-        return innsendingsType;
-    }
-
-    public String getSkjemanummer() {
-        return skjemanummer;
-    }
-
-    public String getUuid() {
-        return uuid;
-    }
-
-    public URI getUrl() {
-        return url;
-    }
-
-    public Dokumenterer getDokumenterer() {
-        return dokumenterer;
-    }
-
-    @Override
-    public boolean equals(Object o) {
-        if (this == o)
-            return true;
-        if (o == null || getClass() != o.getClass())
-            return false;
-        VedleggDto that = (VedleggDto) o;
-        return Objects.equals(id, that.id);
-    }
-
-    @Override
-    public int hashCode() {
-        return Objects.hash(id);
-    }
-
-    @Override
-    public String toString() {
-        return "VedleggFrontend{" + "beskrivelse='" + beskrivelse + '\'' + ", id=" + id + ", innsendingsType='" + innsendingsType + '\''
-            + ", skjemanummer='" + skjemanummer + '\'' + ", uuid='" + uuid + '\'' + ", url=" + url + '}';
+    public VedleggDto(UUID uuid, DokumentType skjemanummer, InnsendingsType innsendingsType, String beskrivelse, Dokumenterer dokumenterer) {
+        this(uuid, skjemanummer, innsendingsType, beskrivelse, dokumenterer, null);
     }
 
     public record Dokumenterer(@NotNull Type type,

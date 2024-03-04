@@ -1,6 +1,9 @@
 package no.nav.foreldrepenger.selvbetjening.kontrakt.innsending.v2.mapper;
 
 import static no.nav.foreldrepenger.common.domain.foreldrepenger.fordeling.StønadskontoType.FELLESPERIODE;
+import static no.nav.foreldrepenger.common.domain.foreldrepenger.fordeling.StønadskontoType.FORELDREPENGER_FØR_FØDSEL;
+import static no.nav.foreldrepenger.selvbetjening.kontrakt.innsending.mapper.DokumentasjonUtil.vedlegg;
+import static no.nav.foreldrepenger.selvbetjening.kontrakt.innsending.v2.util.builder.UttakplanPeriodeBuilder.utsettelse;
 import static no.nav.foreldrepenger.selvbetjening.kontrakt.innsending.v2.util.builder.UttakplanPeriodeBuilder.uttak;
 import static org.assertj.core.api.Assertions.assertThat;
 
@@ -12,11 +15,15 @@ import org.junit.jupiter.api.Test;
 import no.nav.foreldrepenger.common.domain.BrukerRolle;
 import no.nav.foreldrepenger.common.domain.Fødselsnummer;
 import no.nav.foreldrepenger.common.domain.Saksnummer;
+import no.nav.foreldrepenger.common.domain.felles.DokumentType;
+import no.nav.foreldrepenger.common.domain.felles.VedleggReferanse;
 import no.nav.foreldrepenger.common.domain.felles.annenforelder.NorskForelder;
 import no.nav.foreldrepenger.common.domain.foreldrepenger.Endringssøknad;
 import no.nav.foreldrepenger.common.domain.foreldrepenger.Foreldrepenger;
 import no.nav.foreldrepenger.common.domain.foreldrepenger.fordeling.LukketPeriodeMedVedlegg;
+import no.nav.foreldrepenger.common.domain.foreldrepenger.fordeling.UtsettelsesÅrsak;
 import no.nav.foreldrepenger.common.domain.foreldrepenger.fordeling.UttaksPeriode;
+import no.nav.foreldrepenger.selvbetjening.kontrakt.innsending.mapper.DokumentasjonUtil;
 import no.nav.foreldrepenger.selvbetjening.kontrakt.innsending.mapper.SøknadMapper;
 import no.nav.foreldrepenger.selvbetjening.kontrakt.innsending.v2.dto.endringssøknad.EndringssøknadForeldrepengerDto;
 import no.nav.foreldrepenger.selvbetjening.kontrakt.innsending.v2.util.builder.AnnenforelderBuilder;
@@ -85,6 +92,39 @@ class EndrignssøknadFPMappingKonsistensTest {
             .containsExactly(
                 uttak.get(0).tom()
             );
+    }
+
+    @Test
+    void endringssøknadMedVedleggUttakOgBarnKorrektMapping() {
+        var uttak = List.of(
+            uttak(FORELDREPENGER_FØR_FØDSEL, NOW.minusWeeks(3), NOW.minusDays(1)).build(),
+            utsettelse(UtsettelsesÅrsak.SYKDOM, NOW, NOW.plusWeeks(6)).build()
+        );
+        var vedlegg1 = vedlegg(DokumentasjonUtil.barn());
+        var vedlegg2 = vedlegg(DokumentType.I000063, DokumentasjonUtil.barn());
+        var vedlegg3 = vedlegg(DokumentasjonUtil.uttaksperiode(uttak.getLast().fom(), uttak.getLast().tom()));
+        var søknadDto = new EndringssøknadBuilder(new Saksnummer("1"))
+            .medUttaksplan(uttak)
+            .medSøker(new SøkerBuilder(BrukerRolle.MOR)
+                .medErAleneOmOmsorg(true)
+                .build())
+            .medAnnenForelder(AnnenforelderBuilder.annenpartIkkeRettOgMorHarUføretrygd(DUMMY_FNR).build())
+            .medBarn(BarnBuilder.omsorgsovertakelse(LocalDate.now().minusWeeks(2)).build())
+            .medVedlegg(List.of(vedlegg1, vedlegg2, vedlegg3))
+            .build();
+
+        var mappedSøknad = (Endringssøknad) SøknadMapper.tilSøknad(søknadDto, NOW);
+        var ytelse = mappedSøknad.getYtelse();
+        assertThat(ytelse).isInstanceOf(Foreldrepenger.class);
+        var foreldrepenger = (Foreldrepenger) ytelse;
+
+        assertThat(vedlegg1.referanse().verdi()).isNotNull();
+        assertThat(vedlegg2.referanse().verdi()).isNotNull();
+        assertThat(vedlegg3.referanse().verdi()).isNotNull();
+        assertThat(foreldrepenger.relasjonTilBarn().getVedlegg()).extracting(VedleggReferanse::referanse)
+            .containsExactly(vedlegg1.referanse().verdi(), vedlegg2.referanse().verdi());
+        assertThat(foreldrepenger.fordeling().perioder().getLast().getVedlegg()).extracting(VedleggReferanse::referanse)
+            .containsExactly(vedlegg3.referanse().verdi());
     }
 
 }

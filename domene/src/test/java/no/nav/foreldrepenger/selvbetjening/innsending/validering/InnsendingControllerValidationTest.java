@@ -23,8 +23,8 @@ import no.nav.foreldrepenger.selvbetjening.config.JacksonConfiguration;
 import no.nav.foreldrepenger.selvbetjening.error.ApiExceptionHandler;
 import no.nav.foreldrepenger.selvbetjening.innsending.InnsendingController;
 import no.nav.foreldrepenger.selvbetjening.innsending.InnsendingTjeneste;
-import no.nav.foreldrepenger.selvbetjening.kontrakt.innsending.dto.endringssøknad.EndringssøknadDto;
 import no.nav.foreldrepenger.selvbetjening.kontrakt.innsending.dto.SøknadDto;
+import no.nav.foreldrepenger.selvbetjening.kontrakt.innsending.dto.endringssøknad.EndringssøknadDto;
 import no.nav.foreldrepenger.selvbetjening.kontrakt.innsending.dto.endringssøknad.EndringssøknadForeldrepengerDto;
 import no.nav.foreldrepenger.selvbetjening.kontrakt.innsending.dto.foreldrepenger.ForeldrepengesøknadDto;
 import no.nav.foreldrepenger.selvbetjening.kontrakt.innsending.dto.svangerskapspenger.SvangerskapspengesøknadDto;
@@ -54,7 +54,6 @@ class InnsendingControllerValidationTest {
                 .contentType(MediaType.APPLICATION_JSON)
                 .content(mapper.writeValueAsString(sf)
                     .replace(fpSøknad.annenForelder().fornavn(), "Ulovlig tegn [≈≈|£©≈[™")
-                    .replaceFirst(fpSøknad.vedlegg().get(0).getSkjemanummer(), "<scri>sp 202≈≈|0")
                 ))
             .andExpect(status().isBadRequest())
             .andReturn();
@@ -62,7 +61,7 @@ class InnsendingControllerValidationTest {
         assertThat(result.getResolvedException()).isInstanceOf(MethodArgumentNotValidException.class);
         var error = (MethodArgumentNotValidException) result.getResolvedException();
         assertThat(error).isNotNull();
-        assertThat(error.getBindingResult().getFieldErrors()).hasSize(2);
+        assertThat(error.getBindingResult().getFieldErrors()).hasSize(1);
     }
 
 
@@ -75,7 +74,6 @@ class InnsendingControllerValidationTest {
                 .contentType(MediaType.APPLICATION_JSON)
                 .content(mapper.writeValueAsString(sf)
                     .replace(annenInntektFrontend.arbeidsgiverNavn(), "Ulovlig tegn [≈≈|£©≈[™")
-                    .replaceFirst(annenInntektFrontend.vedlegg().get(0).referanse(), "Also ILLEGA @¨¨¨¨ö~~π<>")
                 ))
             .andExpect(status().isBadRequest())
             .andReturn();
@@ -83,7 +81,7 @@ class InnsendingControllerValidationTest {
         assertThat(result.getResolvedException()).isInstanceOf(MethodArgumentNotValidException.class);
         var error = (MethodArgumentNotValidException) result.getResolvedException();
         assertThat(error).isNotNull();
-        assertThat(error.getBindingResult().getFieldErrors()).hasSize(2);
+        assertThat(error.getBindingResult().getFieldErrors()).hasSize(1);
     }
 
 
@@ -116,7 +114,6 @@ class InnsendingControllerValidationTest {
         var result = mvc.perform(post(InnsendingController.INNSENDING_CONTROLLER_PATH)
                 .contentType(MediaType.APPLICATION_JSON)
                 .content(mapper.writeValueAsString(sf)
-                    .replaceFirst(tilrettelegging.vedlegg().get(0).referanse(), "Also ILLEGA @¨¨¨¨ö~~π<>")
                     .replace(tilrettelegging.arbeidsforhold().id(), "Ikke lovlig \u0085")
                 ))
             .andExpect(status().isBadRequest())
@@ -125,7 +122,7 @@ class InnsendingControllerValidationTest {
         assertThat(result.getResolvedException()).isInstanceOf(MethodArgumentNotValidException.class);
         var error = (MethodArgumentNotValidException) result.getResolvedException();
         assertThat(error).isNotNull();
-        assertThat(error.getBindingResult().getFieldErrors()).hasSize(2);
+        assertThat(error.getBindingResult().getFieldErrors()).hasSize(1);
     }
 
 

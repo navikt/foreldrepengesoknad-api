@@ -8,7 +8,6 @@ import no.nav.foreldrepenger.common.domain.foreldrepenger.fordeling.Oppholdsårs
 import no.nav.foreldrepenger.common.domain.foreldrepenger.fordeling.Overføringsårsak;
 import no.nav.foreldrepenger.common.domain.foreldrepenger.fordeling.StønadskontoType;
 import no.nav.foreldrepenger.common.domain.foreldrepenger.fordeling.UtsettelsesÅrsak;
-import no.nav.foreldrepenger.selvbetjening.kontrakt.innsending.dto.MutableVedleggReferanseDto;
 import no.nav.foreldrepenger.selvbetjening.kontrakt.innsending.v2.dto.foreldrepenger.uttaksplan.GradertUttaksPeriodeDto;
 import no.nav.foreldrepenger.selvbetjening.kontrakt.innsending.v2.dto.foreldrepenger.uttaksplan.KontoType;
 import no.nav.foreldrepenger.selvbetjening.kontrakt.innsending.v2.dto.foreldrepenger.uttaksplan.OppholdsPeriodeDto;
@@ -54,7 +53,6 @@ public class UttakplanPeriodeBuilder {
         private Boolean justeresVedFødsel;
         private Boolean ønskerFlerbarnsdager;
         private Double samtidigUttakProsent;
-        private List<MutableVedleggReferanseDto> vedleggsreferanser;
 
         public UttaksperiodeBuilder(KontoType konto, LocalDate fom, LocalDate tom) {
             this.fom = fom;
@@ -87,11 +85,6 @@ public class UttakplanPeriodeBuilder {
             return this;
         }
 
-        public UttaksperiodeBuilder medVedleggsreferanser(List<MutableVedleggReferanseDto> vedleggsreferanser) {
-            this.vedleggsreferanser = vedleggsreferanser;
-            return this;
-        }
-
         public Uttaksplanperiode build() {
             return new UttaksPeriodeDto(
                 fom,
@@ -101,8 +94,7 @@ public class UttakplanPeriodeBuilder {
                 ønskerSamtidigUttak,
                 justeresVedFødsel,
                 ønskerFlerbarnsdager,
-                samtidigUttakProsent,
-                vedleggsreferanser
+                samtidigUttakProsent
             );
         }
     }
@@ -121,7 +113,6 @@ public class UttakplanPeriodeBuilder {
         private Boolean erFrilanser;
         private Boolean erSelvstendig;
         private List<String> orgnumre;
-        private List<MutableVedleggReferanseDto> vedleggsreferanser;
 
         public GradertUttaksperiodeBuilder(KontoType konto, LocalDate fom, LocalDate tom, Double stillingsprosent) {
             this.fom = fom;
@@ -175,11 +166,6 @@ public class UttakplanPeriodeBuilder {
             return this;
         }
 
-        public GradertUttaksperiodeBuilder medVedleggsreferanser(List<MutableVedleggReferanseDto> vedleggsreferanser) {
-            this.vedleggsreferanser = vedleggsreferanser;
-            return this;
-        }
-
         public Uttaksplanperiode build() {
             return new GradertUttaksPeriodeDto(
                 fom,
@@ -194,8 +180,7 @@ public class UttakplanPeriodeBuilder {
                 erArbeidstaker,
                 erFrilanser,
                 erSelvstendig,
-                orgnumre,
-                vedleggsreferanser
+                orgnumre
             );
         }
     }
@@ -205,7 +190,6 @@ public class UttakplanPeriodeBuilder {
         private final LocalDate tom;
         private final Overføringsårsak årsak;
         private final KontoType konto;
-        private List<MutableVedleggReferanseDto> vedleggsreferanser;
 
         public OverføringsperioderBuilder(KontoType konto, LocalDate fom, LocalDate tom, Overføringsårsak årsak) {
             this.fom = fom;
@@ -214,18 +198,12 @@ public class UttakplanPeriodeBuilder {
             this.konto = konto;
         }
 
-        public OverføringsperioderBuilder medVedleggsreferanser(List<MutableVedleggReferanseDto> vedleggsreferanser) {
-            this.vedleggsreferanser = vedleggsreferanser;
-            return this;
-        }
-
         public Uttaksplanperiode build() {
             return new OverføringsPeriodeDto(
                 fom,
                 tom,
                 årsak,
-                konto,
-                vedleggsreferanser
+                konto
             );
         }
     }
@@ -235,7 +213,6 @@ public class UttakplanPeriodeBuilder {
         private final LocalDate fom;
         private final LocalDate tom;
         private final Oppholdsårsak årsak;
-        private List<MutableVedleggReferanseDto> vedleggsreferanser;
 
         public OppholdsPeriodeBuilder(LocalDate fom, LocalDate tom, Oppholdsårsak årsak) {
             this.fom = fom;
@@ -243,17 +220,11 @@ public class UttakplanPeriodeBuilder {
             this.årsak = årsak;
         }
 
-        public OppholdsPeriodeBuilder medVedleggsreferanser(List<MutableVedleggReferanseDto> vedleggsreferanser) {
-            this.vedleggsreferanser = vedleggsreferanser;
-            return this;
-        }
-
         public Uttaksplanperiode build() {
             return new OppholdsPeriodeDto(
                 fom,
                 tom,
-                årsak,
-                vedleggsreferanser
+                årsak
             );
         }
     }
@@ -265,8 +236,7 @@ public class UttakplanPeriodeBuilder {
         private final LocalDate tom;
         private final UtsettelsesÅrsak årsak;
         private MorsAktivitet morsAktivitetIPerioden;
-        private Boolean erArbeidstaker;
-        private List<MutableVedleggReferanseDto> vedleggsreferanser;
+        private boolean erArbeidstaker;
 
         public UtsettelsePeriodeBuilder(UtsettelsesPeriodeDto.Type type, LocalDate fom, LocalDate tom, UtsettelsesÅrsak årsak) {
             this.type = type;
@@ -280,13 +250,8 @@ public class UttakplanPeriodeBuilder {
             return this;
         }
 
-        public UtsettelsePeriodeBuilder medErArbeidstaker(Boolean erArbeidstaker) {
+        public UtsettelsePeriodeBuilder medErArbeidstaker(boolean erArbeidstaker) {
             this.erArbeidstaker = erArbeidstaker;
-            return this;
-        }
-
-        public UtsettelsePeriodeBuilder medVedleggsreferanser(List<MutableVedleggReferanseDto> vedleggsreferanser) {
-            this.vedleggsreferanser = vedleggsreferanser;
             return this;
         }
 
@@ -297,8 +262,7 @@ public class UttakplanPeriodeBuilder {
                 tom,
                 årsak,
                 morsAktivitetIPerioden,
-                erArbeidstaker,
-                vedleggsreferanser
+                erArbeidstaker
             );
         }
     }

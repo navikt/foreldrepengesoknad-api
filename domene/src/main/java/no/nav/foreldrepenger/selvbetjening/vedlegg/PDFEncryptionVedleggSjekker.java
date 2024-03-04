@@ -10,7 +10,6 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Component;
 
-import no.nav.foreldrepenger.selvbetjening.kontrakt.innsending.dto.VedleggDto;
 import no.nav.foreldrepenger.selvbetjening.mellomlagring.Attachment;
 
 @Component
@@ -21,11 +20,6 @@ public class PDFEncryptionVedleggSjekker implements VedleggSjekker {
     @Override
     public void sjekk(Attachment... vedlegg) {
         safeStream(vedlegg).forEach(v -> check(v.bytes));
-    }
-
-    @Override
-    public void sjekk(VedleggDto... vedlegg) {
-        safeStream(vedlegg).forEach(v -> check(v.getContent()));
     }
 
     private static void check(byte[] bytes) {

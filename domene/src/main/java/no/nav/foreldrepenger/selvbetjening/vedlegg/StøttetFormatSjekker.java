@@ -11,18 +11,12 @@ import java.util.List;
 import org.springframework.http.MediaType;
 import org.springframework.stereotype.Service;
 
-import no.nav.foreldrepenger.selvbetjening.kontrakt.innsending.dto.VedleggDto;
 import no.nav.foreldrepenger.selvbetjening.mellomlagring.Attachment;
 
 @Service
 public class StøttetFormatSjekker implements VedleggSjekker {
 
     private static final List<MediaType> supportedTypes = List.of(IMAGE_JPEG, IMAGE_PNG, APPLICATION_PDF);
-
-    @Override
-    public void sjekk(VedleggDto... vedlegg) {
-        safeStream(vedlegg).forEach(v -> check(v.getContent()));
-    }
 
     @Override
     public void sjekk(Attachment... vedlegg) {

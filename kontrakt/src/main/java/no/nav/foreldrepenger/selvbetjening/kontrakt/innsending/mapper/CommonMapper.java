@@ -12,13 +12,10 @@ import java.util.stream.Stream;
 import com.neovisionaries.i18n.CountryCode;
 
 import no.nav.foreldrepenger.common.domain.Orgnummer;
-import no.nav.foreldrepenger.common.domain.felles.DokumentType;
-import no.nav.foreldrepenger.common.domain.felles.InnsendingsType;
 import no.nav.foreldrepenger.common.domain.felles.LukketPeriode;
 import no.nav.foreldrepenger.common.domain.felles.ProsentAndel;
 import no.nav.foreldrepenger.common.domain.felles.PåkrevdVedlegg;
 import no.nav.foreldrepenger.common.domain.felles.VedleggMetaData;
-import no.nav.foreldrepenger.common.domain.felles.VedleggReferanse;
 import no.nav.foreldrepenger.common.domain.felles.medlemskap.Utenlandsopphold;
 import no.nav.foreldrepenger.common.domain.felles.opptjening.AnnenOpptjening;
 import no.nav.foreldrepenger.common.domain.felles.opptjening.AnnenOpptjeningType;
@@ -36,7 +33,7 @@ import no.nav.foreldrepenger.common.domain.felles.ÅpenPeriode;
 import no.nav.foreldrepenger.selvbetjening.kontrakt.innsending.dto.AnnenInntektDto;
 import no.nav.foreldrepenger.selvbetjening.kontrakt.innsending.dto.BarnDto;
 import no.nav.foreldrepenger.selvbetjening.kontrakt.innsending.dto.FrilansInformasjonDto;
-import no.nav.foreldrepenger.selvbetjening.kontrakt.innsending.dto.MutableVedleggReferanseDto;
+import no.nav.foreldrepenger.selvbetjening.kontrakt.innsending.dto.VedleggReferanse;
 import no.nav.foreldrepenger.selvbetjening.kontrakt.innsending.dto.NæringDto;
 import no.nav.foreldrepenger.selvbetjening.kontrakt.innsending.dto.SøkerDto;
 import no.nav.foreldrepenger.selvbetjening.kontrakt.innsending.dto.SøknadDto;
@@ -59,23 +56,23 @@ public final class CommonMapper {
 
     public static no.nav.foreldrepenger.common.domain.felles.Vedlegg tilVedlegg(VedleggDto vedlegg) {
         var vedleggMetadata = new VedleggMetaData(
-            tilVedleggsreferanse(vedlegg.getId()),
-            vedlegg.getInnsendingsType() != null ? InnsendingsType.valueOf(vedlegg.getInnsendingsType()) : null,
-            vedlegg.getSkjemanummer() != null ? DokumentType.valueOf(vedlegg.getSkjemanummer()) : null,
-            vedlegg.getBeskrivelse()
+            tilVedleggsreferanse(vedlegg.referanse()),
+            vedlegg.innsendingsType(),
+            vedlegg.skjemanummer(),
+            vedlegg.beskrivelse()
         );
         return new PåkrevdVedlegg(vedleggMetadata);
     }
 
-    public static List<VedleggReferanse> tilVedleggsreferanse(List<MutableVedleggReferanseDto> vedleggsreferanser) {
+    public static List<no.nav.foreldrepenger.common.domain.felles.VedleggReferanse> tilVedleggsreferanse(List<VedleggReferanse> vedleggsreferanser) {
         return safeStream(vedleggsreferanser)
                 .distinct()
                 .map(CommonMapper::tilVedleggsreferanse)
                 .toList();
     }
 
-    public static VedleggReferanse tilVedleggsreferanse(MutableVedleggReferanseDto vedleggsreferanse) {
-        return new VedleggReferanse(vedleggsreferanse.referanse());
+    public static no.nav.foreldrepenger.common.domain.felles.VedleggReferanse tilVedleggsreferanse(VedleggReferanse vedleggsreferanse) {
+        return new no.nav.foreldrepenger.common.domain.felles.VedleggReferanse(vedleggsreferanse.verdi());
     }
 
     static Utenlandsopphold tilOppholdIUtlandet(SøknadDto s) {
@@ -86,100 +83,100 @@ public final class CommonMapper {
         return new Utenlandsopphold(tilUtenlandsoppholdsliste(opphold));
     }
 
-    public static Opptjening tilOpptjening(SøkerDto søker) {
+    public static Opptjening tilOpptjening(SøkerDto søker, List<VedleggDto> vedlegg) {
         return new Opptjening(
-            tilUtenlandsArbeidsforhold(søker.andreInntekterSiste10Mnd()),
-            tilEgenNæring(søker.selvstendigNæringsdrivendeInformasjon()),
-            tilAnnenOpptjening(søker.andreInntekterSiste10Mnd()),
+            tilUtenlandsArbeidsforhold(søker.andreInntekterSiste10Mnd(), vedlegg),
+            tilEgenNæring(søker.selvstendigNæringsdrivendeInformasjon(), vedlegg),
+            tilAnnenOpptjening(søker.andreInntekterSiste10Mnd(), vedlegg),
             tilFrilans(søker.frilansInformasjon())
         );
     }
 
-    static RelasjonTilBarn tilRelasjonTilBarn(BarnDto barn, Situasjon situasjon) {
+    static RelasjonTilBarn tilRelasjonTilBarn(BarnDto barn, Situasjon situasjon, List<VedleggDto> vedlegg) {
         return switch (situasjon) {
-            case FØDSEL -> !(barn.fødselsdatoer() == null || barn.fødselsdatoer().isEmpty()) ? tilFødsel(barn) : tilFremtidigFødsel(barn);
-            case ADOPSJON -> tilAdopsjon(barn);
-            case OMSORGSOVERTAKELSE -> tilOmsorgsovertagelse(barn);
+            case FØDSEL -> !(barn.fødselsdatoer() == null || barn.fødselsdatoer().isEmpty()) ? tilFødsel(barn, vedlegg) : tilFremtidigFødsel(barn, vedlegg);
+            case ADOPSJON -> tilAdopsjon(barn, vedlegg);
+            case OMSORGSOVERTAKELSE -> tilOmsorgsovertagelse(barn, vedlegg);
         };
     }
 
-    static Fødsel tilFødsel(BarnDto barn) {
+    static Fødsel tilFødsel(BarnDto barn, List<VedleggDto> vedlegg) {
         return new Fødsel(
             barn.antallBarn(),
             barn.fødselsdatoer(),
             barn.termindato(),
-            tilVedleggsreferanse(barn.getAlleVedlegg())
+            tilVedleggsreferanse(DokumentasjonReferanseMapper.dokumentasjonSomDokumentererBarn(vedlegg))
         );
     }
 
-    private static Omsorgsovertakelse tilOmsorgsovertagelse(BarnDto barn) {
+    private static Omsorgsovertakelse tilOmsorgsovertagelse(BarnDto barn, List<VedleggDto> vedlegg) {
         return new Omsorgsovertakelse(
             barn.antallBarn(),
             barn.foreldreansvarsdato(),
             barn.fødselsdatoer(),
-            tilVedleggsreferanse(barn.getAlleVedlegg())
+            tilVedleggsreferanse(DokumentasjonReferanseMapper.dokumentasjonSomDokumentererBarn(vedlegg))
         );
     }
 
-    private static FremtidigFødsel tilFremtidigFødsel(BarnDto barn) {
+    private static FremtidigFødsel tilFremtidigFødsel(BarnDto barn, List<VedleggDto> vedlegg) {
         return new FremtidigFødsel(
             barn.antallBarn(),
             barn.termindato(),
             barn.terminbekreftelseDato(),
-            tilVedleggsreferanse(barn.getAlleVedlegg())
+            tilVedleggsreferanse(DokumentasjonReferanseMapper.dokumentasjonSomDokumentererBarn(vedlegg))
         );
     }
 
-    private static Adopsjon tilAdopsjon(BarnDto barn) {
+    private static Adopsjon tilAdopsjon(BarnDto barn, List<VedleggDto> vedlegg) {
         return new Adopsjon(
             barn.antallBarn(),
             barn.adopsjonsdato(),
             barn.adopsjonAvEktefellesBarn(),
             barn.søkerAdopsjonAlene(),
-            tilVedleggsreferanse(barn.getAlleVedlegg()),
+            tilVedleggsreferanse(DokumentasjonReferanseMapper.dokumentasjonSomDokumentererBarn(vedlegg)),
             barn.ankomstdato(),
             barn.fødselsdatoer()
         );
     }
 
-    private static List<AnnenOpptjening> tilAnnenOpptjening(List<AnnenInntektDto> andreInntekterSiste10Mnd) {
+    private static List<AnnenOpptjening> tilAnnenOpptjening(List<AnnenInntektDto> andreInntekterSiste10Mnd, List<VedleggDto> vedlegg) {
         return andreInntekterSiste10Mnd.stream()
             .filter(annenInntekt -> !annenInntekt.type().equals("JOBB_I_UTLANDET"))
-            .map(CommonMapper::tilAnnenOpptjening)
+            .map(annenInntekt -> tilAnnenOpptjening(annenInntekt, vedlegg))
             .toList();
     }
 
-    private static AnnenOpptjening tilAnnenOpptjening(AnnenInntektDto annenInntekt) {
+    private static AnnenOpptjening tilAnnenOpptjening(AnnenInntektDto annenInntekt, List<VedleggDto> vedlegg) {
         return new AnnenOpptjening(
             annenInntekt.type() != null ? AnnenOpptjeningType.valueOf(annenInntekt.type()) : null,
             new ÅpenPeriode(annenInntekt.tidsperiode().fom(), annenInntekt.tidsperiode().tom()),
-            tilVedleggsreferanse(annenInntekt.vedlegg()));
+            tilVedleggsreferanse(DokumentasjonReferanseMapper.dokumentasjonSomDokumentererOpptjeningsperiode(vedlegg, annenInntekt.tidsperiode())));
     }
 
-    private static List<UtenlandskArbeidsforhold> tilUtenlandsArbeidsforhold(List<AnnenInntektDto> andreInntekterSiste10Mnd) {
+    private static List<UtenlandskArbeidsforhold> tilUtenlandsArbeidsforhold(List<AnnenInntektDto> andreInntekterSiste10Mnd, List<VedleggDto> vedlegg) {
         return andreInntekterSiste10Mnd.stream()
             .filter(annenInntekt -> annenInntekt.type().equals("JOBB_I_UTLANDET"))
-            .map(CommonMapper::tilUtenlandsArbeidsforhold)
+            .map(annenInntekt -> tilUtenlandsArbeidsforhold(annenInntekt, vedlegg))
             .toList();
 
     }
 
-    private static UtenlandskArbeidsforhold tilUtenlandsArbeidsforhold(AnnenInntektDto annenInntekt) {
+    private static UtenlandskArbeidsforhold tilUtenlandsArbeidsforhold(AnnenInntektDto annenInntekt, List<VedleggDto> vedlegg) {
         return new UtenlandskArbeidsforhold(
             annenInntekt.arbeidsgiverNavn(),
             new ÅpenPeriode(annenInntekt.tidsperiode().fom(), annenInntekt.tidsperiode().tom()),
-            tilVedleggsreferanse(annenInntekt.vedlegg()),
+            tilVedleggsreferanse(DokumentasjonReferanseMapper.dokumentasjonSomDokumentererOpptjeningsperiode(vedlegg, annenInntekt.tidsperiode())),
             land(annenInntekt.land())
         );
     }
 
-    private static List<EgenNæring> tilEgenNæring(List<NæringDto> selvstendigNæringsdrivendeInformasjon) {
+    private static List<EgenNæring> tilEgenNæring(List<NæringDto> selvstendigNæringsdrivendeInformasjon, List<VedleggDto> vedlegg) {
         return selvstendigNæringsdrivendeInformasjon.stream()
-            .map(CommonMapper::tilEgenNæring)
+            .map(selvstendig -> tilEgenNæring(selvstendig, vedlegg))
             .toList();
     }
 
-    private static EgenNæring tilEgenNæring(NæringDto selvstendig) {
+    private static EgenNæring tilEgenNæring(NæringDto selvstendig, List<VedleggDto> vedlegg) {
         var nærRelasjon = false; // TODO: Kan vi ha både regnsskapsfører og revisor? Vi har bare propagert en av delene til nå. Bare regnskapsfører hvis begge er oppgitt.
         List<Regnskapsfører> regnskapsførere = null;
         var regnskapsfører = selvstendig.regnskapsfører();
@@ -218,7 +215,7 @@ public final class CommonMapper {
             selvstendig.oppstartsdato(),
             beskrivelseEndring,
             selvstendig.stillingsprosent() != null ? ProsentAndel.valueOf(selvstendig.stillingsprosent()) : null,
-            tilVedleggsreferanse(selvstendig.vedlegg())
+            tilVedleggsreferanse(DokumentasjonReferanseMapper.dokumentasjonSomDokumentererOpptjeningsperiode(vedlegg, selvstendig.tidsperiode()))
         );
     }
 
