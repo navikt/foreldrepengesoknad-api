@@ -55,20 +55,20 @@ public class DokumentasjonReferanseMapper {
             .toList();
     }
 
-    private static boolean matcherArbeidsforhold(ArbeidsforholdDto AFFraVedlegg, no.nav.foreldrepenger.selvbetjening.kontrakt.innsending.v2.dto.svangerskapspenger.arbeidsforhold.ArbeidsforholdDto AFTilrettelegging) {
-        return switch (AFTilrettelegging) {
-            case VirksomhetDto v -> AFFraVedlegg.type().equals(ArbeidsforholdDto.Type.VIRKSOMHET) && AFFraVedlegg.id().equals(v.id().value());
-            case PrivatArbeidsgiverDto p -> AFFraVedlegg.type().equals(ArbeidsforholdDto.Type.PRIVAT) && AFFraVedlegg.id().equals(p.id().value());
-            case SelvstendigNæringsdrivendeDto ignored -> AFFraVedlegg.type().equals(ArbeidsforholdDto.Type.SELVSTENDIG);
-            case FrilanserDto ignored -> AFFraVedlegg.type().equals(ArbeidsforholdDto.Type.FRILANSER);
-            default -> throw new IllegalStateException("Unexpected value: " + AFTilrettelegging);
+    private static boolean matcherArbeidsforhold(ArbeidsforholdDto arbeidsforholdVedlegg, no.nav.foreldrepenger.selvbetjening.kontrakt.innsending.v2.dto.svangerskapspenger.arbeidsforhold.ArbeidsforholdDto arbeidsforholdSøknad) {
+        return switch (arbeidsforholdSøknad) {
+            case VirksomhetDto v -> arbeidsforholdVedlegg.type().equals(ArbeidsforholdDto.Type.VIRKSOMHET) && arbeidsforholdVedlegg.id().equals(v.id().value());
+            case PrivatArbeidsgiverDto p -> arbeidsforholdVedlegg.type().equals(ArbeidsforholdDto.Type.PRIVAT) && arbeidsforholdVedlegg.id().equals(p.id().value());
+            case SelvstendigNæringsdrivendeDto ignored -> arbeidsforholdVedlegg.type().equals(ArbeidsforholdDto.Type.SELVSTENDIG);
+            case FrilanserDto ignored -> arbeidsforholdVedlegg.type().equals(ArbeidsforholdDto.Type.FRILANSER);
+            default -> throw new IllegalStateException("Unexpected value: " + arbeidsforholdSøknad);
         };
     }
 
-    private static boolean matcherArbeidsforhold(ArbeidsforholdDto AFFraVedlegg, ArbeidsforholdDto AFTilrettelegging) {
-        return switch (AFTilrettelegging.type()) {
-            case VIRKSOMHET, PRIVAT -> AFFraVedlegg.type().equals(AFTilrettelegging.type()) && AFFraVedlegg.id().equals(AFTilrettelegging.id());
-            case SELVSTENDIG, FRILANSER -> AFFraVedlegg.type().equals(AFTilrettelegging.type());
+    private static boolean matcherArbeidsforhold(ArbeidsforholdDto arbeidsforholdVedlegg, ArbeidsforholdDto arbeidsforholdSøknad) {
+        return switch (arbeidsforholdSøknad.type()) {
+            case VIRKSOMHET, PRIVAT -> arbeidsforholdVedlegg.type().equals(arbeidsforholdSøknad.type()) && arbeidsforholdVedlegg.id().equals(arbeidsforholdSøknad.id());
+            case SELVSTENDIG, FRILANSER -> arbeidsforholdVedlegg.type().equals(arbeidsforholdSøknad.type());
         };
     }
 }
