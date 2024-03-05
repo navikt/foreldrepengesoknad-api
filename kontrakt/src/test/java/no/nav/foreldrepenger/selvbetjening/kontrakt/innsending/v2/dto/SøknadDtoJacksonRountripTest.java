@@ -16,6 +16,8 @@ import java.io.IOException;
 import java.time.LocalDate;
 import java.util.List;
 
+import no.nav.foreldrepenger.selvbetjening.kontrakt.innsending.v2.util.maler.ArbeidsforholdMaler;
+
 import org.junit.jupiter.api.Test;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
@@ -41,7 +43,6 @@ import no.nav.foreldrepenger.selvbetjening.kontrakt.innsending.v2.util.builder.E
 import no.nav.foreldrepenger.selvbetjening.kontrakt.innsending.v2.util.builder.ForeldrepengerBuilder;
 import no.nav.foreldrepenger.selvbetjening.kontrakt.innsending.v2.util.builder.SvangerskapspengerBuilder;
 import no.nav.foreldrepenger.selvbetjening.kontrakt.innsending.v2.util.builder.SøkerBuilder;
-import no.nav.foreldrepenger.selvbetjening.kontrakt.innsending.v2.util.maler.ArbeidsforholdMaler;
 import no.nav.foreldrepenger.selvbetjening.kontrakt.innsending.v2.util.maler.OpptjeningMaler;
 import no.nav.foreldrepenger.selvbetjening.kontrakt.innsending.v2.util.maler.UtenlandsoppholdMaler;
 
@@ -173,9 +174,7 @@ class SøknadDtoJacksonRountripTest {
         );
         var søknad = new SvangerskapspengerBuilder(tilrettelegginger)
             .medUtenlandsopphold(UtenlandsoppholdMaler.oppholdIUtlandetForrige12mnd())
-            .medSøker(new SøkerBuilder(BrukerRolle.MOR)
-                .medSelvstendigNæringsdrivendeInformasjon(List.of(OpptjeningMaler.egenNaeringOpptjening(Orgnummer.MAGIC_ORG.value())))
-                .build())
+            .medSelvstendigNæringsdrivendeInformasjon(List.of(OpptjeningMaler.egenNaeringOpptjening(Orgnummer.MAGIC_ORG.value())))
             .medBarn(BarnBuilder.termin(2, LocalDate.now().plusWeeks(2)).build())
             .build();
 

@@ -1,5 +1,8 @@
 package no.nav.foreldrepenger.selvbetjening.innsending;
 
+import static org.slf4j.LoggerFactory.getLogger;
+
+import org.slf4j.Logger;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 
@@ -16,6 +19,7 @@ import no.nav.foreldrepenger.selvbetjening.kontrakt.innsending.v2.dto.svangerska
 
 @ProtectedRestController(InnsendingController.INNSENDING_CONTROLLER_PATH)
 public class InnsendingController {
+    private static final Logger LOG = getLogger(InnsendingController.class);
     public static final String INNSENDING_CONTROLLER_PATH = "/rest/soknad";
 
     private final InnsendingTjeneste innsending;
@@ -27,12 +31,14 @@ public class InnsendingController {
     @Deprecated
     @PostMapping
     public Kvittering sendInn(@Valid @RequestBody SøknadDto søknad) {
+        LOG.info("Kall på deprecated endpunkt for {}", søknad.navn());
         return innsending.sendInn(søknad);
     }
 
     @Deprecated
     @PostMapping("/endre")
     public Kvittering endre(@Valid @RequestBody EndringssøknadDto endringssøknad) {
+        LOG.info("Kall på deprecated endpunkt for {}", endringssøknad.navn());
         return innsending.sendInn(endringssøknad);
     }
 

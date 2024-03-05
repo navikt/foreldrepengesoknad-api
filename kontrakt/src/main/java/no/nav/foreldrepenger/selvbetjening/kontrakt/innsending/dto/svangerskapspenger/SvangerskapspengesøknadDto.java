@@ -1,7 +1,6 @@
 package no.nav.foreldrepenger.selvbetjening.kontrakt.innsending.dto.svangerskapspenger;
 
 import java.time.LocalDate;
-import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 
@@ -18,7 +17,7 @@ import no.nav.foreldrepenger.selvbetjening.kontrakt.innsending.dto.validering.Ve
 
 @Deprecated
 public record SvangerskapspengesøknadDto(LocalDate mottattdato,
-                                         @Valid @NotNull @Size(max = 100) List<TilretteleggingDto> tilrettelegging,
+                                         @Valid @NotNull @Size(max = 100) List<@Valid TilretteleggingDto> tilrettelegging,
                                          @Valid @NotNull BarnDto barn,
                                          @Valid @NotNull UtenlandsoppholdDto informasjonOmUtenlandsopphold,
                                          @Valid @NotNull SøkerDto søker,
@@ -26,7 +25,7 @@ public record SvangerskapspengesøknadDto(LocalDate mottattdato,
 
     public SvangerskapspengesøknadDto {
         tilrettelegging = Optional.ofNullable(tilrettelegging).orElse(List.of());
-        vedlegg = Optional.ofNullable(vedlegg).map(ArrayList::new).orElse(new ArrayList<>());
+        vedlegg = Optional.ofNullable(vedlegg).orElse(List.of());
     }
 
     @Override

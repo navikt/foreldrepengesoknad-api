@@ -2,7 +2,7 @@ package no.nav.foreldrepenger.selvbetjening.kontrakt.innsending.util.builder;
 
 import java.time.LocalDate;
 
-import no.nav.foreldrepenger.selvbetjening.kontrakt.innsending.dto.svangerskapspenger.ArbeidsforholdDto;
+import no.nav.foreldrepenger.selvbetjening.kontrakt.innsending.v2.dto.svangerskapspenger.arbeidsforhold.ArbeidsforholdDto;
 import no.nav.foreldrepenger.selvbetjening.kontrakt.innsending.dto.svangerskapspenger.TilretteleggingDto;
 
 public class TilretteleggingBuilder {

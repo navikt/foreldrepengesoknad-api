@@ -7,7 +7,6 @@ import no.nav.foreldrepenger.selvbetjening.kontrakt.innsending.dto.SøkerDto;
 import no.nav.foreldrepenger.selvbetjening.kontrakt.innsending.dto.VedleggDto;
 import no.nav.foreldrepenger.selvbetjening.kontrakt.innsending.v2.dto.BarnDto;
 import no.nav.foreldrepenger.selvbetjening.kontrakt.innsending.v2.dto.SøknadDto;
-import no.nav.foreldrepenger.selvbetjening.kontrakt.innsending.v2.dto.UtenlandsoppholdDto;
 import no.nav.foreldrepenger.selvbetjening.kontrakt.innsending.v2.dto.UtenlandsoppholdsperiodeDto;
 import no.nav.foreldrepenger.selvbetjening.kontrakt.innsending.v2.dto.foreldrepenger.Dekningsgrad;
 import no.nav.foreldrepenger.selvbetjening.kontrakt.innsending.v2.dto.foreldrepenger.ForeldrepengesøknadDto;
@@ -21,8 +20,7 @@ public class ForeldrepengerBuilder {
     private BarnDto barn;
     private AnnenForelderDto annenForelder;
     private Dekningsgrad dekningsgrad;
-    private UtenlandsoppholdDto utenlandsopphold;
-    private List<UtenlandsoppholdsperiodeDto> oppholdIUtlandet;
+    private List<UtenlandsoppholdsperiodeDto> utenlandsopphold;
     private String tilleggsopplysninger;
     private UttaksplanDto uttaksplan;
     private List<VedleggDto> vedlegg;
@@ -55,12 +53,7 @@ public class ForeldrepengerBuilder {
         return this;
     }
 
-    public ForeldrepengerBuilder medOppholdIUtlandet(List<UtenlandsoppholdsperiodeDto> oppholdIUtlandet) {
-        this.oppholdIUtlandet = oppholdIUtlandet;
-        return this;
-    }
-
-    public ForeldrepengerBuilder medUtenlandsopphold(UtenlandsoppholdDto utenlandsopphold) {
+    public ForeldrepengerBuilder medUtenlandsopphold(List<UtenlandsoppholdsperiodeDto> utenlandsopphold) {
         this.utenlandsopphold = utenlandsopphold;
         return this;
     }
@@ -93,10 +86,9 @@ public class ForeldrepengerBuilder {
             barn,
             annenForelder,
             dekningsgrad,
-            utenlandsopphold,
-            oppholdIUtlandet,
             tilleggsopplysninger,
             uttaksplan,
+            utenlandsopphold,
             vedlegg
         );
     }

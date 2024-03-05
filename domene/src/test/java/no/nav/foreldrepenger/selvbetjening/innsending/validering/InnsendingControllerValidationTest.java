@@ -28,6 +28,7 @@ import no.nav.foreldrepenger.selvbetjening.kontrakt.innsending.dto.endringssøkn
 import no.nav.foreldrepenger.selvbetjening.kontrakt.innsending.dto.endringssøknad.EndringssøknadForeldrepengerDto;
 import no.nav.foreldrepenger.selvbetjening.kontrakt.innsending.dto.foreldrepenger.ForeldrepengesøknadDto;
 import no.nav.foreldrepenger.selvbetjening.kontrakt.innsending.dto.svangerskapspenger.SvangerskapspengesøknadDto;
+import no.nav.foreldrepenger.selvbetjening.kontrakt.innsending.v2.dto.svangerskapspenger.arbeidsforhold.VirksomhetDto;
 
 @Import({InnsendingController.class, ApiExceptionHandler.class})
 @WebMvcTest(controllers = InnsendingController.class)
@@ -111,10 +112,11 @@ class InnsendingControllerValidationTest {
         var sf = mapper.readValue(bytesFra("json/svangerskapspengesøknad.json"), SøknadDto.class);
         var svpSøknad = (SvangerskapspengesøknadDto) sf;
         var tilrettelegging = svpSøknad.tilrettelegging().get(0);
+        var virksomhet = (VirksomhetDto) tilrettelegging.arbeidsforhold();
         var result = mvc.perform(post(InnsendingController.INNSENDING_CONTROLLER_PATH)
                 .contentType(MediaType.APPLICATION_JSON)
                 .content(mapper.writeValueAsString(sf)
-                    .replace(tilrettelegging.arbeidsforhold().id(), "Ikke lovlig \u0085")
+                    .replace(virksomhet.id().value(), "Ikke lovlig \u0085")
                 ))
             .andExpect(status().isBadRequest())
             .andReturn();
@@ -122,7 +124,7 @@ class InnsendingControllerValidationTest {
         assertThat(result.getResolvedException()).isInstanceOf(MethodArgumentNotValidException.class);
         var error = (MethodArgumentNotValidException) result.getResolvedException();
         assertThat(error).isNotNull();
-        assertThat(error.getBindingResult().getFieldErrors()).hasSize(1);
+        assertThat(error.getBindingResult().getFieldErrors()).hasSize(2); // Feiler på både @Orgnmr og @Pattern
     }
 
 

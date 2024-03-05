@@ -5,6 +5,7 @@ import java.time.LocalDate;
 import jakarta.validation.Valid;
 import jakarta.validation.constraints.Max;
 import jakarta.validation.constraints.Min;
+import no.nav.foreldrepenger.selvbetjening.kontrakt.innsending.v2.dto.svangerskapspenger.arbeidsforhold.ArbeidsforholdDto;
 
 public record TilretteleggingDto(Type type,
                                  @Valid ArbeidsforholdDto arbeidsforhold,

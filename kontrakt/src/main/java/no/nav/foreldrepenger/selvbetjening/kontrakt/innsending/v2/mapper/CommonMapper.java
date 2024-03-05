@@ -4,7 +4,6 @@ import static no.nav.foreldrepenger.common.util.StreamUtil.safeStream;
 import static no.nav.foreldrepenger.selvbetjening.kontrakt.innsending.mapper.CommonMapper.tilVedleggsreferanse;
 
 import java.util.List;
-import java.util.stream.Stream;
 
 import no.nav.foreldrepenger.common.domain.felles.LukketPeriode;
 import no.nav.foreldrepenger.common.domain.felles.medlemskap.Utenlandsopphold;
@@ -21,7 +20,6 @@ import no.nav.foreldrepenger.selvbetjening.kontrakt.innsending.v2.dto.FødselDto
 import no.nav.foreldrepenger.selvbetjening.kontrakt.innsending.v2.dto.OmsorgsovertakelseDto;
 import no.nav.foreldrepenger.selvbetjening.kontrakt.innsending.v2.dto.SøknadDto;
 import no.nav.foreldrepenger.selvbetjening.kontrakt.innsending.v2.dto.TerminDto;
-import no.nav.foreldrepenger.selvbetjening.kontrakt.innsending.v2.dto.UtenlandsoppholdDto;
 import no.nav.foreldrepenger.selvbetjening.kontrakt.innsending.v2.dto.UtenlandsoppholdsperiodeDto;
 
 public final class CommonMapper {
@@ -30,15 +28,7 @@ public final class CommonMapper {
     }
 
     static Utenlandsopphold tilOppholdIUtlandet(SøknadDto s) {
-        if (s.utenlandsopphold() != null) {
-            var opphold = Stream.concat(
-                safeStream(s.utenlandsopphold().utenlandsoppholdSiste12Mnd()),
-                safeStream(s.utenlandsopphold().utenlandsoppholdNeste12Mnd())
-            ).toList();
-            return new Utenlandsopphold(tilUtenlandsoppholdsliste(opphold));
-        } else {
-            return new Utenlandsopphold(tilUtenlandsoppholds(s.oppholdIUtlandet()));
-        }
+        return new Utenlandsopphold(tilUtenlandsoppholds(s.utenlandsopphold()));
     }
 
     private static List<Utenlandsopphold.Opphold> tilUtenlandsoppholds(List<UtenlandsoppholdsperiodeDto> perioder) {
@@ -49,16 +39,6 @@ public final class CommonMapper {
 
     private static Utenlandsopphold.Opphold tilUtenlandsopphold(UtenlandsoppholdsperiodeDto oppholdsperiode) {
         return new Utenlandsopphold.Opphold(oppholdsperiode.landkode(), new LukketPeriode(oppholdsperiode.fom(), oppholdsperiode.tom()));
-    }
-
-    private static List<Utenlandsopphold.Opphold> tilUtenlandsoppholdsliste(List<UtenlandsoppholdDto.Periode> opphold) {
-        return safeStream(opphold)
-            .map(CommonMapper::tilUtenlandsopphold)
-            .toList();
-    }
-
-    private static Utenlandsopphold.Opphold tilUtenlandsopphold(UtenlandsoppholdDto.Periode o) {
-        return new Utenlandsopphold.Opphold(o.landkode(), new LukketPeriode(o.fom(), o.tom()));
     }
 
     static RelasjonTilBarn tilRelasjonTilBarn(BarnDto barn, List<VedleggDto> vedlegg) {
