@@ -32,6 +32,6 @@ public record ForeldrepengesøknadDto(LocalDate mottattdato,
                                      @Valid @VedlegglistestørrelseConstraint @Size(max = 100) List<@Valid VedleggDto> vedlegg) implements SøknadDto {
     public ForeldrepengesøknadDto {
         uttaksplan = Optional.ofNullable(uttaksplan).orElse(List.of());
-        vedlegg = Optional.ofNullable(vedlegg).map(ArrayList::new).orElse(new ArrayList<>());
+        vedlegg = Optional.ofNullable(vedlegg).orElse(List.of());
     }
 }
