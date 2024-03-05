@@ -6,7 +6,6 @@ import java.util.List;
 import no.nav.foreldrepenger.common.oppslag.dkif.Målform;
 import no.nav.foreldrepenger.selvbetjening.kontrakt.innsending.dto.VedleggDto;
 import no.nav.foreldrepenger.selvbetjening.kontrakt.innsending.v2.dto.BarnDto;
-import no.nav.foreldrepenger.selvbetjening.kontrakt.innsending.v2.dto.UtenlandsoppholdDto;
 import no.nav.foreldrepenger.selvbetjening.kontrakt.innsending.v2.dto.UtenlandsoppholdsperiodeDto;
 import no.nav.foreldrepenger.selvbetjening.kontrakt.innsending.v2.dto.engangsstønad.EngangsstønadDto;
 
@@ -15,8 +14,7 @@ public class EngangsstønadBuilder {
     private LocalDate mottattdato;
     private Målform språkkode;
     private BarnDto barn;
-    private UtenlandsoppholdDto utenlandsopphold;
-    private List<UtenlandsoppholdsperiodeDto> oppholdIUtlandet;
+    private List<UtenlandsoppholdsperiodeDto> utenlandsopphold;
     private List<VedleggDto> vedlegg;
 
 
@@ -35,12 +33,7 @@ public class EngangsstønadBuilder {
         return this;
     }
 
-    public EngangsstønadBuilder medOppholdIUtlandet(List<UtenlandsoppholdsperiodeDto> oppholdIUtlandet) {
-        this.oppholdIUtlandet = oppholdIUtlandet;
-        return this;
-    }
-
-    public EngangsstønadBuilder medUtenlandsopphold(UtenlandsoppholdDto utenlandsopphold) {
+    public EngangsstønadBuilder medUtenlandsopphold(List<UtenlandsoppholdsperiodeDto> utenlandsopphold) {
         this.utenlandsopphold = utenlandsopphold;
         return this;
     }
@@ -57,7 +50,6 @@ public class EngangsstønadBuilder {
             språkkode,
             barn,
             utenlandsopphold,
-            oppholdIUtlandet,
             vedlegg
         );
     }

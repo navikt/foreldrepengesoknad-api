@@ -28,9 +28,8 @@ import no.nav.foreldrepenger.selvbetjening.kontrakt.innsending.mapper.SøknadMap
 import no.nav.foreldrepenger.selvbetjening.kontrakt.innsending.v2.util.maler.ArbeidsforholdMaler;
 import no.nav.foreldrepenger.selvbetjening.kontrakt.innsending.v2.util.builder.BarnBuilder;
 import no.nav.foreldrepenger.selvbetjening.kontrakt.innsending.v2.util.builder.SvangerskapspengerBuilder;
-import no.nav.foreldrepenger.selvbetjening.kontrakt.innsending.v2.util.maler.OppholdIUtlandetMaler;
-import no.nav.foreldrepenger.selvbetjening.kontrakt.innsending.v2.util.maler.OpptjeningMaler;
 import no.nav.foreldrepenger.selvbetjening.kontrakt.innsending.v2.util.maler.UtenlandsoppholdMaler;
+import no.nav.foreldrepenger.selvbetjening.kontrakt.innsending.v2.util.maler.OpptjeningMaler;
 
 class SvangerskapspengerMappingKonsistensTest {
     private static final LocalDate NOW = LocalDate.now();
@@ -95,7 +94,7 @@ class SvangerskapspengerMappingKonsistensTest {
         var vedlegg3 = DokumentasjonUtil.vedlegg(DokumentasjonUtil.tilrettelegging(tilretteleggingerDto.get(2).arbeidsforhold()));
         var søknadDto = new SvangerskapspengerBuilder(tilretteleggingerDto)
             .medSpråkkode(Målform.EN)
-            .medOppholdIUtlandet(List.of(OppholdIUtlandetMaler.oppholdIUtlandetForrige12mnd()))
+            .medUtenlandsopphold(UtenlandsoppholdMaler.oppholdIUtlandetForrige12mnd())
             .medSelvstendigNæringsdrivendeInformasjon(List.of(OpptjeningMaler.egenNaeringOpptjening(Orgnummer.MAGIC_ORG.value())))
             .medBarn(BarnBuilder.termin(2, LocalDate.now().plusWeeks(2)).build())
             .medVedlegg(List.of(vedlegg1, vedlegg2, vedlegg3))

@@ -10,9 +10,7 @@ import no.nav.foreldrepenger.selvbetjening.kontrakt.innsending.v2.dto.svangerska
 
 public interface SøknadDto extends Innsending {
     BarnDto barn();
-    @Deprecated
-    UtenlandsoppholdDto utenlandsopphold();
-    List<UtenlandsoppholdsperiodeDto> oppholdIUtlandet();
+    List<UtenlandsoppholdsperiodeDto> utenlandsopphold();
     List<VedleggDto> vedlegg();
     default String navn() {
         if (this instanceof ForeldrepengesøknadDto) return "foreldrepenger";

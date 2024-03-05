@@ -9,7 +9,6 @@ import no.nav.foreldrepenger.selvbetjening.kontrakt.innsending.dto.FrilansInform
 import no.nav.foreldrepenger.selvbetjening.kontrakt.innsending.dto.NæringDto;
 import no.nav.foreldrepenger.selvbetjening.kontrakt.innsending.dto.VedleggDto;
 import no.nav.foreldrepenger.selvbetjening.kontrakt.innsending.v2.dto.BarnDto;
-import no.nav.foreldrepenger.selvbetjening.kontrakt.innsending.v2.dto.UtenlandsoppholdDto;
 import no.nav.foreldrepenger.selvbetjening.kontrakt.innsending.v2.dto.UtenlandsoppholdsperiodeDto;
 import no.nav.foreldrepenger.selvbetjening.kontrakt.innsending.v2.dto.svangerskapspenger.SvangerskapspengesøknadDto;
 import no.nav.foreldrepenger.selvbetjening.kontrakt.innsending.v2.dto.svangerskapspenger.TilretteleggingDto;
@@ -18,11 +17,10 @@ public class SvangerskapspengerBuilder {
     LocalDate mottattdato;
     Målform språkkode;
     BarnDto barn;
-    UtenlandsoppholdDto utenlandsopphold;
     FrilansInformasjonDto frilansInformasjon;
     List<NæringDto> selvstendigNæringsdrivendeInformasjon;
     List<AnnenInntektDto> andreInntekterSiste10Mnd;
-    List<UtenlandsoppholdsperiodeDto> oppholdIUtlandet;
+    List<UtenlandsoppholdsperiodeDto> utenlandsopphold;
     List<TilretteleggingDto> tilretteleggingsbehov;
     private List<VedleggDto> vedlegg;
 
@@ -60,12 +58,7 @@ public class SvangerskapspengerBuilder {
         return this;
     }
 
-    public SvangerskapspengerBuilder medOppholdIUtlandet(List<UtenlandsoppholdsperiodeDto> oppholdIUtlandet) {
-        this.oppholdIUtlandet = oppholdIUtlandet;
-        return this;
-    }
-
-    public SvangerskapspengerBuilder medUtenlandsopphold(UtenlandsoppholdDto utenlandsopphold) {
+    public SvangerskapspengerBuilder medUtenlandsopphold(List<UtenlandsoppholdsperiodeDto> utenlandsopphold) {
         this.utenlandsopphold = utenlandsopphold;
         return this;
     }
@@ -81,11 +74,10 @@ public class SvangerskapspengerBuilder {
             mottattdato,
             språkkode,
             barn,
-            utenlandsopphold,
             frilansInformasjon,
             selvstendigNæringsdrivendeInformasjon,
             andreInntekterSiste10Mnd,
-            oppholdIUtlandet,
+            utenlandsopphold,
             tilretteleggingsbehov,
             vedlegg
         );

@@ -1,18 +1,18 @@
 package no.nav.foreldrepenger.selvbetjening.kontrakt.innsending.v2.dto.svangerskapspenger.arbeidsforhold;
 
 
-import com.fasterxml.jackson.annotation.JsonSubTypes;
-import com.fasterxml.jackson.annotation.JsonTypeInfo;
-
 import static com.fasterxml.jackson.annotation.JsonTypeInfo.As.PROPERTY;
 import static com.fasterxml.jackson.annotation.JsonTypeInfo.Id.NAME;
 
+import com.fasterxml.jackson.annotation.JsonSubTypes;
+import com.fasterxml.jackson.annotation.JsonTypeInfo;
+
 @JsonTypeInfo(use = NAME, include = PROPERTY, property = "type")
 @JsonSubTypes({
-    @JsonSubTypes.Type(value = VirksomhetDto.class, name = "virksomhet"),
-    @JsonSubTypes.Type(value = PrivatArbeidsgiverDto.class, name = "privat"),
-    @JsonSubTypes.Type(value = SelvstendigNæringsdrivendeDto.class, name = "selvstendig"),
-    @JsonSubTypes.Type(value = FrilanserDto.class, name = "frilanser")
+    @JsonSubTypes.Type(value = VirksomhetDto.class, names = {"virksomhet", "VIRKSOMHET"}),
+    @JsonSubTypes.Type(value = PrivatArbeidsgiverDto.class, names = {"privat", "PRIVAT"}),
+    @JsonSubTypes.Type(value = SelvstendigNæringsdrivendeDto.class, names = {"selvstendig", "SELVSTENDIG"}),
+    @JsonSubTypes.Type(value = FrilanserDto.class, names = {"frilanser", "FRILANSER"})
 })
 public interface ArbeidsforholdDto {
 }
