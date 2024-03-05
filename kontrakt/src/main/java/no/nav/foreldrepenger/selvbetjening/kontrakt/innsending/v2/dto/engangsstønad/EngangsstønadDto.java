@@ -19,9 +19,9 @@ import no.nav.foreldrepenger.selvbetjening.kontrakt.innsending.v2.dto.Utenlandso
 public record EngangsstønadDto(LocalDate mottattdato,
                                @NotNull Målform språkkode,
                                @Valid @NotNull BarnDto barn,
-                               @Valid UtenlandsoppholdDto utenlandsopphold,
+                               @Deprecated @Valid UtenlandsoppholdDto utenlandsopphold,
                                @Valid @Size(max = 40) List<@Valid @NotNull UtenlandsoppholdsperiodeDto> oppholdIUtlandet,
-                               @Valid @VedlegglistestørrelseConstraint @Size(max = 100) List<@Valid VedleggDto> vedlegg) implements SøknadDto {
+                               @Valid @VedlegglistestørrelseConstraint @Size(max = 100) List<@Valid @NotNull VedleggDto> vedlegg) implements SøknadDto {
 
     public EngangsstønadDto {
         vedlegg = Optional.ofNullable(vedlegg).map(ArrayList::new).orElse(new ArrayList<>());

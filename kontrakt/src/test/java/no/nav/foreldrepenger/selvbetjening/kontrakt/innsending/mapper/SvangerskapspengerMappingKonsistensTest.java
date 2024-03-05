@@ -38,7 +38,7 @@ class SvangerskapspengerMappingKonsistensTest {
     void svangerskapspengerTilretteleggingKonsistensSjekk() {
         var tilretteleggingerDto = List.of(
             hel(NOW.minusMonths(1), NOW.minusMonths(1), ArbeidsforholdMaler.selvstendigNæringsdrivende()).build(),
-            delvis(NOW, NOW, ArbeidsforholdMaler.privatArbeidsgiver(DUMMY_FNR.value()), 55.0).build(),
+            delvis(NOW, NOW, ArbeidsforholdMaler.privatArbeidsgiver(DUMMY_FNR), 55.0).build(),
             ingen(NOW.plusWeeks(1), NOW.plusWeeks(1), ArbeidsforholdMaler.virksomhet(Orgnummer.MAGIC_ORG)).build()
         );
         var søknadDto = new SvangerskapspengerBuilder(tilretteleggingerDto)
@@ -88,7 +88,7 @@ class SvangerskapspengerMappingKonsistensTest {
     void svangerskapspengerVedleggReferanseMappingKonsistens() {
         var tilretteleggingerDto = List.of(
             hel(NOW.minusMonths(1), NOW.minusMonths(1), ArbeidsforholdMaler.selvstendigNæringsdrivende()).build(),
-            delvis(NOW, NOW, ArbeidsforholdMaler.privatArbeidsgiver(DUMMY_FNR.value()), 55.0).build(),
+            delvis(NOW, NOW, ArbeidsforholdMaler.privatArbeidsgiver(DUMMY_FNR), 55.0).build(),
             ingen(NOW.plusWeeks(1), NOW.plusWeeks(1), ArbeidsforholdMaler.virksomhet(Orgnummer.MAGIC_ORG)).build()
         );
         var vedlegg1 = DokumentasjonUtil.vedlegg(DokumentasjonUtil.tilrettelegging(tilretteleggingerDto.get(0).arbeidsforhold()));

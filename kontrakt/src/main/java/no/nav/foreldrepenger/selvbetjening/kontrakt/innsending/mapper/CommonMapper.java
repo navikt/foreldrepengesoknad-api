@@ -139,7 +139,7 @@ public final class CommonMapper {
         );
     }
 
-    private static List<AnnenOpptjening> tilAnnenOpptjening(List<AnnenInntektDto> andreInntekterSiste10Mnd, List<VedleggDto> vedlegg) {
+    public static List<AnnenOpptjening> tilAnnenOpptjening(List<AnnenInntektDto> andreInntekterSiste10Mnd, List<VedleggDto> vedlegg) {
         return andreInntekterSiste10Mnd.stream()
             .filter(annenInntekt -> !annenInntekt.type().equals("JOBB_I_UTLANDET"))
             .map(annenInntekt -> tilAnnenOpptjening(annenInntekt, vedlegg))
@@ -153,7 +153,7 @@ public final class CommonMapper {
             tilVedleggsreferanse(DokumentasjonReferanseMapper.dokumentasjonSomDokumentererOpptjeningsperiode(vedlegg, annenInntekt.tidsperiode())));
     }
 
-    private static List<UtenlandskArbeidsforhold> tilUtenlandsArbeidsforhold(List<AnnenInntektDto> andreInntekterSiste10Mnd, List<VedleggDto> vedlegg) {
+    public static List<UtenlandskArbeidsforhold> tilUtenlandsArbeidsforhold(List<AnnenInntektDto> andreInntekterSiste10Mnd, List<VedleggDto> vedlegg) {
         return andreInntekterSiste10Mnd.stream()
             .filter(annenInntekt -> annenInntekt.type().equals("JOBB_I_UTLANDET"))
             .map(annenInntekt -> tilUtenlandsArbeidsforhold(annenInntekt, vedlegg))
@@ -170,7 +170,7 @@ public final class CommonMapper {
         );
     }
 
-    private static List<EgenNæring> tilEgenNæring(List<NæringDto> selvstendigNæringsdrivendeInformasjon, List<VedleggDto> vedlegg) {
+    public static List<EgenNæring> tilEgenNæring(List<NæringDto> selvstendigNæringsdrivendeInformasjon, List<VedleggDto> vedlegg) {
         return selvstendigNæringsdrivendeInformasjon.stream()
             .map(selvstendig -> tilEgenNæring(selvstendig, vedlegg))
             .toList();
@@ -230,7 +230,7 @@ public final class CommonMapper {
         return new Regnskapsfører(person.navn(), person.telefonnummer());
     }
 
-    private static Frilans tilFrilans(FrilansInformasjonDto frilansInformasjon) {
+    public static Frilans tilFrilans(FrilansInformasjonDto frilansInformasjon) {
         if (frilansInformasjon == null) {
             return null;
         }

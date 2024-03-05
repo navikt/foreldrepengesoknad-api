@@ -45,8 +45,6 @@ import no.nav.foreldrepenger.selvbetjening.kontrakt.innsending.util.builder.Svan
 import no.nav.foreldrepenger.selvbetjening.kontrakt.innsending.util.builder.SøkerBuilder;
 import no.nav.foreldrepenger.selvbetjening.kontrakt.innsending.util.maler.ArbeidsforholdMaler;
 import no.nav.foreldrepenger.selvbetjening.kontrakt.innsending.util.maler.OpptjeningMaler;
-import no.nav.foreldrepenger.selvbetjening.kontrakt.innsending.util.maler.UtenlandsoppholdMaler;
-import no.nav.foreldrepenger.selvbetjening.kontrakt.innsending.v2.dto.engangsstønad.EngangsstønadDto;
 
 /**
  * Skal verifisere at seralisering => deseralisering av objektet ikke mister noe data på veien.
@@ -172,7 +170,7 @@ class SøknadDtoJacksonRountripTest {
     void svangerskapspengerRountripTest() throws IOException {
         var tilrettelegginger = List.of(
             hel(NOW.minusMonths(1), NOW.minusMonths(1), ArbeidsforholdMaler.selvstendigNæringsdrivende()).build(),
-            delvis(NOW, NOW, ArbeidsforholdMaler.privatArbeidsgiver(DUMMY_FNR.value()), 55.0).build(),
+            delvis(NOW, NOW, ArbeidsforholdMaler.privatArbeidsgiver(DUMMY_FNR), 55.0).build(),
             ingen(NOW.plusWeeks(1), NOW.plusWeeks(1), ArbeidsforholdMaler.virksomhet(Orgnummer.MAGIC_ORG)).build()
         );
         var søknad = new SvangerskapspengerBuilder(tilrettelegginger)

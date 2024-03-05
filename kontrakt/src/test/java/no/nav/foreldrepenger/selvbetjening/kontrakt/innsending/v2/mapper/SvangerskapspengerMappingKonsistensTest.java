@@ -13,6 +13,7 @@ import org.junit.jupiter.api.Test;
 import no.nav.foreldrepenger.common.domain.BrukerRolle;
 import no.nav.foreldrepenger.common.domain.Fødselsnummer;
 import no.nav.foreldrepenger.common.domain.Orgnummer;
+import no.nav.foreldrepenger.common.domain.felles.VedleggReferanse;
 import no.nav.foreldrepenger.common.domain.svangerskapspenger.Svangerskapspenger;
 import no.nav.foreldrepenger.common.domain.svangerskapspenger.tilrettelegging.DelvisTilrettelegging;
 import no.nav.foreldrepenger.common.domain.svangerskapspenger.tilrettelegging.HelTilrettelegging;
@@ -22,11 +23,12 @@ import no.nav.foreldrepenger.common.domain.svangerskapspenger.tilrettelegging.ar
 import no.nav.foreldrepenger.common.domain.svangerskapspenger.tilrettelegging.arbeidsforhold.SelvstendigNæringsdrivende;
 import no.nav.foreldrepenger.common.domain.svangerskapspenger.tilrettelegging.arbeidsforhold.Virksomhet;
 import no.nav.foreldrepenger.common.oppslag.dkif.Målform;
+import no.nav.foreldrepenger.selvbetjening.kontrakt.innsending.mapper.DokumentasjonUtil;
 import no.nav.foreldrepenger.selvbetjening.kontrakt.innsending.mapper.SøknadMapper;
+import no.nav.foreldrepenger.selvbetjening.kontrakt.innsending.util.maler.ArbeidsforholdMaler;
 import no.nav.foreldrepenger.selvbetjening.kontrakt.innsending.v2.util.builder.BarnBuilder;
 import no.nav.foreldrepenger.selvbetjening.kontrakt.innsending.v2.util.builder.SvangerskapspengerBuilder;
-import no.nav.foreldrepenger.selvbetjening.kontrakt.innsending.v2.util.builder.SøkerBuilder;
-import no.nav.foreldrepenger.selvbetjening.kontrakt.innsending.v2.util.maler.ArbeidsforholdMaler;
+import no.nav.foreldrepenger.selvbetjening.kontrakt.innsending.v2.util.maler.OppholdIUtlandetMaler;
 import no.nav.foreldrepenger.selvbetjening.kontrakt.innsending.v2.util.maler.OpptjeningMaler;
 import no.nav.foreldrepenger.selvbetjening.kontrakt.innsending.v2.util.maler.UtenlandsoppholdMaler;
 
@@ -43,10 +45,8 @@ class SvangerskapspengerMappingKonsistensTest {
         );
         var søknadDto = new SvangerskapspengerBuilder(tilretteleggingerDto)
             .medUtenlandsopphold(UtenlandsoppholdMaler.oppholdIUtlandetForrige12mnd())
-            .medSøker(new SøkerBuilder(BrukerRolle.MOR)
-                .medSpråkkode(Målform.EN)
-                .medSelvstendigNæringsdrivendeInformasjon(List.of(OpptjeningMaler.egenNaeringOpptjening(Orgnummer.MAGIC_ORG.value())))
-                .build())
+            .medSpråkkode(Målform.EN)
+            .medSelvstendigNæringsdrivendeInformasjon(List.of(OpptjeningMaler.egenNaeringOpptjening(Orgnummer.MAGIC_ORG.value())))
             .medBarn(BarnBuilder.termin(2, LocalDate.now().plusWeeks(2)).build())
             .build();
 
@@ -54,8 +54,8 @@ class SvangerskapspengerMappingKonsistensTest {
         var mappedSøknad = SøknadMapper.tilSøknad(søknadDto, NOW);
 
         // Assert
-        assertThat(mappedSøknad.getSøker().søknadsRolle()).isEqualTo(søknadDto.søker().rolle());
-        assertThat(mappedSøknad.getSøker().målform()).isEqualTo(søknadDto.søker().språkkode());
+        assertThat(mappedSøknad.getSøker().søknadsRolle()).isEqualTo(BrukerRolle.MOR);
+        assertThat(mappedSøknad.getSøker().målform()).isEqualTo(søknadDto.språkkode());
         assertThat(mappedSøknad.getMottattdato()).isEqualTo(søknadDto.mottattdato());
         assertThat(mappedSøknad.getTilleggsopplysninger()).isNull();
 
@@ -83,36 +83,33 @@ class SvangerskapspengerMappingKonsistensTest {
             );
     }
 
-    // TODO: Gjør når modellen er gjennomgått med Tor
-//    @Test
-//    void svangerskapspengerVedleggReferanseMappingKonsistens() {
-//        var tilretteleggingerDto = List.of(
-//            hel(NOW.minusMonths(1), NOW.minusMonths(1), ArbeidsforholdMaler.selvstendigNæringsdrivende()).build(),
-//            delvis(NOW, NOW, ArbeidsforholdMaler.privatArbeidsgiver(DUMMY_FNR), 55.0).build(),
-//            ingen(NOW.plusWeeks(1), NOW.plusWeeks(1), ArbeidsforholdMaler.virksomhet(Orgnummer.MAGIC_ORG)).build()
-//        );
-//        var vedlegg1 = DokumentasjonUtil.vedlegg(DokumentasjonUtil.tilrettelegging(tilretteleggingerDto.get(0).arbeidsforhold()));
-//        var vedlegg2 = DokumentasjonUtil.vedlegg(DokumentasjonUtil.tilrettelegging(tilretteleggingerDto.get(1).arbeidsforhold()));
-//        var vedlegg3 = DokumentasjonUtil.vedlegg(DokumentasjonUtil.tilrettelegging(tilretteleggingerDto.get(2).arbeidsforhold()));
-//        var søknadDto = new SvangerskapspengerBuilder(tilretteleggingerDto)
-//            .medMedlemsskap(medlemskapUtlandetForrige12mnd())
-//            .medSøker(new SøkerBuilder(BrukerRolle.MOR)
-//                .medSpråkkode(Målform.EN)
-//                .medSelvstendigNæringsdrivendeInformasjon(List.of(OpptjeningMaler.egenNaeringOpptjening(Orgnummer.MAGIC_ORG.value())))
-//                .build())
-//            .medBarn(BarnBuilder.termin(2, LocalDate.now().plusWeeks(2)).build())
-//            .medVedlegg(List.of(vedlegg1, vedlegg2, vedlegg3))
-//            .build();
-//
-//        var mappedSøknad = SøknadMapper.tilSøknad(søknadDto, NOW);
-//        var svp = (Svangerskapspenger) mappedSøknad.getYtelse();
-//
-//        assertThat(mappedSøknad.getVedlegg()).hasSameSizeAs(søknadDto.vedlegg());
-//        assertThat(svp.tilrettelegging().get(0).getVedlegg()).extracting(VedleggReferanse::referanse)
-//            .containsExactly(vedlegg1.getReferanse().verdi());
-//        assertThat(svp.tilrettelegging().get(1).getVedlegg()).extracting(VedleggReferanse::referanse)
-//            .containsExactly(vedlegg2.getReferanse().verdi());
-//        assertThat(svp.tilrettelegging().get(2).getVedlegg()).extracting(VedleggReferanse::referanse)
-//            .containsExactly(vedlegg3.getReferanse().verdi());
-//    }
+    @Test
+    void svangerskapspengerVedleggReferanseMappingKonsistens() {
+        var tilretteleggingerDto = List.of(
+            hel(NOW.minusMonths(1), NOW.minusMonths(1), ArbeidsforholdMaler.selvstendigNæringsdrivende()).build(),
+            delvis(NOW, NOW, ArbeidsforholdMaler.privatArbeidsgiver(DUMMY_FNR), 55.0).build(),
+            ingen(NOW.plusWeeks(1), NOW.plusWeeks(1), ArbeidsforholdMaler.virksomhet(Orgnummer.MAGIC_ORG)).build()
+        );
+        var vedlegg1 = DokumentasjonUtil.vedlegg(DokumentasjonUtil.tilrettelegging(tilretteleggingerDto.get(0).arbeidsforhold()));
+        var vedlegg2 = DokumentasjonUtil.vedlegg(DokumentasjonUtil.tilrettelegging(tilretteleggingerDto.get(1).arbeidsforhold()));
+        var vedlegg3 = DokumentasjonUtil.vedlegg(DokumentasjonUtil.tilrettelegging(tilretteleggingerDto.get(2).arbeidsforhold()));
+        var søknadDto = new SvangerskapspengerBuilder(tilretteleggingerDto)
+            .medSpråkkode(Målform.EN)
+            .medOppholdIUtlandet(List.of(OppholdIUtlandetMaler.oppholdIUtlandetForrige12mnd()))
+            .medSelvstendigNæringsdrivendeInformasjon(List.of(OpptjeningMaler.egenNaeringOpptjening(Orgnummer.MAGIC_ORG.value())))
+            .medBarn(BarnBuilder.termin(2, LocalDate.now().plusWeeks(2)).build())
+            .medVedlegg(List.of(vedlegg1, vedlegg2, vedlegg3))
+            .build();
+
+        var mappedSøknad = SøknadMapper.tilSøknad(søknadDto, NOW);
+        var svp = (Svangerskapspenger) mappedSøknad.getYtelse();
+
+        assertThat(mappedSøknad.getVedlegg()).hasSameSizeAs(søknadDto.vedlegg());
+        assertThat(svp.tilrettelegging().get(0).getVedlegg()).extracting(VedleggReferanse::referanse)
+            .containsExactly(vedlegg1.referanse().verdi());
+        assertThat(svp.tilrettelegging().get(1).getVedlegg()).extracting(VedleggReferanse::referanse)
+            .containsExactly(vedlegg2.referanse().verdi());
+        assertThat(svp.tilrettelegging().get(2).getVedlegg()).extracting(VedleggReferanse::referanse)
+            .containsExactly(vedlegg3.referanse().verdi());
+    }
 }

@@ -6,6 +6,9 @@ import static no.nav.foreldrepenger.selvbetjening.kontrakt.innsending.mapper.Com
 import java.util.List;
 import java.util.stream.Stream;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
 import no.nav.foreldrepenger.common.domain.felles.LukketPeriode;
 import no.nav.foreldrepenger.common.domain.felles.medlemskap.Utenlandsopphold;
 import no.nav.foreldrepenger.common.domain.felles.relasjontilbarn.Adopsjon;
@@ -26,11 +29,14 @@ import no.nav.foreldrepenger.selvbetjening.kontrakt.innsending.v2.dto.Utenlandso
 
 public final class CommonMapper {
 
+    private static final Logger LOG = LoggerFactory.getLogger(CommonMapper.class);
+
     private CommonMapper() {
     }
 
     static Utenlandsopphold tilOppholdIUtlandet(SøknadDto s) {
         if (s.utenlandsopphold() != null) {
+            LOG.info("Mottok utenlandsopphold på gammelt format på {}", s.navn());
             var opphold = Stream.concat(
                 safeStream(s.utenlandsopphold().utenlandsoppholdSiste12Mnd()),
                 safeStream(s.utenlandsopphold().utenlandsoppholdNeste12Mnd())

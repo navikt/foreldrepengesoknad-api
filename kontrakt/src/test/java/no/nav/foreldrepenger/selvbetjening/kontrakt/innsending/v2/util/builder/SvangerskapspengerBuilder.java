@@ -3,7 +3,10 @@ package no.nav.foreldrepenger.selvbetjening.kontrakt.innsending.v2.util.builder;
 import java.time.LocalDate;
 import java.util.List;
 
-import no.nav.foreldrepenger.selvbetjening.kontrakt.innsending.dto.SøkerDto;
+import no.nav.foreldrepenger.common.oppslag.dkif.Målform;
+import no.nav.foreldrepenger.selvbetjening.kontrakt.innsending.dto.AnnenInntektDto;
+import no.nav.foreldrepenger.selvbetjening.kontrakt.innsending.dto.FrilansInformasjonDto;
+import no.nav.foreldrepenger.selvbetjening.kontrakt.innsending.dto.NæringDto;
 import no.nav.foreldrepenger.selvbetjening.kontrakt.innsending.dto.VedleggDto;
 import no.nav.foreldrepenger.selvbetjening.kontrakt.innsending.v2.dto.BarnDto;
 import no.nav.foreldrepenger.selvbetjening.kontrakt.innsending.v2.dto.UtenlandsoppholdDto;
@@ -12,20 +15,28 @@ import no.nav.foreldrepenger.selvbetjening.kontrakt.innsending.v2.dto.svangerska
 import no.nav.foreldrepenger.selvbetjening.kontrakt.innsending.v2.dto.svangerskapspenger.TilretteleggingDto;
 
 public class SvangerskapspengerBuilder {
-    private LocalDate mottattdato;
-    private BarnDto barn;
-    private SøkerDto søker;
-    private UtenlandsoppholdDto utenlandsopphold;
-    private List<UtenlandsoppholdsperiodeDto> oppholdIUtlandet;
-    private final List<TilretteleggingDto> tilrettelegging;
+    LocalDate mottattdato;
+    Målform språkkode;
+    BarnDto barn;
+    UtenlandsoppholdDto utenlandsopphold;
+    FrilansInformasjonDto frilansInformasjon;
+    List<NæringDto> selvstendigNæringsdrivendeInformasjon;
+    List<AnnenInntektDto> andreInntekterSiste10Mnd;
+    List<UtenlandsoppholdsperiodeDto> oppholdIUtlandet;
+    List<TilretteleggingDto> tilretteleggingsbehov;
     private List<VedleggDto> vedlegg;
 
-    public SvangerskapspengerBuilder(List<TilretteleggingDto> tilrettelegging) {
-        this.tilrettelegging = tilrettelegging;
+    public SvangerskapspengerBuilder(List<TilretteleggingDto> tilretteleggingsbehov) {
+        this.tilretteleggingsbehov = tilretteleggingsbehov;
     }
 
     public SvangerskapspengerBuilder medMottattdato(LocalDate mottattdato) {
         this.mottattdato = mottattdato;
+        return this;
+    }
+
+    public SvangerskapspengerBuilder medSpråkkode(Målform språkkode) {
+        this.språkkode = språkkode;
         return this;
     }
 
@@ -34,8 +45,18 @@ public class SvangerskapspengerBuilder {
         return this;
     }
 
-    public SvangerskapspengerBuilder medSøker(SøkerDto søker) {
-        this.søker = søker;
+    public SvangerskapspengerBuilder medFrilansInformasjon(FrilansInformasjonDto frilansInformasjon) {
+        this.frilansInformasjon = frilansInformasjon;
+        return this;
+    }
+
+    public SvangerskapspengerBuilder medSelvstendigNæringsdrivendeInformasjon(List<NæringDto> selvstendigNæringsdrivendeInformasjon) {
+        this.selvstendigNæringsdrivendeInformasjon = selvstendigNæringsdrivendeInformasjon;
+        return this;
+    }
+
+    public SvangerskapspengerBuilder medAndreInntekterSiste10Mnd(List<AnnenInntektDto> andreInntekterSiste10Mnd) {
+        this.andreInntekterSiste10Mnd = andreInntekterSiste10Mnd;
         return this;
     }
 
@@ -58,11 +79,14 @@ public class SvangerskapspengerBuilder {
         if (mottattdato == null) mottattdato = LocalDate.now();
         return new SvangerskapspengesøknadDto(
             mottattdato,
+            språkkode,
             barn,
-            søker,
             utenlandsopphold,
+            frilansInformasjon,
+            selvstendigNæringsdrivendeInformasjon,
+            andreInntekterSiste10Mnd,
             oppholdIUtlandet,
-            tilrettelegging,
+            tilretteleggingsbehov,
             vedlegg
         );
     }
