@@ -20,6 +20,10 @@ spec:
   gcp:
     buckets:
       - name: {{tmpbucket}}
+  observability:
+    autoInstrumentation:
+      enabled: true
+      runtime: java
   accessPolicy:
     outbound:
       rules:
