@@ -124,7 +124,7 @@ class InnsendingControllerValidationTest {
         assertThat(result.getResolvedException()).isInstanceOf(MethodArgumentNotValidException.class);
         var error = (MethodArgumentNotValidException) result.getResolvedException();
         assertThat(error).isNotNull();
-        assertThat(error.getBindingResult().getFieldErrors()).hasSize(2); // Feiler på både @Orgnmr og @Pattern
+        assertThat(error.getBindingResult().getFieldErrors()).hasSize(4); // Feiler på både @Orgnmr og @Pattern begge plassene hvor dette er definert
     }
 
 
