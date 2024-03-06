@@ -28,25 +28,21 @@
             "behovForTilretteleggingFom": "2021-12-01T00:00:00.000Z",
             "stillingsprosent": 50,
             "tilrettelagtArbeidFom": "2021-12-02T00:00:00.000Z",
-            "type": "delvis",
-            "vedlegg": [
-                "V8419199561626166422394411330007013948"
-            ]
+            "type": "delvis"
         }
     ],
     "type": "svangerskapspenger",
     "vedlegg": [
         {
-            "file": {},
-            "filename": "nav-logo-black.png",
-            "filesize": 1529,
-            "id": "V8419199561626166422394411330007013948",
-            "pending": false,
             "skjemanummer": "I000109",
-            "type": "tilrettelegging",
-            "uploaded": true,
-            "url": "https://foreldrepengesoknad-api.intern.dev.nav.no/rest/storage/vedlegg/733de40c-1c57-4cbc-933f-dcd43ba8548b",
-            "uuid": "733de40c-1c57-4cbc-933f-dcd43ba8548b"
+            "uuid": "733de40c-1c57-4cbc-933f-dcd43ba8548b",
+            "dokumenterer": {
+              "type": "tilrettelegging",
+              "arbeidsforhold": {
+                "id": "342352362",
+                "type": "virksomhet"
+              }
+            }
         }
     ]
 }

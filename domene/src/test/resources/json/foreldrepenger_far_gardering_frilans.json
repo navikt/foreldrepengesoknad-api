@@ -79,16 +79,17 @@
     ],
     "vedlegg": [
         {
-            "file": {},
-            "filename": "logo_mwg.png.png",
-            "filesize": 10130,
-            "id": "V3872008262447517342619654411304222",
-            "pending": false,
             "skjemanummer": "I000038",
-            "type": "morsaktivitetdokumentasjon",
-            "uploaded": true,
-            "url": "https://foreldrepengesoknad-api.intern.dev.nav.no/rest/storage/vedlegg/d26911e0-e5d7-454b-840b-34e9f17ed46e",
-            "uuid": "d26911e0-e5d7-454b-840b-34e9f17ed46e"
+            "uuid": "d26911e0-e5d7-454b-840b-34e9f17ed46e",
+            "dokumenterer": {
+              "type": "uttak",
+              "perioder": [
+                {
+                  "fom": "2023-01-18T00:00:00.000Z",
+                  "tom": "2023-03-14T00:00:00.000Z"
+                }
+              ]
+            }
         }
     ]
 }

@@ -1,7 +1,6 @@
 package no.nav.foreldrepenger.selvbetjening.kontrakt.innsending.mapper;
 
 import static no.nav.foreldrepenger.selvbetjening.kontrakt.innsending.mapper.EndringForeldrepengerMapper.tilEndringForeldrepengesøknadUtenVedleggInnhold;
-import static no.nav.foreldrepenger.selvbetjening.kontrakt.innsending.mapper.EngangsstønadMapper.tilEngangsstønadVedleggUtenInnhold;
 import static no.nav.foreldrepenger.selvbetjening.kontrakt.innsending.mapper.ForeldrepengerMapper.tilForeldrepengesøknadVedleggUtenInnhold;
 import static no.nav.foreldrepenger.selvbetjening.kontrakt.innsending.mapper.SvangerskapspengerMapper.tilSvangerskapspengesøknadVedleggUtenInnhold;
 import static no.nav.foreldrepenger.selvbetjening.kontrakt.innsending.v2.mapper.EndringForeldrepengerMapper.tilEndringForeldrepengesøknad;
@@ -42,9 +41,6 @@ public final class SøknadMapper {
     private static Søknad tilSøknad(no.nav.foreldrepenger.selvbetjening.kontrakt.innsending.dto.SøknadDto søknad, LocalDate mottattDato) {
         if (søknad instanceof no.nav.foreldrepenger.selvbetjening.kontrakt.innsending.dto.foreldrepenger.ForeldrepengesøknadDto f) {
             return tilForeldrepengesøknadVedleggUtenInnhold(f, mottattDato);
-        }
-        if (søknad instanceof no.nav.foreldrepenger.selvbetjening.kontrakt.innsending.dto.engangsstønad.EngangsstønadDto e) {
-            return tilEngangsstønadVedleggUtenInnhold(e, mottattDato);
         }
         if (søknad instanceof no.nav.foreldrepenger.selvbetjening.kontrakt.innsending.dto.svangerskapspenger.SvangerskapspengesøknadDto s) {
             return tilSvangerskapspengesøknadVedleggUtenInnhold(s, mottattDato);

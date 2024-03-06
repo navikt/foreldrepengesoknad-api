@@ -39,12 +39,11 @@ import no.nav.foreldrepenger.selvbetjening.kontrakt.innsending.dto.svangerskapsp
 import no.nav.foreldrepenger.selvbetjening.kontrakt.innsending.util.builder.AnnenforelderBuilder;
 import no.nav.foreldrepenger.selvbetjening.kontrakt.innsending.util.builder.BarnBuilder;
 import no.nav.foreldrepenger.selvbetjening.kontrakt.innsending.util.builder.EndringssøknadBuilder;
-import no.nav.foreldrepenger.selvbetjening.kontrakt.innsending.util.builder.EngangsstønadBuilder;
 import no.nav.foreldrepenger.selvbetjening.kontrakt.innsending.util.builder.ForeldrepengerBuilder;
 import no.nav.foreldrepenger.selvbetjening.kontrakt.innsending.util.builder.SvangerskapspengerBuilder;
 import no.nav.foreldrepenger.selvbetjening.kontrakt.innsending.util.builder.SøkerBuilder;
-import no.nav.foreldrepenger.selvbetjening.kontrakt.innsending.v2.util.maler.ArbeidsforholdMaler;
 import no.nav.foreldrepenger.selvbetjening.kontrakt.innsending.util.maler.OpptjeningMaler;
+import no.nav.foreldrepenger.selvbetjening.kontrakt.innsending.v2.util.maler.ArbeidsforholdMaler;
 
 /**
  * Skal verifisere at seralisering => deseralisering av objektet ikke mister noe data på veien.
@@ -182,17 +181,6 @@ class SøknadDtoJacksonRountripTest {
             .build();
 
         assertThat(søknad).isInstanceOf(SvangerskapspengesøknadDto.class);
-        test(søknad);
-    }
-
-    @Test
-    void engangsstønadRountripTest() throws IOException {
-        var søknad = new EngangsstønadBuilder().medSøker(new SøkerBuilder(BrukerRolle.MOR).build())
-            .medMedlemsskap(medlemskapUtlandetForrige12mnd())
-            .medBarn(BarnBuilder.fødsel(1, NOW).build())
-            .build();
-
-        assertThat(søknad).isInstanceOf(no.nav.foreldrepenger.selvbetjening.kontrakt.innsending.dto.engangsstønad.EngangsstønadDto.class);
         test(søknad);
     }
 
