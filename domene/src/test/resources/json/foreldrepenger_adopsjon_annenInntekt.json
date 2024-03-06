@@ -15,9 +15,6 @@
         "fødselsdatoer": [
             "2015-12-08T00:00:00.000Z",
             "2017-12-06T00:00:00.000Z"
-        ],
-        "omsorgsovertakelse": [
-            "V2898513808905600871912527163003030700"
         ]
     },
     "dekningsgrad": "100",
@@ -39,10 +36,7 @@
                     "fom": "2021-06-17T00:00:00.000Z",
                     "tom": "2021-10-06T00:00:00.000Z"
                 },
-                "type": "VENTELØNN_VARTPENGER",
-                "vedlegg": [
-                    "V916003341575408784272146025402319232"
-                ]
+                "type": "VENTELØNN_VARTPENGER"
             }
         ],
         "erAleneOmOmsorg": false,
@@ -81,28 +75,24 @@
     ],
     "vedlegg": [
         {
-            "file": {},
-            "filename": "nav-logo-black.png",
-            "filesize": 1529,
-            "id": "V916003341575408784272146025402319232",
-            "pending": false,
             "skjemanummer": "I000044",
-            "type": "anneninntektDokumentasjon",
-            "uploaded": true,
-            "url": "https://foreldrepengesoknad-api.intern.dev.nav.no/rest/storage/vedlegg/d8bad0c1-f281-4a0b-a352-e61de4cbac33",
-            "uuid": "d8bad0c1-f281-4a0b-a352-e61de4cbac33"
+            "uuid": "d8bad0c1-f281-4a0b-a352-e61de4cbac33",
+            "dokumenterer": {
+              "type": "opptjening",
+              "perioder": [
+                {
+                  "fom": "2021-06-17T00:00:00.000Z",
+                  "tom": "2021-10-06T00:00:00.000Z"
+                }
+              ]
+            }
         },
         {
-            "file": {},
-            "filename": "logo_mwg.png.png",
-            "filesize": 10130,
-            "id": "V2898513808905600871912527163003030700",
-            "pending": false,
             "skjemanummer": "I000042",
-            "type": "omsorgsovertakelse",
-            "uploaded": true,
-            "url": "https://foreldrepengesoknad-api.intern.dev.nav.no/rest/storage/vedlegg/7005c937-8114-4af4-b19c-18143db92025",
-            "uuid": "7005c937-8114-4af4-b19c-18143db92025"
+            "uuid": "7005c937-8114-4af4-b19c-18143db92025",
+          "dokumenterer": {
+            "type": "barn"
+          }
         }
     ]
 }

@@ -3,13 +3,7 @@
     "type": "foreldrepenger",
     "vedlegg": [
         {
-            "file": {},
-            "filename": "logo_mwg.png.png",
-            "filesize": 10130,
-            "id": "V090740687265315217194125674862219730",
-            "pending": false,
             "skjemanummer": "I000044",
-            "url": "https://foreldrepengesoknad-api.intern.dev.nav.no/rest/storage/vedlegg/b9974360-6c07-4b9d-acac-14f0f417d200",
             "uuid": "b9974360-6c07-4b9d-acac-14f0f417d200"
         }
     ]

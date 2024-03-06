@@ -24,11 +24,11 @@ import no.nav.foreldrepenger.selvbetjening.kontrakt.innsending.dto.Innsending;
 import no.nav.foreldrepenger.selvbetjening.kontrakt.innsending.dto.VedleggDto;
 import no.nav.foreldrepenger.selvbetjening.kontrakt.innsending.dto.VedleggReferanse;
 import no.nav.foreldrepenger.selvbetjening.kontrakt.innsending.dto.endringssøknad.EndringssøknadForeldrepengerDto;
-import no.nav.foreldrepenger.selvbetjening.kontrakt.innsending.dto.engangsstønad.EngangsstønadDto;
 import no.nav.foreldrepenger.selvbetjening.kontrakt.innsending.dto.ettersendelse.EttersendelseDto;
 import no.nav.foreldrepenger.selvbetjening.kontrakt.innsending.dto.ettersendelse.TilbakebetalingUttalelseDto;
 import no.nav.foreldrepenger.selvbetjening.kontrakt.innsending.dto.foreldrepenger.ForeldrepengesøknadDto;
 import no.nav.foreldrepenger.selvbetjening.kontrakt.innsending.dto.svangerskapspenger.SvangerskapspengesøknadDto;
+import no.nav.foreldrepenger.selvbetjening.kontrakt.innsending.v2.dto.engangsstønad.EngangsstønadDto;
 import no.nav.foreldrepenger.selvbetjening.mellomlagring.KryptertMellomlagring;
 import no.nav.foreldrepenger.selvbetjening.mellomlagring.Ytelse;
 
@@ -68,17 +68,21 @@ public class InnsendingTjeneste implements RetryAware {
         var start = Instant.now();
         var vedleggsinnhold = hentMellomlagredeVedlegg(ettersendelse);
         if (ettersendelse.erTilbakebetalingUttalelse()) {
-            LOG.info("Konverterer tekst til vedleggs-pdf {}", ettersendelse.brukerTekst().dokumentType());
-            var uttalelse = uttalelseFra(ettersendelse);
-            var uttalelseVedlegg = vedleggFra(uttalelse);
-            ettersendelse.vedlegg().add(uttalelseVedlegg);
-            vedleggsinnhold.put(uttalelseVedlegg.referanse(), pdfGenerator.generate(uttalelse));
+            genererPDFForUttalelseOmTilbakekrevingOgLeggTilIVedlegg(ettersendelse, vedleggsinnhold);
         }
         var kvittering = connection.ettersend(ettersendelse, vedleggsinnhold);
         var finish = Instant.now();
         var ms = Duration.between(start, finish).toMillis();
         LOG.info(RETURNERER_KVITTERING, kvittering, ms);
         return kvittering;
+    }
+
+    private void genererPDFForUttalelseOmTilbakekrevingOgLeggTilIVedlegg(EttersendelseDto ettersendelse, Map<VedleggReferanse, byte[]> vedleggsinnhold) {
+        LOG.info("Konverterer tekst til vedleggs-pdf {}", ettersendelse.brukerTekst().dokumentType());
+        var uttalelse = uttalelseFra(ettersendelse);
+        var uttalelseVedlegg = vedleggFra(uttalelse);
+        ettersendelse.vedlegg().add(uttalelseVedlegg);
+        vedleggsinnhold.put(uttalelseVedlegg.referanse(), pdfGenerator.generate(uttalelse));
     }
 
     private static VedleggDto vedleggFra(TilbakebetalingUttalelseDto u) {
@@ -129,7 +133,7 @@ public class InnsendingTjeneste implements RetryAware {
         if (innsending instanceof ForeldrepengesøknadDto || innsending instanceof no.nav.foreldrepenger.selvbetjening.kontrakt.innsending.v2.dto.foreldrepenger.ForeldrepengesøknadDto) {
             return Ytelse.FORELDREPENGER;
         }
-        if (innsending instanceof EngangsstønadDto || innsending instanceof no.nav.foreldrepenger.selvbetjening.kontrakt.innsending.v2.dto.engangsstønad.EngangsstønadDto) {
+        if (innsending instanceof EngangsstønadDto) {
             return Ytelse.ENGANGSSTONAD;
         }
         if (innsending instanceof SvangerskapspengesøknadDto || innsending instanceof no.nav.foreldrepenger.selvbetjening.kontrakt.innsending.v2.dto.svangerskapspenger.SvangerskapspengesøknadDto) {
