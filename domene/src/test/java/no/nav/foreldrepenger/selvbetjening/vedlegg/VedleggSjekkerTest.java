@@ -13,7 +13,6 @@ import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.core.io.ClassPathResource;
-import org.springframework.http.MediaType;
 import org.springframework.test.context.ContextConfiguration;
 import org.springframework.util.unit.DataSize;
 
@@ -85,13 +84,13 @@ public class VedleggSjekkerTest {
             fraResource("pdf/nav-logo.png"),
             fraResource("pdf/junit-test.pdf"));
         støttedeFormaterListe.stream()
-             .map(bytes -> Attachment.of("filnavn", bytes, MediaType.IMAGE_JPEG))
+             .map(Attachment::of)
              .forEach(attachment -> assertDoesNotThrow(() -> formatSjekker.sjekk(attachment)));
     }
 
     private static Attachment attachment(int megabytes) {
         var content = megabytes(megabytes);
-        return Attachment.of("en pdf", content, MediaType.APPLICATION_PDF);
+        return Attachment.of(content);
     }
 
     private static byte[] megabytes(int megabytes) {

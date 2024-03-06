@@ -11,7 +11,6 @@ import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
-import org.springframework.http.MediaType;
 
 import no.nav.foreldrepenger.common.util.TokenUtil;
 
@@ -96,10 +95,8 @@ class KryptertMellomlagringTest {
         var mellomlagretFP = km.lesKryptertSøknad(FORELDREPENGER);
         var mellomlagretES = km.lesKryptertSøknad(Ytelse.ENGANGSSTONAD);
 
-        assertThat(mellomlagretFP).isPresent();
-        assertThat(mellomlagretFP.get()).isEqualTo("Søknad FP");
-        assertThat(mellomlagretES).isPresent();
-        assertThat(mellomlagretES.get()).isEqualTo("Søknad ES");
+        assertThat(mellomlagretFP).contains("Søknad FP");
+        assertThat(mellomlagretES).contains("Søknad ES");
 
         km.slettMellomlagring(Ytelse.ENGANGSSTONAD);
         assertThat(km.lesKryptertSøknad(FORELDREPENGER)).isPresent();
@@ -108,11 +105,11 @@ class KryptertMellomlagringTest {
 
     @Test
     void mellomlagringVedleggLagreLesSlettRoundtripTest() {
-        var vedlegg = Attachment.of("filen.pdf", fraResource("pdf/junit-test.pdf"), MediaType.APPLICATION_PDF);
+        var vedlegg = Attachment.of(fraResource("pdf/junit-test.pdf"));
         km.lagreKryptertVedlegg(vedlegg, FORELDREPENGER);
 
-        var lest = km.lesKryptertVedlegg(vedlegg.getUuid(), FORELDREPENGER);
-        assertThat(lest).contains(vedlegg.getBytes());
+        var lest = km.lesKryptertVedlegg(vedlegg.uuid(), FORELDREPENGER);
+        assertThat(lest).contains(vedlegg.bytes());
 
         km.slettMellomlagring(FORELDREPENGER);
         assertThat(km.lesKryptertSøknad(FORELDREPENGER)).isNotPresent();
