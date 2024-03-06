@@ -20,13 +20,13 @@ public class StøttetFormatSjekker implements VedleggSjekker {
 
     @Override
     public void sjekk(Attachment... vedlegg) {
-        safeStream(vedlegg).forEach(v -> check(v.getBytes()));
+        safeStream(vedlegg).forEach(v -> check(v.bytes()));
     }
 
     private static void check(byte[] content) {
         var detectedType = mediaType(content);
         if (detectedType != null && !supportedTypes.contains(detectedType)) {
             throw new AttachmentTypeUnsupportedException(detectedType);
-        };
+        }
     }
 }

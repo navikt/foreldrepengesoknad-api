@@ -78,11 +78,13 @@ public class MellomlagringController {
     @PostMapping(path = "/{ytelse}/vedlegg", consumes = MULTIPART_FORM_DATA_VALUE)
     public ResponseEntity<String> lagreVedlegg(@Valid @RequestPart("vedlegg") MultipartFile file,
                                                @PathVariable("ytelse") @Valid Ytelse ytelse) {
-        var pdfBytes = converter.convert(getBytesNullSjekk(file));
-        var attachment = Attachment.of(file.getOriginalFilename(), pdfBytes, MediaType.APPLICATION_PDF);
-        sjekker.sjekk(attachment);
+        var originalBytes = getBytesNullSjekk(file);
+        sjekker.sjekk(Attachment.of(originalBytes));
+
+        var pdfBytes = converter.convert(originalBytes);
+        var attachment = Attachment.of(pdfBytes);
         mellomlagring.lagreKryptertVedlegg(attachment, ytelse);
-        return created(attachment.uri()).body(attachment.uuid);
+        return created(attachment.uri()).body(attachment.uuid());
     }
 
     @DeleteMapping("/{ytelse}/vedlegg/{key}")

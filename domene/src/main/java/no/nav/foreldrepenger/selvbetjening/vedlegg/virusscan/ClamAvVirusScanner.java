@@ -18,8 +18,7 @@ public class ClamAvVirusScanner implements VedleggSjekker {
 
     @Override
     public void sjekk(Attachment... vedlegg) {
-        safeStream(vedlegg)
-                .forEach(v -> connection.scan(v.bytes, v.uuid));
+        safeStream(vedlegg).forEach(v -> connection.scan(v.bytes(), v.uuid()));
     }
 
     @Override

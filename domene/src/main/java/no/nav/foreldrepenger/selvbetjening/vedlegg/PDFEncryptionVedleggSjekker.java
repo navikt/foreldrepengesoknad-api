@@ -19,7 +19,7 @@ public class PDFEncryptionVedleggSjekker implements VedleggSjekker {
 
     @Override
     public void sjekk(Attachment... vedlegg) {
-        safeStream(vedlegg).forEach(v -> check(v.bytes));
+        safeStream(vedlegg).forEach(v -> check(v.bytes()));
     }
 
     private static void check(byte[] bytes) {

@@ -38,7 +38,7 @@ public class KryptertMellomlagring {
     }
 
     public void lagreKryptertVedlegg(Attachment vedlegg, Ytelse ytelse) {
-        mellomlagring.lagreVedlegg(ytelsespesifikkMappeVedlegg(ytelse), vedlegg.getUuid(), krypto.encryptVedlegg(vedlegg.getBytes()));
+        mellomlagring.lagreVedlegg(ytelsespesifikkMappeVedlegg(ytelse), vedlegg.uuid(), krypto.encryptVedlegg(vedlegg.bytes()));
     }
 
     public void slettMellomlagring(Ytelse ytelse) {
