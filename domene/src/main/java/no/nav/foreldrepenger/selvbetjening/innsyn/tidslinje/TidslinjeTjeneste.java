@@ -1,6 +1,7 @@
 package no.nav.foreldrepenger.selvbetjening.innsyn.tidslinje;
 
 import static no.nav.foreldrepenger.selvbetjening.innsyn.dokument.EnkelJournalpost.Brevkode.FORELDREPENGER_FEIL_PRAKSIS_UTSETTELSE_INFOBREV;
+import static no.nav.foreldrepenger.selvbetjening.innsyn.dokument.EnkelJournalpost.Brevkode.UKJENT;
 import static no.nav.foreldrepenger.selvbetjening.innsyn.dokument.EnkelJournalpost.Type.INNGÅENDE_DOKUMENT;
 
 import java.util.Comparator;
@@ -14,6 +15,7 @@ import org.springframework.stereotype.Service;
 
 import no.nav.foreldrepenger.common.domain.Fødselsnummer;
 import no.nav.foreldrepenger.common.domain.Saksnummer;
+import no.nav.foreldrepenger.common.domain.felles.DokumentType;
 import no.nav.foreldrepenger.selvbetjening.innsyn.Innsyn;
 import no.nav.foreldrepenger.selvbetjening.innsyn.InntektsmeldingDto;
 import no.nav.foreldrepenger.selvbetjening.innsyn.dokument.EnkelJournalpost;
@@ -57,7 +59,7 @@ public class TidslinjeTjeneste {
                     tilDokumenter(enkelJournalpost.dokumenter(), enkelJournalpost.journalpostId())
                 ));
         } else if (enkelJournalpost.type().equals(INNGÅENDE_DOKUMENT)) {
-            return tidslinjehendelsetype(enkelJournalpost, alleDokumentene)
+            return tidslinjehendelsetypeInngåendeDokument(enkelJournalpost, alleDokumentene)
                 .map(hendelseType -> new TidslinjeHendelseDto(
                     enkelJournalpost.mottatt(),
                     TidslinjeHendelseDto.AktørType.BRUKER,
@@ -70,10 +72,18 @@ public class TidslinjeTjeneste {
 
     private static Optional<TidslinjeHendelseDto.TidslinjeHendelseType> tidslinjeHendelseTypeUtgåendeDokument(EnkelJournalpost enkelJournalpost) {
         var brevkode = enkelJournalpost.dokumenter().stream().findFirst().orElseThrow().brevkode();
+        if (brevkode.equals(UKJENT)) {
+            LOG.info("Ignorerer utgåpende journalpost med ukjent brevkode: {}", enkelJournalpost);
+        }
+
         if (brevkode.erVedtak()) {
             return Optional.of(TidslinjeHendelseDto.TidslinjeHendelseType.VEDTAK);
         } else if (brevkode.erFritekstbrev()) {
             return Optional.of(TidslinjeHendelseDto.TidslinjeHendelseType.VEDTAK); // TODO: Er riktig nå, men må mappe til riktig brevkode i fpformidling/fpdokgen
+        } else if (brevkode.erKlageVedtak()) {
+            return Optional.of(TidslinjeHendelseDto.TidslinjeHendelseType.VEDTAK_KLAGE);
+        } else if (brevkode.erKlageSendtTilKlageinstansen()) {
+            return Optional.of(TidslinjeHendelseDto.TidslinjeHendelseType.UTGÅENDE_KLAGE_SENDT_TIL_KLAGEINSTANSEN);
         } else if (brevkode.erInnhentOpplysninger()) {
             return Optional.of(TidslinjeHendelseDto.TidslinjeHendelseType.UTGÅENDE_INNHENT_OPPLYSNINGER);
         } else if (brevkode.erEtterlysIM()) {
@@ -84,27 +94,28 @@ public class TidslinjeTjeneste {
         } else if (brevkode.equals(FORELDREPENGER_FEIL_PRAKSIS_UTSETTELSE_INFOBREV)) {
             return Optional.of(TidslinjeHendelseDto.TidslinjeHendelseType.FORELDREPENGER_FEIL_PRAKSIS_UTSETTELSE_INFOBREV);
         } else {
-            LOG.info("Ignorerer utgåpende journalpost: {}", enkelJournalpost);
+            LOG.info("Ignorerer utgåpende journalpost pga filtering: {}", enkelJournalpost);
             return Optional.empty();
         }
     }
 
-    private static Optional<TidslinjeHendelseDto.TidslinjeHendelseType> tidslinjehendelsetype(EnkelJournalpost enkelJournalpost, List<EnkelJournalpost> alleDokumentene) {
+    private static Optional<TidslinjeHendelseDto.TidslinjeHendelseType> tidslinjehendelsetypeInngåendeDokument(EnkelJournalpost enkelJournalpost, List<EnkelJournalpost> alleDokumentene) {
         var dokumentType = enkelJournalpost.hovedtype();
         if (dokumentType == null) {
-            LOG.info("Ignorer inngående journalpost med dokumenttype: {}", enkelJournalpost);
+            LOG.info("Ignorer inngående journalpost i tidslinje for journalpost fordi dokumenttype er null: {}", enkelJournalpost);
             return Optional.empty();
         }
         if (dokumentType.erFørstegangssøknad()) {
-            return Optional.of(erNyFørstegangssøknad(enkelJournalpost, alleDokumentene) ?
-                TidslinjeHendelseDto.TidslinjeHendelseType.FØRSTEGANGSSØKNAD_NY :
+            return Optional.of(erNyFørstegangssøknad(enkelJournalpost, alleDokumentene) ? TidslinjeHendelseDto.TidslinjeHendelseType.FØRSTEGANGSSØKNAD_NY :
                 TidslinjeHendelseDto.TidslinjeHendelseType.FØRSTEGANGSSØKNAD);
         } else if (dokumentType.erEndringssøknad()) {
             return Optional.of(TidslinjeHendelseDto.TidslinjeHendelseType.ENDRINGSSØKNAD);
         } else if (dokumentType.erVedlegg() || dokumentType.erUttalelseOmTilbakekreving()) {
             return  Optional.of(TidslinjeHendelseDto.TidslinjeHendelseType.ETTERSENDING);
+        } else if (dokumentType.equals(DokumentType.I000027)) {
+            return  Optional.of(TidslinjeHendelseDto.TidslinjeHendelseType.KLAGE);
         } else {
-            LOG.info("Ignorer inngående journalpost med dokumenttype: {}", enkelJournalpost);
+            LOG.info("Ignorer inngående journalpost i tidslinje for journalpost pga filtrering: {}", enkelJournalpost);
             return Optional.empty();
         }
     }
