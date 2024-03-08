@@ -15,7 +15,6 @@ import org.springframework.stereotype.Service;
 
 import no.nav.foreldrepenger.common.domain.Fødselsnummer;
 import no.nav.foreldrepenger.common.domain.Saksnummer;
-import no.nav.foreldrepenger.common.domain.felles.DokumentType;
 import no.nav.foreldrepenger.selvbetjening.innsyn.Innsyn;
 import no.nav.foreldrepenger.selvbetjening.innsyn.InntektsmeldingDto;
 import no.nav.foreldrepenger.selvbetjening.innsyn.dokument.EnkelJournalpost;
@@ -110,7 +109,7 @@ public class TidslinjeTjeneste {
             return Optional.of(TidslinjeHendelseDto.TidslinjeHendelseType.ENDRINGSSØKNAD);
         } else if (dokumentType.erVedlegg() || dokumentType.erUttalelseOmTilbakekreving()) {
             return  Optional.of(TidslinjeHendelseDto.TidslinjeHendelseType.ETTERSENDING);
-        } else if (dokumentType.equals(DokumentType.I000027)) {
+        } else if (dokumentType.erKlage()) {
             return  Optional.of(TidslinjeHendelseDto.TidslinjeHendelseType.KLAGE);
         } else {
             LOG.info("Ignorer inngående journalpost i tidslinje for journalpost pga filtrering: {}", enkelJournalpost);
