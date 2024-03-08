@@ -1,5 +1,7 @@
 package no.nav.foreldrepenger.selvbetjening.innsyn.dokument;
 
+import static no.nav.foreldrepenger.selvbetjening.innsyn.dokument.DokumentTypeUtleder.dokumenttypeFraTittel;
+
 import java.time.LocalDateTime;
 import java.util.List;
 import java.util.Optional;
@@ -13,7 +15,6 @@ import org.springframework.stereotype.Service;
 
 import no.nav.foreldrepenger.common.domain.Fødselsnummer;
 import no.nav.foreldrepenger.common.domain.Saksnummer;
-import no.nav.foreldrepenger.common.domain.felles.DokumentType;
 import no.nav.safselvbetjening.Datotype;
 import no.nav.safselvbetjening.DokumentInfo;
 import no.nav.safselvbetjening.DokumentInfoResponseProjection;
@@ -33,8 +34,7 @@ import no.nav.safselvbetjening.Tema;
 public class SafSelvbetjeningTjeneste {
     private static final Logger LOG = LoggerFactory.getLogger(SafSelvbetjeningTjeneste.class);
     private static final Set<Journalposttype> INKLUDER_JOURNALPOSTTYPER = Set.of(Journalposttype.I, Journalposttype.U);
-    private static final List<String> GYLDIGE_FILFORMAT = List.of("PDF");
-    //    private static final List<String> GYLDIGE_FILFORMAT = List.of("PDF", "JPG", "PNG"); // TODO
+    private static final Set<String> GYLDIGE_FILFORMAT = Set.of("PDF", "JPG", "PNG");
 
     private final SafSelvbetjeningConnection safKlient;
 
@@ -80,8 +80,7 @@ public class SafSelvbetjeningTjeneste {
 
     private static Optional<EnkelJournalpost> tilEnkelJournalpost(Journalpost journalpost) {
         var pdfDokumenter = journalpost.getDokumenter().stream()
-            .filter(dokumentInfo -> dokumentInfo.getDokumentvarianter().stream()
-                .anyMatch(dokumentvariant -> dokumentvariant.getBrukerHarTilgang() && GYLDIGE_FILFORMAT.contains(dokumentvariant.getFiltype())))
+            .filter(dokumentInfo -> dokumentInfo.getDokumentvarianter().stream().anyMatch(dokumentvariant -> dokumentvariant.getBrukerHarTilgang() && GYLDIGE_FILFORMAT.contains(dokumentvariant.getFiltype())))
             .toList();
         if (pdfDokumenter.isEmpty()) {
             return Optional.empty();
@@ -177,20 +176,5 @@ public class SafSelvbetjeningTjeneste {
             case U -> EnkelJournalpost.Type.UTGÅENDE_DOKUMENT;
             case N -> throw new IllegalStateException("Utviklerfeil: Skal filterer bort notater før mapping!");
         };
-    }
-
-    private static DokumentType dokumenttypeFraTittel(Journalpost journalpost) {
-        return utledFraTittel(journalpost.getTittel())
-            .or(() -> utledFraTittel(journalpost.getDokumenter().stream().findFirst().orElseThrow().getTittel()))
-            .orElse(null);
-    }
-
-    private static Optional<DokumentType> utledFraTittel(String tittel) {
-        try {
-            return Optional.of(DokumentType.fraTittel(tittel));
-        } catch (Exception e) {
-            LOG.info("Klarte ikke utlede dokumentTypeId fra SAF tittel: {}", tittel);
-            return Optional.empty();
-        }
     }
 }
