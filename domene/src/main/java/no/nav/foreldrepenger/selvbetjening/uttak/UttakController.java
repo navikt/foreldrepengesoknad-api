@@ -5,16 +5,21 @@ import static no.nav.foreldrepenger.stønadskonto.regelmodell.grunnlag.Dekningsg
 import static no.nav.foreldrepenger.stønadskonto.regelmodell.grunnlag.Dekningsgrad.DEKNINGSGRAD_80;
 
 import java.time.LocalDate;
+import java.util.Map;
 
 import org.springframework.format.annotation.DateTimeFormat;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
+import jakarta.validation.Valid;
 import jakarta.validation.constraints.Digits;
+import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Pattern;
 import no.nav.foreldrepenger.stønadskonto.regelmodell.Minsterett;
 import no.nav.foreldrepenger.stønadskonto.regelmodell.StønadskontoRegelOrkestrering;
@@ -34,22 +39,23 @@ public class UttakController {
     private static final String FMT = "yyyyMMdd";
     private static final StønadskontoRegelOrkestrering REGEL_ORKESTRERING = new StønadskontoRegelOrkestrering();
 
+    @Deprecated
     @GetMapping
     @CrossOrigin(origins = "*", allowCredentials = "false")
-    public KontoBeregning beregn(@RequestParam("antallBarn") @Digits(integer = 2, fraction = 0) int antallBarn,
-                                 @RequestParam("morHarRett") boolean morHarRett,
-                                 @RequestParam("farHarRett") boolean farHarRett,
-                                 @RequestParam(name = "morHarAleneomsorg", required = false, defaultValue = "false") boolean morHarAleneomsorg,
-                                 @RequestParam(name = "farHarAleneomsorg", required = false, defaultValue = "false") boolean farHarAleneomsorg,
-                                 @RequestParam(name = "fødselsdato", required = false) @DateTimeFormat(pattern = FMT) LocalDate fødselsdato,
-                                 @RequestParam(name = "termindato", required = false) @DateTimeFormat(pattern = FMT) LocalDate termindato,
-                                 @RequestParam(name = "omsorgsovertakelseDato", required = false) @DateTimeFormat(pattern = FMT) LocalDate omsorgsovertakelseDato,
-                                 @RequestParam("dekningsgrad") @Pattern(regexp = "^[\\p{Digit}\\p{L}]*$") String dekningsgrad,
-                                 @RequestParam(value = "erMor", required = false) boolean erMor,
-                                 @RequestParam(value = "minsterett", required = false) boolean minsterett,
-                                 @RequestParam(value = "morHarUføretrygd", required = false) boolean morHarUføretrygd,
-                                 @RequestParam(value = "harAnnenForelderTilsvarendeRettEØS", required = false) boolean harAnnenForelderTilsvarendeRettEØS,
-                                 @RequestParam(value = "familieHendelseDatoNesteSak", required = false) @DateTimeFormat(pattern = FMT) LocalDate familieHendelseDatoNesteSak) {
+    public KontoBeregning beregnMedDekningsgrad(@RequestParam("antallBarn") @Digits(integer = 2, fraction = 0) int antallBarn,
+                                                @RequestParam("morHarRett") boolean morHarRett,
+                                                @RequestParam("farHarRett") boolean farHarRett,
+                                                @RequestParam(name = "morHarAleneomsorg", required = false, defaultValue = "false") boolean morHarAleneomsorg,
+                                                @RequestParam(name = "farHarAleneomsorg", required = false, defaultValue = "false") boolean farHarAleneomsorg,
+                                                @RequestParam(name = "fødselsdato", required = false) @DateTimeFormat(pattern = FMT) LocalDate fødselsdato,
+                                                @RequestParam(name = "termindato", required = false) @DateTimeFormat(pattern = FMT) LocalDate termindato,
+                                                @RequestParam(name = "omsorgsovertakelseDato", required = false) @DateTimeFormat(pattern = FMT) LocalDate omsorgsovertakelseDato,
+                                                @RequestParam("dekningsgrad") @Pattern(regexp = "^[\\p{Digit}\\p{L}]*$") String dekningsgrad,
+                                                @RequestParam(value = "erMor", required = false) boolean erMor,
+                                                @RequestParam(value = "minsterett", required = false) boolean minsterett,
+                                                @RequestParam(value = "morHarUføretrygd", required = false) boolean morHarUføretrygd,
+                                                @RequestParam(value = "harAnnenForelderTilsvarendeRettEØS", required = false) boolean harAnnenForelderTilsvarendeRettEØS,
+                                                @RequestParam(value = "familieHendelseDatoNesteSak", required = false) @DateTimeFormat(pattern = FMT) LocalDate familieHendelseDatoNesteSak) {
         guardFamiliehendelse(fødselsdato, termindato, omsorgsovertakelseDato);
         var dekningsgradOversatt = dekningsgrad(dekningsgrad);
         var grunnlag = new BeregnKontoerGrunnlag.Builder().antallBarn(antallBarn)
@@ -83,6 +89,34 @@ public class UttakController {
             .build();
         var minsteretter = Minsterett.finnMinsterett(minsterettGrunnlag);
         return new KontoBeregning(stønadskontoer, Minsteretter.from(minsteretter));
+    }
+    @PostMapping
+    @CrossOrigin(origins = "*", allowCredentials = "false")
+    public Map<String, KontoBeregning> beregn(@Valid @NotNull @RequestBody KontoBeregningGrunnlagDto grunnlag) {
+        var kontoberegning80 = kontoberegningFra(grunnlag, "80");
+        var kontoberegning100 = kontoberegningFra(grunnlag, "100");
+        return Map.of(
+            "80", kontoberegning80,
+            "100", kontoberegning100
+        );
+    }
+
+    private KontoBeregning kontoberegningFra(KontoBeregningGrunnlagDto grunnlag, String dekningsgrad) {
+        return beregnMedDekningsgrad(
+            grunnlag.antallBarn(),
+            grunnlag.morHarRett(),
+            grunnlag.farHarRett(),
+            grunnlag.morHarAleneomsorg(),
+            grunnlag.farHarAleneomsorg(),
+            grunnlag.fødselsdato(),
+            grunnlag.termindato(),
+            grunnlag.omsorgsovertakelseDato(),
+            dekningsgrad,
+            grunnlag.erMor(),
+            grunnlag.minsterett(),
+            grunnlag.morHarUføretrygd(),
+            grunnlag.harAnnenForelderTilsvarendeRettEØS(),
+            grunnlag.familieHendelseDatoNesteSak());
     }
 
 
