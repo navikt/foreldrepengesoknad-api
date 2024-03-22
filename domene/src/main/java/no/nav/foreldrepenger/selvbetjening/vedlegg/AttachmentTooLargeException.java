@@ -17,8 +17,8 @@ public class AttachmentTooLargeException extends AttachmentException {
     }
 
     private static String msg(DataSize attachmentSize, DataSize max) {
-        return format("Vedlegg-størrelse er %s MB, men kan ikke overstige %s MB",
-                attachmentSize.toMegabytes(), max.toMegabytes());
+        return format("Vedlegg-størrelse er %s KB, men kan ikke overstige %s KB",
+                attachmentSize.toKilobytes(), max.toKilobytes());
     }
 
     @Override
