@@ -1,6 +1,7 @@
 package no.nav.foreldrepenger.selvbetjening.uttak;
 
 
+import static no.nav.foreldrepenger.selvbetjening.uttak.KontoBeregningDtoMapper.tilKontoberegning;
 import static no.nav.foreldrepenger.stønadskonto.regelmodell.grunnlag.Dekningsgrad.DEKNINGSGRAD_100;
 import static no.nav.foreldrepenger.stønadskonto.regelmodell.grunnlag.Dekningsgrad.DEKNINGSGRAD_80;
 
@@ -21,11 +22,11 @@ import jakarta.validation.Valid;
 import jakarta.validation.constraints.Digits;
 import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Pattern;
-import no.nav.foreldrepenger.stønadskonto.regelmodell.Minsterett;
 import no.nav.foreldrepenger.stønadskonto.regelmodell.StønadskontoRegelOrkestrering;
 import no.nav.foreldrepenger.stønadskonto.regelmodell.grunnlag.BeregnKontoerGrunnlag;
-import no.nav.foreldrepenger.stønadskonto.regelmodell.grunnlag.BeregnMinsterettGrunnlag;
+import no.nav.foreldrepenger.stønadskonto.regelmodell.grunnlag.Brukerrolle;
 import no.nav.foreldrepenger.stønadskonto.regelmodell.grunnlag.Dekningsgrad;
+import no.nav.foreldrepenger.stønadskonto.regelmodell.grunnlag.Rettighetstype;
 import no.nav.security.token.support.core.api.Unprotected;
 
 @Validated
@@ -58,83 +59,56 @@ public class UttakController {
                                                 @RequestParam(value = "familieHendelseDatoNesteSak", required = false) @DateTimeFormat(pattern = FMT) LocalDate familieHendelseDatoNesteSak) {
         guardFamiliehendelse(fødselsdato, termindato, omsorgsovertakelseDato);
         var dekningsgradOversatt = dekningsgrad(dekningsgrad);
-        var grunnlag = new BeregnKontoerGrunnlag.Builder().antallBarn(antallBarn)
+        var brukerrolle = tilBrukerrolle(erMor);
+        var grunnlag = new BeregnKontoerGrunnlag.Builder()
             .dekningsgrad(dekningsgradOversatt)
-            .morAleneomsorg(morHarAleneomsorg)
-            .farAleneomsorg(farHarAleneomsorg)
-            .morRett(morHarRett)
-            .farRett(farHarRett)
-            .morHarRettEØS(!erMor && harAnnenForelderTilsvarendeRettEØS)
-            .farHarRettEØS(erMor && harAnnenForelderTilsvarendeRettEØS)
+            .rettighetType(tilRettighetstype(brukerrolle, morHarRett, farHarRett, harAnnenForelderTilsvarendeRettEØS, morHarAleneomsorg, farHarAleneomsorg))
+            .brukerRolle(brukerrolle)
+            .antallBarn(antallBarn)
             .fødselsdato(fødselsdato)
-            .omsorgsovertakelseDato(omsorgsovertakelseDato)
             .termindato(termindato)
-            .minsterett(minsterett)
-            .build();
-        var stønadskontoer = REGEL_ORKESTRERING.beregnKontoer(grunnlag).getStønadskontoer();
-        var morHarRettEllerEØS = morHarRett || (!erMor && harAnnenForelderTilsvarendeRettEØS);
-        var bareFarHarRett = farHarRett && !morHarRettEllerEØS;
-        var aleneomsorg = (erMor && morHarAleneomsorg) || (!erMor && farHarAleneomsorg);
-        var gjelderFødsel = omsorgsovertakelseDato == null;
-        var minsterettGrunnlag = new BeregnMinsterettGrunnlag.Builder().antallBarn(antallBarn)
-            .minsterett(minsterett)
-            .mor(erMor)
-            .bareFarHarRett(bareFarHarRett)
-            .aleneomsorg(aleneomsorg)
+            .omsorgsovertakelseDato(omsorgsovertakelseDato)
             .morHarUføretrygd(morHarUføretrygd)
-            .dekningsgrad(dekningsgradOversatt)
-            .gjelderFødsel(gjelderFødsel)
-            .familieHendelseDato(familiehendelse(fødselsdato, termindato, omsorgsovertakelseDato))
             .familieHendelseDatoNesteSak(familieHendelseDatoNesteSak)
             .build();
-        var minsteretter = Minsterett.finnMinsterett(minsterettGrunnlag);
-        return new KontoBeregning(stønadskontoer, Minsteretter.from(minsteretter));
-    }
-    @PostMapping
-    @CrossOrigin(origins = "*", allowCredentials = "false")
-    public Map<String, KontoBeregning> beregn(@Valid @NotNull @RequestBody KontoBeregningGrunnlagDto grunnlag) {
-        var kontoberegning80 = kontoberegningFra(grunnlag, "80");
-        var kontoberegning100 = kontoberegningFra(grunnlag, "100");
-        return Map.of(
-            "80", kontoberegning80,
-            "100", kontoberegning100
-        );
+        var stønadskontoer = REGEL_ORKESTRERING.beregnKontoer(grunnlag).getStønadskontoer();
+        return KontoBeregning.fra(stønadskontoer, brukerrolle);
     }
 
-    private KontoBeregning kontoberegningFra(KontoBeregningGrunnlagDto grunnlag, String dekningsgrad) {
-        return beregnMedDekningsgrad(
-            grunnlag.antallBarn(),
-            grunnlag.morHarRett(),
-            grunnlag.farHarRett(),
-            grunnlag.morHarAleneomsorg(),
-            grunnlag.farHarAleneomsorg(),
-            grunnlag.fødselsdato(),
-            grunnlag.termindato(),
-            grunnlag.omsorgsovertakelseDato(),
-            dekningsgrad,
-            grunnlag.erMor(),
-            grunnlag.minsterett(),
-            grunnlag.morHarUføretrygd(),
-            grunnlag.harAnnenForelderTilsvarendeRettEØS(),
-            grunnlag.familieHendelseDatoNesteSak());
-    }
-
-
-    private static LocalDate familiehendelse(LocalDate fødselsdato,
-                                             LocalDate termindato,
-                                             LocalDate omsorgsovertakelseDato) {
-        if (omsorgsovertakelseDato != null) {
-            return omsorgsovertakelseDato;
+    private Rettighetstype tilRettighetstype(Brukerrolle brukerrolle,
+                                             boolean morHarRett,
+                                             boolean farHarRett,
+                                             boolean harAnnenForelderTilsvarendeRettEØS,
+                                             boolean morHarAleneomsorg,
+                                             boolean farHarAleneomsorg) {
+        if (brukerrolle.equals(Brukerrolle.MOR)) {
+            if (morHarRett && (farHarRett || harAnnenForelderTilsvarendeRettEØS)) {
+                return Rettighetstype.BEGGE_RETT;
+            } else if (morHarAleneomsorg) {
+                return Rettighetstype.ALENEOMSORG;
+            } else {
+                return Rettighetstype.BARE_SØKER_RETT;
+            }
+        } else {
+            if (farHarRett && (morHarRett || harAnnenForelderTilsvarendeRettEØS)) {
+                return Rettighetstype.BEGGE_RETT;
+            } else if (farHarAleneomsorg) {
+                return Rettighetstype.ALENEOMSORG;
+            } else {
+                return Rettighetstype.BARE_SØKER_RETT;
+            }
         }
-        if (fødselsdato != null) {
-            return fødselsdato;
-        }
-        return termindato;
     }
 
-    private static void guardFamiliehendelse(LocalDate fødselsdato,
-                                             LocalDate termindato,
-                                             LocalDate omsorgsovertakelseDato) {
+    private Brukerrolle tilBrukerrolle(boolean erMor) {
+        if (erMor) {
+            return Brukerrolle.MOR;
+        } else {
+            return Brukerrolle.FAR;
+        }
+    }
+
+    private static void guardFamiliehendelse(LocalDate fødselsdato, LocalDate termindato, LocalDate omsorgsovertakelseDato) {
         if (fødselsdato == null && termindato == null && omsorgsovertakelseDato == null) {
             throw new ManglendeFamiliehendelseException("Mangler dato for familiehendelse");
         }
@@ -148,8 +122,42 @@ public class UttakController {
         };
     }
 
-    @Override
-    public String toString() {
-        return getClass().getSimpleName() + " [regelOrkestrering=" + REGEL_ORKESTRERING + "]";
+
+    @PostMapping
+    @CrossOrigin(origins = "*", allowCredentials = "false")
+    public Map<String, KontoBeregningDto> beregn(@Valid @NotNull @RequestBody KontoBeregningGrunnlagDto grunnlag) {
+        guardFamiliehendelse(grunnlag);
+        var kontoberegning80 = kontoberegningFra(grunnlag, DEKNINGSGRAD_80);
+        var kontoberegning100 = kontoberegningFra(grunnlag, DEKNINGSGRAD_100);
+        return Map.of(
+            "80", kontoberegning80,
+            "100", kontoberegning100
+        );
     }
+
+    private KontoBeregningDto kontoberegningFra(KontoBeregningGrunnlagDto grunnlag, Dekningsgrad dekningsgrad) {
+        var stønadskontoer = REGEL_ORKESTRERING.beregnKontoer(tilBeregnKontoGrunnlag(grunnlag, dekningsgrad)).getStønadskontoer();
+        return tilKontoberegning(stønadskontoer, grunnlag.brukerrolle());
+    }
+
+    private static BeregnKontoerGrunnlag tilBeregnKontoGrunnlag(KontoBeregningGrunnlagDto grunnlag, Dekningsgrad dekningsgrad) {
+        return new BeregnKontoerGrunnlag.Builder()
+            .dekningsgrad(dekningsgrad)
+            .rettighetType(grunnlag.rettighetstype())
+            .brukerRolle(grunnlag.brukerrolle())
+            .antallBarn(grunnlag.antallBarn())
+            .fødselsdato(grunnlag.fødselsdato())
+            .termindato(grunnlag.omsorgsovertakelseDato())
+            .omsorgsovertakelseDato(grunnlag.omsorgsovertakelseDato())
+            .morHarUføretrygd(grunnlag.morHarUføretrygd())
+            .familieHendelseDatoNesteSak(grunnlag.familieHendelseDatoNesteSak())
+            .build();
+    }
+
+    private static void guardFamiliehendelse(KontoBeregningGrunnlagDto grunnlag) {
+        if (grunnlag.fødselsdato() == null && grunnlag.termindato() == null && grunnlag.omsorgsovertakelseDato() == null) {
+            throw new ManglendeFamiliehendelseException("Mangler dato for familiehendelse");
+        }
+    }
+
 }
