@@ -43,7 +43,7 @@
 		<project.reporting.outputEncoding>UTF-8</project.reporting.outputEncoding>
 
         <stonadskonto-regler.version>1.1.2</stonadskonto-regler.version>
-        <selvbetjening-felles.version>3.0.6</selvbetjening-felles.version>
+        <selvbetjening-felles.version>3.0.7</selvbetjening-felles.version>
 		<token-validation-version>3.2.0</token-validation-version>
         <boot-conditionals.version>5.1.1</boot-conditionals.version>
 

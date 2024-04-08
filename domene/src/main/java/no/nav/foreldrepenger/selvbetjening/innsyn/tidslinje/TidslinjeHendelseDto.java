@@ -17,14 +17,19 @@ public record TidslinjeHendelseDto(LocalDateTime opprettet,
     enum TidslinjeHendelseType {
         FØRSTEGANGSSØKNAD,
         FØRSTEGANGSSØKNAD_NY,
+        KLAGE,
         ETTERSENDING,
         ENDRINGSSØKNAD,
         INNTEKTSMELDING,
+
+        // Utgående hendelsestyper
         VEDTAK,
+        VEDTAK_KLAGE,
         UTGÅENDE_INNHENT_OPPLYSNINGER,
         UTGÅENDE_ETTERLYS_INNTEKTSMELDING,
+        UTGÅENDE_KLAGE_SENDT_TIL_KLAGEINSTANSEN,
+        UTGÅENDE_VARSEL_TILBAKEBETALING,
         FORELDREPENGER_FEIL_PRAKSIS_UTSETTELSE_INFOBREV,
-        UTGÅENDE_VARSEL_TILBAKEBETALING
     }
 
     public record Dokument(String journalpostId, String dokumentId, String tittel) {
