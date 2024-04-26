@@ -147,7 +147,7 @@ public class UttakController {
             .brukerRolle(grunnlag.brukerrolle())
             .antallBarn(grunnlag.antallBarn())
             .fødselsdato(grunnlag.fødselsdato())
-            .termindato(grunnlag.omsorgsovertakelseDato())
+            .termindato(grunnlag.termindato())
             .omsorgsovertakelseDato(grunnlag.omsorgsovertakelseDato())
             .morHarUføretrygd(grunnlag.morHarUføretrygd())
             .familieHendelseDatoNesteSak(grunnlag.familieHendelseDatoNesteSak())
