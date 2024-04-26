@@ -4,19 +4,15 @@ import java.time.LocalDate;
 
 import jakarta.validation.constraints.Digits;
 import jakarta.validation.constraints.NotNull;
+import no.nav.foreldrepenger.stønadskonto.regelmodell.grunnlag.Brukerrolle;
+import no.nav.foreldrepenger.stønadskonto.regelmodell.grunnlag.Rettighetstype;
 
-public record KontoBeregningGrunnlagDto(@NotNull @Digits(integer = 2, fraction = 0) int antallBarn,
-                                        @NotNull Boolean morHarRett,
-                                        @NotNull Boolean farHarRett,
-                                        @NotNull Boolean morHarAleneomsorg,
-                                        @NotNull Boolean farHarAleneomsorg,
+public record KontoBeregningGrunnlagDto(@NotNull Rettighetstype rettighetstype,
+                                        @NotNull Brukerrolle brukerrolle,
+                                        @NotNull @Digits(integer = 2, fraction = 0) int antallBarn,
                                         LocalDate fødselsdato,
                                         LocalDate termindato,
                                         LocalDate omsorgsovertakelseDato,
-                                        @NotNull Boolean erMor,
-                                        @NotNull Boolean minsterett,
-                                        @NotNull Boolean morHarUføretrygd,
-                                        @NotNull Boolean harAnnenForelderTilsvarendeRettEØS,
+                                        boolean morHarUføretrygd,
                                         LocalDate familieHendelseDatoNesteSak) {
-
 }
