@@ -13,6 +13,7 @@ import no.nav.foreldrepenger.selvbetjening.util.URIUtil;
 public class InnsynConfig {
     private static final String CONTEXT_PATH = "api";
     private static final String SAKER = CONTEXT_PATH + "/saker";
+    private static final String ANNENPART_SAK = CONTEXT_PATH + "/annenPart/v2";
     private static final String ANNENPART_VEDTAK = CONTEXT_PATH + "/annenPart";
     private static final String OPPGAVER = CONTEXT_PATH + "/oppgaver";
     private static final String MANGLENDE_VEDLEGG = OPPGAVER + "/manglendevedlegg";
@@ -37,6 +38,10 @@ public class InnsynConfig {
 
     URI uttalelseOmTilbakekrevinger() {
         return uri(getBaseUri(), UTTALELSER_OM_TILBAKEKREVING);
+    }
+
+    URI annenpartsSak() {
+        return uri(getBaseUri(), ANNENPART_SAK);
     }
 
     URI annenpartsVedtak() {

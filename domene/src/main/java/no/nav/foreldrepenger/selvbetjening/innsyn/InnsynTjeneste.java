@@ -8,7 +8,7 @@ import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Service;
 
 import no.nav.foreldrepenger.common.domain.Saksnummer;
-import no.nav.foreldrepenger.common.innsyn.AnnenPartVedtak;
+import no.nav.foreldrepenger.common.innsyn.AnnenPartSak;
 import no.nav.foreldrepenger.common.innsyn.Saker;
 
 @Service
@@ -38,11 +38,19 @@ public class InnsynTjeneste implements Innsyn {
     }
 
     @Override
-    public Optional<AnnenPartVedtak> annenPartVedtak(AnnenPartVedtakIdentifikator annenPartVedtakIdentifikator) {
-        if (annenPartVedtakIdentifikator == null || annenPartVedtakIdentifikator.annenPartFødselsnummer() == null || annenPartVedtakIdentifikator.annenPartFødselsnummer().value().isBlank()) {
+    public Optional<AnnenPartSak> annenPartSak(AnnenPartSakIdentifikator annenPartSakIdentifikator) {
+        if (annenPartSakIdentifikator == null || annenPartSakIdentifikator.annenPartFødselsnummer() == null || annenPartSakIdentifikator.annenPartFødselsnummer().value().isBlank()) {
             return Optional.empty();
         }
-        return innsynConnection.hentAnnenpartsVedtak(annenPartVedtakIdentifikator);
+        return innsynConnection.hentAnnenpartsSak(annenPartSakIdentifikator);
+    }
+
+    @Override
+    public Optional<AnnenPartSak> annenPartVedtak(AnnenPartSakIdentifikator annenPartSakIdentifikator) {
+        if (annenPartSakIdentifikator == null || annenPartSakIdentifikator.annenPartFødselsnummer() == null || annenPartSakIdentifikator.annenPartFødselsnummer().value().isBlank()) {
+            return Optional.empty();
+        }
+        return innsynConnection.hentAnnenpartsVedtak(annenPartSakIdentifikator);
     }
 
     @Override
