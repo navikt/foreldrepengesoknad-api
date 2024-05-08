@@ -15,7 +15,7 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 
 import jakarta.validation.Valid;
-import no.nav.foreldrepenger.common.innsyn.AnnenPartVedtak;
+import no.nav.foreldrepenger.common.innsyn.AnnenPartSak;
 import no.nav.foreldrepenger.common.innsyn.Saker;
 import no.nav.foreldrepenger.common.util.TokenUtil;
 import no.nav.foreldrepenger.selvbetjening.innsyn.dokument.DokumentDto;
@@ -45,9 +45,14 @@ public class InnsynController {
         return innsynTjeneste.hentSaker();
     }
 
+    @PostMapping(path = "/annenPartSak", consumes = MediaType.APPLICATION_JSON_VALUE)
+    public AnnenPartSak annenPartSak(@Valid @RequestBody AnnenPartSakIdentifikator annenPartSakIdentifikator) {
+        return innsynTjeneste.annenPartSak(annenPartSakIdentifikator).orElse(null);
+    }
+
     @PostMapping(path = "/annenPartVedtak", consumes = MediaType.APPLICATION_JSON_VALUE)
-    public AnnenPartVedtak annenPartVedtak(@Valid @RequestBody AnnenPartVedtakIdentifikator annenPartVedtakIdentifikator) {
-        return innsynTjeneste.annenPartVedtak(annenPartVedtakIdentifikator).orElse(null);
+    public AnnenPartSak annenPartVedtak(@Valid @RequestBody AnnenPartSakIdentifikator annenPartSakIdentifikator) {
+        return innsynTjeneste.annenPartVedtak(annenPartSakIdentifikator).orElse(null);
     }
 
     @GetMapping("/saker/oppdatert")

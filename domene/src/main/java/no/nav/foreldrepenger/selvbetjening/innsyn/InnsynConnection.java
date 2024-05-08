@@ -11,7 +11,7 @@ import org.springframework.web.client.HttpClientErrorException;
 import org.springframework.web.client.RestOperations;
 
 import no.nav.foreldrepenger.common.domain.Saksnummer;
-import no.nav.foreldrepenger.common.innsyn.AnnenPartVedtak;
+import no.nav.foreldrepenger.common.innsyn.AnnenPartSak;
 import no.nav.foreldrepenger.common.innsyn.Saker;
 import no.nav.foreldrepenger.selvbetjening.http.AbstractRestConnection;
 
@@ -37,8 +37,13 @@ public class InnsynConnection extends AbstractRestConnection {
         }
 
     }
-    public Optional<AnnenPartVedtak> hentAnnenpartsVedtak(AnnenPartVedtakIdentifikator annenPartVedtakIdentifikator) {
-        return Optional.ofNullable(postForObject(cfg.annenpartsVedtak(), annenPartVedtakIdentifikator, AnnenPartVedtak.class));
+
+    public Optional<AnnenPartSak> hentAnnenpartsSak(AnnenPartSakIdentifikator annenPartSakIdentifikator) {
+        return Optional.ofNullable(postForObject(cfg.annenpartsSak(), annenPartSakIdentifikator, AnnenPartSak.class));
+    }
+
+    public Optional<AnnenPartSak> hentAnnenpartsVedtak(AnnenPartSakIdentifikator annenPartSakIdentifikator) {
+        return Optional.ofNullable(postForObject(cfg.annenpartsVedtak(), annenPartSakIdentifikator, AnnenPartSak.class));
     }
 
     public List<String> hentManglendeVedlegg(Saksnummer saksnr) {
