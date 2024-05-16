@@ -8,17 +8,21 @@ import static org.junit.jupiter.api.Assertions.assertThrows;
 import java.time.LocalDate;
 
 import org.junit.jupiter.api.Test;
+import org.springframework.core.env.Environment;
+import org.springframework.mock.env.MockEnvironment;
 
 import no.nav.foreldrepenger.stønadskonto.regelmodell.grunnlag.Brukerrolle;
 import no.nav.foreldrepenger.stønadskonto.regelmodell.grunnlag.Rettighetstype;
 
 
-
 class UttakControllerTest {
+
+    private Environment environment = new MockEnvironment();
+    private UttakCore2024 uttakCore2024 = new UttakCore2024(null, null, environment);
 
     @Test
     void skal_kaste_exception_hvis_manglende_familiehendelse() {
-        var controller = new UttakController();
+        var controller = new UttakController(uttakCore2024);
         LocalDate fødselsdato = null;
         LocalDate termindato = null;
         LocalDate omsorgsovertakelseDato = null;
@@ -56,7 +60,7 @@ class UttakControllerTest {
 
     @Test
     void bfhr() {
-        var controller = new UttakController();
+        var controller = new UttakController(uttakCore2024);
         var resultat = controller.beregnMedDekningsgrad(1, false, true, false, false, LocalDate.now(), LocalDate.now().minusWeeks(1),
             null, "100", false, true, false, false, null);
 
@@ -67,7 +71,7 @@ class UttakControllerTest {
     }
     @Test
     void bfhrNY() {
-        var controller = new UttakController();
+        var controller = new UttakController(uttakCore2024);
         var grunnlag = new KontoBeregningGrunnlagDto(
             Rettighetstype.BARE_SØKER_RETT,
             Brukerrolle.FAR,
@@ -96,7 +100,7 @@ class UttakControllerTest {
 
     @Test
     void aleneomsorg() {
-        var controller = new UttakController();
+        var controller = new UttakController(uttakCore2024);
         var resultat = controller.beregnMedDekningsgrad(1, false, true, false, true, null, LocalDate.now(),
             null, "100", false, true, false, false, null);
 
@@ -106,7 +110,7 @@ class UttakControllerTest {
 
     @Test
     void bfhr_flere_barn_minsterett_skal_ikke_ha_flerbarnsdager() {
-        var controller = new UttakController();
+        var controller = new UttakController(uttakCore2024);
         var resultat = controller.beregnMedDekningsgrad(2, false, true, false, false, LocalDate.now(), LocalDate.now().minusWeeks(1),
             null, "100", false, true, false, false, null);
 
@@ -119,7 +123,7 @@ class UttakControllerTest {
 
     @Test
     void morEøs() {
-        var controller = new UttakController();
+        var controller = new UttakController(uttakCore2024);
         var resultat = controller.beregnMedDekningsgrad(1, false, true, false, false, LocalDate.now(), LocalDate.now().minusWeeks(1),
             null, "100", false, true, false, true, null);
 

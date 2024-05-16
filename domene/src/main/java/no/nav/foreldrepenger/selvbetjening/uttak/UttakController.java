@@ -40,6 +40,13 @@ public class UttakController {
     private static final String FMT = "yyyyMMdd";
     private static final StønadskontoRegelOrkestrering REGEL_ORKESTRERING = new StønadskontoRegelOrkestrering();
 
+    private final UttakCore2024 uttakCore2024;
+
+    public UttakController(UttakCore2024 uttakCore2024) {
+        this.uttakCore2024 = uttakCore2024;
+    }
+
+
     @Deprecated
     @GetMapping
     @CrossOrigin(origins = "*", allowCredentials = "false")
@@ -60,7 +67,9 @@ public class UttakController {
         guardFamiliehendelse(fødselsdato, termindato, omsorgsovertakelseDato);
         var dekningsgradOversatt = dekningsgrad(dekningsgrad);
         var brukerrolle = tilBrukerrolle(erMor);
+        var familiehendelsedato = familiehendelsedato(fødselsdato, termindato, omsorgsovertakelseDato);
         var grunnlag = new BeregnKontoerGrunnlag.Builder()
+            .regelvalgsdato(uttakCore2024.utledRegelvalgsdato(familiehendelsedato))
             .dekningsgrad(dekningsgradOversatt)
             .rettighetType(tilRettighetstype(brukerrolle, morHarRett, farHarRett, harAnnenForelderTilsvarendeRettEØS, morHarAleneomsorg, farHarAleneomsorg))
             .brukerRolle(brukerrolle)
@@ -140,8 +149,10 @@ public class UttakController {
         return tilKontoberegning(stønadskontoer, grunnlag.brukerrolle());
     }
 
-    private static BeregnKontoerGrunnlag tilBeregnKontoGrunnlag(KontoBeregningGrunnlagDto grunnlag, Dekningsgrad dekningsgrad) {
+    private BeregnKontoerGrunnlag tilBeregnKontoGrunnlag(KontoBeregningGrunnlagDto grunnlag, Dekningsgrad dekningsgrad) {
+        var familiehendelsedato = familiehendelsedato(grunnlag.fødselsdato(), grunnlag.termindato(), grunnlag.omsorgsovertakelseDato());
         return new BeregnKontoerGrunnlag.Builder()
+            .regelvalgsdato(uttakCore2024.utledRegelvalgsdato(familiehendelsedato))
             .dekningsgrad(dekningsgrad)
             .rettighetType(grunnlag.rettighetstype())
             .brukerRolle(grunnlag.brukerrolle())
@@ -152,6 +163,13 @@ public class UttakController {
             .morHarUføretrygd(grunnlag.morHarUføretrygd())
             .familieHendelseDatoNesteSak(grunnlag.familieHendelseDatoNesteSak())
             .build();
+    }
+
+
+    private static LocalDate familiehendelsedato(LocalDate fødselsdato, LocalDate termindato, LocalDate omsorgsovertakelseDato) {
+        if (omsorgsovertakelseDato != null) return omsorgsovertakelseDato;
+        if (fødselsdato != null) return fødselsdato;
+        return termindato;
     }
 
     private static void guardFamiliehendelse(KontoBeregningGrunnlagDto grunnlag) {
