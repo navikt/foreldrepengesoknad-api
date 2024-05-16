@@ -12,9 +12,8 @@ import org.springframework.stereotype.Component;
 
 @Component
 public class UttakCore2024 {
-
-    private static LocalDate DEFAULT_IKRAFTTREDELSEDATO_1 = LocalDate.of(3024, Month.JULY,1); // LA STÅ etter endring til 2024
-    private static LocalDate DEFAULT_IKRAFTTREDELSEDATO_2 = LocalDate.of(3024, Month.AUGUST,2); // LA STÅ.
+    private static LocalDate DEFAULT_IKRAFTTREDELSEDATO_1 = LocalDate.of(2024, Month.JULY,1); // LA STÅ etter endring til 2024
+    private static LocalDate DEFAULT_IKRAFTTREDELSEDATO_2 = LocalDate.of(2024, Month.AUGUST,2); // LA STÅ.
 
     private LocalDate ikrafttredelseDato1;
     private LocalDate ikrafttredelseDato2;
