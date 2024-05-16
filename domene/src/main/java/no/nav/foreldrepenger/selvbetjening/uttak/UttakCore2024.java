@@ -8,7 +8,6 @@ import java.time.Month;
 
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.core.env.Environment;
-import org.springframework.format.annotation.DateTimeFormat;
 import org.springframework.stereotype.Component;
 
 @Component
@@ -20,8 +19,8 @@ public class UttakCore2024 {
     private LocalDate ikrafttredelseDato1;
     private LocalDate ikrafttredelseDato2;
 
-    public UttakCore2024(@Value("dato.for.aatti.prosent") @DateTimeFormat(pattern = "yyyy-MM-dd") LocalDate overstyrtIkrafttredelsedato1,
-                         @Value("dato.for.minsterett.andre") @DateTimeFormat(pattern = "yyyy-MM-dd") LocalDate overstyrtIkrafttredelsedato2,
+    public UttakCore2024(@Value("${dato.for.aatti.prosent:#{null}}") LocalDate overstyrtIkrafttredelsedato1,
+                         @Value("${dato.for.minsterett.andre:#{null}}") LocalDate overstyrtIkrafttredelsedato2,
                          Environment env) {
         ikrafttredelseDato1 = isProd(env) || overstyrtIkrafttredelsedato1 == null ? DEFAULT_IKRAFTTREDELSEDATO_1 : overstyrtIkrafttredelsedato1;
         ikrafttredelseDato2 = isProd(env) || overstyrtIkrafttredelsedato2 == null ? DEFAULT_IKRAFTTREDELSEDATO_2 : overstyrtIkrafttredelsedato2;
