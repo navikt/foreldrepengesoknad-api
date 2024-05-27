@@ -7,7 +7,7 @@
     <parent>
         <groupId>org.springframework.boot</groupId>
         <artifactId>spring-boot-starter-parent</artifactId>
-        <version>3.2.5</version>
+        <version>3.3.0</version>
     </parent>
 
 	<groupId>no.nav.foreldrepenger.selvbetjening</groupId>
@@ -42,9 +42,9 @@
 		<project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
 		<project.reporting.outputEncoding>UTF-8</project.reporting.outputEncoding>
 
-        <stonadskonto-regler.version>2.0.3</stonadskonto-regler.version>
+        <stonadskonto-regler.version>2.0.1</stonadskonto-regler.version>
         <selvbetjening-felles.version>3.0.9</selvbetjening-felles.version>
-		<token-validation-version>4.0.5</token-validation-version> <!-- Fjerner cookie støtte fra versjon 4.1.0-->
+		<token-validation-version>3.2.0</token-validation-version>
         <boot-conditionals.version>5.1.2</boot-conditionals.version>
 
         <springdoc.version>2.5.0</springdoc.version>
@@ -55,7 +55,6 @@
 		<pdfbox.version>3.0.2</pdfbox.version>
 		<jacoco.version>0.8.12</jacoco.version>
 		<gcp.version>0.220.0</gcp.version>
-		<simpleclient.version>0.16.0</simpleclient.version>
         <graphql-java-codegen.version>5.10.0</graphql-java-codegen.version>
 	</properties>
 

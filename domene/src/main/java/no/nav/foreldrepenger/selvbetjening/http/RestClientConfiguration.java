@@ -15,6 +15,7 @@ import static org.springframework.util.ReflectionUtils.makeAccessible;
 
 import java.time.Duration;
 import java.util.List;
+import java.util.Optional;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -83,6 +84,20 @@ public class RestClientConfiguration implements WebMvcConfigurer {
                                                                                 OAuth2AccessTokenService service,
                                                                                 ClientConfigurationPropertiesMatcher matcher) {
         return new OAuth2ClientRequestInterceptor(properties, service, matcher);
+    }
+
+    @Bean
+    public ClientConfigurationPropertiesMatcher tokenxClientConfigMatcher() {
+        return (properties, uri) -> {
+            LOG.trace("Oppslag token X konfig for {}", uri.getHost());
+            var cfg = properties.getRegistration().get(uri.getHost().split("\\.")[0]);
+            if (cfg != null) {
+                LOG.trace("Oppslag token X konfig for {} OK", uri.getHost());
+            } else {
+                LOG.trace("Oppslag token X konfig for {} fant ingenting", uri.getHost());
+            }
+            return Optional.ofNullable(cfg);
+        };
     }
 
     @Bean
