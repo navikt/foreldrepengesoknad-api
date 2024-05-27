@@ -2,17 +2,11 @@ package no.nav.foreldrepenger.selvbetjening.http.filters;
 
 import static no.nav.foreldrepenger.common.util.Constants.NAV_USER_ID;
 import static no.nav.foreldrepenger.common.util.MDCUtil.toMDC;
-import static no.nav.foreldrepenger.common.util.TokenUtil.NAV_AUTH_LEVEL;
-import static no.nav.foreldrepenger.common.util.TokenUtil.NAV_TOKEN_EXPIRY_ID;
+import static no.nav.foreldrepenger.selvbetjening.http.TokenUtil.NAV_AUTH_LEVEL;
+import static no.nav.foreldrepenger.selvbetjening.http.TokenUtil.NAV_TOKEN_EXPIRY_ID;
 
 import java.io.IOException;
 import java.util.Optional;
-
-import jakarta.servlet.FilterChain;
-import jakarta.servlet.ServletException;
-import jakarta.servlet.ServletRequest;
-import jakarta.servlet.ServletResponse;
-import jakarta.servlet.http.HttpServletRequest;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -20,9 +14,14 @@ import org.slf4j.MDC;
 import org.springframework.stereotype.Component;
 import org.springframework.web.filter.GenericFilterBean;
 
+import jakarta.servlet.FilterChain;
+import jakarta.servlet.ServletException;
+import jakarta.servlet.ServletRequest;
+import jakarta.servlet.ServletResponse;
+import jakarta.servlet.http.HttpServletRequest;
 import no.nav.foreldrepenger.common.util.AuthenticationLevel;
 import no.nav.foreldrepenger.common.util.StringUtil;
-import no.nav.foreldrepenger.common.util.TokenUtil;
+import no.nav.foreldrepenger.selvbetjening.http.TokenUtil;
 import no.nav.foreldrepenger.selvbetjening.oppslag.Oppslag;
 
 @Component

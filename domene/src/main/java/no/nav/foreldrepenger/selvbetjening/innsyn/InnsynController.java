@@ -17,10 +17,10 @@ import org.springframework.web.bind.annotation.RequestBody;
 import jakarta.validation.Valid;
 import no.nav.foreldrepenger.common.innsyn.AnnenPartSak;
 import no.nav.foreldrepenger.common.innsyn.Saker;
-import no.nav.foreldrepenger.common.util.TokenUtil;
+import no.nav.foreldrepenger.selvbetjening.http.ProtectedRestController;
+import no.nav.foreldrepenger.selvbetjening.http.TokenUtil;
 import no.nav.foreldrepenger.selvbetjening.innsyn.dokument.DokumentDto;
 import no.nav.foreldrepenger.selvbetjening.innsyn.dokument.DokumentTjeneste;
-import no.nav.foreldrepenger.selvbetjening.http.ProtectedRestController;
 
 @ProtectedRestController(INNSYN)
 public class InnsynController {

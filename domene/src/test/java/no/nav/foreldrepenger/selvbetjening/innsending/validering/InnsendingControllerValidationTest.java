@@ -18,9 +18,9 @@ import org.springframework.web.bind.MethodArgumentNotValidException;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 
-import no.nav.foreldrepenger.common.util.TokenUtil;
 import no.nav.foreldrepenger.selvbetjening.config.JacksonConfiguration;
 import no.nav.foreldrepenger.selvbetjening.error.ApiExceptionHandler;
+import no.nav.foreldrepenger.selvbetjening.http.TokenUtil;
 import no.nav.foreldrepenger.selvbetjening.innsending.InnsendingController;
 import no.nav.foreldrepenger.selvbetjening.innsending.InnsendingTjeneste;
 import no.nav.foreldrepenger.selvbetjening.kontrakt.innsending.dto.SøknadDto;

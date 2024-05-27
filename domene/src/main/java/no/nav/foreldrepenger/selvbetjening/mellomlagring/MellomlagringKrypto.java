@@ -3,7 +3,7 @@ package no.nav.foreldrepenger.selvbetjening.mellomlagring;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Component;
 
-import no.nav.foreldrepenger.common.util.TokenUtil;
+import no.nav.foreldrepenger.selvbetjening.http.TokenUtil;
 
 @Component
 public class MellomlagringKrypto {

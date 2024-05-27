@@ -16,7 +16,7 @@ import org.springframework.web.context.request.ServletWebRequest;
 import org.springframework.web.multipart.MultipartException;
 
 import no.nav.foreldrepenger.common.domain.Fødselsnummer;
-import no.nav.foreldrepenger.common.util.TokenUtil;
+import no.nav.foreldrepenger.selvbetjening.http.TokenUtil;
 
 
 @ExtendWith(SpringExtension.class)
