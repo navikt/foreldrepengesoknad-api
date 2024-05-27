@@ -17,7 +17,7 @@ import no.nav.foreldrepenger.common.innsyn.FpSak;
 import no.nav.foreldrepenger.common.innsyn.RettighetType;
 import no.nav.foreldrepenger.common.innsyn.Saker;
 import no.nav.foreldrepenger.common.innsyn.Saksnummer;
-import no.nav.foreldrepenger.common.util.TokenUtil;
+import no.nav.foreldrepenger.selvbetjening.http.TokenUtil;
 import no.nav.foreldrepenger.selvbetjening.innsyn.dokument.DokumentDto;
 import no.nav.foreldrepenger.selvbetjening.innsyn.dokument.DokumentTjeneste;
 

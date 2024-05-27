@@ -30,10 +30,10 @@ import org.springframework.web.multipart.MultipartException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 
 import jakarta.validation.ConstraintViolationException;
-import no.nav.foreldrepenger.common.util.TokenUtil;
 import no.nav.foreldrepenger.selvbetjening.config.JacksonConfiguration;
 import no.nav.foreldrepenger.selvbetjening.config.MessageSourceConfig;
 import no.nav.foreldrepenger.selvbetjening.error.ApiExceptionHandler;
+import no.nav.foreldrepenger.selvbetjening.http.TokenUtil;
 import no.nav.foreldrepenger.selvbetjening.vedlegg.AttachmentTooLargeException;
 import no.nav.foreldrepenger.selvbetjening.vedlegg.Image2PDFConverter;
 import no.nav.foreldrepenger.selvbetjening.vedlegg.VedleggSjekker;

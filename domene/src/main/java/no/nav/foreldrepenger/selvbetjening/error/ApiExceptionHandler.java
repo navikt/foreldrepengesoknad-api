@@ -40,7 +40,7 @@ import org.springframework.web.servlet.mvc.method.annotation.ResponseEntityExcep
 
 import jakarta.validation.ConstraintViolationException;
 import no.nav.foreldrepenger.common.error.UnexpectedInputException;
-import no.nav.foreldrepenger.common.util.TokenUtil;
+import no.nav.foreldrepenger.selvbetjening.http.TokenUtil;
 import no.nav.foreldrepenger.selvbetjening.innsyn.UmydigBrukerException;
 import no.nav.foreldrepenger.selvbetjening.uttak.ManglendeFamiliehendelseException;
 import no.nav.foreldrepenger.selvbetjening.vedlegg.AttachmentException;

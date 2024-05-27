@@ -28,9 +28,9 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import no.nav.boot.conditionals.ConditionalOnNotProd;
-import no.nav.foreldrepenger.common.util.TokenUtil;
 import no.nav.foreldrepenger.selvbetjening.config.JacksonConfiguration;
 import no.nav.foreldrepenger.selvbetjening.config.MessageSourceConfig;
+import no.nav.foreldrepenger.selvbetjening.http.TokenUtil;
 import no.nav.foreldrepenger.selvbetjening.vedlegg.AttachmentPasswordProtectedException;
 import no.nav.foreldrepenger.selvbetjening.vedlegg.AttachmentTypeUnsupportedException;
 

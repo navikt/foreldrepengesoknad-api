@@ -14,8 +14,8 @@ import org.springframework.web.client.HttpClientErrorException;
 import jakarta.validation.Valid;
 import jakarta.validation.constraints.NotNull;
 import no.nav.foreldrepenger.common.domain.Saksnummer;
-import no.nav.foreldrepenger.common.util.TokenUtil;
 import no.nav.foreldrepenger.selvbetjening.http.ProtectedRestController;
+import no.nav.foreldrepenger.selvbetjening.http.TokenUtil;
 
 @ProtectedRestController("/rest/dokument")
 public class DokumentController {
