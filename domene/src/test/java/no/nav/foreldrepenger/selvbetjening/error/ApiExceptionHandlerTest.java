@@ -34,7 +34,7 @@ class ApiExceptionHandlerTest {
 
     @Test
     void andreMultipartExceptionSkalHaVanligExceptionLøype() {
-        when(tokenUtil.autentisertBrukerOrElseThrowException()).thenReturn(new Fødselsnummer("0000000"));
+        when(tokenUtil.innloggetBrukerOrElseThrowException()).thenReturn(new Fødselsnummer("0000000"));
         var webrequest = mock(ServletWebRequest.class);
         when(webrequest.getRequest()).thenReturn(new MockHttpServletRequest("POST", "/path"));
         var exception = new MultipartException("MULTIPART", new EOFException());

@@ -31,7 +31,7 @@ class InnsynControllerTest {
 
     @BeforeEach
     void setUp() {
-        when(tokenUtil.autentisertBrukerOrElseThrowException()).thenReturn(DUMMY_FNR);
+        when(tokenUtil.innloggetBrukerOrElseThrowException()).thenReturn(DUMMY_FNR);
     }
 
     @Test

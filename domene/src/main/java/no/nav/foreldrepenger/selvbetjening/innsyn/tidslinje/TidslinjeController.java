@@ -37,7 +37,7 @@ public class TidslinjeController {
 
     @GetMapping(produces = MediaType.APPLICATION_JSON_VALUE)
     public List<TidslinjeHendelseDto> hentTidslinje(@RequestParam @Valid @NotNull Saksnummer saksnummer) {
-        var tidslinje = tidslinjeTjeneste.tidslinje(tokenUtil.autentisertBrukerOrElseThrowException(), saksnummer);
+        var tidslinje = tidslinjeTjeneste.tidslinje(tokenUtil.innloggetBrukerOrElseThrowException(), saksnummer);
         tidslinjeKonsistensSjekk(tidslinje);
         return tidslinje;
     }

@@ -5,7 +5,6 @@ import java.util.Date;
 import java.util.List;
 import java.util.Objects;
 import java.util.Optional;
-import java.util.function.Supplier;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Configuration;
@@ -18,32 +17,43 @@ import no.nav.foreldrepenger.common.util.TimeUtil;
 import no.nav.security.token.support.core.context.TokenValidationContext;
 import no.nav.security.token.support.core.context.TokenValidationContextHolder;
 import no.nav.security.token.support.core.exceptions.JwtTokenValidatorException;
-import no.nav.security.token.support.core.jwt.JwtToken;
 import no.nav.security.token.support.core.jwt.JwtTokenClaims;
 
 @Configuration
 public class TokenUtil {
     public static final String IDPORTEN = "idporten";
-    public static final String CLAIMS = "acr=Level4";
     public static final String IDPORTENV2_CLAIMS = "acr=idporten-loa-high";
-    public static final String BEARER = "Bearer ";
     public static final String NAV_AUTH_LEVEL = "Nav-auth-level";
     public static final String NAV_TOKEN_EXPIRY_ID = "Nav-Token-Expiry";
+    private static final List<String> issuers = List.of(IDPORTEN);
 
     private final TokenValidationContextHolder ctxHolder;
-    private final List<String> issuers = List.of(IDPORTEN);
 
     @Autowired
     public TokenUtil(TokenValidationContextHolder ctxHolder) {
         this.ctxHolder = ctxHolder;
     }
 
-    public Fødselsnummer autentisertBrukerOrElseThrowException() {
+    public Fødselsnummer innloggetBrukerOrElseThrowException() {
         return new Fødselsnummer(fødselsnummerFraToken());
     }
 
-    public boolean erAutentisert() {
+    public boolean erInnloggetBruker() {
         return getSubject() != null;
+    }
+
+    public boolean erUtløpt() {
+        return Optional.ofNullable(getExpiration())
+            .filter(d -> d.isBefore(LocalDateTime.now()))
+            .isPresent();
+    }
+
+    public LocalDateTime getExpiration() {
+        return Optional.ofNullable(claimSet())
+            .map(c -> c.get("exp"))
+            .map(TokenUtil::getDateClaim)
+            .map(TimeUtil::fraDato)
+            .orElse(null);
     }
 
     public String getSubject() {
@@ -63,20 +73,6 @@ public class TokenUtil {
                 .orElse("");
     }
 
-    public boolean erUtløpt() {
-        return Optional.ofNullable(getExpiration())
-                .filter(d -> d.isBefore(LocalDateTime.now()))
-                .isPresent();
-    }
-
-    public LocalDateTime getExpiration() {
-        return Optional.ofNullable(claimSet())
-                .map(c -> c.get("exp"))
-                .map(this::getDateClaim)
-                .map(TimeUtil::fraDato)
-                .orElse(null);
-    }
-
     public AuthenticationLevel getLevel() {
         return Optional.ofNullable(claimSet())
                 .map(c -> c.get("acr"))
@@ -87,26 +83,7 @@ public class TokenUtil {
 
     private String fødselsnummerFraToken() {
         return Optional.ofNullable(getSubject())
-            .orElseThrow(unauthenticated("Fant ikke subject, antagelig ikke autentisert"));
-    }
-
-    private static Supplier<? extends JwtTokenValidatorException> unauthenticated(String msg) {
-        return () -> new JwtTokenValidatorException(msg);
-    }
-
-    public String getToken() {
-        return issuers.stream()
-                .map(this::getToken)
-                .filter(Objects::nonNull)
-                .findFirst()
-                .orElseThrow(unauthenticated("Fant ikke ID-token"));
-    }
-
-    private String getToken(String issuer) {
-        return Optional.ofNullable(context())
-                .map(c -> c.getJwtToken(issuer))
-                .map(JwtToken::getTokenAsString)
-                .orElse(null);
+            .orElseThrow(() -> new JwtTokenValidatorException("Fant ikke subject, antagelig ikke autentisert"));
     }
 
     private JwtTokenClaims claimSet() {
@@ -119,15 +96,23 @@ public class TokenUtil {
 
     private JwtTokenClaims claimSet(String issuer) {
         return Optional.ofNullable(context())
-                .map(s -> s.getClaims(issuer))
+                .map(s -> claimsFraKontekts(issuer, s))
                 .orElse(null);
+    }
+
+    private static JwtTokenClaims claimsFraKontekts(String issuer, TokenValidationContext context) {
+        try {
+            return context.getClaims(issuer);
+        } catch (Exception e) {
+            return null;
+        }
     }
 
     private TokenValidationContext context() {
         return ctxHolder.getTokenValidationContext();
     }
 
-    private Date getDateClaim(Object value) {
+    private static Date getDateClaim(Object value) {
         if (value == null) {
             return null;
         }
@@ -138,10 +123,5 @@ public class TokenUtil {
             return DateUtils.fromSecondsSinceEpoch(n.longValue());
         }
         return null;
-    }
-
-    @Override
-    public String toString() {
-        return "TokenUtil{" + "issuers=" + issuers + '}';
     }
 }

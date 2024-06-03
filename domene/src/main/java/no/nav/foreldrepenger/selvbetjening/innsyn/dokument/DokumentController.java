@@ -45,7 +45,7 @@ public class DokumentController {
 
     @GetMapping(value = "/alle")
     public List<DokumentDto> hentDokumentoversikten(@RequestParam @Valid @NotNull Saksnummer saksnummer) {
-        var dokumenter = dokumentTjeneste.alle(tokenUtil.autentisertBrukerOrElseThrowException(), saksnummer);
+        var dokumenter = dokumentTjeneste.alle(tokenUtil.innloggetBrukerOrElseThrowException(), saksnummer);
         LOG.info("Hentet {} dokumenter på sak {}", dokumenter.size(), saksnummer.value());
         return dokumenter;
     }

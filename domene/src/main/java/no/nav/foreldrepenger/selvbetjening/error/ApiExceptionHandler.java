@@ -203,8 +203,7 @@ public class ApiExceptionHandler extends ResponseEntityExceptionHandler {
     }
 
     private boolean loggExceptionPåInfoNivå(Exception e) {
-        return !tokenUtil.erAutentisert() ||
-                tokenUtil.erUtløpt() ||
+        return !tokenUtil.erInnloggetBruker() || tokenUtil.erUtløpt() ||
                 e instanceof JwtTokenInvalidClaimException && getMostSpecificCause(e).getMessage().contains(REDIRECT_INNLOGGING_VED_MANGLEDE_NIVÅ_ACR) ||
                 e instanceof JwtTokenUnauthorizedException && getMostSpecificCause(e).getMessage().contains(REDIRECT_INNLOGGING_VED_MANGLEDE_NIVÅ_ACR) ||
                 e instanceof HttpMediaTypeNotAcceptableException ||

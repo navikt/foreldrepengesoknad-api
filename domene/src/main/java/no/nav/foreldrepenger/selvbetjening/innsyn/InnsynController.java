@@ -57,7 +57,7 @@ public class InnsynController {
 
     @GetMapping("/saker/oppdatert")
     public boolean erSakOppdatert() {
-        var dokumenter = dokumentTjeneste.alle(tokenUtil.autentisertBrukerOrElseThrowException());
+        var dokumenter = dokumentTjeneste.alle(tokenUtil.innloggetBrukerOrElseThrowException());
         var søkaderMottattNylig = dokumenter.stream()
             .filter(arkivDokument -> DokumentDto.Type.INNGÅENDE_DOKUMENT.equals(arkivDokument.type()))
             .filter(arkivDokument -> arkivDokument.tittel().contains(TITTEL_VED_SØKNAD))

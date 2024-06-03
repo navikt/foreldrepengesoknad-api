@@ -51,7 +51,7 @@ public class IDToMDCFilterBean extends GenericFilterBean {
 
     private void copyHeadersToMDC(HttpServletRequest request, String uri) {
         try {
-            if (tokenUtil.erAutentisert()) {
+            if (tokenUtil.erInnloggetBruker()) {
                 var fnr = tokenUtil.getSubject();
                 SECURE_LOGGER.info("FNR {} - {} {}", fnr, request.getMethod(), request.getRequestURI());
                 toMDC(NAV_USER_ID, Optional.ofNullable(fnr).map(StringUtil::mask).orElse("Uautentisert"));

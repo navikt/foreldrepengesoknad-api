@@ -49,59 +49,53 @@ class TokenUtilTest {
     void testOK() {
         when(claims.get("exp")).thenReturn(toDate(LocalDateTime.now().minusHours(1)).toInstant().getEpochSecond());
         when(claims.getSubject()).thenReturn(FNR.value());
-        assertEquals(FNR, tokenHelper.autentisertBrukerOrElseThrowException());
-        assertTrue(tokenHelper.erAutentisert());
+        assertEquals(FNR, tokenHelper.innloggetBrukerOrElseThrowException());
+        assertTrue(tokenHelper.erInnloggetBruker());
     }
 
     @Test
     void testNoContext() {
         when(holder.getTokenValidationContext()).thenReturn(null);
-        assertFalse(tokenHelper.erAutentisert());
-        assertThrows(JwtTokenValidatorException.class, () -> tokenHelper.autentisertBrukerOrElseThrowException());
+        assertFalse(tokenHelper.erInnloggetBruker());
+        assertThrows(JwtTokenValidatorException.class, () -> tokenHelper.innloggetBrukerOrElseThrowException());
     }
 
     @Test
     void testNoClaims() {
         when(context.getClaims(IDPORTEN)).thenReturn(null);
-        assertFalse(tokenHelper.erAutentisert());
-        assertThrows(JwtTokenValidatorException.class, () -> tokenHelper.autentisertBrukerOrElseThrowException());
+        assertFalse(tokenHelper.erInnloggetBruker());
+        assertThrows(JwtTokenValidatorException.class, () -> tokenHelper.innloggetBrukerOrElseThrowException());
     }
 
     @Test
     void testNoClaimset() {
         when(context.getClaims(IDPORTEN)).thenReturn(null);
-        assertFalse(tokenHelper.erAutentisert());
-        assertThrows(JwtTokenValidatorException.class, () -> tokenHelper.autentisertBrukerOrElseThrowException());
+        assertFalse(tokenHelper.erInnloggetBruker());
+        assertThrows(JwtTokenValidatorException.class, () -> tokenHelper.innloggetBrukerOrElseThrowException());
     }
 
     @Test
     void testNoSubject() {
         when(claims.getSubject()).thenReturn(null);
         when(claims.getStringClaim(PID)).thenReturn(null);
-        assertFalse(tokenHelper.erAutentisert());
-        assertThrows(JwtTokenValidatorException.class, () -> tokenHelper.autentisertBrukerOrElseThrowException());
-    }
-
-    @Test
-    void testNoToken() {
-        when(context.getJwtToken(IDPORTEN)).thenReturn(null);
-        assertThrows(JwtTokenValidatorException.class, () -> tokenHelper.getToken());
+        assertFalse(tokenHelper.erInnloggetBruker());
+        assertThrows(JwtTokenValidatorException.class, () -> tokenHelper.innloggetBrukerOrElseThrowException());
     }
 
     @Test
     void nårSubjectIkkeFinnesISubSåHentesDetFraPidTest() {
         when(claims.getSubject()).thenReturn(null);
         when(claims.getStringClaim(PID)).thenReturn(FNR.value());
-        assertTrue(tokenHelper.erAutentisert());
-        assertEquals(FNR, tokenHelper.autentisertBrukerOrElseThrowException());
+        assertTrue(tokenHelper.erInnloggetBruker());
+        assertEquals(FNR, tokenHelper.innloggetBrukerOrElseThrowException());
     }
 
     @Test
     void nårSubjectIkkeFinnesIPidSåHentesDetFraSubTest() {
         when(claims.getSubject()).thenReturn(FNR.value());
         when(claims.getStringClaim(PID)).thenReturn(null);
-        assertTrue(tokenHelper.erAutentisert());
-        assertEquals(FNR, tokenHelper.autentisertBrukerOrElseThrowException());
+        assertTrue(tokenHelper.erInnloggetBruker());
+        assertEquals(FNR, tokenHelper.innloggetBrukerOrElseThrowException());
     }
 
     private static Date toDate(LocalDateTime date) {
