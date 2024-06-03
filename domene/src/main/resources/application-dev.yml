@@ -47,3 +47,10 @@ oversikt:
   uri: http://fpoversikt
 safselvbetjening:
   uri: https://safselvbetjening.dev-fss-pub.nais.io
+
+dato:
+  for:
+    aatti:
+      prosent: 2024-06-10
+    minsterett:
+      andre: 2024-06-11

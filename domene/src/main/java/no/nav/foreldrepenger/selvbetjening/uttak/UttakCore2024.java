@@ -6,12 +6,15 @@ import static no.nav.boot.conditionals.EnvUtil.isProd;
 import java.time.LocalDate;
 import java.time.Month;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.core.env.Environment;
 import org.springframework.stereotype.Component;
 
 @Component
 public class UttakCore2024 {
+    private static final Logger LOG = LoggerFactory.getLogger(UttakCore2024.class);
     public static final LocalDate DEFAULT_IKRAFTTREDELSEDATO_1 = LocalDate.of(2024, Month.JULY,1); // LA STÅ etter endring til 2024
     public static final LocalDate DEFAULT_IKRAFTTREDELSEDATO_2 = LocalDate.of(2024, Month.AUGUST,2); // LA STÅ.
 
@@ -25,6 +28,14 @@ public class UttakCore2024 {
         this.env = env;
         this.ikrafttredelseDato1 = isProd(env) || overstyrtIkrafttredelsedato1 == null ? DEFAULT_IKRAFTTREDELSEDATO_1 : overstyrtIkrafttredelsedato1;
         this.ikrafttredelseDato2 = isProd(env) || overstyrtIkrafttredelsedato2 == null ? DEFAULT_IKRAFTTREDELSEDATO_2 : overstyrtIkrafttredelsedato2;
+
+        if (!DEFAULT_IKRAFTTREDELSEDATO_1.isEqual(this.ikrafttredelseDato1)) {
+            LOG.info("Endrer ikraftredelsesdato for åtti prosent fra {} til {}", DEFAULT_IKRAFTTREDELSEDATO_1, ikrafttredelseDato1);
+        }
+        if (!DEFAULT_IKRAFTTREDELSEDATO_2.isEqual(this.ikrafttredelseDato2)) {
+            LOG.info("Endrer ikraftredelsesdato for minstrett andre fra {} til {}", DEFAULT_IKRAFTTREDELSEDATO_2, ikrafttredelseDato2);
+        }
+
     }
 
     public LocalDate getIkrafttredelseDato1() {
