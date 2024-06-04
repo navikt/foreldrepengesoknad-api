@@ -6,23 +6,36 @@ import static no.nav.boot.conditionals.EnvUtil.isProd;
 import java.time.LocalDate;
 import java.time.Month;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.core.env.Environment;
 import org.springframework.stereotype.Component;
 
 @Component
 public class UttakCore2024 {
-    private static LocalDate DEFAULT_IKRAFTTREDELSEDATO_1 = LocalDate.of(2024, Month.JULY,1); // LA STÅ etter endring til 2024
-    private static LocalDate DEFAULT_IKRAFTTREDELSEDATO_2 = LocalDate.of(2024, Month.AUGUST,2); // LA STÅ.
+    private static final Logger LOG = LoggerFactory.getLogger(UttakCore2024.class);
+    public static final LocalDate DEFAULT_IKRAFTTREDELSEDATO_1 = LocalDate.of(2024, Month.JULY,1); // LA STÅ etter endring til 2024
+    public static final LocalDate DEFAULT_IKRAFTTREDELSEDATO_2 = LocalDate.of(2024, Month.AUGUST,2); // LA STÅ.
 
     private LocalDate ikrafttredelseDato1;
     private LocalDate ikrafttredelseDato2;
+    private Environment env;
 
     public UttakCore2024(@Value("${dato.for.aatti.prosent:#{null}}") LocalDate overstyrtIkrafttredelsedato1,
                          @Value("${dato.for.minsterett.andre:#{null}}") LocalDate overstyrtIkrafttredelsedato2,
                          Environment env) {
-        ikrafttredelseDato1 = isProd(env) || overstyrtIkrafttredelsedato1 == null ? DEFAULT_IKRAFTTREDELSEDATO_1 : overstyrtIkrafttredelsedato1;
-        ikrafttredelseDato2 = isProd(env) || overstyrtIkrafttredelsedato2 == null ? DEFAULT_IKRAFTTREDELSEDATO_2 : overstyrtIkrafttredelsedato2;
+        this.env = env;
+        this.ikrafttredelseDato1 = isProd(env) || overstyrtIkrafttredelsedato1 == null ? DEFAULT_IKRAFTTREDELSEDATO_1 : overstyrtIkrafttredelsedato1;
+        this.ikrafttredelseDato2 = isProd(env) || overstyrtIkrafttredelsedato2 == null ? DEFAULT_IKRAFTTREDELSEDATO_2 : overstyrtIkrafttredelsedato2;
+
+        if (!DEFAULT_IKRAFTTREDELSEDATO_1.isEqual(this.ikrafttredelseDato1)) {
+            LOG.info("Endrer ikraftredelsesdato for åtti prosent fra {} til {}", DEFAULT_IKRAFTTREDELSEDATO_1, ikrafttredelseDato1);
+        }
+        if (!DEFAULT_IKRAFTTREDELSEDATO_2.isEqual(this.ikrafttredelseDato2)) {
+            LOG.info("Endrer ikraftredelsesdato for minstrett andre fra {} til {}", DEFAULT_IKRAFTTREDELSEDATO_2, ikrafttredelseDato2);
+        }
+
     }
 
     public LocalDate getIkrafttredelseDato1() {
@@ -34,7 +47,26 @@ public class UttakCore2024 {
     }
 
     public LocalDate utledRegelvalgsdato(LocalDate familieHendelseDato) {
-        if (familieHendelseDato == null || familieHendelseDato.isBefore(ikrafttredelseDato1)) return null;
+        if (familieHendelseDato == null) {
+            return null;
+        }
+        return isProd(env) ? utledRegelvalgDato(familieHendelseDato) : utledRegelvalgDatoForDev(familieHendelseDato);
+    }
+
+    private LocalDate utledRegelvalgDatoForDev(LocalDate familieHendelseDato) {
+        if (!familieHendelseDato.isBefore(ikrafttredelseDato2)) {
+            return DEFAULT_IKRAFTTREDELSEDATO_2;
+        }
+        if (!familieHendelseDato.isBefore(ikrafttredelseDato1)) {
+            return DEFAULT_IKRAFTTREDELSEDATO_1;
+        }
+        return null;
+    }
+
+    private LocalDate utledRegelvalgDato(LocalDate familieHendelseDato) {
+        if (familieHendelseDato.isBefore(ikrafttredelseDato1)) {
+            return null;
+        }
         return LocalDate.now().isBefore(ikrafttredelseDato2) ? LocalDate.now() : null;
     }
 }
