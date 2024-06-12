@@ -26,6 +26,13 @@ spec:
       enabled: true
       runtime: java
   accessPolicy:
+    inbound:
+      rules:
+        - application: engangsstonad
+        - application: svangerskapspengesoknad
+        - application: foreldrepengesoknad
+        - application: planlegger
+        - application: foreldrepengeoversikt
     outbound:
       rules:
         - application: fpdokgen
