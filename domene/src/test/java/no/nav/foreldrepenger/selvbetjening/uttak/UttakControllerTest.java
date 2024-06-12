@@ -42,7 +42,7 @@ class UttakControllerTest {
 
     @Test
     void mor_og_far_rett_to_tette() {
-        var controller = new UttakController();
+        var controller = new UttakController(uttakCore2024);
         var grunnlag = new KontoBeregningGrunnlagDto(
             Rettighetstype.BEGGE_RETT,
             Brukerrolle.MOR,

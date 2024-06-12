@@ -5,6 +5,7 @@ import static no.nav.foreldrepenger.selvbetjening.uttak.KontoBeregningDtoMapper.
 import static no.nav.foreldrepenger.stønadskonto.regelmodell.grunnlag.Dekningsgrad.DEKNINGSGRAD_100;
 import static no.nav.foreldrepenger.stønadskonto.regelmodell.grunnlag.Dekningsgrad.DEKNINGSGRAD_80;
 
+import java.time.LocalDate;
 import java.util.Map;
 
 import org.springframework.validation.annotation.Validated;
@@ -54,7 +55,7 @@ public class UttakController {
         return tilKontoberegning(stønadskontoer, grunnlag.brukerrolle());
     }
 
-    private static BeregnKontoerGrunnlag tilBeregnKontoGrunnlag(KontoBeregningGrunnlagDto grunnlag, Dekningsgrad dekningsgrad) {
+    private BeregnKontoerGrunnlag tilBeregnKontoGrunnlag(KontoBeregningGrunnlagDto grunnlag, Dekningsgrad dekningsgrad) {
         var familiehendelsedato = familiehendelsedato(grunnlag.fødselsdato(), grunnlag.termindato(), grunnlag.omsorgsovertakelseDato());
         return new BeregnKontoerGrunnlag.Builder()
             .regelvalgsdato(uttakCore2024.utledRegelvalgsdato(familiehendelsedato))
