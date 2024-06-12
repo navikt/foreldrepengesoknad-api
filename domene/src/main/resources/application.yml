@@ -30,7 +30,9 @@ no.nav:
           discoveryurl: ${idporten.well.known.url}
           validation:
             optional-claims: aud
-
+        tokenx:
+          discovery-url: ${token.x.well.known.url}
+          accepted-audience: ${token.x.client.id}
 virus:
   enabled: true
 
