@@ -2,8 +2,7 @@ package no.nav.foreldrepenger.selvbetjening.http;
 
 import static java.lang.annotation.ElementType.TYPE;
 import static java.lang.annotation.RetentionPolicy.RUNTIME;
-import static no.nav.foreldrepenger.selvbetjening.http.TokenUtil.IDPORTEN;
-import static no.nav.foreldrepenger.selvbetjening.http.TokenUtil.IDPORTENV2_CLAIMS;
+import static no.nav.foreldrepenger.selvbetjening.http.TokenUtil.ARC_CLAIM;
 import static no.nav.foreldrepenger.selvbetjening.http.TokenUtil.TOKENX;
 
 import java.lang.annotation.Documented;
@@ -20,9 +19,7 @@ import no.nav.security.token.support.core.api.RequiredIssuers;
 
 @RestController
 @Documented
-@RequiredIssuers({
-    @ProtectedWithClaims(issuer = TOKENX, combineWithOr = true),
-    @ProtectedWithClaims(issuer = IDPORTEN, claimMap = {IDPORTENV2_CLAIMS}, combineWithOr = true)})
+@RequiredIssuers({@ProtectedWithClaims(issuer = TOKENX, claimMap = {ARC_CLAIM}, combineWithOr = true)})
 @Validated
 @Target(TYPE)
 @Retention(RUNTIME)

@@ -26,10 +26,6 @@ no.nav:
               client-jwk: ${token.x.private.jwk}
               client-auth-method: private_key_jwt
       issuer:
-        idporten:
-          discoveryurl: ${idporten.well.known.url}
-          validation:
-            optional-claims: aud
         tokenx:
           discovery-url: ${token.x.well.known.url}
           accepted-audience: ${token.x.client.id}

@@ -1,6 +1,6 @@
 package no.nav.foreldrepenger.selvbetjening.util;
 
-import static no.nav.foreldrepenger.selvbetjening.http.TokenUtil.IDPORTEN;
+import static no.nav.foreldrepenger.selvbetjening.http.TokenUtil.TOKENX;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertFalse;
 import static org.junit.jupiter.api.Assertions.assertThrows;
@@ -41,7 +41,7 @@ class TokenUtilTest {
         claims = mock(JwtTokenClaims.class);
 
         when(holder.getTokenValidationContext()).thenReturn(context);
-        when(context.getClaims(IDPORTEN)).thenReturn(claims);
+        when(context.getClaims(TOKENX)).thenReturn(claims);
         tokenHelper = new TokenUtil(holder);
     }
 
@@ -62,14 +62,14 @@ class TokenUtilTest {
 
     @Test
     void testNoClaims() {
-        when(context.getClaims(IDPORTEN)).thenReturn(null);
+        when(context.getClaims(TOKENX)).thenReturn(null);
         assertFalse(tokenHelper.erInnloggetBruker());
         assertThrows(JwtTokenValidatorException.class, () -> tokenHelper.innloggetBrukerOrElseThrowException());
     }
 
     @Test
     void testNoClaimset() {
-        when(context.getClaims(IDPORTEN)).thenReturn(null);
+        when(context.getClaims(TOKENX)).thenReturn(null);
         assertFalse(tokenHelper.erInnloggetBruker());
         assertThrows(JwtTokenValidatorException.class, () -> tokenHelper.innloggetBrukerOrElseThrowException());
     }

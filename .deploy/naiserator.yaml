@@ -12,10 +12,6 @@ metadata:
 spec:
   tokenx:
     enabled: true
-  idporten:
-    enabled: true
-    sidecar:
-      enabled: true
   envFrom:
     - secret: api-storage
   gcp:

@@ -21,12 +21,11 @@ import no.nav.security.token.support.core.jwt.JwtTokenClaims;
 
 @Configuration
 public class TokenUtil {
-    public static final String IDPORTEN = "idporten";
     public static final String TOKENX = "tokenx";
-    public static final String IDPORTENV2_CLAIMS = "acr=idporten-loa-high";
+    public static final String ARC_CLAIM = "acr=idporten-loa-high";
     public static final String NAV_AUTH_LEVEL = "Nav-auth-level";
     public static final String NAV_TOKEN_EXPIRY_ID = "Nav-Token-Expiry";
-    private static final List<String> issuers = List.of(IDPORTEN, TOKENX);
+    private static final List<String> issuers = List.of(TOKENX);
 
     private final TokenValidationContextHolder ctxHolder;
 
