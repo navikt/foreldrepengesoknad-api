@@ -1,8 +1,5 @@
 {
   "tmpbucket": "mellomlagring",
-  "ingresses": [
-    "https://foreldrepengesoknad-api.intern.dev.nav.no"
-  ],
   "external": [
     "fpsoknad-mottak.dev-fss-pub.nais.io",
     "safselvbetjening.dev-fss-pub.nais.io"

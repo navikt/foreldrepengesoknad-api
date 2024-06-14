@@ -61,10 +61,6 @@ spec:
   prometheus:
     enabled: true
     path: /internal/actuator/prometheus
-  ingresses:
-    {{#each ingresses as |url|}}
-    - {{url}}
-    {{/each}}
   resources:
     limits:
       cpu: "{{limits.cpu}}"
