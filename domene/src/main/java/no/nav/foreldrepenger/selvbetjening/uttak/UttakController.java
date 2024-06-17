@@ -52,7 +52,7 @@ public class UttakController {
 
     private KontoBeregningDto kontoberegningFra(KontoBeregningGrunnlagDto grunnlag, Dekningsgrad dekningsgrad) {
         var stønadskontoer = REGEL_ORKESTRERING.beregnKontoer(tilBeregnKontoGrunnlag(grunnlag, dekningsgrad)).getStønadskontoer();
-        return tilKontoberegning(stønadskontoer, grunnlag.brukerrolle());
+        return tilKontoberegning(stønadskontoer, grunnlag);
     }
 
     private BeregnKontoerGrunnlag tilBeregnKontoGrunnlag(KontoBeregningGrunnlagDto grunnlag, Dekningsgrad dekningsgrad) {
