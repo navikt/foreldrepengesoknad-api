@@ -4,6 +4,7 @@
     "fpsoknad-mottak.dev-fss-pub.nais.io",
     "safselvbetjening.dev-fss-pub.nais.io"
   ],
+  "ingress": "https://foreldrepengesoknad-api.ekstern.dev.nav.no",
   "limits": {
     "cpu": "1500m",
     "mem": "4096Mi"

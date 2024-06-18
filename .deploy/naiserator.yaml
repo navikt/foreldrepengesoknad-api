@@ -41,6 +41,10 @@ spec:
         {{/each}}
   image: {{image}}
   port: 8080
+  {{#if ingress}}
+  ingresses:
+    - {{ingress}}
+  {{/if}}
   replicas:
     min: 2
     max: 3
