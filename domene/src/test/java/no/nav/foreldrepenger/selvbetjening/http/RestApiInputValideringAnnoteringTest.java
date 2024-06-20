@@ -8,10 +8,11 @@ import java.util.Set;
 import org.junit.jupiter.api.Test;
 
 import jakarta.validation.Valid;
+import no.nav.foreldrepenger.selvbetjening.sats.SatsController;
 import no.nav.foreldrepenger.selvbetjening.uttak.UttakController;
 
 class RestApiInputValideringAnnoteringTest extends RestApiTestUtil {
-    private static final Set<Class<?>> UNNTATT_RESTCONTROLLER = Set.of(UttakController.class);
+    private static final Set<Class<?>> UNNTATT_RESTCONTROLLER = Set.of(UttakController.class, SatsController.class);
     private static final Set<Class<?>> UNNTATT_PARAMETER_TYPE = Set.of(boolean.class, String.class);
 
 

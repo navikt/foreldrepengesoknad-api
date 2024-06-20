@@ -1,21 +1,23 @@
 package no.nav.foreldrepenger.selvbetjening.http;
 
-import no.nav.boot.conditionals.ConditionalOnNotProd;
-import no.nav.foreldrepenger.selvbetjening.uttak.UttakController;
-import no.nav.security.token.support.core.api.RequiredIssuers;
-import no.nav.security.token.support.core.api.Unprotected;
-import org.junit.jupiter.api.Test;
-import org.springframework.validation.annotation.Validated;
-import org.springframework.web.bind.annotation.RestController;
+import static org.assertj.core.api.Assertions.assertThat;
 
 import java.lang.reflect.Method;
 import java.util.List;
 
-import static org.assertj.core.api.Assertions.assertThat;
+import org.junit.jupiter.api.Test;
+import org.springframework.validation.annotation.Validated;
+import org.springframework.web.bind.annotation.RestController;
+
+import no.nav.boot.conditionals.ConditionalOnNotProd;
+import no.nav.foreldrepenger.selvbetjening.sats.SatsController;
+import no.nav.foreldrepenger.selvbetjening.uttak.UttakController;
+import no.nav.security.token.support.core.api.RequiredIssuers;
+import no.nav.security.token.support.core.api.Unprotected;
 
 class RestApiSikredeEndepunktTest extends RestApiTestUtil {
 
-    private static final List<Class<?>> UNNTATT_RESTCONTROLLER = List.of(UttakController.class, PreStopHookController.class);
+    private static final List<Class<?>> UNNTATT_RESTCONTROLLER = List.of(UttakController.class, SatsController.class, PreStopHookController.class);
     private static final List<String> ENDEPUNKT_SOM_KAN_VÆRE_UNPROTECTED = List.of("ping", "preStop");
 
     @Test
