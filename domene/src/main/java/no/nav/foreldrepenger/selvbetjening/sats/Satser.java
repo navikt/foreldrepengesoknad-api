@@ -2,6 +2,7 @@ package no.nav.foreldrepenger.selvbetjening.sats;
 
 public class Satser {
 
+    // Uttrekk fra BR_SATS i fpsak
     public static final String SATSER = """
         {
             "engangstønad":

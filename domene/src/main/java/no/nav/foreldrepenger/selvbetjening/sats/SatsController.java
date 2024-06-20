@@ -24,10 +24,4 @@ public class SatsController {
     public String satser() {
         return Satser.SATSER;
     }
-
-
-
-
-
-
 }
