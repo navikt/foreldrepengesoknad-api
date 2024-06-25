@@ -27,8 +27,9 @@ spec:
         - application: engangsstonad
         - application: svangerskapspengesoknad
         - application: foreldrepengesoknad
-        - application: planlegger
         - application: foreldrepengeoversikt
+        - application: planlegger
+        - application: veivisere
     outbound:
       rules:
         - application: fpdokgen
