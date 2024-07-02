@@ -101,7 +101,7 @@ class UttakControllerTest {
         assertThat(kontoberegning100.kontoer()).contains(new KontoBeregningDto.KontoDto(AKTIVITETSFRI_KVOTE, 40));
 
         var kontoberegning80 = resultat.get("80");
-        assertThat(kontoberegning80.kontoer()).contains(new KontoBeregningDto.KontoDto(FORELDREPENGER, 210));
+        assertThat(kontoberegning80.kontoer()).contains(new KontoBeregningDto.KontoDto(FORELDREPENGER, 221));
         assertThat(kontoberegning100.kontoer()).contains(new KontoBeregningDto.KontoDto(AKTIVITETSFRI_KVOTE, 40));
         assertThat(kontoberegning100.minsteretter().farRundtFødsel())
             .isEqualTo(kontoberegning80.minsteretter().farRundtFødsel())
@@ -133,7 +133,7 @@ class UttakControllerTest {
         var kontoberegning80 = resultat.get("80");
         assertThat(kontoberegning80.kontoer()).containsExactlyInAnyOrder(
             new KontoBeregningDto.KontoDto(FORELDREPENGER_FØR_FØDSEL, 15),
-            new KontoBeregningDto.KontoDto(FORELDREPENGER, 280)
+            new KontoBeregningDto.KontoDto(FORELDREPENGER, 291)
             );
 
         assertThat(kontoberegning100.minsteretter().farRundtFødsel())
