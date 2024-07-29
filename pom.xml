@@ -7,7 +7,7 @@
     <parent>
         <groupId>org.springframework.boot</groupId>
         <artifactId>spring-boot-starter-parent</artifactId>
-        <version>3.3.1</version>
+        <version>3.3.2</version>
     </parent>
 
 	<groupId>no.nav.foreldrepenger.selvbetjening</groupId>
@@ -47,14 +47,14 @@
 		<token-validation-version>4.0.5</token-validation-version> <!-- Fjerner cookie støtte fra versjon 4.1.0-->
         <boot-conditionals.version>5.1.2</boot-conditionals.version>
 
-        <springdoc.version>2.5.0</springdoc.version>
+        <springdoc.version>2.6.0</springdoc.version>
 		<tika.version>2.9.2</tika.version>
-		<logback.logstash.version>7.4</logback.logstash.version>
+		<logback.logstash.version>8.0</logback.logstash.version>
 		<nv.version>1.29</nv.version>
         <reflections.version>0.10.2</reflections.version>
 		<pdfbox.version>3.0.2</pdfbox.version>
 		<jacoco.version>0.8.12</jacoco.version>
-		<gcp.version>0.223.0</gcp.version>
+		<gcp.version>0.224.0</gcp.version>
         <graphql-java-codegen.version>5.10.0</graphql-java-codegen.version>
 	</properties>
 
