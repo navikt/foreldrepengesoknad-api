@@ -42,9 +42,9 @@
 		<project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
 		<project.reporting.outputEncoding>UTF-8</project.reporting.outputEncoding>
 
-        <stonadskonto-regler.version>2.1.0</stonadskonto-regler.version>
-        <selvbetjening-felles.version>3.1.1</selvbetjening-felles.version>
-		<token-validation-version>4.0.5</token-validation-version> <!-- Fjerner cookie støtte fra versjon 4.1.0-->
+        <stonadskonto-regler.version>2.1.1</stonadskonto-regler.version>
+        <selvbetjening-felles.version>3.1.2</selvbetjening-felles.version>
+		<token-validation-version>5.0.1</token-validation-version> <!-- Fjerner cookie støtte fra versjon 4.1.0-->
         <boot-conditionals.version>5.1.2</boot-conditionals.version>
 
         <springdoc.version>2.5.0</springdoc.version>
