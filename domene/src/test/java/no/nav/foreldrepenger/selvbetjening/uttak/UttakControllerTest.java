@@ -97,12 +97,12 @@ class UttakControllerTest {
 
         assertThat(resultat).containsOnlyKeys("80", "100");
         var kontoberegning100 = resultat.get("100");
-        assertThat(kontoberegning100.kontoer()).contains(new KontoBeregningDto.KontoDto(FORELDREPENGER, 160));
-        assertThat(kontoberegning100.kontoer()).contains(new KontoBeregningDto.KontoDto(AKTIVITETSFRI_KVOTE, 40));
+        assertThat(kontoberegning100.kontoer()).contains(new KontoBeregningDto.KontoDto(FORELDREPENGER, 150));
+        assertThat(kontoberegning100.kontoer()).contains(new KontoBeregningDto.KontoDto(AKTIVITETSFRI_KVOTE, 50));
 
         var kontoberegning80 = resultat.get("80");
-        assertThat(kontoberegning80.kontoer()).contains(new KontoBeregningDto.KontoDto(FORELDREPENGER, 221));
-        assertThat(kontoberegning100.kontoer()).contains(new KontoBeregningDto.KontoDto(AKTIVITETSFRI_KVOTE, 40));
+        assertThat(kontoberegning80.kontoer()).contains(new KontoBeregningDto.KontoDto(FORELDREPENGER, 211));
+        assertThat(kontoberegning80.kontoer()).contains(new KontoBeregningDto.KontoDto(AKTIVITETSFRI_KVOTE, 50));
         assertThat(kontoberegning100.minsteretter().farRundtFødsel())
             .isEqualTo(kontoberegning80.minsteretter().farRundtFødsel())
             .isEqualTo(10);
@@ -166,8 +166,8 @@ class UttakControllerTest {
 
         var kontoberegning80 = resultat.get("80");
         assertThat(kontoberegning80.kontoer()).containsExactlyInAnyOrder(
-            new KontoBeregningDto.KontoDto(AKTIVITETSFRI_KVOTE, 105),
-            new KontoBeregningDto.KontoDto(FORELDREPENGER, 250)
+            new KontoBeregningDto.KontoDto(AKTIVITETSFRI_KVOTE, 106),
+            new KontoBeregningDto.KontoDto(FORELDREPENGER, 261)
         );
         assertThat(kontoberegning100.minsteretter().farRundtFødsel())
             .isEqualTo(kontoberegning80.minsteretter().farRundtFødsel())
