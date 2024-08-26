@@ -1,5 +1,6 @@
 package no.nav.foreldrepenger.selvbetjening.kontrakt.innsending.mapper;
 
+import static no.nav.foreldrepenger.common.util.StreamUtil.safeStream;
 import static no.nav.foreldrepenger.selvbetjening.kontrakt.innsending.mapper.CommonMapper.tilOppholdIUtlandet;
 import static no.nav.foreldrepenger.selvbetjening.kontrakt.innsending.mapper.CommonMapper.tilOpptjening;
 import static no.nav.foreldrepenger.selvbetjening.kontrakt.innsending.mapper.CommonMapper.tilVedlegg;
@@ -12,6 +13,7 @@ import no.nav.foreldrepenger.common.domain.BrukerRolle;
 import no.nav.foreldrepenger.common.domain.Søker;
 import no.nav.foreldrepenger.common.domain.Søknad;
 import no.nav.foreldrepenger.common.domain.felles.ProsentAndel;
+import no.nav.foreldrepenger.common.domain.svangerskapspenger.AvtaltFerie;
 import no.nav.foreldrepenger.common.domain.svangerskapspenger.Svangerskapspenger;
 import no.nav.foreldrepenger.common.domain.svangerskapspenger.tilrettelegging.DelvisTilrettelegging;
 import no.nav.foreldrepenger.common.domain.svangerskapspenger.tilrettelegging.HelTilrettelegging;
@@ -65,8 +67,16 @@ public final class SvangerskapspengerMapper {
             tilFødselsdato(s),
             tilOppholdIUtlandet(s),
             tilOpptjening(s.søker(), vedlegg),
-            tilTilrettelegging(s, vedlegg)
+            tilTilrettelegging(s, vedlegg),
+            tilFerieperioder(s)
         );
+    }
+
+    private static List<AvtaltFerie> tilFerieperioder(SvangerskapspengesøknadDto s) {
+        return safeStream(s.avtaltFerie()).map(af -> {
+            var arbeidsforhold = tilArbeidsforhold(af.arbeidsforholdDto());
+            return new AvtaltFerie(arbeidsforhold, af.fom(), af.tom());
+        }).toList();
     }
 
     private static LocalDate tilFødselsdato(SvangerskapspengesøknadDto s) {

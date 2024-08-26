@@ -18,6 +18,7 @@ import no.nav.foreldrepenger.selvbetjening.kontrakt.innsending.dto.validering.Ve
 @Deprecated
 public record SvangerskapspengesøknadDto(LocalDate mottattdato,
                                          @Valid @NotNull @Size(max = 100) List<@Valid TilretteleggingDto> tilrettelegging,
+                                         @Valid @Size(max = 100) List<@Valid AvtaltFerie> avtaltFerie,
                                          @Valid @NotNull BarnDto barn,
                                          @Valid @NotNull UtenlandsoppholdDto informasjonOmUtenlandsopphold,
                                          @Valid @NotNull SøkerDto søker,

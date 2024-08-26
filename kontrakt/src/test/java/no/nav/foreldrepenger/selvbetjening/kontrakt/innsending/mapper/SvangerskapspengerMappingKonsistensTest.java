@@ -9,6 +9,8 @@ import static org.assertj.core.api.Assertions.assertThat;
 import java.time.LocalDate;
 import java.util.List;
 
+import no.nav.foreldrepenger.selvbetjening.kontrakt.innsending.dto.svangerskapspenger.AvtaltFerie;
+
 import org.junit.jupiter.api.Test;
 
 import no.nav.foreldrepenger.common.domain.BrukerRolle;
@@ -41,6 +43,8 @@ class SvangerskapspengerMappingKonsistensTest {
             delvis(NOW, NOW, ArbeidsforholdMaler.privatArbeidsgiver(DUMMY_FNR), 55.0).build(),
             ingen(NOW.plusWeeks(1), NOW.plusWeeks(1), ArbeidsforholdMaler.virksomhet(Orgnummer.MAGIC_ORG)).build()
         );
+        var ferie = new AvtaltFerie(ArbeidsforholdMaler.virksomhet(Orgnummer.MAGIC_ORG), LocalDate.now().plusDays(10),
+            LocalDate.now().plusDays(20));
         var søknadDto = new SvangerskapspengerBuilder(tilretteleggingerDto)
             .medMedlemsskap(medlemskapUtlandetForrige12mnd())
             .medSøker(new SøkerBuilder(BrukerRolle.MOR)
@@ -48,6 +52,7 @@ class SvangerskapspengerMappingKonsistensTest {
                 .medSelvstendigNæringsdrivendeInformasjon(List.of(OpptjeningMaler.egenNaeringOpptjening(Orgnummer.MAGIC_ORG.value())))
                 .build())
             .medBarn(BarnBuilder.termin(2, LocalDate.now().plusWeeks(2)).build())
+            .medAvtaltFerie(ferie)
             .build();
 
         // Act
