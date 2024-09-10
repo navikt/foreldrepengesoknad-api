@@ -5,7 +5,8 @@ allowed:
     https://foreldrepengesoknad.intern.dev.nav.no,
     https://svangerskapspengesoknad.intern.dev.nav.no,
     https://svangerskapspengesoknad-rework.intern.dev.nav.no,
-    https://www.ekstern.dev.nav.no
+    https://www.ekstern.dev.nav.no,
+    https://www.intern.dev.nav.no
 
 management:
   endpoints:
