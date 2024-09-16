@@ -65,6 +65,11 @@ public class SvangerskapspengerBuilder {
         return this;
     }
 
+    public SvangerskapspengerBuilder medAvtaltFerieListe(List<AvtaltFerie> utenlandsopphold) {
+        this.avtalteFerieperioder = avtalteFerieperioder;
+        return this;
+    }
+
     public SvangerskapspengerBuilder medVedlegg(List<VedleggDto> vedlegg) {
         this.vedlegg = vedlegg;
         return this;
