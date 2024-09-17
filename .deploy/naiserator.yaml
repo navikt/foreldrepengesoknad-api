@@ -34,6 +34,9 @@ spec:
         - application: foreldrepengeoversikt
         - application: planlegger
         - application: veivisere
+        - application: veiviser-fp-eller-es
+        - application: veiviser-hva-skjer-nar
+        - application: veiviser-hvor-mye
     outbound:
       rules:
         - application: fpdokgen
