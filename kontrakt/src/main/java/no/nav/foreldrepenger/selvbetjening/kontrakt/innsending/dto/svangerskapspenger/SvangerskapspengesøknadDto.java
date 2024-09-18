@@ -28,6 +28,7 @@ public record SvangerskapspengesøknadDto(LocalDate mottattdato,
     public SvangerskapspengesøknadDto {
         tilrettelegging = Optional.ofNullable(tilrettelegging).orElse(List.of());
         vedlegg = Optional.ofNullable(vedlegg).orElse(List.of());
+        avtaltFerie = Optional.ofNullable(avtaltFerie).orElse(List.of());
     }
 
     @Override

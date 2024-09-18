@@ -52,7 +52,7 @@ class SvangerskapspengerMappingKonsistensTest {
                 .medSelvstendigNæringsdrivendeInformasjon(List.of(OpptjeningMaler.egenNaeringOpptjening(Orgnummer.MAGIC_ORG.value())))
                 .build())
             .medBarn(BarnBuilder.termin(2, LocalDate.now().plusWeeks(2)).build())
-            .medAvtaltFerie(ferie)
+            .medAvtaltFerie(List.of(ferie))
             .build();
 
         // Act

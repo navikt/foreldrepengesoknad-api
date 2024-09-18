@@ -23,7 +23,7 @@ public class SvangerskapspengerBuilder {
     List<AnnenInntektDto> andreInntekterSiste10Mnd;
     List<UtenlandsoppholdsperiodeDto> utenlandsopphold;
     List<TilretteleggingDto> tilretteleggingsbehov;
-    List<AvtaltFerieDto> avtalteFerieperioder;
+    List<AvtaltFerieDto> avtaltFerie;
     private List<VedleggDto> vedlegg;
 
     public SvangerskapspengerBuilder(List<TilretteleggingDto> tilretteleggingsbehov) {
@@ -65,8 +65,8 @@ public class SvangerskapspengerBuilder {
         return this;
     }
 
-    public SvangerskapspengerBuilder medAvtaltFerieListe(List<AvtaltFerieDto> avtalteFerieperioder) {
-        this.avtalteFerieperioder = avtalteFerieperioder;
+    public SvangerskapspengerBuilder medAvtaltFerie(List<AvtaltFerieDto> avtaltFerie) {
+        this.avtaltFerie = avtaltFerie;
         return this;
     }
 
@@ -85,8 +85,7 @@ public class SvangerskapspengerBuilder {
             selvstendigNæringsdrivendeInformasjon,
             andreInntekterSiste10Mnd,
             utenlandsopphold,
-            tilretteleggingsbehov,
-            avtalteFerieperioder,
+            tilretteleggingsbehov, avtaltFerie,
             vedlegg
         );
     }

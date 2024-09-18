@@ -5,5 +5,5 @@ import no.nav.foreldrepenger.selvbetjening.kontrakt.innsending.v2.dto.svangerska
 
 import java.time.LocalDate;
 
-public record AvtaltFerieDto(@Valid ArbeidsforholdDto arbeidsforholdDto, LocalDate fom, LocalDate tom) {
+public record AvtaltFerieDto(@Valid ArbeidsforholdDto arbeidsforhold, LocalDate fom, LocalDate tom) {
 }

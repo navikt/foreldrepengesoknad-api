@@ -49,7 +49,7 @@ class SvangerskapspengerMappingKonsistensTest {
         var søknadDto = new SvangerskapspengerBuilder(tilretteleggingerDto)
             .medUtenlandsopphold(UtenlandsoppholdMaler.oppholdIUtlandetForrige12mnd())
             .medSpråkkode(Målform.EN)
-            .medAvtaltFerieListe(List.of(ferie))
+            .medAvtaltFerie(List.of(ferie))
             .medSelvstendigNæringsdrivendeInformasjon(List.of(OpptjeningMaler.egenNaeringOpptjening(Orgnummer.MAGIC_ORG.value())))
             .medBarn(BarnBuilder.termin(2, LocalDate.now().plusWeeks(2)).build())
             .build();

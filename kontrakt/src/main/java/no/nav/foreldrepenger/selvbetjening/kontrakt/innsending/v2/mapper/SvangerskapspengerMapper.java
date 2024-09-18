@@ -71,8 +71,8 @@ public final class SvangerskapspengerMapper {
 
 
     private static List<AvtaltFerie> tilFerieperioder(SvangerskapspengesøknadDto s) {
-        return safeStream(s.avtalteFerieperioder()).map(af -> {
-            var arbeidsforhold = tilArbeidsforhold(af.arbeidsforholdDto());
+        return safeStream(s.avtaltFerie()).map(af -> {
+            var arbeidsforhold = tilArbeidsforhold(af.arbeidsforhold());
             return new AvtaltFerie(arbeidsforhold, af.fom(), af.tom());
         }).toList();
     }

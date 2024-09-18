@@ -16,7 +16,7 @@ public class SvangerskapspengerBuilder {
     private LocalDate mottattdato;
     private List<TilretteleggingDto> tilrettelegging;
 
-    private List<AvtaltFerieDto> avtaltFerie = new ArrayList<>();
+    private List<AvtaltFerieDto> avtaltFerie;
     private BarnDto barn;
     private UtenlandsoppholdDto informasjonOmUtenlandsopphold;
     private SøkerDto søker;
@@ -57,8 +57,8 @@ public class SvangerskapspengerBuilder {
         return this;
     }
 
-    public SvangerskapspengerBuilder medAvtaltFerie(AvtaltFerieDto avtaltFerie) {
-        this.avtaltFerie.add(avtaltFerie);
+    public SvangerskapspengerBuilder medAvtaltFerie(List<AvtaltFerieDto> avtaltFerie) {
+        this.avtaltFerie = avtaltFerie;
         return this;
     }
 
