@@ -1,7 +1,6 @@
 package no.nav.foreldrepenger.selvbetjening.kontrakt.innsending.util.builder;
 
 import java.time.LocalDate;
-import java.util.ArrayList;
 import java.util.List;
 
 import no.nav.foreldrepenger.selvbetjening.kontrakt.innsending.dto.BarnDto;
