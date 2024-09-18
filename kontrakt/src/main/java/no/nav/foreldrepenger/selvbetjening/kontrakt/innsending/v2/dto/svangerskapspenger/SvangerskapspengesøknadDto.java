@@ -12,7 +12,6 @@ import no.nav.foreldrepenger.selvbetjening.kontrakt.innsending.dto.AnnenInntektD
 import no.nav.foreldrepenger.selvbetjening.kontrakt.innsending.dto.FrilansInformasjonDto;
 import no.nav.foreldrepenger.selvbetjening.kontrakt.innsending.dto.NæringDto;
 import no.nav.foreldrepenger.selvbetjening.kontrakt.innsending.dto.VedleggDto;
-import no.nav.foreldrepenger.selvbetjening.kontrakt.innsending.dto.svangerskapspenger.AvtaltFerie;
 import no.nav.foreldrepenger.selvbetjening.kontrakt.innsending.dto.validering.VedlegglistestørrelseConstraint;
 import no.nav.foreldrepenger.selvbetjening.kontrakt.innsending.v2.dto.BarnDto;
 import no.nav.foreldrepenger.selvbetjening.kontrakt.innsending.v2.dto.SøknadDto;
@@ -26,7 +25,7 @@ public record SvangerskapspengesøknadDto(LocalDate mottattdato,
                                          @Valid @Size(max = 15) List<@Valid @NotNull AnnenInntektDto> andreInntekterSiste10Mnd,
                                          @Valid @Size(max = 40) List<@Valid @NotNull UtenlandsoppholdsperiodeDto> utenlandsopphold,
                                          @Valid @NotNull @Size(max = 100) List<@Valid @NotNull TilretteleggingDto> tilretteleggingsbehov,
-                                         @Valid @Size(max = 100) List<@Valid @NotNull AvtaltFerie> avtalteFerieperioder,
+                                         @Valid @Size(max = 100) List<@Valid @NotNull AvtaltFerieDto> avtalteFerieperioder,
                                          @Valid @VedlegglistestørrelseConstraint @Size(max = 100) List<@Valid  @NotNull VedleggDto> vedlegg) implements SøknadDto {
 
     public SvangerskapspengesøknadDto {
