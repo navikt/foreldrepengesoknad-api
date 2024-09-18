@@ -9,6 +9,8 @@ import static org.assertj.core.api.Assertions.assertThat;
 import java.time.LocalDate;
 import java.util.List;
 
+import no.nav.foreldrepenger.selvbetjening.kontrakt.innsending.v2.dto.svangerskapspenger.AvtaltFerieDto;
+
 import org.junit.jupiter.api.Test;
 
 import no.nav.foreldrepenger.common.domain.BrukerRolle;
@@ -41,6 +43,8 @@ class SvangerskapspengerMappingKonsistensTest {
             delvis(NOW, NOW, ArbeidsforholdMaler.privatArbeidsgiver(DUMMY_FNR), 55.0).build(),
             ingen(NOW.plusWeeks(1), NOW.plusWeeks(1), ArbeidsforholdMaler.virksomhet(Orgnummer.MAGIC_ORG)).build()
         );
+        var ferie = new AvtaltFerieDto(ArbeidsforholdMaler.virksomhet(Orgnummer.MAGIC_ORG), LocalDate.now().plusDays(10),
+            LocalDate.now().plusDays(20));
         var søknadDto = new SvangerskapspengerBuilder(tilretteleggingerDto)
             .medMedlemsskap(medlemskapUtlandetForrige12mnd())
             .medSøker(new SøkerBuilder(BrukerRolle.MOR)
@@ -48,6 +52,7 @@ class SvangerskapspengerMappingKonsistensTest {
                 .medSelvstendigNæringsdrivendeInformasjon(List.of(OpptjeningMaler.egenNaeringOpptjening(Orgnummer.MAGIC_ORG.value())))
                 .build())
             .medBarn(BarnBuilder.termin(2, LocalDate.now().plusWeeks(2)).build())
+            .medAvtaltFerie(List.of(ferie))
             .build();
 
         // Act
@@ -59,9 +64,10 @@ class SvangerskapspengerMappingKonsistensTest {
         assertThat(mappedSøknad.getMottattdato()).isEqualTo(søknadDto.mottattdato());
         assertThat(mappedSøknad.getTilleggsopplysninger()).isNull();
 
-        var ytelse = mappedSøknad.getYtelse();
-        assertThat(ytelse).isInstanceOf(Svangerskapspenger.class);
-        var tilrettelegginger = ((Svangerskapspenger) ytelse).tilrettelegging();
+
+        assertThat(mappedSøknad.getYtelse()).isInstanceOf(Svangerskapspenger.class);
+        var svpMappet = (Svangerskapspenger) mappedSøknad.getYtelse();
+        var tilrettelegginger = svpMappet.tilrettelegging();
         assertThat(tilrettelegginger).hasSameSizeAs(tilretteleggingerDto)
             .hasExactlyElementsOfTypes(
                 HelTilrettelegging.class,
@@ -81,6 +87,12 @@ class SvangerskapspengerMappingKonsistensTest {
                 PrivatArbeidsgiver.class,
                 Virksomhet.class
             );
+        assertThat(svpMappet.avtaltFerie()).hasSize(1)
+            .first().satisfies(af -> {
+                assertThat(af.arbeidsforhold()).isInstanceOf(Virksomhet.class);
+                assertThat(af.ferieFom()).isEqualTo(LocalDate.now().plusDays(10));
+                assertThat(af.ferieTom()).isEqualTo(LocalDate.now().plusDays(20));
+            });
 
     }
 

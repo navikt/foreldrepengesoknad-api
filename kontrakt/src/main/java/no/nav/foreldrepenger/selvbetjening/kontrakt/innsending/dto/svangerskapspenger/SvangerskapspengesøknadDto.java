@@ -14,10 +14,12 @@ import no.nav.foreldrepenger.selvbetjening.kontrakt.innsending.dto.Utenlandsopph
 import no.nav.foreldrepenger.selvbetjening.kontrakt.innsending.dto.VedleggDto;
 import no.nav.foreldrepenger.selvbetjening.kontrakt.innsending.dto.foreldrepenger.Situasjon;
 import no.nav.foreldrepenger.selvbetjening.kontrakt.innsending.dto.validering.VedlegglistestørrelseConstraint;
+import no.nav.foreldrepenger.selvbetjening.kontrakt.innsending.v2.dto.svangerskapspenger.AvtaltFerieDto;
 
 @Deprecated
 public record SvangerskapspengesøknadDto(LocalDate mottattdato,
                                          @Valid @NotNull @Size(max = 100) List<@Valid TilretteleggingDto> tilrettelegging,
+                                         @Valid @Size(max = 100) List<@Valid AvtaltFerieDto> avtaltFerie,
                                          @Valid @NotNull BarnDto barn,
                                          @Valid @NotNull UtenlandsoppholdDto informasjonOmUtenlandsopphold,
                                          @Valid @NotNull SøkerDto søker,
@@ -26,6 +28,7 @@ public record SvangerskapspengesøknadDto(LocalDate mottattdato,
     public SvangerskapspengesøknadDto {
         tilrettelegging = Optional.ofNullable(tilrettelegging).orElse(List.of());
         vedlegg = Optional.ofNullable(vedlegg).orElse(List.of());
+        avtaltFerie = Optional.ofNullable(avtaltFerie).orElse(List.of());
     }
 
     @Override

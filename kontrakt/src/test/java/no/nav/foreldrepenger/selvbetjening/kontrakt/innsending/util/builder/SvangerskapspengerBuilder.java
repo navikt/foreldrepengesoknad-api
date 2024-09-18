@@ -7,12 +7,15 @@ import no.nav.foreldrepenger.selvbetjening.kontrakt.innsending.dto.BarnDto;
 import no.nav.foreldrepenger.selvbetjening.kontrakt.innsending.dto.SøkerDto;
 import no.nav.foreldrepenger.selvbetjening.kontrakt.innsending.dto.UtenlandsoppholdDto;
 import no.nav.foreldrepenger.selvbetjening.kontrakt.innsending.dto.VedleggDto;
+import no.nav.foreldrepenger.selvbetjening.kontrakt.innsending.v2.dto.svangerskapspenger.AvtaltFerieDto;
 import no.nav.foreldrepenger.selvbetjening.kontrakt.innsending.dto.svangerskapspenger.SvangerskapspengesøknadDto;
 import no.nav.foreldrepenger.selvbetjening.kontrakt.innsending.dto.svangerskapspenger.TilretteleggingDto;
 
 public class SvangerskapspengerBuilder {
     private LocalDate mottattdato;
     private List<TilretteleggingDto> tilrettelegging;
+
+    private List<AvtaltFerieDto> avtaltFerie;
     private BarnDto barn;
     private UtenlandsoppholdDto informasjonOmUtenlandsopphold;
     private SøkerDto søker;
@@ -53,11 +56,17 @@ public class SvangerskapspengerBuilder {
         return this;
     }
 
+    public SvangerskapspengerBuilder medAvtaltFerie(List<AvtaltFerieDto> avtaltFerie) {
+        this.avtaltFerie = avtaltFerie;
+        return this;
+    }
+
     public SvangerskapspengesøknadDto build() {
         if (mottattdato == null) mottattdato = LocalDate.now();
         return new SvangerskapspengesøknadDto(
                 mottattdato,
                 tilrettelegging,
+                avtaltFerie,
                 barn,
                 informasjonOmUtenlandsopphold,
                 søker,

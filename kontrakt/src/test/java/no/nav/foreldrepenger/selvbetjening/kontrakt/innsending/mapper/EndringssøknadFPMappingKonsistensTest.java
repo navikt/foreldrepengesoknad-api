@@ -29,7 +29,7 @@ import no.nav.foreldrepenger.selvbetjening.kontrakt.innsending.util.builder.Barn
 import no.nav.foreldrepenger.selvbetjening.kontrakt.innsending.util.builder.EndringssøknadBuilder;
 import no.nav.foreldrepenger.selvbetjening.kontrakt.innsending.util.builder.SøkerBuilder;
 
-class EndrignssøknadFPMappingKonsistensTest {
+class EndringssøknadFPMappingKonsistensTest {
     private static final LocalDate NOW = LocalDate.now();
     private static final Fødselsnummer DUMMY_FNR = new Fødselsnummer("0000000000");
 

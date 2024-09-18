@@ -8,6 +8,7 @@ import no.nav.foreldrepenger.selvbetjening.kontrakt.innsending.dto.AnnenInntektD
 import no.nav.foreldrepenger.selvbetjening.kontrakt.innsending.dto.FrilansInformasjonDto;
 import no.nav.foreldrepenger.selvbetjening.kontrakt.innsending.dto.NæringDto;
 import no.nav.foreldrepenger.selvbetjening.kontrakt.innsending.dto.VedleggDto;
+import no.nav.foreldrepenger.selvbetjening.kontrakt.innsending.v2.dto.svangerskapspenger.AvtaltFerieDto;
 import no.nav.foreldrepenger.selvbetjening.kontrakt.innsending.v2.dto.BarnDto;
 import no.nav.foreldrepenger.selvbetjening.kontrakt.innsending.v2.dto.UtenlandsoppholdsperiodeDto;
 import no.nav.foreldrepenger.selvbetjening.kontrakt.innsending.v2.dto.svangerskapspenger.SvangerskapspengesøknadDto;
@@ -22,6 +23,7 @@ public class SvangerskapspengerBuilder {
     List<AnnenInntektDto> andreInntekterSiste10Mnd;
     List<UtenlandsoppholdsperiodeDto> utenlandsopphold;
     List<TilretteleggingDto> tilretteleggingsbehov;
+    List<AvtaltFerieDto> avtaltFerie;
     private List<VedleggDto> vedlegg;
 
     public SvangerskapspengerBuilder(List<TilretteleggingDto> tilretteleggingsbehov) {
@@ -63,6 +65,11 @@ public class SvangerskapspengerBuilder {
         return this;
     }
 
+    public SvangerskapspengerBuilder medAvtaltFerie(List<AvtaltFerieDto> avtaltFerie) {
+        this.avtaltFerie = avtaltFerie;
+        return this;
+    }
+
     public SvangerskapspengerBuilder medVedlegg(List<VedleggDto> vedlegg) {
         this.vedlegg = vedlegg;
         return this;
@@ -78,7 +85,7 @@ public class SvangerskapspengerBuilder {
             selvstendigNæringsdrivendeInformasjon,
             andreInntekterSiste10Mnd,
             utenlandsopphold,
-            tilretteleggingsbehov,
+            tilretteleggingsbehov, avtaltFerie,
             vedlegg
         );
     }
