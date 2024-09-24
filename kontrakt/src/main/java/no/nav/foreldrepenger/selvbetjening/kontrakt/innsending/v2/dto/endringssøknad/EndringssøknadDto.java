@@ -9,7 +9,6 @@ import com.fasterxml.jackson.annotation.JsonTypeInfo;
 
 import no.nav.foreldrepenger.common.domain.Saksnummer;
 import no.nav.foreldrepenger.selvbetjening.kontrakt.innsending.dto.Innsending;
-import no.nav.foreldrepenger.selvbetjening.kontrakt.innsending.dto.SøkerDto;
 import no.nav.foreldrepenger.selvbetjening.kontrakt.innsending.dto.VedleggDto;
 import no.nav.foreldrepenger.selvbetjening.kontrakt.innsending.v2.dto.BarnDto;
 
@@ -20,7 +19,6 @@ import no.nav.foreldrepenger.selvbetjening.kontrakt.innsending.v2.dto.BarnDto;
 public interface EndringssøknadDto extends Innsending {
     Saksnummer saksnummer();
     BarnDto barn();
-    SøkerDto søker();
     List<VedleggDto> vedlegg();
 
     default String navn() {

@@ -3,8 +3,9 @@ package no.nav.foreldrepenger.selvbetjening.kontrakt.innsending.v2.util.builder;
 import java.time.LocalDate;
 import java.util.List;
 
+import no.nav.foreldrepenger.common.domain.BrukerRolle;
 import no.nav.foreldrepenger.common.domain.Saksnummer;
-import no.nav.foreldrepenger.selvbetjening.kontrakt.innsending.dto.SøkerDto;
+import no.nav.foreldrepenger.common.oppslag.dkif.Målform;
 import no.nav.foreldrepenger.selvbetjening.kontrakt.innsending.dto.VedleggDto;
 import no.nav.foreldrepenger.selvbetjening.kontrakt.innsending.v2.dto.BarnDto;
 import no.nav.foreldrepenger.selvbetjening.kontrakt.innsending.v2.dto.endringssøknad.EndringssøknadForeldrepengerDto;
@@ -14,8 +15,9 @@ import no.nav.foreldrepenger.selvbetjening.kontrakt.innsending.v2.dto.foreldrepe
 
 public class EndringssøknadBuilder {
     private final Saksnummer saksnummer;
+    private BrukerRolle rolle;
+    private Målform språkkode;
     private LocalDate mottattdato;
-    private SøkerDto søker;
     private BarnDto barn;
     private AnnenForelderDto annenForelder;
     private String tilleggsopplysninger;
@@ -24,6 +26,7 @@ public class EndringssøknadBuilder {
 
     public EndringssøknadBuilder(Saksnummer saksnummer) {
         this.saksnummer = saksnummer;
+        this.språkkode = Målform.standard();
     }
 
     public EndringssøknadBuilder medMottattdato(LocalDate mottattdato) {
@@ -31,8 +34,13 @@ public class EndringssøknadBuilder {
         return this;
     }
 
-    public EndringssøknadBuilder medSøker(SøkerDto søker) {
-        this.søker = søker;
+    public EndringssøknadBuilder medRolle(BrukerRolle rolle) {
+        this.rolle = rolle;
+        return this;
+    }
+
+    public EndringssøknadBuilder medSpråkkode(Målform språkkode) {
+        this.språkkode = språkkode;
         return this;
     }
 
@@ -70,12 +78,13 @@ public class EndringssøknadBuilder {
         if (mottattdato == null) mottattdato = LocalDate.now();
         return new EndringssøknadForeldrepengerDto(
             mottattdato,
-            saksnummer,
-            søker,
+            rolle,
+            språkkode,
             barn,
             annenForelder,
             tilleggsopplysninger,
             uttaksplan,
+            saksnummer,
             vedlegg
         );
     }

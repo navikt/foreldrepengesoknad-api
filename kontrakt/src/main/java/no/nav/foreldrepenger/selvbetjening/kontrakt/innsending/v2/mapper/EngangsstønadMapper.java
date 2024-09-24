@@ -38,7 +38,7 @@ public final class EngangsstønadMapper {
 
     private static Ytelse tilYtelse(EngangsstønadDto e, List<VedleggDto> vedlegg) {
         return new Engangsstønad(
-            tilOppholdIUtlandet(e),
+            tilOppholdIUtlandet(e.utenlandsopphold()),
             tilRelasjonTilBarn(e.barn(), vedlegg)
         );
     }
