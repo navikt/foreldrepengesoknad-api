@@ -5,7 +5,6 @@ import static no.nav.foreldrepenger.selvbetjening.kontrakt.innsending.mapper.Com
 import static no.nav.foreldrepenger.selvbetjening.kontrakt.innsending.mapper.CommonMapper.tilVedleggsreferanse;
 import static no.nav.foreldrepenger.selvbetjening.kontrakt.innsending.mapper.SvangerskapspengerMapper.tilArbeidsforhold;
 import static no.nav.foreldrepenger.selvbetjening.kontrakt.innsending.v2.mapper.CommonMapper.tilOppholdIUtlandet;
-import static no.nav.foreldrepenger.selvbetjening.kontrakt.innsending.v2.mapper.CommonMapper.tilOpptjening;
 
 import java.time.LocalDate;
 import java.util.List;
@@ -14,6 +13,7 @@ import no.nav.foreldrepenger.common.domain.BrukerRolle;
 import no.nav.foreldrepenger.common.domain.Søker;
 import no.nav.foreldrepenger.common.domain.Søknad;
 import no.nav.foreldrepenger.common.domain.felles.ProsentAndel;
+import no.nav.foreldrepenger.common.domain.felles.opptjening.Opptjening;
 import no.nav.foreldrepenger.common.domain.svangerskapspenger.AvtaltFerie;
 import no.nav.foreldrepenger.common.domain.svangerskapspenger.Svangerskapspenger;
 import no.nav.foreldrepenger.common.domain.svangerskapspenger.tilrettelegging.DelvisTilrettelegging;
@@ -22,6 +22,9 @@ import no.nav.foreldrepenger.common.domain.svangerskapspenger.tilrettelegging.In
 import no.nav.foreldrepenger.common.domain.svangerskapspenger.tilrettelegging.Tilrettelegging;
 import no.nav.foreldrepenger.selvbetjening.kontrakt.innsending.dto.VedleggDto;
 import no.nav.foreldrepenger.selvbetjening.kontrakt.innsending.mapper.DokumentasjonReferanseMapper;
+import no.nav.foreldrepenger.selvbetjening.kontrakt.innsending.v2.dto.AnnenInntektDto;
+import no.nav.foreldrepenger.selvbetjening.kontrakt.innsending.v2.dto.FrilansDto;
+import no.nav.foreldrepenger.selvbetjening.kontrakt.innsending.v2.dto.NæringDto;
 import no.nav.foreldrepenger.selvbetjening.kontrakt.innsending.v2.dto.svangerskapspenger.SvangerskapspengesøknadDto;
 import no.nav.foreldrepenger.selvbetjening.kontrakt.innsending.v2.dto.svangerskapspenger.tilrettelegging.DelvisTilretteleggingDto;
 import no.nav.foreldrepenger.selvbetjening.kontrakt.innsending.v2.dto.svangerskapspenger.tilrettelegging.HelTilretteleggingDto;
@@ -58,6 +61,11 @@ public final class SvangerskapspengerMapper {
             tilTilrettelegging(s, vedlegg),
             tilFerieperioder(s)
         );
+    }
+
+    private static Opptjening tilOpptjening(NæringDto næring, FrilansDto frilans, List<AnnenInntektDto.Utlandet> utlandets, List<VedleggDto> vedlegg) {
+        var annenInntekt = safeStream(utlandets).map(AnnenInntektDto.class::cast).toList();
+        return CommonMapper.tilOpptjening(næring, frilans, annenInntekt, vedlegg);
     }
 
     private static List<AvtaltFerie> tilFerieperioder(SvangerskapspengesøknadDto s) {

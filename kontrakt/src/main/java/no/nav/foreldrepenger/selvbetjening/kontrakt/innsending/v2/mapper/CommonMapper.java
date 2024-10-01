@@ -8,6 +8,7 @@ import static no.nav.foreldrepenger.selvbetjening.kontrakt.innsending.mapper.Com
 
 import java.time.LocalDate;
 import java.util.List;
+import java.util.Optional;
 
 import com.neovisionaries.i18n.CountryCode;
 
@@ -156,6 +157,12 @@ public final class CommonMapper {
         if (selvstendig == null) {
             return List.of();
         }
+        var næringsinntektBrutto = Optional.ofNullable(selvstendig.varigEndringInntektEtterEndring())
+            .map(Integer::longValue)
+            .orElse(Optional.ofNullable(selvstendig.næringsinntekt())
+                .map(Integer::longValue)
+                .orElse(0L));
+
         return List.of(
             new EgenNæring( // TODO: Aldri mer enn 1 dokument
                 selvstendig.registrertINorge() ? CountryCode.NO : selvstendig.registrertILand(),
@@ -168,7 +175,7 @@ public final class CommonMapper {
                 erNyopprettet(selvstendig.fom()),
                 selvstendig.hattVarigEndringAvNæringsinntektSiste4Kalenderår(),
                 selvstendig.harBlittYrkesaktivILøpetAvDeTreSisteFerdigliknedeÅrene(),
-                selvstendig.varigEndringInntektEtterEndring(),
+                næringsinntektBrutto,
                 selvstendig.varigEndringDato(),
                 selvstendig.oppstartsdato(),
                 selvstendig.varigEndringBeskrivelse(),
