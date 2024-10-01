@@ -5,15 +5,16 @@ import static no.nav.foreldrepenger.common.domain.foreldrepenger.fordeling.Støn
 import static no.nav.foreldrepenger.common.domain.foreldrepenger.fordeling.StønadskontoType.FORELDREPENGER;
 import static no.nav.foreldrepenger.common.domain.foreldrepenger.fordeling.StønadskontoType.FORELDREPENGER_FØR_FØDSEL;
 import static no.nav.foreldrepenger.common.domain.foreldrepenger.fordeling.StønadskontoType.MØDREKVOTE;
-import static no.nav.foreldrepenger.selvbetjening.kontrakt.innsending.mapper.CommonMapper.tilOpptjening;
 import static no.nav.foreldrepenger.selvbetjening.kontrakt.innsending.mapper.CommonMapper.tilVedlegg;
 import static no.nav.foreldrepenger.selvbetjening.kontrakt.innsending.mapper.CommonMapper.tilVedleggsreferanse;
 import static no.nav.foreldrepenger.selvbetjening.kontrakt.innsending.v2.mapper.CommonMapper.tilOppholdIUtlandet;
+import static no.nav.foreldrepenger.selvbetjening.kontrakt.innsending.v2.mapper.CommonMapper.tilOpptjening;
 import static no.nav.foreldrepenger.selvbetjening.kontrakt.innsending.v2.mapper.CommonMapper.tilRelasjonTilBarn;
 
 import java.time.LocalDate;
 import java.util.List;
 
+import no.nav.foreldrepenger.common.domain.BrukerRolle;
 import no.nav.foreldrepenger.common.domain.Søker;
 import no.nav.foreldrepenger.common.domain.Søknad;
 import no.nav.foreldrepenger.common.domain.felles.ProsentAndel;
@@ -33,7 +34,7 @@ import no.nav.foreldrepenger.common.domain.foreldrepenger.fordeling.Overførings
 import no.nav.foreldrepenger.common.domain.foreldrepenger.fordeling.StønadskontoType;
 import no.nav.foreldrepenger.common.domain.foreldrepenger.fordeling.UtsettelsesPeriode;
 import no.nav.foreldrepenger.common.domain.foreldrepenger.fordeling.UttaksPeriode;
-import no.nav.foreldrepenger.selvbetjening.kontrakt.innsending.dto.SøkerDto;
+import no.nav.foreldrepenger.common.oppslag.dkif.Målform;
 import no.nav.foreldrepenger.selvbetjening.kontrakt.innsending.dto.VedleggDto;
 import no.nav.foreldrepenger.selvbetjening.kontrakt.innsending.dto.ÅpenPeriodeDto;
 import no.nav.foreldrepenger.selvbetjening.kontrakt.innsending.mapper.DokumentasjonReferanseMapper;
@@ -60,34 +61,34 @@ public final class ForeldrepengerMapper {
         var vedlegg = foreldrepengesøknad.vedlegg();
         return new Søknad(
             mottattDato,
-            tilSøker(foreldrepengesøknad.søker()),
+            tilSøker(foreldrepengesøknad.rolle(), foreldrepengesøknad.språkkode()),
             tilYtelse(foreldrepengesøknad, vedlegg),
             foreldrepengesøknad.tilleggsopplysninger(),
             tilVedlegg(vedlegg)
         );
     }
 
-    static Søker tilSøker(SøkerDto søker) {
-        return new Søker(søker.rolle(), søker.språkkode());
+    static Søker tilSøker(BrukerRolle søknadsRolle, Målform målform) {
+        return new Søker(søknadsRolle, målform);
     }
 
     private static Foreldrepenger tilYtelse(ForeldrepengesøknadDto f, List<VedleggDto> vedlegg) {
         return new Foreldrepenger(
             tilAnnenForelder(f.annenForelder()),
             tilRelasjonTilBarn(f.barn(), vedlegg),
-            tilRettigheter(f.søker(), f.annenForelder()),
+            tilRettigheter(f.annenForelder()),
             Dekningsgrad.fraKode(f.dekningsgrad().verdi()),
-            tilOpptjening(f.søker(), vedlegg),
+            tilOpptjening(f.selvstendigNæringsdrivendeInformasjon(), f.frilansInformasjon(), f.andreInntekterSiste10Mnd(), vedlegg),
             tilUttaksplan(f.uttaksplan(), f.annenForelder(), vedlegg),
-            tilOppholdIUtlandet(f)
+            tilOppholdIUtlandet(f.utenlandsopphold())
         );
     }
 
-    static Rettigheter tilRettigheter(SøkerDto søker, AnnenForelderDto annenforelder) {
+    static Rettigheter tilRettigheter(AnnenForelderDto annenforelder) {
         if (annenforelder == null) {
             return new Rettigheter(
                 false,
-                søker.erAleneOmOmsorg(),
+                null,
                 null,
                 null,
                 null
@@ -96,7 +97,7 @@ public final class ForeldrepengerMapper {
         var annenpartsRettigheter = annenforelder.rettigheter();
         return new Rettigheter(
             annenpartsRettigheter.harRettPåForeldrepenger(),
-            søker.erAleneOmOmsorg(),
+            annenpartsRettigheter.erAleneOmOmsorg(),
             annenpartsRettigheter.harMorUføretrygd(),
             annenpartsRettigheter.harAnnenForelderOppholdtSegIEØS(),
             annenpartsRettigheter.harAnnenForelderTilsvarendeRettEØS());

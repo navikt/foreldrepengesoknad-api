@@ -25,7 +25,7 @@ public final class EndringForeldrepengerMapper {
         var vedlegg = endringssøknadFP.vedlegg();
         return new Endringssøknad(
             mottattDato,
-            tilSøker(endringssøknadFP.søker()),
+            tilSøker(endringssøknadFP.rolle(), endringssøknadFP.språkkode()),
             tilYtelse(endringssøknadFP, vedlegg),
             endringssøknadFP.tilleggsopplysninger(),
             tilVedlegg(vedlegg),
@@ -36,7 +36,7 @@ public final class EndringForeldrepengerMapper {
         return new Foreldrepenger(
             tilAnnenForelder(f.annenForelder()),
             tilRelasjonTilBarn(f.barn(), vedlegg),
-            tilRettigheter(f.søker(), f.annenForelder()),
+            tilRettigheter(f.annenForelder()),
             null,
             null,
             tilUttaksplan(f.uttaksplan(), f.annenForelder(), vedlegg),

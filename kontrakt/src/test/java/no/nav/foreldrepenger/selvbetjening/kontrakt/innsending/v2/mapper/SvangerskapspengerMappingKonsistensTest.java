@@ -50,7 +50,7 @@ class SvangerskapspengerMappingKonsistensTest {
             .medUtenlandsopphold(UtenlandsoppholdMaler.oppholdIUtlandetForrige12mnd())
             .medSpråkkode(Målform.EN)
             .medAvtaltFerie(List.of(ferie))
-            .medSelvstendigNæringsdrivendeInformasjon(List.of(OpptjeningMaler.egenNaeringOpptjening(Orgnummer.MAGIC_ORG.value())))
+            .medSelvstendigNæringsdrivendeInformasjon(OpptjeningMaler.egenNaeringOpptjening(Orgnummer.MAGIC_ORG.value()))
             .medBarn(BarnBuilder.termin(2, LocalDate.now().plusWeeks(2)).build())
             .build();
 
@@ -106,7 +106,7 @@ class SvangerskapspengerMappingKonsistensTest {
         var søknadDto = new SvangerskapspengerBuilder(tilretteleggingerDto)
             .medSpråkkode(Målform.EN)
             .medUtenlandsopphold(UtenlandsoppholdMaler.oppholdIUtlandetForrige12mnd())
-            .medSelvstendigNæringsdrivendeInformasjon(List.of(OpptjeningMaler.egenNaeringOpptjening(Orgnummer.MAGIC_ORG.value())))
+            .medSelvstendigNæringsdrivendeInformasjon(OpptjeningMaler.egenNaeringOpptjening(Orgnummer.MAGIC_ORG.value()))
             .medBarn(BarnBuilder.termin(2, LocalDate.now().plusWeeks(2)).build())
             .medVedlegg(List.of(vedlegg1, vedlegg2, vedlegg3))
             .build();

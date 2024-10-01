@@ -1,26 +1,23 @@
 package no.nav.foreldrepenger.selvbetjening.kontrakt.innsending.v2.util.maler;
 
 import java.time.LocalDate;
-import java.util.List;
 
 import com.neovisionaries.i18n.CountryCode;
 
+import no.nav.foreldrepenger.common.domain.Orgnummer;
 import no.nav.foreldrepenger.common.domain.felles.opptjening.AnnenOpptjeningType;
 import no.nav.foreldrepenger.common.domain.felles.opptjening.Virksomhetstype;
-import no.nav.foreldrepenger.selvbetjening.kontrakt.innsending.dto.AnnenInntektDto;
-import no.nav.foreldrepenger.selvbetjening.kontrakt.innsending.dto.FrilansInformasjonDto;
-import no.nav.foreldrepenger.selvbetjening.kontrakt.innsending.dto.NæringDto;
-import no.nav.foreldrepenger.selvbetjening.kontrakt.innsending.dto.NæringsinntektInformasjonDto;
-import no.nav.foreldrepenger.selvbetjening.kontrakt.innsending.dto.TilknyttetPersonDto;
-import no.nav.foreldrepenger.selvbetjening.kontrakt.innsending.dto.ÅpenPeriodeDto;
+import no.nav.foreldrepenger.selvbetjening.kontrakt.innsending.v2.dto.AnnenInntektDto;
+import no.nav.foreldrepenger.selvbetjening.kontrakt.innsending.v2.dto.FrilansDto;
+import no.nav.foreldrepenger.selvbetjening.kontrakt.innsending.v2.dto.NæringDto;
 
 public final class OpptjeningMaler {
 
     private OpptjeningMaler() {
     }
 
-    public static FrilansInformasjonDto frilansOpptjening() {
-        return new FrilansInformasjonDto(LocalDate.now().minusYears(2), false);
+    public static FrilansDto frilansOpptjening() {
+        return new FrilansDto( false, LocalDate.now().minusYears(2));
     }
 
     public static NæringDto egenNaeringOpptjening(String orgnummer) {
@@ -37,52 +34,44 @@ public final class OpptjeningMaler {
     }
 
     public static AnnenInntektDto utenlandskArbeidsforhold(CountryCode landKode) {
-        return lagUtenlandskArbeidsforhold(landKode, AnnenOpptjeningType.JOBB_I_UTLANDET, new ÅpenPeriodeDto(LocalDate.now().minusYears(4), LocalDate.now()));
+        return annenInntekt(AnnenOpptjeningType.JOBB_I_UTLANDET, landKode, LocalDate.now().minusYears(4), LocalDate.now());
     }
 
     public static AnnenInntektDto annenInntektNorsk(AnnenOpptjeningType type) {
-        return lagUtenlandskArbeidsforhold(CountryCode.NO, type, new ÅpenPeriodeDto(LocalDate.now().minusYears(4), LocalDate.now()));
+        return annenInntekt(type, CountryCode.NO, LocalDate.now().minusYears(4), LocalDate.now());
     }
 
-    public static AnnenInntektDto annenInntektNorsk(AnnenOpptjeningType type, ÅpenPeriodeDto periode) {
-        return lagUtenlandskArbeidsforhold(CountryCode.NO, type, periode);
+    public static AnnenInntektDto annenInntektNorsk(AnnenOpptjeningType type, LocalDate fom, LocalDate tom) {
+        return annenInntekt(type, CountryCode.NO, fom, tom);
     }
 
 
     /* PRIVATE HJELPEMETODER */
-    private static NæringDto lagNorskOrganisasjon(String orgnummer, LocalDate fom, LocalDate tom, Boolean erNyIArbeidslivet, Number næringsInntekt, Boolean varigEndretNæring) {
-        var endringAvNæring = new NæringsinntektInformasjonDto(
-                varigEndretNæring.equals(Boolean.TRUE) ? LocalDate.now().minusWeeks(1) : null,
-                næringsInntekt.intValue(),
-                "Endringsbeskrivelse"
-        );
+    private static NæringDto lagNorskOrganisasjon(String orgnummer, LocalDate fom, LocalDate tom, boolean erNyIArbeidslivet, Number næringsInntekt, Boolean varigEndretNæring) {
         return new NæringDto(
-                erNyIArbeidslivet,
-                varigEndretNæring,
-                true,
-                100.0,
-                næringsInntekt.intValue(),
-                List.of(Virksomhetstype.ANNEN),
-                CountryCode.NO.getAlpha3(),
-                LocalDate.now().minusYears(4),
-                endringAvNæring,
+                fom,
+                tom,
+                Virksomhetstype.ANNEN,
                 "Navnet på Næring",
-                orgnummer,
-                new ÅpenPeriodeDto(fom, tom),
-                new TilknyttetPersonDto("Regnar Regnskap", "99999999", false),
-                null
+                new Orgnummer(orgnummer),
+                næringsInntekt.intValue(),
+                true,
+                CountryCode.NO,
+                erNyIArbeidslivet,
+                LocalDate.now().minusYears(4),
+                varigEndretNæring,
+                varigEndretNæring.equals(Boolean.TRUE) ? LocalDate.now().minusWeeks(1) : null,
+                varigEndretNæring.equals(Boolean.TRUE) ? næringsInntekt.intValue() : null,
+                varigEndretNæring.equals(Boolean.TRUE) ? "Endringsbeskrivelse" : null
         );
 
     }
 
-    private static AnnenInntektDto lagUtenlandskArbeidsforhold(CountryCode landKode, AnnenOpptjeningType type, ÅpenPeriodeDto periode) {
-        return new AnnenInntektDto(
-                type.name(),
-                landKode.getAlpha2(),
-                "elskap AS",
-                periode,
-                false
-        );
+    private static AnnenInntektDto annenInntekt(AnnenOpptjeningType type, CountryCode landKode, LocalDate fom, LocalDate tom) {
+        if (AnnenOpptjeningType.JOBB_I_UTLANDET.equals(type)) {
+            return new AnnenInntektDto.Utlandet(landKode, "Utenlandsk arbeidsgiver AS", fom, tom);
+        }
+        return new AnnenInntektDto.Annet(type, fom, tom);
     }
 
 }
