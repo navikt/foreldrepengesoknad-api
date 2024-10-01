@@ -59,10 +59,10 @@ public final class OpptjeningMaler {
                 CountryCode.NO,
                 erNyIArbeidslivet,
                 LocalDate.now().minusYears(4),
-                true,
+                varigEndretNæring,
                 varigEndretNæring.equals(Boolean.TRUE) ? LocalDate.now().minusWeeks(1) : null,
-                næringsInntekt.intValue(),
-                "Endringsbeskrivelse"
+                varigEndretNæring.equals(Boolean.TRUE) ? næringsInntekt.intValue() : null,
+                varigEndretNæring.equals(Boolean.TRUE) ? "Endringsbeskrivelse" : null
         );
 
     }

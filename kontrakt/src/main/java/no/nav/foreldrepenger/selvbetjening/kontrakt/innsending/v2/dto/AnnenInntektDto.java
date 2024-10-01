@@ -1,16 +1,18 @@
 package no.nav.foreldrepenger.selvbetjening.kontrakt.innsending.v2.dto;
 
-import com.fasterxml.jackson.annotation.JsonSubTypes;
-import com.fasterxml.jackson.annotation.JsonTypeInfo;
-import com.neovisionaries.i18n.CountryCode;
-import jakarta.validation.constraints.Pattern;
-import no.nav.foreldrepenger.common.domain.felles.opptjening.AnnenOpptjeningType;
-
-import java.time.LocalDate;
-
 import static com.fasterxml.jackson.annotation.JsonTypeInfo.As.PROPERTY;
 import static com.fasterxml.jackson.annotation.JsonTypeInfo.Id.NAME;
 import static no.nav.foreldrepenger.common.domain.validation.InputValideringRegex.FRITEKST;
+
+import java.time.LocalDate;
+
+import com.fasterxml.jackson.annotation.JsonSubTypes;
+import com.fasterxml.jackson.annotation.JsonTypeInfo;
+import com.neovisionaries.i18n.CountryCode;
+
+import jakarta.validation.constraints.NotNull;
+import jakarta.validation.constraints.Pattern;
+import no.nav.foreldrepenger.common.domain.felles.opptjening.AnnenOpptjeningType;
 
 @JsonTypeInfo(use = NAME, include = PROPERTY, property = "type")
 @JsonSubTypes({
@@ -21,9 +23,12 @@ public interface AnnenInntektDto {
     LocalDate fom();
     LocalDate tom();
 
-    record Annet(AnnenOpptjeningType type, LocalDate fom, LocalDate tom) implements AnnenInntektDto {
+    record Annet(@NotNull AnnenOpptjeningType type, @NotNull LocalDate fom, LocalDate tom) implements AnnenInntektDto {
     }
 
-    record Utlandet(CountryCode land, @Pattern(regexp = FRITEKST) String arbeidsgiverNavn, LocalDate fom, LocalDate tom) implements AnnenInntektDto {
+    record Utlandet(@NotNull CountryCode land,
+                    @NotNull @Pattern(regexp = FRITEKST) String arbeidsgiverNavn,
+                    @NotNull LocalDate fom,
+                    LocalDate tom) implements AnnenInntektDto {
     }
 }
