@@ -9,10 +9,10 @@ import com.fasterxml.jackson.annotation.JsonTypeInfo;
 
 @JsonTypeInfo(use = NAME, include = PROPERTY, property = "type")
 @JsonSubTypes({
-    @JsonSubTypes.Type(value = VirksomhetDto.class, name = "virksomhet"),
-    @JsonSubTypes.Type(value = PrivatArbeidsgiverDto.class, name = "privat"),
-    @JsonSubTypes.Type(value = SelvstendigNæringsdrivendeDto.class, name = "selvstendig"),
-    @JsonSubTypes.Type(value = FrilanserDto.class, name = "frilanser")
+    @JsonSubTypes.Type(value = VirksomhetDto.class, name = "VIRKSOMHET"),
+    @JsonSubTypes.Type(value = PrivatArbeidsgiverDto.class, name = "PRIVAT"),
+    @JsonSubTypes.Type(value = SelvstendigNæringsdrivendeDto.class, name = "SELVSTENDIG"),
+    @JsonSubTypes.Type(value = FrilanserDto.class, name = "FRILANSER")
 })
 public interface ArbeidsforholdDto {
 }
