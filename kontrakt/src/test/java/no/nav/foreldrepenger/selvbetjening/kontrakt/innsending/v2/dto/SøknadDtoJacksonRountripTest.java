@@ -34,12 +34,14 @@ import no.nav.foreldrepenger.selvbetjening.kontrakt.innsending.v2.dto.engangsst�
 import no.nav.foreldrepenger.selvbetjening.kontrakt.innsending.v2.dto.foreldrepenger.Dekningsgrad;
 import no.nav.foreldrepenger.selvbetjening.kontrakt.innsending.v2.dto.foreldrepenger.ForeldrepengesøknadDto;
 import no.nav.foreldrepenger.selvbetjening.kontrakt.innsending.v2.dto.svangerskapspenger.SvangerskapspengesøknadDto;
+import no.nav.foreldrepenger.selvbetjening.kontrakt.innsending.v2.dto.svangerskapspenger.tilretteleggingbehov.TilretteleggingbehovDto;
 import no.nav.foreldrepenger.selvbetjening.kontrakt.innsending.v2.util.builder.AnnenforelderBuilder;
 import no.nav.foreldrepenger.selvbetjening.kontrakt.innsending.v2.util.builder.BarnBuilder;
 import no.nav.foreldrepenger.selvbetjening.kontrakt.innsending.v2.util.builder.EndringssøknadBuilder;
 import no.nav.foreldrepenger.selvbetjening.kontrakt.innsending.v2.util.builder.EngangsstønadBuilder;
 import no.nav.foreldrepenger.selvbetjening.kontrakt.innsending.v2.util.builder.ForeldrepengerBuilder;
 import no.nav.foreldrepenger.selvbetjening.kontrakt.innsending.v2.util.builder.SvangerskapspengerBuilder;
+import no.nav.foreldrepenger.selvbetjening.kontrakt.innsending.v2.util.builder.TilretteleggingBehovBuilder;
 import no.nav.foreldrepenger.selvbetjening.kontrakt.innsending.v2.util.maler.ArbeidsforholdMaler;
 import no.nav.foreldrepenger.selvbetjening.kontrakt.innsending.v2.util.maler.OpptjeningMaler;
 import no.nav.foreldrepenger.selvbetjening.kontrakt.innsending.v2.util.maler.UtenlandsoppholdMaler;
@@ -165,7 +167,28 @@ class SøknadDtoJacksonRountripTest {
             delvis(NOW, NOW, ArbeidsforholdMaler.privatArbeidsgiver(DUMMY_FNR), 55.0).build(),
             ingen(NOW.plusWeeks(1), NOW.plusWeeks(1), ArbeidsforholdMaler.virksomhet(Orgnummer.MAGIC_ORG)).build()
         );
-        var søknad = new SvangerskapspengerBuilder(tilrettelegginger)
+        var søknad = new SvangerskapspengerBuilder(null)
+            .medTilrettelegging(tilrettelegginger)
+            .medUtenlandsopphold(UtenlandsoppholdMaler.oppholdIUtlandetForrige12mnd())
+            .medSelvstendigNæringsdrivendeInformasjon(OpptjeningMaler.egenNaeringOpptjening(Orgnummer.MAGIC_ORG.value()))
+            .medBarn(BarnBuilder.termin(2, LocalDate.now().plusWeeks(2)).build())
+            .build();
+
+        assertThat(søknad).isInstanceOf(SvangerskapspengesøknadDto.class);
+        test(søknad);
+    }
+
+    @Test
+    void svangerskapspengerBehovRountripTest() throws IOException {
+        var tilretteleggingBehov = List.of(
+            new TilretteleggingbehovDto(ArbeidsforholdMaler.selvstendigNæringsdrivende(), NOW.minusMonths(1), List.of(
+                TilretteleggingBehovBuilder.hel(NOW.minusMonths(1)))),
+            new TilretteleggingbehovDto(ArbeidsforholdMaler.privatArbeidsgiver(DUMMY_FNR), NOW.minusMonths(1), List.of(
+                TilretteleggingBehovBuilder.delvis(NOW, 55.0))),
+            new TilretteleggingbehovDto(ArbeidsforholdMaler.virksomhet(Orgnummer.MAGIC_ORG), NOW.minusMonths(1), List.of(
+                TilretteleggingBehovBuilder.ingen(NOW.plusMonths(1))))
+        );
+        var søknad = new SvangerskapspengerBuilder(tilretteleggingBehov)
             .medUtenlandsopphold(UtenlandsoppholdMaler.oppholdIUtlandetForrige12mnd())
             .medSelvstendigNæringsdrivendeInformasjon(OpptjeningMaler.egenNaeringOpptjening(Orgnummer.MAGIC_ORG.value()))
             .medBarn(BarnBuilder.termin(2, LocalDate.now().plusWeeks(2)).build())

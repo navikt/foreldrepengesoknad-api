@@ -20,6 +20,7 @@ import no.nav.foreldrepenger.common.domain.svangerskapspenger.tilrettelegging.De
 import no.nav.foreldrepenger.common.domain.svangerskapspenger.tilrettelegging.HelTilrettelegging;
 import no.nav.foreldrepenger.common.domain.svangerskapspenger.tilrettelegging.IngenTilrettelegging;
 import no.nav.foreldrepenger.common.domain.svangerskapspenger.tilrettelegging.Tilrettelegging;
+import no.nav.foreldrepenger.common.domain.svangerskapspenger.tilretteleggingsbehov.Tilretteleggingbehov;
 import no.nav.foreldrepenger.selvbetjening.kontrakt.innsending.dto.VedleggDto;
 import no.nav.foreldrepenger.selvbetjening.kontrakt.innsending.mapper.DokumentasjonReferanseMapper;
 import no.nav.foreldrepenger.selvbetjening.kontrakt.innsending.v2.dto.AnnenInntektDto;
@@ -30,6 +31,7 @@ import no.nav.foreldrepenger.selvbetjening.kontrakt.innsending.v2.dto.svangerska
 import no.nav.foreldrepenger.selvbetjening.kontrakt.innsending.v2.dto.svangerskapspenger.tilrettelegging.HelTilretteleggingDto;
 import no.nav.foreldrepenger.selvbetjening.kontrakt.innsending.v2.dto.svangerskapspenger.tilrettelegging.IngenTilretteleggingDto;
 import no.nav.foreldrepenger.selvbetjening.kontrakt.innsending.v2.dto.svangerskapspenger.tilrettelegging.TilretteleggingDto;
+import no.nav.foreldrepenger.selvbetjening.kontrakt.innsending.v2.dto.svangerskapspenger.tilretteleggingbehov.TilretteleggingbehovDto;
 
 
 public final class SvangerskapspengerMapper {
@@ -59,8 +61,42 @@ public final class SvangerskapspengerMapper {
             tilOppholdIUtlandet(s.utenlandsopphold()),
             tilOpptjening(s.egenNæring(), s.frilans(), s.andreInntekterSiste10Mnd(), vedlegg),
             tilTilrettelegging(s, vedlegg),
+            tilTilretteleggingBehov(s, vedlegg),
             tilFerieperioder(s)
         );
+    }
+
+    private static List<Tilretteleggingbehov> tilTilretteleggingBehov(SvangerskapspengesøknadDto s, List<VedleggDto> vedlegg) {
+        return safeStream(s.tilretteleggingbehov())
+            .map(behov -> tilTilretteleggingBehov(behov, vedlegg))
+            .toList();
+    }
+
+    private static Tilretteleggingbehov tilTilretteleggingBehov(TilretteleggingbehovDto tilretteleggingbehov, List<VedleggDto> vedlegg) {
+        return new Tilretteleggingbehov(
+            tilArbeidsforhold(tilretteleggingbehov.arbeidsforhold()),
+            tilretteleggingbehov.behovForTilretteleggingFom(),
+            tilTilrettelegging(tilretteleggingbehov.tilrettelegginger()),
+            tilVedleggsreferanse(DokumentasjonReferanseMapper.dokumentasjonSomDokumentererTilrettelegggingAv(vedlegg, tilretteleggingbehov.arbeidsforhold()))
+        );
+    }
+
+    private static List<Tilretteleggingbehov.Tilrettelegging> tilTilrettelegging(List<TilretteleggingbehovDto.TilretteleggingDto> tilrettelegginger) {
+        return safeStream(tilrettelegginger)
+            .map(SvangerskapspengerMapper::tilTilrettelegging)
+            .toList();
+    }
+
+    private static Tilretteleggingbehov.Tilrettelegging tilTilrettelegging(TilretteleggingbehovDto.TilretteleggingDto tilrettelegging) {
+        if (tilrettelegging instanceof TilretteleggingbehovDto.HelTilretteleggingDto hel) {
+            return new Tilretteleggingbehov.HelTilrettelegging(hel.tilrettelagtArbeidFom());
+        } else if (tilrettelegging instanceof TilretteleggingbehovDto.DelvisTilretteleggingDto del) {
+            return new Tilretteleggingbehov.DelvisTilrettelegging(del.tilrettelagtArbeidFom(), del.stillingsprosent());
+        } else if (tilrettelegging instanceof TilretteleggingbehovDto.IngenTilretteleggingDto ingen) {
+            return new Tilretteleggingbehov.IngenTilrettelegging(ingen.slutteArbeidFom());
+        } else {
+            throw new IllegalArgumentException("Ugyldig tilrettelegging: " + tilrettelegging);
+        }
     }
 
     private static Opptjening tilOpptjening(NæringDto næring, FrilansDto frilans, List<AnnenInntektDto.Utlandet> utlandets, List<VedleggDto> vedlegg) {
@@ -76,7 +112,7 @@ public final class SvangerskapspengerMapper {
     }
 
     private static List<Tilrettelegging> tilTilrettelegging(SvangerskapspengesøknadDto s, List<VedleggDto> vedlegg) {
-        return s.tilrettelegging().stream()
+        return safeStream(s.tilrettelegging())
             .map(tilrettelegging -> tilTilretteleggings(tilrettelegging, vedlegg))
             .toList();
     }

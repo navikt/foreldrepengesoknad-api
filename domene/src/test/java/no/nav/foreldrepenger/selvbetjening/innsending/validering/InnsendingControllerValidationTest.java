@@ -27,7 +27,7 @@ import no.nav.foreldrepenger.selvbetjening.kontrakt.innsending.dto.SøknadDto;
 import no.nav.foreldrepenger.selvbetjening.kontrakt.innsending.dto.endringssøknad.EndringssøknadDto;
 import no.nav.foreldrepenger.selvbetjening.kontrakt.innsending.dto.endringssøknad.EndringssøknadForeldrepengerDto;
 import no.nav.foreldrepenger.selvbetjening.kontrakt.innsending.dto.foreldrepenger.ForeldrepengesøknadDto;
-import no.nav.foreldrepenger.selvbetjening.kontrakt.innsending.dto.svangerskapspenger.SvangerskapspengesøknadDto;
+import no.nav.foreldrepenger.selvbetjening.kontrakt.innsending.v2.dto.svangerskapspenger.SvangerskapspengesøknadDto;
 import no.nav.foreldrepenger.selvbetjening.kontrakt.innsending.v2.dto.svangerskapspenger.arbeidsforhold.VirksomhetDto;
 
 @Import({InnsendingController.class, ApiExceptionHandler.class})
@@ -109,13 +109,12 @@ class InnsendingControllerValidationTest {
 
     @Test
     void svangerskapspengerValidering() throws Exception {
-        var sf = mapper.readValue(bytesFra("json/svangerskapspengesøknad.json"), SøknadDto.class);
-        var svpSøknad = (SvangerskapspengesøknadDto) sf;
+        var svpSøknad = mapper.readValue(bytesFra("json/svangerskapspengesøknad.json"), SvangerskapspengesøknadDto.class);
         var tilrettelegging = svpSøknad.tilrettelegging().get(0);
         var virksomhet = (VirksomhetDto) tilrettelegging.arbeidsforhold();
-        var result = mvc.perform(post(InnsendingController.INNSENDING_CONTROLLER_PATH)
+        var result = mvc.perform(post(InnsendingController.INNSENDING_CONTROLLER_PATH + "/svangerskapspenger")
                 .contentType(MediaType.APPLICATION_JSON)
-                .content(mapper.writeValueAsString(sf)
+                .content(mapper.writeValueAsString(svpSøknad)
                     .replace(virksomhet.id().value(), "Ikke lovlig \u0085")
                 ))
             .andExpect(status().isBadRequest())
@@ -124,7 +123,7 @@ class InnsendingControllerValidationTest {
         assertThat(result.getResolvedException()).isInstanceOf(MethodArgumentNotValidException.class);
         var error = (MethodArgumentNotValidException) result.getResolvedException();
         assertThat(error).isNotNull();
-        assertThat(error.getBindingResult().getFieldErrors()).hasSize(4); // Feiler på både @Orgnmr og @Pattern begge plassene hvor dette er definert
+        assertThat(error.getBindingResult().getFieldErrors()).hasSize(6); // Feiler på både @Orgnmr og @Pattern begge plassene hvor dette er definert
     }
 
 
