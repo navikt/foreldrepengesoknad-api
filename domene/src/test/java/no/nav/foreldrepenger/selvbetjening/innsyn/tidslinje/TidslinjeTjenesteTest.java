@@ -5,6 +5,7 @@ import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.when;
 
 import java.time.LocalDateTime;
+import java.util.Collections;
 import java.util.List;
 
 import org.junit.jupiter.api.BeforeEach;
@@ -356,6 +357,8 @@ public class TidslinjeTjenesteTest {
     }
 
     public static InntektsmeldingDto standardInntektsmelding(LocalDateTime opprettet) {
-        return new InntektsmeldingDto(opprettet);
+        return new InntektsmeldingDto(
+            1, null, null, null, null, null, opprettet, null, Collections.emptyList(), Collections.emptyList()
+        );
     }
 }
