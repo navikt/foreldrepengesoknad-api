@@ -358,7 +358,7 @@ public class TidslinjeTjenesteTest {
 
     public static InntektsmeldingDto standardInntektsmelding(LocalDateTime opprettet) {
         return new InntektsmeldingDto(
-            1, null, null, null, null, null, opprettet, null, Collections.emptyList(), Collections.emptyList()
+            1, null, null, null, null, null, null, null, opprettet, null, Collections.emptyList(), Collections.emptyList()
         );
     }
 }

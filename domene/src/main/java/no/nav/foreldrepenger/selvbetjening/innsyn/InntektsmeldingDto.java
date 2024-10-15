@@ -10,6 +10,8 @@ public record InntektsmeldingDto(
                               BigDecimal refusjonPrMnd,
                               String arbeidsgiver,
                               String journalpostId,
+    String kontaktpersonNavn,
+    String kontaktpersonNummer,
                               LocalDateTime innsendingstidspunkt,
                               LocalDateTime mottattTidspunkt,
                               LocalDate startDatoPermisjon,
