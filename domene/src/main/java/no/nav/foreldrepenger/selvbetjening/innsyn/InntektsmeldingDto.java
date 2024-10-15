@@ -8,7 +8,7 @@ import java.util.List;
 public record InntektsmeldingDto(
     int versjon, BigDecimal inntektPrMnd,
                               BigDecimal refusjonPrMnd,
-                              String arbeidsgiver,
+                              String arbeidsgiverNavn,
                               String journalpostId,
     String kontaktpersonNavn,
     String kontaktpersonNummer,
