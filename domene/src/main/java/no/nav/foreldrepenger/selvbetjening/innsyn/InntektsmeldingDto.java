@@ -6,7 +6,9 @@ import java.time.LocalDateTime;
 import java.util.List;
 
 public record InntektsmeldingDto(
-    int versjon, BigDecimal inntektPrMnd,
+    int versjon,
+    boolean erAktiv,
+    BigDecimal inntektPrMnd,
                               BigDecimal refusjonPrMnd,
                               String arbeidsgiverNavn,
                               String journalpostId,
@@ -15,7 +17,7 @@ public record InntektsmeldingDto(
                               LocalDateTime innsendingstidspunkt,
                               LocalDateTime mottattTidspunkt,
                               LocalDate startDatoPermisjon,
-                              List<NaturalYtelse> aktiveNaturalytelser,
+                              List<NaturalYtelse> bortfalteNaturalytelser,
                               List<Refusjon> refusjonsperioder
 ) {
     public record NaturalYtelse(
