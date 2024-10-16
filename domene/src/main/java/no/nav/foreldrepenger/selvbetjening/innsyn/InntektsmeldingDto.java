@@ -8,6 +8,7 @@ import java.util.List;
 public record InntektsmeldingDto(
     int versjon,
     boolean erAktiv,
+    BigDecimal stillingsprosent,
     BigDecimal inntektPrMnd,
                               BigDecimal refusjonPrMnd,
                               String arbeidsgiverNavn,
