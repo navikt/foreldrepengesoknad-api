@@ -20,14 +20,16 @@ public class AnnenforelderBuilder {
 
     public static NorskForelderBuilder norskIkkeRett(Fødselsnummer fnr) {
         return new NorskForelderBuilder(fnr)
+            .medErAleneOmOmsorg(true)
             .medHarRettPåForeldrepenger(false)
             .medErInformertOmSøknaden(false)
             .medHarMorUføretrygd(false)
             .medHarAnnenForelderTilsvarendeRettEØS(false);
     }
 
-    public static NorskForelderBuilder annenpartIkkeRettOgMorHarUføretrygd(Fødselsnummer fnr) {
+    public static NorskForelderBuilder aleneomsorgAnnenpartIkkeRettOgMorHarUføretrygd(Fødselsnummer fnr) {
         return new NorskForelderBuilder(fnr)
+            .medErAleneOmOmsorg(true)
             .medHarRettPåForeldrepenger(false)
             .medErInformertOmSøknaden(true)
             .medHarMorUføretrygd(true);
@@ -70,6 +72,11 @@ public class AnnenforelderBuilder {
 
         public NorskForelderBuilder medErInformertOmSøknaden(Boolean erInformertOmSøknaden) {
             this.rettigheter.medErInformertOmSøknaden(erInformertOmSøknaden);
+            return this;
+        }
+
+        public NorskForelderBuilder medErAleneOmOmsorg(Boolean erAleneomsorg) {
+            this.rettigheter.medErAleneOmOmsorg(erAleneomsorg);
             return this;
         }
 
@@ -136,6 +143,11 @@ public class AnnenforelderBuilder {
             return this;
         }
 
+        public UtenlandskForelderBuilder medErAleneOmOmsorg(Boolean erAleneomsorg) {
+            this.rettigheter.medErAleneOmOmsorg(erAleneomsorg);
+            return this;
+        }
+
         public UtenlandskForelderBuilder medHarAnnenForelderOppholdtSegIEØS(Boolean harAnnenForelderOppholdtSegIEØS) {
             this.rettigheter.medHarAnnenForelderOppholdtSegIEØS(harAnnenForelderOppholdtSegIEØS);
             return this;
@@ -162,6 +174,7 @@ public class AnnenforelderBuilder {
     public static class RettighetBuilder {
         private Boolean harRettPåForeldrepenger;
         private Boolean erInformertOmSøknaden;
+        private Boolean erAleneOmOmsorg;
         private Boolean harMorUføretrygd;
         private Boolean harAnnenForelderOppholdtSegIEØS;
         private Boolean harAnnenForelderTilsvarendeRettEØS;
@@ -174,10 +187,16 @@ public class AnnenforelderBuilder {
             return this;
         }
 
+        public RettighetBuilder medErAleneOmOmsorg(Boolean erAleneOmOmsorg) {
+            this.erAleneOmOmsorg = erAleneOmOmsorg;
+            return this;
+        }
+
         public RettighetBuilder medErInformertOmSøknaden(Boolean erInformertOmSøknaden) {
             this.erInformertOmSøknaden = erInformertOmSøknaden;
             return this;
         }
+
 
         public RettighetBuilder medHarMorUføretrygd(Boolean harMorUføretrygd) {
             this.harMorUføretrygd = harMorUføretrygd;
@@ -198,6 +217,7 @@ public class AnnenforelderBuilder {
             return new AnnenForelderDto.Rettigheter(
                 harRettPåForeldrepenger,
                 erInformertOmSøknaden,
+                erAleneOmOmsorg,
                 harMorUføretrygd,
                 harAnnenForelderOppholdtSegIEØS,
                 harAnnenForelderTilsvarendeRettEØS

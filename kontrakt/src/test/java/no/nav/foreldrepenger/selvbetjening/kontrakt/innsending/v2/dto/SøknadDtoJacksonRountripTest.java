@@ -16,8 +16,6 @@ import java.io.IOException;
 import java.time.LocalDate;
 import java.util.List;
 
-import no.nav.foreldrepenger.selvbetjening.kontrakt.innsending.v2.util.maler.ArbeidsforholdMaler;
-
 import org.junit.jupiter.api.Test;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
@@ -42,7 +40,7 @@ import no.nav.foreldrepenger.selvbetjening.kontrakt.innsending.v2.util.builder.E
 import no.nav.foreldrepenger.selvbetjening.kontrakt.innsending.v2.util.builder.EngangsstønadBuilder;
 import no.nav.foreldrepenger.selvbetjening.kontrakt.innsending.v2.util.builder.ForeldrepengerBuilder;
 import no.nav.foreldrepenger.selvbetjening.kontrakt.innsending.v2.util.builder.SvangerskapspengerBuilder;
-import no.nav.foreldrepenger.selvbetjening.kontrakt.innsending.v2.util.builder.SøkerBuilder;
+import no.nav.foreldrepenger.selvbetjening.kontrakt.innsending.v2.util.maler.ArbeidsforholdMaler;
 import no.nav.foreldrepenger.selvbetjening.kontrakt.innsending.v2.util.maler.OpptjeningMaler;
 import no.nav.foreldrepenger.selvbetjening.kontrakt.innsending.v2.util.maler.UtenlandsoppholdMaler;
 
@@ -62,10 +60,10 @@ class SøknadDtoJacksonRountripTest {
             uttak(FELLESPERIODE, NOW.minusWeeks(8), NOW.plusWeeks(5)).build()
         );
         var søknad = new ForeldrepengerBuilder()
+            .medRolle(BrukerRolle.FAR)
             .medUttaksplan(uttak)
             .medDekningsgrad(Dekningsgrad.HUNDRE)
             .medUtenlandsopphold(UtenlandsoppholdMaler.oppholdBareINorge())
-            .medSøker(new SøkerBuilder(BrukerRolle.FAR).build())
             .medAnnenForelder(AnnenforelderBuilder.norskMedRettighetNorge(DUMMY_FNR).build())
             .medBarn(BarnBuilder.fødsel(1, LocalDate.now().minusWeeks(2)).build())
             .build();
@@ -83,12 +81,11 @@ class SøknadDtoJacksonRountripTest {
         );
         var søknad = new ForeldrepengerBuilder()
             .medUttaksplan(uttak)
+            .medRolle(BrukerRolle.MOR)
             .medDekningsgrad(Dekningsgrad.ÅTTI)
             .medUtenlandsopphold(UtenlandsoppholdMaler.oppholdBareINorge())
-            .medSøker(new SøkerBuilder(BrukerRolle.MOR)
-                .medAndreInntekterSiste10Mnd(List.of(OpptjeningMaler.utenlandskArbeidsforhold(CountryCode.US)))
-                .build())
-            .medAnnenForelder(AnnenforelderBuilder.annenpartIkkeRettOgMorHarUføretrygd(DUMMY_FNR).build())
+            .medAndreInntekterSiste10Mnd(List.of(OpptjeningMaler.utenlandskArbeidsforhold(CountryCode.US)))
+            .medAnnenForelder(AnnenforelderBuilder.aleneomsorgAnnenpartIkkeRettOgMorHarUføretrygd(DUMMY_FNR).build())
             .medBarn(BarnBuilder.adopsjon(LocalDate.now().minusWeeks(2), false).build())
             .build();
 
@@ -105,11 +102,10 @@ class SøknadDtoJacksonRountripTest {
         );
         var søknad = new ForeldrepengerBuilder()
             .medUttaksplan(uttak)
+            .medRolle(BrukerRolle.MOR)
             .medDekningsgrad(Dekningsgrad.HUNDRE)
             .medUtenlandsopphold(UtenlandsoppholdMaler.oppholdBareINorge())
-            .medSøker(new SøkerBuilder(BrukerRolle.MOR)
-                .medFrilansInformasjon(OpptjeningMaler.frilansOpptjening())
-                .build())
+            .medFrilansInformasjon(OpptjeningMaler.frilansOpptjening())
             .medAnnenForelder(AnnenforelderBuilder.norskMedRettighetNorge(DUMMY_FNR).build())
             .medBarn(BarnBuilder.termin(2, LocalDate.now().minusWeeks(2)).build())
             .build();
@@ -130,12 +126,11 @@ class SøknadDtoJacksonRountripTest {
         );
         var søknad = new ForeldrepengerBuilder()
             .medUttaksplan(uttak)
+            .medRolle(BrukerRolle.MOR)
             .medDekningsgrad(Dekningsgrad.HUNDRE)
             .medUtenlandsopphold(UtenlandsoppholdMaler.oppholdBareINorge())
-            .medSøker(new SøkerBuilder(BrukerRolle.MOR)
-                .medFrilansInformasjon(OpptjeningMaler.frilansOpptjening())
-                .medSelvstendigNæringsdrivendeInformasjon(List.of(OpptjeningMaler.egenNaeringOpptjening(orgnummerNæring)))
-                .build())
+            .medFrilansInformasjon(OpptjeningMaler.frilansOpptjening())
+            .medSelvstendigNæringsdrivendeInformasjon(OpptjeningMaler.egenNaeringOpptjening(orgnummerNæring))
             .medAnnenForelder(AnnenforelderBuilder.norskMedRettighetNorge(DUMMY_FNR).build())
             .medBarn(BarnBuilder.fødsel(1, LocalDate.now().minusWeeks(2)).build())
             .build();
@@ -151,13 +146,11 @@ class SøknadDtoJacksonRountripTest {
             uttak(FELLESPERIODE, NOW.plusWeeks(15), NOW.plusWeeks(45).minusDays(1)).build()
         );
         var søknad = new ForeldrepengerBuilder()
+            .medRolle(BrukerRolle.MOR)
             .medUttaksplan(uttak)
             .medDekningsgrad(Dekningsgrad.HUNDRE)
             .medUtenlandsopphold(UtenlandsoppholdMaler.oppholdIUtlandetForrige12mnd())
-            .medSøker(new SøkerBuilder(BrukerRolle.MOR)
-                .medErAleneOmOmsorg(true)
-                .build())
-            .medAnnenForelder(AnnenforelderBuilder.annenpartIkkeRettOgMorHarUføretrygd(DUMMY_FNR).build())
+            .medAnnenForelder(AnnenforelderBuilder.aleneomsorgAnnenpartIkkeRettOgMorHarUføretrygd(DUMMY_FNR).build())
             .medBarn(BarnBuilder.omsorgsovertakelse(LocalDate.now().minusWeeks(2)).build())
             .build();
 
@@ -174,7 +167,7 @@ class SøknadDtoJacksonRountripTest {
         );
         var søknad = new SvangerskapspengerBuilder(tilrettelegginger)
             .medUtenlandsopphold(UtenlandsoppholdMaler.oppholdIUtlandetForrige12mnd())
-            .medSelvstendigNæringsdrivendeInformasjon(List.of(OpptjeningMaler.egenNaeringOpptjening(Orgnummer.MAGIC_ORG.value())))
+            .medSelvstendigNæringsdrivendeInformasjon(OpptjeningMaler.egenNaeringOpptjening(Orgnummer.MAGIC_ORG.value()))
             .medBarn(BarnBuilder.termin(2, LocalDate.now().plusWeeks(2)).build())
             .build();
 
@@ -199,11 +192,9 @@ class SøknadDtoJacksonRountripTest {
             uttak(FELLESPERIODE, NOW.minusWeeks(8), NOW.plusWeeks(5)).build()
         );
         var søknad = new EndringssøknadBuilder(new Saksnummer("1"))
+            .medRolle(BrukerRolle.MOR)
             .medUttaksplan(uttak)
-            .medSøker(new SøkerBuilder(BrukerRolle.MOR)
-                .medErAleneOmOmsorg(true)
-                .build())
-            .medAnnenForelder(AnnenforelderBuilder.annenpartIkkeRettOgMorHarUføretrygd(DUMMY_FNR).build())
+            .medAnnenForelder(AnnenforelderBuilder.aleneomsorgAnnenpartIkkeRettOgMorHarUføretrygd(DUMMY_FNR).build())
             .medBarn(BarnBuilder.omsorgsovertakelse(LocalDate.now().minusWeeks(2)).build())
             .build();
 

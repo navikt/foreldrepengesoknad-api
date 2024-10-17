@@ -29,7 +29,6 @@ import no.nav.foreldrepenger.selvbetjening.kontrakt.innsending.v2.dto.endringss�
 import no.nav.foreldrepenger.selvbetjening.kontrakt.innsending.v2.util.builder.AnnenforelderBuilder;
 import no.nav.foreldrepenger.selvbetjening.kontrakt.innsending.v2.util.builder.BarnBuilder;
 import no.nav.foreldrepenger.selvbetjening.kontrakt.innsending.v2.util.builder.EndringssøknadBuilder;
-import no.nav.foreldrepenger.selvbetjening.kontrakt.innsending.v2.util.builder.SøkerBuilder;
 
 class EndrignssøknadFPMappingKonsistensTest {
     private static final LocalDate NOW = LocalDate.now();
@@ -42,19 +41,17 @@ class EndrignssøknadFPMappingKonsistensTest {
             uttak(FELLESPERIODE, NOW.minusWeeks(8), NOW.plusWeeks(5)).build()
         );
         var søknadDto = new EndringssøknadBuilder(new Saksnummer("1"))
+            .medRolle(BrukerRolle.MOR)
             .medUttaksplan(uttak)
-            .medSøker(new SøkerBuilder(BrukerRolle.MOR)
-                .medErAleneOmOmsorg(true)
-                .build())
-            .medAnnenForelder(AnnenforelderBuilder.annenpartIkkeRettOgMorHarUføretrygd(DUMMY_FNR).build())
+            .medAnnenForelder(AnnenforelderBuilder.aleneomsorgAnnenpartIkkeRettOgMorHarUføretrygd(DUMMY_FNR).build())
             .medBarn(BarnBuilder.omsorgsovertakelse(LocalDate.now().minusWeeks(2)).build())
             .build();
         var foreldrepengerDto = ((EndringssøknadForeldrepengerDto) søknadDto);
 
         var mappedSøknad = (Endringssøknad) SøknadMapper.tilSøknad(søknadDto, NOW);
         assertThat(mappedSøknad.getSaksnr()).isEqualTo(søknadDto.saksnummer());
-        assertThat(mappedSøknad.getSøker().søknadsRolle()).isEqualTo(søknadDto.søker().rolle());
-        assertThat(mappedSøknad.getSøker().målform()).isEqualTo(søknadDto.søker().språkkode());
+        assertThat(mappedSøknad.getSøker().søknadsRolle()).isEqualTo(søknadDto.rolle());
+        assertThat(mappedSøknad.getSøker().målform()).isEqualTo(søknadDto.språkkode());
         assertThat(mappedSøknad.getMottattdato()).isEqualTo(søknadDto.mottattdato());
         assertThat(mappedSøknad.getTilleggsopplysninger()).isEqualTo(foreldrepengerDto.tilleggsopplysninger());
 
@@ -70,7 +67,7 @@ class EndrignssøknadFPMappingKonsistensTest {
 
         // Rettigheter
         var rettigheter = foreldrepenger.rettigheter();
-        assertThat(rettigheter.harAleneOmsorgForBarnet()).isEqualTo(foreldrepengerDto.søker().erAleneOmOmsorg());
+        assertThat(rettigheter.harAleneOmsorgForBarnet()).isEqualTo(foreldrepengerDto.annenForelder().rettigheter().erAleneOmOmsorg());
         assertThat(rettigheter.harAnnenForelderRett()).isEqualTo(annenForelderDto.rettigheter().harRettPåForeldrepenger());
         assertThat(rettigheter.harMorUføretrygd()).isEqualTo(annenForelderDto.rettigheter().harMorUføretrygd());
         assertThat(rettigheter.harAnnenForelderOppholdtSegIEØS()).isEqualTo(annenForelderDto.rettigheter().harAnnenForelderOppholdtSegIEØS());
@@ -104,11 +101,9 @@ class EndrignssøknadFPMappingKonsistensTest {
         var vedlegg2 = vedlegg(DokumentType.I000063, DokumentasjonUtil.barn());
         var vedlegg3 = vedlegg(DokumentasjonUtil.uttaksperiode(uttak.getLast().fom(), uttak.getLast().tom()));
         var søknadDto = new EndringssøknadBuilder(new Saksnummer("1"))
+            .medRolle(BrukerRolle.MOR)
             .medUttaksplan(uttak)
-            .medSøker(new SøkerBuilder(BrukerRolle.MOR)
-                .medErAleneOmOmsorg(true)
-                .build())
-            .medAnnenForelder(AnnenforelderBuilder.annenpartIkkeRettOgMorHarUføretrygd(DUMMY_FNR).build())
+            .medAnnenForelder(AnnenforelderBuilder.aleneomsorgAnnenpartIkkeRettOgMorHarUføretrygd(DUMMY_FNR).build())
             .medBarn(BarnBuilder.omsorgsovertakelse(LocalDate.now().minusWeeks(2)).build())
             .medVedlegg(List.of(vedlegg1, vedlegg2, vedlegg3))
             .build();

@@ -3,9 +3,13 @@ package no.nav.foreldrepenger.selvbetjening.kontrakt.innsending.v2.util.builder;
 import java.time.LocalDate;
 import java.util.List;
 
-import no.nav.foreldrepenger.selvbetjening.kontrakt.innsending.dto.SøkerDto;
+import no.nav.foreldrepenger.common.domain.BrukerRolle;
+import no.nav.foreldrepenger.common.oppslag.dkif.Målform;
 import no.nav.foreldrepenger.selvbetjening.kontrakt.innsending.dto.VedleggDto;
+import no.nav.foreldrepenger.selvbetjening.kontrakt.innsending.v2.dto.AnnenInntektDto;
 import no.nav.foreldrepenger.selvbetjening.kontrakt.innsending.v2.dto.BarnDto;
+import no.nav.foreldrepenger.selvbetjening.kontrakt.innsending.v2.dto.FrilansDto;
+import no.nav.foreldrepenger.selvbetjening.kontrakt.innsending.v2.dto.NæringDto;
 import no.nav.foreldrepenger.selvbetjening.kontrakt.innsending.v2.dto.SøknadDto;
 import no.nav.foreldrepenger.selvbetjening.kontrakt.innsending.v2.dto.UtenlandsoppholdsperiodeDto;
 import no.nav.foreldrepenger.selvbetjening.kontrakt.innsending.v2.dto.foreldrepenger.Dekningsgrad;
@@ -16,7 +20,11 @@ import no.nav.foreldrepenger.selvbetjening.kontrakt.innsending.v2.dto.foreldrepe
 
 public class ForeldrepengerBuilder {
     private LocalDate mottattdato;
-    private SøkerDto søker;
+    private BrukerRolle rolle;
+    private Målform språkkode;
+    private FrilansDto frilansInformasjon;
+    private NæringDto selvstendigNæringsdrivendeInformasjon;
+    private List<AnnenInntektDto> andreInntekterSiste10Mnd;
     private BarnDto barn;
     private AnnenForelderDto annenForelder;
     private Dekningsgrad dekningsgrad;
@@ -26,6 +34,7 @@ public class ForeldrepengerBuilder {
     private List<VedleggDto> vedlegg;
 
     public ForeldrepengerBuilder() {
+        this.språkkode = Målform.standard();
     }
 
     public ForeldrepengerBuilder medMottattdato(LocalDate mottattdato) {
@@ -33,8 +42,28 @@ public class ForeldrepengerBuilder {
         return this;
     }
 
-    public ForeldrepengerBuilder medSøker(SøkerDto søker) {
-        this.søker = søker;
+    public ForeldrepengerBuilder medRolle(BrukerRolle rolle) {
+        this.rolle = rolle;
+        return this;
+    }
+
+    public ForeldrepengerBuilder medSpråkkode(Målform språkkode) {
+        this.språkkode = språkkode;
+        return this;
+    }
+
+    public ForeldrepengerBuilder medFrilansInformasjon(FrilansDto frilansInformasjon) {
+        this.frilansInformasjon = frilansInformasjon;
+        return this;
+    }
+
+    public ForeldrepengerBuilder medSelvstendigNæringsdrivendeInformasjon(NæringDto selvstendigNæringsdrivendeInformasjon) {
+        this.selvstendigNæringsdrivendeInformasjon = selvstendigNæringsdrivendeInformasjon;
+        return this;
+    }
+
+    public ForeldrepengerBuilder medAndreInntekterSiste10Mnd(List<AnnenInntektDto> andreInntekterSiste10Mnd) {
+        this.andreInntekterSiste10Mnd = andreInntekterSiste10Mnd;
         return this;
     }
 
@@ -82,12 +111,16 @@ public class ForeldrepengerBuilder {
         if (mottattdato == null) mottattdato = LocalDate.now();
         return new ForeldrepengesøknadDto(
             mottattdato,
-            søker,
+            rolle,
+            språkkode,
+            frilansInformasjon,
+            selvstendigNæringsdrivendeInformasjon,
+            andreInntekterSiste10Mnd,
             barn,
             annenForelder,
             dekningsgrad,
-            tilleggsopplysninger,
             uttaksplan,
+            tilleggsopplysninger,
             utenlandsopphold,
             vedlegg
         );

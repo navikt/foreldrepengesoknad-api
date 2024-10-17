@@ -17,6 +17,9 @@ public class EngangsstønadBuilder {
     private List<UtenlandsoppholdsperiodeDto> utenlandsopphold;
     private List<VedleggDto> vedlegg;
 
+    public EngangsstønadBuilder() {
+        this.språkkode = Målform.standard();
+    }
 
     public EngangsstønadBuilder medMottattdato(LocalDate mottattdato) {
         this.mottattdato = mottattdato;

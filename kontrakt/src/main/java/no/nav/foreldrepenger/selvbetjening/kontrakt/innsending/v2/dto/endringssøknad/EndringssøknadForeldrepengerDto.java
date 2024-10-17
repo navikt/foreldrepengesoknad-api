@@ -11,8 +11,9 @@ import jakarta.validation.Valid;
 import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Pattern;
 import jakarta.validation.constraints.Size;
+import no.nav.foreldrepenger.common.domain.BrukerRolle;
 import no.nav.foreldrepenger.common.domain.Saksnummer;
-import no.nav.foreldrepenger.selvbetjening.kontrakt.innsending.dto.SøkerDto;
+import no.nav.foreldrepenger.common.oppslag.dkif.Målform;
 import no.nav.foreldrepenger.selvbetjening.kontrakt.innsending.dto.VedleggDto;
 import no.nav.foreldrepenger.selvbetjening.kontrakt.innsending.dto.validering.VedlegglistestørrelseConstraint;
 import no.nav.foreldrepenger.selvbetjening.kontrakt.innsending.v2.dto.BarnDto;
@@ -20,12 +21,13 @@ import no.nav.foreldrepenger.selvbetjening.kontrakt.innsending.v2.dto.foreldrepe
 import no.nav.foreldrepenger.selvbetjening.kontrakt.innsending.v2.dto.foreldrepenger.uttaksplan.UttaksplanDto;
 
 public record EndringssøknadForeldrepengerDto(LocalDate mottattdato,
-                                              @Valid @NotNull Saksnummer saksnummer,
-                                              @Valid @NotNull SøkerDto søker,
+                                              @Valid BrukerRolle rolle,
+                                              @Valid Målform språkkode,
                                               @Valid @NotNull BarnDto barn,
                                               @Valid AnnenForelderDto annenForelder,
                                               @Pattern(regexp = FRITEKST) String tilleggsopplysninger,
                                               @Valid @NotNull UttaksplanDto uttaksplan,
+                                              @Valid @NotNull Saksnummer saksnummer,
                                               @Valid @VedlegglistestørrelseConstraint @Size(max = 100) List<@Valid VedleggDto> vedlegg) implements EndringssøknadDto {
 
     public EndringssøknadForeldrepengerDto {
