@@ -39,7 +39,6 @@ public class TidslinjeController {
     public List<TidslinjeHendelseDto> hentTidslinje(@RequestParam @Valid @NotNull Saksnummer saksnummer) {
         var tidslinje = tidslinjeTjeneste.tidslinje(tokenUtil.innloggetBrukerOrElseThrowException(), saksnummer);
         tidslinjeKonsistensSjekk(tidslinje);
-        LOG.info("Produserte tidslinje {}", tidslinje);
         return tidslinje;
     }
 
