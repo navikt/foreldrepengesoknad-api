@@ -27,7 +27,6 @@ import no.nav.foreldrepenger.common.oppslag.dkif.Målform;
 import no.nav.foreldrepenger.selvbetjening.kontrakt.innsending.mapper.DokumentasjonUtil;
 import no.nav.foreldrepenger.selvbetjening.kontrakt.innsending.mapper.SøknadMapper;
 import no.nav.foreldrepenger.selvbetjening.kontrakt.innsending.v2.dto.svangerskapspenger.AvtaltFerieDto;
-import no.nav.foreldrepenger.selvbetjening.kontrakt.innsending.v2.dto.svangerskapspenger.tilretteleggingbehov.TilretteleggingbehovDto;
 import no.nav.foreldrepenger.selvbetjening.kontrakt.innsending.v2.util.builder.BarnBuilder;
 import no.nav.foreldrepenger.selvbetjening.kontrakt.innsending.v2.util.builder.SvangerskapspengerBuilder;
 import no.nav.foreldrepenger.selvbetjening.kontrakt.innsending.v2.util.builder.TilretteleggingBehovBuilder;
@@ -99,15 +98,19 @@ class SvangerskapspengerMappingKonsistensTest {
     @Test
     void svangerskapspengerTilretteleggingBehovKonsistensSjekk() {
         var tilretteleggingBehovDto = List.of(
-            new TilretteleggingbehovDto(ArbeidsforholdMaler.selvstendigNæringsdrivende(), NOW.minusMonths(1), List.of(
-                TilretteleggingBehovBuilder.hel(NOW.minusMonths(1)),
-                TilretteleggingBehovBuilder.delvis(NOW, 55.0))
-            ),
-            new TilretteleggingbehovDto(ArbeidsforholdMaler.privatArbeidsgiver(DUMMY_FNR), NOW.minusMonths(1), List.of(
-                TilretteleggingBehovBuilder.delvis(NOW, 55.0))),
-            new TilretteleggingbehovDto(ArbeidsforholdMaler.virksomhet(Orgnummer.MAGIC_ORG), NOW.minusMonths(1), List.of(
-                TilretteleggingBehovBuilder.ingen(NOW.plusMonths(1))))
+            new TilretteleggingBehovBuilder(ArbeidsforholdMaler.selvstendigNæringsdrivende(), NOW.minusMonths(1))
+                .hel(NOW.minusMonths(1))
+                .delvis(NOW, 55.0)
+                .build(),
+            new TilretteleggingBehovBuilder(ArbeidsforholdMaler.privatArbeidsgiver(DUMMY_FNR), NOW)
+                .delvis(NOW, 55.0)
+                .build(),
+            new TilretteleggingBehovBuilder(ArbeidsforholdMaler.virksomhet(Orgnummer.MAGIC_ORG), NOW.plusMonths(1))
+                .ingen(NOW.plusMonths(1))
+                .build()
         );
+
+
         var ferie = new AvtaltFerieDto(ArbeidsforholdMaler.virksomhet(Orgnummer.MAGIC_ORG), LocalDate.now().plusDays(10),
             LocalDate.now().plusDays(20));
         var søknadDto = new SvangerskapspengerBuilder(tilretteleggingBehovDto)
@@ -140,10 +143,10 @@ class SvangerskapspengerMappingKonsistensTest {
         assertThat(tilretteleggingbehov).hasSameSizeAs(tilretteleggingBehovDto)
             .flatExtracting(Tilretteleggingbehov::tilrettelegginger)
             .hasExactlyElementsOfTypes(
-                Tilretteleggingbehov.HelTilrettelegging.class,
-                Tilretteleggingbehov.DelvisTilrettelegging.class,
-                Tilretteleggingbehov.DelvisTilrettelegging.class,
-                Tilretteleggingbehov.IngenTilrettelegging.class
+                Tilretteleggingbehov.Tilrettelegging.Hel.class,
+                Tilretteleggingbehov.Tilrettelegging.Delvis.class,
+                Tilretteleggingbehov.Tilrettelegging.Delvis.class,
+                Tilretteleggingbehov.Tilrettelegging.Ingen.class
             );
         assertThat(tilretteleggingbehov)
             .extracting(Tilretteleggingbehov::arbeidsforhold)
@@ -193,18 +196,22 @@ class SvangerskapspengerMappingKonsistensTest {
 
     @Test
     void svangerskapspengerBehovVedleggReferanseMappingKonsistens() {
-        var tilretteleggingBehov = List.of(
-            new TilretteleggingbehovDto(ArbeidsforholdMaler.selvstendigNæringsdrivende(), NOW.minusMonths(1), List.of(
-                TilretteleggingBehovBuilder.hel(NOW.minusMonths(1)))),
-            new TilretteleggingbehovDto(ArbeidsforholdMaler.privatArbeidsgiver(DUMMY_FNR), NOW.minusMonths(1), List.of(
-                TilretteleggingBehovBuilder.delvis(NOW, 55.0))),
-            new TilretteleggingbehovDto(ArbeidsforholdMaler.virksomhet(Orgnummer.MAGIC_ORG), NOW.minusMonths(1), List.of(
-                TilretteleggingBehovBuilder.ingen(NOW.plusMonths(1))))
+        var tilretteleggingbehov = List.of(
+            new TilretteleggingBehovBuilder(ArbeidsforholdMaler.selvstendigNæringsdrivende(), NOW.minusMonths(1))
+                .hel(NOW.minusMonths(1))
+                .build(),
+            new TilretteleggingBehovBuilder(ArbeidsforholdMaler.privatArbeidsgiver(DUMMY_FNR), NOW)
+                .delvis(NOW, 55.0)
+                .build(),
+            new TilretteleggingBehovBuilder(ArbeidsforholdMaler.virksomhet(Orgnummer.MAGIC_ORG), NOW.plusMonths(1))
+                .ingen(NOW.plusMonths(1))
+                .build()
         );
-        var vedlegg1 = DokumentasjonUtil.vedlegg(DokumentasjonUtil.tilrettelegging(tilretteleggingBehov.get(0).arbeidsforhold()));
-        var vedlegg2 = DokumentasjonUtil.vedlegg(DokumentasjonUtil.tilrettelegging(tilretteleggingBehov.get(1).arbeidsforhold()));
-        var vedlegg3 = DokumentasjonUtil.vedlegg(DokumentasjonUtil.tilrettelegging(tilretteleggingBehov.get(2).arbeidsforhold()));
-        var søknadDto = new SvangerskapspengerBuilder(tilretteleggingBehov)
+
+        var vedlegg1 = DokumentasjonUtil.vedlegg(DokumentasjonUtil.tilrettelegging(tilretteleggingbehov.get(0).arbeidsforhold()));
+        var vedlegg2 = DokumentasjonUtil.vedlegg(DokumentasjonUtil.tilrettelegging(tilretteleggingbehov.get(1).arbeidsforhold()));
+        var vedlegg3 = DokumentasjonUtil.vedlegg(DokumentasjonUtil.tilrettelegging(tilretteleggingbehov.get(2).arbeidsforhold()));
+        var søknadDto = new SvangerskapspengerBuilder(tilretteleggingbehov)
             .medSpråkkode(Målform.EN)
             .medUtenlandsopphold(UtenlandsoppholdMaler.oppholdIUtlandetForrige12mnd())
             .medSelvstendigNæringsdrivendeInformasjon(OpptjeningMaler.egenNaeringOpptjening(Orgnummer.MAGIC_ORG.value()))

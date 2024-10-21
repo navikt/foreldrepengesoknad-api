@@ -34,7 +34,6 @@ import no.nav.foreldrepenger.selvbetjening.kontrakt.innsending.v2.dto.engangsst�
 import no.nav.foreldrepenger.selvbetjening.kontrakt.innsending.v2.dto.foreldrepenger.Dekningsgrad;
 import no.nav.foreldrepenger.selvbetjening.kontrakt.innsending.v2.dto.foreldrepenger.ForeldrepengesøknadDto;
 import no.nav.foreldrepenger.selvbetjening.kontrakt.innsending.v2.dto.svangerskapspenger.SvangerskapspengesøknadDto;
-import no.nav.foreldrepenger.selvbetjening.kontrakt.innsending.v2.dto.svangerskapspenger.tilretteleggingbehov.TilretteleggingbehovDto;
 import no.nav.foreldrepenger.selvbetjening.kontrakt.innsending.v2.util.builder.AnnenforelderBuilder;
 import no.nav.foreldrepenger.selvbetjening.kontrakt.innsending.v2.util.builder.BarnBuilder;
 import no.nav.foreldrepenger.selvbetjening.kontrakt.innsending.v2.util.builder.EndringssøknadBuilder;
@@ -180,15 +179,13 @@ class SøknadDtoJacksonRountripTest {
 
     @Test
     void svangerskapspengerBehovRountripTest() throws IOException {
-        var tilretteleggingBehov = List.of(
-            new TilretteleggingbehovDto(ArbeidsforholdMaler.selvstendigNæringsdrivende(), NOW.minusMonths(1), List.of(
-                TilretteleggingBehovBuilder.hel(NOW.minusMonths(1)))),
-            new TilretteleggingbehovDto(ArbeidsforholdMaler.privatArbeidsgiver(DUMMY_FNR), NOW.minusMonths(1), List.of(
-                TilretteleggingBehovBuilder.delvis(NOW, 55.0))),
-            new TilretteleggingbehovDto(ArbeidsforholdMaler.virksomhet(Orgnummer.MAGIC_ORG), NOW.minusMonths(1), List.of(
-                TilretteleggingBehovBuilder.ingen(NOW.plusMonths(1))))
+        var tilretteleggingbehov = List.of(
+            new TilretteleggingBehovBuilder(ArbeidsforholdMaler.selvstendigNæringsdrivende(), NOW.minusMonths(1)).hel(NOW.minusMonths(1)).build(),
+            new TilretteleggingBehovBuilder(ArbeidsforholdMaler.privatArbeidsgiver(DUMMY_FNR), NOW).delvis(NOW, 55.0).build(),
+            new TilretteleggingBehovBuilder(ArbeidsforholdMaler.virksomhet(Orgnummer.MAGIC_ORG), NOW.plusMonths(1)).ingen(NOW.plusMonths(1)).build()
         );
-        var søknad = new SvangerskapspengerBuilder(tilretteleggingBehov)
+
+        var søknad = new SvangerskapspengerBuilder(tilretteleggingbehov)
             .medUtenlandsopphold(UtenlandsoppholdMaler.oppholdIUtlandetForrige12mnd())
             .medSelvstendigNæringsdrivendeInformasjon(OpptjeningMaler.egenNaeringOpptjening(Orgnummer.MAGIC_ORG.value()))
             .medBarn(BarnBuilder.termin(2, LocalDate.now().plusWeeks(2)).build())
