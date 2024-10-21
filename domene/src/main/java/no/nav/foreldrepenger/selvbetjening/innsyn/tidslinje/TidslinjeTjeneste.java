@@ -129,7 +129,7 @@ public class TidslinjeTjeneste {
     private static TidslinjeHendelseDto tilTidslinjeHendelse(InntektsmeldingDto inntektsmelding) {
         // versjon 1 har ikke journalPostId.
         var dokumenter = inntektsmelding.versjon() == 2 ?
-            List.of(new TidslinjeHendelseDto.Dokument(inntektsmelding.journalpostId(), null, null)) : List.<TidslinjeHendelseDto.Dokument>of();
+            List.of(new TidslinjeHendelseDto.Dokument(inntektsmelding.journalpostId(), null, "")) : List.<TidslinjeHendelseDto.Dokument>of();
 
         return new TidslinjeHendelseDto(
             inntektsmelding.mottattTidspunkt(),
