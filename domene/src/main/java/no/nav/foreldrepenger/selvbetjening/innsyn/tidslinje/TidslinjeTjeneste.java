@@ -8,6 +8,8 @@ import java.util.List;
 import java.util.Optional;
 import java.util.stream.Stream;
 
+import no.nav.foreldrepenger.common.innsyn.inntektsmelding.FpOversiktInntektsmeldingDto;
+
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Service;
@@ -15,7 +17,6 @@ import org.springframework.stereotype.Service;
 import no.nav.foreldrepenger.common.domain.Fødselsnummer;
 import no.nav.foreldrepenger.common.domain.Saksnummer;
 import no.nav.foreldrepenger.selvbetjening.innsyn.Innsyn;
-import no.nav.foreldrepenger.selvbetjening.innsyn.InntektsmeldingDto;
 import no.nav.foreldrepenger.selvbetjening.innsyn.dokument.EnkelJournalpost;
 import no.nav.foreldrepenger.selvbetjening.innsyn.dokument.SafSelvbetjeningTjeneste;
 
@@ -126,7 +127,7 @@ public class TidslinjeTjeneste {
         return new TidslinjeHendelseDto.Dokument(journalpostId, dokument.dokumentId(), dokument.tittel());
     }
 
-    private static TidslinjeHendelseDto tilTidslinjeHendelse(InntektsmeldingDto inntektsmelding) {
+    private static TidslinjeHendelseDto tilTidslinjeHendelse(FpOversiktInntektsmeldingDto inntektsmelding) {
         // versjon 1 har ikke journalPostId.
         var dokumenter = inntektsmelding.versjon() == 2 ?
             List.of(new TidslinjeHendelseDto.Dokument(inntektsmelding.journalpostId(), null, "")) : List.<TidslinjeHendelseDto.Dokument>of();

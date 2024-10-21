@@ -1,8 +1,8 @@
 package no.nav.foreldrepenger.selvbetjening.innsyn.inntektsmelding;
 
 import no.nav.foreldrepenger.common.domain.Saksnummer;
+import no.nav.foreldrepenger.common.innsyn.inntektsmelding.FpOversiktInntektsmeldingDto;
 import no.nav.foreldrepenger.selvbetjening.innsyn.Innsyn;
-import no.nav.foreldrepenger.selvbetjening.innsyn.InntektsmeldingDto;
 
 import org.springframework.stereotype.Service;
 
@@ -17,7 +17,7 @@ public class InntektsmeldingTjeneste {
         this.innsyn = innsyn;
     }
 
-    public List<InntektsmeldingDto> hentInntektsmeldinger(Saksnummer saksnummer) {
+    public List<FpOversiktInntektsmeldingDto> hentInntektsmeldinger(Saksnummer saksnummer) {
         return innsyn.inntektsmeldinger(saksnummer);
     }
 }
