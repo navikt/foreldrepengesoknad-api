@@ -2,7 +2,6 @@ package no.nav.foreldrepenger.selvbetjening.kontrakt.innsending.mapper;
 
 import static no.nav.foreldrepenger.selvbetjening.kontrakt.innsending.mapper.EndringForeldrepengerMapper.tilEndringForeldrepengesøknadUtenVedleggInnhold;
 import static no.nav.foreldrepenger.selvbetjening.kontrakt.innsending.mapper.ForeldrepengerMapper.tilForeldrepengesøknadVedleggUtenInnhold;
-import static no.nav.foreldrepenger.selvbetjening.kontrakt.innsending.mapper.SvangerskapspengerMapper.tilSvangerskapspengesøknadVedleggUtenInnhold;
 import static no.nav.foreldrepenger.selvbetjening.kontrakt.innsending.v2.mapper.EndringForeldrepengerMapper.tilEndringForeldrepengesøknad;
 import static no.nav.foreldrepenger.selvbetjening.kontrakt.innsending.v2.mapper.EngangsstønadMapper.tilEngangsstønad;
 import static no.nav.foreldrepenger.selvbetjening.kontrakt.innsending.v2.mapper.ForeldrepengerMapper.tilForeldrepengesøknad;
@@ -41,9 +40,6 @@ public final class SøknadMapper {
     private static Søknad tilSøknad(no.nav.foreldrepenger.selvbetjening.kontrakt.innsending.dto.SøknadDto søknad, LocalDate mottattDato) {
         if (søknad instanceof no.nav.foreldrepenger.selvbetjening.kontrakt.innsending.dto.foreldrepenger.ForeldrepengesøknadDto f) {
             return tilForeldrepengesøknadVedleggUtenInnhold(f, mottattDato);
-        }
-        if (søknad instanceof no.nav.foreldrepenger.selvbetjening.kontrakt.innsending.dto.svangerskapspenger.SvangerskapspengesøknadDto s) {
-            return tilSvangerskapspengesøknadVedleggUtenInnhold(s, mottattDato);
         }
         throw new IllegalArgumentException("Ukjent søknad " + søknad.getClass().getSimpleName());
     }

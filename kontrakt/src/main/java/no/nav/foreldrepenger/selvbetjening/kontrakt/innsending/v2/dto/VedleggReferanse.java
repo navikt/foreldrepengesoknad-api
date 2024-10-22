@@ -1,4 +1,4 @@
-package no.nav.foreldrepenger.selvbetjening.kontrakt.innsending.dto;
+package no.nav.foreldrepenger.selvbetjening.kontrakt.innsending.v2.dto;
 
 import java.util.Objects;
 import java.util.UUID;
