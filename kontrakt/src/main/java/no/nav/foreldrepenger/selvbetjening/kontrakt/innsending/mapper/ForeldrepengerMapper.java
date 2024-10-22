@@ -39,7 +39,7 @@ import no.nav.foreldrepenger.common.domain.foreldrepenger.fordeling.UtsettelsesP
 import no.nav.foreldrepenger.common.domain.foreldrepenger.fordeling.UtsettelsesÅrsak;
 import no.nav.foreldrepenger.common.domain.foreldrepenger.fordeling.UttaksPeriode;
 import no.nav.foreldrepenger.selvbetjening.kontrakt.innsending.dto.SøkerDto;
-import no.nav.foreldrepenger.selvbetjening.kontrakt.innsending.dto.VedleggDto;
+import no.nav.foreldrepenger.selvbetjening.kontrakt.innsending.v2.dto.VedleggDto;
 import no.nav.foreldrepenger.selvbetjening.kontrakt.innsending.dto.foreldrepenger.AnnenforelderDto;
 import no.nav.foreldrepenger.selvbetjening.kontrakt.innsending.dto.foreldrepenger.ForeldrepengesøknadDto;
 import no.nav.foreldrepenger.selvbetjening.kontrakt.innsending.dto.foreldrepenger.UttaksplanPeriodeDto;

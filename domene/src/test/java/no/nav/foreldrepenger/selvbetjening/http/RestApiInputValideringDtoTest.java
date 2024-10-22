@@ -46,8 +46,8 @@ import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Null;
 import jakarta.validation.constraints.Pattern;
 import jakarta.validation.constraints.Size;
-import no.nav.foreldrepenger.selvbetjening.kontrakt.innsending.dto.VedleggDto;
-import no.nav.foreldrepenger.selvbetjening.kontrakt.innsending.dto.VedleggReferanse;
+import no.nav.foreldrepenger.selvbetjening.kontrakt.innsending.v2.dto.VedleggDto;
+import no.nav.foreldrepenger.selvbetjening.kontrakt.innsending.v2.dto.VedleggReferanse;
 import no.nav.foreldrepenger.selvbetjening.kontrakt.innsending.dto.validering.VedlegglistestørrelseConstraint;
 
 class RestApiInputValideringDtoTest extends RestApiTestUtil {

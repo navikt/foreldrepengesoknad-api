@@ -11,7 +11,7 @@ import no.nav.foreldrepenger.common.domain.Saksnummer;
 import no.nav.foreldrepenger.selvbetjening.kontrakt.innsending.dto.BarnDto;
 import no.nav.foreldrepenger.selvbetjening.kontrakt.innsending.dto.Innsending;
 import no.nav.foreldrepenger.selvbetjening.kontrakt.innsending.dto.SøkerDto;
-import no.nav.foreldrepenger.selvbetjening.kontrakt.innsending.dto.VedleggDto;
+import no.nav.foreldrepenger.selvbetjening.kontrakt.innsending.v2.dto.VedleggDto;
 import no.nav.foreldrepenger.selvbetjening.kontrakt.innsending.dto.foreldrepenger.Situasjon;
 
 @JsonTypeInfo(use = NAME, property = "type", visible = true)

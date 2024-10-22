@@ -12,7 +12,7 @@ import java.util.List;
 
 import no.nav.foreldrepenger.common.domain.foreldrepenger.Endringssøknad;
 import no.nav.foreldrepenger.common.domain.foreldrepenger.Foreldrepenger;
-import no.nav.foreldrepenger.selvbetjening.kontrakt.innsending.dto.VedleggDto;
+import no.nav.foreldrepenger.selvbetjening.kontrakt.innsending.v2.dto.VedleggDto;
 import no.nav.foreldrepenger.selvbetjening.kontrakt.innsending.v2.dto.endringssøknad.EndringssøknadForeldrepengerDto;
 
 

@@ -33,13 +33,13 @@ import no.nav.foreldrepenger.common.domain.felles.ÅpenPeriode;
 import no.nav.foreldrepenger.selvbetjening.kontrakt.innsending.dto.AnnenInntektDto;
 import no.nav.foreldrepenger.selvbetjening.kontrakt.innsending.dto.BarnDto;
 import no.nav.foreldrepenger.selvbetjening.kontrakt.innsending.dto.FrilansInformasjonDto;
-import no.nav.foreldrepenger.selvbetjening.kontrakt.innsending.dto.VedleggReferanse;
+import no.nav.foreldrepenger.selvbetjening.kontrakt.innsending.v2.dto.VedleggReferanse;
 import no.nav.foreldrepenger.selvbetjening.kontrakt.innsending.dto.NæringDto;
 import no.nav.foreldrepenger.selvbetjening.kontrakt.innsending.dto.SøkerDto;
 import no.nav.foreldrepenger.selvbetjening.kontrakt.innsending.dto.SøknadDto;
 import no.nav.foreldrepenger.selvbetjening.kontrakt.innsending.dto.TilknyttetPersonDto;
 import no.nav.foreldrepenger.selvbetjening.kontrakt.innsending.dto.UtenlandsoppholdPeriodeDto;
-import no.nav.foreldrepenger.selvbetjening.kontrakt.innsending.dto.VedleggDto;
+import no.nav.foreldrepenger.selvbetjening.kontrakt.innsending.v2.dto.VedleggDto;
 import no.nav.foreldrepenger.selvbetjening.kontrakt.innsending.dto.foreldrepenger.Situasjon;
 
 public final class CommonMapper {

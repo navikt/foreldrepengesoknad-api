@@ -25,7 +25,7 @@ import no.nav.foreldrepenger.common.domain.felles.relasjontilbarn.Fødsel;
 import no.nav.foreldrepenger.common.domain.felles.relasjontilbarn.Omsorgsovertakelse;
 import no.nav.foreldrepenger.common.domain.felles.relasjontilbarn.RelasjonTilBarn;
 import no.nav.foreldrepenger.common.domain.felles.ÅpenPeriode;
-import no.nav.foreldrepenger.selvbetjening.kontrakt.innsending.dto.VedleggDto;
+import no.nav.foreldrepenger.selvbetjening.kontrakt.innsending.v2.dto.VedleggDto;
 import no.nav.foreldrepenger.selvbetjening.kontrakt.innsending.dto.ÅpenPeriodeDto;
 import no.nav.foreldrepenger.selvbetjening.kontrakt.innsending.mapper.DokumentasjonReferanseMapper;
 import no.nav.foreldrepenger.selvbetjening.kontrakt.innsending.v2.dto.AdopsjonDto;

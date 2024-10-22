@@ -21,14 +21,14 @@ import no.nav.foreldrepenger.common.domain.Kvittering;
 import no.nav.foreldrepenger.selvbetjening.http.RetryAware;
 import no.nav.foreldrepenger.selvbetjening.innsending.pdf.PdfGenerator;
 import no.nav.foreldrepenger.selvbetjening.kontrakt.innsending.dto.Innsending;
-import no.nav.foreldrepenger.selvbetjening.kontrakt.innsending.dto.VedleggDto;
-import no.nav.foreldrepenger.selvbetjening.kontrakt.innsending.dto.VedleggReferanse;
+import no.nav.foreldrepenger.selvbetjening.kontrakt.innsending.v2.dto.VedleggDto;
+import no.nav.foreldrepenger.selvbetjening.kontrakt.innsending.v2.dto.VedleggReferanse;
 import no.nav.foreldrepenger.selvbetjening.kontrakt.innsending.dto.endringssøknad.EndringssøknadForeldrepengerDto;
 import no.nav.foreldrepenger.selvbetjening.kontrakt.innsending.dto.ettersendelse.EttersendelseDto;
 import no.nav.foreldrepenger.selvbetjening.kontrakt.innsending.dto.ettersendelse.TilbakebetalingUttalelseDto;
 import no.nav.foreldrepenger.selvbetjening.kontrakt.innsending.dto.foreldrepenger.ForeldrepengesøknadDto;
-import no.nav.foreldrepenger.selvbetjening.kontrakt.innsending.dto.svangerskapspenger.SvangerskapspengesøknadDto;
 import no.nav.foreldrepenger.selvbetjening.kontrakt.innsending.v2.dto.engangsstønad.EngangsstønadDto;
+import no.nav.foreldrepenger.selvbetjening.kontrakt.innsending.v2.dto.svangerskapspenger.SvangerskapspengesøknadDto;
 import no.nav.foreldrepenger.selvbetjening.mellomlagring.KryptertMellomlagring;
 import no.nav.foreldrepenger.selvbetjening.mellomlagring.Ytelse;
 
@@ -136,7 +136,7 @@ public class InnsendingTjeneste implements RetryAware {
         if (innsending instanceof EngangsstønadDto) {
             return Ytelse.ENGANGSSTONAD;
         }
-        if (innsending instanceof SvangerskapspengesøknadDto || innsending instanceof no.nav.foreldrepenger.selvbetjening.kontrakt.innsending.v2.dto.svangerskapspenger.SvangerskapspengesøknadDto) {
+        if ( innsending instanceof SvangerskapspengesøknadDto) {
             return Ytelse.SVANGERSKAPSPENGER;
         }
         if (innsending instanceof EndringssøknadForeldrepengerDto || innsending instanceof no.nav.foreldrepenger.selvbetjening.kontrakt.innsending.v2.dto.endringssøknad.EndringssøknadForeldrepengerDto) {
