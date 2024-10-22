@@ -6,6 +6,7 @@ import java.util.Optional;
 import no.nav.foreldrepenger.common.domain.Saksnummer;
 import no.nav.foreldrepenger.common.innsyn.AnnenPartSak;
 import no.nav.foreldrepenger.common.innsyn.Saker;
+import no.nav.foreldrepenger.common.innsyn.inntektsmelding.FpOversiktInntektsmeldingDto;
 import no.nav.foreldrepenger.selvbetjening.http.RetryAware;
 
 public interface Innsyn extends RetryAware {
@@ -20,5 +21,5 @@ public interface Innsyn extends RetryAware {
 
     Optional<AnnenPartSak> annenPartVedtak(AnnenPartSakIdentifikator request);
 
-    List<InntektsmeldingDto> inntektsmeldinger(Saksnummer saksnummer);
+    List<FpOversiktInntektsmeldingDto> inntektsmeldinger(Saksnummer saksnummer);
 }

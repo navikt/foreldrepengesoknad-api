@@ -6,6 +6,8 @@ import java.util.Arrays;
 import java.util.List;
 import java.util.Optional;
 
+import no.nav.foreldrepenger.common.innsyn.inntektsmelding.FpOversiktInntektsmeldingDto;
+
 import org.springframework.stereotype.Component;
 import org.springframework.web.client.HttpClientErrorException;
 import org.springframework.web.client.RestOperations;
@@ -58,8 +60,8 @@ public class InnsynConnection extends AbstractRestConnection {
             .orElse(emptyList());
     }
 
-    public List<InntektsmeldingDto> hentInntekstmeldingFor(Saksnummer saksnummer) {
-        return Optional.ofNullable(getForObject(cfg.inntektsmelding(saksnummer), InntektsmeldingDto[].class))
+    public List<FpOversiktInntektsmeldingDto> hentInntekstmeldingFor(Saksnummer saksnummer) {
+        return Optional.ofNullable(getForObject(cfg.inntektsmelding(saksnummer), FpOversiktInntektsmeldingDto[].class))
             .map(Arrays::asList)
             .orElse(emptyList());
     }

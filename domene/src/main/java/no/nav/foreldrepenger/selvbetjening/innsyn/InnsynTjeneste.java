@@ -3,6 +3,8 @@ package no.nav.foreldrepenger.selvbetjening.innsyn;
 import java.util.List;
 import java.util.Optional;
 
+import no.nav.foreldrepenger.common.innsyn.inntektsmelding.FpOversiktInntektsmeldingDto;
+
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Service;
@@ -54,7 +56,7 @@ public class InnsynTjeneste implements Innsyn {
     }
 
     @Override
-    public List<InntektsmeldingDto> inntektsmeldinger(Saksnummer saksnummer) {
+    public List<FpOversiktInntektsmeldingDto> inntektsmeldinger(Saksnummer saksnummer) {
         return innsynConnection.hentInntekstmeldingFor(saksnummer);
     }
 

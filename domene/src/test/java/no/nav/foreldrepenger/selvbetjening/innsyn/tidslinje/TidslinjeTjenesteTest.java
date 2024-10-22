@@ -5,7 +5,10 @@ import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.when;
 
 import java.time.LocalDateTime;
+import java.util.Collections;
 import java.util.List;
+
+import no.nav.foreldrepenger.common.innsyn.inntektsmelding.FpOversiktInntektsmeldingDto;
 
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -14,7 +17,6 @@ import no.nav.foreldrepenger.common.domain.Fødselsnummer;
 import no.nav.foreldrepenger.common.domain.Saksnummer;
 import no.nav.foreldrepenger.common.domain.felles.DokumentType;
 import no.nav.foreldrepenger.selvbetjening.innsyn.Innsyn;
-import no.nav.foreldrepenger.selvbetjening.innsyn.InntektsmeldingDto;
 import no.nav.foreldrepenger.selvbetjening.innsyn.dokument.EnkelJournalpost;
 import no.nav.foreldrepenger.selvbetjening.innsyn.dokument.SafSelvbetjeningTjeneste;
 
@@ -355,7 +357,9 @@ public class TidslinjeTjenesteTest {
         );
     }
 
-    public static InntektsmeldingDto standardInntektsmelding(LocalDateTime opprettet) {
-        return new InntektsmeldingDto(opprettet);
+    public static FpOversiktInntektsmeldingDto standardInntektsmelding(LocalDateTime opprettet) {
+        return new FpOversiktInntektsmeldingDto(
+            1, true, null, null, null, null, null,  null, opprettet, null, Collections.emptyList(), Collections.emptyList()
+        );
     }
 }
