@@ -110,7 +110,7 @@ class InnsendingControllerValidationTest {
     @Test
     void svangerskapspengerValidering() throws Exception {
         var svpSøknad = mapper.readValue(bytesFra("json/svangerskapspengesøknad.json"), SvangerskapspengesøknadDto.class);
-        var tilrettelegging = svpSøknad.tilrettelegging().get(0);
+        var tilrettelegging = svpSøknad.tilretteleggingsbehov().get(0);
         var virksomhet = (VirksomhetDto) tilrettelegging.arbeidsforhold();
         var result = mvc.perform(post(InnsendingController.INNSENDING_CONTROLLER_PATH + "/svangerskapspenger")
                 .contentType(MediaType.APPLICATION_JSON)

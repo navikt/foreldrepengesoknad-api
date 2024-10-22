@@ -3,9 +3,6 @@ package no.nav.foreldrepenger.selvbetjening.kontrakt.innsending.v2.dto;
 import static no.nav.foreldrepenger.common.domain.foreldrepenger.fordeling.StønadskontoType.FELLESPERIODE;
 import static no.nav.foreldrepenger.common.domain.foreldrepenger.fordeling.StønadskontoType.FORELDREPENGER_FØR_FØDSEL;
 import static no.nav.foreldrepenger.common.domain.foreldrepenger.fordeling.StønadskontoType.MØDREKVOTE;
-import static no.nav.foreldrepenger.selvbetjening.kontrakt.innsending.v2.util.builder.TilretteleggingBuilder.delvis;
-import static no.nav.foreldrepenger.selvbetjening.kontrakt.innsending.v2.util.builder.TilretteleggingBuilder.hel;
-import static no.nav.foreldrepenger.selvbetjening.kontrakt.innsending.v2.util.builder.TilretteleggingBuilder.ingen;
 import static no.nav.foreldrepenger.selvbetjening.kontrakt.innsending.v2.util.builder.UttakplanPeriodeBuilder.gradert;
 import static no.nav.foreldrepenger.selvbetjening.kontrakt.innsending.v2.util.builder.UttakplanPeriodeBuilder.overføring;
 import static no.nav.foreldrepenger.selvbetjening.kontrakt.innsending.v2.util.builder.UttakplanPeriodeBuilder.uttak;
@@ -156,24 +153,6 @@ class SøknadDtoJacksonRountripTest {
             .build();
 
         assertThat(søknad).isInstanceOf(ForeldrepengesøknadDto.class);
-        test(søknad);
-    }
-
-    @Test
-    void svangerskapspengerRountripTest() throws IOException {
-        var tilrettelegginger = List.of(
-            hel(NOW.minusMonths(1), NOW.minusMonths(1), ArbeidsforholdMaler.selvstendigNæringsdrivende()).build(),
-            delvis(NOW, NOW, ArbeidsforholdMaler.privatArbeidsgiver(DUMMY_FNR), 55.0).build(),
-            ingen(NOW.plusWeeks(1), NOW.plusWeeks(1), ArbeidsforholdMaler.virksomhet(Orgnummer.MAGIC_ORG)).build()
-        );
-        var søknad = new SvangerskapspengerBuilder(null)
-            .medTilrettelegging(tilrettelegginger)
-            .medUtenlandsopphold(UtenlandsoppholdMaler.oppholdIUtlandetForrige12mnd())
-            .medSelvstendigNæringsdrivendeInformasjon(OpptjeningMaler.egenNaeringOpptjening(Orgnummer.MAGIC_ORG.value()))
-            .medBarn(BarnBuilder.termin(2, LocalDate.now().plusWeeks(2)).build())
-            .build();
-
-        assertThat(søknad).isInstanceOf(SvangerskapspengesøknadDto.class);
         test(søknad);
     }
 

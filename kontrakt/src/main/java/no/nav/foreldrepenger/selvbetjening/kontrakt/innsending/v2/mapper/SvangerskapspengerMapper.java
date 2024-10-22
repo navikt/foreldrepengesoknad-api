@@ -11,19 +11,14 @@ import java.util.List;
 import no.nav.foreldrepenger.common.domain.BrukerRolle;
 import no.nav.foreldrepenger.common.domain.Søker;
 import no.nav.foreldrepenger.common.domain.Søknad;
-import no.nav.foreldrepenger.common.domain.felles.ProsentAndel;
 import no.nav.foreldrepenger.common.domain.felles.opptjening.Opptjening;
 import no.nav.foreldrepenger.common.domain.svangerskapspenger.AvtaltFerie;
 import no.nav.foreldrepenger.common.domain.svangerskapspenger.Svangerskapspenger;
-import no.nav.foreldrepenger.common.domain.svangerskapspenger.tilrettelegging.DelvisTilrettelegging;
-import no.nav.foreldrepenger.common.domain.svangerskapspenger.tilrettelegging.HelTilrettelegging;
-import no.nav.foreldrepenger.common.domain.svangerskapspenger.tilrettelegging.IngenTilrettelegging;
-import no.nav.foreldrepenger.common.domain.svangerskapspenger.tilrettelegging.Tilrettelegging;
-import no.nav.foreldrepenger.common.domain.svangerskapspenger.tilrettelegging.arbeidsforhold.Arbeidsforhold;
-import no.nav.foreldrepenger.common.domain.svangerskapspenger.tilrettelegging.arbeidsforhold.Frilanser;
-import no.nav.foreldrepenger.common.domain.svangerskapspenger.tilrettelegging.arbeidsforhold.PrivatArbeidsgiver;
-import no.nav.foreldrepenger.common.domain.svangerskapspenger.tilrettelegging.arbeidsforhold.SelvstendigNæringsdrivende;
-import no.nav.foreldrepenger.common.domain.svangerskapspenger.tilrettelegging.arbeidsforhold.Virksomhet;
+import no.nav.foreldrepenger.common.domain.svangerskapspenger.arbeidsforhold.Arbeidsforhold;
+import no.nav.foreldrepenger.common.domain.svangerskapspenger.arbeidsforhold.Frilanser;
+import no.nav.foreldrepenger.common.domain.svangerskapspenger.arbeidsforhold.PrivatArbeidsgiver;
+import no.nav.foreldrepenger.common.domain.svangerskapspenger.arbeidsforhold.SelvstendigNæringsdrivende;
+import no.nav.foreldrepenger.common.domain.svangerskapspenger.arbeidsforhold.Virksomhet;
 import no.nav.foreldrepenger.common.domain.svangerskapspenger.tilretteleggingsbehov.Tilretteleggingbehov;
 import no.nav.foreldrepenger.selvbetjening.kontrakt.innsending.mapper.DokumentasjonReferanseMapper;
 import no.nav.foreldrepenger.selvbetjening.kontrakt.innsending.v2.dto.AnnenInntektDto;
@@ -36,10 +31,6 @@ import no.nav.foreldrepenger.selvbetjening.kontrakt.innsending.v2.dto.svangerska
 import no.nav.foreldrepenger.selvbetjening.kontrakt.innsending.v2.dto.svangerskapspenger.arbeidsforhold.PrivatArbeidsgiverDto;
 import no.nav.foreldrepenger.selvbetjening.kontrakt.innsending.v2.dto.svangerskapspenger.arbeidsforhold.SelvstendigNæringsdrivendeDto;
 import no.nav.foreldrepenger.selvbetjening.kontrakt.innsending.v2.dto.svangerskapspenger.arbeidsforhold.VirksomhetDto;
-import no.nav.foreldrepenger.selvbetjening.kontrakt.innsending.v2.dto.svangerskapspenger.tilrettelegging.DelvisTilretteleggingDto;
-import no.nav.foreldrepenger.selvbetjening.kontrakt.innsending.v2.dto.svangerskapspenger.tilrettelegging.HelTilretteleggingDto;
-import no.nav.foreldrepenger.selvbetjening.kontrakt.innsending.v2.dto.svangerskapspenger.tilrettelegging.IngenTilretteleggingDto;
-import no.nav.foreldrepenger.selvbetjening.kontrakt.innsending.v2.dto.svangerskapspenger.tilrettelegging.TilretteleggingDto;
 import no.nav.foreldrepenger.selvbetjening.kontrakt.innsending.v2.dto.svangerskapspenger.tilretteleggingbehov.TilretteleggingbehovDto;
 
 
@@ -69,7 +60,6 @@ public final class SvangerskapspengerMapper {
             s.barn().fødselsdato(),
             tilOppholdIUtlandet(s.utenlandsopphold()),
             tilOpptjening(s.egenNæring(), s.frilans(), s.andreInntekterSiste10Mnd(), vedlegg),
-            tilTilrettelegging(s, vedlegg),
             tilTilretteleggingBehov(s, vedlegg),
             tilFerieperioder(s)
         );
@@ -127,55 +117,6 @@ public final class SvangerskapspengerMapper {
             return new AvtaltFerie(arbeidsforhold, af.fom(), af.tom());
         }).toList();
     }
-
-    @Deprecated
-    private static List<Tilrettelegging> tilTilrettelegging(SvangerskapspengesøknadDto s, List<VedleggDto> vedlegg) {
-        return safeStream(s.tilrettelegging())
-            .map(tilrettelegging -> tilTilretteleggings(tilrettelegging, vedlegg))
-            .toList();
-    }
-
-    private static Tilrettelegging tilTilretteleggings(TilretteleggingDto tilrettelegging, List<VedleggDto> vedlegg) {
-        if (tilrettelegging instanceof HelTilretteleggingDto hel) {
-            return tilHelTilrettelegging(hel, vedlegg);
-        }
-        if (tilrettelegging instanceof DelvisTilretteleggingDto del) {
-            return tilDelvisTilrettelegging(del, vedlegg);
-        }
-        if (tilrettelegging instanceof IngenTilretteleggingDto ingen) {
-            return tilIngenTilrettelegging(ingen, vedlegg);
-        }
-        throw new IllegalStateException("Utviklerfeil: Tilrettelegging kan bare være hel, delvis eller ingen, men er " + tilrettelegging);
-    }
-
-    private static IngenTilrettelegging tilIngenTilrettelegging(IngenTilretteleggingDto tilrettelegging, List<VedleggDto> vedlegg) {
-        return new IngenTilrettelegging(
-            tilArbeidsforhold(tilrettelegging.arbeidsforhold()),
-            tilrettelegging.behovForTilretteleggingFom(),
-            tilrettelegging.slutteArbeidFom(),
-            tilVedleggsreferanse(DokumentasjonReferanseMapper.dokumentasjonSomDokumentererTilrettelegggingAv(vedlegg, tilrettelegging.arbeidsforhold()))
-        );
-    }
-
-    private static DelvisTilrettelegging tilDelvisTilrettelegging(DelvisTilretteleggingDto tilrettelegging, List<VedleggDto> vedlegg) {
-        return new DelvisTilrettelegging(
-            tilArbeidsforhold(tilrettelegging.arbeidsforhold()),
-            tilrettelegging.behovForTilretteleggingFom(),
-            tilrettelegging.tilrettelagtArbeidFom(),
-            ProsentAndel.valueOf(tilrettelegging.stillingsprosent()),
-            tilVedleggsreferanse(DokumentasjonReferanseMapper.dokumentasjonSomDokumentererTilrettelegggingAv(vedlegg, tilrettelegging.arbeidsforhold()))
-        );
-    }
-
-    private static HelTilrettelegging tilHelTilrettelegging(HelTilretteleggingDto tilrettelegging, List<VedleggDto> vedlegg) {
-        return new HelTilrettelegging(
-            tilArbeidsforhold(tilrettelegging.arbeidsforhold()),
-            tilrettelegging.behovForTilretteleggingFom(),
-            tilrettelegging.tilrettelagtArbeidFom(),
-            tilVedleggsreferanse(DokumentasjonReferanseMapper.dokumentasjonSomDokumentererTilrettelegggingAv(vedlegg, tilrettelegging.arbeidsforhold()))
-        );
-    }
-
 
     private static Arbeidsforhold tilArbeidsforhold(ArbeidsforholdDto arbeidsforhold) {
         if (arbeidsforhold instanceof VirksomhetDto virksomhet) {
