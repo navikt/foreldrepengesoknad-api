@@ -16,7 +16,6 @@ import no.nav.foreldrepenger.selvbetjening.kontrakt.innsending.v2.dto.NæringDto
 import no.nav.foreldrepenger.selvbetjening.kontrakt.innsending.v2.dto.SøknadDto;
 import no.nav.foreldrepenger.selvbetjening.kontrakt.innsending.v2.dto.UtenlandsoppholdsperiodeDto;
 import no.nav.foreldrepenger.selvbetjening.kontrakt.innsending.v2.dto.VedleggDto;
-import no.nav.foreldrepenger.selvbetjening.kontrakt.innsending.v2.dto.svangerskapspenger.tilretteleggingbehov.TilretteleggingbehovDto;
 
 public record SvangerskapspengesøknadDto(LocalDate mottattdato,
                                          @Valid @NotNull BarnSvpDto barn,
@@ -24,11 +23,11 @@ public record SvangerskapspengesøknadDto(LocalDate mottattdato,
                                          @Valid Målform språkkode,
                                          @Valid FrilansDto frilans,
                                          @Valid NæringDto egenNæring,
-                                         @Valid @Size(max = 40) List<AnnenInntektDto.@NotNull @Valid Utlandet> andreInntekterSiste10Mnd,
-                                         @Valid @Size(max = 40) List<@Valid @NotNull UtenlandsoppholdsperiodeDto> utenlandsopphold,
+                                         @Valid @Size(max = 20) List<AnnenInntektDto.@NotNull @Valid Utlandet> andreInntekterSiste10Mnd,
+                                         @Valid @Size(max = 20) List<@Valid @NotNull UtenlandsoppholdsperiodeDto> utenlandsopphold,
                                          @Valid @Size(min = 1, max = 20) List<@Valid @NotNull TilretteleggingbehovDto> tilretteleggingsbehov,
-                                         @Valid @Size(max = 100) List<@Valid @NotNull AvtaltFerieDto> avtaltFerie,
-                                         @Valid @VedlegglistestørrelseConstraint @Size(max = 100) List<@Valid  @NotNull VedleggDto> vedlegg) implements SøknadDto {
+                                         @Valid @Size(max = 20) List<@Valid @NotNull AvtaltFerieDto> avtaltFerie,
+                                         @Valid @VedlegglistestørrelseConstraint @Size(min = 1, max = 20) List<@Valid @NotNull VedleggDto> vedlegg) implements SøknadDto {
 
     public SvangerskapspengesøknadDto {
         utenlandsopphold = Optional.ofNullable(utenlandsopphold).orElse(List.of());

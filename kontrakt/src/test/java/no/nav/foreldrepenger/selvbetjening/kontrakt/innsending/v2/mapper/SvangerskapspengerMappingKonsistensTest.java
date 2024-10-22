@@ -15,7 +15,7 @@ import no.nav.foreldrepenger.common.domain.svangerskapspenger.Svangerskapspenger
 import no.nav.foreldrepenger.common.domain.svangerskapspenger.arbeidsforhold.PrivatArbeidsgiver;
 import no.nav.foreldrepenger.common.domain.svangerskapspenger.arbeidsforhold.SelvstendigNæringsdrivende;
 import no.nav.foreldrepenger.common.domain.svangerskapspenger.arbeidsforhold.Virksomhet;
-import no.nav.foreldrepenger.common.domain.svangerskapspenger.tilretteleggingsbehov.Tilretteleggingbehov;
+import no.nav.foreldrepenger.common.domain.svangerskapspenger.Tilretteleggingbehov;
 import no.nav.foreldrepenger.common.oppslag.dkif.Målform;
 import no.nav.foreldrepenger.selvbetjening.kontrakt.innsending.mapper.DokumentasjonUtil;
 import no.nav.foreldrepenger.selvbetjening.kontrakt.innsending.mapper.SøknadMapper;
