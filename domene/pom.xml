@@ -29,11 +29,6 @@
             <version>${stonadskonto-regler.version}</version>
         </dependency>
         <dependency>
-            <groupId>no.nav.foreldrepenger</groupId>
-            <artifactId>fpsoknad-felles</artifactId>
-            <version>0.0.1-SNAPSHOT</version>
-        </dependency>
-        <dependency>
             <groupId>no.nav.boot</groupId>
             <artifactId>boot-conditionals</artifactId>
             <version>${boot-conditionals.version}</version>
@@ -54,11 +49,11 @@
             <version>${token-validation-version}</version>
             <scope>test</scope>
         </dependency>
-<!--        <dependency>-->
-<!--            <groupId>no.nav.foreldrepenger</groupId>-->
-<!--            <artifactId>fpsoknad-felles</artifactId>-->
-<!--            <version>${selvbetjening-felles.version}</version>-->
-<!--        </dependency>-->
+        <dependency>
+            <groupId>no.nav.foreldrepenger</groupId>
+            <artifactId>fpsoknad-felles</artifactId>
+            <version>${selvbetjening-felles.version}</version>
+        </dependency>
 
         <dependency>
             <groupId>com.google.cloud</groupId>
