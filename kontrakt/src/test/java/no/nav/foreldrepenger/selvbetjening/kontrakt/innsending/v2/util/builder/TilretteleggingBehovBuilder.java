@@ -4,9 +4,7 @@ import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
 
-import no.nav.foreldrepenger.selvbetjening.kontrakt.innsending.v2.dto.svangerskapspenger.arbeidsforhold.ArbeidsforholdDto;
-import no.nav.foreldrepenger.selvbetjening.kontrakt.innsending.v2.dto.svangerskapspenger.arbeidsforhold.FrilanserDto;
-import no.nav.foreldrepenger.selvbetjening.kontrakt.innsending.v2.dto.svangerskapspenger.arbeidsforhold.SelvstendigNæringsdrivendeDto;
+import no.nav.foreldrepenger.selvbetjening.kontrakt.innsending.v2.dto.svangerskapspenger.ArbeidsforholdDto;
 import no.nav.foreldrepenger.selvbetjening.kontrakt.innsending.v2.dto.svangerskapspenger.TilretteleggingbehovDto;
 
 
@@ -20,7 +18,7 @@ public class TilretteleggingBehovBuilder {
     public TilretteleggingBehovBuilder(ArbeidsforholdDto arbeidsforhold, LocalDate behovForTilretteleggingFom) {
         this.arbeidsforhold = arbeidsforhold;
         this.behovForTilretteleggingFom = behovForTilretteleggingFom;
-        if (arbeidsforhold instanceof SelvstendigNæringsdrivendeDto || arbeidsforhold instanceof FrilanserDto) {
+        if (arbeidsforhold instanceof ArbeidsforholdDto.SelvstendigNæringsdrivendeDto || arbeidsforhold instanceof ArbeidsforholdDto.FrilanserDto) {
             this.risikofaktorer = "Risikofaktorer her";
             this.tilretteleggingstiltak = "Tilretteleggingstiltak her";
         }
