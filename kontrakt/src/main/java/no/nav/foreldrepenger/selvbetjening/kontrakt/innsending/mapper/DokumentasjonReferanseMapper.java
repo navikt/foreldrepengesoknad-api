@@ -5,11 +5,7 @@ import java.util.List;
 import no.nav.foreldrepenger.selvbetjening.kontrakt.innsending.dto.ÅpenPeriodeDto;
 import no.nav.foreldrepenger.selvbetjening.kontrakt.innsending.v2.dto.VedleggDto;
 import no.nav.foreldrepenger.selvbetjening.kontrakt.innsending.v2.dto.VedleggReferanse;
-import no.nav.foreldrepenger.selvbetjening.kontrakt.innsending.v2.dto.svangerskapspenger.arbeidsforhold.ArbeidsforholdDto;
-import no.nav.foreldrepenger.selvbetjening.kontrakt.innsending.v2.dto.svangerskapspenger.arbeidsforhold.FrilanserDto;
-import no.nav.foreldrepenger.selvbetjening.kontrakt.innsending.v2.dto.svangerskapspenger.arbeidsforhold.PrivatArbeidsgiverDto;
-import no.nav.foreldrepenger.selvbetjening.kontrakt.innsending.v2.dto.svangerskapspenger.arbeidsforhold.SelvstendigNæringsdrivendeDto;
-import no.nav.foreldrepenger.selvbetjening.kontrakt.innsending.v2.dto.svangerskapspenger.arbeidsforhold.VirksomhetDto;
+import no.nav.foreldrepenger.selvbetjening.kontrakt.innsending.v2.dto.svangerskapspenger.ArbeidsforholdDto;
 
 public class DokumentasjonReferanseMapper {
 
@@ -49,10 +45,10 @@ public class DokumentasjonReferanseMapper {
 
     private static boolean matcherArbeidsforhold(ArbeidsforholdDto arbeidsforholdVedlegg, ArbeidsforholdDto arbeidsforholdSøknad) {
         return switch (arbeidsforholdSøknad) {
-            case VirksomhetDto v -> arbeidsforholdVedlegg instanceof VirksomhetDto afVedlegg && afVedlegg.id().equals(v.id());
-            case PrivatArbeidsgiverDto p -> arbeidsforholdVedlegg instanceof PrivatArbeidsgiverDto afVedlegg && afVedlegg.id().equals(p.id());
-            case SelvstendigNæringsdrivendeDto ignored -> arbeidsforholdVedlegg instanceof SelvstendigNæringsdrivendeDto;
-            case FrilanserDto ignored -> arbeidsforholdVedlegg instanceof FrilanserDto;
+            case ArbeidsforholdDto.VirksomhetDto v -> arbeidsforholdVedlegg instanceof ArbeidsforholdDto.VirksomhetDto afVedlegg && afVedlegg.id().equals(v.id());
+            case ArbeidsforholdDto.PrivatArbeidsgiverDto p -> arbeidsforholdVedlegg instanceof ArbeidsforholdDto.PrivatArbeidsgiverDto afVedlegg && afVedlegg.id().equals(p.id());
+            case ArbeidsforholdDto.SelvstendigNæringsdrivendeDto ignored -> arbeidsforholdVedlegg instanceof ArbeidsforholdDto.SelvstendigNæringsdrivendeDto;
+            case ArbeidsforholdDto.FrilanserDto ignored -> arbeidsforholdVedlegg instanceof ArbeidsforholdDto.FrilanserDto;
             default -> throw new IllegalStateException("Unexpected value: " + arbeidsforholdSøknad);
         };
     }

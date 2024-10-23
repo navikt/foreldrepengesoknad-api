@@ -17,9 +17,6 @@ import jakarta.validation.constraints.Min;
 import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Pattern;
 import jakarta.validation.constraints.Size;
-import no.nav.foreldrepenger.selvbetjening.kontrakt.innsending.v2.dto.svangerskapspenger.arbeidsforhold.ArbeidsforholdDto;
-import no.nav.foreldrepenger.selvbetjening.kontrakt.innsending.v2.dto.svangerskapspenger.arbeidsforhold.FrilanserDto;
-import no.nav.foreldrepenger.selvbetjening.kontrakt.innsending.v2.dto.svangerskapspenger.arbeidsforhold.SelvstendigNæringsdrivendeDto;
 
 public record TilretteleggingbehovDto(@Valid @NotNull ArbeidsforholdDto arbeidsforhold,
                                       @NotNull LocalDate behovForTilretteleggingFom,
@@ -29,7 +26,7 @@ public record TilretteleggingbehovDto(@Valid @NotNull ArbeidsforholdDto arbeidsf
 
     @AssertTrue(message = "Tilrettelegging av næring eller frilans må ha satt risikofaktorer og tilretteleggingstiltak")
     public boolean isRisikofaktorerOgTilretteleggingtiltakSattForNæringFrilans() {
-        if (arbeidsforhold instanceof FrilanserDto || arbeidsforhold instanceof SelvstendigNæringsdrivendeDto) {
+        if (arbeidsforhold instanceof ArbeidsforholdDto.FrilanserDto || arbeidsforhold instanceof ArbeidsforholdDto.SelvstendigNæringsdrivendeDto) {
             return risikofaktorer != null && tilretteleggingstiltak != null;
         }
         return true;

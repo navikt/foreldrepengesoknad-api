@@ -26,11 +26,7 @@ import no.nav.foreldrepenger.selvbetjening.kontrakt.innsending.v2.dto.FrilansDto
 import no.nav.foreldrepenger.selvbetjening.kontrakt.innsending.v2.dto.NæringDto;
 import no.nav.foreldrepenger.selvbetjening.kontrakt.innsending.v2.dto.VedleggDto;
 import no.nav.foreldrepenger.selvbetjening.kontrakt.innsending.v2.dto.svangerskapspenger.SvangerskapspengesøknadDto;
-import no.nav.foreldrepenger.selvbetjening.kontrakt.innsending.v2.dto.svangerskapspenger.arbeidsforhold.ArbeidsforholdDto;
-import no.nav.foreldrepenger.selvbetjening.kontrakt.innsending.v2.dto.svangerskapspenger.arbeidsforhold.FrilanserDto;
-import no.nav.foreldrepenger.selvbetjening.kontrakt.innsending.v2.dto.svangerskapspenger.arbeidsforhold.PrivatArbeidsgiverDto;
-import no.nav.foreldrepenger.selvbetjening.kontrakt.innsending.v2.dto.svangerskapspenger.arbeidsforhold.SelvstendigNæringsdrivendeDto;
-import no.nav.foreldrepenger.selvbetjening.kontrakt.innsending.v2.dto.svangerskapspenger.arbeidsforhold.VirksomhetDto;
+import no.nav.foreldrepenger.selvbetjening.kontrakt.innsending.v2.dto.svangerskapspenger.ArbeidsforholdDto;
 import no.nav.foreldrepenger.selvbetjening.kontrakt.innsending.v2.dto.svangerskapspenger.TilretteleggingbehovDto;
 
 
@@ -83,10 +79,10 @@ public final class SvangerskapspengerMapper {
     private static Arbeidsforhold tilArbeidsforhold(TilretteleggingbehovDto tilretteleggingbehov) {
         var arbeidsforhold = tilretteleggingbehov.arbeidsforhold();
         return switch (arbeidsforhold) {
-            case VirksomhetDto virksomhet -> new Virksomhet(virksomhet.id());
-            case PrivatArbeidsgiverDto privat -> new PrivatArbeidsgiver(privat.id());
-            case SelvstendigNæringsdrivendeDto ignore -> new SelvstendigNæringsdrivende(tilretteleggingbehov.risikofaktorer(), tilretteleggingbehov.tilretteleggingstiltak());
-            case FrilanserDto ignore -> new Frilanser(tilretteleggingbehov.risikofaktorer(), tilretteleggingbehov.tilretteleggingstiltak());
+            case ArbeidsforholdDto.VirksomhetDto virksomhet -> new Virksomhet(virksomhet.id());
+            case ArbeidsforholdDto.PrivatArbeidsgiverDto privat -> new PrivatArbeidsgiver(privat.id());
+            case ArbeidsforholdDto.SelvstendigNæringsdrivendeDto ignore -> new SelvstendigNæringsdrivende(tilretteleggingbehov.risikofaktorer(), tilretteleggingbehov.tilretteleggingstiltak());
+            case ArbeidsforholdDto.FrilanserDto ignore -> new Frilanser(tilretteleggingbehov.risikofaktorer(), tilretteleggingbehov.tilretteleggingstiltak());
             default -> throw new IllegalStateException("Utviklerfeil: Arbeidsforhold kan bare være virksomhet, privat, næring, frilans, men er " + arbeidsforhold);
         };
     }
@@ -99,9 +95,9 @@ public final class SvangerskapspengerMapper {
 
     private static Tilretteleggingbehov.Tilrettelegging tilTilrettelegging(TilretteleggingbehovDto.TilretteleggingDto tilrettelegging) {
         return switch (tilrettelegging) {
-            case TilretteleggingbehovDto.TilretteleggingDto.Hel hel -> new Tilretteleggingbehov.Tilrettelegging.Hel(hel.fom());
-            case TilretteleggingbehovDto.TilretteleggingDto.Del del -> new Tilretteleggingbehov.Tilrettelegging.Delvis(del.fom(), del.stillingsprosent());
-            case TilretteleggingbehovDto.TilretteleggingDto.Ingen ingen -> new Tilretteleggingbehov.Tilrettelegging.Ingen(ingen.fom());
+            case TilretteleggingbehovDto.TilretteleggingDto.Hel(var fom) -> new Tilretteleggingbehov.Tilrettelegging.Hel(fom);
+            case TilretteleggingbehovDto.TilretteleggingDto.Del(var fom, var stillingsprosent) -> new Tilretteleggingbehov.Tilrettelegging.Delvis(fom, stillingsprosent);
+            case TilretteleggingbehovDto.TilretteleggingDto.Ingen(var fom) -> new Tilretteleggingbehov.Tilrettelegging.Ingen(fom);
             default -> throw new IllegalArgumentException("Ugyldig tilrettelegging: " + tilrettelegging);
         };
     }
@@ -113,40 +109,12 @@ public final class SvangerskapspengerMapper {
 
     private static List<AvtaltFerie> tilFerieperioder(SvangerskapspengesøknadDto s) {
         return safeStream(s.avtaltFerie()).map(af -> {
-            var arbeidsforhold = tilArbeidsforhold(af.arbeidsforhold());
+            var arbeidsforhold = switch (af.arbeidsforhold()) {
+                case ArbeidsforholdDto.VirksomhetDto virksomhet -> new Virksomhet(virksomhet.id());
+                case ArbeidsforholdDto.PrivatArbeidsgiverDto privat -> new PrivatArbeidsgiver(privat.id());
+                default ->throw new IllegalStateException("Utviklerfeil: Arbeidsforhold kan bare være virksomhet eller privat for avtalt ferie, men er " + af.arbeidsforhold());
+            };
             return new AvtaltFerie(arbeidsforhold, af.fom(), af.tom());
         }).toList();
-    }
-
-    private static Arbeidsforhold tilArbeidsforhold(ArbeidsforholdDto arbeidsforhold) {
-        if (arbeidsforhold instanceof VirksomhetDto virksomhet) {
-            return tilVirksomhet(virksomhet);
-        }
-        if (arbeidsforhold instanceof PrivatArbeidsgiverDto privat) {
-            return tilPrivatArbeidsgiver(privat);
-        }
-        if (arbeidsforhold instanceof SelvstendigNæringsdrivendeDto næring) {
-            return tilSelvstendigNæringsdrivende(næring);
-        }
-        if (arbeidsforhold instanceof FrilanserDto frilans) {
-            return tilFrilanser(frilans);
-        }
-        throw new IllegalStateException("Utviklerfeil: Arbeidsforhold kan bare være virksomhet, privat, næring, frilans, men er " + arbeidsforhold);
-    }
-
-    private static Frilanser tilFrilanser(FrilanserDto frilans) {
-        return new Frilanser(frilans.risikofaktorer(), frilans.tilretteleggingstiltak());
-    }
-
-    private static SelvstendigNæringsdrivende tilSelvstendigNæringsdrivende(SelvstendigNæringsdrivendeDto næring) {
-        return new SelvstendigNæringsdrivende(næring.risikofaktorer(), næring.tilretteleggingstiltak());
-    }
-
-    private static PrivatArbeidsgiver tilPrivatArbeidsgiver(PrivatArbeidsgiverDto privat) {
-        return new PrivatArbeidsgiver(privat.id());
-    }
-
-    private static Virksomhet tilVirksomhet(VirksomhetDto virksomhet) {
-        return new Virksomhet(virksomhet.id());
     }
 }

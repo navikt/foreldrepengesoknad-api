@@ -27,7 +27,7 @@ import no.nav.foreldrepenger.selvbetjening.kontrakt.innsending.dto.SøknadDto;
 import no.nav.foreldrepenger.selvbetjening.kontrakt.innsending.dto.endringssøknad.EndringssøknadDto;
 import no.nav.foreldrepenger.selvbetjening.kontrakt.innsending.dto.endringssøknad.EndringssøknadForeldrepengerDto;
 import no.nav.foreldrepenger.selvbetjening.kontrakt.innsending.dto.foreldrepenger.ForeldrepengesøknadDto;
-import no.nav.foreldrepenger.selvbetjening.kontrakt.innsending.v2.dto.svangerskapspenger.arbeidsforhold.VirksomhetDto;
+import no.nav.foreldrepenger.selvbetjening.kontrakt.innsending.v2.dto.svangerskapspenger.ArbeidsforholdDto;
 import no.nav.foreldrepenger.selvbetjening.kontrakt.innsending.v2.dto.svangerskapspenger.SvangerskapspengesøknadDto;
 
 @Import({InnsendingController.class, ApiExceptionHandler.class})
@@ -111,7 +111,7 @@ class InnsendingControllerValidationTest {
     void svangerskapspengerValidering() throws Exception {
         var svpSøknad = mapper.readValue(bytesFra("json/svangerskapspengesøknad.json"), SvangerskapspengesøknadDto.class);
         var tilrettelegging = svpSøknad.tilretteleggingsbehov().get(0);
-        var virksomhet = (VirksomhetDto) tilrettelegging.arbeidsforhold();
+        var virksomhet = (ArbeidsforholdDto.VirksomhetDto) tilrettelegging.arbeidsforhold();
         var result = mvc.perform(post(InnsendingController.INNSENDING_CONTROLLER_PATH + "/svangerskapspenger")
                 .contentType(MediaType.APPLICATION_JSON)
                 .content(mapper.writeValueAsString(svpSøknad)

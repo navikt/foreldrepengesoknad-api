@@ -33,7 +33,7 @@ public record SvangerskapspengesøknadDto(LocalDate mottattdato,
         utenlandsopphold = Optional.ofNullable(utenlandsopphold).orElse(List.of());
         tilretteleggingsbehov = Optional.ofNullable(tilretteleggingsbehov).orElse(List.of());
         andreInntekterSiste10Mnd = Optional.ofNullable(andreInntekterSiste10Mnd).orElse(List.of());
-        vedlegg = Optional.ofNullable(vedlegg).orElse(List.of());
         avtaltFerie = Optional.ofNullable(avtaltFerie).orElse(List.of());
+        vedlegg = Optional.ofNullable(vedlegg).orElse(List.of());
     }
 }
