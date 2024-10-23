@@ -19,29 +19,37 @@
       "landkode": "PF"
     }
   ],
-  "tilrettelegging":
+  "tilretteleggingsbehov":
   [
     {
-      "type": "ingen",
-      "slutteArbeidFom": "2024-08-21",
       "arbeidsforhold":
       {
         "id": "896929119",
         "type": "virksomhet"
       },
-      "behovForTilretteleggingFom": "2024-08-01"
+      "behovForTilretteleggingFom": "2024-08-01",
+      "tilrettelegginger": [
+        {
+          "type": "ingen",
+          "fom": "2024-08-21"
+        }
+      ]
     },
     {
-      "type": "delvis",
-      "tilrettelagtArbeidFom": "2024-09-01",
       "arbeidsforhold":
       {
-        "type": "frilanser",
-        "risikoFaktorer": "aosudhsadasd",
-        "tilretteleggingstiltak": "dasdasdasda"
+        "type": "frilanser"
       },
       "behovForTilretteleggingFom": "2024-09-01",
-      "stillingsprosent": 55
+      "risikoFaktorer": "aosudhsadasd",
+      "tilretteleggingstiltak": "dasdasdasda",
+      "tilrettelegginger": [
+        {
+          "type": "delvis",
+          "fom": "2024-09-01",
+          "stillingsprosent": 55
+        }
+      ]
     }
   ],
   "vedlegg":
