@@ -13,6 +13,7 @@ import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
 import no.nav.foreldrepenger.common.domain.Fødselsnummer;
+import no.nav.foreldrepenger.common.innsyn.BrukerRolle;
 import no.nav.foreldrepenger.common.innsyn.FpSak;
 import no.nav.foreldrepenger.common.innsyn.RettighetType;
 import no.nav.foreldrepenger.common.innsyn.Saker;
@@ -132,6 +133,7 @@ class InnsynControllerTest {
             null,
             null,
             null,
-            oppdateringstidspunkt);
+            oppdateringstidspunkt,
+            BrukerRolle.MOR);
     }
 }
