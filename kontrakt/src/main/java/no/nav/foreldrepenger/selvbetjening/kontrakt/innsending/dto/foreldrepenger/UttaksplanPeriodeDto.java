@@ -1,6 +1,5 @@
 package no.nav.foreldrepenger.selvbetjening.kontrakt.innsending.dto.foreldrepenger;
 
-import static no.nav.foreldrepenger.common.domain.validation.InputValideringRegex.BARE_BOKSTAVER;
 import static no.nav.foreldrepenger.common.domain.validation.InputValideringRegex.FRITEKST;
 
 import java.util.List;
@@ -17,7 +16,6 @@ import no.nav.foreldrepenger.selvbetjening.kontrakt.innsending.dto.ÅpenPeriodeD
 // TODO: Rydd opp
 public record UttaksplanPeriodeDto(@NotNull UttaksplanPeriodeDto.Type type,
                                    @Valid ÅpenPeriodeDto tidsperiode,
-                                   @Pattern(regexp = BARE_BOKSTAVER) String forelder,
                                    KontoType konto,
                                    @Pattern(regexp = "^[\\p{Digit}\\p{L}_]*$") String morsAktivitetIPerioden,
                                    @Pattern(regexp = "^[\\p{Digit}\\p{L}_]*$") String årsak,

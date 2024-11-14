@@ -13,7 +13,6 @@ import no.nav.foreldrepenger.selvbetjening.kontrakt.innsending.dto.ÅpenPeriodeD
 public class UttakplanPeriodeBuilder {
     UttaksplanPeriodeDto.Type type;
     ÅpenPeriodeDto tidsperiode;
-    String forelder;
     UttaksplanPeriodeDto.KontoType konto;
     String morsAktivitetIPerioden;
     String årsak;
@@ -65,11 +64,6 @@ public class UttakplanPeriodeBuilder {
 
     public UttakplanPeriodeBuilder medTidsperiode(ÅpenPeriodeDto tidsperiode) {
         this.tidsperiode = tidsperiode;
-        return this;
-    }
-
-    public UttakplanPeriodeBuilder medForelder(String forelder) {
-        this.forelder = forelder;
         return this;
     }
 
@@ -153,7 +147,6 @@ public class UttakplanPeriodeBuilder {
         return new UttaksplanPeriodeDto(
             type,
             tidsperiode,
-            forelder,
             konto,
             morsAktivitetIPerioden,
             årsak,
