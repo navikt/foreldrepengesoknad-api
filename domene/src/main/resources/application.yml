@@ -53,10 +53,6 @@ server:
   shutdown: graceful
 spring:
   cloud.discovery.enabled: false
-  cache:
-    cache-names: aktør
-    caffeine:
-      spec: maximumSize=100,expireAfterAccess=3600s
   application:
     name: foreldrepengesoknad-api
   main:
