@@ -47,7 +47,7 @@
 		<token-validation-version>4.0.5</token-validation-version> <!-- Fjerner cookie støtte fra versjon 4.1.0-->
         <boot-conditionals.version>5.1.2</boot-conditionals.version>
 
-        <springdoc.version>2.6.0</springdoc.version>
+        <springdoc.version>2.7.0</springdoc.version>
 		<tika.version>3.0.0</tika.version>
 		<logback.logstash.version>8.0</logback.logstash.version>
 		<nv.version>1.29</nv.version>
