@@ -11,6 +11,6 @@
   },
   "requests": {
     "cpu": "100m",
-    "mem": "1024Mi"
+    "mem": "512Mi"
   }
 }
