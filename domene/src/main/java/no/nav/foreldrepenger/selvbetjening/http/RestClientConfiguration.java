@@ -55,8 +55,8 @@ public class RestClientConfiguration implements WebMvcConfigurer {
     @Qualifier(LONG_TIMEOUT)
     public RestOperations longTimeoutRestTemplate(RestTemplateBuilder b, ClientHttpRequestInterceptor... interceptors) {
         return b.interceptors(interceptors)
-            .setConnectTimeout(Duration.ofSeconds(5))
-            .setReadTimeout(Duration.ofSeconds(40))
+            .connectTimeout(Duration.ofSeconds(5))
+            .readTimeout(Duration.ofSeconds(40))
             .build();
     }
 
@@ -64,8 +64,8 @@ public class RestClientConfiguration implements WebMvcConfigurer {
     @Primary
     public RestOperations regularTimeoutRestTemplate(RestTemplateBuilder b, ClientHttpRequestInterceptor... interceptors) {
         return b.interceptors(interceptors)
-            .setConnectTimeout(Duration.ofSeconds(5))
-            .setReadTimeout(Duration.ofSeconds(10))
+            .connectTimeout(Duration.ofSeconds(5))
+            .readTimeout(Duration.ofSeconds(10))
             .build();
     }
 
@@ -73,8 +73,8 @@ public class RestClientConfiguration implements WebMvcConfigurer {
     public RestTemplateBuilder tokendingsRestTemplateBuilder(RestTemplateBuilderConfigurer configurer) {
         // RestTemplateBuilder tas inn av DefaultOAuth2HttpClient. Setter default timeout verdier for denne.
         return configurer.configure(new RestTemplateBuilder())
-            .setConnectTimeout(Duration.ofSeconds(5))
-            .setReadTimeout(Duration.ofSeconds(10));
+            .connectTimeout(Duration.ofSeconds(5))
+            .readTimeout(Duration.ofSeconds(10));
     }
 
     @Bean
