@@ -1,5 +1,6 @@
 package no.nav.foreldrepenger.selvbetjening.innsyn.tidslinje;
 
+import static no.nav.foreldrepenger.selvbetjening.innsyn.dokument.EnkelJournalpost.Brevkode.FORELDREPENGER_FEIL_PRAKSIS_UTSETTELSE_FORLENGET_SAKSBEHANDLINGSTID;
 import static no.nav.foreldrepenger.selvbetjening.innsyn.dokument.EnkelJournalpost.Brevkode.FORELDREPENGER_FEIL_PRAKSIS_UTSETTELSE_INFOBREV;
 import static no.nav.foreldrepenger.selvbetjening.innsyn.dokument.EnkelJournalpost.Type.INNGÅENDE_DOKUMENT;
 
@@ -8,14 +9,13 @@ import java.util.List;
 import java.util.Optional;
 import java.util.stream.Stream;
 
-import no.nav.foreldrepenger.common.innsyn.inntektsmelding.FpOversiktInntektsmeldingDto;
-
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Service;
 
 import no.nav.foreldrepenger.common.domain.Fødselsnummer;
 import no.nav.foreldrepenger.common.domain.Saksnummer;
+import no.nav.foreldrepenger.common.innsyn.inntektsmelding.FpOversiktInntektsmeldingDto;
 import no.nav.foreldrepenger.selvbetjening.innsyn.Innsyn;
 import no.nav.foreldrepenger.selvbetjening.innsyn.dokument.EnkelJournalpost;
 import no.nav.foreldrepenger.selvbetjening.innsyn.dokument.SafSelvbetjeningTjeneste;
@@ -82,7 +82,7 @@ public class TidslinjeTjeneste {
         } else if (brevkode.erVarselOmTilbakebetaling() && enkelJournalpost.tittel().contains(VARSEL_TILBAKEBETALING_TITTEL)) {
             LOG.info("Varsel om tilbakebetaling returnes {}", enkelJournalpost);
             return Optional.of(TidslinjeHendelseDto.TidslinjeHendelseType.UTGÅENDE_VARSEL_TILBAKEBETALING);
-        } else if (brevkode.equals(FORELDREPENGER_FEIL_PRAKSIS_UTSETTELSE_INFOBREV)) {
+        } else if (brevkode.equals(FORELDREPENGER_FEIL_PRAKSIS_UTSETTELSE_INFOBREV) || brevkode.equals(FORELDREPENGER_FEIL_PRAKSIS_UTSETTELSE_FORLENGET_SAKSBEHANDLINGSTID)) {
             return Optional.of(TidslinjeHendelseDto.TidslinjeHendelseType.FORELDREPENGER_FEIL_PRAKSIS_UTSETTELSE_INFOBREV);
         } else {
             LOG.info("Ignorerer utgåpende journalpost: {}", enkelJournalpost);
