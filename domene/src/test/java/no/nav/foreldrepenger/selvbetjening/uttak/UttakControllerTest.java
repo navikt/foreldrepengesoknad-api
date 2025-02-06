@@ -41,17 +41,20 @@ class UttakControllerTest {
     }
 
     @Test
-    void mor_og_far_rett_to_tette() {
+    void mor_og_far_rett_to_tette_første_før_juli2024() {
         var controller = new UttakController(uttakCore2024);
+        var fødselsdato = LocalDate.of(2024,6, 15);
+        var termindato = fødselsdato.minusWeeks(1);
+        var nesteFamiliehendelseDato = fødselsdato.plusMonths(11);
         var grunnlag = new KontoBeregningGrunnlagDto(
             Rettighetstype.BEGGE_RETT,
             Brukerrolle.MOR,
             1,
-            LocalDate.now().minusMonths(7),
-            LocalDate.now().minusMonths(7).minusWeeks(1),
+            fødselsdato,
+            termindato,
             null,
             false,
-            LocalDate.now()
+            nesteFamiliehendelseDato
         );
         var resultat = controller.beregn(grunnlag);
 
