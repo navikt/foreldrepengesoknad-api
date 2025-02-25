@@ -1,5 +1,26 @@
 package no.nav.foreldrepenger.selvbetjening.mellomlagring;
 
+import jakarta.validation.Valid;
+import jakarta.validation.constraints.Pattern;
+import no.nav.foreldrepenger.selvbetjening.http.ProtectedRestController;
+import no.nav.foreldrepenger.selvbetjening.vedlegg.Image2PDFConverter;
+import no.nav.foreldrepenger.selvbetjening.vedlegg.VedleggSjekker;
+import org.springframework.beans.factory.annotation.Qualifier;
+import org.springframework.http.MediaType;
+import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.DeleteMapping;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.RequestPart;
+import org.springframework.web.bind.annotation.ResponseStatus;
+import org.springframework.web.multipart.MultipartFile;
+
+import java.io.IOException;
+import java.util.UUID;
+
 import static no.nav.foreldrepenger.common.domain.validation.InputValideringRegex.FRITEKST;
 import static no.nav.foreldrepenger.selvbetjening.vedlegg.DelegerendeVedleggSjekker.DELEGERENDE;
 import static org.springframework.http.HttpStatus.NO_CONTENT;
@@ -9,26 +30,6 @@ import static org.springframework.http.ResponseEntity.created;
 import static org.springframework.http.ResponseEntity.noContent;
 import static org.springframework.http.ResponseEntity.notFound;
 import static org.springframework.http.ResponseEntity.ok;
-
-import java.io.IOException;
-
-import org.springframework.beans.factory.annotation.Qualifier;
-import org.springframework.http.MediaType;
-import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.DeleteMapping;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestPart;
-import org.springframework.web.bind.annotation.ResponseStatus;
-import org.springframework.web.multipart.MultipartFile;
-
-import jakarta.validation.Valid;
-import jakarta.validation.constraints.Pattern;
-import no.nav.foreldrepenger.selvbetjening.http.ProtectedRestController;
-import no.nav.foreldrepenger.selvbetjening.vedlegg.Image2PDFConverter;
-import no.nav.foreldrepenger.selvbetjening.vedlegg.VedleggSjekker;
 
 @ProtectedRestController(MellomlagringController.REST_STORAGE)
 public class MellomlagringController {
@@ -77,12 +78,16 @@ public class MellomlagringController {
 
     @PostMapping(path = "/{ytelse}/vedlegg", consumes = MULTIPART_FORM_DATA_VALUE)
     public ResponseEntity<String> lagreVedlegg(@Valid @RequestPart("vedlegg") MultipartFile file,
-                                               @PathVariable("ytelse") @Valid Ytelse ytelse) {
+                                               @PathVariable("ytelse") @Valid Ytelse ytelse,
+                                               @RequestParam(value = "uuid", required = false) UUID uuid) { // Kan spesifisere uuid hvis ønskelig
         var originalBytes = getBytesNullSjekk(file);
         sjekker.sjekk(Attachment.of(originalBytes));
 
         var pdfBytes = converter.convert(originalBytes);
-        var attachment = Attachment.of(pdfBytes);
+
+        var attachment = uuid != null
+                ? new Attachment(pdfBytes, uuid.toString())
+                : Attachment.of(pdfBytes);
         mellomlagring.lagreKryptertVedlegg(attachment, ytelse);
         return created(attachment.uri()).body(attachment.uuid());
     }
