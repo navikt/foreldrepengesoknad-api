@@ -77,7 +77,7 @@ public class MellomlagringController {
     }
 
     @PostMapping(path = "/{ytelse}/vedlegg", consumes = MULTIPART_FORM_DATA_VALUE)
-    public ResponseEntity<String> lagreVedlegg(@Valid @RequestPart("vedlegg") MultipartFile file,
+    public ResponseEntity<String> lagreVedlegg(@RequestPart("vedlegg") @Valid MultipartFile file,
                                                @PathVariable("ytelse") @Valid Ytelse ytelse,
                                                @RequestParam(value = "uuid", required = false) @Valid UUID uuid) { // Kan spesifisere uuid hvis ønskelig
         var originalBytes = getBytesNullSjekk(file);
