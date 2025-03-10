@@ -51,6 +51,8 @@ import no.nav.security.token.support.core.exceptions.JwtTokenInvalidClaimExcepti
 import no.nav.security.token.support.core.exceptions.JwtTokenValidatorException;
 import no.nav.security.token.support.spring.validation.interceptor.JwtTokenUnauthorizedException;
 
+import org.springframework.web.util.ContentCachingRequestWrapper;
+
 @ControllerAdvice
 public class ApiExceptionHandler extends ResponseEntityExceptionHandler {
 
@@ -68,6 +70,7 @@ public class ApiExceptionHandler extends ResponseEntityExceptionHandler {
 
     @Override
     protected ResponseEntity<Object> handleHttpMessageNotReadable(HttpMessageNotReadableException e, HttpHeaders headers, HttpStatusCode status, WebRequest req) {
+        bodyToSecurelogs(req);
         return logAndHandle(UNPROCESSABLE_ENTITY, e, req, headers);
     }
 
@@ -159,6 +162,21 @@ public class ApiExceptionHandler extends ResponseEntityExceptionHandler {
 
     private ResponseEntity<Object> logAndHandle(HttpStatusCode status, Exception e, WebRequest req) {
         return logAndHandle(status, e, req, new HttpHeaders());
+    }
+
+    private void bodyToSecurelogs(WebRequest req) {
+        try {
+            var servletRequest = ((ServletWebRequest) req).getRequest();
+            if (servletRequest instanceof ContentCachingRequestWrapper wrapper) {
+                byte[] content = wrapper.getContentAsByteArray();
+                if (content.length > 0) {
+                    var body = new String(content, servletRequest.getCharacterEncoding());
+                    SECURE_LOGGER.info("[{}] {}", fullPathTilKaltEndepunkt(req), body);
+                }
+            }
+        } catch (Exception e) {
+            // ignore
+        }
     }
 
     private ResponseEntity<Object> logAndHandle(HttpStatusCode status, Exception e, WebRequest req, HttpHeaders headers, Object... messages) {
