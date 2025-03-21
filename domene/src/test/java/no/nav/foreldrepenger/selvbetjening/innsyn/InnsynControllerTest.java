@@ -1,17 +1,5 @@
 package no.nav.foreldrepenger.selvbetjening.innsyn;
 
-import static org.assertj.core.api.Assertions.assertThat;
-import static org.mockito.ArgumentMatchers.any;
-import static org.mockito.Mockito.mock;
-import static org.mockito.Mockito.when;
-
-import java.time.LocalDateTime;
-import java.util.List;
-import java.util.Set;
-
-import org.junit.jupiter.api.BeforeEach;
-import org.junit.jupiter.api.Test;
-
 import no.nav.foreldrepenger.common.domain.Fødselsnummer;
 import no.nav.foreldrepenger.common.innsyn.BrukerRolle;
 import no.nav.foreldrepenger.common.innsyn.FpSak;
@@ -21,6 +9,18 @@ import no.nav.foreldrepenger.common.innsyn.Saksnummer;
 import no.nav.foreldrepenger.selvbetjening.http.TokenUtil;
 import no.nav.foreldrepenger.selvbetjening.innsyn.dokument.DokumentDto;
 import no.nav.foreldrepenger.selvbetjening.innsyn.dokument.DokumentTjeneste;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
+
+import java.time.LocalDate;
+import java.time.LocalDateTime;
+import java.util.List;
+import java.util.Set;
+
+import static org.assertj.core.api.Assertions.assertThat;
+import static org.mockito.ArgumentMatchers.any;
+import static org.mockito.Mockito.mock;
+import static org.mockito.Mockito.when;
 
 class InnsynControllerTest {
 
@@ -104,6 +104,17 @@ class InnsynControllerTest {
         when(innsyn.hentSaker()).thenReturn(saker);
 
         assertThat(innsynController.erSakOppdatert()).isFalse();
+    }
+
+    @Test
+    void skalAlltidKreveDokumentasjonAvMorIArbeid() {
+        var innsyntjenteste = new InnsynTjeneste(new InnsynConnection(null, null));
+        var innsynController = new InnsynController(innsyntjenteste, dokumentTjeneste, tokenUtil);
+
+        var perioder = List.of(new ArbeidsdokumentasjonPeriodeDto.Periode(LocalDate.now().minusYears(2), LocalDate.now()));
+        var måDokumentereMorIArbeid = innsynController.måDokumentereMorIArbeid(new ArbeidsdokumentasjonPeriodeDto(perioder));
+
+        assertThat(måDokumentereMorIArbeid).isTrue();
     }
 
     private static DokumentDto arkivertSøknadOmForeldrepenger(LocalDateTime mottatt, String saksnummer) {
