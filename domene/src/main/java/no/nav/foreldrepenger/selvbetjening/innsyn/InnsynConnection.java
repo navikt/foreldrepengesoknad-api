@@ -1,21 +1,19 @@
 package no.nav.foreldrepenger.selvbetjening.innsyn;
 
-import static java.util.Collections.emptyList;
+import no.nav.foreldrepenger.common.domain.Saksnummer;
+import no.nav.foreldrepenger.common.innsyn.AnnenPartSak;
+import no.nav.foreldrepenger.common.innsyn.Saker;
+import no.nav.foreldrepenger.common.innsyn.inntektsmelding.FpOversiktInntektsmeldingDto;
+import no.nav.foreldrepenger.selvbetjening.http.AbstractRestConnection;
+import org.springframework.stereotype.Component;
+import org.springframework.web.client.HttpClientErrorException;
+import org.springframework.web.client.RestOperations;
 
 import java.util.Arrays;
 import java.util.List;
 import java.util.Optional;
 
-import no.nav.foreldrepenger.common.innsyn.inntektsmelding.FpOversiktInntektsmeldingDto;
-
-import org.springframework.stereotype.Component;
-import org.springframework.web.client.HttpClientErrorException;
-import org.springframework.web.client.RestOperations;
-
-import no.nav.foreldrepenger.common.domain.Saksnummer;
-import no.nav.foreldrepenger.common.innsyn.AnnenPartSak;
-import no.nav.foreldrepenger.common.innsyn.Saker;
-import no.nav.foreldrepenger.selvbetjening.http.AbstractRestConnection;
+import static java.util.Collections.emptyList;
 
 @Component
 public class InnsynConnection extends AbstractRestConnection {
@@ -64,5 +62,9 @@ public class InnsynConnection extends AbstractRestConnection {
         return Optional.ofNullable(getForObject(cfg.inntektsmelding(saksnummer), FpOversiktInntektsmeldingDto[].class))
             .map(Arrays::asList)
             .orElse(emptyList());
+    }
+
+    public boolean måDokumentereMorIArbeid(ArbeidsdokumentasjonPeriodeDto arbeidsdokumentasjonPeriodeDto) {
+        return true; // TODO: Må alltid dokumentere nå frem til støtte i fpoversikt
     }
 }
