@@ -1,19 +1,5 @@
 package no.nav.foreldrepenger.selvbetjening.innsyn;
 
-import static java.util.stream.Stream.concat;
-import static no.nav.foreldrepenger.selvbetjening.innsyn.InnsynController.INNSYN;
-
-import java.time.LocalDateTime;
-import java.util.Comparator;
-
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.MediaType;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-
 import jakarta.validation.Valid;
 import no.nav.foreldrepenger.common.innsyn.AnnenPartSak;
 import no.nav.foreldrepenger.common.innsyn.Saker;
@@ -21,6 +7,21 @@ import no.nav.foreldrepenger.selvbetjening.http.ProtectedRestController;
 import no.nav.foreldrepenger.selvbetjening.http.TokenUtil;
 import no.nav.foreldrepenger.selvbetjening.innsyn.dokument.DokumentDto;
 import no.nav.foreldrepenger.selvbetjening.innsyn.dokument.DokumentTjeneste;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.core.env.Environment;
+import org.springframework.http.MediaType;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestBody;
+
+import java.time.LocalDateTime;
+import java.util.Comparator;
+
+import static java.util.stream.Stream.concat;
+import static no.nav.boot.conditionals.EnvUtil.isProd;
+import static no.nav.foreldrepenger.selvbetjening.innsyn.InnsynController.INNSYN;
 
 @ProtectedRestController(INNSYN)
 public class InnsynController {
@@ -32,12 +33,14 @@ public class InnsynController {
     private final Innsyn innsynTjeneste;
     private final DokumentTjeneste dokumentTjeneste;
     private final TokenUtil tokenUtil;
+    private final Environment env;
 
     @Autowired
-    public InnsynController(Innsyn innsyn, DokumentTjeneste dokumentTjeneste, TokenUtil tokenUtil) {
+    public InnsynController(Innsyn innsyn, DokumentTjeneste dokumentTjeneste, TokenUtil tokenUtil, Environment env) {
         this.innsynTjeneste = innsyn;
         this.dokumentTjeneste = dokumentTjeneste;
         this.tokenUtil = tokenUtil;
+        this.env = env;
     }
 
     @GetMapping("/saker")
@@ -94,6 +97,20 @@ public class InnsynController {
             }
         }
         return true;
+    }
+
+    @PostMapping("/trengerDokumentereMorsArbeid")
+    public boolean trengerDokumentereMorsArbeid(@Valid @RequestBody MorArbeidRequestDto morArbeidRequestDto) {
+        if (isProd(env)) {
+            return true;
+        }
+
+        try {
+            return innsynTjeneste.trengerDokumentereMorsArbeid(morArbeidRequestDto);
+        } catch (Exception e) {
+            LOG.warn("Kall mot oversikt feilet ved sjekk om mors arbeid må doumenteres. Returnerer at det trengs dokumentasjon.", e);
+            return true;
+        }
     }
 }
 

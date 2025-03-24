@@ -1,13 +1,13 @@
 package no.nav.foreldrepenger.selvbetjening.innsyn;
 
-import java.util.List;
-import java.util.Optional;
-
 import no.nav.foreldrepenger.common.domain.Saksnummer;
 import no.nav.foreldrepenger.common.innsyn.AnnenPartSak;
 import no.nav.foreldrepenger.common.innsyn.Saker;
 import no.nav.foreldrepenger.common.innsyn.inntektsmelding.FpOversiktInntektsmeldingDto;
 import no.nav.foreldrepenger.selvbetjening.http.RetryAware;
+
+import java.util.List;
+import java.util.Optional;
 
 public interface Innsyn extends RetryAware {
 
@@ -22,4 +22,6 @@ public interface Innsyn extends RetryAware {
     Optional<AnnenPartSak> annenPartVedtak(AnnenPartSakIdentifikator request);
 
     List<FpOversiktInntektsmeldingDto> inntektsmeldinger(Saksnummer saksnummer);
+
+    boolean trengerDokumentereMorsArbeid(MorArbeidRequestDto morArbeidRequestDto);
 }

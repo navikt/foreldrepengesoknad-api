@@ -1,17 +1,15 @@
 package no.nav.foreldrepenger.selvbetjening.innsyn;
 
-import java.util.List;
-import java.util.Optional;
-
+import no.nav.foreldrepenger.common.domain.Saksnummer;
+import no.nav.foreldrepenger.common.innsyn.AnnenPartSak;
+import no.nav.foreldrepenger.common.innsyn.Saker;
 import no.nav.foreldrepenger.common.innsyn.inntektsmelding.FpOversiktInntektsmeldingDto;
-
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Service;
 
-import no.nav.foreldrepenger.common.domain.Saksnummer;
-import no.nav.foreldrepenger.common.innsyn.AnnenPartSak;
-import no.nav.foreldrepenger.common.innsyn.Saker;
+import java.util.List;
+import java.util.Optional;
 
 @Service
 public class InnsynTjeneste implements Innsyn {
@@ -58,6 +56,11 @@ public class InnsynTjeneste implements Innsyn {
     @Override
     public List<FpOversiktInntektsmeldingDto> inntektsmeldinger(Saksnummer saksnummer) {
         return innsynConnection.hentInntekstmeldingFor(saksnummer);
+    }
+
+    @Override
+    public boolean trengerDokumentereMorsArbeid(MorArbeidRequestDto morArbeidRequestDto) {
+        return innsynConnection.trengerDokumentereMorsArbeid(morArbeidRequestDto);
     }
 
     @Override
