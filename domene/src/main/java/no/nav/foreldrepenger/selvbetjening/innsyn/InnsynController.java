@@ -95,9 +95,9 @@ public class InnsynController {
         return true;
     }
 
-    @PostMapping("/måDokumentereMorIArbeid")
-    public boolean måDokumentereMorIArbeid(@Valid @RequestBody ArbeidsdokumentasjonPeriodeDto arbeidsdokumentasjonPeriodeDto) {
-        return innsynTjeneste.måDokumentereMorIArbeid(arbeidsdokumentasjonPeriodeDto);
+    @PostMapping("/trengerDokumentereMorsArbeid")
+    public boolean trengerDokumentereMorsArbeid(@Valid @RequestBody MorArbeidRequestDto morArbeidRequestDto) {
+        return innsynTjeneste.trengerDokumentereMorsArbeid(morArbeidRequestDto);
     }
 }
 

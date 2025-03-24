@@ -23,5 +23,5 @@ public interface Innsyn extends RetryAware {
 
     List<FpOversiktInntektsmeldingDto> inntektsmeldinger(Saksnummer saksnummer);
 
-    boolean måDokumentereMorIArbeid(ArbeidsdokumentasjonPeriodeDto arbeidsdokumentasjonPeriodeDto);
+    boolean trengerDokumentereMorsArbeid(MorArbeidRequestDto morArbeidRequestDto);
 }

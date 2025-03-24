@@ -111,8 +111,12 @@ class InnsynControllerTest {
         var innsyntjenteste = new InnsynTjeneste(new InnsynConnection(null, null));
         var innsynController = new InnsynController(innsyntjenteste, dokumentTjeneste, tokenUtil);
 
-        var perioder = List.of(new ArbeidsdokumentasjonPeriodeDto.Periode(LocalDate.now().minusYears(2), LocalDate.now()));
-        var måDokumentereMorIArbeid = innsynController.måDokumentereMorIArbeid(new ArbeidsdokumentasjonPeriodeDto(perioder));
+        var perioder = List.of(new MorArbeidRequestDto.Periode(LocalDate.now().minusYears(2), LocalDate.now()));
+        var måDokumentereMorIArbeid = innsynController.trengerDokumentereMorsArbeid(new MorArbeidRequestDto(
+                DUMMY_FNR,
+                DUMMY_FNR,
+                LocalDate.now(),
+                perioder));
 
         assertThat(måDokumentereMorIArbeid).isTrue();
     }

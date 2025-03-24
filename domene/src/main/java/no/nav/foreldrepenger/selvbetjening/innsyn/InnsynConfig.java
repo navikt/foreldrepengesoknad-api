@@ -1,13 +1,12 @@
 package no.nav.foreldrepenger.selvbetjening.innsyn;
 
-import static no.nav.foreldrepenger.selvbetjening.util.URIUtil.uri;
+import no.nav.foreldrepenger.common.domain.Saksnummer;
+import no.nav.foreldrepenger.selvbetjening.util.URIUtil;
+import org.springframework.boot.context.properties.ConfigurationProperties;
 
 import java.net.URI;
 
-import org.springframework.boot.context.properties.ConfigurationProperties;
-
-import no.nav.foreldrepenger.common.domain.Saksnummer;
-import no.nav.foreldrepenger.selvbetjening.util.URIUtil;
+import static no.nav.foreldrepenger.selvbetjening.util.URIUtil.uri;
 
 @ConfigurationProperties(prefix = "oversikt")
 public class InnsynConfig {
@@ -19,6 +18,7 @@ public class InnsynConfig {
     private static final String MANGLENDE_VEDLEGG = OPPGAVER + "/manglendevedlegg";
     private static final String INNTEKTSMELDINGER = CONTEXT_PATH + "/inntektsmeldinger";
     private static final String UTTALELSER_OM_TILBAKEKREVING = OPPGAVER + "/tilbakekrevingsuttalelse";
+    private static final String MOR_DOKUMENTASJON_ARBEID_PATH = "/morDokuentasjon";
 
     private static final String SAKSNUMMER = "saksnummer";
 
@@ -46,6 +46,10 @@ public class InnsynConfig {
 
     URI annenpartsVedtak() {
         return uri(getBaseUri(), ANNENPART_VEDTAK);
+    }
+
+    URI trengerDokumentereMorsArbeid() {
+        return uri(getBaseUri(), MOR_DOKUMENTASJON_ARBEID_PATH);
     }
 
     URI inntektsmelding(Saksnummer saksnummer) {

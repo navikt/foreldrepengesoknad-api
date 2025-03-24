@@ -64,7 +64,12 @@ public class InnsynConnection extends AbstractRestConnection {
             .orElse(emptyList());
     }
 
-    public boolean måDokumentereMorIArbeid(ArbeidsdokumentasjonPeriodeDto arbeidsdokumentasjonPeriodeDto) {
-        return true; // TODO: Må alltid dokumentere nå frem til støtte i fpoversikt
+    public boolean trengerDokumentereMorsArbeid(MorArbeidRequestDto morArbeidRequestDto) {
+        try {
+            return postForObject(cfg.annenpartsVedtak(), morArbeidRequestDto, boolean.class);
+        } catch (Exception e) {
+            LOG.warn("Kall mot oversikt feilet ved sjekk om mors arbeid må doumenteres. Returnerer at det trengs dokumentasjon.", e);
+            return true;
+        }
     }
 }

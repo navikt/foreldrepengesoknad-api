@@ -59,8 +59,8 @@ public class InnsynTjeneste implements Innsyn {
     }
 
     @Override
-    public boolean måDokumentereMorIArbeid(ArbeidsdokumentasjonPeriodeDto arbeidsdokumentasjonPeriodeDto) {
-        return innsynConnection.måDokumentereMorIArbeid(arbeidsdokumentasjonPeriodeDto);
+    public boolean trengerDokumentereMorsArbeid(MorArbeidRequestDto morArbeidRequestDto) {
+        return innsynConnection.trengerDokumentereMorsArbeid(morArbeidRequestDto);
     }
 
     @Override
