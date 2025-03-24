@@ -65,11 +65,6 @@ public class InnsynConnection extends AbstractRestConnection {
     }
 
     public boolean trengerDokumentereMorsArbeid(MorArbeidRequestDto morArbeidRequestDto) {
-        try {
-            return postForObject(cfg.annenpartsVedtak(), morArbeidRequestDto, boolean.class);
-        } catch (Exception e) {
-            LOG.warn("Kall mot oversikt feilet ved sjekk om mors arbeid må doumenteres. Returnerer at det trengs dokumentasjon.", e);
-            return true;
-        }
+        return postForObject(cfg.trengerDokumentereMorsArbeid(), morArbeidRequestDto, boolean.class);
     }
 }

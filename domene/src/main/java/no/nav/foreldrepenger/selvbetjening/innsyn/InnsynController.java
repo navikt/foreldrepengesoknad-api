@@ -10,6 +10,7 @@ import no.nav.foreldrepenger.selvbetjening.innsyn.dokument.DokumentTjeneste;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.core.env.Environment;
 import org.springframework.http.MediaType;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -19,6 +20,7 @@ import java.time.LocalDateTime;
 import java.util.Comparator;
 
 import static java.util.stream.Stream.concat;
+import static no.nav.boot.conditionals.EnvUtil.isProd;
 import static no.nav.foreldrepenger.selvbetjening.innsyn.InnsynController.INNSYN;
 
 @ProtectedRestController(INNSYN)
@@ -31,12 +33,14 @@ public class InnsynController {
     private final Innsyn innsynTjeneste;
     private final DokumentTjeneste dokumentTjeneste;
     private final TokenUtil tokenUtil;
+    private final Environment env;
 
     @Autowired
-    public InnsynController(Innsyn innsyn, DokumentTjeneste dokumentTjeneste, TokenUtil tokenUtil) {
+    public InnsynController(Innsyn innsyn, DokumentTjeneste dokumentTjeneste, TokenUtil tokenUtil, Environment env) {
         this.innsynTjeneste = innsyn;
         this.dokumentTjeneste = dokumentTjeneste;
         this.tokenUtil = tokenUtil;
+        this.env = env;
     }
 
     @GetMapping("/saker")
@@ -97,7 +101,16 @@ public class InnsynController {
 
     @PostMapping("/trengerDokumentereMorsArbeid")
     public boolean trengerDokumentereMorsArbeid(@Valid @RequestBody MorArbeidRequestDto morArbeidRequestDto) {
-        return innsynTjeneste.trengerDokumentereMorsArbeid(morArbeidRequestDto);
+        if (isProd(env)) {
+            return true;
+        }
+
+        try {
+            return innsynTjeneste.trengerDokumentereMorsArbeid(morArbeidRequestDto);
+        } catch (Exception e) {
+            LOG.warn("Kall mot oversikt feilet ved sjekk om mors arbeid må doumenteres. Returnerer at det trengs dokumentasjon.", e);
+            return true;
+        }
     }
 }
 

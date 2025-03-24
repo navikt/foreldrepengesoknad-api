@@ -11,6 +11,7 @@ import no.nav.foreldrepenger.selvbetjening.innsyn.dokument.DokumentDto;
 import no.nav.foreldrepenger.selvbetjening.innsyn.dokument.DokumentTjeneste;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
+import org.springframework.mock.env.MockEnvironment;
 
 import java.time.LocalDate;
 import java.time.LocalDateTime;
@@ -37,7 +38,7 @@ class InnsynControllerTest {
 
     @Test
     void sakErOppdatertHvisOppdateringstidspunktErEtterMottattidspunktetTilJournalposten() {
-        var innsynController = new InnsynController(innsyn, dokumentTjeneste, tokenUtil);
+        var innsynController = new InnsynController(innsyn, dokumentTjeneste, tokenUtil, null);
 
         var arkivertSøknadOmForeldrepenger = arkivertSøknadOmForeldrepenger(LocalDateTime.now().minusHours(1), FAKE_SAKSNUMMER);
         var arkiverteDokumenter = List.of(arkivertSøknadOmForeldrepenger);
@@ -50,7 +51,7 @@ class InnsynControllerTest {
 
     @Test
     void sakErIkkeOppdatertHvisOppdatertTidspunktetErFørInnsendingstidspunkt() {
-        var innsynController = new InnsynController(innsyn, dokumentTjeneste, tokenUtil);
+        var innsynController = new InnsynController(innsyn, dokumentTjeneste, tokenUtil, null);
         var søknadOmForeldrepenger1 = arkivertSøknadOmForeldrepenger(LocalDateTime.now().minusHours(1), FAKE_SAKSNUMMER);
         var søknadOmForeldrepenger2 = arkivertSøknadOmForeldrepenger(LocalDateTime.now(), FAKE_SAKSNUMMER);
         var arkiverteDokumenter = List.of(søknadOmForeldrepenger1, søknadOmForeldrepenger2);
@@ -65,7 +66,7 @@ class InnsynControllerTest {
 
     @Test
     void ingenSakerIFpoversiktMenArkivertSøknadSkalReturnereFalse() {
-        var innsynController = new InnsynController(innsyn, dokumentTjeneste, tokenUtil);
+        var innsynController = new InnsynController(innsyn, dokumentTjeneste, tokenUtil, null);
 
         var søknadOmForeldrepenger = arkivertSøknadOmForeldrepenger(LocalDateTime.now(), FAKE_SAKSNUMMER);
         var arkiverteDokumenter = List.of(søknadOmForeldrepenger);
@@ -79,7 +80,7 @@ class InnsynControllerTest {
 
     @Test
     void ingenSakerMedLiktSaksnummerIFpoversiktMenArkivertSøknadSkalReturnereFalse() {
-        var innsynController = new InnsynController(innsyn, dokumentTjeneste, tokenUtil);
+        var innsynController = new InnsynController(innsyn, dokumentTjeneste, tokenUtil, null);
 
         var søknadOmForeldrepenger = arkivertSøknadOmForeldrepenger(LocalDateTime.now(), FAKE_SAKSNUMMER);
         var arkiverteDokumenter = List.of(søknadOmForeldrepenger);
@@ -93,7 +94,7 @@ class InnsynControllerTest {
 
     @Test
     void nårSøknadIkkeHarSaksnummerAntarViAtSakenIkkeErOppdatert() {
-        var innsynController = new InnsynController(innsyn, dokumentTjeneste, tokenUtil);
+        var innsynController = new InnsynController(innsyn, dokumentTjeneste, tokenUtil, null);
 
         var søknadOmForeldrepenger1 = arkivertSøknadOmForeldrepenger(LocalDateTime.now(), null);
         var søknadOmForeldrepenger2 = arkivertSøknadOmForeldrepenger(LocalDateTime.now(), FAKE_SAKSNUMMER);
@@ -108,8 +109,26 @@ class InnsynControllerTest {
 
     @Test
     void skalAlltidKreveDokumentasjonAvMorIArbeid() {
-        var innsyntjenteste = new InnsynTjeneste(new InnsynConnection(null, null));
-        var innsynController = new InnsynController(innsyntjenteste, dokumentTjeneste, tokenUtil);
+        var environment = new MockEnvironment();
+        environment.setActiveProfiles("dev-gcp");
+        var innsynController = new InnsynController(innsyn, dokumentTjeneste, tokenUtil, environment);
+        when(innsyn.trengerDokumentereMorsArbeid(any())).thenReturn(false);
+
+        var perioder = List.of(new MorArbeidRequestDto.Periode(LocalDate.now().minusYears(2), LocalDate.now()));
+        var måDokumentereMorIArbeid = innsynController.trengerDokumentereMorsArbeid(new MorArbeidRequestDto(
+                DUMMY_FNR,
+                DUMMY_FNR,
+                LocalDate.now(),
+                perioder));
+
+        assertThat(måDokumentereMorIArbeid).isFalse();
+    }
+
+    @Test
+    void skalAlltidKreveDokumentasjonAvMorIArbeidIProd() {
+        var environment = new MockEnvironment();
+        environment.setActiveProfiles("prod-gcp");
+        var innsynController = new InnsynController(innsyn, dokumentTjeneste, tokenUtil, environment);
 
         var perioder = List.of(new MorArbeidRequestDto.Periode(LocalDate.now().minusYears(2), LocalDate.now()));
         var måDokumentereMorIArbeid = innsynController.trengerDokumentereMorsArbeid(new MorArbeidRequestDto(
