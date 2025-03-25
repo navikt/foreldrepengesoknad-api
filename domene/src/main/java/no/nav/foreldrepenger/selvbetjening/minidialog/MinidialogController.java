@@ -3,6 +3,8 @@ package no.nav.foreldrepenger.selvbetjening.minidialog;
 import java.time.LocalDate;
 import java.util.List;
 
+import jakarta.validation.constraints.NotNull;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.GetMapping;
 
@@ -31,6 +33,6 @@ public class MinidialogController {
             tilbakekrevingsInnslag.saksnummer().value(), tilbakekrevingsInnslag.frist());
     }
 
-    public record MinidialogInnslag(String saksnr, LocalDate opprettet, String dialogId, LocalDate frist) {
+    public record MinidialogInnslag(@NotNull String saksnr, @NotNull LocalDate opprettet, @NotNull String dialogId, LocalDate frist) {
     }
 }

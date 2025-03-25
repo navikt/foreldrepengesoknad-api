@@ -7,13 +7,15 @@ import java.time.LocalDate;
 
 import com.fasterxml.jackson.annotation.JsonInclude;
 
+import jakarta.validation.constraints.NotNull;
+
 @JsonInclude(NON_NULL)
-public record BarnFrontend(String fnr,
-                           String fornavn,
+public record BarnFrontend(@NotNull String fnr,
+                           @NotNull String fornavn,
                            String mellomnavn,
-                           String etternavn,
-                           String kjønn,
-                           LocalDate fødselsdato,
+                           @NotNull String etternavn,
+                           @NotNull String kjønn,
+                           @NotNull LocalDate fødselsdato,
                            LocalDate dødsdato,
                            AnnenForelderFrontend annenForelder) {
 

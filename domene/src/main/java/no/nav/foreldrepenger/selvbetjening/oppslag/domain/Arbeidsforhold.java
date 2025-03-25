@@ -4,11 +4,13 @@ import java.time.LocalDate;
 
 import com.fasterxml.jackson.annotation.JsonAlias;
 
-public record Arbeidsforhold(String arbeidsgiverId,
-                             String arbeidsgiverIdType,
+import jakarta.validation.constraints.NotNull;
+
+public record Arbeidsforhold(@NotNull String arbeidsgiverId,
+                             @NotNull String arbeidsgiverIdType,
                              String arbeidsgiverNavn,
-                             Double stillingsprosent,
-                             @JsonAlias("from") LocalDate fom,
+                             @NotNull Double stillingsprosent,
+                             @NotNull @JsonAlias("from") LocalDate fom,
                              @JsonAlias("to") LocalDate tom) {
 
 }

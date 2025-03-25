@@ -7,11 +7,13 @@ import java.time.LocalDate;
 
 import com.fasterxml.jackson.annotation.JsonInclude;
 
+import jakarta.validation.constraints.NotNull;
+
 @JsonInclude(NON_NULL)
-public record AnnenForelderFrontend(String fnr,
-                                    String fornavn,
+public record AnnenForelderFrontend(@NotNull String fnr,
+                                    @NotNull String fornavn,
                                     String mellomnavn,
-                                    String etternavn,
+                                    @NotNull String etternavn,
                                     LocalDate fødselsdato) {
 
     @Override
