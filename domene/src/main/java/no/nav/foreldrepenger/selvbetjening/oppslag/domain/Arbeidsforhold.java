@@ -8,7 +8,7 @@ import jakarta.validation.constraints.NotNull;
 
 public record Arbeidsforhold(@NotNull String arbeidsgiverId,
                              @NotNull String arbeidsgiverIdType,
-                             String arbeidsgiverNavn,
+                             @NotNull String arbeidsgiverNavn,
                              @NotNull Double stillingsprosent,
                              @NotNull @JsonAlias("from") LocalDate fom,
                              @JsonAlias("to") LocalDate tom) {
