@@ -18,7 +18,8 @@ public class InnsynConfig {
     private static final String MANGLENDE_VEDLEGG = OPPGAVER + "/manglendevedlegg";
     private static final String INNTEKTSMELDINGER = CONTEXT_PATH + "/inntektsmeldinger";
     private static final String UTTALELSER_OM_TILBAKEKREVING = OPPGAVER + "/tilbakekrevingsuttalelse";
-    private static final String MOR_DOKUMENTASJON_ARBEID_PATH = "/morDokumentasjon";
+    private static final String ARBEID = CONTEXT_PATH + "/arbeid";
+    private static final String MOR_DOKUMENTASJON_ARBEID_PATH = ARBEID + "/morDokumentasjon";
 
     private static final String SAKSNUMMER = "saksnummer";
 

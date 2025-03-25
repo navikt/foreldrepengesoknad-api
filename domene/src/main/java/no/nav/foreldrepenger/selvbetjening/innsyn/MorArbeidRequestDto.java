@@ -8,7 +8,7 @@ import no.nav.foreldrepenger.common.domain.Fødselsnummer;
 import java.time.LocalDate;
 import java.util.List;
 
-public record MorArbeidRequestDto(@Valid Fødselsnummer annenPartFødselsnummer,
+public record MorArbeidRequestDto(@Valid @NotNull Fødselsnummer annenPartFødselsnummer,
                                   @Valid Fødselsnummer barnFødselsnummer,
                                   LocalDate familiehendelse,
                                   @Valid @Size(max = 50) List<@Valid @NotNull Periode> perioder) {
