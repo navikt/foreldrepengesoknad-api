@@ -15,7 +15,7 @@ public record BarnFrontend(@NotNull String fnr,
                            @NotNull String fornavn,
                            String mellomnavn,
                            @NotNull String etternavn,
-                           Kjønn kjønn,
+                           @NotNull Kjønn kjønn,
                            @NotNull LocalDate fødselsdato,
                            LocalDate dødsdato,
                            AnnenForelderFrontend annenForelder) {
