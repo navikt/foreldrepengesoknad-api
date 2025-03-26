@@ -1,4 +1,6 @@
 package no.nav.foreldrepenger.selvbetjening.mellomlagring;
 
-public record AktivMellomlagringDto(boolean engangsstonad, boolean foreldrepenger, boolean svangerskapspenger) {
+import jakarta.validation.constraints.NotNull;
+
+public record AktivMellomlagringDto(@NotNull boolean engangsstonad,@NotNull boolean foreldrepenger,@NotNull boolean svangerskapspenger) {
 }

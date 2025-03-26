@@ -8,17 +8,19 @@ import java.util.List;
 
 import com.fasterxml.jackson.annotation.JsonInclude;
 
+import jakarta.validation.constraints.NotNull;
 import no.nav.foreldrepenger.common.domain.Fødselsnummer;
+import no.nav.foreldrepenger.common.domain.felles.Kjønn;
 
 @JsonInclude(NON_NULL)
-public record PersonFrontend(Fødselsnummer fnr,
-                             String fornavn,
+public record PersonFrontend(@NotNull Fødselsnummer fnr,
+                             @NotNull String fornavn,
                              String mellomnavn,
-                             String etternavn,
-                             String kjønn,
-                             LocalDate fødselsdato,
+                             @NotNull String etternavn,
+                             @NotNull Kjønn kjønn,
+                             @NotNull LocalDate fødselsdato,
                              Bankkonto bankkonto,
-                             List<BarnFrontend> barn,
+                             @NotNull List<BarnFrontend> barn,
                              Sivilstand sivilstand) {
 
     @Override

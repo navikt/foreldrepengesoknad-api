@@ -30,7 +30,7 @@ public final class PersonMapper {
             Optional.ofNullable(dto.navn()).map(no.nav.foreldrepenger.common.domain.Navn::fornavn).orElse(null),
             Optional.ofNullable(dto.navn()).map(no.nav.foreldrepenger.common.domain.Navn::mellomnavn).orElse(null),
             Optional.ofNullable(dto.navn()).map(no.nav.foreldrepenger.common.domain.Navn::etternavn).orElse(null),
-            Optional.ofNullable(dto.kjønn()).map(Enum::name).orElse(null),
+            Optional.ofNullable(dto.kjønn()).orElse(null),
             dto.fødselsdato(),
             tilBankkonto(dto.bankkonto()),
             sort(tilBarn(dto.barn())),
@@ -74,7 +74,7 @@ public final class PersonMapper {
             Optional.ofNullable(barn.navn()).map(no.nav.foreldrepenger.common.domain.Navn::fornavn).orElse(null),
             Optional.ofNullable(barn.navn()).map(no.nav.foreldrepenger.common.domain.Navn::mellomnavn).orElse(null),
             Optional.ofNullable(barn.navn()).map(no.nav.foreldrepenger.common.domain.Navn::etternavn).orElse(null),
-            Optional.ofNullable(barn.kjønn()).map(Enum::name).orElse(null),
+            Optional.ofNullable(barn.kjønn()).orElse(null),
             barn.fødselsdato(), barn.dødsdato(), tilAnnenforelder(barn.annenPart()));
     }
 
