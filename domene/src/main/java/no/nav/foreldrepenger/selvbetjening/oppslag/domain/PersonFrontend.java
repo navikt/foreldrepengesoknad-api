@@ -16,7 +16,7 @@ public record PersonFrontend(@NotNull Fødselsnummer fnr,
                              @NotNull String fornavn,
                              String mellomnavn,
                              @NotNull String etternavn,
-                             @NotNull String kjønn, // TODO: string union "M" | "F"
+                             String kjønn,
                              @NotNull LocalDate fødselsdato,
                              Bankkonto bankkonto,
                              @NotNull List<BarnFrontend> barn,
