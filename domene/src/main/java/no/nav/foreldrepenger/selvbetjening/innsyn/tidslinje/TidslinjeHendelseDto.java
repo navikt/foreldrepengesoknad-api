@@ -1,5 +1,6 @@
 package no.nav.foreldrepenger.selvbetjening.innsyn.tidslinje;
 
+import jakarta.validation.Valid;
 import jakarta.validation.constraints.NotNull;
 
 import java.time.LocalDateTime;
@@ -8,7 +9,7 @@ import java.util.List;
 public record TidslinjeHendelseDto(@NotNull LocalDateTime opprettet,
                                    @NotNull AktørType aktørType,
                                    @NotNull TidslinjeHendelseType tidslinjeHendelseType,
-                                   @NotNull List<Dokument> dokumenter) {
+                                   @NotNull List<@Valid @NotNull Dokument> dokumenter) {
 
     enum AktørType {
         BRUKER,

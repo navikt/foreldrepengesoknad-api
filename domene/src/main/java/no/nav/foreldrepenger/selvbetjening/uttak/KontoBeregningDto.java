@@ -1,11 +1,12 @@
 package no.nav.foreldrepenger.selvbetjening.uttak;
 
+import jakarta.validation.Valid;
 import jakarta.validation.constraints.NotNull;
 
 import java.util.List;
 
 
-public record KontoBeregningDto(@NotNull List<KontoDto> kontoer, @NotNull Minsteretter minsteretter, Tillegg tillegg) {
+public record KontoBeregningDto(@NotNull List<@Valid @NotNull KontoDto> kontoer, @NotNull @Valid Minsteretter minsteretter, @Valid Tillegg tillegg) {
 
     public record Minsteretter(@NotNull int farRundtFødsel, @NotNull int toTette) {
     }
