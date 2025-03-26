@@ -8,13 +8,14 @@ import java.time.LocalDate;
 import com.fasterxml.jackson.annotation.JsonInclude;
 
 import jakarta.validation.constraints.NotNull;
+import no.nav.foreldrepenger.common.domain.felles.Kjønn;
 
 @JsonInclude(NON_NULL)
 public record BarnFrontend(@NotNull String fnr,
                            @NotNull String fornavn,
                            String mellomnavn,
                            @NotNull String etternavn,
-                           String kjønn,
+                           Kjønn kjønn,
                            @NotNull LocalDate fødselsdato,
                            LocalDate dødsdato,
                            AnnenForelderFrontend annenForelder) {

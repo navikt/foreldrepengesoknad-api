@@ -10,13 +10,14 @@ import com.fasterxml.jackson.annotation.JsonInclude;
 
 import jakarta.validation.constraints.NotNull;
 import no.nav.foreldrepenger.common.domain.Fødselsnummer;
+import no.nav.foreldrepenger.common.domain.felles.Kjønn;
 
 @JsonInclude(NON_NULL)
 public record PersonFrontend(@NotNull Fødselsnummer fnr,
                              @NotNull String fornavn,
                              String mellomnavn,
                              @NotNull String etternavn,
-                             String kjønn,
+                             Kjønn kjønn,
                              @NotNull LocalDate fødselsdato,
                              Bankkonto bankkonto,
                              @NotNull List<BarnFrontend> barn,

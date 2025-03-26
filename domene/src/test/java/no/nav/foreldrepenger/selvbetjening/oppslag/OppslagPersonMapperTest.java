@@ -45,13 +45,13 @@ class OppslagPersonMapperTest {
         assertThat(person.fnr()).isEqualTo(personFelles.fnr());
         assertThat(person.fornavn()).isEqualTo(personFelles.navn().fornavn());
         assertThat(person.etternavn()).isEqualTo(personFelles.navn().etternavn());
-        assertThat(person.kjønn()).isEqualTo(personFelles.kjønn().name());
+        assertThat(person.kjønn()).isEqualTo(personFelles.kjønn());
         assertThat(person.barn()).hasSize(1);
         var barn = person.barn().get(0);
 
         assertThat(barn.fnr()).isEqualTo(barnFelles.fnr().value());
         assertThat(barn.fødselsdato()).isEqualTo(barnFelles.fødselsdato());
-        assertThat(barn.kjønn()).isEqualTo(Kjønn.K.name());
+        assertThat(barn.kjønn()).isEqualTo(Kjønn.K);
         var annenforelder = barn.annenForelder();
         assertThat(annenforelder).isNotNull();
         assertThat(annenforelder.fnr()).isEqualTo(annenPartFelles.fnr().value());
@@ -69,7 +69,7 @@ class OppslagPersonMapperTest {
         assertThat(person.fnr()).isEqualTo(personFelles.fnr());
         assertThat(person.fornavn()).isEqualTo(personFelles.navn().fornavn());
         assertThat(person.etternavn()).isEqualTo(personFelles.navn().etternavn());
-        assertThat(person.kjønn()).isEqualTo(personFelles.kjønn().name());
+        assertThat(person.kjønn()).isEqualTo(personFelles.kjønn());
         assertThat(person.barn()).hasSize(2);
 
         for (var barn : person.barn()) {
