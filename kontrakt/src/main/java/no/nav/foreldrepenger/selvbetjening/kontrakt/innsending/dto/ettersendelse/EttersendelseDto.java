@@ -20,7 +20,7 @@ public record EttersendelseDto(LocalDate mottattdato,
                                @NotNull @Valid Saksnummer saksnummer,
                                @Valid BrukerTekstDto brukerTekst,
                                @Pattern(regexp = FRITEKST) String dialogId,
-                               @Valid @Size(max = 40) List<@Valid VedleggDto> vedlegg) implements Innsending {
+                               @Valid @NotNull @Size(max = 40) List<@Valid VedleggDto> vedlegg) implements Innsending {
 
     public EttersendelseDto {
         vedlegg = Optional.ofNullable(vedlegg).map(ArrayList::new).orElse(new ArrayList<>());
