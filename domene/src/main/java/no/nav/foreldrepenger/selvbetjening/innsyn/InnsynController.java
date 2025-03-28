@@ -12,6 +12,7 @@ import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.core.env.Environment;
 import org.springframework.http.MediaType;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -54,8 +55,10 @@ public class InnsynController {
     }
 
     @PostMapping(path = "/annenPartVedtak", consumes = MediaType.APPLICATION_JSON_VALUE)
-    public AnnenPartSak annenPartVedtak(@Valid @RequestBody AnnenPartSakIdentifikator annenPartSakIdentifikator) {
-        return innsynTjeneste.annenPartVedtak(annenPartSakIdentifikator).orElse(null);
+    public ResponseEntity<AnnenPartSak> annenPartVedtak(@Valid @RequestBody AnnenPartSakIdentifikator annenPartSakIdentifikator) {
+        return innsynTjeneste.annenPartVedtak(annenPartSakIdentifikator)
+            .map(ResponseEntity::ok)
+            .orElseGet(() -> ResponseEntity.notFound().build());
     }
 
     @GetMapping("/saker/oppdatert")
