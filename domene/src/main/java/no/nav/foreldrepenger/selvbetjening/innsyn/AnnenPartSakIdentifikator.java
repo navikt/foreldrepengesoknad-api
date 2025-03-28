@@ -6,7 +6,7 @@ import jakarta.validation.Valid;
 
 import no.nav.foreldrepenger.common.domain.Fødselsnummer;
 
-record AnnenPartSakIdentifikator(@Valid Fødselsnummer annenPartFødselsnummer,
+public record AnnenPartSakIdentifikator(@Valid Fødselsnummer annenPartFødselsnummer,
                                  @Valid Fødselsnummer barnFødselsnummer,
                                  LocalDate familiehendelse) {
 }
