@@ -49,9 +49,12 @@ public class InnsynController {
         return innsynTjeneste.hentSaker();
     }
 
+    // tiltenkt TFP-6068 skal benytte mors søknadsgrunnlag om vedtak ikke foreligger
     @PostMapping(path = "/annenPartSak", consumes = MediaType.APPLICATION_JSON_VALUE)
-    public AnnenPartSak annenPartSak(@Valid @RequestBody AnnenPartSakIdentifikator annenPartSakIdentifikator) {
-        return innsynTjeneste.annenPartSak(annenPartSakIdentifikator).orElse(null);
+    public ResponseEntity<AnnenPartSak> annenPartSak(@Valid @RequestBody AnnenPartSakIdentifikator annenPartSakIdentifikator) {
+        return innsynTjeneste.annenPartSak(annenPartSakIdentifikator)
+            .map(ResponseEntity::ok)
+            .orElseGet(() -> ResponseEntity.notFound().build());
     }
 
     @PostMapping(path = "/annenPartVedtak", consumes = MediaType.APPLICATION_JSON_VALUE)
