@@ -10,13 +10,16 @@ import static no.nav.foreldrepenger.selvbetjening.util.URIUtil.uri;
 
 @ConfigurationProperties(prefix = "oversikt")
 public class InnsynConfig {
-    private static final String SAKER = "api/saker";
-    private static final String ANNENPART_SAK = "api/annenPart/v2";
-    private static final String ANNENPART_VEDTAK = "api/annenPart";
-    private static final String MANGLENDE_VEDLEGG = "api/oppgaver/manglendevedlegg";
-    private static final String UTTALELSER_OM_TILBAKEKREVING = "api/oppgaver/tilbakekrevingsuttalelse";
-    private static final String INNTEKTSMELDINGER = "api/inntektsmeldinger";
-    private static final String MOR_DOKUMENTASJON_ARBEID_PATH = "api/arbeid/morDokumentasjon";
+    private static final String CONTEXT_PATH = "api";
+    private static final String SAKER = CONTEXT_PATH + "/saker";
+    private static final String ANNENPART_SAK = CONTEXT_PATH + "/annenPart/v2";
+    private static final String ANNENPART_VEDTAK = CONTEXT_PATH + "/annenPart";
+    private static final String OPPGAVER = CONTEXT_PATH + "/oppgaver";
+    private static final String MANGLENDE_VEDLEGG = OPPGAVER + "/manglendevedlegg";
+    private static final String INNTEKTSMELDINGER = CONTEXT_PATH + "/inntektsmeldinger";
+    private static final String UTTALELSER_OM_TILBAKEKREVING = OPPGAVER + "/tilbakekrevingsuttalelse";
+    private static final String ARBEID = CONTEXT_PATH + "/arbeid";
+    private static final String MOR_DOKUMENTASJON_ARBEID_PATH = ARBEID + "/morDokumentasjon";
 
     private static final String SAKSNUMMER = "saksnummer";
 
