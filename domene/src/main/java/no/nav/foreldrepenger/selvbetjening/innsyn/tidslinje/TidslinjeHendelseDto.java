@@ -1,12 +1,15 @@
 package no.nav.foreldrepenger.selvbetjening.innsyn.tidslinje;
 
+import jakarta.validation.Valid;
+import jakarta.validation.constraints.NotNull;
+
 import java.time.LocalDateTime;
 import java.util.List;
 
-public record TidslinjeHendelseDto(LocalDateTime opprettet,
-                                   AktørType aktørType,
-                                   TidslinjeHendelseType tidslinjeHendelseType,
-                                   List<Dokument> dokumenter) {
+public record TidslinjeHendelseDto(@NotNull LocalDateTime opprettet,
+                                   @NotNull AktørType aktørType,
+                                   @NotNull TidslinjeHendelseType tidslinjeHendelseType,
+                                   @NotNull List<@Valid @NotNull Dokument> dokumenter) {
 
     enum AktørType {
         BRUKER,
@@ -27,6 +30,6 @@ public record TidslinjeHendelseDto(LocalDateTime opprettet,
         UTGÅENDE_VARSEL_TILBAKEBETALING
     }
 
-    public record Dokument(String journalpostId, String dokumentId, String tittel) {
+    public record Dokument(@NotNull String journalpostId, @NotNull String dokumentId, @NotNull String tittel) {
     }
 }
