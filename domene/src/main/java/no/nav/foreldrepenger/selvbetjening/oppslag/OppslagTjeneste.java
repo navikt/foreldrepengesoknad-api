@@ -23,7 +23,9 @@ public class OppslagTjeneste implements Oppslag {
 
     @Override
     public PersonFrontend hentPerson() {
-        return tilPersonFrontend(oppslag.hentPerson());
+        var person = oppslag.hentPerson();
+        oppslag.sammenlignMedNyttEndepunktIOversikt(person);
+        return tilPersonFrontend(person);
     }
 
     @Override
@@ -35,6 +37,7 @@ public class OppslagTjeneste implements Oppslag {
         LOG.info("Henter søkerinfo");
         var personDto = oppslag.hentPerson();
         var arbeidsforhold = oppslag.hentArbeidsForhold();
+        oppslag.sammenlignResultatNyttKallIOversikt(personDto, arbeidsforhold);
         var info = new Søkerinfo(tilPersonFrontend(personDto), arbeidsforhold);
         LOG.info("Hentet søkerinfo for med {} arbeidsforhold OK", info.arbeidsforhold().size());
         LOG.trace(CONFIDENTIAL, "Hentet søkerinfo {}", info);

@@ -19,52 +19,53 @@ import static java.util.Collections.emptyList;
 public class OppslagConnection extends AbstractRestConnection {
     private static final Logger LOG = LoggerFactory.getLogger(OppslagConnection.class);
     private final OppslagConfig config;
-    private final OppslagOversiktConfig config2;
+    private final OppslagOversiktConfig configMotOverikt;
 
-    public OppslagConnection(RestOperations operations, OppslagConfig config, OppslagOversiktConfig config2) {
+    public OppslagConnection(RestOperations operations, OppslagConfig config, OppslagOversiktConfig configMotOverikt) {
         super(operations);
         this.config = config;
-        this.config2 = config2;
+        this.configMotOverikt = configMotOverikt;
     }
 
     public Person hentPerson() {
-        var opprinneligFraMottak = getForObject(config.personURI(), Person.class);
+        return getForObject(config.personURI(), Person.class);
+    }
+
+    public List<Arbeidsforhold> hentArbeidsForhold() {
+        return Optional.ofNullable(getForObject(config.arbeidsforholdURI(), Arbeidsforhold[].class, false)).map(Arrays::asList).orElse(emptyList());
+    }
+
+    public void sammenlignMedNyttEndepunktIOversikt(Person orginal) {
         try {
-            var oversikt = getForObject(config2.personURI(), Person.class);
-            if (Objects.equals(oversikt, opprinneligFraMottak)) {
+            var oversikt = getForObject(configMotOverikt.personURI(), Person.class);
+            if (Objects.equals(orginal, oversikt)) {
                 LOG.info("PERSON: Likt resultat fra oversikt og mottak!");
             } else {
-                LOG.info("PERSON: Ulikt resultat fra oversikt og mottak. Sjekk diff mottak: {} VS oversikt: {}", opprinneligFraMottak, oversikt);
+                LOG.info("PERSON: Ulikt resultat fra oversikt og mottak. Sjekk diff mottak: {} VS oversikt: {}", orginal, oversikt);
             }
         } catch (Exception e) {
             LOG.info("PERSON: Noe feilet med kall nytt person endepunkt i oversikt!", e);
         }
-
-        return opprinneligFraMottak;
-
     }
 
-    public List<Arbeidsforhold> hentArbeidsForhold() {
-        var arbeidsforholdGammel = Optional.ofNullable(getForObject(config.arbeidsforholdURI(), Arbeidsforhold[].class, false)).map(Arrays::asList).orElse(emptyList());
-
+    public void sammenlignResultatNyttKallIOversikt(Person personDto, List<Arbeidsforhold> arbeidsforhold) {
         try {
-            var oversikt = Optional.ofNullable(getForObject(config2.arbeidsforholdURI(), Arbeidsforhold[].class, false)).map(Arrays::asList).orElse(emptyList());
-            if (Objects.equals(oversikt, arbeidsforholdGammel)) {
-                LOG.info("ARBEID: Likt resultat fra oversikt og mottak!");
+            var original = new PersonMedArbeidsforholdDto(personDto, arbeidsforhold);
+            var søkerinfo = getForObject(configMotOverikt.personMedArbeidsforhold(), PersonMedArbeidsforholdDto.class);
+            if (Objects.equals(original, søkerinfo)) {
+                LOG.info("SØKERINFO: Likt resultat fra oversikt og mottak!");
             } else {
-                LOG.info("ARBEID: Ulikt resultat fra oversikt og mottak. Sjekk diff mottak: {} VS oversikt: {}", arbeidsforholdGammel, oversikt);
+                LOG.info("SØKERINFO: Ulikt resultat fra oversikt og mottak. Sjekk diff mottak: {} VS oversikt: {}", original, søkerinfo);
             }
         } catch (Exception e) {
-            LOG.info("ARBEID: Noe feilet med kall nytt person endepunkt i oversikt!", e);
+            LOG.info("SØKERINFO: Noe feilet med kall nytt person endepunkt i oversikt!", e);
         }
-
-        return arbeidsforholdGammel;
     }
-
 
 
     @Override
     public String toString() {
         return getClass().getSimpleName() + " [config=" + config + "]";
     }
+
 }
