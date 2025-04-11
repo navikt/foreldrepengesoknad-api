@@ -29,6 +29,8 @@ no.nav:
               audience: prod-fss:teamdokumenthandtering:safselvbetjening
 oppslag:
   uri: https://fpsoknad-mottak.prod-fss-pub.nais.io/api/
+oppslag2:
+  uri: https://fpoversikt
 mottak:
   uri: https://fpsoknad-mottak.prod-fss-pub.nais.io/api/
 pdfgenerator:
