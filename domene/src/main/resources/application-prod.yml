@@ -30,7 +30,7 @@ no.nav:
 oppslag:
   uri: https://fpsoknad-mottak.prod-fss-pub.nais.io/api/
 oppslag2:
-  uri: https://fpoversikt
+  uri: http://fpoversikt
 mottak:
   uri: https://fpsoknad-mottak.prod-fss-pub.nais.io/api/
 pdfgenerator:
