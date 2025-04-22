@@ -20,9 +20,19 @@ public record Arbeidsforhold(@NotNull String arbeidsgiverId,
         return Objects.equals(fom, that.fom) &&
                 Objects.equals(tom, that.tom) &&
                 Objects.equals(arbeidsgiverId, that.arbeidsgiverId) &&
-                Objects.equals(arbeidsgiverNavn, that.arbeidsgiverNavn) &&
+                erArbeidsgiverNavnDetSammeUavhengigAvCAPS(that) &&
                 sammenlignProsentRelativTilFomOgTomSomMottakIkkeHensyntar(that) &&
                 Objects.equals(arbeidsgiverIdType, that.arbeidsgiverIdType);
+    }
+
+    private boolean erArbeidsgiverNavnDetSammeUavhengigAvCAPS(Arbeidsforhold that) {
+        if (arbeidsgiverNavn == null && that.arbeidsgiverNavn == null) {
+            return true;
+        }
+        if (arbeidsgiverNavn == null || that.arbeidsgiverNavn == null) {
+            return false;
+        }
+        return arbeidsgiverNavn.equalsIgnoreCase(that.arbeidsgiverNavn);
     }
 
     private boolean sammenlignProsentRelativTilFomOgTomSomMottakIkkeHensyntar(Arbeidsforhold that) {
