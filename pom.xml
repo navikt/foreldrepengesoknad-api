@@ -7,7 +7,7 @@
     <parent>
         <groupId>org.springframework.boot</groupId>
         <artifactId>spring-boot-starter-parent</artifactId>
-        <version>3.4.4</version>
+        <version>3.4.5</version>
     </parent>
 
 	<groupId>no.nav.foreldrepenger.selvbetjening</groupId>
@@ -52,7 +52,7 @@
 		<logback.logstash.version>8.1</logback.logstash.version>
 		<nv.version>1.29</nv.version>
         <reflections.version>0.10.2</reflections.version>
-		<pdfbox.version>3.0.4</pdfbox.version>
+		<pdfbox.version>3.0.5</pdfbox.version>
 		<jacoco.version>0.8.13</jacoco.version>
 		<gcp.version>0.240.0</gcp.version>
         <graphql-java-codegen.version>5.10.0</graphql-java-codegen.version>
