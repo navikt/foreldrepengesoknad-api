@@ -5,6 +5,7 @@ import no.nav.foreldrepenger.common.innsyn.AnnenPartSak;
 import no.nav.foreldrepenger.common.innsyn.Saker;
 import no.nav.foreldrepenger.common.innsyn.inntektsmelding.FpOversiktInntektsmeldingDto;
 import no.nav.foreldrepenger.selvbetjening.http.AbstractRestConnection;
+import no.nav.foreldrepenger.selvbetjening.innsyn.tidslinje.TidslinjeHendelseDto;
 import org.springframework.stereotype.Component;
 import org.springframework.web.client.HttpClientErrorException;
 import org.springframework.web.client.RestOperations;
@@ -66,5 +67,11 @@ public class InnsynConnection extends AbstractRestConnection {
 
     public boolean trengerDokumentereMorsArbeid(MorArbeidRequestDto morArbeidRequestDto) {
         return postForObject(cfg.trengerDokumentereMorsArbeid(), morArbeidRequestDto, boolean.class);
+    }
+
+    public List<TidslinjeHendelseDto> tidslinje(Saksnummer saksnummer) {
+        return Optional.ofNullable(getForObject(cfg.tidlinje(saksnummer), TidslinjeHendelseDto[].class))
+                .map(Arrays::asList)
+                .orElse(emptyList());
     }
 }

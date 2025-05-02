@@ -5,6 +5,7 @@ import no.nav.foreldrepenger.common.innsyn.AnnenPartSak;
 import no.nav.foreldrepenger.common.innsyn.Saker;
 import no.nav.foreldrepenger.common.innsyn.inntektsmelding.FpOversiktInntektsmeldingDto;
 import no.nav.foreldrepenger.selvbetjening.http.RetryAware;
+import no.nav.foreldrepenger.selvbetjening.innsyn.tidslinje.TidslinjeHendelseDto;
 
 import java.util.List;
 import java.util.Optional;
@@ -24,4 +25,6 @@ public interface Innsyn extends RetryAware {
     List<FpOversiktInntektsmeldingDto> inntektsmeldinger(Saksnummer saksnummer);
 
     boolean trengerDokumentereMorsArbeid(MorArbeidRequestDto morArbeidRequestDto);
+
+    List<TidslinjeHendelseDto> tidslinje(Saksnummer saksnummer);
 }

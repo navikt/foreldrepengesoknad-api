@@ -20,6 +20,7 @@ public class InnsynConfig {
     private static final String UTTALELSER_OM_TILBAKEKREVING = OPPGAVER + "/tilbakekrevingsuttalelse";
     private static final String ARBEID = CONTEXT_PATH + "/arbeid";
     private static final String MOR_DOKUMENTASJON_ARBEID_PATH = ARBEID + "/morDokumentasjon";
+    private static final String TIDSLINJE = CONTEXT_PATH + "/tidslinje";
 
     private static final String SAKSNUMMER = "saksnummer";
 
@@ -55,6 +56,10 @@ public class InnsynConfig {
 
     URI inntektsmelding(Saksnummer saksnummer) {
         return uri(getBaseUri(), INNTEKTSMELDINGER, URIUtil.queryParam(SAKSNUMMER, saksnummer.value()));
+    }
+
+    URI tidlinje(Saksnummer saksnummer) {
+        return uri(getBaseUri(), TIDSLINJE, URIUtil.queryParam(SAKSNUMMER, saksnummer.value()));
     }
 
     private URI getBaseUri() {
