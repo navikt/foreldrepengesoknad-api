@@ -4,6 +4,7 @@ import no.nav.foreldrepenger.common.domain.Saksnummer;
 import no.nav.foreldrepenger.common.innsyn.AnnenPartSak;
 import no.nav.foreldrepenger.common.innsyn.Saker;
 import no.nav.foreldrepenger.common.innsyn.inntektsmelding.FpOversiktInntektsmeldingDto;
+import no.nav.foreldrepenger.selvbetjening.innsyn.tidslinje.TidslinjeHendelseDto;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Service;
@@ -61,6 +62,11 @@ public class InnsynTjeneste implements Innsyn {
     @Override
     public boolean trengerDokumentereMorsArbeid(MorArbeidRequestDto morArbeidRequestDto) {
         return innsynConnection.trengerDokumentereMorsArbeid(morArbeidRequestDto);
+    }
+
+    @Override
+    public List<TidslinjeHendelseDto> tidslinje(Saksnummer saksnummer) {
+        return innsynConnection.tidslinje(saksnummer);
     }
 
     @Override
