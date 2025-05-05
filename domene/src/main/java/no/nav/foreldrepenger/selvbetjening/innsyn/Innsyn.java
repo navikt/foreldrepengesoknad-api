@@ -34,4 +34,6 @@ public interface Innsyn extends RetryAware {
     List<DokumentDto> dokumenter(Saksnummer saksnummer);
 
     byte[] hentDokument(JournalpostId journalpostId, DokumentInfoId dokumentId);
+
+    boolean erOppdatert();
 }

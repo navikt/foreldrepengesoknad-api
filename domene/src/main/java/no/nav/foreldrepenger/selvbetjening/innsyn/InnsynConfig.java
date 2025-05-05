@@ -14,6 +14,7 @@ import static no.nav.foreldrepenger.selvbetjening.util.URIUtil.uri;
 public class InnsynConfig {
     private static final String CONTEXT_PATH = "api";
     private static final String SAKER = CONTEXT_PATH + "/saker";
+    private static final String SAK_OPPDATERT = SAKER + "/erOppdatert";
     private static final String ANNENPART_SAK = CONTEXT_PATH + "/annenPart/v2";
     private static final String ANNENPART_VEDTAK = CONTEXT_PATH + "/annenPart";
     private static final String OPPGAVER = CONTEXT_PATH + "/oppgaver";
@@ -77,6 +78,10 @@ public class InnsynConfig {
 
     URI dokumenter(Saksnummer saksnummer) {
         return uri(getBaseUri(), ALLE_DOKUMENTER, URIUtil.queryParam(QUERY_SAKSNUMMER, saksnummer.value()));
+    }
+
+    URI erOppdatert() {
+        return uri(getBaseUri(), SAK_OPPDATERT);
     }
 
     private URI getBaseUri() {
