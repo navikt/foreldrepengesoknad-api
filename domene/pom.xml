@@ -111,12 +111,6 @@
         </dependency>
 
         <dependency>
-            <groupId>io.github.kobylynskyi</groupId>
-            <artifactId>graphql-codegen-maven-plugin</artifactId>
-            <version>${graphql-java-codegen.version}</version>
-        </dependency>
-
-        <dependency>
             <groupId>com.neovisionaries</groupId>
             <artifactId>nv-i18n</artifactId>
             <version>${nv.version}</version>
@@ -170,35 +164,6 @@
                         <goals>
                             <goal>build-info</goal>
                         </goals>
-                    </execution>
-                </executions>
-            </plugin>
-            <plugin>
-                <groupId>io.github.kobylynskyi</groupId>
-                <artifactId>graphql-codegen-maven-plugin</artifactId>
-                <version>${graphql-java-codegen.version}</version>
-                <executions>
-                    <execution>
-                        <goals>
-                            <goal>generate</goal>
-                        </goals>
-                        <phase>validate</phase>
-                        <configuration>
-                            <graphqlSchemaPaths>${project.basedir}/src/main/resources/safselvbetjening/schema.graphql</graphqlSchemaPaths>
-                            <outputDir>${project.build.directory}/generated-sources</outputDir>
-                            <modelPackageName>no.nav.safselvbetjening</modelPackageName>
-                            <customTypesMapping>
-                                <DateTime>java.time.LocalDateTime</DateTime>
-                            </customTypesMapping>
-                            <generateClient>true</generateClient>
-                            <generateApis>false</generateApis>
-                            <generateBuilder>false</generateBuilder>
-                            <generateToString>true</generateToString>
-                            <generateParameterizedFieldsResolvers>false</generateParameterizedFieldsResolvers>
-                            <addGeneratedAnnotation>true</addGeneratedAnnotation>
-                            <generatedAnnotation>jakarta.annotation.Generated</generatedAnnotation>
-                            <modelValidationAnnotation>@jakarta.validation.constraints.NotNull</modelValidationAnnotation>
-                        </configuration>
                     </execution>
                 </executions>
             </plugin>

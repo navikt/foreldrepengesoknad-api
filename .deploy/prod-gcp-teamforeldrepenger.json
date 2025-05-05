@@ -1,8 +1,7 @@
 {
   "tmpbucket": "mellomlagring-prod",
   "external": [
-    "fpsoknad-mottak.prod-fss-pub.nais.io",
-    "safselvbetjening.prod-fss-pub.nais.io"
+    "fpsoknad-mottak.prod-fss-pub.nais.io"
   ],
   "limits": {
     "cpu": "1500m",
