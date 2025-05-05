@@ -83,6 +83,11 @@ public class InnsynTjeneste implements Innsyn {
     }
 
     @Override
+    public boolean erOppdatert() {
+        return innsynConnection.erOppdatert();
+    }
+
+    @Override
     public String toString() {
         return getClass().getSimpleName() + " [innsynConnection=" + innsynConnection + "]";
     }

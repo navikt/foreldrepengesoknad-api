@@ -87,4 +87,8 @@ public class InnsynConnection extends AbstractRestConnection {
     public byte[] hentDokument(JournalpostId journalpostId, DokumentInfoId dokumentId) {
         return getForObject(cfg.hentDokument(journalpostId, dokumentId), byte[].class);
     }
+
+    public boolean erOppdatert() {
+        return getForObject(cfg.erOppdatert(), boolean.class);
+    }
 }

@@ -60,6 +60,21 @@ public class InnsynController {
 
     @GetMapping("/saker/oppdatert")
     public boolean erSakOppdatert() {
+        var erOppdatert = erSakOppdatertDirekte();
+        sammenling(erOppdatert);
+        return erOppdatert;
+    }
+
+    private void sammenling(boolean gammel) {
+        var ny = innsynTjeneste.erOppdatert();
+        if (gammel == ny) {
+            LOG.info("SAK OPPDATERING: Like resultat");
+        } else {
+            LOG.info("SAK OPPDATERING: Ulikt resultat. Gammel {} Ny {}", gammel, ny);
+        }
+    }
+
+    private boolean erSakOppdatertDirekte() {
         var dokumenter = dokumentTjeneste.alle(tokenUtil.innloggetBrukerOrElseThrowException());
         var søkaderMottattNylig = dokumenter.stream()
             .filter(arkivDokument -> DokumentDto.Type.INNGÅENDE_DOKUMENT.equals(arkivDokument.type()))
