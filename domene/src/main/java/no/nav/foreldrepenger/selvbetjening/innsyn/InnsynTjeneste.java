@@ -4,6 +4,9 @@ import no.nav.foreldrepenger.common.domain.Saksnummer;
 import no.nav.foreldrepenger.common.innsyn.AnnenPartSak;
 import no.nav.foreldrepenger.common.innsyn.Saker;
 import no.nav.foreldrepenger.common.innsyn.inntektsmelding.FpOversiktInntektsmeldingDto;
+import no.nav.foreldrepenger.selvbetjening.innsyn.dokument.DokumentDto;
+import no.nav.foreldrepenger.selvbetjening.innsyn.dokument.DokumentInfoId;
+import no.nav.foreldrepenger.selvbetjening.innsyn.dokument.JournalpostId;
 import no.nav.foreldrepenger.selvbetjening.innsyn.tidslinje.TidslinjeHendelseDto;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -67,6 +70,16 @@ public class InnsynTjeneste implements Innsyn {
     @Override
     public List<TidslinjeHendelseDto> tidslinje(Saksnummer saksnummer) {
         return innsynConnection.tidslinje(saksnummer);
+    }
+
+    @Override
+    public List<DokumentDto> dokumenter(Saksnummer saksnummer) {
+        return innsynConnection.dokumenter(saksnummer);
+    }
+
+    @Override
+    public byte[] hentDokument(JournalpostId journalpostId, DokumentInfoId dokumentId) {
+        return innsynConnection.hentDokument(journalpostId, dokumentId);
     }
 
     @Override

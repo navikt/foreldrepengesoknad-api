@@ -5,6 +5,9 @@ import no.nav.foreldrepenger.common.innsyn.AnnenPartSak;
 import no.nav.foreldrepenger.common.innsyn.Saker;
 import no.nav.foreldrepenger.common.innsyn.inntektsmelding.FpOversiktInntektsmeldingDto;
 import no.nav.foreldrepenger.selvbetjening.http.AbstractRestConnection;
+import no.nav.foreldrepenger.selvbetjening.innsyn.dokument.DokumentDto;
+import no.nav.foreldrepenger.selvbetjening.innsyn.dokument.DokumentInfoId;
+import no.nav.foreldrepenger.selvbetjening.innsyn.dokument.JournalpostId;
 import no.nav.foreldrepenger.selvbetjening.innsyn.tidslinje.TidslinjeHendelseDto;
 import org.springframework.stereotype.Component;
 import org.springframework.web.client.HttpClientErrorException;
@@ -73,5 +76,15 @@ public class InnsynConnection extends AbstractRestConnection {
         return Optional.ofNullable(getForObject(cfg.tidlinje(saksnummer), TidslinjeHendelseDto[].class))
                 .map(Arrays::asList)
                 .orElse(emptyList());
+    }
+
+    public List<DokumentDto> dokumenter(Saksnummer saksnummer) {
+        return Optional.ofNullable(getForObject(cfg.dokumenter(saksnummer), DokumentDto[].class))
+            .map(Arrays::asList)
+            .orElse(emptyList());
+    }
+
+    public byte[] hentDokument(JournalpostId journalpostId, DokumentInfoId dokumentId) {
+        return getForObject(cfg.hentDokument(journalpostId, dokumentId), byte[].class);
     }
 }

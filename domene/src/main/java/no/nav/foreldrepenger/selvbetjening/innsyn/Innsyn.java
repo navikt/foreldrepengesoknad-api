@@ -5,6 +5,9 @@ import no.nav.foreldrepenger.common.innsyn.AnnenPartSak;
 import no.nav.foreldrepenger.common.innsyn.Saker;
 import no.nav.foreldrepenger.common.innsyn.inntektsmelding.FpOversiktInntektsmeldingDto;
 import no.nav.foreldrepenger.selvbetjening.http.RetryAware;
+import no.nav.foreldrepenger.selvbetjening.innsyn.dokument.DokumentDto;
+import no.nav.foreldrepenger.selvbetjening.innsyn.dokument.DokumentInfoId;
+import no.nav.foreldrepenger.selvbetjening.innsyn.dokument.JournalpostId;
 import no.nav.foreldrepenger.selvbetjening.innsyn.tidslinje.TidslinjeHendelseDto;
 
 import java.util.List;
@@ -27,4 +30,8 @@ public interface Innsyn extends RetryAware {
     boolean trengerDokumentereMorsArbeid(MorArbeidRequestDto morArbeidRequestDto);
 
     List<TidslinjeHendelseDto> tidslinje(Saksnummer saksnummer);
+
+    List<DokumentDto> dokumenter(Saksnummer saksnummer);
+
+    byte[] hentDokument(JournalpostId journalpostId, DokumentInfoId dokumentId);
 }
