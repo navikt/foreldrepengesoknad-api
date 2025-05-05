@@ -31,8 +31,6 @@ pdfgenerator:
 mottak:
   uri: ${fpsoknad-mottak.override.url}
 oppslag:
-  uri: ${fpsoknad-mottak.override.url}
-oppslag2:
   uri: ${fpoversikt.override.url}
 oversikt:
   uri: ${fpoversikt.override.url}

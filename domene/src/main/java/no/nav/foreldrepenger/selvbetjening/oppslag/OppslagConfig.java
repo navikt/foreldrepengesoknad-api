@@ -1,16 +1,16 @@
 package no.nav.foreldrepenger.selvbetjening.oppslag;
 
-import static no.nav.foreldrepenger.selvbetjening.util.URIUtil.uri;
+import org.springframework.boot.context.properties.ConfigurationProperties;
 
 import java.net.URI;
 
-import org.springframework.boot.context.properties.ConfigurationProperties;
+import static no.nav.foreldrepenger.selvbetjening.util.URIUtil.uri;
 
 @ConfigurationProperties("oppslag")
 public class OppslagConfig {
 
-    private static final String PERSON = "oppslag/person";
-    private static final String ARBEIDSFORHOLD = "oppslag/person/arbeidsforhold";
+    private static final String PERSON = "api/person/info";
+    private static final String PERSON_MED_ARBEIDSFORHOLD = "api/person/info-med-arbeidsforhold";
     private final URI baseUri;
 
     public OppslagConfig(URI uri) {
@@ -21,11 +21,12 @@ public class OppslagConfig {
         return uri(getBaseUri(), PERSON);
     }
 
-    URI arbeidsforholdURI() {
-        return uri(getBaseUri(), ARBEIDSFORHOLD);
+    URI personMedArbeidsforhold() {
+        return uri(getBaseUri(), PERSON_MED_ARBEIDSFORHOLD);
     }
 
     private URI getBaseUri() {
         return baseUri;
     }
+
 }

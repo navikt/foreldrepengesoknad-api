@@ -6,8 +6,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.GetMapping;
 
 import no.nav.foreldrepenger.selvbetjening.http.ProtectedRestController;
-import no.nav.foreldrepenger.selvbetjening.oppslag.domain.PersonFrontend;
-import no.nav.foreldrepenger.selvbetjening.oppslag.domain.Søkerinfo;
+import no.nav.foreldrepenger.selvbetjening.oppslag.dto.PersonFrontend;
+import no.nav.foreldrepenger.selvbetjening.oppslag.dto.Søkerinfo;
 import no.nav.foreldrepenger.selvbetjening.http.TokenUtil;
 
 @ProtectedRestController(OppslagController.OPPSLAG_PATH)

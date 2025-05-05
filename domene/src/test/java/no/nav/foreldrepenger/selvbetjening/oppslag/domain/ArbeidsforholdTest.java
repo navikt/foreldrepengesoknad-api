@@ -1,5 +1,6 @@
 package no.nav.foreldrepenger.selvbetjening.oppslag.domain;
 
+import no.nav.foreldrepenger.selvbetjening.oppslag.dto.Arbeidsforhold;
 import org.junit.jupiter.api.Test;
 
 import java.time.LocalDate;

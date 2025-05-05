@@ -1,21 +1,20 @@
 package no.nav.foreldrepenger.selvbetjening.oppslag.mapper;
 
-import static java.util.Comparator.comparing;
-import static no.nav.foreldrepenger.common.util.StreamUtil.safeStream;
+import no.nav.foreldrepenger.common.domain.Fødselsnummer;
+import no.nav.foreldrepenger.common.domain.felles.AnnenPart;
+import no.nav.foreldrepenger.selvbetjening.oppslag.dto.AnnenForelderFrontend;
+import no.nav.foreldrepenger.selvbetjening.oppslag.dto.Bankkonto;
+import no.nav.foreldrepenger.selvbetjening.oppslag.dto.BarnFrontend;
+import no.nav.foreldrepenger.selvbetjening.oppslag.dto.PersonFrontend;
+import no.nav.foreldrepenger.selvbetjening.oppslag.dto.Sivilstand;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import java.util.List;
 import java.util.Optional;
 
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
-
-import no.nav.foreldrepenger.common.domain.Fødselsnummer;
-import no.nav.foreldrepenger.common.domain.felles.AnnenPart;
-import no.nav.foreldrepenger.selvbetjening.oppslag.domain.AnnenForelderFrontend;
-import no.nav.foreldrepenger.selvbetjening.oppslag.domain.Bankkonto;
-import no.nav.foreldrepenger.selvbetjening.oppslag.domain.BarnFrontend;
-import no.nav.foreldrepenger.selvbetjening.oppslag.domain.PersonFrontend;
-import no.nav.foreldrepenger.selvbetjening.oppslag.domain.Sivilstand;
+import static java.util.Comparator.comparing;
+import static no.nav.foreldrepenger.common.util.StreamUtil.safeStream;
 
 public final class PersonMapper {
 
@@ -24,6 +23,7 @@ public final class PersonMapper {
     private PersonMapper() {
     }
 
+    // TODO: Fjern unødvendig mapper og DTO-er... må skrives litt om i frontend
     public static PersonFrontend tilPersonFrontend(no.nav.foreldrepenger.common.domain.felles.Person dto) {
         return new PersonFrontend(
             dto.fnr(),

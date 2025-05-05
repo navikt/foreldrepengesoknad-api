@@ -25,8 +25,6 @@ no.nav:
             token-exchange:
               audience: prod-gcp:teamforeldrepenger:fpoversikt
 oppslag:
-  uri: https://fpsoknad-mottak.prod-fss-pub.nais.io/api/
-oppslag2:
   uri: http://fpoversikt
 mottak:
   uri: https://fpsoknad-mottak.prod-fss-pub.nais.io/api/

@@ -1,14 +1,13 @@
-package no.nav.foreldrepenger.selvbetjening.oppslag.domain;
+package no.nav.foreldrepenger.selvbetjening.oppslag.dto;
 
-import static com.fasterxml.jackson.annotation.JsonInclude.Include.NON_NULL;
-import static no.nav.foreldrepenger.common.util.StringUtil.mask;
+import com.fasterxml.jackson.annotation.JsonInclude;
+import jakarta.validation.constraints.NotNull;
+import no.nav.foreldrepenger.common.domain.felles.Kjønn;
 
 import java.time.LocalDate;
 
-import com.fasterxml.jackson.annotation.JsonInclude;
-
-import jakarta.validation.constraints.NotNull;
-import no.nav.foreldrepenger.common.domain.felles.Kjønn;
+import static com.fasterxml.jackson.annotation.JsonInclude.Include.NON_NULL;
+import static no.nav.foreldrepenger.common.util.StringUtil.mask;
 
 @JsonInclude(NON_NULL)
 public record BarnFrontend(@NotNull String fnr,
