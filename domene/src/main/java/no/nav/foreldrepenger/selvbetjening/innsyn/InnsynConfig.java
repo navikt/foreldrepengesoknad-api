@@ -1,6 +1,8 @@
 package no.nav.foreldrepenger.selvbetjening.innsyn;
 
 import no.nav.foreldrepenger.common.domain.Saksnummer;
+import no.nav.foreldrepenger.selvbetjening.innsyn.dokument.DokumentInfoId;
+import no.nav.foreldrepenger.selvbetjening.innsyn.dokument.JournalpostId;
 import no.nav.foreldrepenger.selvbetjening.util.URIUtil;
 import org.springframework.boot.context.properties.ConfigurationProperties;
 
@@ -21,8 +23,12 @@ public class InnsynConfig {
     private static final String ARBEID = CONTEXT_PATH + "/arbeid";
     private static final String MOR_DOKUMENTASJON_ARBEID_PATH = ARBEID + "/morDokumentasjon";
     private static final String TIDSLINJE = CONTEXT_PATH + "/tidslinje";
+    private static final String DOKUMENT = CONTEXT_PATH + "/dokument";
+    private static final String ALLE_DOKUMENTER = DOKUMENT + "/alle";
 
-    private static final String SAKSNUMMER = "saksnummer";
+    private static final String QUERY_SAKSNUMMER = "saksnummer";
+    private static final String QUERY_JOURNALPOSTID = "journalpostId";
+    private static final String QUERY_DOKUMENTID = "dokumentId";
 
     private final URI baseUri;
 
@@ -35,7 +41,7 @@ public class InnsynConfig {
     }
 
     URI manglendeOppgaver(Saksnummer saksnummer) {
-        return uri(getBaseUri(), MANGLENDE_VEDLEGG, URIUtil.queryParam(SAKSNUMMER, saksnummer.value()));
+        return uri(getBaseUri(), MANGLENDE_VEDLEGG, URIUtil.queryParam(QUERY_SAKSNUMMER, saksnummer.value()));
     }
 
     URI uttalelseOmTilbakekrevinger() {
@@ -55,14 +61,26 @@ public class InnsynConfig {
     }
 
     URI inntektsmelding(Saksnummer saksnummer) {
-        return uri(getBaseUri(), INNTEKTSMELDINGER, URIUtil.queryParam(SAKSNUMMER, saksnummer.value()));
+        return uri(getBaseUri(), INNTEKTSMELDINGER, URIUtil.queryParam(QUERY_SAKSNUMMER, saksnummer.value()));
     }
 
     URI tidlinje(Saksnummer saksnummer) {
-        return uri(getBaseUri(), TIDSLINJE, URIUtil.queryParam(SAKSNUMMER, saksnummer.value()));
+        return uri(getBaseUri(), TIDSLINJE, URIUtil.queryParam(QUERY_SAKSNUMMER, saksnummer.value()));
+    }
+
+    URI hentDokument(JournalpostId journalpostId, DokumentInfoId dokumentId) {
+        return uri(getBaseUri(), DOKUMENT, URIUtil.queryParams(
+                QUERY_JOURNALPOSTID, journalpostId.value(),
+                QUERY_DOKUMENTID, dokumentId.value())
+        );
+    }
+
+    URI dokumenter(Saksnummer saksnummer) {
+        return uri(getBaseUri(), ALLE_DOKUMENTER, URIUtil.queryParam(QUERY_SAKSNUMMER, saksnummer.value()));
     }
 
     private URI getBaseUri() {
         return baseUri;
     }
+
 }
