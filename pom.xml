@@ -55,7 +55,6 @@
 		<pdfbox.version>3.0.4</pdfbox.version>
 		<jacoco.version>0.8.13</jacoco.version>
 		<gcp.version>0.240.0</gcp.version>
-        <graphql-java-codegen.version>5.10.0</graphql-java-codegen.version>
 	</properties>
 
     <dependencyManagement>
