@@ -1,4 +1,4 @@
-package no.nav.foreldrepenger.selvbetjening.oppslag.domain;
+package no.nav.foreldrepenger.selvbetjening.oppslag.dto;
 
 public record Bankkonto(String kontonummer, String banknavn) {
 

@@ -21,8 +21,8 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 
 import no.nav.foreldrepenger.common.domain.felles.Kjønn;
 import no.nav.foreldrepenger.selvbetjening.config.JacksonConfiguration;
-import no.nav.foreldrepenger.selvbetjening.oppslag.domain.Arbeidsforhold;
-import no.nav.foreldrepenger.selvbetjening.oppslag.domain.Søkerinfo;
+import no.nav.foreldrepenger.selvbetjening.oppslag.dto.Arbeidsforhold;
+import no.nav.foreldrepenger.selvbetjening.oppslag.dto.Søkerinfo;
 
 
 @ExtendWith(SpringExtension.class)

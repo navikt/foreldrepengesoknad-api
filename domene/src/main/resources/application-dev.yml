@@ -38,8 +38,6 @@ no.nav:
               audience: dev-gcp:teamforeldrepenger:fpoversikt
 
 oppslag:
-  uri: https://fpsoknad-mottak.dev-fss-pub.nais.io/api/
-oppslag2:
   uri: http://fpoversikt
 mottak:
   uri: https://fpsoknad-mottak.dev-fss-pub.nais.io/api/

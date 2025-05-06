@@ -1,7 +1,7 @@
 package no.nav.foreldrepenger.selvbetjening.oppslag;
 
 import no.nav.foreldrepenger.common.domain.felles.Person;
-import no.nav.foreldrepenger.selvbetjening.oppslag.domain.Arbeidsforhold;
+import no.nav.foreldrepenger.selvbetjening.oppslag.dto.Arbeidsforhold;
 
 import java.util.Collections;
 import java.util.List;

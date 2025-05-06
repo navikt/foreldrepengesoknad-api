@@ -10,7 +10,7 @@ import java.util.stream.Stream;
 import org.springframework.stereotype.Component;
 
 import no.nav.foreldrepenger.selvbetjening.oppslag.OppslagTjeneste;
-import no.nav.foreldrepenger.selvbetjening.oppslag.domain.PersonFrontend;
+import no.nav.foreldrepenger.selvbetjening.oppslag.dto.PersonFrontend;
 
 @Component
 public class PdfGeneratorTjeneste implements PdfGenerator {

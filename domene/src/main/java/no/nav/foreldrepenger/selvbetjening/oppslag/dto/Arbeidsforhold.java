@@ -1,4 +1,4 @@
-package no.nav.foreldrepenger.selvbetjening.oppslag.domain;
+package no.nav.foreldrepenger.selvbetjening.oppslag.dto;
 
 import com.fasterxml.jackson.annotation.JsonAlias;
 import jakarta.validation.constraints.NotNull;

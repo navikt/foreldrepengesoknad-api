@@ -1,4 +1,4 @@
-package no.nav.foreldrepenger.selvbetjening.oppslag.domain;
+package no.nav.foreldrepenger.selvbetjening.oppslag.dto;
 
 import static com.fasterxml.jackson.annotation.JsonInclude.Include.NON_NULL;
 import static no.nav.foreldrepenger.common.util.StringUtil.mask;
