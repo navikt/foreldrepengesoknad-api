@@ -39,25 +39,21 @@ import no.nav.foreldrepenger.common.domain.foreldrepenger.fordeling.UtsettelsesP
 import no.nav.foreldrepenger.common.domain.foreldrepenger.fordeling.UtsettelsesÅrsak;
 import no.nav.foreldrepenger.common.domain.foreldrepenger.fordeling.UttaksPeriode;
 import no.nav.foreldrepenger.selvbetjening.kontrakt.innsending.dto.SøkerDto;
-import no.nav.foreldrepenger.selvbetjening.kontrakt.innsending.v2.dto.VedleggDto;
 import no.nav.foreldrepenger.selvbetjening.kontrakt.innsending.dto.foreldrepenger.AnnenforelderDto;
 import no.nav.foreldrepenger.selvbetjening.kontrakt.innsending.dto.foreldrepenger.ForeldrepengesøknadDto;
 import no.nav.foreldrepenger.selvbetjening.kontrakt.innsending.dto.foreldrepenger.UttaksplanPeriodeDto;
+import no.nav.foreldrepenger.selvbetjening.kontrakt.innsending.v2.dto.VedleggDto;
 
 final class ForeldrepengerMapper {
 
     private ForeldrepengerMapper() {
     }
 
-    static Søknad tilForeldrepengesøknadVedleggUtenInnhold(ForeldrepengesøknadDto foreldrepengesøknad, LocalDate mottattDato) {
-        var vedlegg = foreldrepengesøknad.vedlegg();
-        return new Søknad(
-            mottattDato,
-            tilSøker(foreldrepengesøknad.søker()),
-            tilYtelse(foreldrepengesøknad, vedlegg),
-            foreldrepengesøknad.tilleggsopplysninger(),
-            tilVedlegg(vedlegg)
-        );
+    static Søknad tilForeldrepengesøknadVedleggUtenInnhold(ForeldrepengesøknadDto foreldrepengesøknad,
+                                                           List<VedleggDto> påkrevdeVedlegg,
+                                                           LocalDate mottattDato) {
+        return new Søknad(mottattDato, tilSøker(foreldrepengesøknad.søker()), tilYtelse(foreldrepengesøknad, påkrevdeVedlegg),
+            foreldrepengesøknad.tilleggsopplysninger(), tilVedlegg(påkrevdeVedlegg));
     }
 
     static Søker tilSøker(SøkerDto søker) {
@@ -65,39 +61,24 @@ final class ForeldrepengerMapper {
     }
 
     private static Foreldrepenger tilYtelse(ForeldrepengesøknadDto f, List<VedleggDto> vedlegg) {
-        return new Foreldrepenger(
-            tilAnnenForelder(f.annenForelder()),
-            tilRelasjonTilBarn(f.barn(), f.situasjon(), vedlegg),
-            tilRettigheter(f.søker(), f.annenForelder()),
-            Dekningsgrad.fraKode(f.dekningsgrad().verdi()),
-            tilOpptjening(f.søker(), vedlegg),
-            tilFordeling(f, vedlegg),
-            tilOppholdIUtlandet(f)
-        );
+        return new Foreldrepenger(tilAnnenForelder(f.annenForelder()), tilRelasjonTilBarn(f.barn(), f.situasjon(), vedlegg),
+            tilRettigheter(f.søker(), f.annenForelder()), Dekningsgrad.fraKode(f.dekningsgrad().verdi()), tilOpptjening(f.søker(), vedlegg),
+            tilFordeling(f, vedlegg), tilOppholdIUtlandet(f));
     }
 
     static Rettigheter tilRettigheter(SøkerDto søker, AnnenforelderDto annenforelder) {
-        return new Rettigheter(
-            annenforelder.harRettPåForeldrepenger(),
-            søker.erAleneOmOmsorg(),
-            annenforelder.harMorUføretrygd(),
-            annenforelder.harAnnenForelderOppholdtSegIEØS(),
-            annenforelder.harAnnenForelderTilsvarendeRettEØS());
+        return new Rettigheter(annenforelder.harRettPåForeldrepenger(), søker.erAleneOmOmsorg(), annenforelder.harMorUføretrygd(),
+            annenforelder.harAnnenForelderOppholdtSegIEØS(), annenforelder.harAnnenForelderTilsvarendeRettEØS());
     }
 
 
     private static Fordeling tilFordeling(ForeldrepengesøknadDto f, List<VedleggDto> vedlegg) {
-        return new Fordeling(
-            f.annenForelder().erInformertOmSøknaden(),
-            tilLukketPeriodeMedVedlegg(f.uttaksplan(), vedlegg),
-            f.ønskerJustertUttakVedFødsel()
-        );
+        return new Fordeling(f.annenForelder().erInformertOmSøknaden(), tilLukketPeriodeMedVedlegg(f.uttaksplan(), vedlegg),
+            f.ønskerJustertUttakVedFødsel());
     }
 
     static List<LukketPeriodeMedVedlegg> tilLukketPeriodeMedVedlegg(List<UttaksplanPeriodeDto> uttaksplan, List<VedleggDto> vedlegg) {
-        return uttaksplan.stream()
-            .map(u -> tilLukketPeriodeMedVedlegg(u, vedlegg))
-            .toList();
+        return uttaksplan.stream().map(u -> tilLukketPeriodeMedVedlegg(u, vedlegg)).toList();
     }
 
     private static LukketPeriodeMedVedlegg tilLukketPeriodeMedVedlegg(UttaksplanPeriodeDto u, List<VedleggDto> vedlegg) {
@@ -114,78 +95,44 @@ final class ForeldrepengerMapper {
     }
 
     private static OverføringsPeriode tilOverføringsPeriode(UttaksplanPeriodeDto u, List<VedleggDto> vedlegg) {
-        return new OverføringsPeriode(
-            u.tidsperiode().fom(),
-            u.tidsperiode().tom(),
-            u.årsak() != null ? Overføringsårsak.valueOf(u.årsak()) : null,
+        return new OverføringsPeriode(u.tidsperiode().fom(), u.tidsperiode().tom(), u.årsak() != null ? Overføringsårsak.valueOf(u.årsak()) : null,
             tilStønadskontoType(u.konto()),
-            tilVedleggsreferanse(DokumentasjonReferanseMapper.dokumentasjonSomDokumentererUttaksperiode(vedlegg, u.tidsperiode()))
-        );
+            tilVedleggsreferanse(DokumentasjonReferanseMapper.dokumentasjonSomDokumentererUttaksperiode(vedlegg, u.tidsperiode())));
     }
 
     private static FriUtsettelsesPeriode tilFriUtsettelsesPeriode(UttaksplanPeriodeDto u, List<VedleggDto> vedlegg) {
-        return new FriUtsettelsesPeriode(
-            u.tidsperiode().fom(),
-            u.tidsperiode().tom(),
-            u.erArbeidstaker(),
-            UtsettelsesÅrsak.valueOf(u.årsak()),
+        return new FriUtsettelsesPeriode(u.tidsperiode().fom(), u.tidsperiode().tom(), u.erArbeidstaker(), UtsettelsesÅrsak.valueOf(u.årsak()),
             u.morsAktivitetIPerioden() != null ? MorsAktivitet.valueOf(u.morsAktivitetIPerioden()) : null,
-            tilVedleggsreferanse(DokumentasjonReferanseMapper.dokumentasjonSomDokumentererUttaksperiode(vedlegg, u.tidsperiode()))
-        );
+            tilVedleggsreferanse(DokumentasjonReferanseMapper.dokumentasjonSomDokumentererUttaksperiode(vedlegg, u.tidsperiode())));
     }
 
     private static UtsettelsesPeriode tilUtsettelsesPeriode(UttaksplanPeriodeDto u, List<VedleggDto> vedlegg) {
-        return new UtsettelsesPeriode(
-            u.tidsperiode().fom(),
-            u.tidsperiode().tom(),
-            u.erArbeidstaker(),
-            UtsettelsesÅrsak.valueOf(u.årsak()),
+        return new UtsettelsesPeriode(u.tidsperiode().fom(), u.tidsperiode().tom(), u.erArbeidstaker(), UtsettelsesÅrsak.valueOf(u.årsak()),
             u.morsAktivitetIPerioden() != null ? MorsAktivitet.valueOf(u.morsAktivitetIPerioden()) : null,
-            tilVedleggsreferanse(DokumentasjonReferanseMapper.dokumentasjonSomDokumentererUttaksperiode(vedlegg, u.tidsperiode()))
-        );
+            tilVedleggsreferanse(DokumentasjonReferanseMapper.dokumentasjonSomDokumentererUttaksperiode(vedlegg, u.tidsperiode())));
     }
 
     private static OppholdsPeriode tilOppholdsPeriode(UttaksplanPeriodeDto u, List<VedleggDto> vedlegg) {
-        return new OppholdsPeriode(
-            u.tidsperiode().fom(),
-            u.tidsperiode().tom(),
-            u.årsak() != null ? Oppholdsårsak.valueOf(u.årsak()) : null,
-            tilVedleggsreferanse(DokumentasjonReferanseMapper.dokumentasjonSomDokumentererUttaksperiode(vedlegg, u.tidsperiode()))
-        );
+        return new OppholdsPeriode(u.tidsperiode().fom(), u.tidsperiode().tom(), u.årsak() != null ? Oppholdsårsak.valueOf(u.årsak()) : null,
+            tilVedleggsreferanse(DokumentasjonReferanseMapper.dokumentasjonSomDokumentererUttaksperiode(vedlegg, u.tidsperiode())));
     }
 
     private static UttaksPeriode tilUttaksPeriode(UttaksplanPeriodeDto u, List<VedleggDto> vedlegg) {
-        return new UttaksPeriode(
-            u.tidsperiode().fom(),
-            u.tidsperiode().tom(),
+        return new UttaksPeriode(u.tidsperiode().fom(), u.tidsperiode().tom(),
             tilVedleggsreferanse(DokumentasjonReferanseMapper.dokumentasjonSomDokumentererUttaksperiode(vedlegg, u.tidsperiode())),
-            tilStønadskontoType(u.konto()),
-            u.ønskerSamtidigUttak(),
-            u.morsAktivitetIPerioden() != null ? MorsAktivitet.valueOf(u.morsAktivitetIPerioden()) : null,
-            u.ønskerFlerbarnsdager(),
-            u.samtidigUttakProsent() != null ? ProsentAndel.valueOf(u.samtidigUttakProsent()) : null,
-            u.justeresVedFødsel()
-        );
+            tilStønadskontoType(u.konto()), u.ønskerSamtidigUttak(),
+            u.morsAktivitetIPerioden() != null ? MorsAktivitet.valueOf(u.morsAktivitetIPerioden()) : null, u.ønskerFlerbarnsdager(),
+            u.samtidigUttakProsent() != null ? ProsentAndel.valueOf(u.samtidigUttakProsent()) : null, u.justeresVedFødsel());
     }
 
     private static GradertUttaksPeriode tilGradertUttaksperiode(UttaksplanPeriodeDto u, List<VedleggDto> vedlegg) {
-        return new GradertUttaksPeriode(
-            u.tidsperiode().fom(),
-            u.tidsperiode().tom(),
+        return new GradertUttaksPeriode(u.tidsperiode().fom(), u.tidsperiode().tom(),
             tilVedleggsreferanse(DokumentasjonReferanseMapper.dokumentasjonSomDokumentererUttaksperiode(vedlegg, u.tidsperiode())),
-            tilStønadskontoType(u.konto()),
-            u.ønskerSamtidigUttak(),
-            u.morsAktivitetIPerioden() != null ? MorsAktivitet.valueOf(u.morsAktivitetIPerioden()) : null,
-            u.ønskerFlerbarnsdager(),
+            tilStønadskontoType(u.konto()), u.ønskerSamtidigUttak(),
+            u.morsAktivitetIPerioden() != null ? MorsAktivitet.valueOf(u.morsAktivitetIPerioden()) : null, u.ønskerFlerbarnsdager(),
             u.samtidigUttakProsent() != null ? ProsentAndel.valueOf(u.samtidigUttakProsent()) : null,
-            u.stillingsprosent() != null ? ProsentAndel.valueOf(u.stillingsprosent()) : null,
-            u.erArbeidstaker(),
-            u.orgnumre(),
-            true,
-            u.erFrilanser(),
-            u.erSelvstendig(),
-            u.justeresVedFødsel()
-        );
+            u.stillingsprosent() != null ? ProsentAndel.valueOf(u.stillingsprosent()) : null, u.erArbeidstaker(), u.orgnumre(), true, u.erFrilanser(),
+            u.erSelvstendig(), u.justeresVedFødsel());
     }
 
     public static StønadskontoType tilStønadskontoType(UttaksplanPeriodeDto.KontoType konto) {
@@ -214,17 +161,11 @@ final class ForeldrepengerMapper {
     }
 
     private static UtenlandskForelder tilUtenlandskForelder(AnnenforelderDto annenForelder) {
-        return new UtenlandskForelder(
-            annenForelder.fnr(),
-            CommonMapper.land(annenForelder.bostedsland()),
-            navn(annenForelder)
-        );
+        return new UtenlandskForelder(annenForelder.fnr(), CommonMapper.land(annenForelder.bostedsland()), navn(annenForelder));
     }
 
     private static NorskForelder tilNorskForelder(AnnenforelderDto annenForelder) {
-        return new NorskForelder(
-            new Fødselsnummer(annenForelder.fnr()),
-            navn(annenForelder));
+        return new NorskForelder(new Fødselsnummer(annenForelder.fnr()), navn(annenForelder));
     }
 
     private static String navn(AnnenforelderDto annenForelder) {

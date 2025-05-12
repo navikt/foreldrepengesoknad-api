@@ -1,6 +1,7 @@
 package no.nav.foreldrepenger.selvbetjening.innsending;
 
-import static no.nav.foreldrepenger.common.domain.felles.InnsendingsType.LASTET_OPP;
+import static no.nav.foreldrepenger.selvbetjening.kontrakt.innsending.v2.dto.VedleggInnsendingType.AUTOMATISK;
+import static no.nav.foreldrepenger.selvbetjening.kontrakt.innsending.v2.dto.VedleggInnsendingType.LASTET_OPP;
 import static no.nav.foreldrepenger.selvbetjening.vedlegg.VedleggUtil.mediaType;
 import static org.slf4j.LoggerFactory.getLogger;
 import static org.springframework.http.MediaType.APPLICATION_PDF;
@@ -21,12 +22,12 @@ import no.nav.foreldrepenger.common.domain.Kvittering;
 import no.nav.foreldrepenger.selvbetjening.http.RetryAware;
 import no.nav.foreldrepenger.selvbetjening.innsending.pdf.PdfGenerator;
 import no.nav.foreldrepenger.selvbetjening.kontrakt.innsending.dto.Innsending;
-import no.nav.foreldrepenger.selvbetjening.kontrakt.innsending.v2.dto.VedleggDto;
-import no.nav.foreldrepenger.selvbetjening.kontrakt.innsending.v2.dto.VedleggReferanse;
 import no.nav.foreldrepenger.selvbetjening.kontrakt.innsending.dto.endringssøknad.EndringssøknadForeldrepengerDto;
 import no.nav.foreldrepenger.selvbetjening.kontrakt.innsending.dto.ettersendelse.EttersendelseDto;
 import no.nav.foreldrepenger.selvbetjening.kontrakt.innsending.dto.ettersendelse.TilbakebetalingUttalelseDto;
 import no.nav.foreldrepenger.selvbetjening.kontrakt.innsending.dto.foreldrepenger.ForeldrepengesøknadDto;
+import no.nav.foreldrepenger.selvbetjening.kontrakt.innsending.v2.dto.VedleggDto;
+import no.nav.foreldrepenger.selvbetjening.kontrakt.innsending.v2.dto.VedleggReferanse;
 import no.nav.foreldrepenger.selvbetjening.kontrakt.innsending.v2.dto.engangsstønad.EngangsstønadDto;
 import no.nav.foreldrepenger.selvbetjening.kontrakt.innsending.v2.dto.svangerskapspenger.SvangerskapspengesøknadDto;
 import no.nav.foreldrepenger.selvbetjening.mellomlagring.KryptertMellomlagring;
@@ -42,9 +43,7 @@ public class InnsendingTjeneste implements RetryAware {
     private final PdfGenerator pdfGenerator;
     private final ObjectMapper mapper;
 
-    public InnsendingTjeneste(InnsendingConnection connection,
-                              KryptertMellomlagring mellomlagring,
-                              PdfGenerator pdfGenerator, ObjectMapper mapper) {
+    public InnsendingTjeneste(InnsendingConnection connection, KryptertMellomlagring mellomlagring, PdfGenerator pdfGenerator, ObjectMapper mapper) {
         this.connection = connection;
         this.mellomlagring = mellomlagring;
         this.pdfGenerator = pdfGenerator;
@@ -56,6 +55,7 @@ public class InnsendingTjeneste implements RetryAware {
         SECURE_LOGGER.info("Mottatt {} fra frontend med følende innhold: {}", innsending.navn(), tilJson(innsending));
         var start = Instant.now();
         var vedleggsinnhold = hentMellomlagredeVedlegg(innsending);
+        validerVedlegg(innsending);
         var kvittering = connection.sendInn(innsending, vedleggsinnhold);
         var finish = Instant.now();
         var ms = Duration.between(start, finish).toMillis();
@@ -77,7 +77,8 @@ public class InnsendingTjeneste implements RetryAware {
         return kvittering;
     }
 
-    private void genererPDFForUttalelseOmTilbakekrevingOgLeggTilIVedlegg(EttersendelseDto ettersendelse, Map<VedleggReferanse, byte[]> vedleggsinnhold) {
+    private void genererPDFForUttalelseOmTilbakekrevingOgLeggTilIVedlegg(EttersendelseDto ettersendelse,
+                                                                         Map<VedleggReferanse, byte[]> vedleggsinnhold) {
         LOG.info("Konverterer tekst til vedleggs-pdf {}", ettersendelse.brukerTekst().dokumentType());
         var uttalelse = uttalelseFra(ettersendelse);
         var uttalelseVedlegg = vedleggFra(uttalelse);
@@ -86,15 +87,21 @@ public class InnsendingTjeneste implements RetryAware {
     }
 
     private static VedleggDto vedleggFra(TilbakebetalingUttalelseDto u) {
-        return new VedleggDto(null, u.brukerTekst().dokumentType(), LASTET_OPP,"Tekst fra bruker", null);
+        return new VedleggDto(null, u.brukerTekst().dokumentType(), LASTET_OPP, "Tekst fra bruker", null);
     }
 
     private static TilbakebetalingUttalelseDto uttalelseFra(EttersendelseDto e) {
-        return new TilbakebetalingUttalelseDto(
-            e.type(),
-            e.saksnummer(),
-            e.dialogId(),
-            e.brukerTekst());
+        return new TilbakebetalingUttalelseDto(e.type(), e.saksnummer(), e.dialogId(), e.brukerTekst());
+    }
+
+    private void validerVedlegg(Innsending innsending) {
+        var antallAutomatiskeVedlegg = innsending.vedlegg().stream().filter(v -> AUTOMATISK.equals(v.innsendingsType())).count();
+        if (antallAutomatiskeVedlegg > 0) {
+            LOG.info("Innsending {} har {} automatiske vedlegg", innsending.navn(), antallAutomatiskeVedlegg);
+            if (!Ytelse.FORELDREPENGER.equals(tilYtelse(innsending))) {
+                throw new IllegalStateException("Utviklerfeil: Innsending av type " + innsending.navn() + " har automatiske vedlegg");
+            }
+        }
     }
 
     private Map<VedleggReferanse, byte[]> hentMellomlagredeVedlegg(Innsending innsending) {
@@ -103,14 +110,11 @@ public class InnsendingTjeneste implements RetryAware {
 
         LOG.info("Henter mellomlagrede vedlegg for {} ", innsending.navn());
         var start = Instant.now();
-        innsending.vedlegg().stream()
-            .filter(v -> v.uuid() != null) // ID som brukes mot GCP mellomlagring
-            .filter(v -> v.innsendingsType() == null || LASTET_OPP.equals(v.innsendingsType()))
-            .forEach(v -> {
-                var innhold = vedleggFraMellomlagring(v.uuid(), ytelse);
-                guardIkkePDF(innhold);
-                vedleggsinnhold.put(v.referanse(), innhold);
-            });
+        innsending.vedlegg().stream().filter(VedleggDto::erOpplastetVedlegg).forEach(v -> {
+            var innhold = vedleggFraMellomlagring(v.uuid(), ytelse);
+            guardIkkePDF(innhold);
+            vedleggsinnhold.put(v.referanse(), innhold);
+        });
         var finish = Instant.now();
         var ms = Duration.between(start, finish).toMillis();
         LOG.info("Hentet mellomlagring OK for {} vedlegg ({}ms)", vedleggsinnhold.size(), ms);
@@ -130,16 +134,18 @@ public class InnsendingTjeneste implements RetryAware {
     }
 
     private Ytelse tilYtelse(Innsending innsending) {
-        if (innsending instanceof ForeldrepengesøknadDto || innsending instanceof no.nav.foreldrepenger.selvbetjening.kontrakt.innsending.v2.dto.foreldrepenger.ForeldrepengesøknadDto) {
+        if (innsending instanceof ForeldrepengesøknadDto
+            || innsending instanceof no.nav.foreldrepenger.selvbetjening.kontrakt.innsending.v2.dto.foreldrepenger.ForeldrepengesøknadDto) {
             return Ytelse.FORELDREPENGER;
         }
         if (innsending instanceof EngangsstønadDto) {
             return Ytelse.ENGANGSSTONAD;
         }
-        if ( innsending instanceof SvangerskapspengesøknadDto) {
+        if (innsending instanceof SvangerskapspengesøknadDto) {
             return Ytelse.SVANGERSKAPSPENGER;
         }
-        if (innsending instanceof EndringssøknadForeldrepengerDto || innsending instanceof no.nav.foreldrepenger.selvbetjening.kontrakt.innsending.v2.dto.endringssøknad.EndringssøknadForeldrepengerDto) {
+        if (innsending instanceof EndringssøknadForeldrepengerDto
+            || innsending instanceof no.nav.foreldrepenger.selvbetjening.kontrakt.innsending.v2.dto.endringssøknad.EndringssøknadForeldrepengerDto) {
             return Ytelse.FORELDREPENGER;
         }
         if (innsending instanceof EttersendelseDto ettersendelse) {

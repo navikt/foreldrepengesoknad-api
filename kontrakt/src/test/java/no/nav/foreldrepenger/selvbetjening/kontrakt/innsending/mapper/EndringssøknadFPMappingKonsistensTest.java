@@ -36,14 +36,9 @@ class EndringssøknadFPMappingKonsistensTest {
 
     @Test
     void endringssøknadHappyCaseMappingKonsistesTest() {
-        var uttak = List.of(
-            uttak(FELLESPERIODE, NOW.minusWeeks(8), NOW.plusWeeks(5)).build()
-        );
-        var søknadDto = new EndringssøknadBuilder(new Saksnummer("1"))
-            .medFordeling(uttak)
-            .medSøker(new SøkerBuilder(BrukerRolle.MOR)
-                .medErAleneOmOmsorg(true)
-                .build())
+        var uttak = List.of(uttak(FELLESPERIODE, NOW.minusWeeks(8), NOW.plusWeeks(5)).build());
+        var søknadDto = new EndringssøknadBuilder(new Saksnummer("1")).medFordeling(uttak)
+            .medSøker(new SøkerBuilder(BrukerRolle.MOR).medErAleneOmOmsorg(true).build())
             .medAnnenForelder(AnnenforelderBuilder.annenpartIkkeRettOgMorHarUføretrygd(DUMMY_FNR).build())
             .medBarn(BarnBuilder.omsorgsovertakelse(LocalDate.now().minusWeeks(2)).build())
             .build();
@@ -71,40 +66,28 @@ class EndringssøknadFPMappingKonsistensTest {
         assertThat(rettigheter.harAnnenForelderRett()).isEqualTo(foreldrepengerDto.annenForelder().harRettPåForeldrepenger());
         assertThat(rettigheter.harMorUføretrygd()).isEqualTo(foreldrepengerDto.annenForelder().harMorUføretrygd());
         assertThat(rettigheter.harAnnenForelderOppholdtSegIEØS()).isEqualTo(foreldrepengerDto.annenForelder().harAnnenForelderOppholdtSegIEØS());
-        assertThat(rettigheter.harAnnenForelderTilsvarendeRettEØS()).isEqualTo(foreldrepengerDto.annenForelder().harAnnenForelderTilsvarendeRettEØS());
+        assertThat(rettigheter.harAnnenForelderTilsvarendeRettEØS()).isEqualTo(
+            foreldrepengerDto.annenForelder().harAnnenForelderTilsvarendeRettEØS());
 
         // Fordeling
         assertThat(foreldrepenger.fordeling().ønskerJustertUttakVedFødsel()).isEqualTo(foreldrepengerDto.ønskerJustertUttakVedFødsel());
-        assertThat(foreldrepenger.fordeling().perioder())
-            .hasSameSizeAs(foreldrepengerDto.uttaksplan())
-            .hasExactlyElementsOfTypes(
-                UttaksPeriode.class
-            )
+        assertThat(foreldrepenger.fordeling().perioder()).hasSameSizeAs(foreldrepengerDto.uttaksplan())
+            .hasExactlyElementsOfTypes(UttaksPeriode.class)
             .extracting(LukketPeriodeMedVedlegg::getFom)
-            .containsExactly(
-                uttak.get(0).tidsperiode().fom()
-            );
-        assertThat(foreldrepenger.fordeling().perioder())
-            .extracting(LukketPeriodeMedVedlegg::getTom)
-            .containsExactly(
-                uttak.get(0).tidsperiode().tom()
-            );
+            .containsExactly(uttak.get(0).tidsperiode().fom());
+        assertThat(foreldrepenger.fordeling().perioder()).extracting(LukketPeriodeMedVedlegg::getTom)
+            .containsExactly(uttak.get(0).tidsperiode().tom());
     }
 
     @Test
     void endringssøknadMedVedleggUttakOgBarnKorrektMapping() {
-        var uttak = List.of(
-            uttak(FORELDREPENGER_FØR_FØDSEL, NOW.minusWeeks(3), NOW.minusDays(1)).build(),
-            utsettelse(UtsettelsesÅrsak.SYKDOM, NOW, NOW.plusWeeks(6)).build()
-        );
+        var uttak = List.of(uttak(FORELDREPENGER_FØR_FØDSEL, NOW.minusWeeks(3), NOW.minusDays(1)).build(),
+            utsettelse(UtsettelsesÅrsak.SYKDOM, NOW, NOW.plusWeeks(6)).build());
         var vedlegg1 = vedlegg(DokumentasjonUtil.barn());
         var vedlegg2 = vedlegg(DokumentType.I000063, DokumentasjonUtil.barn());
         var vedlegg3 = vedlegg(DokumentasjonUtil.uttaksperiode(uttak.getLast().tidsperiode().fom(), uttak.getLast().tidsperiode().tom()));
-        var søknadDto = new EndringssøknadBuilder(new Saksnummer("1"))
-            .medFordeling(uttak)
-            .medSøker(new SøkerBuilder(BrukerRolle.MOR)
-                .medErAleneOmOmsorg(true)
-                .build())
+        var søknadDto = new EndringssøknadBuilder(new Saksnummer("1")).medFordeling(uttak)
+            .medSøker(new SøkerBuilder(BrukerRolle.MOR).medErAleneOmOmsorg(true).build())
             .medAnnenForelder(AnnenforelderBuilder.annenpartIkkeRettOgMorHarUføretrygd(DUMMY_FNR).build())
             .medBarn(BarnBuilder.omsorgsovertakelse(LocalDate.now().minusWeeks(2)).build())
             .medVedlegg(List.of(vedlegg1, vedlegg2, vedlegg3))
