@@ -1,6 +1,5 @@
 package no.nav.foreldrepenger.selvbetjening.kontrakt.innsending.dto.validering;
 
-import static no.nav.foreldrepenger.common.domain.felles.InnsendingsType.SEND_SENERE;
 import static org.assertj.core.api.Assertions.assertThat;
 
 import java.util.ArrayList;
@@ -11,6 +10,7 @@ import org.junit.jupiter.api.Test;
 
 import no.nav.foreldrepenger.common.domain.felles.DokumentType;
 import no.nav.foreldrepenger.selvbetjening.kontrakt.innsending.v2.dto.VedleggDto;
+import no.nav.foreldrepenger.selvbetjening.kontrakt.innsending.v2.dto.VedleggInnsendingType;
 
 class VedlegglistestørrelseValidatorTest {
 
@@ -23,37 +23,36 @@ class VedlegglistestørrelseValidatorTest {
 
     @Test
     void valideringFeilerVedForMangeOpplastedeVedlegg() {
-        assertThat(vedlegglistestørrelseValidator.isValid(validVedleggsliste(0,  41), null)).isFalse();
+        assertThat(vedlegglistestørrelseValidator.isValid(validVedleggsliste(0, 41), null)).isFalse();
     }
 
     @Test
     void forMangeSenereVedleggOGforMangeOpplastedeTriggerFeiletValidering() {
-        assertThat(vedlegglistestørrelseValidator.isValid(validVedleggsliste(100,  100), null)).isFalse();
+        assertThat(vedlegglistestørrelseValidator.isValid(validVedleggsliste(100, 100), null)).isFalse();
     }
 
     @Test
     void mangeSenereVedleggOgOppplastedeMenFremdelesInnenforGrensenOKValidering() {
-        assertThat(vedlegglistestørrelseValidator.isValid(validVedleggsliste(50,  35), null)).isTrue();
+        assertThat(vedlegglistestørrelseValidator.isValid(validVedleggsliste(50, 35), null)).isTrue();
     }
 
     @Test
     void ingenVedleggSendVedSkalValidereOK() {
-        assertThat(vedlegglistestørrelseValidator.isValid(validVedleggsliste(0,  0), null)).isTrue();
+        assertThat(vedlegglistestørrelseValidator.isValid(validVedleggsliste(0, 0), null)).isTrue();
     }
-
 
 
     private List<VedleggDto> validVedleggsliste(int sendSenereVedlegg, int opplastetVedlegg) {
         List<VedleggDto> sendSenere = new ArrayList<>();
 
         while (sendSenere.size() < sendSenereVedlegg) {
-            var nyttVedlegg = new VedleggDto(UUID.randomUUID(), DokumentType.I000050, SEND_SENERE, "Beskrivelse", null);
+            var nyttVedlegg = new VedleggDto(UUID.randomUUID(), DokumentType.I000050, VedleggInnsendingType.SEND_SENERE, "Beskrivelse", null);
             sendSenere.add(nyttVedlegg);
         }
 
         List<VedleggDto> opplastet = new ArrayList<>();
         while (opplastet.size() < opplastetVedlegg) {
-            var nyttVedlegg = new VedleggDto(UUID.randomUUID(),  DokumentType.I000050, null, "Beskrivelse", null);
+            var nyttVedlegg = new VedleggDto(UUID.randomUUID(), DokumentType.I000050, null, "Beskrivelse", null);
             opplastet.add(nyttVedlegg);
         }
         sendSenere.addAll(opplastet);

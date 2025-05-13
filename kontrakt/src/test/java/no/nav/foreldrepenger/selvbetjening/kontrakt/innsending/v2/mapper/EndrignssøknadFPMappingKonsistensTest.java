@@ -37,11 +37,8 @@ class EndrignssøknadFPMappingKonsistensTest {
 
     @Test
     void endringssøknadHappyCaseMappingKonsistesTest() {
-        var uttak = List.of(
-            uttak(FELLESPERIODE, NOW.minusWeeks(8), NOW.plusWeeks(5)).build()
-        );
-        var søknadDto = new EndringssøknadBuilder(new Saksnummer("1"))
-            .medRolle(BrukerRolle.MOR)
+        var uttak = List.of(uttak(FELLESPERIODE, NOW.minusWeeks(8), NOW.plusWeeks(5)).build());
+        var søknadDto = new EndringssøknadBuilder(new Saksnummer("1")).medRolle(BrukerRolle.MOR)
             .medUttaksplan(uttak)
             .medAnnenForelder(AnnenforelderBuilder.aleneomsorgAnnenpartIkkeRettOgMorHarUføretrygd(DUMMY_FNR).build())
             .medBarn(BarnBuilder.omsorgsovertakelse(LocalDate.now().minusWeeks(2)).build())
@@ -75,33 +72,21 @@ class EndrignssøknadFPMappingKonsistensTest {
 
         // Fordeling
         assertThat(foreldrepenger.fordeling().ønskerJustertUttakVedFødsel()).isEqualTo(foreldrepengerDto.uttaksplan().ønskerJustertUttakVedFødsel());
-        assertThat(foreldrepenger.fordeling().perioder())
-            .hasSameSizeAs(foreldrepengerDto.uttaksplan().uttaksperioder())
-            .hasExactlyElementsOfTypes(
-                UttaksPeriode.class
-            )
+        assertThat(foreldrepenger.fordeling().perioder()).hasSameSizeAs(foreldrepengerDto.uttaksplan().uttaksperioder())
+            .hasExactlyElementsOfTypes(UttaksPeriode.class)
             .extracting(LukketPeriodeMedVedlegg::getFom)
-            .containsExactly(
-                uttak.get(0).fom()
-            );
-        assertThat(foreldrepenger.fordeling().perioder())
-            .extracting(LukketPeriodeMedVedlegg::getTom)
-            .containsExactly(
-                uttak.get(0).tom()
-            );
+            .containsExactly(uttak.get(0).fom());
+        assertThat(foreldrepenger.fordeling().perioder()).extracting(LukketPeriodeMedVedlegg::getTom).containsExactly(uttak.get(0).tom());
     }
 
     @Test
     void endringssøknadMedVedleggUttakOgBarnKorrektMapping() {
-        var uttak = List.of(
-            uttak(FORELDREPENGER_FØR_FØDSEL, NOW.minusWeeks(3), NOW.minusDays(1)).build(),
-            utsettelse(UtsettelsesÅrsak.SYKDOM, NOW, NOW.plusWeeks(6)).build()
-        );
+        var uttak = List.of(uttak(FORELDREPENGER_FØR_FØDSEL, NOW.minusWeeks(3), NOW.minusDays(1)).build(),
+            utsettelse(UtsettelsesÅrsak.SYKDOM, NOW, NOW.plusWeeks(6)).build());
         var vedlegg1 = vedlegg(DokumentasjonUtil.barn());
         var vedlegg2 = vedlegg(DokumentType.I000063, DokumentasjonUtil.barn());
         var vedlegg3 = vedlegg(DokumentasjonUtil.uttaksperiode(uttak.getLast().fom(), uttak.getLast().tom()));
-        var søknadDto = new EndringssøknadBuilder(new Saksnummer("1"))
-            .medRolle(BrukerRolle.MOR)
+        var søknadDto = new EndringssøknadBuilder(new Saksnummer("1")).medRolle(BrukerRolle.MOR)
             .medUttaksplan(uttak)
             .medAnnenForelder(AnnenforelderBuilder.aleneomsorgAnnenpartIkkeRettOgMorHarUføretrygd(DUMMY_FNR).build())
             .medBarn(BarnBuilder.omsorgsovertakelse(LocalDate.now().minusWeeks(2)).build())
