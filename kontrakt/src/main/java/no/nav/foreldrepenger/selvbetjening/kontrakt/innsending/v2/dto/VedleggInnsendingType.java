@@ -1,7 +1,9 @@
 package no.nav.foreldrepenger.selvbetjening.kontrakt.innsending.v2.dto;
 
+import com.fasterxml.jackson.annotation.JsonEnumDefaultValue;
+
 public enum VedleggInnsendingType {
-    LASTET_OPP,
+    @JsonEnumDefaultValue LASTET_OPP,
     SEND_SENERE,
     AUTOMATISK
 }

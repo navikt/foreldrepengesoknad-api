@@ -110,7 +110,7 @@ public class InnsendingTjeneste implements RetryAware {
 
         LOG.info("Henter mellomlagrede vedlegg for {} ", innsending.navn());
         var start = Instant.now();
-        innsending.vedlegg().stream().filter(VedleggDto::erOpplastetVedlegg).forEach(v -> {
+        innsending.påkrevdeVedlegg().stream().filter(VedleggDto::erOpplastetVedlegg).forEach(v -> {
             var innhold = vedleggFraMellomlagring(v.uuid(), ytelse);
             guardIkkePDF(innhold);
             vedleggsinnhold.put(v.referanse(), innhold);

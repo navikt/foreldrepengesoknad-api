@@ -64,6 +64,7 @@ public final class CommonMapper {
             case LASTET_OPP -> InnsendingsType.LASTET_OPP;
             case SEND_SENERE -> InnsendingsType.SEND_SENERE;
             case AUTOMATISK -> throw new IllegalStateException("Innsendingstype AUTOMATISK skal ikke sendes ned videre");
+            case null -> InnsendingsType.LASTET_OPP; // Frontend setter ikke denne ved opplasting
         };
     }
 
