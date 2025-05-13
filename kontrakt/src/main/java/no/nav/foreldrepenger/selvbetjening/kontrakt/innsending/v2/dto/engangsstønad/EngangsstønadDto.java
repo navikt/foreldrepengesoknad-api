@@ -22,9 +22,4 @@ public record EngangsstønadDto(LocalDate mottattdato, @NotNull Målform språkk
     public EngangsstønadDto {
         vedlegg = Optional.ofNullable(vedlegg).orElse(List.of());
     }
-
-    @Override
-    public BrukerRolle rolle() {
-        return BrukerRolle.MOR;
-    }
 }
