@@ -51,6 +51,10 @@ public class Satser {
             "grunnbeløp":
             [
                 {
+                    "fom": "01.05.2025",
+                    "verdi": 130160
+                },
+                {
                     "fom": "01.05.2024",
                     "verdi": 124028
                 },
