@@ -18,16 +18,16 @@ import no.nav.foreldrepenger.selvbetjening.kontrakt.innsending.v2.dto.Utenlandso
 import no.nav.foreldrepenger.selvbetjening.kontrakt.innsending.v2.dto.VedleggDto;
 
 public record SvangerskapspengesøknadDto(LocalDate mottattdato,
-                                         @Valid @NotNull BarnSvpDto barn,
+                                         @NotNull @Valid BarnSvpDto barn,
                                          @Valid BrukerRolle rolle,
-                                         @Valid Målform språkkode,
+                                         @NotNull @Valid Målform språkkode,
                                          @Valid FrilansDto frilans,
                                          @Valid NæringDto egenNæring,
                                          @Valid @Size(max = 20) List<AnnenInntektDto.@NotNull @Valid Utlandet> andreInntekterSiste10Mnd,
                                          @Valid @Size(max = 20) List<@Valid @NotNull UtenlandsoppholdsperiodeDto> utenlandsopphold,
-                                         @Valid @Size(min = 1, max = 20) List<@Valid @NotNull TilretteleggingbehovDto> tilretteleggingsbehov,
-                                         @Valid @Size(max = 20) List<@Valid @NotNull AvtaltFerieDto> avtaltFerie,
-                                         @Valid @VedlegglistestørrelseConstraint @Size(min = 1, max = 20) List<@Valid @NotNull VedleggDto> vedlegg) implements SøknadDto {
+                                         @NotNull @Valid @Size(min = 1, max = 20) List<@Valid @NotNull TilretteleggingbehovDto> tilretteleggingsbehov,
+                                         @NotNull @Valid @Size(max = 20) List<@Valid @NotNull AvtaltFerieDto> avtaltFerie,
+                                         @NotNull @Valid @VedlegglistestørrelseConstraint @Size(min = 1, max = 20) List<@Valid @NotNull VedleggDto> vedlegg) implements SøknadDto {
 
     public SvangerskapspengesøknadDto {
         utenlandsopphold = Optional.ofNullable(utenlandsopphold).orElse(List.of());
