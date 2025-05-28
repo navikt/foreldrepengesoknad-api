@@ -2,6 +2,8 @@ package no.nav.foreldrepenger.selvbetjening.innsyn.dokument;
 
 import java.util.List;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.MediaType;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -16,7 +18,7 @@ import no.nav.foreldrepenger.selvbetjening.innsyn.Innsyn;
 
 @ProtectedRestController("/rest/dokument")
 public class DokumentController {
-
+    private static final Logger LOG = LoggerFactory.getLogger(DokumentController.class);
     private final Innsyn innsyn;
 
     @Autowired

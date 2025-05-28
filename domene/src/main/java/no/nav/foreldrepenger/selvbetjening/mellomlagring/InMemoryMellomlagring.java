@@ -5,6 +5,8 @@ import java.util.Map;
 import java.util.Optional;
 import java.util.stream.Collectors;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnMissingBean;
 import org.springframework.stereotype.Service;
 
@@ -15,6 +17,7 @@ import no.nav.boot.conditionals.ConditionalOnLocalOrTest;
 @ConditionalOnMissingBean(GCPMellomlagring.class)
 public class InMemoryMellomlagring implements Mellomlagring {
 
+    private static final Logger LOG = LoggerFactory.getLogger(InMemoryMellomlagring.class);
     private final Map<String, Object> store;
 
 
@@ -29,6 +32,7 @@ public class InMemoryMellomlagring implements Mellomlagring {
 
     @Override
     public void lagreVedlegg(String katalog, String key, byte[] value) {
+        LOG.info("Mellomlagrer vedlegg med nøkkel {} og størresle {}...", key, value.length);
         store.put(key(katalog, key), value);
     }
 
@@ -49,14 +53,13 @@ public class InMemoryMellomlagring implements Mellomlagring {
 
     @Override
     public void slett(String katalog, String key) {
+        LOG.info("Sletter mellomlagring med nøkkel {}...", key);
         store.remove(key(katalog, key));
     }
 
     @Override
     public void slettAll(String katalog) {
-        var alleNøkkler = store.keySet().stream()
-            .filter(k -> k.startsWith(katalog))
-            .collect(Collectors.toSet());
+        var alleNøkkler = store.keySet().stream().filter(k -> k.startsWith(katalog)).collect(Collectors.toSet());
         for (var nøkkel : alleNøkkler) {
             store.remove(nøkkel);
         }
