@@ -1,8 +1,8 @@
 package no.nav.foreldrepenger.selvbetjening.mellomlagring;
 
-import java.util.HashMap;
 import java.util.Map;
 import java.util.Optional;
+import java.util.concurrent.ConcurrentHashMap;
 import java.util.stream.Collectors;
 
 import org.slf4j.Logger;
@@ -18,12 +18,7 @@ import no.nav.boot.conditionals.ConditionalOnLocalOrTest;
 public class InMemoryMellomlagring implements Mellomlagring {
 
     private static final Logger LOG = LoggerFactory.getLogger(InMemoryMellomlagring.class);
-    private final Map<String, Object> store;
-
-
-    public InMemoryMellomlagring() {
-        store = new HashMap<>();
-    }
+    private final Map<String, Object> store = new ConcurrentHashMap<>();
 
     @Override
     public void lagre(String katalog, String key, String value) {
