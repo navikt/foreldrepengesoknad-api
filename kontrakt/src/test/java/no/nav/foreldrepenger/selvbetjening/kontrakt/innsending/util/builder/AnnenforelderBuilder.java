@@ -3,7 +3,7 @@ package no.nav.foreldrepenger.selvbetjening.kontrakt.innsending.util.builder;
 import com.neovisionaries.i18n.CountryCode;
 
 import no.nav.foreldrepenger.common.domain.Fødselsnummer;
-import no.nav.foreldrepenger.selvbetjening.kontrakt.innsending.dto.foreldrepenger.AnnenforelderDto;
+import no.nav.foreldrepenger.selvbetjening.kontrakt.innsending.dto.foreldrepenger.AnnenforelderDtoOLD;
 
 public class AnnenforelderBuilder {
     private Boolean kanIkkeOppgis;
@@ -18,13 +18,12 @@ public class AnnenforelderBuilder {
     private Boolean harAnnenForelderOppholdtSegIEØS;
     private Boolean harAnnenForelderTilsvarendeRettEØS;
 
-    public static AnnenforelderDto ukjentForelder() {
+    public static AnnenforelderDtoOLD ukjentForelder() {
         return new AnnenforelderBuilder().medKanIkkeOppgis(true).build();
     }
 
     public static AnnenforelderBuilder norskMedRettighetNorge(Fødselsnummer fnr) {
-        return new AnnenforelderBuilder()
-            .medUtenlandskFnr(false)
+        return new AnnenforelderBuilder().medUtenlandskFnr(false)
             .medHarRettPåForeldrepenger(true)
             .medErInformertOmSøknaden(true)
             .medFnr(fnr.value())
@@ -32,8 +31,7 @@ public class AnnenforelderBuilder {
     }
 
     public static AnnenforelderBuilder norskIkkeRett(Fødselsnummer fnr) {
-        return new AnnenforelderBuilder()
-            .medUtenlandskFnr(false)
+        return new AnnenforelderBuilder().medUtenlandskFnr(false)
             .medHarRettPåForeldrepenger(false)
             .medErInformertOmSøknaden(false)
             .medHarMorUføretrygd(false)
@@ -43,8 +41,7 @@ public class AnnenforelderBuilder {
     }
 
     public static AnnenforelderBuilder annenpartIkkeRettOgMorHarUføretrygd(Fødselsnummer fnr) {
-        return new AnnenforelderBuilder()
-            .medHarRettPåForeldrepenger(false)
+        return new AnnenforelderBuilder().medHarRettPåForeldrepenger(false)
             .medErInformertOmSøknaden(true)
             .medHarMorUføretrygd(true)
             .medBostedsland(CountryCode.NO.getAlpha2())
@@ -109,19 +106,8 @@ public class AnnenforelderBuilder {
         return this;
     }
 
-    public AnnenforelderDto build() {
-        return new AnnenforelderDto(
-                kanIkkeOppgis,
-                fornavn,
-                etternavn,
-                fnr,
-                bostedsland,
-                utenlandskFnr,
-                harRettPåForeldrepenger,
-                erInformertOmSøknaden,
-                harMorUføretrygd,
-                harAnnenForelderOppholdtSegIEØS,
-                harAnnenForelderTilsvarendeRettEØS
-        );
+    public AnnenforelderDtoOLD build() {
+        return new AnnenforelderDtoOLD(kanIkkeOppgis, fornavn, etternavn, fnr, bostedsland, utenlandskFnr, harRettPåForeldrepenger,
+            erInformertOmSøknaden, harMorUføretrygd, harAnnenForelderOppholdtSegIEØS, harAnnenForelderTilsvarendeRettEØS);
     }
 }

@@ -41,10 +41,7 @@ import no.nav.foreldrepenger.selvbetjening.vedlegg.VedleggSjekker;
 @Import({MellomlagringController.class, ApiExceptionHandler.class})
 @WebMvcTest(controllers = MellomlagringController.class)
 @ContextConfiguration(classes = {
-    JacksonConfiguration.class,
-    Image2PDFConverter.class,
-    MessageSourceConfig.class
-})
+    JacksonConfiguration.class, Image2PDFConverter.class, MessageSourceConfig.class})
 class MellomlagringControllerTest {
 
     @Autowired
@@ -71,10 +68,8 @@ class MellomlagringControllerTest {
         when(converter.convert(any())).thenAnswer(i -> i.getArguments()[0]);
         var pdf = fraResource("pdf/jks.jpg");
         var vedlegg = new MockMultipartFile("vedlegg", pdf);
-        var result = mvc.perform(multipart(MellomlagringController.REST_STORAGE + "/" + Ytelse.FORELDREPENGER + "/vedlegg")
-                .file(vedlegg))
-            .andExpect(status().isCreated())
-            .andReturn();
+        var result = mvc.perform(multipart(MellomlagringController.REST_STORAGE + "/" + YtelseMellomlagringType.FORELDREPENGER + "/vedlegg").file(
+            vedlegg)).andExpect(status().isCreated()).andReturn();
         assertThat(result.getResolvedException()).isNull();
         assertThat(result.getResponse().getContentAsString()).isNotNull();
     }
@@ -82,20 +77,16 @@ class MellomlagringControllerTest {
     @Test
     void hentVedleggOkMedUUID() throws Exception {
         var key = UUID.randomUUID();
-        var result = mvc.perform(get(MellomlagringController.REST_STORAGE + "/" + Ytelse.FORELDREPENGER + "/vedlegg/{key}", key)
-                .contentType(MediaType.APPLICATION_JSON))
-            .andExpect(status().isNotFound())
-            .andReturn();
+        var result = mvc.perform(get(MellomlagringController.REST_STORAGE + "/" + YtelseMellomlagringType.FORELDREPENGER + "/vedlegg/{key}",
+            key).contentType(MediaType.APPLICATION_JSON)).andExpect(status().isNotFound()).andReturn();
         assertThat(result.getResolvedException()).isNull();
     }
 
     @Test
     void hentVedleggHiverExceptionMedUlovligKey() throws Exception {
         var key = "<Special=key∁\uD835\uDD4A>";
-        var result = mvc.perform(get(MellomlagringController.REST_STORAGE + "/" + Ytelse.FORELDREPENGER + "/vedlegg/{key}", key)
-            .contentType(MediaType.APPLICATION_JSON))
-            .andExpect(status().isBadRequest())
-            .andReturn();
+        var result = mvc.perform(get(MellomlagringController.REST_STORAGE + "/" + YtelseMellomlagringType.FORELDREPENGER + "/vedlegg/{key}",
+            key).contentType(MediaType.APPLICATION_JSON)).andExpect(status().isBadRequest()).andReturn();
 
         assertThat(result.getResolvedException()).isInstanceOf(ConstraintViolationException.class);
     }
@@ -106,7 +97,7 @@ class MellomlagringControllerTest {
         doThrow(wrappedConnectivityException).when(converter).convert(any());
         var file = new MockMultipartFile("vedlegg", "filename.pdf", MULTIPART_FORM_DATA_VALUE, "file content".getBytes());
 
-        mvc.perform(multipart(MellomlagringController.REST_STORAGE + "/" + Ytelse.FORELDREPENGER + "/vedlegg").file(file))
+        mvc.perform(multipart(MellomlagringController.REST_STORAGE + "/" + YtelseMellomlagringType.FORELDREPENGER + "/vedlegg").file(file))
             .andExpect(status().isInternalServerError())
             .andReturn();
     }
@@ -115,7 +106,7 @@ class MellomlagringControllerTest {
     void skalMappeAttachmentsTooLargeExceptionTil413() throws Exception {
         doThrow(new AttachmentTooLargeException(DataSize.ofMegabytes(2), DataSize.ofMegabytes(1))).when(converter).convert(any());
         var file = new MockMultipartFile("vedlegg", "filename.pdf", MULTIPART_FORM_DATA_VALUE, "file content".getBytes());
-        mvc.perform(multipart(MellomlagringController.REST_STORAGE + "/" + Ytelse.FORELDREPENGER + "/vedlegg").file(file))
+        mvc.perform(multipart(MellomlagringController.REST_STORAGE + "/" + YtelseMellomlagringType.FORELDREPENGER + "/vedlegg").file(file))
             .andExpect(status().isPayloadTooLarge())
             .andReturn();
     }

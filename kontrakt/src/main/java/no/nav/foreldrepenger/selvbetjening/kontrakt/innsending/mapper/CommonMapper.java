@@ -31,15 +31,15 @@ import no.nav.foreldrepenger.common.domain.felles.relasjontilbarn.Fødsel;
 import no.nav.foreldrepenger.common.domain.felles.relasjontilbarn.Omsorgsovertakelse;
 import no.nav.foreldrepenger.common.domain.felles.relasjontilbarn.RelasjonTilBarn;
 import no.nav.foreldrepenger.common.domain.felles.ÅpenPeriode;
-import no.nav.foreldrepenger.selvbetjening.kontrakt.innsending.dto.AnnenInntektDto;
-import no.nav.foreldrepenger.selvbetjening.kontrakt.innsending.dto.BarnDto;
-import no.nav.foreldrepenger.selvbetjening.kontrakt.innsending.dto.FrilansInformasjonDto;
-import no.nav.foreldrepenger.selvbetjening.kontrakt.innsending.dto.NæringDto;
-import no.nav.foreldrepenger.selvbetjening.kontrakt.innsending.dto.SøkerDto;
-import no.nav.foreldrepenger.selvbetjening.kontrakt.innsending.dto.SøknadDto;
-import no.nav.foreldrepenger.selvbetjening.kontrakt.innsending.dto.TilknyttetPersonDto;
-import no.nav.foreldrepenger.selvbetjening.kontrakt.innsending.dto.UtenlandsoppholdPeriodeDto;
-import no.nav.foreldrepenger.selvbetjening.kontrakt.innsending.dto.foreldrepenger.Situasjon;
+import no.nav.foreldrepenger.selvbetjening.kontrakt.innsending.dto.AnnenInntektDtoOLD;
+import no.nav.foreldrepenger.selvbetjening.kontrakt.innsending.dto.BarnDtoOLD;
+import no.nav.foreldrepenger.selvbetjening.kontrakt.innsending.dto.FrilansInformasjonDtoOLD;
+import no.nav.foreldrepenger.selvbetjening.kontrakt.innsending.dto.NæringDtoOLD;
+import no.nav.foreldrepenger.selvbetjening.kontrakt.innsending.dto.SøkerDtoOLD;
+import no.nav.foreldrepenger.selvbetjening.kontrakt.innsending.dto.SøknadDtoOLD;
+import no.nav.foreldrepenger.selvbetjening.kontrakt.innsending.dto.TilknyttetPersonDtoOLD;
+import no.nav.foreldrepenger.selvbetjening.kontrakt.innsending.dto.UtenlandsoppholdPeriodeDtoOLD;
+import no.nav.foreldrepenger.selvbetjening.kontrakt.innsending.dto.foreldrepenger.SituasjonOLD;
 import no.nav.foreldrepenger.selvbetjening.kontrakt.innsending.v2.dto.VedleggDto;
 import no.nav.foreldrepenger.selvbetjening.kontrakt.innsending.v2.dto.VedleggInnsendingType;
 import no.nav.foreldrepenger.selvbetjening.kontrakt.innsending.v2.dto.VedleggReferanse;
@@ -76,19 +76,19 @@ public final class CommonMapper {
         return new no.nav.foreldrepenger.common.domain.felles.VedleggReferanse(vedleggsreferanse.verdi());
     }
 
-    static Utenlandsopphold tilOppholdIUtlandet(SøknadDto s) {
+    static Utenlandsopphold tilOppholdIUtlandet(SøknadDtoOLD s) {
         var opphold = Stream.concat(safeStream(s.informasjonOmUtenlandsopphold().tidligereOpphold()),
             safeStream(s.informasjonOmUtenlandsopphold().senereOpphold())).toList();
         return new Utenlandsopphold(tilUtenlandsoppholdsliste(opphold));
     }
 
-    public static Opptjening tilOpptjening(SøkerDto søker, List<VedleggDto> vedlegg) {
+    public static Opptjening tilOpptjening(SøkerDtoOLD søker, List<VedleggDto> vedlegg) {
         return new Opptjening(tilUtenlandsArbeidsforhold(søker.andreInntekterSiste10Mnd(), vedlegg),
             tilEgenNæring(søker.selvstendigNæringsdrivendeInformasjon(), vedlegg), tilAnnenOpptjening(søker.andreInntekterSiste10Mnd(), vedlegg),
             tilFrilans(søker.frilansInformasjon()));
     }
 
-    static RelasjonTilBarn tilRelasjonTilBarn(BarnDto barn, Situasjon situasjon, List<VedleggDto> vedlegg) {
+    static RelasjonTilBarn tilRelasjonTilBarn(BarnDtoOLD barn, SituasjonOLD situasjon, List<VedleggDto> vedlegg) {
         return switch (situasjon) {
             case FØDSEL ->
                 !(barn.fødselsdatoer() == null || barn.fødselsdatoer().isEmpty()) ? tilFødsel(barn, vedlegg) : tilFremtidigFødsel(barn, vedlegg);
@@ -97,40 +97,40 @@ public final class CommonMapper {
         };
     }
 
-    static Fødsel tilFødsel(BarnDto barn, List<VedleggDto> vedlegg) {
+    static Fødsel tilFødsel(BarnDtoOLD barn, List<VedleggDto> vedlegg) {
         return new Fødsel(barn.antallBarn(), barn.fødselsdatoer(), barn.termindato(),
             tilVedleggsreferanse(DokumentasjonReferanseMapper.dokumentasjonSomDokumentererBarn(vedlegg)));
     }
 
-    private static Omsorgsovertakelse tilOmsorgsovertagelse(BarnDto barn, List<VedleggDto> vedlegg) {
+    private static Omsorgsovertakelse tilOmsorgsovertagelse(BarnDtoOLD barn, List<VedleggDto> vedlegg) {
         return new Omsorgsovertakelse(barn.antallBarn(), barn.foreldreansvarsdato(), barn.fødselsdatoer(),
             tilVedleggsreferanse(DokumentasjonReferanseMapper.dokumentasjonSomDokumentererBarn(vedlegg)));
     }
 
-    private static FremtidigFødsel tilFremtidigFødsel(BarnDto barn, List<VedleggDto> vedlegg) {
+    private static FremtidigFødsel tilFremtidigFødsel(BarnDtoOLD barn, List<VedleggDto> vedlegg) {
         return new FremtidigFødsel(barn.antallBarn(), barn.termindato(), barn.terminbekreftelseDato(),
             tilVedleggsreferanse(DokumentasjonReferanseMapper.dokumentasjonSomDokumentererBarn(vedlegg)));
     }
 
-    private static Adopsjon tilAdopsjon(BarnDto barn, List<VedleggDto> vedlegg) {
+    private static Adopsjon tilAdopsjon(BarnDtoOLD barn, List<VedleggDto> vedlegg) {
         return new Adopsjon(barn.antallBarn(), barn.adopsjonsdato(), barn.adopsjonAvEktefellesBarn(), barn.søkerAdopsjonAlene(),
             tilVedleggsreferanse(DokumentasjonReferanseMapper.dokumentasjonSomDokumentererBarn(vedlegg)), barn.ankomstdato(), barn.fødselsdatoer());
     }
 
-    public static List<AnnenOpptjening> tilAnnenOpptjening(List<AnnenInntektDto> andreInntekterSiste10Mnd, List<VedleggDto> vedlegg) {
+    public static List<AnnenOpptjening> tilAnnenOpptjening(List<AnnenInntektDtoOLD> andreInntekterSiste10Mnd, List<VedleggDto> vedlegg) {
         return andreInntekterSiste10Mnd.stream()
             .filter(annenInntekt -> !annenInntekt.type().equals("JOBB_I_UTLANDET"))
             .map(annenInntekt -> tilAnnenOpptjening(annenInntekt, vedlegg))
             .toList();
     }
 
-    private static AnnenOpptjening tilAnnenOpptjening(AnnenInntektDto annenInntekt, List<VedleggDto> vedlegg) {
+    private static AnnenOpptjening tilAnnenOpptjening(AnnenInntektDtoOLD annenInntekt, List<VedleggDto> vedlegg) {
         return new AnnenOpptjening(annenInntekt.type() != null ? AnnenOpptjeningType.valueOf(annenInntekt.type()) : null,
             new ÅpenPeriode(annenInntekt.tidsperiode().fom(), annenInntekt.tidsperiode().tom()),
             tilVedleggsreferanse(DokumentasjonReferanseMapper.dokumentasjonSomDokumentererOpptjeningsperiode(vedlegg, annenInntekt.tidsperiode())));
     }
 
-    public static List<UtenlandskArbeidsforhold> tilUtenlandsArbeidsforhold(List<AnnenInntektDto> andreInntekterSiste10Mnd,
+    public static List<UtenlandskArbeidsforhold> tilUtenlandsArbeidsforhold(List<AnnenInntektDtoOLD> andreInntekterSiste10Mnd,
                                                                             List<VedleggDto> vedlegg) {
         return andreInntekterSiste10Mnd.stream()
             .filter(annenInntekt -> annenInntekt.type().equals("JOBB_I_UTLANDET"))
@@ -139,18 +139,18 @@ public final class CommonMapper {
 
     }
 
-    private static UtenlandskArbeidsforhold tilUtenlandsArbeidsforhold(AnnenInntektDto annenInntekt, List<VedleggDto> vedlegg) {
+    private static UtenlandskArbeidsforhold tilUtenlandsArbeidsforhold(AnnenInntektDtoOLD annenInntekt, List<VedleggDto> vedlegg) {
         return new UtenlandskArbeidsforhold(annenInntekt.arbeidsgiverNavn(),
             new ÅpenPeriode(annenInntekt.tidsperiode().fom(), annenInntekt.tidsperiode().tom()),
             tilVedleggsreferanse(DokumentasjonReferanseMapper.dokumentasjonSomDokumentererOpptjeningsperiode(vedlegg, annenInntekt.tidsperiode())),
             land(annenInntekt.land()));
     }
 
-    public static List<EgenNæring> tilEgenNæring(List<NæringDto> selvstendigNæringsdrivendeInformasjon, List<VedleggDto> vedlegg) {
+    public static List<EgenNæring> tilEgenNæring(List<NæringDtoOLD> selvstendigNæringsdrivendeInformasjon, List<VedleggDto> vedlegg) {
         return selvstendigNæringsdrivendeInformasjon.stream().map(selvstendig -> tilEgenNæring(selvstendig, vedlegg)).toList();
     }
 
-    private static EgenNæring tilEgenNæring(NæringDto selvstendig, List<VedleggDto> vedlegg) {
+    private static EgenNæring tilEgenNæring(NæringDtoOLD selvstendig, List<VedleggDto> vedlegg) {
         var nærRelasjon = false; // TODO: Kan vi ha både regnsskapsfører og revisor? Vi har bare propagert en av delene til nå. Bare regnskapsfører hvis begge er oppgitt.
         List<Regnskapsfører> regnskapsførere = null;
         var regnskapsfører = selvstendig.regnskapsfører();
@@ -182,29 +182,29 @@ public final class CommonMapper {
             tilVedleggsreferanse(DokumentasjonReferanseMapper.dokumentasjonSomDokumentererOpptjeningsperiode(vedlegg, selvstendig.tidsperiode())));
     }
 
-    private static Orgnummer tilOrgnummer(NæringDto selvstendig) {
+    private static Orgnummer tilOrgnummer(NæringDtoOLD selvstendig) {
         if (selvstendig.registrertINorge()) {
             return selvstendig.organisasjonsnummer() != null ? new Orgnummer(selvstendig.organisasjonsnummer()) : null;
         }
         return null;
     }
 
-    private static Regnskapsfører tilRegnskapsfører(TilknyttetPersonDto person) {
+    private static Regnskapsfører tilRegnskapsfører(TilknyttetPersonDtoOLD person) {
         return new Regnskapsfører(person.navn(), person.telefonnummer());
     }
 
-    public static Frilans tilFrilans(FrilansInformasjonDto frilansInformasjon) {
+    public static Frilans tilFrilans(FrilansInformasjonDtoOLD frilansInformasjon) {
         if (frilansInformasjon == null) {
             return null;
         }
         return new Frilans(new ÅpenPeriode(frilansInformasjon.oppstart()), frilansInformasjon.jobberFremdelesSomFrilans());
     }
 
-    private static List<Utenlandsopphold.Opphold> tilUtenlandsoppholdsliste(List<UtenlandsoppholdPeriodeDto> tidligereOpphold) {
+    private static List<Utenlandsopphold.Opphold> tilUtenlandsoppholdsliste(List<UtenlandsoppholdPeriodeDtoOLD> tidligereOpphold) {
         return safeStream(tidligereOpphold).map(CommonMapper::tilUtenlandsopphold).toList();
     }
 
-    private static Utenlandsopphold.Opphold tilUtenlandsopphold(UtenlandsoppholdPeriodeDto o) {
+    private static Utenlandsopphold.Opphold tilUtenlandsopphold(UtenlandsoppholdPeriodeDtoOLD o) {
         return new Utenlandsopphold.Opphold(land(o.land()), new LukketPeriode(o.tidsperiode().fom(), o.tidsperiode().tom()));
     }
 

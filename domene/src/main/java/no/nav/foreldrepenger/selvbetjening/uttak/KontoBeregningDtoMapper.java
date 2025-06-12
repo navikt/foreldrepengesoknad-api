@@ -32,14 +32,16 @@ public class KontoBeregningDtoMapper {
     }
 
     public static KontoBeregningDto tilKontoberegning(Map<StønadskontoKontotype, Integer> stønadskontoer, KontoBeregningGrunnlagDto grunnlag) {
-        return new KontoBeregningDto(tilKontoer(stønadskontoer, grunnlag), tilMinsteretter(stønadskontoer, grunnlag.brukerrolle()), tilTillegg(stønadskontoer));
+        return new KontoBeregningDto(tilKontoer(stønadskontoer, grunnlag),
+            tilMinsteretter(stønadskontoer, grunnlag.brukerrolle()),
+            tilTillegg(stønadskontoer));
     }
 
     private static List<KontoDto> tilKontoer(Map<StønadskontoKontotype, Integer> stønadskontoer, KontoBeregningGrunnlagDto grunnlag) {
         var kontoer = new ArrayList<KontoDto>();
         if (Set.of(FAR, MEDMOR).contains(grunnlag.brukerrolle()) && grunnlag.rettighetstype().equals(Rettighetstype.BARE_SØKER_RETT)) {
             var dagerUtenAktivitetskrav = dagerUtenAktivitetskrav(stønadskontoer);
-            kontoer.add(new KontoDto(KontoDto.KontoType.AKTIVITETSFRI_KVOTE, dagerUtenAktivitetskrav));
+            kontoer.add(new KontoDto(KontoDto.KontoTypeUttak.AKTIVITETSFRI_KVOTE, dagerUtenAktivitetskrav));
             kontoer.add(tilKontoDto(StønadskontoKontotype.FORELDREPENGER, stønadskontoer.get(FORELDREPENGER) - dagerUtenAktivitetskrav));
         } else {
             stønadskontoer.entrySet()
@@ -65,9 +67,9 @@ public class KontoBeregningDtoMapper {
 
     // Kalles bare ved BFHR
     private static int dagerUtenAktivitetskrav(Map<StønadskontoKontotype, Integer> k) {
-        return  k.getOrDefault(BARE_FAR_RETT, 0) + // BFHR ETTER WLB
-                k.getOrDefault(UFØREDAGER, 0) + // BFHR FØR WLB
-                k.getOrDefault(FLERBARNSDAGER, 0); // BFHR FØR WLB
+        return k.getOrDefault(BARE_FAR_RETT, 0) + // BFHR ETTER WLB
+            k.getOrDefault(UFØREDAGER, 0) + // BFHR FØR WLB
+            k.getOrDefault(FLERBARNSDAGER, 0); // BFHR FØR WLB
     }
 
     private static Integer toTetteFra(Map<StønadskontoKontotype, Integer> kontoer, Brukerrolle brukerrolle) {
@@ -78,13 +80,13 @@ public class KontoBeregningDtoMapper {
         }
     }
 
-    private static Optional<KontoDto.KontoType> tilKontoType(StønadskontoKontotype konto) {
+    private static Optional<KontoDto.KontoTypeUttak> tilKontoType(StønadskontoKontotype konto) {
         return switch (konto) {
-            case FELLESPERIODE -> Optional.of(KontoDto.KontoType.FELLESPERIODE);
-            case MØDREKVOTE -> Optional.of(KontoDto.KontoType.MØDREKVOTE);
-            case FEDREKVOTE -> Optional.of(KontoDto.KontoType.FEDREKVOTE);
-            case FORELDREPENGER -> Optional.of(KontoDto.KontoType.FORELDREPENGER);
-            case FORELDREPENGER_FØR_FØDSEL -> Optional.of(KontoDto.KontoType.FORELDREPENGER_FØR_FØDSEL);
+            case FELLESPERIODE -> Optional.of(KontoDto.KontoTypeUttak.FELLESPERIODE);
+            case MØDREKVOTE -> Optional.of(KontoDto.KontoTypeUttak.MØDREKVOTE);
+            case FEDREKVOTE -> Optional.of(KontoDto.KontoTypeUttak.FEDREKVOTE);
+            case FORELDREPENGER -> Optional.of(KontoDto.KontoTypeUttak.FORELDREPENGER);
+            case FORELDREPENGER_FØR_FØDSEL -> Optional.of(KontoDto.KontoTypeUttak.FORELDREPENGER_FØR_FØDSEL);
             default -> Optional.empty();
         };
     }

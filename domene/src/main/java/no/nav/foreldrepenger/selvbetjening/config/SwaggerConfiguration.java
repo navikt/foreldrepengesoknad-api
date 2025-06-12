@@ -12,12 +12,16 @@ import no.nav.boot.conditionals.ConditionalOnNotProd;
 @ConditionalOnNotProd
 public class SwaggerConfiguration {
 
+    static {
+        io.swagger.v3.core.jackson.ModelResolver.enumsAsRef = true;
+    }
+
     @Bean
     public OpenAPI swaggerOpenAPI() {
-        return new OpenAPI()
-            .info(new Info().title("Foreldrepengesoknad-api")
-                .description("Mottar søknader om svangerskapspenger, foreldrepenger og engangsstønad fra frontend og sender dem videre inn i NAV for behandling")
-                .version("v0.0.1")
-                .license(new License().name("MIT").url("http://nav.no")));
+        return new OpenAPI().info(new Info().title("Foreldrepengesoknad-api")
+            .description(
+                "Mottar søknader om svangerskapspenger, foreldrepenger og engangsstønad fra frontend og sender dem videre inn i NAV for behandling")
+            .version("v0.0.1")
+            .license(new License().name("MIT").url("http://nav.no")));
     }
 }

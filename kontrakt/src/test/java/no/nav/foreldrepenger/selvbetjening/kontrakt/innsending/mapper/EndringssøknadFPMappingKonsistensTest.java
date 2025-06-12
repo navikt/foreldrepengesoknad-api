@@ -23,7 +23,7 @@ import no.nav.foreldrepenger.common.domain.foreldrepenger.Foreldrepenger;
 import no.nav.foreldrepenger.common.domain.foreldrepenger.fordeling.LukketPeriodeMedVedlegg;
 import no.nav.foreldrepenger.common.domain.foreldrepenger.fordeling.UtsettelsesÅrsak;
 import no.nav.foreldrepenger.common.domain.foreldrepenger.fordeling.UttaksPeriode;
-import no.nav.foreldrepenger.selvbetjening.kontrakt.innsending.dto.endringssøknad.EndringssøknadForeldrepengerDto;
+import no.nav.foreldrepenger.selvbetjening.kontrakt.innsending.dto.endringssøknad.EndringssøknadForeldrepengerDtoOLD;
 import no.nav.foreldrepenger.selvbetjening.kontrakt.innsending.util.builder.AnnenforelderBuilder;
 import no.nav.foreldrepenger.selvbetjening.kontrakt.innsending.util.builder.BarnBuilder;
 import no.nav.foreldrepenger.selvbetjening.kontrakt.innsending.util.builder.EndringssøknadBuilder;
@@ -42,7 +42,7 @@ class EndringssøknadFPMappingKonsistensTest {
             .medAnnenForelder(AnnenforelderBuilder.annenpartIkkeRettOgMorHarUføretrygd(DUMMY_FNR).build())
             .medBarn(BarnBuilder.omsorgsovertakelse(LocalDate.now().minusWeeks(2)).build())
             .build();
-        var foreldrepengerDto = ((EndringssøknadForeldrepengerDto) søknadDto);
+        var foreldrepengerDto = ((EndringssøknadForeldrepengerDtoOLD) søknadDto);
 
         var mappedSøknad = (Endringssøknad) SøknadMapper.tilSøknad(søknadDto, NOW);
         assertThat(mappedSøknad.getSaksnr()).isEqualTo(søknadDto.saksnummer());

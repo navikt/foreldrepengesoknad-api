@@ -12,7 +12,11 @@ import java.util.List;
 
 import no.nav.foreldrepenger.common.domain.Søknad;
 import no.nav.foreldrepenger.common.domain.foreldrepenger.Endringssøknad;
-import no.nav.foreldrepenger.selvbetjening.kontrakt.innsending.dto.Innsending;
+import no.nav.foreldrepenger.selvbetjening.kontrakt.innsending.dto.SøknadDtoOLD;
+import no.nav.foreldrepenger.selvbetjening.kontrakt.innsending.dto.endringssøknad.EndringssøknadDtoOLD;
+import no.nav.foreldrepenger.selvbetjening.kontrakt.innsending.dto.endringssøknad.EndringssøknadForeldrepengerDtoOLD;
+import no.nav.foreldrepenger.selvbetjening.kontrakt.innsending.dto.foreldrepenger.ForeldrepengesøknadDtoOLD;
+import no.nav.foreldrepenger.selvbetjening.kontrakt.innsending.v2.dto.Innsending;
 import no.nav.foreldrepenger.selvbetjening.kontrakt.innsending.v2.dto.SøknadDto;
 import no.nav.foreldrepenger.selvbetjening.kontrakt.innsending.v2.dto.VedleggDto;
 import no.nav.foreldrepenger.selvbetjening.kontrakt.innsending.v2.dto.endringssøknad.EndringssøknadDto;
@@ -28,9 +32,9 @@ public final class SøknadMapper {
 
     public static Søknad tilSøknad(Innsending innsending, LocalDate mottattDato) {
         var påkrevdeVedlegg = innsending.påkrevdeVedlegg();
-        if (innsending instanceof no.nav.foreldrepenger.selvbetjening.kontrakt.innsending.dto.SøknadDto søknad) {
+        if (innsending instanceof SøknadDtoOLD søknad) {
             return tilSøknad(søknad, påkrevdeVedlegg, mottattDato);
-        } else if (innsending instanceof no.nav.foreldrepenger.selvbetjening.kontrakt.innsending.dto.endringssøknad.EndringssøknadDto endrringsøknad) {
+        } else if (innsending instanceof EndringssøknadDtoOLD endrringsøknad) {
             return tilEndringssøknad(endrringsøknad, påkrevdeVedlegg, mottattDato);
         } else if (innsending instanceof SøknadDto søknadV2) {
             return tilSøknad(søknadV2, påkrevdeVedlegg, mottattDato);
@@ -40,19 +44,15 @@ public final class SøknadMapper {
         throw new IllegalArgumentException("Utviklerfeil: Ukjent søknad " + innsending.getClass().getSimpleName());
     }
 
-    private static Søknad tilSøknad(no.nav.foreldrepenger.selvbetjening.kontrakt.innsending.dto.SøknadDto søknad,
-                                    List<VedleggDto> påkrevdeVedlegg,
-                                    LocalDate mottattDato) {
-        if (søknad instanceof no.nav.foreldrepenger.selvbetjening.kontrakt.innsending.dto.foreldrepenger.ForeldrepengesøknadDto f) {
+    private static Søknad tilSøknad(SøknadDtoOLD søknad, List<VedleggDto> påkrevdeVedlegg, LocalDate mottattDato) {
+        if (søknad instanceof ForeldrepengesøknadDtoOLD f) {
             return tilForeldrepengesøknadVedleggUtenInnhold(f, påkrevdeVedlegg, mottattDato);
         }
         throw new IllegalArgumentException("Ukjent søknad " + søknad.getClass().getSimpleName());
     }
 
-    private static Endringssøknad tilEndringssøknad(no.nav.foreldrepenger.selvbetjening.kontrakt.innsending.dto.endringssøknad.EndringssøknadDto endringssøknad,
-                                                    List<VedleggDto> påkrevdeVedlegg,
-                                                    LocalDate mottattDato) {
-        if (endringssøknad instanceof no.nav.foreldrepenger.selvbetjening.kontrakt.innsending.dto.endringssøknad.EndringssøknadForeldrepengerDto f) {
+    private static Endringssøknad tilEndringssøknad(EndringssøknadDtoOLD endringssøknad, List<VedleggDto> påkrevdeVedlegg, LocalDate mottattDato) {
+        if (endringssøknad instanceof EndringssøknadForeldrepengerDtoOLD f) {
             return tilEndringForeldrepengesøknadUtenVedleggInnhold(f, påkrevdeVedlegg, mottattDato);
         }
         throw new IllegalArgumentException("Ukjent søknad " + endringssøknad.getClass().getSimpleName());

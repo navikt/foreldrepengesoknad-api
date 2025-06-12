@@ -4,25 +4,25 @@ import java.time.LocalDate;
 import java.util.List;
 
 import no.nav.foreldrepenger.common.domain.Saksnummer;
-import no.nav.foreldrepenger.selvbetjening.kontrakt.innsending.dto.BarnDto;
-import no.nav.foreldrepenger.selvbetjening.kontrakt.innsending.dto.SøkerDto;
+import no.nav.foreldrepenger.selvbetjening.kontrakt.innsending.dto.BarnDtoOLD;
+import no.nav.foreldrepenger.selvbetjening.kontrakt.innsending.dto.SøkerDtoOLD;
+import no.nav.foreldrepenger.selvbetjening.kontrakt.innsending.dto.endringssøknad.EndringssøknadDtoOLD;
+import no.nav.foreldrepenger.selvbetjening.kontrakt.innsending.dto.endringssøknad.EndringssøknadForeldrepengerDtoOLD;
+import no.nav.foreldrepenger.selvbetjening.kontrakt.innsending.dto.foreldrepenger.AnnenforelderDtoOLD;
+import no.nav.foreldrepenger.selvbetjening.kontrakt.innsending.dto.foreldrepenger.SituasjonOLD;
+import no.nav.foreldrepenger.selvbetjening.kontrakt.innsending.dto.foreldrepenger.UttaksplanPeriodeDtoOLD;
 import no.nav.foreldrepenger.selvbetjening.kontrakt.innsending.v2.dto.VedleggDto;
-import no.nav.foreldrepenger.selvbetjening.kontrakt.innsending.dto.endringssøknad.EndringssøknadDto;
-import no.nav.foreldrepenger.selvbetjening.kontrakt.innsending.dto.endringssøknad.EndringssøknadForeldrepengerDto;
-import no.nav.foreldrepenger.selvbetjening.kontrakt.innsending.dto.foreldrepenger.AnnenforelderDto;
-import no.nav.foreldrepenger.selvbetjening.kontrakt.innsending.dto.foreldrepenger.Situasjon;
-import no.nav.foreldrepenger.selvbetjening.kontrakt.innsending.dto.foreldrepenger.UttaksplanPeriodeDto;
 
 public class EndringssøknadBuilder {
     private LocalDate mottattdato;
-    private Situasjon situasjon;
+    private SituasjonOLD situasjon;
     private Saksnummer saksnummer;
-    private SøkerDto søker;
-    private BarnDto barn;
-    private AnnenforelderDto annenForelder;
+    private SøkerDtoOLD søker;
+    private BarnDtoOLD barn;
+    private AnnenforelderDtoOLD annenForelder;
     private String tilleggsopplysninger;
     private Boolean ønskerJustertUttakVedFødsel;
-    private List<UttaksplanPeriodeDto> uttaksplan;
+    private List<UttaksplanPeriodeDtoOLD> uttaksplan;
     private List<VedleggDto> vedlegg;
 
     public EndringssøknadBuilder(Saksnummer saksnummer) {
@@ -34,7 +34,7 @@ public class EndringssøknadBuilder {
         return this;
     }
 
-    public EndringssøknadBuilder medSøker(SøkerDto søker) {
+    public EndringssøknadBuilder medSøker(SøkerDtoOLD søker) {
         this.søker = søker;
         return this;
     }
@@ -45,7 +45,7 @@ public class EndringssøknadBuilder {
         return this;
     }
 
-    public EndringssøknadBuilder medAnnenForelder(AnnenforelderDto annenforelder) {
+    public EndringssøknadBuilder medAnnenForelder(AnnenforelderDtoOLD annenforelder) {
         this.annenForelder = annenforelder;
         return this;
     }
@@ -60,7 +60,7 @@ public class EndringssøknadBuilder {
         return this;
     }
 
-    public EndringssøknadBuilder medFordeling(List<UttaksplanPeriodeDto> uttaksplan) {
+    public EndringssøknadBuilder medFordeling(List<UttaksplanPeriodeDtoOLD> uttaksplan) {
         this.uttaksplan = uttaksplan;
         return this;
     }
@@ -70,19 +70,11 @@ public class EndringssøknadBuilder {
         return this;
     }
 
-    public EndringssøknadDto build() {
-        if (mottattdato == null) mottattdato = LocalDate.now();
-        return new EndringssøknadForeldrepengerDto(
-                mottattdato,
-                situasjon,
-                saksnummer,
-                søker,
-                barn,
-                annenForelder,
-                tilleggsopplysninger,
-                ønskerJustertUttakVedFødsel,
-                uttaksplan,
-                vedlegg
-        );
+    public EndringssøknadDtoOLD build() {
+        if (mottattdato == null) {
+            mottattdato = LocalDate.now();
+        }
+        return new EndringssøknadForeldrepengerDtoOLD(mottattdato, situasjon, saksnummer, søker, barn, annenForelder, tilleggsopplysninger,
+            ønskerJustertUttakVedFødsel, uttaksplan, vedlegg);
     }
 }

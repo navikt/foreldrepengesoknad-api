@@ -5,6 +5,5 @@ import static no.nav.foreldrepenger.common.domain.validation.InputValideringRege
 import jakarta.validation.Valid;
 import jakarta.validation.constraints.Pattern;
 
-public record UtenlandsoppholdPeriodeDto(@Pattern(regexp = BARE_BOKSTAVER) String land,
-                                         @Valid ÅpenPeriodeDto tidsperiode) {
+public record UtenlandsoppholdPeriodeDtoOLD(@Pattern(regexp = BARE_BOKSTAVER) String land, @Valid ÅpenPeriodeDtoOLD tidsperiode) {
 }

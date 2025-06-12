@@ -7,24 +7,24 @@ import java.util.List;
 
 import com.neovisionaries.i18n.CountryCode;
 
-import no.nav.foreldrepenger.selvbetjening.kontrakt.innsending.dto.UtenlandsoppholdDto;
-import no.nav.foreldrepenger.selvbetjening.kontrakt.innsending.dto.UtenlandsoppholdPeriodeDto;
-import no.nav.foreldrepenger.selvbetjening.kontrakt.innsending.dto.ÅpenPeriodeDto;
+import no.nav.foreldrepenger.selvbetjening.kontrakt.innsending.dto.UtenlandsoppholdDtoOLD;
+import no.nav.foreldrepenger.selvbetjening.kontrakt.innsending.dto.UtenlandsoppholdPeriodeDtoOLD;
+import no.nav.foreldrepenger.selvbetjening.kontrakt.innsending.dto.ÅpenPeriodeDtoOLD;
 
 public final class MedlemsskapMaler {
 
     private MedlemsskapMaler() {
     }
 
-    public static UtenlandsoppholdDto medlemsskapNorge() {
-        return new UtenlandsoppholdDto(emptyList(), emptyList());
+    public static UtenlandsoppholdDtoOLD medlemsskapNorge() {
+        return new UtenlandsoppholdDtoOLD(emptyList(), emptyList());
     }
 
-    public static UtenlandsoppholdDto medlemskapUtlandetForrige12mnd() {
-        return new UtenlandsoppholdDto(List.of(utenlandsopphold(LocalDate.now().minusYears(2), LocalDate.now())), emptyList());
+    public static UtenlandsoppholdDtoOLD medlemskapUtlandetForrige12mnd() {
+        return new UtenlandsoppholdDtoOLD(List.of(utenlandsopphold(LocalDate.now().minusYears(2), LocalDate.now())), emptyList());
     }
 
-    private static UtenlandsoppholdPeriodeDto utenlandsopphold(LocalDate fom, LocalDate tom) {
-        return new UtenlandsoppholdPeriodeDto(CountryCode.US.getAlpha2(), new ÅpenPeriodeDto(fom, tom));
+    private static UtenlandsoppholdPeriodeDtoOLD utenlandsopphold(LocalDate fom, LocalDate tom) {
+        return new UtenlandsoppholdPeriodeDtoOLD(CountryCode.US.getAlpha2(), new ÅpenPeriodeDtoOLD(fom, tom));
     }
 }

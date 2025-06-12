@@ -13,11 +13,15 @@ import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Pattern;
 import jakarta.validation.constraints.Size;
 import no.nav.foreldrepenger.common.domain.felles.DokumentType;
-import no.nav.foreldrepenger.selvbetjening.kontrakt.innsending.dto.ÅpenPeriodeDto;
+import no.nav.foreldrepenger.selvbetjening.kontrakt.innsending.dto.ÅpenPeriodeDtoOLD;
 import no.nav.foreldrepenger.selvbetjening.kontrakt.innsending.v2.dto.svangerskapspenger.ArbeidsforholdDto;
 
-public record VedleggDto(UUID uuid, @NotNull DokumentType skjemanummer, VedleggInnsendingType innsendingsType,
-                         @Pattern(regexp = FRITEKST) String beskrivelse, @Valid Dokumenterer dokumenterer, @JsonIgnore VedleggReferanse referanse) {
+public record VedleggDto(UUID uuid,
+                         @NotNull DokumentType skjemanummer,
+                         VedleggInnsendingType innsendingsType,
+                         @Pattern(regexp = FRITEKST) String beskrivelse,
+                         @Valid Dokumenterer dokumenterer,
+                         @JsonIgnore VedleggReferanse referanse) {
 
     public VedleggDto {
         referanse = VedleggReferanse.fra(uuid);
@@ -32,9 +36,10 @@ public record VedleggDto(UUID uuid, @NotNull DokumentType skjemanummer, VedleggI
         return innsendingsType == null || innsendingsType.equals(VedleggInnsendingType.LASTET_OPP);
     }
 
-    public record Dokumenterer(@NotNull Type type, @Valid ArbeidsforholdDto arbeidsforhold,
-                               @Valid @Size(max = 100) List<@Valid @NotNull ÅpenPeriodeDto> perioder) {
-        public enum Type {
+    public record Dokumenterer(@NotNull VedleggDto.Dokumenterer.DokumentererType type,
+                               @Valid ArbeidsforholdDto arbeidsforhold,
+                               @Valid @Size(max = 100) List<@Valid @NotNull ÅpenPeriodeDtoOLD> perioder) {
+        public enum DokumentererType {
             BARN,
             OPPTJENING,
             UTTAK,

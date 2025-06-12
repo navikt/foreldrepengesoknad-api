@@ -2,13 +2,13 @@ package no.nav.foreldrepenger.selvbetjening.kontrakt.innsending.dto.foreldrepeng
 
 import com.fasterxml.jackson.annotation.JsonValue;
 
-public enum Dekningsgrad {
+public enum DekningsgradOLD {
     ÅTTI("80"),
     HUNDRE("100");
 
     private final String verdi;
 
-    Dekningsgrad(String verdi) {
+    DekningsgradOLD(String verdi) {
         this.verdi = verdi;
     }
 

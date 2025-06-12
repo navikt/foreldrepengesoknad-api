@@ -5,13 +5,13 @@ import java.util.List;
 
 import no.nav.foreldrepenger.common.domain.BrukerRolle;
 import no.nav.foreldrepenger.common.oppslag.dkif.Målform;
-import no.nav.foreldrepenger.selvbetjening.kontrakt.innsending.v2.dto.VedleggDto;
 import no.nav.foreldrepenger.selvbetjening.kontrakt.innsending.v2.dto.AnnenInntektDto;
 import no.nav.foreldrepenger.selvbetjening.kontrakt.innsending.v2.dto.BarnDto;
 import no.nav.foreldrepenger.selvbetjening.kontrakt.innsending.v2.dto.FrilansDto;
 import no.nav.foreldrepenger.selvbetjening.kontrakt.innsending.v2.dto.NæringDto;
 import no.nav.foreldrepenger.selvbetjening.kontrakt.innsending.v2.dto.SøknadDto;
 import no.nav.foreldrepenger.selvbetjening.kontrakt.innsending.v2.dto.UtenlandsoppholdsperiodeDto;
+import no.nav.foreldrepenger.selvbetjening.kontrakt.innsending.v2.dto.VedleggDto;
 import no.nav.foreldrepenger.selvbetjening.kontrakt.innsending.v2.dto.foreldrepenger.Dekningsgrad;
 import no.nav.foreldrepenger.selvbetjening.kontrakt.innsending.v2.dto.foreldrepenger.ForeldrepengesøknadDto;
 import no.nav.foreldrepenger.selvbetjening.kontrakt.innsending.v2.dto.foreldrepenger.annenpart.AnnenForelderDto;
@@ -29,7 +29,6 @@ public class ForeldrepengerBuilder {
     private AnnenForelderDto annenForelder;
     private Dekningsgrad dekningsgrad;
     private List<UtenlandsoppholdsperiodeDto> utenlandsopphold;
-    private String tilleggsopplysninger;
     private UttaksplanDto uttaksplan;
     private List<VedleggDto> vedlegg;
 
@@ -87,11 +86,6 @@ public class ForeldrepengerBuilder {
         return this;
     }
 
-    public ForeldrepengerBuilder medTilleggsopplysninger(String tilleggsopplysninger) {
-        this.tilleggsopplysninger = tilleggsopplysninger;
-        return this;
-    }
-
     public ForeldrepengerBuilder medUttaksplan(UttaksplanDto uttaksplan) {
         this.uttaksplan = uttaksplan;
         return this;
@@ -108,9 +102,10 @@ public class ForeldrepengerBuilder {
     }
 
     public SøknadDto build() {
-        if (mottattdato == null) mottattdato = LocalDate.now();
-        return new ForeldrepengesøknadDto(
-            mottattdato,
+        if (mottattdato == null) {
+            mottattdato = LocalDate.now();
+        }
+        return new ForeldrepengesøknadDto(mottattdato,
             rolle,
             språkkode,
             frilansInformasjon,
@@ -120,9 +115,7 @@ public class ForeldrepengerBuilder {
             annenForelder,
             dekningsgrad,
             uttaksplan,
-            tilleggsopplysninger,
             utenlandsopphold,
-            vedlegg
-        );
+            vedlegg);
     }
 }

@@ -71,8 +71,7 @@ class ImageScaler {
 
         public Matrix transform(PDPage pdPage) {
             var skalertBildedimensjon = roterOgSkalerNed(pdPage.getMediaBox().getWidth(), pdPage.getMediaBox().getHeight());
-            var transform = new AffineTransform(
-                skalertBildedimensjon.width,
+            var transform = new AffineTransform(skalertBildedimensjon.width,
                 0f,
                 0f,
                 skalertBildedimensjon.height,
