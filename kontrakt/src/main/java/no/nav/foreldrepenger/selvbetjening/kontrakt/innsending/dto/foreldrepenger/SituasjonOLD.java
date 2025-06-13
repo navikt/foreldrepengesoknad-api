@@ -1,6 +1,6 @@
 package no.nav.foreldrepenger.selvbetjening.kontrakt.innsending.dto.foreldrepenger;
 
-public enum Situasjon {
+public enum SituasjonOLD {
     FØDSEL,
     ADOPSJON,
     OMSORGSOVERTAKELSE

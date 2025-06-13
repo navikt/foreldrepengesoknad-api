@@ -30,9 +30,9 @@ import no.nav.foreldrepenger.common.domain.foreldrepenger.fordeling.GradertUttak
 import no.nav.foreldrepenger.common.domain.foreldrepenger.fordeling.LukketPeriodeMedVedlegg;
 import no.nav.foreldrepenger.common.domain.foreldrepenger.fordeling.UtsettelsesÅrsak;
 import no.nav.foreldrepenger.common.domain.foreldrepenger.fordeling.UttaksPeriode;
-import no.nav.foreldrepenger.selvbetjening.kontrakt.innsending.dto.foreldrepenger.Dekningsgrad;
-import no.nav.foreldrepenger.selvbetjening.kontrakt.innsending.dto.foreldrepenger.ForeldrepengesøknadDto;
-import no.nav.foreldrepenger.selvbetjening.kontrakt.innsending.dto.ÅpenPeriodeDto;
+import no.nav.foreldrepenger.selvbetjening.kontrakt.innsending.dto.foreldrepenger.DekningsgradOLD;
+import no.nav.foreldrepenger.selvbetjening.kontrakt.innsending.dto.foreldrepenger.ForeldrepengesøknadDtoOLD;
+import no.nav.foreldrepenger.selvbetjening.kontrakt.innsending.dto.ÅpenPeriodeDtoOLD;
 import no.nav.foreldrepenger.selvbetjening.kontrakt.innsending.util.builder.AnnenforelderBuilder;
 import no.nav.foreldrepenger.selvbetjening.kontrakt.innsending.util.builder.BarnBuilder;
 import no.nav.foreldrepenger.selvbetjening.kontrakt.innsending.util.builder.ForeldrepengerBuilder;
@@ -50,13 +50,13 @@ class ForeldrepengesoknadMappingKonsistensTest {
             uttak(MØDREKVOTE, NOW, NOW.plusWeeks(15).minusDays(1)).build(),
             gradert(FELLESPERIODE, NOW.plusWeeks(15), NOW.plusWeeks(45).minusDays(1), 33.3).build());
         var søknadDto = new ForeldrepengerBuilder().medFordeling(uttak)
-            .medDekningsgrad(Dekningsgrad.HUNDRE)
+            .medDekningsgrad(DekningsgradOLD.HUNDRE)
             .medMedlemsskap(medlemsskapNorge())
             .medSøker(new SøkerBuilder(BrukerRolle.MOR).medErAleneOmOmsorg(true).medFrilansInformasjon(OpptjeningMaler.frilansOpptjening()).build())
             .medAnnenForelder(AnnenforelderBuilder.norskIkkeRett(DUMMY_FNR).build())
             .medBarn(BarnBuilder.termin(2, LocalDate.now().minusWeeks(2)).build())
             .build();
-        var foreldrepengerDto = ((ForeldrepengesøknadDto) søknadDto);
+        var foreldrepengerDto = ((ForeldrepengesøknadDtoOLD) søknadDto);
 
         var mappedSøknad = SøknadMapper.tilSøknad(søknadDto, NOW);
         assertThat(mappedSøknad.getSøker().søknadsRolle()).isEqualTo(søknadDto.søker().rolle());
@@ -111,13 +111,13 @@ class ForeldrepengesoknadMappingKonsistensTest {
         var annenOpptjeninger = List.of(utenlandskOpptjening, annenNorskOpptjening);
         var søknadDto = new ForeldrepengerBuilder().medFordeling(uttak)
             .medØnskerJustertUttakVedFødsel(true)
-            .medDekningsgrad(Dekningsgrad.ÅTTI)
+            .medDekningsgrad(DekningsgradOLD.ÅTTI)
             .medMedlemsskap(medlemskapUtlandetForrige12mnd())
             .medSøker(new SøkerBuilder(BrukerRolle.MOR).medAndreInntekterSiste10Mnd(annenOpptjeninger).build())
             .medAnnenForelder(AnnenforelderBuilder.ukjentForelder())
             .medBarn(BarnBuilder.adopsjon(LocalDate.now().minusWeeks(2), false).build())
             .build();
-        var foreldrepengerDto = ((ForeldrepengesøknadDto) søknadDto);
+        var foreldrepengerDto = ((ForeldrepengesøknadDtoOLD) søknadDto);
 
         var mappedSøknad = SøknadMapper.tilSøknad(søknadDto, NOW);
         assertThat(mappedSøknad.getSøker().søknadsRolle()).isEqualTo(søknadDto.søker().rolle());
@@ -175,18 +175,18 @@ class ForeldrepengesoknadMappingKonsistensTest {
             uttak(MØDREKVOTE, NOW.plusWeeks(6), NOW.plusWeeks(15).minusDays(1)).build());
         var utenlandskOpptjening = OpptjeningMaler.utenlandskArbeidsforhold(CountryCode.US);
         var annenNorskOpptjening = OpptjeningMaler.annenInntektNorsk(AnnenOpptjeningType.SLUTTPAKKE,
-            new ÅpenPeriodeDto(LocalDate.now().minusYears(1), LocalDate.now()));
+            new ÅpenPeriodeDtoOLD(LocalDate.now().minusYears(1), LocalDate.now()));
 
         var vedlegg1 = DokumentasjonUtil.vedlegg(DokumentasjonUtil.barn());
-        var vedlegg2 = DokumentasjonUtil.vedlegg(DokumentasjonUtil.uttaksperioder(
-            List.of(new ÅpenPeriodeDto(NOW, NOW.plusWeeks(1).minusDays(1)), new ÅpenPeriodeDto(NOW.plusWeeks(4), NOW.plusWeeks(6).minusDays(1)))));
+        var vedlegg2 = DokumentasjonUtil.vedlegg(DokumentasjonUtil.uttaksperioder(List.of(new ÅpenPeriodeDtoOLD(NOW, NOW.plusWeeks(1).minusDays(1)),
+            new ÅpenPeriodeDtoOLD(NOW.plusWeeks(4), NOW.plusWeeks(6).minusDays(1)))));
         var vedlegg3 = DokumentasjonUtil.vedlegg(DokumentasjonUtil.uttaksperiode(NOW.plusWeeks(1), NOW.plusWeeks(3).minusDays(1)));
         var vedlegg4 = DokumentasjonUtil.vedlegg(DokumentasjonUtil.opptjening(utenlandskOpptjening.tidsperiode()));
         var vedlegg5 = DokumentasjonUtil.vedlegg(DokumentasjonUtil.opptjening(annenNorskOpptjening.tidsperiode()));
 
         var søknadDto = new ForeldrepengerBuilder().medFordeling(uttak)
             .medØnskerJustertUttakVedFødsel(true)
-            .medDekningsgrad(Dekningsgrad.ÅTTI)
+            .medDekningsgrad(DekningsgradOLD.ÅTTI)
             .medMedlemsskap(medlemskapUtlandetForrige12mnd())
             .medSøker(new SøkerBuilder(BrukerRolle.MOR).medAndreInntekterSiste10Mnd(List.of(utenlandskOpptjening, annenNorskOpptjening)).build())
             .medAnnenForelder(AnnenforelderBuilder.ukjentForelder())

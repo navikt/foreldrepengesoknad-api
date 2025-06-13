@@ -3,11 +3,11 @@ package no.nav.foreldrepenger.selvbetjening.kontrakt.innsending.util.builder;
 import java.time.LocalDate;
 import java.util.List;
 
-import no.nav.foreldrepenger.selvbetjening.kontrakt.innsending.dto.BarnDto;
-import no.nav.foreldrepenger.selvbetjening.kontrakt.innsending.dto.foreldrepenger.Situasjon;
+import no.nav.foreldrepenger.selvbetjening.kontrakt.innsending.dto.BarnDtoOLD;
+import no.nav.foreldrepenger.selvbetjening.kontrakt.innsending.dto.foreldrepenger.SituasjonOLD;
 
 public class BarnBuilder {
-    Situasjon situasjon;
+    SituasjonOLD situasjon;
     List<LocalDate> fødselsdatoer;
     int antallBarn;
     LocalDate termindato;
@@ -19,31 +19,28 @@ public class BarnBuilder {
     LocalDate foreldreansvarsdato;
 
     public static BarnBuilder fødsel(int antallBarn, LocalDate fødselsdato) {
-        return new BarnBuilder(antallBarn)
-            .medFødselsdatoer(List.of(fødselsdato))
-            .medTermindato(fødselsdato)
-            .medSituasjon(Situasjon.FØDSEL);
+        return new BarnBuilder(antallBarn).medFødselsdatoer(List.of(fødselsdato)).medTermindato(fødselsdato).medSituasjon(SituasjonOLD.FØDSEL);
     }
+
     public static BarnBuilder termin(int antallBarn, LocalDate termindato) {
-        return new BarnBuilder(antallBarn)
-            .medTermindato(termindato)
+        return new BarnBuilder(antallBarn).medTermindato(termindato)
             .medTerminbekreftelseDato(termindato.minusMonths(1))
-            .medSituasjon(Situasjon.FØDSEL);
+            .medSituasjon(SituasjonOLD.FØDSEL);
     }
+
     public static BarnBuilder adopsjon(LocalDate omsorgsovertakelsesdato, boolean ektefellesBarn) {
-        return new BarnBuilder(1)
-            .medFødselsdatoer(List.of(LocalDate.now().minusYears(10)))
+        return new BarnBuilder(1).medFødselsdatoer(List.of(LocalDate.now().minusYears(10)))
             .medAdopsjonsdato(omsorgsovertakelsesdato)
             .medAnkomstdato(omsorgsovertakelsesdato)
             .medAdopsjonAvEktefellesBarn(ektefellesBarn)
-            .medSituasjon(Situasjon.ADOPSJON);
+            .medSituasjon(SituasjonOLD.ADOPSJON);
     }
+
     public static BarnBuilder omsorgsovertakelse(LocalDate omsorgsovertakelsedato) {
-        return new BarnBuilder(1)
-            .medFødselsdatoer(List.of(LocalDate.now().minusMonths(6)))
+        return new BarnBuilder(1).medFødselsdatoer(List.of(LocalDate.now().minusMonths(6)))
             .medAnkomstdato(omsorgsovertakelsedato)
             .medForeldreansvarsdato(omsorgsovertakelsedato)
-            .medSituasjon(Situasjon.OMSORGSOVERTAKELSE);
+            .medSituasjon(SituasjonOLD.OMSORGSOVERTAKELSE);
     }
 
 
@@ -51,7 +48,7 @@ public class BarnBuilder {
         this.antallBarn = antallBarn;
     }
 
-    public BarnBuilder medSituasjon(Situasjon situasjon) {
+    public BarnBuilder medSituasjon(SituasjonOLD situasjon) {
         this.situasjon = situasjon;
         return this;
     }
@@ -103,17 +100,7 @@ public class BarnBuilder {
 
     public BarnHelper build() {
         return new BarnHelper(
-            new BarnDto(
-                fødselsdatoer,
-                antallBarn,
-                termindato,
-                terminbekreftelseDato,
-                adopsjonsdato,
-                ankomstdato,
-                adopsjonAvEktefellesBarn,
-                søkerAdopsjonAlene,
-                foreldreansvarsdato
-            ),
-            situasjon);
+            new BarnDtoOLD(fødselsdatoer, antallBarn, termindato, terminbekreftelseDato, adopsjonsdato, ankomstdato, adopsjonAvEktefellesBarn,
+                søkerAdopsjonAlene, foreldreansvarsdato), situasjon);
     }
 }

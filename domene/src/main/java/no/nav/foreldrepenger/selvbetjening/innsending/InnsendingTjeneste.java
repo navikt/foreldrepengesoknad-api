@@ -21,17 +21,17 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import no.nav.foreldrepenger.common.domain.Kvittering;
 import no.nav.foreldrepenger.selvbetjening.http.RetryAware;
 import no.nav.foreldrepenger.selvbetjening.innsending.pdf.PdfGenerator;
-import no.nav.foreldrepenger.selvbetjening.kontrakt.innsending.dto.Innsending;
-import no.nav.foreldrepenger.selvbetjening.kontrakt.innsending.dto.endringssøknad.EndringssøknadForeldrepengerDto;
+import no.nav.foreldrepenger.selvbetjening.kontrakt.innsending.dto.endringssøknad.EndringssøknadForeldrepengerDtoOLD;
 import no.nav.foreldrepenger.selvbetjening.kontrakt.innsending.dto.ettersendelse.EttersendelseDto;
 import no.nav.foreldrepenger.selvbetjening.kontrakt.innsending.dto.ettersendelse.TilbakebetalingUttalelseDto;
-import no.nav.foreldrepenger.selvbetjening.kontrakt.innsending.dto.foreldrepenger.ForeldrepengesøknadDto;
+import no.nav.foreldrepenger.selvbetjening.kontrakt.innsending.dto.foreldrepenger.ForeldrepengesøknadDtoOLD;
+import no.nav.foreldrepenger.selvbetjening.kontrakt.innsending.v2.dto.Innsending;
 import no.nav.foreldrepenger.selvbetjening.kontrakt.innsending.v2.dto.VedleggDto;
 import no.nav.foreldrepenger.selvbetjening.kontrakt.innsending.v2.dto.VedleggReferanse;
 import no.nav.foreldrepenger.selvbetjening.kontrakt.innsending.v2.dto.engangsstønad.EngangsstønadDto;
 import no.nav.foreldrepenger.selvbetjening.kontrakt.innsending.v2.dto.svangerskapspenger.SvangerskapspengesøknadDto;
 import no.nav.foreldrepenger.selvbetjening.mellomlagring.KryptertMellomlagring;
-import no.nav.foreldrepenger.selvbetjening.mellomlagring.Ytelse;
+import no.nav.foreldrepenger.selvbetjening.mellomlagring.YtelseMellomlagringType;
 
 @Service
 public class InnsendingTjeneste implements RetryAware {
@@ -98,7 +98,7 @@ public class InnsendingTjeneste implements RetryAware {
         var antallAutomatiskeVedlegg = innsending.vedlegg().stream().filter(v -> AUTOMATISK.equals(v.innsendingsType())).count();
         if (antallAutomatiskeVedlegg > 0) {
             LOG.info("Innsending {} har {} automatiske vedlegg", innsending.navn(), antallAutomatiskeVedlegg);
-            if (!Ytelse.FORELDREPENGER.equals(tilYtelse(innsending))) {
+            if (!YtelseMellomlagringType.FORELDREPENGER.equals(tilYtelse(innsending))) {
                 throw new IllegalStateException("Utviklerfeil: Innsending av type " + innsending.navn() + " har automatiske vedlegg");
             }
         }
@@ -121,7 +121,7 @@ public class InnsendingTjeneste implements RetryAware {
         return vedleggsinnhold;
     }
 
-    private byte[] vedleggFraMellomlagring(UUID uuid, Ytelse ytelse) {
+    private byte[] vedleggFraMellomlagring(UUID uuid, YtelseMellomlagringType ytelse) {
         return mellomlagring.lesKryptertVedlegg(uuid.toString(), ytelse)
             .orElseThrow(() -> new IllegalStateException("Fant ikke mellomlagret vedlegg med uuid " + uuid + " og ytelse " + ytelse));
     }
@@ -133,26 +133,26 @@ public class InnsendingTjeneste implements RetryAware {
         }
     }
 
-    private Ytelse tilYtelse(Innsending innsending) {
-        if (innsending instanceof ForeldrepengesøknadDto
+    private YtelseMellomlagringType tilYtelse(Innsending innsending) {
+        if (innsending instanceof ForeldrepengesøknadDtoOLD
             || innsending instanceof no.nav.foreldrepenger.selvbetjening.kontrakt.innsending.v2.dto.foreldrepenger.ForeldrepengesøknadDto) {
-            return Ytelse.FORELDREPENGER;
+            return YtelseMellomlagringType.FORELDREPENGER;
         }
         if (innsending instanceof EngangsstønadDto) {
-            return Ytelse.ENGANGSSTONAD;
+            return YtelseMellomlagringType.ENGANGSSTONAD;
         }
         if (innsending instanceof SvangerskapspengesøknadDto) {
-            return Ytelse.SVANGERSKAPSPENGER;
+            return YtelseMellomlagringType.SVANGERSKAPSPENGER;
         }
-        if (innsending instanceof EndringssøknadForeldrepengerDto
+        if (innsending instanceof EndringssøknadForeldrepengerDtoOLD
             || innsending instanceof no.nav.foreldrepenger.selvbetjening.kontrakt.innsending.v2.dto.endringssøknad.EndringssøknadForeldrepengerDto) {
-            return Ytelse.FORELDREPENGER;
+            return YtelseMellomlagringType.FORELDREPENGER;
         }
         if (innsending instanceof EttersendelseDto ettersendelse) {
             return switch (ettersendelse.type()) {
-                case FORELDREPENGER -> Ytelse.FORELDREPENGER;
-                case SVANGERSKAPSPENGER -> Ytelse.SVANGERSKAPSPENGER;
-                case ENGANGSSTØNAD -> Ytelse.ENGANGSSTONAD;
+                case FORELDREPENGER -> YtelseMellomlagringType.FORELDREPENGER;
+                case SVANGERSKAPSPENGER -> YtelseMellomlagringType.SVANGERSKAPSPENGER;
+                case ENGANGSSTØNAD -> YtelseMellomlagringType.ENGANGSSTONAD;
             };
         }
         throw new IllegalStateException("Utviklerfeil: Fant ikke ytelse på innsending: " + innsending);

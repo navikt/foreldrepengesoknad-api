@@ -88,8 +88,10 @@ class OppslagPersonMapperTest {
         var annenpartFornavn = "Guro";
         var annenpartMellomnavn = "";
         var annenpartEtternavn = "Skoskaft";
-        var annenPartFelles = new AnnenPart(annenpartFnr, annenpartAktørId,
-            new Navn(annenpartFornavn, annenpartMellomnavn, annenpartEtternavn), annenpartFødselsdato);
+        var annenPartFelles = new AnnenPart(annenpartFnr,
+            annenpartAktørId,
+            new Navn(annenpartFornavn, annenpartMellomnavn, annenpartEtternavn),
+            annenpartFødselsdato);
 
         var barnFnr = new Fødselsnummer("11111122222");
         var barnFødselsdato = LocalDate.now().minusMonths(5);
@@ -99,9 +101,15 @@ class OppslagPersonMapperTest {
         var søkerAktørId = new AktørId("9988888877777");
         var søkerFornavn = "Kvikk";
         var søkerEtternavn = "Flakk";
-        return new Person(søkerAktørId, søkerFnr, LocalDate.now().minusYears(25),
-            new Navn(søkerFornavn, null,  søkerEtternavn), Kjønn.M, Målform.NB,
-            Bankkonto.UKJENT, List.of(barnFelles), new Sivilstand(Sivilstand.Type.GIFT));
+        return new Person(søkerAktørId,
+            søkerFnr,
+            LocalDate.now().minusYears(25),
+            new Navn(søkerFornavn, null, søkerEtternavn),
+            Kjønn.M,
+            Målform.NB,
+            Bankkonto.UKJENT,
+            List.of(barnFelles),
+            new Sivilstand(Sivilstand.SivilstandType.GIFT));
     }
 
     public static Person personUtenAnnenpart() {
@@ -116,13 +124,23 @@ class OppslagPersonMapperTest {
         var søkerAktørId = new AktørId("9988888877777");
         var søkerFornavn = "Kvikk";
         var søkerEtternavn = "Flakk";
-        return new Person(søkerAktørId, søkerFnr, LocalDate.now().minusYears(30),
-            new Navn(søkerFornavn, null,  søkerEtternavn), Kjønn.M, Målform.NB, null,
-                List.of(barnFelles1, barnFelles2), new Sivilstand(Sivilstand.Type.SEPARERT));
+        return new Person(søkerAktørId,
+            søkerFnr,
+            LocalDate.now().minusYears(30),
+            new Navn(søkerFornavn, null, søkerEtternavn),
+            Kjønn.M,
+            Målform.NB,
+            null,
+            List.of(barnFelles1, barnFelles2),
+            new Sivilstand(Sivilstand.SivilstandType.SEPARERT));
     }
 
     public static List<Arbeidsforhold> arbeidsforhold() {
-        return List.of(new Arbeidsforhold(ARBEIDSGIVER_ID, ARBEIDSGIVER_ID_TYPE, ARBEIDSGIVER_NAVN, STILLINGSPROSENT,
-            FOM_ARBEIDSFORHOLD, TOM_ARBEIDSFORHOLD));
+        return List.of(new Arbeidsforhold(ARBEIDSGIVER_ID,
+            ARBEIDSGIVER_ID_TYPE,
+            ARBEIDSGIVER_NAVN,
+            STILLINGSPROSENT,
+            FOM_ARBEIDSFORHOLD,
+            TOM_ARBEIDSFORHOLD));
     }
 }

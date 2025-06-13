@@ -6,8 +6,8 @@ import java.util.List;
 import no.nav.foreldrepenger.common.domain.BrukerRolle;
 import no.nav.foreldrepenger.common.domain.Saksnummer;
 import no.nav.foreldrepenger.common.oppslag.dkif.Målform;
-import no.nav.foreldrepenger.selvbetjening.kontrakt.innsending.v2.dto.VedleggDto;
 import no.nav.foreldrepenger.selvbetjening.kontrakt.innsending.v2.dto.BarnDto;
+import no.nav.foreldrepenger.selvbetjening.kontrakt.innsending.v2.dto.VedleggDto;
 import no.nav.foreldrepenger.selvbetjening.kontrakt.innsending.v2.dto.endringssøknad.EndringssøknadForeldrepengerDto;
 import no.nav.foreldrepenger.selvbetjening.kontrakt.innsending.v2.dto.foreldrepenger.annenpart.AnnenForelderDto;
 import no.nav.foreldrepenger.selvbetjening.kontrakt.innsending.v2.dto.foreldrepenger.uttaksplan.UttaksplanDto;
@@ -20,7 +20,6 @@ public class EndringssøknadBuilder {
     private LocalDate mottattdato;
     private BarnDto barn;
     private AnnenForelderDto annenForelder;
-    private String tilleggsopplysninger;
     private UttaksplanDto uttaksplan;
     private List<VedleggDto> vedlegg;
 
@@ -54,11 +53,6 @@ public class EndringssøknadBuilder {
         return this;
     }
 
-    public EndringssøknadBuilder medTilleggsopplysninger(String tilleggsopplysninger) {
-        this.tilleggsopplysninger = tilleggsopplysninger;
-        return this;
-    }
-
     public EndringssøknadBuilder medUttaksplan(UttaksplanDto uttaksplan) {
         this.uttaksplan = uttaksplan;
         return this;
@@ -75,17 +69,9 @@ public class EndringssøknadBuilder {
     }
 
     public EndringssøknadForeldrepengerDto build() {
-        if (mottattdato == null) mottattdato = LocalDate.now();
-        return new EndringssøknadForeldrepengerDto(
-            mottattdato,
-            rolle,
-            språkkode,
-            barn,
-            annenForelder,
-            tilleggsopplysninger,
-            uttaksplan,
-            saksnummer,
-            vedlegg
-        );
+        if (mottattdato == null) {
+            mottattdato = LocalDate.now();
+        }
+        return new EndringssøknadForeldrepengerDto(mottattdato, rolle, språkkode, barn, annenForelder, uttaksplan, saksnummer, vedlegg);
     }
 }

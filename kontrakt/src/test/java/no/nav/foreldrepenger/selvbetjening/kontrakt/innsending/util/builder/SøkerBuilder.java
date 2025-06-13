@@ -4,18 +4,18 @@ import java.util.List;
 
 import no.nav.foreldrepenger.common.domain.BrukerRolle;
 import no.nav.foreldrepenger.common.oppslag.dkif.Målform;
-import no.nav.foreldrepenger.selvbetjening.kontrakt.innsending.dto.AnnenInntektDto;
-import no.nav.foreldrepenger.selvbetjening.kontrakt.innsending.dto.FrilansInformasjonDto;
-import no.nav.foreldrepenger.selvbetjening.kontrakt.innsending.dto.NæringDto;
-import no.nav.foreldrepenger.selvbetjening.kontrakt.innsending.dto.SøkerDto;
+import no.nav.foreldrepenger.selvbetjening.kontrakt.innsending.dto.AnnenInntektDtoOLD;
+import no.nav.foreldrepenger.selvbetjening.kontrakt.innsending.dto.FrilansInformasjonDtoOLD;
+import no.nav.foreldrepenger.selvbetjening.kontrakt.innsending.dto.NæringDtoOLD;
+import no.nav.foreldrepenger.selvbetjening.kontrakt.innsending.dto.SøkerDtoOLD;
 
 public final class SøkerBuilder {
     private BrukerRolle rolle;
     private Målform språkkode;
     private boolean erAleneOmOmsorg;
-    private FrilansInformasjonDto frilansInformasjon;
-    private List<NæringDto> selvstendigNæringsdrivendeInformasjon;
-    private List<AnnenInntektDto> andreInntekterSiste10Mnd;
+    private FrilansInformasjonDtoOLD frilansInformasjon;
+    private List<NæringDtoOLD> selvstendigNæringsdrivendeInformasjon;
+    private List<AnnenInntektDtoOLD> andreInntekterSiste10Mnd;
 
     public SøkerBuilder(BrukerRolle rolle) {
         this.rolle = rolle;
@@ -37,29 +37,23 @@ public final class SøkerBuilder {
         return this;
     }
 
-    public SøkerBuilder medFrilansInformasjon(FrilansInformasjonDto frilansInformasjon) {
+    public SøkerBuilder medFrilansInformasjon(FrilansInformasjonDtoOLD frilansInformasjon) {
         this.frilansInformasjon = frilansInformasjon;
         return this;
     }
 
-    public SøkerBuilder medSelvstendigNæringsdrivendeInformasjon(List<NæringDto> selvstendigNæringsdrivendeInformasjon) {
+    public SøkerBuilder medSelvstendigNæringsdrivendeInformasjon(List<NæringDtoOLD> selvstendigNæringsdrivendeInformasjon) {
         this.selvstendigNæringsdrivendeInformasjon = selvstendigNæringsdrivendeInformasjon;
         return this;
     }
 
-    public SøkerBuilder medAndreInntekterSiste10Mnd(List<AnnenInntektDto> andreInntekterSiste10Mnd) {
+    public SøkerBuilder medAndreInntekterSiste10Mnd(List<AnnenInntektDtoOLD> andreInntekterSiste10Mnd) {
         this.andreInntekterSiste10Mnd = andreInntekterSiste10Mnd;
         return this;
     }
 
-    public SøkerDto build() {
-        return new SøkerDto(
-                rolle,
-                språkkode,
-                erAleneOmOmsorg,
-                frilansInformasjon,
-                selvstendigNæringsdrivendeInformasjon,
-                andreInntekterSiste10Mnd
-        );
+    public SøkerDtoOLD build() {
+        return new SøkerDtoOLD(rolle, språkkode, erAleneOmOmsorg, frilansInformasjon, selvstendigNæringsdrivendeInformasjon,
+            andreInntekterSiste10Mnd);
     }
 }

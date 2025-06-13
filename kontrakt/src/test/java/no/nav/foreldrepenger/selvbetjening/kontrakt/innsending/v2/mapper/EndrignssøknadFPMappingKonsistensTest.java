@@ -50,7 +50,6 @@ class EndrignssøknadFPMappingKonsistensTest {
         assertThat(mappedSøknad.getSøker().søknadsRolle()).isEqualTo(søknadDto.rolle());
         assertThat(mappedSøknad.getSøker().målform()).isEqualTo(søknadDto.språkkode());
         assertThat(mappedSøknad.getMottattdato()).isEqualTo(søknadDto.mottattdato());
-        assertThat(mappedSøknad.getTilleggsopplysninger()).isEqualTo(foreldrepengerDto.tilleggsopplysninger());
 
         var ytelse = mappedSøknad.getYtelse();
         assertThat(ytelse).isInstanceOf(Foreldrepenger.class);

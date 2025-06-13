@@ -1,7 +1,7 @@
 package no.nav.foreldrepenger.selvbetjening.mellomlagring;
 
-import static no.nav.foreldrepenger.selvbetjening.mellomlagring.Ytelse.FORELDREPENGER;
-import static no.nav.foreldrepenger.selvbetjening.mellomlagring.Ytelse.SVANGERSKAPSPENGER;
+import static no.nav.foreldrepenger.selvbetjening.mellomlagring.YtelseMellomlagringType.FORELDREPENGER;
+import static no.nav.foreldrepenger.selvbetjening.mellomlagring.YtelseMellomlagringType.SVANGERSKAPSPENGER;
 import static no.nav.foreldrepenger.selvbetjening.vedlegg.VedleggSjekkerTest.fraResource;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.mockito.Mockito.when;
@@ -76,7 +76,7 @@ class KryptertMellomlagringTest {
 
     @Test
     void TestKryptertSøknadEngangssøknad() {
-        var ytelse = Ytelse.ENGANGSSTONAD;
+        var ytelse = YtelseMellomlagringType.ENGANGSSTONAD;
         km.lagreKryptertSøknad("Søknad", ytelse);
 
         var lest = km.lesKryptertSøknad(ytelse);
@@ -90,17 +90,17 @@ class KryptertMellomlagringTest {
     @Test
     void slettingAvMellomlagretESSkalIkkeSletteMellomlagretFP() {
         km.lagreKryptertSøknad("Søknad FP", FORELDREPENGER);
-        km.lagreKryptertSøknad("Søknad ES", Ytelse.ENGANGSSTONAD);
+        km.lagreKryptertSøknad("Søknad ES", YtelseMellomlagringType.ENGANGSSTONAD);
 
         var mellomlagretFP = km.lesKryptertSøknad(FORELDREPENGER);
-        var mellomlagretES = km.lesKryptertSøknad(Ytelse.ENGANGSSTONAD);
+        var mellomlagretES = km.lesKryptertSøknad(YtelseMellomlagringType.ENGANGSSTONAD);
 
         assertThat(mellomlagretFP).contains("Søknad FP");
         assertThat(mellomlagretES).contains("Søknad ES");
 
-        km.slettMellomlagring(Ytelse.ENGANGSSTONAD);
+        km.slettMellomlagring(YtelseMellomlagringType.ENGANGSSTONAD);
         assertThat(km.lesKryptertSøknad(FORELDREPENGER)).isPresent();
-        assertThat(km.lesKryptertSøknad(Ytelse.ENGANGSSTONAD)).isNotPresent();
+        assertThat(km.lesKryptertSøknad(YtelseMellomlagringType.ENGANGSSTONAD)).isNotPresent();
     }
 
     @Test

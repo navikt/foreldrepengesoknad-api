@@ -1,6 +1,6 @@
 package no.nav.foreldrepenger.selvbetjening.mellomlagring;
 
-public enum Ytelse {
+public enum YtelseMellomlagringType {
     FORELDREPENGER,
     SVANGERSKAPSPENGER,
     ENGANGSSTONAD

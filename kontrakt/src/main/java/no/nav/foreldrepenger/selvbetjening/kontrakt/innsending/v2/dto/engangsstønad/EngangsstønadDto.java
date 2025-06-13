@@ -15,7 +15,10 @@ import no.nav.foreldrepenger.selvbetjening.kontrakt.innsending.v2.dto.SøknadDto
 import no.nav.foreldrepenger.selvbetjening.kontrakt.innsending.v2.dto.UtenlandsoppholdsperiodeDto;
 import no.nav.foreldrepenger.selvbetjening.kontrakt.innsending.v2.dto.VedleggDto;
 
-public record EngangsstønadDto(LocalDate mottattdato, @NotNull Målform språkkode, @Valid BrukerRolle rolle, @Valid @NotNull BarnDto barn,
+public record EngangsstønadDto(LocalDate mottattdato,
+                               @NotNull Målform språkkode,
+                               @Valid BrukerRolle rolle,
+                               @Valid @NotNull BarnDto barn,
                                @Valid @Size(max = 40) List<@Valid @NotNull UtenlandsoppholdsperiodeDto> utenlandsopphold,
                                @Valid @VedlegglistestørrelseConstraint @Size(max = 100) List<@Valid @NotNull VedleggDto> vedlegg) implements SøknadDto {
 

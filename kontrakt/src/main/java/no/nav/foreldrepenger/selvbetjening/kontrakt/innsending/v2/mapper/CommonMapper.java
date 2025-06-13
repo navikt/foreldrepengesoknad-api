@@ -25,8 +25,7 @@ import no.nav.foreldrepenger.common.domain.felles.relasjontilbarn.Fødsel;
 import no.nav.foreldrepenger.common.domain.felles.relasjontilbarn.Omsorgsovertakelse;
 import no.nav.foreldrepenger.common.domain.felles.relasjontilbarn.RelasjonTilBarn;
 import no.nav.foreldrepenger.common.domain.felles.ÅpenPeriode;
-import no.nav.foreldrepenger.selvbetjening.kontrakt.innsending.v2.dto.VedleggDto;
-import no.nav.foreldrepenger.selvbetjening.kontrakt.innsending.dto.ÅpenPeriodeDto;
+import no.nav.foreldrepenger.selvbetjening.kontrakt.innsending.dto.ÅpenPeriodeDtoOLD;
 import no.nav.foreldrepenger.selvbetjening.kontrakt.innsending.mapper.DokumentasjonReferanseMapper;
 import no.nav.foreldrepenger.selvbetjening.kontrakt.innsending.v2.dto.AdopsjonDto;
 import no.nav.foreldrepenger.selvbetjening.kontrakt.innsending.v2.dto.AnnenInntektDto;
@@ -37,6 +36,7 @@ import no.nav.foreldrepenger.selvbetjening.kontrakt.innsending.v2.dto.NæringDto
 import no.nav.foreldrepenger.selvbetjening.kontrakt.innsending.v2.dto.OmsorgsovertakelseDto;
 import no.nav.foreldrepenger.selvbetjening.kontrakt.innsending.v2.dto.TerminDto;
 import no.nav.foreldrepenger.selvbetjening.kontrakt.innsending.v2.dto.UtenlandsoppholdsperiodeDto;
+import no.nav.foreldrepenger.selvbetjening.kontrakt.innsending.v2.dto.VedleggDto;
 
 public final class CommonMapper {
 
@@ -48,9 +48,7 @@ public final class CommonMapper {
     }
 
     static List<Utenlandsopphold.Opphold> tilUtenlandsopphold(List<UtenlandsoppholdsperiodeDto> perioder) {
-        return safeStream(perioder)
-            .map(CommonMapper::tilUtenlandsopphold)
-            .toList();
+        return safeStream(perioder).map(CommonMapper::tilUtenlandsopphold).toList();
     }
 
     private static Utenlandsopphold.Opphold tilUtenlandsopphold(UtenlandsoppholdsperiodeDto oppholdsperiode) {
@@ -67,59 +65,48 @@ public final class CommonMapper {
         } else if (barn instanceof OmsorgsovertakelseDto o) {
             return tilOmsorgsovertagelse(o, vedlegg);
         } else {
-            throw new IllegalStateException("Utviklerfeil: Skal ikke være mulig med annen type barn enn fødsel, termin, adopsjon eller omsorgsovertakelse");
+            throw new IllegalStateException(
+                "Utviklerfeil: Skal ikke være mulig med annen type barn enn fødsel, termin, adopsjon eller omsorgsovertakelse");
         }
     }
 
     private static Fødsel tilFødsel(FødselDto barn, List<VedleggDto> vedlegg) {
-        return new Fødsel(
-            barn.antallBarn(),
-            List.of(barn.fødselsdato()), // TODO: Fjern liste i mottak!
-            barn.termindato(),
-            tilVedleggsreferanse(DokumentasjonReferanseMapper.dokumentasjonSomDokumentererBarn(vedlegg))
-        );
+        return new Fødsel(barn.antallBarn(), List.of(barn.fødselsdato()), // TODO: Fjern liste i mottak!
+            barn.termindato(), tilVedleggsreferanse(DokumentasjonReferanseMapper.dokumentasjonSomDokumentererBarn(vedlegg)));
     }
 
     private static FremtidigFødsel tilFremtidigFødsel(TerminDto barn, List<VedleggDto> vedlegg) {
-        return new FremtidigFødsel(
-            barn.antallBarn(),
+        return new FremtidigFødsel(barn.antallBarn(),
             barn.termindato(),
             barn.terminbekreftelseDato(),
-            tilVedleggsreferanse(DokumentasjonReferanseMapper.dokumentasjonSomDokumentererBarn(vedlegg))
-        );
+            tilVedleggsreferanse(DokumentasjonReferanseMapper.dokumentasjonSomDokumentererBarn(vedlegg)));
     }
 
     private static Omsorgsovertakelse tilOmsorgsovertagelse(OmsorgsovertakelseDto barn, List<VedleggDto> vedlegg) {
-        return new Omsorgsovertakelse(
-            barn.antallBarn(),
+        return new Omsorgsovertakelse(barn.antallBarn(),
             barn.foreldreansvarsdato(),
             barn.fødselsdatoer(),
-            tilVedleggsreferanse(DokumentasjonReferanseMapper.dokumentasjonSomDokumentererBarn(vedlegg))
-        );
+            tilVedleggsreferanse(DokumentasjonReferanseMapper.dokumentasjonSomDokumentererBarn(vedlegg)));
     }
 
     private static Adopsjon tilAdopsjon(AdopsjonDto barn, List<VedleggDto> vedlegg) {
-        return new Adopsjon(
-            barn.antallBarn(),
+        return new Adopsjon(barn.antallBarn(),
             barn.adopsjonsdato(),
             barn.adopsjonAvEktefellesBarn(),
             barn.søkerAdopsjonAlene() != null && barn.søkerAdopsjonAlene(),
             tilVedleggsreferanse(DokumentasjonReferanseMapper.dokumentasjonSomDokumentererBarn(vedlegg)),
             barn.ankomstdato(),
-            barn.fødselsdatoer()
-        );
+            barn.fødselsdatoer());
     }
 
     public static Opptjening tilOpptjening(NæringDto egenNæring,
                                            FrilansDto frilans,
                                            List<AnnenInntektDto> annenOpptjening,
                                            List<VedleggDto> vedlegg) {
-        return new Opptjening(
-            tilUtenlandsArbeidsforhold(annenOpptjening, vedlegg),
+        return new Opptjening(tilUtenlandsArbeidsforhold(annenOpptjening, vedlegg),
             tilEgenNæring(egenNæring, vedlegg),
             tilAnnenOpptjening(annenOpptjening, vedlegg),
-            tilFrilans(frilans)
-        );
+            tilFrilans(frilans));
     }
 
     private static List<AnnenOpptjening> tilAnnenOpptjening(List<AnnenInntektDto> andreInntekterSiste10Mnd, List<VedleggDto> vedlegg) {
@@ -130,13 +117,14 @@ public final class CommonMapper {
     }
 
     private static AnnenOpptjening tilAnnenOpptjening(AnnenInntektDto.Annet annenInntekt, List<VedleggDto> vedlegg) {
-        return new AnnenOpptjening(
-            annenInntekt.type(),
+        return new AnnenOpptjening(annenInntekt.type(),
             new ÅpenPeriode(annenInntekt.fom(), annenInntekt.tom()),
-            tilVedleggsreferanse(DokumentasjonReferanseMapper.dokumentasjonSomDokumentererOpptjeningsperiode(vedlegg, new ÅpenPeriodeDto(annenInntekt.fom(), annenInntekt.tom())))); // TODO ÅpenPeriode
+            tilVedleggsreferanse(DokumentasjonReferanseMapper.dokumentasjonSomDokumentererOpptjeningsperiode(vedlegg,
+                new ÅpenPeriodeDtoOLD(annenInntekt.fom(), annenInntekt.tom())))); // TODO ÅpenPeriode
     }
 
-    private static List<UtenlandskArbeidsforhold> tilUtenlandsArbeidsforhold(List<AnnenInntektDto> andreInntekterSiste10Mnd, List<VedleggDto> vedlegg) {
+    private static List<UtenlandskArbeidsforhold> tilUtenlandsArbeidsforhold(List<AnnenInntektDto> andreInntekterSiste10Mnd,
+                                                                             List<VedleggDto> vedlegg) {
         return andreInntekterSiste10Mnd.stream()
             .filter(u -> u instanceof AnnenInntektDto.Utlandet)
             .map(u -> tilUtenlandsArbeidsforhold((AnnenInntektDto.Utlandet) u, vedlegg))
@@ -145,12 +133,11 @@ public final class CommonMapper {
     }
 
     private static UtenlandskArbeidsforhold tilUtenlandsArbeidsforhold(AnnenInntektDto.Utlandet annenInntekt, List<VedleggDto> vedlegg) {
-        return new UtenlandskArbeidsforhold(
-            annenInntekt.arbeidsgiverNavn(),
+        return new UtenlandskArbeidsforhold(annenInntekt.arbeidsgiverNavn(),
             new ÅpenPeriode(annenInntekt.fom(), annenInntekt.tom()),
-            tilVedleggsreferanse(DokumentasjonReferanseMapper.dokumentasjonSomDokumentererOpptjeningsperiode(vedlegg, new ÅpenPeriodeDto(annenInntekt.fom(), annenInntekt.tom()))),
-            annenInntekt.land()
-        );
+            tilVedleggsreferanse(DokumentasjonReferanseMapper.dokumentasjonSomDokumentererOpptjeningsperiode(vedlegg,
+                new ÅpenPeriodeDtoOLD(annenInntekt.fom(), annenInntekt.tom()))),
+            annenInntekt.land());
     }
 
     private static List<EgenNæring> tilEgenNæring(NæringDto selvstendig, List<VedleggDto> vedlegg) {
@@ -159,29 +146,28 @@ public final class CommonMapper {
         }
         var næringsinntektBrutto = Optional.ofNullable(selvstendig.varigEndringInntektEtterEndring())
             .map(Integer::longValue)
-            .orElse(Optional.ofNullable(selvstendig.næringsinntekt())
-                .map(Integer::longValue)
-                .orElse(0L));
+            .orElse(Optional.ofNullable(selvstendig.næringsinntekt()).map(Integer::longValue).orElse(0L));
 
-        return List.of(
-            new EgenNæring( // TODO: Aldri mer enn 1 dokument
-                selvstendig.registrertINorge() ? CountryCode.NO : selvstendig.registrertILand(),
-                selvstendig.organisasjonsnummer(),
-                selvstendig.navnPåNæringen(),
-                List.of(selvstendig.næringstype()),
-                new ÅpenPeriode(selvstendig.fom(), selvstendig.tom()),
-                false, // TODO: aldri oppgitt
-                null,
-                erNyopprettet(selvstendig.fom()),
-                selvstendig.hattVarigEndringAvNæringsinntektSiste4Kalenderår(),
-                selvstendig.harBlittYrkesaktivILøpetAvDeTreSisteFerdigliknedeÅrene(),
-                næringsinntektBrutto,
-                selvstendig.varigEndringDato(),
-                selvstendig.oppstartsdato(),
-                selvstendig.varigEndringBeskrivelse(),
-                null, // TODO: Stillingsprosent ikke i bruk
-                tilVedleggsreferanse(DokumentasjonReferanseMapper.dokumentasjonSomDokumentererOpptjeningsperiode(vedlegg, new ÅpenPeriodeDto(selvstendig.fom(), selvstendig.tom())))
-        ));
+        return List.of(new EgenNæring( // TODO: Aldri mer enn 1 dokument
+            selvstendig.registrertINorge() ? CountryCode.NO : selvstendig.registrertILand(),
+            selvstendig.organisasjonsnummer(),
+            selvstendig.navnPåNæringen(),
+            List.of(selvstendig.næringstype()),
+            new ÅpenPeriode(selvstendig.fom(), selvstendig.tom()),
+            false,
+            // TODO: aldri oppgitt
+            null,
+            erNyopprettet(selvstendig.fom()),
+            selvstendig.hattVarigEndringAvNæringsinntektSiste4Kalenderår(),
+            selvstendig.harBlittYrkesaktivILøpetAvDeTreSisteFerdigliknedeÅrene(),
+            næringsinntektBrutto,
+            selvstendig.varigEndringDato(),
+            selvstendig.oppstartsdato(),
+            selvstendig.varigEndringBeskrivelse(),
+            null,
+            // TODO: Stillingsprosent ikke i bruk
+            tilVedleggsreferanse(DokumentasjonReferanseMapper.dokumentasjonSomDokumentererOpptjeningsperiode(vedlegg,
+                new ÅpenPeriodeDtoOLD(selvstendig.fom(), selvstendig.tom())))));
     }
 
 
@@ -197,7 +183,6 @@ public final class CommonMapper {
     }
 
     static boolean erNyopprettet(LocalDate nå, LocalDate fom) {
-        return fom.isAfter(now().minusYears(nå.isAfter(LocalDate.of(nå.getYear(), OCTOBER, 20)) ? 3 : 4)
-            .with(firstDayOfYear()).minusDays(1));
+        return fom.isAfter(now().minusYears(nå.isAfter(LocalDate.of(nå.getYear(), OCTOBER, 20)) ? 3 : 4).with(firstDayOfYear()).minusDays(1));
     }
 }

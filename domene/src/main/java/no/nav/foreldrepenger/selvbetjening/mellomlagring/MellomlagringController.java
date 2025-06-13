@@ -1,10 +1,18 @@
 package no.nav.foreldrepenger.selvbetjening.mellomlagring;
 
-import jakarta.validation.Valid;
-import jakarta.validation.constraints.Pattern;
-import no.nav.foreldrepenger.selvbetjening.http.ProtectedRestController;
-import no.nav.foreldrepenger.selvbetjening.vedlegg.Image2PDFConverter;
-import no.nav.foreldrepenger.selvbetjening.vedlegg.VedleggSjekker;
+import static no.nav.foreldrepenger.common.domain.validation.InputValideringRegex.FRITEKST;
+import static no.nav.foreldrepenger.selvbetjening.vedlegg.DelegerendeVedleggSjekker.DELEGERENDE;
+import static org.springframework.http.HttpStatus.NO_CONTENT;
+import static org.springframework.http.MediaType.APPLICATION_JSON_VALUE;
+import static org.springframework.http.MediaType.MULTIPART_FORM_DATA_VALUE;
+import static org.springframework.http.ResponseEntity.created;
+import static org.springframework.http.ResponseEntity.noContent;
+import static org.springframework.http.ResponseEntity.notFound;
+import static org.springframework.http.ResponseEntity.ok;
+
+import java.io.IOException;
+import java.util.UUID;
+
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
@@ -18,18 +26,11 @@ import org.springframework.web.bind.annotation.RequestPart;
 import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.multipart.MultipartFile;
 
-import java.io.IOException;
-import java.util.UUID;
-
-import static no.nav.foreldrepenger.common.domain.validation.InputValideringRegex.FRITEKST;
-import static no.nav.foreldrepenger.selvbetjening.vedlegg.DelegerendeVedleggSjekker.DELEGERENDE;
-import static org.springframework.http.HttpStatus.NO_CONTENT;
-import static org.springframework.http.MediaType.APPLICATION_JSON_VALUE;
-import static org.springframework.http.MediaType.MULTIPART_FORM_DATA_VALUE;
-import static org.springframework.http.ResponseEntity.created;
-import static org.springframework.http.ResponseEntity.noContent;
-import static org.springframework.http.ResponseEntity.notFound;
-import static org.springframework.http.ResponseEntity.ok;
+import jakarta.validation.Valid;
+import jakarta.validation.constraints.Pattern;
+import no.nav.foreldrepenger.selvbetjening.http.ProtectedRestController;
+import no.nav.foreldrepenger.selvbetjening.vedlegg.Image2PDFConverter;
+import no.nav.foreldrepenger.selvbetjening.vedlegg.VedleggSjekker;
 
 @ProtectedRestController(MellomlagringController.REST_STORAGE)
 public class MellomlagringController {
@@ -39,7 +40,9 @@ public class MellomlagringController {
     private final Image2PDFConverter converter;
     private final VedleggSjekker sjekker;
 
-    public MellomlagringController(KryptertMellomlagring mellomlagring, Image2PDFConverter converter, @Qualifier(DELEGERENDE) VedleggSjekker sjekker) {
+    public MellomlagringController(KryptertMellomlagring mellomlagring,
+                                   Image2PDFConverter converter,
+                                   @Qualifier(DELEGERENDE) VedleggSjekker sjekker) {
         this.mellomlagring = mellomlagring;
         this.converter = converter;
         this.sjekker = sjekker;
@@ -51,59 +54,51 @@ public class MellomlagringController {
     }
 
     @GetMapping(path = "/{ytelse}")
-    public ResponseEntity<String> lesSøknad(@PathVariable("ytelse") @Valid Ytelse ytelse) {
-        return mellomlagring.lesKryptertSøknad(ytelse)
-            .map(s -> ok().body(s))
-            .orElse(noContent().build());
+    public ResponseEntity<String> lesSøknad(@PathVariable("ytelse") @Valid YtelseMellomlagringType ytelse) {
+        return mellomlagring.lesKryptertSøknad(ytelse).map(s -> ok().body(s)).orElse(noContent().build());
     }
 
     @DeleteMapping(path = "/{ytelse}")
     @ResponseStatus(NO_CONTENT)
-    public void slettMellomlagring(@PathVariable("ytelse") @Valid Ytelse ytelse) {
+    public void slettMellomlagring(@PathVariable("ytelse") @Valid YtelseMellomlagringType ytelse) {
         mellomlagring.slettMellomlagring(ytelse);
     }
 
     @PostMapping(path = "/{ytelse}", consumes = APPLICATION_JSON_VALUE)
-    public void lagreSøknadYtelse(@PathVariable("ytelse") @Valid Ytelse ytelse, @RequestBody String søknad) {
+    public void lagreSøknadYtelse(@PathVariable("ytelse") @Valid YtelseMellomlagringType ytelse, @RequestBody String søknad) {
         mellomlagring.lagreKryptertSøknad(søknad, ytelse);
     }
 
     @GetMapping("/{ytelse}/vedlegg/{key}")
-    public ResponseEntity<byte[]> lesVedlegg(@PathVariable("ytelse") @Valid Ytelse ytelse,
+    public ResponseEntity<byte[]> lesVedlegg(@PathVariable("ytelse") @Valid YtelseMellomlagringType ytelse,
                                              @PathVariable("key") @Pattern(regexp = FRITEKST) String key) {
-        return mellomlagring.lesKryptertVedlegg(key, ytelse)
-            .map(this::found)
-            .orElse(notFound().build());
+        return mellomlagring.lesKryptertVedlegg(key, ytelse).map(this::found).orElse(notFound().build());
     }
 
     @PostMapping(path = "/{ytelse}/vedlegg", consumes = MULTIPART_FORM_DATA_VALUE)
     public ResponseEntity<String> lagreVedlegg(@RequestPart("vedlegg") @Valid MultipartFile file,
-                                               @PathVariable("ytelse") @Valid Ytelse ytelse,
-                                               @RequestParam(value = "uuid", required = false) @Valid UUID uuid) { // Kan spesifisere uuid hvis ønskelig
+                                               @PathVariable("ytelse") @Valid YtelseMellomlagringType ytelse,
+                                               // Kan spesifisere uuid hvis ønskelig
+                                               @RequestParam(value = "uuid", required = false) @Valid UUID uuid) {
         var originalBytes = getBytesNullSjekk(file);
         sjekker.sjekk(Attachment.of(originalBytes));
 
         var pdfBytes = converter.convert(originalBytes);
 
-        var attachment = uuid != null
-                ? new Attachment(pdfBytes, uuid.toString())
-                : Attachment.of(pdfBytes);
+        var attachment = uuid != null ? new Attachment(pdfBytes, uuid.toString()) : Attachment.of(pdfBytes);
         mellomlagring.lagreKryptertVedlegg(attachment, ytelse);
         return created(attachment.uri()).body(attachment.uuid());
     }
 
     @DeleteMapping("/{ytelse}/vedlegg/{key}")
     @ResponseStatus(NO_CONTENT)
-    public void slettVedlegg(@PathVariable("ytelse") @Valid Ytelse ytelse,
+    public void slettVedlegg(@PathVariable("ytelse") @Valid YtelseMellomlagringType ytelse,
                              @PathVariable("key") @Pattern(regexp = FRITEKST) String key) {
         mellomlagring.slettKryptertVedlegg(key, ytelse);
     }
 
     private ResponseEntity<byte[]> found(byte[] innhold) {
-        return ok()
-                .contentType(MediaType.APPLICATION_PDF)
-                .contentLength(innhold.length)
-                .body(innhold);
+        return ok().contentType(MediaType.APPLICATION_PDF).contentLength(innhold.length).body(innhold);
     }
 
     private static byte[] getBytesNullSjekk(MultipartFile file) {

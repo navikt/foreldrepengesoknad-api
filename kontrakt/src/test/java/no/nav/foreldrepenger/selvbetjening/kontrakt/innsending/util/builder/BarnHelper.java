@@ -1,7 +1,7 @@
 package no.nav.foreldrepenger.selvbetjening.kontrakt.innsending.util.builder;
 
-import no.nav.foreldrepenger.selvbetjening.kontrakt.innsending.dto.BarnDto;
-import no.nav.foreldrepenger.selvbetjening.kontrakt.innsending.dto.foreldrepenger.Situasjon;
+import no.nav.foreldrepenger.selvbetjening.kontrakt.innsending.dto.BarnDtoOLD;
+import no.nav.foreldrepenger.selvbetjening.kontrakt.innsending.dto.foreldrepenger.SituasjonOLD;
 
-public record BarnHelper(BarnDto barn, Situasjon situasjon) {
+public record BarnHelper(BarnDtoOLD barn, SituasjonOLD situasjon) {
 }

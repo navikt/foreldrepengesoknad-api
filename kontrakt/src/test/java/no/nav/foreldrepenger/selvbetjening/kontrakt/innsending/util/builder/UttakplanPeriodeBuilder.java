@@ -7,13 +7,13 @@ import no.nav.foreldrepenger.common.domain.foreldrepenger.fordeling.Oppholdsårs
 import no.nav.foreldrepenger.common.domain.foreldrepenger.fordeling.Overføringsårsak;
 import no.nav.foreldrepenger.common.domain.foreldrepenger.fordeling.StønadskontoType;
 import no.nav.foreldrepenger.common.domain.foreldrepenger.fordeling.UtsettelsesÅrsak;
-import no.nav.foreldrepenger.selvbetjening.kontrakt.innsending.dto.foreldrepenger.UttaksplanPeriodeDto;
-import no.nav.foreldrepenger.selvbetjening.kontrakt.innsending.dto.ÅpenPeriodeDto;
+import no.nav.foreldrepenger.selvbetjening.kontrakt.innsending.dto.foreldrepenger.UttaksplanPeriodeDtoOLD;
+import no.nav.foreldrepenger.selvbetjening.kontrakt.innsending.dto.ÅpenPeriodeDtoOLD;
 
 public class UttakplanPeriodeBuilder {
-    UttaksplanPeriodeDto.Type type;
-    ÅpenPeriodeDto tidsperiode;
-    UttaksplanPeriodeDto.KontoType konto;
+    UttaksplanPeriodeDtoOLD.UttakType type;
+    ÅpenPeriodeDtoOLD tidsperiode;
+    UttaksplanPeriodeDtoOLD.KontoType konto;
     String morsAktivitetIPerioden;
     String årsak;
     Double samtidigUttakProsent;
@@ -28,41 +28,37 @@ public class UttakplanPeriodeBuilder {
     List<String> orgnumre;
 
     public static UttakplanPeriodeBuilder uttak(StønadskontoType konto, LocalDate fom, LocalDate tom) {
-        return new UttakplanPeriodeBuilder(UttaksplanPeriodeDto.Type.UTTAK, konto, fom, tom);
+        return new UttakplanPeriodeBuilder(UttaksplanPeriodeDtoOLD.UttakType.UTTAK, konto, fom, tom);
     }
 
     public static UttakplanPeriodeBuilder gradert(StønadskontoType konto, LocalDate fom, LocalDate tom, Double stillingsprosent) {
-        return new UttakplanPeriodeBuilder(UttaksplanPeriodeDto.Type.UTTAK, konto, fom, tom)
-            .medStillingsprosent(stillingsprosent)
+        return new UttakplanPeriodeBuilder(UttaksplanPeriodeDtoOLD.UttakType.UTTAK, konto, fom, tom).medStillingsprosent(stillingsprosent)
             .medGradert(true);
     }
 
     public static UttakplanPeriodeBuilder opphold(Oppholdsårsak oppholdsårsak, LocalDate fom, LocalDate tom) {
-        return new UttakplanPeriodeBuilder(UttaksplanPeriodeDto.Type.OPPHOLD, null, fom, tom)
-            .medÅrsak(oppholdsårsak.name());
+        return new UttakplanPeriodeBuilder(UttaksplanPeriodeDtoOLD.UttakType.OPPHOLD, null, fom, tom).medÅrsak(oppholdsårsak.name());
     }
 
     public static UttakplanPeriodeBuilder overføring(Overføringsårsak årsak, StønadskontoType konto, LocalDate fom, LocalDate tom) {
-        return new UttakplanPeriodeBuilder(UttaksplanPeriodeDto.Type.OVERFØRING, konto, fom, tom)
-            .medÅrsak(årsak.name());
+        return new UttakplanPeriodeBuilder(UttaksplanPeriodeDtoOLD.UttakType.OVERFØRING, konto, fom, tom).medÅrsak(årsak.name());
     }
 
     public static UttakplanPeriodeBuilder utsettelse(UtsettelsesÅrsak årsak, LocalDate fom, LocalDate tom) {
-        return new UttakplanPeriodeBuilder(UttaksplanPeriodeDto.Type.UTSETTELSE, null, fom, tom)
-            .medÅrsak(årsak.name());
+        return new UttakplanPeriodeBuilder(UttaksplanPeriodeDtoOLD.UttakType.UTSETTELSE, null, fom, tom).medÅrsak(årsak.name());
     }
 
     public static UttakplanPeriodeBuilder friUtsettelse(LocalDate fom, LocalDate tom) {
-        return new UttakplanPeriodeBuilder(UttaksplanPeriodeDto.Type.PERIODEUTENUTTAK, null, fom, tom);
+        return new UttakplanPeriodeBuilder(UttaksplanPeriodeDtoOLD.UttakType.PERIODEUTENUTTAK, null, fom, tom);
     }
 
-    private UttakplanPeriodeBuilder(UttaksplanPeriodeDto.Type type, StønadskontoType konto, LocalDate fom, LocalDate tom) {
+    private UttakplanPeriodeBuilder(UttaksplanPeriodeDtoOLD.UttakType type, StønadskontoType konto, LocalDate fom, LocalDate tom) {
         this.type = type;
         this.konto = konto == null ? tilKontoType(StønadskontoType.IKKE_SATT) : tilKontoType(konto);
-        this.tidsperiode = new ÅpenPeriodeDto(fom, tom);
+        this.tidsperiode = new ÅpenPeriodeDtoOLD(fom, tom);
     }
 
-    public UttakplanPeriodeBuilder medTidsperiode(ÅpenPeriodeDto tidsperiode) {
+    public UttakplanPeriodeBuilder medTidsperiode(ÅpenPeriodeDtoOLD tidsperiode) {
         this.tidsperiode = tidsperiode;
         return this;
     }
@@ -132,20 +128,19 @@ public class UttakplanPeriodeBuilder {
         return this;
     }
 
-    public static UttaksplanPeriodeDto.KontoType tilKontoType(StønadskontoType konto) {
+    public static UttaksplanPeriodeDtoOLD.KontoType tilKontoType(StønadskontoType konto) {
         return switch (konto) {
             case IKKE_SATT -> null;
-            case FELLESPERIODE -> UttaksplanPeriodeDto.KontoType.FELLESPERIODE;
-            case MØDREKVOTE -> UttaksplanPeriodeDto.KontoType.MØDREKVOTE;
-            case FEDREKVOTE -> UttaksplanPeriodeDto.KontoType.FEDREKVOTE;
-            case FORELDREPENGER -> UttaksplanPeriodeDto.KontoType.FORELDREPENGER;
-            case FORELDREPENGER_FØR_FØDSEL -> UttaksplanPeriodeDto.KontoType.FORELDREPENGER_FØR_FØDSEL;
+            case FELLESPERIODE -> UttaksplanPeriodeDtoOLD.KontoType.FELLESPERIODE;
+            case MØDREKVOTE -> UttaksplanPeriodeDtoOLD.KontoType.MØDREKVOTE;
+            case FEDREKVOTE -> UttaksplanPeriodeDtoOLD.KontoType.FEDREKVOTE;
+            case FORELDREPENGER -> UttaksplanPeriodeDtoOLD.KontoType.FORELDREPENGER;
+            case FORELDREPENGER_FØR_FØDSEL -> UttaksplanPeriodeDtoOLD.KontoType.FORELDREPENGER_FØR_FØDSEL;
         };
     }
 
-    public UttaksplanPeriodeDto build() {
-        return new UttaksplanPeriodeDto(
-            type,
+    public UttaksplanPeriodeDtoOLD build() {
+        return new UttaksplanPeriodeDtoOLD(type,
             tidsperiode,
             konto,
             morsAktivitetIPerioden,
@@ -159,7 +154,6 @@ public class UttakplanPeriodeBuilder {
             ønskerFlerbarnsdager,
             ønskerSamtidigUttak,
             justeresVedFødsel,
-            orgnumre
-        );
+            orgnumre);
     }
 }

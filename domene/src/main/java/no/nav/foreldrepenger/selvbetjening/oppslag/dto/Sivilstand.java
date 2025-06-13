@@ -1,7 +1,7 @@
 package no.nav.foreldrepenger.selvbetjening.oppslag.dto;
 
-public record Sivilstand(Sivilstand.Type type) {
-    public enum Type {
+public record Sivilstand(SivilstandType type) {
+    public enum SivilstandType {
         UOPPGITT,
         UGIFT,
         GIFT,

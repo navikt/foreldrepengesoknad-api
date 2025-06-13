@@ -1,10 +1,7 @@
-package no.nav.foreldrepenger.selvbetjening.kontrakt.innsending.dto;
+package no.nav.foreldrepenger.selvbetjening.kontrakt.innsending.v2.dto;
 
 import java.time.LocalDate;
 import java.util.List;
-
-import no.nav.foreldrepenger.selvbetjening.kontrakt.innsending.v2.dto.VedleggDto;
-import no.nav.foreldrepenger.selvbetjening.kontrakt.innsending.v2.dto.VedleggInnsendingType;
 
 
 public interface Innsending {

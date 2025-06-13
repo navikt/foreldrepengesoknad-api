@@ -30,7 +30,7 @@ import no.nav.foreldrepenger.common.domain.foreldrepenger.fordeling.GradertUttak
 import no.nav.foreldrepenger.common.domain.foreldrepenger.fordeling.LukketPeriodeMedVedlegg;
 import no.nav.foreldrepenger.common.domain.foreldrepenger.fordeling.UtsettelsesÅrsak;
 import no.nav.foreldrepenger.common.domain.foreldrepenger.fordeling.UttaksPeriode;
-import no.nav.foreldrepenger.selvbetjening.kontrakt.innsending.dto.ÅpenPeriodeDto;
+import no.nav.foreldrepenger.selvbetjening.kontrakt.innsending.dto.ÅpenPeriodeDtoOLD;
 import no.nav.foreldrepenger.selvbetjening.kontrakt.innsending.mapper.DokumentasjonUtil;
 import no.nav.foreldrepenger.selvbetjening.kontrakt.innsending.mapper.SøknadMapper;
 import no.nav.foreldrepenger.selvbetjening.kontrakt.innsending.v2.dto.AnnenInntektDto;
@@ -49,13 +49,10 @@ class ForeldrepengesoknadMappingKonsistensTest {
 
     @Test
     void fpGraderingFrilansAleneomsorgFarIkkeRettMappingKonsistensTest() {
-        var uttak = List.of(
-            uttak(FORELDREPENGER_FØR_FØDSEL, NOW.minusWeeks(3), NOW.minusDays(1)).build(),
+        var uttak = List.of(uttak(FORELDREPENGER_FØR_FØDSEL, NOW.minusWeeks(3), NOW.minusDays(1)).build(),
             uttak(MØDREKVOTE, NOW, NOW.plusWeeks(15).minusDays(1)).build(),
-            gradert(FELLESPERIODE, NOW.plusWeeks(15), NOW.plusWeeks(45).minusDays(1), 33.3).build()
-        );
-        var søknadDto = new ForeldrepengerBuilder()
-            .medRolle(BrukerRolle.MOR)
+            gradert(FELLESPERIODE, NOW.plusWeeks(15), NOW.plusWeeks(45).minusDays(1), 33.3).build());
+        var søknadDto = new ForeldrepengerBuilder().medRolle(BrukerRolle.MOR)
             .medUttaksplan(uttak)
             .medDekningsgrad(Dekningsgrad.HUNDRE)
             .medUtenlandsopphold(oppholdBareINorge())
@@ -69,7 +66,6 @@ class ForeldrepengesoknadMappingKonsistensTest {
         assertThat(mappedSøknad.getSøker().søknadsRolle()).isEqualTo(foreldrepengerDto.rolle());
         assertThat(mappedSøknad.getSøker().målform()).isEqualTo(foreldrepengerDto.språkkode());
         assertThat(mappedSøknad.getMottattdato()).isEqualTo(søknadDto.mottattdato());
-        assertThat(mappedSøknad.getTilleggsopplysninger()).isEqualTo(foreldrepengerDto.tilleggsopplysninger());
 
         var ytelse = mappedSøknad.getYtelse();
         assertThat(ytelse).isInstanceOf(Foreldrepenger.class);
@@ -87,7 +83,7 @@ class ForeldrepengesoknadMappingKonsistensTest {
 
         // Frilans
         var frilans = foreldrepenger.opptjening().frilans();
-        var frilansDto = foreldrepengerDto.frilansInformasjon();
+        var frilansDto = foreldrepengerDto.frilans();
         assertThat(frilans.periode().fom()).isEqualTo(frilansDto.oppstart());
         assertThat(frilans.jobberFremdelesSomFrilans()).isEqualTo(frilansDto.jobberFremdelesSomFrilans());
 
@@ -101,41 +97,24 @@ class ForeldrepengesoknadMappingKonsistensTest {
 
         // Fordeling
         assertThat(foreldrepenger.fordeling().ønskerJustertUttakVedFødsel()).isEqualTo(foreldrepengerDto.uttaksplan().ønskerJustertUttakVedFødsel());
-        assertThat(foreldrepenger.fordeling().perioder())
-            .hasSameSizeAs(foreldrepengerDto.uttaksplan().uttaksperioder())
-            .hasExactlyElementsOfTypes(
-                UttaksPeriode.class,
-                UttaksPeriode.class,
-                GradertUttaksPeriode.class
-            )
+        assertThat(foreldrepenger.fordeling().perioder()).hasSameSizeAs(foreldrepengerDto.uttaksplan().uttaksperioder())
+            .hasExactlyElementsOfTypes(UttaksPeriode.class, UttaksPeriode.class, GradertUttaksPeriode.class)
             .extracting(LukketPeriodeMedVedlegg::getFom)
-            .containsExactly(
-                uttak.get(0).fom(),
-                uttak.get(1).fom(),
-                uttak.get(2).fom()
-            );
-        assertThat(foreldrepenger.fordeling().perioder())
-            .extracting(LukketPeriodeMedVedlegg::getTom)
-            .containsExactly(
-                uttak.get(0).tom(),
-                uttak.get(1).tom(),
-                uttak.get(2).tom()
-            );
+            .containsExactly(uttak.get(0).fom(), uttak.get(1).fom(), uttak.get(2).fom());
+        assertThat(foreldrepenger.fordeling().perioder()).extracting(LukketPeriodeMedVedlegg::getTom)
+            .containsExactly(uttak.get(0).tom(), uttak.get(1).tom(), uttak.get(2).tom());
 
     }
 
     @Test
     void fpAdopsjonAnnenInntektMappingKonsistensTest() {
-        var uttak = List.of(
-            uttak(FORELDREPENGER_FØR_FØDSEL, NOW.minusWeeks(3), NOW.minusDays(1)).build(),
+        var uttak = List.of(uttak(FORELDREPENGER_FØR_FØDSEL, NOW.minusWeeks(3), NOW.minusDays(1)).build(),
             uttak(MØDREKVOTE, NOW, NOW.plusWeeks(15).minusDays(1)).build(),
-            uttak(FELLESPERIODE, NOW.plusWeeks(15), NOW.plusWeeks(31).minusDays(1)).build()
-        );
+            uttak(FELLESPERIODE, NOW.plusWeeks(15), NOW.plusWeeks(31).minusDays(1)).build());
         var utenlandskOpptjening = OpptjeningMaler.utenlandskArbeidsforhold(CountryCode.US);
         var annenNorskOpptjening = OpptjeningMaler.annenInntektNorsk(AnnenOpptjeningType.SLUTTPAKKE);
         var annenOpptjeninger = List.of(utenlandskOpptjening, annenNorskOpptjening);
-        var søknadDto = new ForeldrepengerBuilder()
-            .medRolle(BrukerRolle.MOR)
+        var søknadDto = new ForeldrepengerBuilder().medRolle(BrukerRolle.MOR)
             .medUttaksplan(new UttaksplanDto(true, uttak))
             .medDekningsgrad(Dekningsgrad.ÅTTI)
             .medUtenlandsopphold(oppholdIUtlandetForrige12mnd())
@@ -149,7 +128,6 @@ class ForeldrepengesoknadMappingKonsistensTest {
         assertThat(mappedSøknad.getSøker().søknadsRolle()).isEqualTo(foreldrepengerDto.rolle());
         assertThat(mappedSøknad.getSøker().målform()).isEqualTo(foreldrepengerDto.språkkode());
         assertThat(mappedSøknad.getMottattdato()).isEqualTo(søknadDto.mottattdato());
-        assertThat(mappedSøknad.getTilleggsopplysninger()).isEqualTo(foreldrepengerDto.tilleggsopplysninger());
 
         var ytelse = mappedSøknad.getYtelse();
         assertThat(ytelse).isInstanceOf(Foreldrepenger.class);
@@ -182,54 +160,35 @@ class ForeldrepengesoknadMappingKonsistensTest {
 
         // Fordeling
         assertThat(foreldrepenger.fordeling().ønskerJustertUttakVedFødsel()).isEqualTo(foreldrepengerDto.uttaksplan().ønskerJustertUttakVedFødsel());
-        assertThat(foreldrepenger.fordeling().perioder())
-            .hasSameSizeAs(foreldrepengerDto.uttaksplan().uttaksperioder())
-            .hasExactlyElementsOfTypes(
-                UttaksPeriode.class,
-                UttaksPeriode.class,
-                UttaksPeriode.class
-            )
+        assertThat(foreldrepenger.fordeling().perioder()).hasSameSizeAs(foreldrepengerDto.uttaksplan().uttaksperioder())
+            .hasExactlyElementsOfTypes(UttaksPeriode.class, UttaksPeriode.class, UttaksPeriode.class)
             .extracting(LukketPeriodeMedVedlegg::getFom)
-            .containsExactly(
-                uttak.get(0).fom(),
-                uttak.get(1).fom(),
-                uttak.get(2).fom()
-            );
-        assertThat(foreldrepenger.fordeling().perioder())
-            .extracting(LukketPeriodeMedVedlegg::getTom)
-            .containsExactly(
-                uttak.get(0).tom(),
-                uttak.get(1).tom(),
-                uttak.get(2).tom()
-            );
+            .containsExactly(uttak.get(0).fom(), uttak.get(1).fom(), uttak.get(2).fom());
+        assertThat(foreldrepenger.fordeling().perioder()).extracting(LukketPeriodeMedVedlegg::getTom)
+            .containsExactly(uttak.get(0).tom(), uttak.get(1).tom(), uttak.get(2).tom());
     }
 
     @Test
     void foreldrepengerVedleggReferanseMappingKonsistensTest() {
-        var uttak = List.of(
-            uttak(FORELDREPENGER_FØR_FØDSEL, NOW.minusWeeks(3), NOW.minusDays(1)).build(),
+        var uttak = List.of(uttak(FORELDREPENGER_FØR_FØDSEL, NOW.minusWeeks(3), NOW.minusDays(1)).build(),
             utsettelse(UtsettelsesÅrsak.SYKDOM, NOW, NOW.plusWeeks(1).minusDays(1)).build(),
             utsettelse(UtsettelsesÅrsak.INSTITUSJONSOPPHOLD_SØKER, NOW.plusWeeks(1), NOW.plusWeeks(3).minusDays(1)).build(),
             uttak(MØDREKVOTE, NOW.plusWeeks(3), NOW.plusWeeks(4).minusDays(1)).build(),
             utsettelse(UtsettelsesÅrsak.SYKDOM, NOW.plusWeeks(4), NOW.plusWeeks(6).minusDays(1)).build(),
-            uttak(MØDREKVOTE, NOW.plusWeeks(6), NOW.plusWeeks(15).minusDays(1)).build()
-        );
+            uttak(MØDREKVOTE, NOW.plusWeeks(6), NOW.plusWeeks(15).minusDays(1)).build());
         var utenlandskOpptjening = OpptjeningMaler.utenlandskArbeidsforhold(CountryCode.US);
         var annenNorskOpptjening = OpptjeningMaler.annenInntektNorsk(AnnenOpptjeningType.SLUTTPAKKE, LocalDate.now().minusYears(1), LocalDate.now());
 
         var vedlegg1 = DokumentasjonUtil.vedlegg(DokumentasjonUtil.barn());
-        var vedlegg2 = DokumentasjonUtil.vedlegg(DokumentasjonUtil.uttaksperioder(
-            List.of(
-                new ÅpenPeriodeDto(NOW, NOW.plusWeeks(1).minusDays(1)),
-                new ÅpenPeriodeDto(NOW.plusWeeks(4), NOW.plusWeeks(6).minusDays(1))
-            )
-        ));
+        var vedlegg2 = DokumentasjonUtil.vedlegg(DokumentasjonUtil.uttaksperioder(List.of(new ÅpenPeriodeDtoOLD(NOW, NOW.plusWeeks(1).minusDays(1)),
+            new ÅpenPeriodeDtoOLD(NOW.plusWeeks(4), NOW.plusWeeks(6).minusDays(1)))));
         var vedlegg3 = DokumentasjonUtil.vedlegg(DokumentasjonUtil.uttaksperiode(NOW.plusWeeks(1), NOW.plusWeeks(3).minusDays(1)));
-        var vedlegg4 = DokumentasjonUtil.vedlegg(DokumentasjonUtil.opptjening(new ÅpenPeriodeDto(utenlandskOpptjening.fom(), utenlandskOpptjening.tom())));
-        var vedlegg5 = DokumentasjonUtil.vedlegg(DokumentasjonUtil.opptjening(new ÅpenPeriodeDto(annenNorskOpptjening.fom(), annenNorskOpptjening.tom())));
+        var vedlegg4 = DokumentasjonUtil.vedlegg(DokumentasjonUtil.opptjening(new ÅpenPeriodeDtoOLD(utenlandskOpptjening.fom(),
+            utenlandskOpptjening.tom())));
+        var vedlegg5 = DokumentasjonUtil.vedlegg(DokumentasjonUtil.opptjening(new ÅpenPeriodeDtoOLD(annenNorskOpptjening.fom(),
+            annenNorskOpptjening.tom())));
 
-        var søknadDto = new ForeldrepengerBuilder()
-            .medRolle(BrukerRolle.MOR)
+        var søknadDto = new ForeldrepengerBuilder().medRolle(BrukerRolle.MOR)
             .medUttaksplan(new UttaksplanDto(true, uttak))
             .medDekningsgrad(Dekningsgrad.ÅTTI)
             .medAndreInntekterSiste10Mnd(List.of(utenlandskOpptjening, annenNorskOpptjening))

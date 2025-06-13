@@ -7,7 +7,6 @@ import java.time.LocalDate;
 import jakarta.validation.constraints.Digits;
 import jakarta.validation.constraints.Pattern;
 
-public record NæringsinntektInformasjonDto(LocalDate dato,
-                                           @Digits(integer = 9, fraction = 0) int næringsinntektEtterEndring,
-                                           @Pattern(regexp = FRITEKST) String forklaring) {
+public record NæringsinntektInformasjonDtoOLD(LocalDate dato, @Digits(integer = 9, fraction = 0) int næringsinntektEtterEndring,
+                                              @Pattern(regexp = FRITEKST) String forklaring) {
 }

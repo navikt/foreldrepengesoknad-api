@@ -1,9 +1,9 @@
 package no.nav.foreldrepenger.selvbetjening.uttak;
 
+import java.util.List;
+
 import jakarta.validation.Valid;
 import jakarta.validation.constraints.NotNull;
-
-import java.util.List;
 
 
 public record KontoBeregningDto(@NotNull List<@Valid @NotNull KontoDto> kontoer, @NotNull @Valid Minsteretter minsteretter, @Valid Tillegg tillegg) {
@@ -14,8 +14,8 @@ public record KontoBeregningDto(@NotNull List<@Valid @NotNull KontoDto> kontoer,
     public record Tillegg(@NotNull int flerbarn, @NotNull int prematur) {
     }
 
-    public record KontoDto(@NotNull KontoType konto, @NotNull int dager) {
-        public enum KontoType {
+    public record KontoDto(@NotNull KontoBeregningDto.KontoDto.KontoTypeUttak konto, @NotNull int dager) {
+        public enum KontoTypeUttak {
             MØDREKVOTE,
             FEDREKVOTE,
             FELLESPERIODE,
