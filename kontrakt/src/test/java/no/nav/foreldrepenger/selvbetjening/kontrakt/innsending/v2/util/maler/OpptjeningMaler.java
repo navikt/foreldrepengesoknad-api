@@ -75,7 +75,10 @@ public final class OpptjeningMaler {
     }
 
     private static AnnenInntektDto annenInntekt(AnnenOpptjeningType type, CountryCode landKode, LocalDate fom, LocalDate tom) {
-        return new AnnenInntektDto(type, fom, tom, landKode, "Utenlandsk arbeidsgiver AS");
+        if (AnnenOpptjeningType.JOBB_I_UTLANDET.equals(type)) {
+            return new AnnenInntektDto(type, fom, tom, landKode, "Utenlandsk arbeidsgiver AS");
+        }
+        return new AnnenInntektDto(type, fom, tom, null, null);
     }
 
 }
