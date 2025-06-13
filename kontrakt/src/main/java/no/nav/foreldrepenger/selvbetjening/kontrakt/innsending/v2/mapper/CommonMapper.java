@@ -15,6 +15,7 @@ import com.neovisionaries.i18n.CountryCode;
 import no.nav.foreldrepenger.common.domain.felles.LukketPeriode;
 import no.nav.foreldrepenger.common.domain.felles.medlemskap.Utenlandsopphold;
 import no.nav.foreldrepenger.common.domain.felles.opptjening.AnnenOpptjening;
+import no.nav.foreldrepenger.common.domain.felles.opptjening.AnnenOpptjeningType;
 import no.nav.foreldrepenger.common.domain.felles.opptjening.EgenNæring;
 import no.nav.foreldrepenger.common.domain.felles.opptjening.Frilans;
 import no.nav.foreldrepenger.common.domain.felles.opptjening.Opptjening;
@@ -111,12 +112,12 @@ public final class CommonMapper {
 
     private static List<AnnenOpptjening> tilAnnenOpptjening(List<AnnenInntektDto> andreInntekterSiste10Mnd, List<VedleggDto> vedlegg) {
         return andreInntekterSiste10Mnd.stream()
-            .filter(a -> a instanceof AnnenInntektDto.Annet)
-            .map(a -> tilAnnenOpptjening((AnnenInntektDto.Annet) a, vedlegg))
+            .filter(a -> !AnnenOpptjeningType.JOBB_I_UTLANDET.equals(a.type()))
+            .map(a -> tilAnnenOpptjening(a, vedlegg))
             .toList();
     }
 
-    private static AnnenOpptjening tilAnnenOpptjening(AnnenInntektDto.Annet annenInntekt, List<VedleggDto> vedlegg) {
+    private static AnnenOpptjening tilAnnenOpptjening(AnnenInntektDto annenInntekt, List<VedleggDto> vedlegg) {
         return new AnnenOpptjening(annenInntekt.type(),
             new ÅpenPeriode(annenInntekt.fom(), annenInntekt.tom()),
             tilVedleggsreferanse(DokumentasjonReferanseMapper.dokumentasjonSomDokumentererOpptjeningsperiode(vedlegg,
@@ -126,13 +127,13 @@ public final class CommonMapper {
     private static List<UtenlandskArbeidsforhold> tilUtenlandsArbeidsforhold(List<AnnenInntektDto> andreInntekterSiste10Mnd,
                                                                              List<VedleggDto> vedlegg) {
         return andreInntekterSiste10Mnd.stream()
-            .filter(u -> u instanceof AnnenInntektDto.Utlandet)
-            .map(u -> tilUtenlandsArbeidsforhold((AnnenInntektDto.Utlandet) u, vedlegg))
+            .filter(u -> AnnenOpptjeningType.JOBB_I_UTLANDET.equals(u.type()))
+            .map(u -> tilUtenlandsArbeidsforhold(u, vedlegg))
             .toList();
 
     }
 
-    private static UtenlandskArbeidsforhold tilUtenlandsArbeidsforhold(AnnenInntektDto.Utlandet annenInntekt, List<VedleggDto> vedlegg) {
+    private static UtenlandskArbeidsforhold tilUtenlandsArbeidsforhold(AnnenInntektDto annenInntekt, List<VedleggDto> vedlegg) {
         return new UtenlandskArbeidsforhold(annenInntekt.arbeidsgiverNavn(),
             new ÅpenPeriode(annenInntekt.fom(), annenInntekt.tom()),
             tilVedleggsreferanse(DokumentasjonReferanseMapper.dokumentasjonSomDokumentererOpptjeningsperiode(vedlegg,

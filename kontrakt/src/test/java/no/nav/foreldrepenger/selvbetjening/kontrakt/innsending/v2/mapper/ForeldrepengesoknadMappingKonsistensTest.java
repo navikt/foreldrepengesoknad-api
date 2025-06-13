@@ -33,7 +33,6 @@ import no.nav.foreldrepenger.common.domain.foreldrepenger.fordeling.UttaksPeriod
 import no.nav.foreldrepenger.selvbetjening.kontrakt.innsending.dto.ÅpenPeriodeDtoOLD;
 import no.nav.foreldrepenger.selvbetjening.kontrakt.innsending.mapper.DokumentasjonUtil;
 import no.nav.foreldrepenger.selvbetjening.kontrakt.innsending.mapper.SøknadMapper;
-import no.nav.foreldrepenger.selvbetjening.kontrakt.innsending.v2.dto.AnnenInntektDto;
 import no.nav.foreldrepenger.selvbetjening.kontrakt.innsending.v2.dto.foreldrepenger.Dekningsgrad;
 import no.nav.foreldrepenger.selvbetjening.kontrakt.innsending.v2.dto.foreldrepenger.ForeldrepengesøknadDto;
 import no.nav.foreldrepenger.selvbetjening.kontrakt.innsending.v2.dto.foreldrepenger.uttaksplan.UttaksplanDto;
@@ -148,7 +147,7 @@ class ForeldrepengesoknadMappingKonsistensTest {
             .containsExactly(AnnenOpptjeningType.SLUTTPAKKE);
         assertThat(foreldrepenger.opptjening().utenlandskArbeidsforhold()).hasSize(1)
             .extracting(UtenlandskArbeidsforhold::land)
-            .containsExactly(((AnnenInntektDto.Utlandet) utenlandskOpptjening).land());
+            .containsExactly(utenlandskOpptjening.land());
 
         // Rettigheter
         var rettigheter = foreldrepenger.rettigheter();
