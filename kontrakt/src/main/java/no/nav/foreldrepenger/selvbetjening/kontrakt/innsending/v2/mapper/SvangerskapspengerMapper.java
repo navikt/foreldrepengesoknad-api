@@ -4,6 +4,7 @@ import static no.nav.foreldrepenger.common.util.StreamUtil.safeStream;
 import static no.nav.foreldrepenger.selvbetjening.kontrakt.innsending.mapper.CommonMapper.tilVedlegg;
 import static no.nav.foreldrepenger.selvbetjening.kontrakt.innsending.mapper.CommonMapper.tilVedleggsreferanse;
 import static no.nav.foreldrepenger.selvbetjening.kontrakt.innsending.v2.mapper.CommonMapper.tilOppholdIUtlandet;
+import static no.nav.foreldrepenger.selvbetjening.kontrakt.innsending.v2.mapper.CommonMapper.tilOpptjening;
 
 import java.time.LocalDate;
 import java.util.List;
@@ -11,7 +12,6 @@ import java.util.List;
 import no.nav.foreldrepenger.common.domain.BrukerRolle;
 import no.nav.foreldrepenger.common.domain.Søker;
 import no.nav.foreldrepenger.common.domain.Søknad;
-import no.nav.foreldrepenger.common.domain.felles.opptjening.Opptjening;
 import no.nav.foreldrepenger.common.domain.svangerskapspenger.AvtaltFerie;
 import no.nav.foreldrepenger.common.domain.svangerskapspenger.Svangerskapspenger;
 import no.nav.foreldrepenger.common.domain.svangerskapspenger.Tilretteleggingbehov;
@@ -21,9 +21,6 @@ import no.nav.foreldrepenger.common.domain.svangerskapspenger.arbeidsforhold.Pri
 import no.nav.foreldrepenger.common.domain.svangerskapspenger.arbeidsforhold.SelvstendigNæringsdrivende;
 import no.nav.foreldrepenger.common.domain.svangerskapspenger.arbeidsforhold.Virksomhet;
 import no.nav.foreldrepenger.selvbetjening.kontrakt.innsending.mapper.DokumentasjonReferanseMapper;
-import no.nav.foreldrepenger.selvbetjening.kontrakt.innsending.v2.dto.AnnenInntektDto;
-import no.nav.foreldrepenger.selvbetjening.kontrakt.innsending.v2.dto.FrilansDto;
-import no.nav.foreldrepenger.selvbetjening.kontrakt.innsending.v2.dto.NæringDto;
 import no.nav.foreldrepenger.selvbetjening.kontrakt.innsending.v2.dto.VedleggDto;
 import no.nav.foreldrepenger.selvbetjening.kontrakt.innsending.v2.dto.svangerskapspenger.ArbeidsforholdDto;
 import no.nav.foreldrepenger.selvbetjening.kontrakt.innsending.v2.dto.svangerskapspenger.SvangerskapspengesøknadDto;
@@ -44,8 +41,11 @@ public final class SvangerskapspengerMapper {
     }
 
     public static Svangerskapspenger tilYtelse(SvangerskapspengesøknadDto s, List<VedleggDto> vedlegg) {
-        return new Svangerskapspenger(s.barn().termindato(), s.barn().fødselsdato(), tilOppholdIUtlandet(s.utenlandsopphold()),
-            tilOpptjening(s.egenNæring(), s.frilans(), s.andreInntekterSiste10Mnd(), vedlegg), tilTilretteleggingBehov(s, vedlegg),
+        return new Svangerskapspenger(s.barn().termindato(),
+            s.barn().fødselsdato(),
+            tilOppholdIUtlandet(s.utenlandsopphold()),
+            tilOpptjening(s.egenNæring(), s.frilans(), s.andreInntekterSiste10Mnd(), vedlegg),
+            tilTilretteleggingBehov(s, vedlegg),
             tilFerieperioder(s));
     }
 
@@ -54,9 +54,11 @@ public final class SvangerskapspengerMapper {
     }
 
     private static Tilretteleggingbehov tilTilretteleggingBehov(TilretteleggingbehovDto tilretteleggingbehov, List<VedleggDto> vedlegg) {
-        return new Tilretteleggingbehov(tilArbeidsforhold(tilretteleggingbehov), tilretteleggingbehov.behovForTilretteleggingFom(),
-            tilTilrettelegging(tilretteleggingbehov.tilrettelegginger()), tilVedleggsreferanse(
-            DokumentasjonReferanseMapper.dokumentasjonSomDokumentererTilrettelegggingAv(vedlegg, tilretteleggingbehov.arbeidsforhold())));
+        return new Tilretteleggingbehov(tilArbeidsforhold(tilretteleggingbehov),
+            tilretteleggingbehov.behovForTilretteleggingFom(),
+            tilTilrettelegging(tilretteleggingbehov.tilrettelegginger()),
+            tilVedleggsreferanse(DokumentasjonReferanseMapper.dokumentasjonSomDokumentererTilrettelegggingAv(vedlegg,
+                tilretteleggingbehov.arbeidsforhold())));
     }
 
     private static Arbeidsforhold tilArbeidsforhold(TilretteleggingbehovDto tilretteleggingbehov) {
@@ -85,14 +87,6 @@ public final class SvangerskapspengerMapper {
             case TilretteleggingbehovDto.TilretteleggingDto.Ingen(var fom) -> new Tilretteleggingbehov.Tilrettelegging.Ingen(fom);
             default -> throw new IllegalArgumentException("Ugyldig tilrettelegging: " + tilrettelegging);
         };
-    }
-
-    private static Opptjening tilOpptjening(NæringDto næring,
-                                            FrilansDto frilans,
-                                            List<AnnenInntektDto.Utlandet> utlandets,
-                                            List<VedleggDto> vedlegg) {
-        var annenInntekt = safeStream(utlandets).map(AnnenInntektDto.class::cast).toList();
-        return CommonMapper.tilOpptjening(næring, frilans, annenInntekt, vedlegg);
     }
 
     private static List<AvtaltFerie> tilFerieperioder(SvangerskapspengesøknadDto s) {

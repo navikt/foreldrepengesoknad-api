@@ -6,7 +6,9 @@ import static no.nav.foreldrepenger.common.domain.validation.InputValideringRege
 import jakarta.validation.Valid;
 import jakarta.validation.constraints.Pattern;
 
-public record AnnenInntektDtoOLD(@Pattern(regexp = "^[\\p{L}_]*$") String type, @Pattern(regexp = BARE_BOKSTAVER) String land,
-                                 @Pattern(regexp = FRITEKST) String arbeidsgiverNavn, @Valid ÅpenPeriodeDtoOLD tidsperiode,
+public record AnnenInntektDtoOLD(@Pattern(regexp = "^[\\p{L}_]*$") String type,
+                                 @Pattern(regexp = BARE_BOKSTAVER) String land,
+                                 @Pattern(regexp = FRITEKST) String arbeidsgiverNavn,
+                                 @Valid ÅpenPeriodeDtoOLD tidsperiode,
                                  boolean erNærVennEllerFamilieMedArbeisdgiver) {
 }

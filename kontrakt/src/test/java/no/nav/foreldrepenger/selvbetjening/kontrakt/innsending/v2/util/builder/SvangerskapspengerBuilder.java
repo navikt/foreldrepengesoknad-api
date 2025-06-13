@@ -24,7 +24,7 @@ public class SvangerskapspengerBuilder {
     private BarnSvpDto barn;
     private FrilansDto frilansInformasjon;
     private NæringDto selvstendigNæringsdrivendeInformasjon;
-    private List<AnnenInntektDto.Utlandet> andreInntekterSiste10Mnd;
+    private List<AnnenInntektDto> andreInntekterSiste10Mnd;
     private List<UtenlandsoppholdsperiodeDto> utenlandsopphold;
     private List<TilretteleggingbehovDto> tilretteleggingbehov;
     private List<AvtaltFerieDto> avtaltFerie;
@@ -66,7 +66,7 @@ public class SvangerskapspengerBuilder {
         return this;
     }
 
-    public SvangerskapspengerBuilder medAndreInntekterSiste10Mnd(List<AnnenInntektDto.Utlandet> andreInntekterSiste10Mnd) {
+    public SvangerskapspengerBuilder medAndreInntekterSiste10Mnd(List<AnnenInntektDto> andreInntekterSiste10Mnd) {
         this.andreInntekterSiste10Mnd = andreInntekterSiste10Mnd;
         return this;
     }
@@ -87,9 +87,10 @@ public class SvangerskapspengerBuilder {
     }
 
     public SvangerskapspengesøknadDto build() {
-        if (mottattdato == null) mottattdato = LocalDate.now();
-        return new SvangerskapspengesøknadDto(
-            mottattdato,
+        if (mottattdato == null) {
+            mottattdato = LocalDate.now();
+        }
+        return new SvangerskapspengesøknadDto(mottattdato,
             barn,
             BrukerRolle.MOR,
             språkkode,
@@ -99,7 +100,6 @@ public class SvangerskapspengerBuilder {
             utenlandsopphold,
             tilretteleggingbehov,
             avtaltFerie,
-            vedlegg
-        );
+            vedlegg);
     }
 }

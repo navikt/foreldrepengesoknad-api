@@ -23,11 +23,12 @@ public record SvangerskapspengesøknadDto(LocalDate mottattdato,
                                          @NotNull @Valid Målform språkkode,
                                          @Valid FrilansDto frilans,
                                          @Valid NæringDto egenNæring,
-                                         @Valid @Size(max = 20) List<AnnenInntektDto.@NotNull @Valid Utlandet> andreInntekterSiste10Mnd,
+                                         @Valid @Size(max = 20) List<@Valid @NotNull AnnenInntektDto> andreInntekterSiste10Mnd,
                                          @Valid @Size(max = 20) List<@Valid @NotNull UtenlandsoppholdsperiodeDto> utenlandsopphold,
                                          @NotNull @Valid @Size(min = 1, max = 20) List<@Valid @NotNull TilretteleggingbehovDto> tilretteleggingsbehov,
                                          @NotNull @Valid @Size(max = 20) List<@Valid @NotNull AvtaltFerieDto> avtaltFerie,
-                                         @NotNull @Valid @VedlegglistestørrelseConstraint @Size(min = 1, max = 20) List<@Valid @NotNull VedleggDto> vedlegg) implements SøknadDto {
+                                         @NotNull @Valid @VedlegglistestørrelseConstraint @Size(min = 1,
+                                             max = 20) List<@Valid @NotNull VedleggDto> vedlegg) implements SøknadDto {
 
     public SvangerskapspengesøknadDto {
         utenlandsopphold = Optional.ofNullable(utenlandsopphold).orElse(List.of());
