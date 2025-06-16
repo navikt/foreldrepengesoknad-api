@@ -24,7 +24,7 @@ public interface AnnenForelderDto {
     Rettigheter rettigheter();
 
     record Rettigheter(@NotNull Boolean harRettPåForeldrepenger,
-                       @NotNull Boolean erInformertOmSøknaden,
+                       Boolean erInformertOmSøknaden,
                        Boolean erAleneOmOmsorg,
                        Boolean harMorUføretrygd,
                        Boolean harAnnenForelderOppholdtSegIEØS,
