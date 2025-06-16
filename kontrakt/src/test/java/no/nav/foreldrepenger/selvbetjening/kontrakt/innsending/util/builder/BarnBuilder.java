@@ -3,104 +3,145 @@ package no.nav.foreldrepenger.selvbetjening.kontrakt.innsending.util.builder;
 import java.time.LocalDate;
 import java.util.List;
 
-import no.nav.foreldrepenger.selvbetjening.kontrakt.innsending.dto.BarnDtoOLD;
-import no.nav.foreldrepenger.selvbetjening.kontrakt.innsending.dto.foreldrepenger.SituasjonOLD;
+import no.nav.foreldrepenger.selvbetjening.kontrakt.innsending.dto.AdopsjonDto;
+import no.nav.foreldrepenger.selvbetjening.kontrakt.innsending.dto.FødselDto;
+import no.nav.foreldrepenger.selvbetjening.kontrakt.innsending.dto.OmsorgsovertakelseDto;
+import no.nav.foreldrepenger.selvbetjening.kontrakt.innsending.dto.TerminDto;
 
-public class BarnBuilder {
-    SituasjonOLD situasjon;
-    List<LocalDate> fødselsdatoer;
-    int antallBarn;
-    LocalDate termindato;
-    LocalDate terminbekreftelseDato;
-    LocalDate adopsjonsdato;
-    LocalDate ankomstdato;
-    boolean adopsjonAvEktefellesBarn;
-    boolean søkerAdopsjonAlene;
-    LocalDate foreldreansvarsdato;
+public final class BarnBuilder {
 
-    public static BarnBuilder fødsel(int antallBarn, LocalDate fødselsdato) {
-        return new BarnBuilder(antallBarn).medFødselsdatoer(List.of(fødselsdato)).medTermindato(fødselsdato).medSituasjon(SituasjonOLD.FØDSEL);
+    public static FødselBuilder fødsel(int antallBarn, LocalDate fødselsdato) {
+        return new FødselBuilder(antallBarn).medFødselsdato(fødselsdato).medTermindato(fødselsdato);
     }
 
-    public static BarnBuilder termin(int antallBarn, LocalDate termindato) {
-        return new BarnBuilder(antallBarn).medTermindato(termindato)
-            .medTerminbekreftelseDato(termindato.minusMonths(1))
-            .medSituasjon(SituasjonOLD.FØDSEL);
+    public static TerminBuilder termin(int antallBarn, LocalDate termindato) {
+        return new TerminBuilder(antallBarn).medTermindato(termindato).medTerminbekreftelseDato(termindato.minusMonths(1));
     }
 
-    public static BarnBuilder adopsjon(LocalDate omsorgsovertakelsesdato, boolean ektefellesBarn) {
-        return new BarnBuilder(1).medFødselsdatoer(List.of(LocalDate.now().minusYears(10)))
+    public static AdopsjonBuilder adopsjon(LocalDate omsorgsovertakelsesdato, boolean ektefellesBarn) {
+        return new AdopsjonBuilder(1).medFødselsdatoer(List.of(LocalDate.now().minusYears(10)))
             .medAdopsjonsdato(omsorgsovertakelsesdato)
             .medAnkomstdato(omsorgsovertakelsesdato)
-            .medAdopsjonAvEktefellesBarn(ektefellesBarn)
-            .medSituasjon(SituasjonOLD.ADOPSJON);
+            .medAdopsjonAvEktefellesBarn(ektefellesBarn);
     }
 
-    public static BarnBuilder omsorgsovertakelse(LocalDate omsorgsovertakelsedato) {
-        return new BarnBuilder(1).medFødselsdatoer(List.of(LocalDate.now().minusMonths(6)))
-            .medAnkomstdato(omsorgsovertakelsedato)
-            .medForeldreansvarsdato(omsorgsovertakelsedato)
-            .medSituasjon(SituasjonOLD.OMSORGSOVERTAKELSE);
+    public static OmsorgsovertakelseBuilder omsorgsovertakelse(LocalDate omsorgsovertakelsedato) {
+        return new OmsorgsovertakelseBuilder(1).medFødselsdatoer(List.of(LocalDate.now().minusMonths(6)))
+            .medForeldreansvarsdato(omsorgsovertakelsedato);
+    }
+
+    public static class TerminBuilder {
+        private int antallBarn;
+        private LocalDate termindato;
+        private LocalDate terminbekreftelseDato;
+
+        public TerminBuilder(int antallBarn) {
+            this.antallBarn = antallBarn;
+        }
+
+        public TerminBuilder medTermindato(LocalDate termindato) {
+            this.termindato = termindato;
+            return this;
+        }
+
+        public TerminBuilder medTerminbekreftelseDato(LocalDate terminbekreftelseDato) {
+            this.terminbekreftelseDato = terminbekreftelseDato;
+            return this;
+        }
+
+        public TerminDto build() {
+            return new TerminDto(antallBarn, termindato, terminbekreftelseDato);
+        }
+    }
+
+    public static class AdopsjonBuilder {
+        private int antallBarn;
+        private List<LocalDate> fødselsdatoer;
+        private LocalDate adopsjonsdato;
+        private LocalDate ankomstdato;
+        private Boolean adopsjonAvEktefellesBarn;
+        private Boolean søkerAdopsjonAlene;
+
+        public AdopsjonBuilder(int antallBarn) {
+            this.antallBarn = antallBarn;
+        }
+
+        public AdopsjonBuilder medFødselsdatoer(List<LocalDate> fødselsdatoer) {
+            this.fødselsdatoer = fødselsdatoer;
+            return this;
+        }
+
+        public AdopsjonBuilder medAdopsjonsdato(LocalDate adopsjonsdato) {
+            this.adopsjonsdato = adopsjonsdato;
+            return this;
+        }
+
+        public AdopsjonBuilder medAnkomstdato(LocalDate ankomstdato) {
+            this.ankomstdato = ankomstdato;
+            return this;
+        }
+
+        public AdopsjonBuilder medSøkerAdopsjonAlene(Boolean søkerAdopsjonAlene) {
+            this.søkerAdopsjonAlene = søkerAdopsjonAlene;
+            return this;
+        }
+
+        public AdopsjonBuilder medAdopsjonAvEktefellesBarn(Boolean adopsjonAvEktefellesBarn) {
+            this.adopsjonAvEktefellesBarn = adopsjonAvEktefellesBarn;
+            return this;
+        }
+
+        public AdopsjonDto build() {
+            return new AdopsjonDto(antallBarn, fødselsdatoer, adopsjonsdato, ankomstdato, adopsjonAvEktefellesBarn, søkerAdopsjonAlene);
+        }
+    }
+
+    public static class OmsorgsovertakelseBuilder {
+        private int antallBarn;
+        private List<LocalDate> fødselsdatoer;
+        private LocalDate foreldreansvarsdato;
+
+        public OmsorgsovertakelseBuilder(int antallBarn) {
+            this.antallBarn = antallBarn;
+        }
+
+        public OmsorgsovertakelseBuilder medFødselsdatoer(List<LocalDate> fødselsdatoer) {
+            this.fødselsdatoer = fødselsdatoer;
+            return this;
+        }
+
+        public OmsorgsovertakelseBuilder medForeldreansvarsdato(LocalDate foreldreansvarsdato) {
+            this.foreldreansvarsdato = foreldreansvarsdato;
+            return this;
+        }
+
+        public OmsorgsovertakelseDto build() {
+            return new OmsorgsovertakelseDto(antallBarn, fødselsdatoer, foreldreansvarsdato);
+        }
     }
 
 
-    private BarnBuilder(int antallBarn) {
-        this.antallBarn = antallBarn;
-    }
+    public static class FødselBuilder {
+        private int antallBarn;
+        private LocalDate fødselsdato;
+        private LocalDate termindato;
 
-    public BarnBuilder medSituasjon(SituasjonOLD situasjon) {
-        this.situasjon = situasjon;
-        return this;
-    }
+        public FødselBuilder(int antallBarn) {
+            this.antallBarn = antallBarn;
+        }
 
-    public BarnBuilder medFødselsdatoer(List<LocalDate> fødselsdatoer) {
-        this.fødselsdatoer = fødselsdatoer;
-        return this;
-    }
+        public FødselBuilder medFødselsdato(LocalDate fødselsdato) {
+            this.fødselsdato = fødselsdato;
+            return this;
+        }
 
-    public BarnBuilder medAntallBarn(int antallBarn) {
-        this.antallBarn = antallBarn;
-        return this;
-    }
+        public FødselBuilder medTermindato(LocalDate termindato) {
+            this.termindato = termindato;
+            return this;
+        }
 
-    public BarnBuilder medTermindato(LocalDate termindato) {
-        this.termindato = termindato;
-        return this;
-    }
-
-    public BarnBuilder medTerminbekreftelseDato(LocalDate terminbekreftelseDato) {
-        this.terminbekreftelseDato = terminbekreftelseDato;
-        return this;
-    }
-
-    public BarnBuilder medAdopsjonsdato(LocalDate adopsjonsdato) {
-        this.adopsjonsdato = adopsjonsdato;
-        return this;
-    }
-
-    public BarnBuilder medAnkomstdato(LocalDate ankomstdato) {
-        this.ankomstdato = ankomstdato;
-        return this;
-    }
-
-    public BarnBuilder medAdopsjonAvEktefellesBarn(boolean adopsjonAvEktefellesBarn) {
-        this.adopsjonAvEktefellesBarn = adopsjonAvEktefellesBarn;
-        return this;
-    }
-
-    public BarnBuilder medSøkerAdopsjonAlene(boolean søkerAdopsjonAlene) {
-        this.søkerAdopsjonAlene = søkerAdopsjonAlene;
-        return this;
-    }
-
-    public BarnBuilder medForeldreansvarsdato(LocalDate foreldreansvarsdato) {
-        this.foreldreansvarsdato = foreldreansvarsdato;
-        return this;
-    }
-
-    public BarnHelper build() {
-        return new BarnHelper(
-            new BarnDtoOLD(fødselsdatoer, antallBarn, termindato, terminbekreftelseDato, adopsjonsdato, ankomstdato, adopsjonAvEktefellesBarn,
-                søkerAdopsjonAlene, foreldreansvarsdato), situasjon);
+        public FødselDto build() {
+            return new FødselDto(antallBarn, fødselsdato, termindato);
+        }
     }
 }

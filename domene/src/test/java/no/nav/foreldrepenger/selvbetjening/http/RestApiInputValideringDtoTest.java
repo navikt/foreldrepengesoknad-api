@@ -46,8 +46,8 @@ import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Null;
 import jakarta.validation.constraints.Pattern;
 import jakarta.validation.constraints.Size;
-import no.nav.foreldrepenger.selvbetjening.kontrakt.innsending.v2.dto.VedleggDto;
-import no.nav.foreldrepenger.selvbetjening.kontrakt.innsending.v2.dto.VedleggReferanse;
+import no.nav.foreldrepenger.selvbetjening.kontrakt.innsending.dto.VedleggDto;
+import no.nav.foreldrepenger.selvbetjening.kontrakt.innsending.dto.VedleggReferanse;
 import no.nav.foreldrepenger.selvbetjening.kontrakt.innsending.dto.validering.VedlegglistestørrelseConstraint;
 
 class RestApiInputValideringDtoTest extends RestApiTestUtil {
@@ -63,8 +63,12 @@ class RestApiInputValideringDtoTest extends RestApiTestUtil {
         validerRekursivt(validerteKlasser, dto, null);
     }
 
-    private static final Set<Class<? extends Object>> ALLOWED_ENUM_ANNOTATIONS = Set.of(
-        JsonProperty.class, JsonValue.class, JsonIgnore.class, Valid.class, Null.class, NotNull.class);
+    private static final Set<Class<? extends Object>> ALLOWED_ENUM_ANNOTATIONS = Set.of(JsonProperty.class,
+        JsonValue.class,
+        JsonIgnore.class,
+        Valid.class,
+        Null.class,
+        NotNull.class);
 
     @SuppressWarnings("rawtypes")
     private static final Map<Class, List<List<Class<? extends Annotation>>>> UNNTATT_FRA_VALIDERING = new HashMap<>() {
@@ -94,8 +98,7 @@ class RestApiInputValideringDtoTest extends RestApiTestUtil {
             put(double.class, List.of(List.of(Min.class, Max.class), List.of(Digits.class)));
             put(Integer.class, List.of(List.of(Min.class, Max.class), List.of(Digits.class)));
             put(int.class, List.of(List.of(Min.class, Max.class), List.of(Digits.class)));
-            put(BigDecimal.class, List.of(List.of(Min.class, Max.class, Digits.class),
-                List.of(DecimalMin.class, DecimalMax.class, Digits.class)));
+            put(BigDecimal.class, List.of(List.of(Min.class, Max.class, Digits.class), List.of(DecimalMin.class, DecimalMax.class, Digits.class)));
             put(List.class, List.of(List.of(VedlegglistestørrelseConstraint.class)));
 
 
@@ -125,9 +128,8 @@ class RestApiInputValideringDtoTest extends RestApiTestUtil {
     }
 
     private static boolean harKorrektvedlegglisteConstraint(Field field) {
-        var aktuell = brukerGenerics(field)
-            && field.getType().equals(List.class)
-            && field.getGenericType().getTypeName().contains(VedleggDto.class.getName());
+        var aktuell =
+            brukerGenerics(field) && field.getType().equals(List.class) && field.getGenericType().getTypeName().contains(VedleggDto.class.getName());
         return aktuell && field.isAnnotationPresent(VedlegglistestørrelseConstraint.class);
     }
 

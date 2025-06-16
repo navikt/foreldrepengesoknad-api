@@ -3,32 +3,37 @@ package no.nav.foreldrepenger.selvbetjening.kontrakt.innsending.util.builder;
 import java.time.LocalDate;
 import java.util.List;
 
-import no.nav.foreldrepenger.selvbetjening.kontrakt.innsending.dto.BarnDtoOLD;
-import no.nav.foreldrepenger.selvbetjening.kontrakt.innsending.dto.SøkerDtoOLD;
-import no.nav.foreldrepenger.selvbetjening.kontrakt.innsending.dto.SøknadDtoOLD;
-import no.nav.foreldrepenger.selvbetjening.kontrakt.innsending.dto.UtenlandsoppholdDtoOLD;
-import no.nav.foreldrepenger.selvbetjening.kontrakt.innsending.dto.foreldrepenger.AnnenforelderDtoOLD;
-import no.nav.foreldrepenger.selvbetjening.kontrakt.innsending.dto.foreldrepenger.DekningsgradOLD;
-import no.nav.foreldrepenger.selvbetjening.kontrakt.innsending.dto.foreldrepenger.ForeldrepengesøknadDtoOLD;
-import no.nav.foreldrepenger.selvbetjening.kontrakt.innsending.dto.foreldrepenger.SituasjonOLD;
-import no.nav.foreldrepenger.selvbetjening.kontrakt.innsending.dto.foreldrepenger.UttaksplanPeriodeDtoOLD;
-import no.nav.foreldrepenger.selvbetjening.kontrakt.innsending.v2.dto.VedleggDto;
+import no.nav.foreldrepenger.common.domain.BrukerRolle;
+import no.nav.foreldrepenger.common.oppslag.dkif.Målform;
+import no.nav.foreldrepenger.selvbetjening.kontrakt.innsending.dto.AnnenInntektDto;
+import no.nav.foreldrepenger.selvbetjening.kontrakt.innsending.dto.BarnDto;
+import no.nav.foreldrepenger.selvbetjening.kontrakt.innsending.dto.FrilansDto;
+import no.nav.foreldrepenger.selvbetjening.kontrakt.innsending.dto.NæringDto;
+import no.nav.foreldrepenger.selvbetjening.kontrakt.innsending.dto.SøknadDto;
+import no.nav.foreldrepenger.selvbetjening.kontrakt.innsending.dto.UtenlandsoppholdsperiodeDto;
+import no.nav.foreldrepenger.selvbetjening.kontrakt.innsending.dto.VedleggDto;
+import no.nav.foreldrepenger.selvbetjening.kontrakt.innsending.dto.foreldrepenger.Dekningsgrad;
+import no.nav.foreldrepenger.selvbetjening.kontrakt.innsending.dto.foreldrepenger.ForeldrepengesøknadDto;
+import no.nav.foreldrepenger.selvbetjening.kontrakt.innsending.dto.foreldrepenger.annenpart.AnnenForelderDto;
+import no.nav.foreldrepenger.selvbetjening.kontrakt.innsending.dto.foreldrepenger.uttaksplan.UttaksplanDto;
+import no.nav.foreldrepenger.selvbetjening.kontrakt.innsending.dto.foreldrepenger.uttaksplan.Uttaksplanperiode;
 
 public class ForeldrepengerBuilder {
     private LocalDate mottattdato;
-    private SituasjonOLD situasjon;
-    private SøkerDtoOLD søker;
-    private AnnenforelderDtoOLD annenForelder;
-    private BarnDtoOLD barn;
-    private DekningsgradOLD dekningsgrad;
-    private String tilleggsopplysninger;
-    private UtenlandsoppholdDtoOLD informasjonOmUtenlandsopphold;
-    private List<UttaksplanPeriodeDtoOLD> uttaksplan;
-    private Boolean ønskerJustertUttakVedFødsel;
+    private BrukerRolle rolle;
+    private Målform språkkode;
+    private FrilansDto frilansInformasjon;
+    private NæringDto selvstendigNæringsdrivendeInformasjon;
+    private List<AnnenInntektDto> andreInntekterSiste10Mnd;
+    private BarnDto barn;
+    private AnnenForelderDto annenForelder;
+    private Dekningsgrad dekningsgrad;
+    private List<UtenlandsoppholdsperiodeDto> utenlandsopphold;
+    private UttaksplanDto uttaksplan;
     private List<VedleggDto> vedlegg;
 
     public ForeldrepengerBuilder() {
-
+        this.språkkode = Målform.standard();
     }
 
     public ForeldrepengerBuilder medMottattdato(LocalDate mottattdato) {
@@ -36,44 +41,58 @@ public class ForeldrepengerBuilder {
         return this;
     }
 
-    public ForeldrepengerBuilder medSøker(SøkerDtoOLD søker) {
-        this.søker = søker;
+    public ForeldrepengerBuilder medRolle(BrukerRolle rolle) {
+        this.rolle = rolle;
         return this;
     }
 
-    public ForeldrepengerBuilder medBarn(BarnHelper barn) {
-        this.situasjon = barn.situasjon();
-        this.barn = barn.barn();
+    public ForeldrepengerBuilder medSpråkkode(Målform språkkode) {
+        this.språkkode = språkkode;
         return this;
     }
 
-    public ForeldrepengerBuilder medAnnenForelder(AnnenforelderDtoOLD annenForelder) {
+    public ForeldrepengerBuilder medFrilansInformasjon(FrilansDto frilansInformasjon) {
+        this.frilansInformasjon = frilansInformasjon;
+        return this;
+    }
+
+    public ForeldrepengerBuilder medSelvstendigNæringsdrivendeInformasjon(NæringDto selvstendigNæringsdrivendeInformasjon) {
+        this.selvstendigNæringsdrivendeInformasjon = selvstendigNæringsdrivendeInformasjon;
+        return this;
+    }
+
+    public ForeldrepengerBuilder medAndreInntekterSiste10Mnd(List<AnnenInntektDto> andreInntekterSiste10Mnd) {
+        this.andreInntekterSiste10Mnd = andreInntekterSiste10Mnd;
+        return this;
+    }
+
+    public ForeldrepengerBuilder medBarn(BarnDto barn) {
+        this.barn = barn;
+        return this;
+    }
+
+    public ForeldrepengerBuilder medAnnenForelder(AnnenForelderDto annenForelder) {
         this.annenForelder = annenForelder;
         return this;
     }
 
-    public ForeldrepengerBuilder medDekningsgrad(DekningsgradOLD dekningsgrad) {
+    public ForeldrepengerBuilder medDekningsgrad(Dekningsgrad dekningsgrad) {
         this.dekningsgrad = dekningsgrad;
         return this;
     }
 
-    public ForeldrepengerBuilder medTilleggsopplysninger(String tilleggsopplysninger) {
-        this.tilleggsopplysninger = tilleggsopplysninger;
+    public ForeldrepengerBuilder medUtenlandsopphold(List<UtenlandsoppholdsperiodeDto> utenlandsopphold) {
+        this.utenlandsopphold = utenlandsopphold;
         return this;
     }
 
-    public ForeldrepengerBuilder medMedlemsskap(UtenlandsoppholdDtoOLD informasjonOmUtenlandsopphold) {
-        this.informasjonOmUtenlandsopphold = informasjonOmUtenlandsopphold;
-        return this;
-    }
-
-    public ForeldrepengerBuilder medFordeling(List<UttaksplanPeriodeDtoOLD> uttaksplan) {
+    public ForeldrepengerBuilder medUttaksplan(UttaksplanDto uttaksplan) {
         this.uttaksplan = uttaksplan;
         return this;
     }
 
-    public ForeldrepengerBuilder medØnskerJustertUttakVedFødsel(Boolean ønskerJustertUttakVedFødsel) {
-        this.ønskerJustertUttakVedFødsel = ønskerJustertUttakVedFødsel;
+    public ForeldrepengerBuilder medUttaksplan(List<Uttaksplanperiode> uttaksperioder) {
+        this.uttaksplan = new UttaksplanDto(null, uttaksperioder);
         return this;
     }
 
@@ -82,11 +101,21 @@ public class ForeldrepengerBuilder {
         return this;
     }
 
-    public SøknadDtoOLD build() {
+    public SøknadDto build() {
         if (mottattdato == null) {
             mottattdato = LocalDate.now();
         }
-        return new ForeldrepengesøknadDtoOLD(this.mottattdato, this.situasjon, this.søker, this.barn, this.annenForelder, this.dekningsgrad,
-            this.tilleggsopplysninger, this.informasjonOmUtenlandsopphold, this.uttaksplan, this.ønskerJustertUttakVedFødsel, this.vedlegg);
+        return new ForeldrepengesøknadDto(mottattdato,
+            rolle,
+            språkkode,
+            frilansInformasjon,
+            selvstendigNæringsdrivendeInformasjon,
+            andreInntekterSiste10Mnd,
+            barn,
+            annenForelder,
+            dekningsgrad,
+            uttaksplan,
+            utenlandsopphold,
+            vedlegg);
     }
 }
