@@ -192,7 +192,7 @@ public final class ForeldrepengerMapper {
             u.morsAktivitetIPerioden(),
             u.ønskerFlerbarnsdager() != null && u.ønskerFlerbarnsdager(),
             u.samtidigUttakProsent() != null ? ProsentAndel.valueOf(u.samtidigUttakProsent()) : null,
-            gradering.stillingsprosent() != null ? ProsentAndel.valueOf(gradering.stillingsprosent()) : null,
+            ProsentAndel.valueOf(gradering.stillingsprosent()),
             gradering.erArbeidstaker() != null && gradering.erArbeidstaker(),
             gradering.orgnumre(),
             true,
