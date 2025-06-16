@@ -3,30 +3,29 @@ package no.nav.foreldrepenger.selvbetjening.kontrakt.innsending.util.builder;
 import java.time.LocalDate;
 import java.util.List;
 
+import no.nav.foreldrepenger.common.domain.BrukerRolle;
 import no.nav.foreldrepenger.common.domain.Saksnummer;
-import no.nav.foreldrepenger.selvbetjening.kontrakt.innsending.dto.BarnDtoOLD;
-import no.nav.foreldrepenger.selvbetjening.kontrakt.innsending.dto.SøkerDtoOLD;
-import no.nav.foreldrepenger.selvbetjening.kontrakt.innsending.dto.endringssøknad.EndringssøknadDtoOLD;
-import no.nav.foreldrepenger.selvbetjening.kontrakt.innsending.dto.endringssøknad.EndringssøknadForeldrepengerDtoOLD;
-import no.nav.foreldrepenger.selvbetjening.kontrakt.innsending.dto.foreldrepenger.AnnenforelderDtoOLD;
-import no.nav.foreldrepenger.selvbetjening.kontrakt.innsending.dto.foreldrepenger.SituasjonOLD;
-import no.nav.foreldrepenger.selvbetjening.kontrakt.innsending.dto.foreldrepenger.UttaksplanPeriodeDtoOLD;
-import no.nav.foreldrepenger.selvbetjening.kontrakt.innsending.v2.dto.VedleggDto;
+import no.nav.foreldrepenger.common.oppslag.dkif.Målform;
+import no.nav.foreldrepenger.selvbetjening.kontrakt.innsending.dto.BarnDto;
+import no.nav.foreldrepenger.selvbetjening.kontrakt.innsending.dto.VedleggDto;
+import no.nav.foreldrepenger.selvbetjening.kontrakt.innsending.dto.endringssøknad.EndringssøknadForeldrepengerDto;
+import no.nav.foreldrepenger.selvbetjening.kontrakt.innsending.dto.foreldrepenger.annenpart.AnnenForelderDto;
+import no.nav.foreldrepenger.selvbetjening.kontrakt.innsending.dto.foreldrepenger.uttaksplan.UttaksplanDto;
+import no.nav.foreldrepenger.selvbetjening.kontrakt.innsending.dto.foreldrepenger.uttaksplan.Uttaksplanperiode;
 
 public class EndringssøknadBuilder {
+    private final Saksnummer saksnummer;
+    private BrukerRolle rolle;
+    private Målform språkkode;
     private LocalDate mottattdato;
-    private SituasjonOLD situasjon;
-    private Saksnummer saksnummer;
-    private SøkerDtoOLD søker;
-    private BarnDtoOLD barn;
-    private AnnenforelderDtoOLD annenForelder;
-    private String tilleggsopplysninger;
-    private Boolean ønskerJustertUttakVedFødsel;
-    private List<UttaksplanPeriodeDtoOLD> uttaksplan;
+    private BarnDto barn;
+    private AnnenForelderDto annenForelder;
+    private UttaksplanDto uttaksplan;
     private List<VedleggDto> vedlegg;
 
     public EndringssøknadBuilder(Saksnummer saksnummer) {
         this.saksnummer = saksnummer;
+        this.språkkode = Målform.standard();
     }
 
     public EndringssøknadBuilder medMottattdato(LocalDate mottattdato) {
@@ -34,34 +33,33 @@ public class EndringssøknadBuilder {
         return this;
     }
 
-    public EndringssøknadBuilder medSøker(SøkerDtoOLD søker) {
-        this.søker = søker;
+    public EndringssøknadBuilder medRolle(BrukerRolle rolle) {
+        this.rolle = rolle;
         return this;
     }
 
-    public EndringssøknadBuilder medBarn(BarnHelper barn) {
-        this.situasjon = barn.situasjon();
-        this.barn = barn.barn();
+    public EndringssøknadBuilder medSpråkkode(Målform språkkode) {
+        this.språkkode = språkkode;
         return this;
     }
 
-    public EndringssøknadBuilder medAnnenForelder(AnnenforelderDtoOLD annenforelder) {
-        this.annenForelder = annenforelder;
+    public EndringssøknadBuilder medBarn(BarnDto barn) {
+        this.barn = barn;
         return this;
     }
 
-    public EndringssøknadBuilder medTilleggsopplysninger(String tilleggsopplysninger) {
-        this.tilleggsopplysninger = tilleggsopplysninger;
+    public EndringssøknadBuilder medAnnenForelder(AnnenForelderDto annenForelder) {
+        this.annenForelder = annenForelder;
         return this;
     }
 
-    public EndringssøknadBuilder medØnskerJustertUttakVedFødsel(Boolean ønskerJustertUttakVedFødsel) {
-        this.ønskerJustertUttakVedFødsel = ønskerJustertUttakVedFødsel;
-        return this;
-    }
-
-    public EndringssøknadBuilder medFordeling(List<UttaksplanPeriodeDtoOLD> uttaksplan) {
+    public EndringssøknadBuilder medUttaksplan(UttaksplanDto uttaksplan) {
         this.uttaksplan = uttaksplan;
+        return this;
+    }
+
+    public EndringssøknadBuilder medUttaksplan(List<Uttaksplanperiode> uttaksplanperiodeer) {
+        this.uttaksplan = new UttaksplanDto(null, uttaksplanperiodeer);
         return this;
     }
 
@@ -70,11 +68,10 @@ public class EndringssøknadBuilder {
         return this;
     }
 
-    public EndringssøknadDtoOLD build() {
+    public EndringssøknadForeldrepengerDto build() {
         if (mottattdato == null) {
             mottattdato = LocalDate.now();
         }
-        return new EndringssøknadForeldrepengerDtoOLD(mottattdato, situasjon, saksnummer, søker, barn, annenForelder, tilleggsopplysninger,
-            ønskerJustertUttakVedFødsel, uttaksplan, vedlegg);
+        return new EndringssøknadForeldrepengerDto(mottattdato, rolle, språkkode, barn, annenForelder, uttaksplan, saksnummer, vedlegg);
     }
 }

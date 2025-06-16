@@ -2,10 +2,10 @@ package no.nav.foreldrepenger.selvbetjening.kontrakt.innsending.mapper;
 
 import java.util.List;
 
-import no.nav.foreldrepenger.selvbetjening.kontrakt.innsending.dto.ÅpenPeriodeDtoOLD;
-import no.nav.foreldrepenger.selvbetjening.kontrakt.innsending.v2.dto.VedleggDto;
-import no.nav.foreldrepenger.selvbetjening.kontrakt.innsending.v2.dto.VedleggReferanse;
-import no.nav.foreldrepenger.selvbetjening.kontrakt.innsending.v2.dto.svangerskapspenger.ArbeidsforholdDto;
+import no.nav.foreldrepenger.selvbetjening.kontrakt.innsending.dto.VedleggDto;
+import no.nav.foreldrepenger.selvbetjening.kontrakt.innsending.dto.VedleggReferanse;
+import no.nav.foreldrepenger.selvbetjening.kontrakt.innsending.dto.svangerskapspenger.ArbeidsforholdDto;
+import no.nav.foreldrepenger.selvbetjening.kontrakt.innsending.dto.ÅpenPeriodeDto;
 
 public class DokumentasjonReferanseMapper {
 
@@ -19,7 +19,7 @@ public class DokumentasjonReferanseMapper {
             .toList();
     }
 
-    public static List<VedleggReferanse> dokumentasjonSomDokumentererOpptjeningsperiode(List<VedleggDto> vedleggene, ÅpenPeriodeDtoOLD periode) {
+    public static List<VedleggReferanse> dokumentasjonSomDokumentererOpptjeningsperiode(List<VedleggDto> vedleggene, ÅpenPeriodeDto periode) {
         return vedleggene.stream()
             .filter(vedlegg -> vedlegg.dokumenterer().type().equals(VedleggDto.Dokumenterer.DokumentererType.OPPTJENING))
             .filter(vedlegg -> vedlegg.dokumenterer().perioder().contains(periode))
@@ -27,7 +27,7 @@ public class DokumentasjonReferanseMapper {
             .toList();
     }
 
-    public static List<VedleggReferanse> dokumentasjonSomDokumentererUttaksperiode(List<VedleggDto> vedleggene, ÅpenPeriodeDtoOLD periode) {
+    public static List<VedleggReferanse> dokumentasjonSomDokumentererUttaksperiode(List<VedleggDto> vedleggene, ÅpenPeriodeDto periode) {
         return vedleggene.stream()
             .filter(vedlegg -> vedlegg.dokumenterer().type().equals(VedleggDto.Dokumenterer.DokumentererType.UTTAK))
             .filter(vedlegg -> vedlegg.dokumenterer().perioder().contains(periode))

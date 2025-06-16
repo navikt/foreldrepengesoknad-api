@@ -2,8 +2,5 @@ package no.nav.foreldrepenger.selvbetjening.kontrakt.innsending.dto.ettersendels
 
 import no.nav.foreldrepenger.common.domain.Saksnummer;
 
-public record TilbakebetalingUttalelseDto(YtelseType type,
-                                          Saksnummer saksnummer,
-                                          String dialogId,
-                                          BrukerTekstDto brukerTekst) {
+public record TilbakebetalingUttalelseDto(YtelseType type, Saksnummer saksnummer, String dialogId, BrukerTekstDto brukerTekst) {
 }

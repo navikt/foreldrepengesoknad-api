@@ -1,7 +1,7 @@
 package no.nav.foreldrepenger.selvbetjening.innsending;
 
-import static no.nav.foreldrepenger.selvbetjening.kontrakt.innsending.v2.dto.VedleggInnsendingType.AUTOMATISK;
-import static no.nav.foreldrepenger.selvbetjening.kontrakt.innsending.v2.dto.VedleggInnsendingType.LASTET_OPP;
+import static no.nav.foreldrepenger.selvbetjening.kontrakt.innsending.dto.VedleggInnsendingType.AUTOMATISK;
+import static no.nav.foreldrepenger.selvbetjening.kontrakt.innsending.dto.VedleggInnsendingType.LASTET_OPP;
 import static no.nav.foreldrepenger.selvbetjening.vedlegg.VedleggUtil.mediaType;
 import static org.slf4j.LoggerFactory.getLogger;
 import static org.springframework.http.MediaType.APPLICATION_PDF;
@@ -21,15 +21,15 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import no.nav.foreldrepenger.common.domain.Kvittering;
 import no.nav.foreldrepenger.selvbetjening.http.RetryAware;
 import no.nav.foreldrepenger.selvbetjening.innsending.pdf.PdfGenerator;
-import no.nav.foreldrepenger.selvbetjening.kontrakt.innsending.dto.endringssøknad.EndringssøknadForeldrepengerDtoOLD;
+import no.nav.foreldrepenger.selvbetjening.kontrakt.innsending.dto.Innsending;
+import no.nav.foreldrepenger.selvbetjening.kontrakt.innsending.dto.VedleggDto;
+import no.nav.foreldrepenger.selvbetjening.kontrakt.innsending.dto.VedleggReferanse;
+import no.nav.foreldrepenger.selvbetjening.kontrakt.innsending.dto.endringssøknad.EndringssøknadForeldrepengerDto;
+import no.nav.foreldrepenger.selvbetjening.kontrakt.innsending.dto.engangsstønad.EngangsstønadDto;
 import no.nav.foreldrepenger.selvbetjening.kontrakt.innsending.dto.ettersendelse.EttersendelseDto;
 import no.nav.foreldrepenger.selvbetjening.kontrakt.innsending.dto.ettersendelse.TilbakebetalingUttalelseDto;
-import no.nav.foreldrepenger.selvbetjening.kontrakt.innsending.dto.foreldrepenger.ForeldrepengesøknadDtoOLD;
-import no.nav.foreldrepenger.selvbetjening.kontrakt.innsending.v2.dto.Innsending;
-import no.nav.foreldrepenger.selvbetjening.kontrakt.innsending.v2.dto.VedleggDto;
-import no.nav.foreldrepenger.selvbetjening.kontrakt.innsending.v2.dto.VedleggReferanse;
-import no.nav.foreldrepenger.selvbetjening.kontrakt.innsending.v2.dto.engangsstønad.EngangsstønadDto;
-import no.nav.foreldrepenger.selvbetjening.kontrakt.innsending.v2.dto.svangerskapspenger.SvangerskapspengesøknadDto;
+import no.nav.foreldrepenger.selvbetjening.kontrakt.innsending.dto.foreldrepenger.ForeldrepengesøknadDto;
+import no.nav.foreldrepenger.selvbetjening.kontrakt.innsending.dto.svangerskapspenger.SvangerskapspengesøknadDto;
 import no.nav.foreldrepenger.selvbetjening.mellomlagring.KryptertMellomlagring;
 import no.nav.foreldrepenger.selvbetjening.mellomlagring.YtelseMellomlagringType;
 
@@ -134,8 +134,7 @@ public class InnsendingTjeneste implements RetryAware {
     }
 
     private YtelseMellomlagringType tilYtelse(Innsending innsending) {
-        if (innsending instanceof ForeldrepengesøknadDtoOLD
-            || innsending instanceof no.nav.foreldrepenger.selvbetjening.kontrakt.innsending.v2.dto.foreldrepenger.ForeldrepengesøknadDto) {
+        if (innsending instanceof ForeldrepengesøknadDto || innsending instanceof EndringssøknadForeldrepengerDto) {
             return YtelseMellomlagringType.FORELDREPENGER;
         }
         if (innsending instanceof EngangsstønadDto) {
@@ -143,10 +142,6 @@ public class InnsendingTjeneste implements RetryAware {
         }
         if (innsending instanceof SvangerskapspengesøknadDto) {
             return YtelseMellomlagringType.SVANGERSKAPSPENGER;
-        }
-        if (innsending instanceof EndringssøknadForeldrepengerDtoOLD
-            || innsending instanceof no.nav.foreldrepenger.selvbetjening.kontrakt.innsending.v2.dto.endringssøknad.EndringssøknadForeldrepengerDto) {
-            return YtelseMellomlagringType.FORELDREPENGER;
         }
         if (innsending instanceof EttersendelseDto ettersendelse) {
             return switch (ettersendelse.type()) {

@@ -25,13 +25,11 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 
 import no.nav.foreldrepenger.common.domain.Kvittering;
 import no.nav.foreldrepenger.selvbetjening.http.AbstractRestConnection;
-import no.nav.foreldrepenger.selvbetjening.kontrakt.innsending.dto.SøknadDtoOLD;
-import no.nav.foreldrepenger.selvbetjening.kontrakt.innsending.dto.endringssøknad.EndringssøknadDtoOLD;
+import no.nav.foreldrepenger.selvbetjening.kontrakt.innsending.dto.Innsending;
+import no.nav.foreldrepenger.selvbetjening.kontrakt.innsending.dto.SøknadDto;
+import no.nav.foreldrepenger.selvbetjening.kontrakt.innsending.dto.VedleggReferanse;
+import no.nav.foreldrepenger.selvbetjening.kontrakt.innsending.dto.endringssøknad.EndringssøknadDto;
 import no.nav.foreldrepenger.selvbetjening.kontrakt.innsending.dto.ettersendelse.EttersendelseDto;
-import no.nav.foreldrepenger.selvbetjening.kontrakt.innsending.v2.dto.Innsending;
-import no.nav.foreldrepenger.selvbetjening.kontrakt.innsending.v2.dto.SøknadDto;
-import no.nav.foreldrepenger.selvbetjening.kontrakt.innsending.v2.dto.VedleggReferanse;
-import no.nav.foreldrepenger.selvbetjening.kontrakt.innsending.v2.dto.endringssøknad.EndringssøknadDto;
 
 @Component
 public class InnsendingConnection extends AbstractRestConnection {
@@ -51,9 +49,9 @@ public class InnsendingConnection extends AbstractRestConnection {
     }
 
     public Kvittering sendInn(Innsending innsending, Map<VedleggReferanse, byte[]> vedleggsinnhold) {
-        if (innsending instanceof SøknadDtoOLD || innsending instanceof SøknadDto) {
+        if (innsending instanceof SøknadDto) {
             return postForEntity(config.innsendingURI(), body(innsending, vedleggsinnhold), Kvittering.class);
-        } else if (innsending instanceof EndringssøknadDtoOLD || innsending instanceof EndringssøknadDto) {
+        } else if (innsending instanceof EndringssøknadDto) {
             return postForEntity(config.endringURI(), body(innsending, vedleggsinnhold), Kvittering.class);
         } else {
             throw new IllegalStateException("Utviklerfeil: Innsending støtter bare søknad, endringssøknad og ettersendelse");

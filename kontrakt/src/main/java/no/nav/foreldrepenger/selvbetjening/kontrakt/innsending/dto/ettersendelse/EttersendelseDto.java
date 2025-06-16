@@ -12,11 +12,14 @@ import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Pattern;
 import jakarta.validation.constraints.Size;
 import no.nav.foreldrepenger.common.domain.Saksnummer;
-import no.nav.foreldrepenger.selvbetjening.kontrakt.innsending.v2.dto.Innsending;
-import no.nav.foreldrepenger.selvbetjening.kontrakt.innsending.v2.dto.VedleggDto;
+import no.nav.foreldrepenger.selvbetjening.kontrakt.innsending.dto.Innsending;
+import no.nav.foreldrepenger.selvbetjening.kontrakt.innsending.dto.VedleggDto;
 
-public record EttersendelseDto(LocalDate mottattdato, @NotNull YtelseType type, @NotNull @Valid Saksnummer saksnummer,
-                               @Valid BrukerTekstDto brukerTekst, @Pattern(regexp = FRITEKST) String dialogId,
+public record EttersendelseDto(LocalDate mottattdato,
+                               @NotNull YtelseType type,
+                               @NotNull @Valid Saksnummer saksnummer,
+                               @Valid BrukerTekstDto brukerTekst,
+                               @Pattern(regexp = FRITEKST) String dialogId,
                                @Valid @NotNull @Size(max = 40) List<@Valid VedleggDto> vedlegg) implements Innsending {
 
     public EttersendelseDto {
