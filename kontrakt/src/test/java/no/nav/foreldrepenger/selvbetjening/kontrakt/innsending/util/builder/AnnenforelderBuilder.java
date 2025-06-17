@@ -20,12 +20,15 @@ public class AnnenforelderBuilder {
         return new NorskForelderBuilder(fnr).medErAleneOmOmsorg(false)
             .medHarRettPåForeldrepenger(false)
             .medErInformertOmSøknaden(false)
-            .medHarMorUføretrygd(false)
-            .medHarAnnenForelderTilsvarendeRettEØS(false);
+            .medHarMorUføretrygd(false);
     }
 
-    public static NorskForelderBuilder aleneomsorgAnnenpartIkkeRettOgMorHarUføretrygd(Fødselsnummer fnr) {
-        return new NorskForelderBuilder(fnr).medErAleneOmOmsorg(true)
+    public static NorskForelderBuilder aleneomsorg(Fødselsnummer fnr) {
+        return new NorskForelderBuilder(fnr).medErAleneOmOmsorg(true);
+    }
+
+    public static NorskForelderBuilder annenpartIkkeRettOgMorHarUføretrygd(Fødselsnummer fnr) {
+        return new NorskForelderBuilder(fnr).medErAleneOmOmsorg(false)
             .medHarRettPåForeldrepenger(false)
             .medErInformertOmSøknaden(true)
             .medHarMorUføretrygd(true);
@@ -33,6 +36,7 @@ public class AnnenforelderBuilder {
 
     public static UtenlandskForelderBuilder utenlandskForelderRettEØS(Fødselsnummer fnr, CountryCode bostedsland) {
         return new UtenlandskForelderBuilder(fnr, bostedsland).medHarRettPåForeldrepenger(false)
+            .medHarAnnenForelderOppholdtSegIEØS(true)
             .medHarAnnenForelderTilsvarendeRettEØS(true)
             .medErInformertOmSøknaden(true)
             .medHarMorUføretrygd(true);
