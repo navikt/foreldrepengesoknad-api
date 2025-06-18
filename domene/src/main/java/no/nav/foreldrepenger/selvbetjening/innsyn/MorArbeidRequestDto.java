@@ -11,7 +11,7 @@ import no.nav.foreldrepenger.common.domain.Fødselsnummer;
 public record MorArbeidRequestDto(@Valid @NotNull Fødselsnummer annenPartFødselsnummer,
                                   @Valid Fødselsnummer barnFødselsnummer,
                                   LocalDate familiehendelse,
-                                  @Valid @Size(max = 50) List<@Valid @NotNull Periode> perioder) {
+                                  @Valid @Size(max = 200) List<@Valid @NotNull Periode> perioder) {
 
     public record Periode(@NotNull LocalDate fom, @NotNull LocalDate tom, @Valid PeriodeMedAktivitetskravType periodeType) {
     }
