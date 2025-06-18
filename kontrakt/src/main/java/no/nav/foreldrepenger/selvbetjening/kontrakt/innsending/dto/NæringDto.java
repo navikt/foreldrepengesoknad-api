@@ -16,11 +16,11 @@ import static no.nav.foreldrepenger.common.domain.validation.InputValideringRege
 
 public record NæringDto(@Valid @NotNull LocalDate fom,
                         @Valid LocalDate tom,
-                        @Valid Virksomhetstype næringstype,
+                        @Valid @NotNull Virksomhetstype næringstype,
                         @Pattern(regexp = FRITEKST) String navnPåNæringen,
                         @Valid Orgnummer organisasjonsnummer,
                         @Digits(integer = 9, fraction = 0) Integer næringsinntekt,
-                        boolean registrertINorge,
+                        @NotNull boolean registrertINorge,
                         CountryCode registrertILand,
                         boolean harBlittYrkesaktivILøpetAvDeTreSisteFerdigliknedeÅrene,
                         LocalDate oppstartsdato,
