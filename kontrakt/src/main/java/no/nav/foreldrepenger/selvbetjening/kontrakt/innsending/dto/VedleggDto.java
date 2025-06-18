@@ -37,7 +37,7 @@ public record VedleggDto(UUID uuid,
 
     public record Dokumenterer(@NotNull VedleggDto.Dokumenterer.DokumentererType type,
                                @Valid ArbeidsforholdDto arbeidsforhold,
-                               @Valid @Size(max = 100) List<@Valid @NotNull ÅpenPeriodeDto> perioder) {
+                               @Valid @Size(max = 200) List<@Valid @NotNull ÅpenPeriodeDto> perioder) {
         public enum DokumentererType {
             BARN,
             OPPTJENING,
