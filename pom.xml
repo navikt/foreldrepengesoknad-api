@@ -48,7 +48,7 @@
         <boot-conditionals.version>5.1.7</boot-conditionals.version>
 
         <springdoc.version>2.8.9</springdoc.version>
-        <tika.version>3.2.0</tika.version>
+        <tika.version>3.2.1</tika.version>
         <logback.logstash.version>8.1</logback.logstash.version>
         <nv.version>1.29</nv.version>
         <reflections.version>0.10.2</reflections.version>
