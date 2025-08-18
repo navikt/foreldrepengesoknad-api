@@ -54,7 +54,7 @@
         <reflections.version>0.10.2</reflections.version>
         <pdfbox.version>3.0.5</pdfbox.version>
         <jacoco.version>0.8.13</jacoco.version>
-        <gcp.version>0.246.0</gcp.version>
+        <gcp.version>0.247.0</gcp.version>
     </properties>
 
     <dependencyManagement>
