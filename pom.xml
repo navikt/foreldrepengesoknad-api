@@ -43,7 +43,7 @@
         <project.reporting.outputEncoding>UTF-8</project.reporting.outputEncoding>
 
         <stonadskonto-regler.version>2.1.1</stonadskonto-regler.version>
-        <selvbetjening-felles.version>3.3.3</selvbetjening-felles.version>
+        <selvbetjening-felles.version>3.3.4</selvbetjening-felles.version>
         <token-validation-version>4.0.5</token-validation-version> <!-- Fjerner cookie støtte fra versjon 4.1.0-->
         <boot-conditionals.version>5.1.9</boot-conditionals.version>
 
