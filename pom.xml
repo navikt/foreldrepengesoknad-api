@@ -45,7 +45,7 @@
         <stonadskonto-regler.version>2.1.1</stonadskonto-regler.version>
         <selvbetjening-felles.version>3.3.5</selvbetjening-felles.version>
         <token-validation-version>4.0.5</token-validation-version> <!-- Fjerner cookie støtte fra versjon 4.1.0-->
-        <boot-conditionals.version>5.1.9</boot-conditionals.version>
+        <boot-conditionals.version>5.1.11</boot-conditionals.version>
 
         <springdoc.version>2.8.9</springdoc.version>
         <tika.version>3.2.2</tika.version>
