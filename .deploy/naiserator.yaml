@@ -28,6 +28,7 @@ spec:
   accessPolicy:
     inbound:
       rules:
+        - application: fpsoknad
         - application: engangsstonad
         - application: svangerskapspengesoknad
         - application: foreldrepengesoknad
@@ -42,14 +43,14 @@ spec:
         - application: clamav
           namespace: nais-system
       external:
-        {{#each external as |url|}}
-        - host: {{url}}
-        {{/each}}
+        { { #each external as |url|}}
+            - host: {{url } }
+          {{/each}}
   image: {{image}}
   port: 8080
-  {{#if ingress}}
-  ingresses:
-    - {{ingress}}
+  { { #if ingress}}
+    ingresses:
+      - {{ingress } }
   {{/if}}
   replicas:
     min: 2
